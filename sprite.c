@@ -25,8 +25,6 @@ struct Sprite createTestHumanoid() {
     Vector2 position = { 350.0f, 280.0f };
     Rectangle frameRec = { 0.0f, 0.0f, HUMANOID_WIDTH, HUMANOID_HEIGHT };
 
-    SetTargetFPS(60);
-
     sp.position = position;
     sp.frameRec = frameRec;
     sp.currentFrame = 0;
