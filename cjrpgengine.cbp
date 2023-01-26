@@ -72,7 +72,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/danmunro/github/cjrpgengine/main.c">
+		<Unit filename="/Users/danmunro/github/cjrpgengine/src/main.c">
 			<Option target="cjrpgengine"/>
 		</Unit>
 		<Unit filename="/Users/danmunro/github/cjrpgengine/CMakeLists.txt">

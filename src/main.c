@@ -11,17 +11,7 @@
 *
 ********************************************************************************************/
 
-#include "raylib.h"
-#include "sprite.c"
-
-#define MAX_FRAME_SPEED     15
-#define MIN_FRAME_SPEED      1
-
-//------------------------------------------------------------------------------------
-// Program main entry point
-//------------------------------------------------------------------------------------
-void incrementFrame(struct Sprite *sp);
-void incrementFrameCounter(struct Sprite *sp);
+#include "header.h"
 
 int main(void)
 {
@@ -32,26 +22,27 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "raylib [texture] example - sprite anim");
 
-    struct Sprite sp = createTestHumanoid();
+//    struct Instance *instance = createGameInstance();
+    struct Sprite *sp = createTestHumanoid();
 
     // Main game loop
     while (!WindowShouldClose())
     {
-        if (IsKeyDown(KEY_RIGHT)) move(&sp, DIRECTION_RIGHT);
-        else if (IsKeyDown(KEY_LEFT)) move(&sp, DIRECTION_LEFT);
-        else if (IsKeyDown(KEY_UP)) move(&sp, DIRECTION_UP);
-        else if (IsKeyDown(KEY_DOWN)) move(&sp, DIRECTION_DOWN);
+        if (IsKeyDown(KEY_RIGHT)) move(sp, DIRECTION_RIGHT);
+        else if (IsKeyDown(KEY_LEFT)) move(sp, DIRECTION_LEFT);
+        else if (IsKeyDown(KEY_UP)) move(sp, DIRECTION_UP);
+        else if (IsKeyDown(KEY_DOWN)) move(sp, DIRECTION_DOWN);
 
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
 
-        DrawTextureRec(sp.source, sp.frameRec, sp.position, WHITE);
+        DrawTextureRec(sp->source, sp->frameRec, sp->position, WHITE);
 
         EndDrawing();
     }
 
-    UnloadTexture(sp.source);
+    UnloadTexture(sp->source);
 
     CloseWindow();
 

@@ -18,7 +18,7 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
     endif()
 endif()
 
-add_executable(cjrpgengine main.c)
+add_executable(cjrpgengine src/main.c)
 set(EXECUTABLE_OUTPUT_PATH ./build CACHE PATH "Build directory" FORCE)
 include_directories(.)
 target_link_libraries(cjrpgengine raylib)

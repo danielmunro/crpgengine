@@ -7,7 +7,7 @@
 #define DIRECTION_LEFT     3
 #define DIRECTION_RIGHT    4
 
-struct Sprite {
+typedef struct Sprite {
     Texture2D source;
     Vector2 position;
     Rectangle frameRec;
@@ -15,22 +15,22 @@ struct Sprite {
     int framesCounter;
     int framesSpeed;
     int direction;
-};
+} Sprite;
 
-struct Sprite createTestHumanoid() {
-    struct Sprite sp;
+SpriteT *createTestHumanoid() {
+    struct Sprite *sp = malloc(sizeof(Sprite));
 
-    sp.source = LoadTexture("resources/hatman.png");
+    sp->source = LoadTexture("resources/hatman.png");
 
     Vector2 position = { 350.0f, 280.0f };
     Rectangle frameRec = { 0.0f, 0.0f, HUMANOID_WIDTH, HUMANOID_HEIGHT };
 
-    sp.position = position;
-    sp.frameRec = frameRec;
-    sp.currentFrame = 0;
-    sp.framesCounter = 0;
-    sp.framesSpeed = 8;
-    sp.direction = DIRECTION_DOWN;
+    sp->position = position;
+    sp->frameRec = frameRec;
+    sp->currentFrame = 0;
+    sp->framesCounter = 0;
+    sp->framesSpeed = 8;
+    sp->direction = DIRECTION_DOWN;
     return sp;
 }
 
