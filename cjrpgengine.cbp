@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="cjrpgengine"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\local\;CMake Files\..\..\..\..\usr\local\lib\;CMake Files\..\..\..\..\usr\local\lib\cmake\;CMake Files\..\..\..\..\usr\local\lib\cmake\raylib\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cjrpgengine">
+				<Option output="/Users/danmunro/github/cjrpgengine/build/cjrpgengine" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="./build"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
+					<Add directory="/usr/local/Cellar/raylib/4.2.0/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 cjrpgengine"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cjrpgengine/fast">
+				<Option output="/Users/danmunro/github/cjrpgengine/build/cjrpgengine" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="./build"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
+					<Add directory="/usr/local/Cellar/raylib/4.2.0/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 cjrpgengine/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/main.c">
+			<Option target="cjrpgengine"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/../../../../usr/local/lib/cmake/raylib/raylib-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\raylib\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/../../../../usr/local/lib/cmake/raylib/raylib-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\raylib\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

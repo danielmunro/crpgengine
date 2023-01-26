@@ -26,7 +26,6 @@ void incrementFrameCounter(struct Sprite *sp);
 int main(void)
 {
     // Initialization
-    //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
     SetTargetFPS(60);
@@ -47,34 +46,14 @@ int main(void)
 
         ClearBackground(RAYWHITE);
 
-//        DrawTexture(sp.source, 15, 40, WHITE);
-//        DrawRectangleLines(15, 40, sp.source.width, sp.source.height, LIME);
-//        DrawRectangleLines(15 + (int)sp.frameRec.x, 40 + (int)sp.frameRec.y, (int)sp.frameRec.width, (int)sp.frameRec.height, RED);
-//
-//        DrawText("FRAME SPEED: ", 165, 210, 10, DARKGRAY);
-//        DrawText(TextFormat("%02i FPS", sp.framesSpeed), 575, 210, 10, DARKGRAY);
-//        DrawText("PRESS RIGHT/LEFT KEYS to CHANGE SPEED!", 290, 240, 10, DARKGRAY);
-//
-//        for (int i = 0; i < MAX_FRAME_SPEED; i++)
-//        {
-//            if (i < sp.framesSpeed) DrawRectangle(250 + 21*i, 205, 20, 20, RED);
-//            DrawRectangleLines(250 + 21*i, 205, 20, 20, MAROON);
-//        }
-
         DrawTextureRec(sp.source, sp.frameRec, sp.position, WHITE);
 
-//        DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);
-
         EndDrawing();
-        //----------------------------------------------------------------------------------
     }
 
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    UnloadTexture(sp.source);       // Texture unloading
+    UnloadTexture(sp.source);
 
-    CloseWindow();                // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
+    CloseWindow();
 
     return 0;
 }
