@@ -33,19 +33,13 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "raylib [texture] example - sprite anim");
 
     struct Sprite sp;
+
     sp.source = LoadTexture("resources/scarfy.png");
 
-    // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
-//    Texture2D scarfy = LoadTexture("resources/scarfy.png");        // Texture loading
-//
     Vector2 position = { 350.0f, 280.0f };
     Rectangle frameRec = { 0.0f, 0.0f, (float)sp.source.width/6, (float)sp.source.height };
-//    int currentFrame = 0;
-//
-//    int framesCounter = 0;
-//    int framesSpeed = 8;            // Number of spritesheet frames shown by second
 
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    SetTargetFPS(60);
 
     sp.position = position;
     sp.frameRec = frameRec;
@@ -55,7 +49,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    while (!WindowShouldClose())
     {
         // Update
         //----------------------------------------------------------------------------------
