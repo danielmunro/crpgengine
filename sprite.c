@@ -17,6 +17,25 @@ struct Sprite {
     int direction;
 };
 
+struct Sprite createTestHumanoid() {
+    struct Sprite sp;
+
+    sp.source = LoadTexture("resources/hatman.png");
+
+    Vector2 position = { 350.0f, 280.0f };
+    Rectangle frameRec = { 0.0f, 0.0f, HUMANOID_WIDTH, HUMANOID_HEIGHT };
+
+    SetTargetFPS(60);
+
+    sp.position = position;
+    sp.frameRec = frameRec;
+    sp.currentFrame = 0;
+    sp.framesCounter = 0;
+    sp.framesSpeed = 8;
+    sp.direction = DIRECTION_DOWN;
+    return sp;
+}
+
 void incrementFrame(struct Sprite *sp) {
     sp->framesCounter = 0;
     sp->currentFrame++;
@@ -28,10 +47,24 @@ void incrementFrame(struct Sprite *sp) {
     sp->frameRec.x = (float) sp->currentFrame * HUMANOID_WIDTH;
 }
 
-void incrementFrameCounter(struct Sprite *sp) {
-    sp->framesCounter++;
-
-    if (sp->framesCounter >= (60 / sp->framesSpeed)) {
+void move(struct Sprite *sp, int direction) {
+    sp->direction = direction;
+    sp->framesCounter = sp->framesCounter + 1;
+    if (sp->framesCounter > 10) {
+        sp->framesCounter = 0;
         incrementFrame(sp);
+    }
+    if (direction == DIRECTION_UP) {
+        sp->frameRec.y = HUMANOID_HEIGHT * 3;
+        sp->position.y = sp->position.y - 1;
+    } else if (direction == DIRECTION_DOWN) {
+        sp->frameRec.y = 0;
+        sp->position.y = sp->position.y + 1;
+    } else if (direction == DIRECTION_LEFT) {
+        sp->frameRec.y = HUMANOID_HEIGHT;
+        sp->position.x = sp->position.x - 1;
+    } else if (direction == DIRECTION_RIGHT) {
+        sp->frameRec.y = HUMANOID_HEIGHT * 2;
+        sp->position.x = sp->position.x + 1;
     }
 }

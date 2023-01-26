@@ -32,39 +32,16 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "raylib [texture] example - sprite anim");
 
-    struct Sprite sp;
-
-    sp.source = LoadTexture("resources/hatman.png");
-
-    Vector2 position = { 350.0f, 280.0f };
-    Rectangle frameRec = { 0.0f, 0.0f, HUMANOID_WIDTH, HUMANOID_HEIGHT };
-
-    SetTargetFPS(60);
-
-    sp.position = position;
-    sp.frameRec = frameRec;
-    sp.currentFrame = 0;
-    sp.framesCounter = 0;
-    sp.framesSpeed = 8;
-    //--------------------------------------------------------------------------------------
+    struct Sprite sp = createTestHumanoid();
 
     // Main game loop
     while (!WindowShouldClose())
     {
-        // Update
-        //----------------------------------------------------------------------------------
-        incrementFrameCounter(&sp);
+        if (IsKeyDown(KEY_RIGHT)) move(&sp, DIRECTION_RIGHT);
+        else if (IsKeyDown(KEY_LEFT)) move(&sp, DIRECTION_LEFT);
+        else if (IsKeyDown(KEY_UP)) move(&sp, DIRECTION_UP);
+        else if (IsKeyDown(KEY_DOWN)) move(&sp, DIRECTION_DOWN);
 
-        // Control frames speed
-        if (IsKeyPressed(KEY_RIGHT)) sp.framesSpeed++;
-        else if (IsKeyPressed(KEY_LEFT)) sp.framesSpeed--;
-
-        if (sp.framesSpeed > MAX_FRAME_SPEED) sp.framesSpeed = MAX_FRAME_SPEED;
-        else if (sp.framesSpeed < MIN_FRAME_SPEED) sp.framesSpeed = MIN_FRAME_SPEED;
-        //----------------------------------------------------------------------------------
-
-        // Draw
-        //----------------------------------------------------------------------------------
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
