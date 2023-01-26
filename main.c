@@ -34,10 +34,10 @@ int main(void)
 
     struct Sprite sp;
 
-    sp.source = LoadTexture("resources/scarfy.png");
+    sp.source = LoadTexture("resources/hatman.png");
 
     Vector2 position = { 350.0f, 280.0f };
-    Rectangle frameRec = { 0.0f, 0.0f, (float)sp.source.width/6, (float)sp.source.height };
+    Rectangle frameRec = { 0.0f, 0.0f, HUMANOID_WIDTH, HUMANOID_HEIGHT };
 
     SetTargetFPS(60);
 
@@ -69,23 +69,23 @@ int main(void)
 
         ClearBackground(RAYWHITE);
 
-        DrawTexture(sp.source, 15, 40, WHITE);
-        DrawRectangleLines(15, 40, sp.source.width, sp.source.height, LIME);
-        DrawRectangleLines(15 + (int)sp.frameRec.x, 40 + (int)sp.frameRec.y, (int)sp.frameRec.width, (int)sp.frameRec.height, RED);
+//        DrawTexture(sp.source, 15, 40, WHITE);
+//        DrawRectangleLines(15, 40, sp.source.width, sp.source.height, LIME);
+//        DrawRectangleLines(15 + (int)sp.frameRec.x, 40 + (int)sp.frameRec.y, (int)sp.frameRec.width, (int)sp.frameRec.height, RED);
+//
+//        DrawText("FRAME SPEED: ", 165, 210, 10, DARKGRAY);
+//        DrawText(TextFormat("%02i FPS", sp.framesSpeed), 575, 210, 10, DARKGRAY);
+//        DrawText("PRESS RIGHT/LEFT KEYS to CHANGE SPEED!", 290, 240, 10, DARKGRAY);
+//
+//        for (int i = 0; i < MAX_FRAME_SPEED; i++)
+//        {
+//            if (i < sp.framesSpeed) DrawRectangle(250 + 21*i, 205, 20, 20, RED);
+//            DrawRectangleLines(250 + 21*i, 205, 20, 20, MAROON);
+//        }
 
-        DrawText("FRAME SPEED: ", 165, 210, 10, DARKGRAY);
-        DrawText(TextFormat("%02i FPS", sp.framesSpeed), 575, 210, 10, DARKGRAY);
-        DrawText("PRESS RIGHT/LEFT KEYS to CHANGE SPEED!", 290, 240, 10, DARKGRAY);
+        DrawTextureRec(sp.source, sp.frameRec, sp.position, WHITE);
 
-        for (int i = 0; i < MAX_FRAME_SPEED; i++)
-        {
-            if (i < sp.framesSpeed) DrawRectangle(250 + 21*i, 205, 20, 20, RED);
-            DrawRectangleLines(250 + 21*i, 205, 20, 20, MAROON);
-        }
-
-        DrawTextureRec(sp.source, sp.frameRec, sp.position, WHITE);  // Draw part of the texture
-
-        DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);
+//        DrawText("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200, screenHeight - 20, 10, GRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
