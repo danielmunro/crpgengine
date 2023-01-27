@@ -1,13 +1,12 @@
 #include <stdlib.h>
+#include <raylib.h>
 
 #define MAX_SPRITES   128
 #define MAX_SCENES    256
 
-typedef struct Game GameT;
-typedef struct Sprite SpriteT;
-SpriteT *createTestHumanoid();
+#include "game.h"
+#include "sprite.h"
 
-#include "raylib.h"
 #include "player.c"
 #include "scene.c"
 #include "sprite.c"

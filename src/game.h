@@ -1,0 +1,1 @@
+typedef struct Game GameT;
