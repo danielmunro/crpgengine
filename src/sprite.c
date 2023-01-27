@@ -17,7 +17,7 @@ typedef struct Sprite {
     int direction;
 } Sprite;
 
-SpriteT *createTestHumanoid() {
+Sprite *createTestHumanoid() {
     struct Sprite *sp = malloc(sizeof(Sprite));
 
     sp->source = LoadTexture("resources/hatman.png");

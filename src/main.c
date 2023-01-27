@@ -22,27 +22,31 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "raylib [texture] example - sprite anim");
 
-//    struct Instance *instance = createGameInstance();
-    struct Sprite *sp = createTestHumanoid();
+    struct Game *g = createGameInstance();
 
     // Main game loop
     while (!WindowShouldClose())
     {
-        if (IsKeyDown(KEY_RIGHT)) move(sp, DIRECTION_RIGHT);
-        else if (IsKeyDown(KEY_LEFT)) move(sp, DIRECTION_LEFT);
-        else if (IsKeyDown(KEY_UP)) move(sp, DIRECTION_UP);
-        else if (IsKeyDown(KEY_DOWN)) move(sp, DIRECTION_DOWN);
+        if (IsKeyDown(KEY_RIGHT)) move(g->player->sprite, DIRECTION_RIGHT);
+        else if (IsKeyDown(KEY_LEFT)) move(g->player->sprite, DIRECTION_LEFT);
+        else if (IsKeyDown(KEY_UP)) move(g->player->sprite, DIRECTION_UP);
+        else if (IsKeyDown(KEY_DOWN)) move(g->player->sprite, DIRECTION_DOWN);
 
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
 
-        DrawTextureRec(sp->source, sp->frameRec, sp->position, WHITE);
+        DrawTextureRec(
+                g->player->sprite->source,
+                g->player->sprite->frameRec,
+                g->player->sprite->position,
+                WHITE
+            );
 
         EndDrawing();
     }
 
-    UnloadTexture(sp->source);
+    UnloadTexture(g->player->sprite->source);
 
     CloseWindow();
 

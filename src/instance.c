@@ -1,7 +1,7 @@
-GameT *createGameInstance() {
-    GameT *g = malloc(sizeof(struct Game));
-//    struct Scene scenes[MAX_SCENES];
-    g->sp = createTestHumanoid();
-//    g->scenes = scenes;
+Game *createGameInstance() {
+    Game *g = malloc(sizeof(struct Game));
+    g->scene = 0;
+    g->player = malloc(sizeof(struct Player));
+    g->player->sprite = createTestHumanoid();
     return g;
 }
