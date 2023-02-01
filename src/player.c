@@ -2,7 +2,7 @@ typedef struct Player {
     struct Sprite *sprite;
     int x;
     int y;
-    Vector2 offset;
+    Vector2D offset;
 } Player;
 
 Player *createTestPlayer() {
@@ -10,7 +10,7 @@ Player *createTestPlayer() {
     player->sprite = createTestHumanoid();
     player->x = 10;
     player->y = 10;
-    Vector2 offset = {0.0f, 0.0f};
+    Vector2D offset = {0, 0};
     player->offset = offset;
     return player;
 }

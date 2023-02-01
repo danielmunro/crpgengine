@@ -49,7 +49,7 @@ void drawLayer(Scene *s, Layer layer) {
     int tiles_y = SCREEN_HEIGHT / s->tilemap->size.y + 2;
     int start_y = s->player->y - (tiles_y / 2);
     int start_x = s->player->x - (tiles_x / 2);
-    Vector2 sz = s->tilemap->size;
+    Vector2D sz = s->tilemap->size;
     for (int y = -1; y < tiles_y; y++) {
         for (int x = -1; x < tiles_x; x++) {
             if (start_x + x < 0 || start_y + y < 0 || start_x + x > MAX_LAYER_SIZE || start_y + y > MAX_LAYER_SIZE) {
@@ -57,8 +57,11 @@ void drawLayer(Scene *s, Layer layer) {
             }
             int index = layer[start_y + y][start_x + x];
             Tile t = s->tilemap->tiles[index];
-            Rectangle frameRec = {(float)t.x, (float)t.y, sz.x, sz.y};
-            Vector2 pos = {(sz.x * (float)x) + s->player->offset.x, (sz.y * (float)y) + s->player->offset.y };
+            Rectangle frameRec = {(float)t.x, (float)t.y, (float)sz.x, (float)sz.y};
+            Vector2 pos = {
+                    (float)((sz.x * x) + s->player->offset.x),
+                    (float)((sz.y * y) + s->player->offset.y)
+            };
             DrawTextureRec(
                     s->tilemap->source,
                     frameRec,

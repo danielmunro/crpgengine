@@ -21,6 +21,7 @@
 
 typedef char Layer[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
 
+#include "util.c"
 #include "sprite.c"
 #include "player.c"
 #include "tilemap.c"
