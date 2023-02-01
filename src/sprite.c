@@ -22,7 +22,7 @@ Sprite *createTestHumanoid() {
 
     sp->source = LoadTexture("resources/hatman.png");
 
-    Vector2 position = { 350.0f, 280.0f };
+    Vector2 position = { (float)SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT / 2 };
     Rectangle frameRec = { 0.0f, 0.0f, HUMANOID_WIDTH, HUMANOID_HEIGHT };
 
     sp->position = position;

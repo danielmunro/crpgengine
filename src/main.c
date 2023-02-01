@@ -1,10 +1,8 @@
 #include "header.h"
 
 int main(void) {
-    const int screenWidth = 800;
-    const int screenHeight = 450;
     SetTargetFPS(60);
-    InitWindow(screenWidth, screenHeight, "cjrpgengine");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "cjrpgengine");
     struct Game *g = createGameInstance();
     SetWindowTitle(g->scenes[g->scene]->name);
 

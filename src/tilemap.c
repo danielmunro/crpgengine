@@ -24,11 +24,11 @@ Tilemap *createTestTilemap() {
     t->tiles[0].x = 0;
     t->tiles[0].y = 0;
 
-//    for (int y = 0; y < MAX_LAYER_SIZE; y++) {
-//        for (int x = 0; x < MAX_LAYER_SIZE; x++) {
-//
-//        }
-//    }
+    for (int y = 0; y < MAX_LAYER_SIZE / 4; y++) {
+        for (int x = 0; x < MAX_LAYER_SIZE / 4; x++) {
+            t->background[y][x] = 0;
+        }
+    }
 
     return t;
 }

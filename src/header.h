@@ -3,6 +3,9 @@
 #include <raylib.h>
 #include <string.h>
 
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 450
+
 #define MAX_SPRITES   128
 #define MAX_SCENES    256
 #define MAX_LAYER_SIZE 1024
