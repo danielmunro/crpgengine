@@ -8,6 +8,12 @@
 #define MAX_LAYER_SIZE 1024
 #define MAX_TILES 512
 
+#define SCENE_NAME_MAX_LENGTH 64
+
+#define SCENE_TYPE_FREE_MOVE 1
+#define SCENE_TYPE_FIGHT 2
+#define SCENE_TYPE_MENU 3
+
 #include "player.c"
 #include "sprite.c"
 #include "tilemap.c"

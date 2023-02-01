@@ -10,26 +10,23 @@ int main(void) {
     struct Game *g = createGameInstance();
 
     while (!WindowShouldClose()) {
-        if (IsKeyDown(KEY_RIGHT)) move(g->player->sprite, DIRECTION_RIGHT);
-        else if (IsKeyDown(KEY_LEFT)) move(g->player->sprite, DIRECTION_LEFT);
-        else if (IsKeyDown(KEY_UP)) move(g->player->sprite, DIRECTION_UP);
-        else if (IsKeyDown(KEY_DOWN)) move(g->player->sprite, DIRECTION_DOWN);
+        checkInput(g->scenes[g->scene]);
 
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
 
         DrawTextureRec(
-            g->player->sprite->source,
-            g->player->sprite->frameRec,
-            g->player->sprite->position,
+            g->scenes[g->scene]->player->sprite->source,
+            g->scenes[g->scene]->player->sprite->frameRec,
+            g->scenes[g->scene]->player->sprite->position,
             WHITE
         );
 
         EndDrawing();
     }
 
-    UnloadTexture(g->player->sprite->source);
+    UnloadTexture(g->scenes[g->scene]->player->sprite->source);
 
     CloseWindow();
 

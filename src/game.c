@@ -1,5 +1,4 @@
 typedef struct Game {
-    Player *player;
     Scene *scenes[MAX_SCENES];
     int scene;
 } Game;
@@ -7,8 +6,8 @@ typedef struct Game {
 Game *createGameInstance() {
     Game *g = malloc(sizeof(Game));
     g->scene = 0;
-    g->player = malloc(sizeof(Player));
-    g->player->sprite = createTestHumanoid();
-    g->scenes[0] = createTestScene();
+    Player *player = malloc(sizeof(Player));
+    player->sprite = createTestHumanoid();
+    g->scenes[g->scene] = createTestScene(player);
     return g;
 }
