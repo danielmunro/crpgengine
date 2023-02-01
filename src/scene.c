@@ -36,7 +36,7 @@ void drawScene(Scene *s) {
     for (int y = 0; y < tiles_y; y++) {
         cur_x = 0;
         for (int x = 0; x < tiles_x; x++) {
-            if (start_x + x < 0 || start_y + y < 0) {
+            if (start_x + x < 0 || start_y + y < 0 || start_x + x > MAX_LAYER_SIZE || start_y + y > MAX_LAYER_SIZE) {
                 continue;
             }
             int index = s->tilemap->background[start_y + y][start_x + x];
