@@ -22,7 +22,7 @@ Sprite *createTestHumanoid() {
 
     sp->source = LoadTexture("resources/hatman.png");
 
-    Vector2 position = { (float)SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT / 2 };
+    Vector2 position = { ((float)SCREEN_WIDTH / 2) - (HUMANOID_WIDTH / 2), ((float)SCREEN_HEIGHT / 2) - (HUMANOID_HEIGHT / 2) };
     Rectangle frameRec = { 0.0f, 0.0f, HUMANOID_WIDTH, HUMANOID_HEIGHT };
 
     sp->position = position;
@@ -54,15 +54,11 @@ void moveSprite(struct Sprite *sp, int direction) {
     }
     if (direction == DIRECTION_UP) {
         sp->frameRec.y = HUMANOID_HEIGHT * 3;
-        sp->position.y = sp->position.y - 1;
     } else if (direction == DIRECTION_DOWN) {
         sp->frameRec.y = 0;
-        sp->position.y = sp->position.y + 1;
     } else if (direction == DIRECTION_LEFT) {
         sp->frameRec.y = HUMANOID_HEIGHT;
-        sp->position.x = sp->position.x - 1;
     } else if (direction == DIRECTION_RIGHT) {
         sp->frameRec.y = HUMANOID_HEIGHT * 2;
-        sp->position.x = sp->position.x + 1;
     }
 }
