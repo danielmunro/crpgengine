@@ -45,20 +45,19 @@ void incrementFrame(struct Sprite *sp) {
     sp->frameRec.x = (float) sp->currentFrame * HUMANOID_WIDTH;
 }
 
-void moveSprite(struct Sprite *sp, int direction) {
-    sp->direction = direction;
+void animateSprite(struct Sprite *sp) {
     sp->framesCounter = sp->framesCounter + 1;
     if (sp->framesCounter > 10) {
         sp->framesCounter = 0;
         incrementFrame(sp);
     }
-    if (direction == DIRECTION_UP) {
+    if (sp->direction == DIRECTION_UP) {
         sp->frameRec.y = HUMANOID_HEIGHT * 3;
-    } else if (direction == DIRECTION_DOWN) {
+    } else if (sp->direction == DIRECTION_DOWN) {
         sp->frameRec.y = 0;
-    } else if (direction == DIRECTION_LEFT) {
+    } else if (sp->direction == DIRECTION_LEFT) {
         sp->frameRec.y = HUMANOID_HEIGHT;
-    } else if (direction == DIRECTION_RIGHT) {
+    } else if (sp->direction == DIRECTION_RIGHT) {
         sp->frameRec.y = HUMANOID_HEIGHT * 2;
     }
 }

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <raylib.h>
 #include <string.h>
+#include <math.h>
+#include <sys/time.h>
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 450
