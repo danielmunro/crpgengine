@@ -1,3 +1,6 @@
+#ifndef CJRPGENGINE_H_INCLUDED
+#define CJRPGENGINE_H_INCLUDED
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <raylib.h>
@@ -27,3 +30,5 @@ typedef char Layer[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
 #include "tilemap.c"
 #include "scene.c"
 #include "game.c"
+
+#endif /* CJRPGENGINE_H_INCLUDED */
