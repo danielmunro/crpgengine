@@ -23,3 +23,14 @@ void checkInput(Scene *s) {
         else if (IsKeyDown(KEY_DOWN)) move(s->player->sprite, DIRECTION_DOWN);
     }
 }
+
+void drawScene(Scene *s) {
+    ClearBackground(RAYWHITE);
+
+    DrawTextureRec(
+            s->player->sprite->source,
+            s->player->sprite->frameRec,
+            s->player->sprite->position,
+            WHITE
+    );
+}

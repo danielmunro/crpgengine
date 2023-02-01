@@ -10,18 +10,8 @@ int main(void) {
 
     while (!WindowShouldClose()) {
         checkInput(g->scenes[g->scene]);
-
         BeginDrawing();
-
-        ClearBackground(RAYWHITE);
-
-        DrawTextureRec(
-            g->scenes[g->scene]->player->sprite->source,
-            g->scenes[g->scene]->player->sprite->frameRec,
-            g->scenes[g->scene]->player->sprite->position,
-            WHITE
-        );
-
+        drawScene(g->scenes[g->scene]);
         EndDrawing();
     }
 
