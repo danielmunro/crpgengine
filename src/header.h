@@ -19,6 +19,8 @@
 #define SCENE_TYPE_FIGHT 2
 #define SCENE_TYPE_MENU 3
 
+typedef char Layer[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
+
 #include "sprite.c"
 #include "player.c"
 #include "tilemap.c"

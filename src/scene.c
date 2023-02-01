@@ -44,7 +44,7 @@ void checkInput(Scene *s) {
     }
 }
 
-void drawBackground(Scene *s) {
+void drawLayer(Scene *s, Layer layer) {
     int tiles_y = 32;
     int tiles_x = 54;
     int start_y = s->player->y - (tiles_y / 2);
@@ -58,7 +58,7 @@ void drawBackground(Scene *s) {
             if (start_x + x < 0 || start_y + y < 0 || start_x + x > MAX_LAYER_SIZE || start_y + y > MAX_LAYER_SIZE) {
                 continue;
             }
-            int index = s->tilemap->background[start_y + y][start_x + x];
+            int index = layer[start_y + y][start_x + x];
             Tile t = s->tilemap->tiles[index];
             Rectangle frameRec = {(float)t.x, (float)t.y, sz.x, sz.y};
             Vector2 pos = {(sz.x * (float)x) + s->player->offset.x, (sz.y * (float)y) + s->player->offset.y };
@@ -76,6 +76,6 @@ void drawBackground(Scene *s) {
 
 void drawScene(Scene *s) {
     ClearBackground(RAYWHITE);
-    drawBackground(s);
+    drawLayer(s, s->tilemap->background);
     drawSprite(s->player->sprite);
 }
