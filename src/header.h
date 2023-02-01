@@ -9,7 +9,7 @@
 #define MAX_SPRITES   128
 #define MAX_SCENES    256
 #define MAX_LAYER_SIZE 1024
-#define MAX_TILES 512
+#define MAX_TILES 2048
 
 #define SCENE_NAME_MAX_LENGTH 64
 

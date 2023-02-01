@@ -26,6 +26,32 @@ void checkInput(Scene *s) {
 
 void drawScene(Scene *s) {
     ClearBackground(RAYWHITE);
+    int tiles_y = 28;
+    int tiles_x = 48;
+    int start_y = s->player->y - (tiles_y / 2);
+    int start_x = s->player->x - (tiles_x / 2);
+    int cur_x = 0;
+    int cur_y = 0;
+    for (int y = 0; y < tiles_y; y++) {
+        cur_x = 0;
+        for (int x = 0; x < tiles_x; x++) {
+            if (start_x + x < 0 || start_y + y < 0) {
+                continue;
+            }
+            int index = s->tilemap->background[start_y + y][start_x + x];
+            Tile t = s->tilemap->tiles[index];
+            Rectangle frameRec = {(float)t.x, (float)t.y, 16.0f, 16.0f};
+            Vector2 pos = {16.0f * (float)x, 16.0f * (float)y};
+            DrawTextureRec(
+                  s->tilemap->source,
+                  frameRec,
+                  pos,
+                  WHITE
+            );
+            cur_x = cur_x + 1;
+        }
+        cur_y = cur_y + 1;
+    }
 
     DrawTextureRec(
             s->player->sprite->source,
