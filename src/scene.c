@@ -6,12 +6,12 @@ typedef struct Scene {
     char name[SCENE_NAME_MAX_LENGTH];
 } Scene;
 
-Scene *createTestScene(Player *p) {
+Scene *createTestScene() {
     Scene *scene = malloc(sizeof(Scene));
     scene->tilemap = createTestTilemap();
-    scene->player = p;
+    scene->player = createTestPlayer();
     scene->type = SCENE_TYPE_FREE_MOVE;
-    strcpy(scene->name, "test");
+    strcpy(scene->name, "test town map");
     return scene;
 }
 

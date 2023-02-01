@@ -14,8 +14,8 @@
 #define SCENE_TYPE_FIGHT 2
 #define SCENE_TYPE_MENU 3
 
-#include "player.c"
 #include "sprite.c"
+#include "player.c"
 #include "tilemap.c"
 #include "scene.c"
 #include "game.c"
