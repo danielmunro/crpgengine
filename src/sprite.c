@@ -45,7 +45,7 @@ void incrementFrame(struct Sprite *sp) {
     sp->frameRec.x = (float) sp->currentFrame * HUMANOID_WIDTH;
 }
 
-void move(struct Sprite *sp, int direction) {
+void moveSprite(struct Sprite *sp, int direction) {
     sp->direction = direction;
     sp->framesCounter = sp->framesCounter + 1;
     if (sp->framesCounter > 10) {

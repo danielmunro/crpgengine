@@ -17,10 +17,10 @@ Scene *createTestScene() {
 
 void checkInput(Scene *s) {
     if (s->type == SCENE_TYPE_FREE_MOVE) {
-        if (IsKeyDown(KEY_RIGHT)) move(s->player->sprite, DIRECTION_RIGHT);
-        else if (IsKeyDown(KEY_LEFT)) move(s->player->sprite, DIRECTION_LEFT);
-        else if (IsKeyDown(KEY_UP)) move(s->player->sprite, DIRECTION_UP);
-        else if (IsKeyDown(KEY_DOWN)) move(s->player->sprite, DIRECTION_DOWN);
+        if (IsKeyDown(KEY_RIGHT)) movePlayer(s->player, DIRECTION_RIGHT);
+        else if (IsKeyDown(KEY_LEFT)) movePlayer(s->player, DIRECTION_LEFT);
+        else if (IsKeyDown(KEY_UP)) movePlayer(s->player, DIRECTION_UP);
+        else if (IsKeyDown(KEY_DOWN)) movePlayer(s->player, DIRECTION_DOWN);
     }
 }
 

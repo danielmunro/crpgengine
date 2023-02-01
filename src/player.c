@@ -11,3 +11,16 @@ Player *createTestPlayer() {
     player->y = 10;
     return player;
 }
+
+void movePlayer(Player *p, int direction) {
+    moveSprite(p->sprite, direction);
+    if (direction == DIRECTION_UP) {
+        p->y = p->y - 1;
+    } else if (direction == DIRECTION_DOWN) {
+        p->y = p->y + 1;
+    } else if (direction == DIRECTION_LEFT) {
+        p->x = p->x - 1;
+    } else if (direction == DIRECTION_RIGHT) {
+        p->x = p->x + 1;
+    }
+}
