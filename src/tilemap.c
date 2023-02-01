@@ -6,8 +6,7 @@ typedef struct Tile {
 } Tile;
 
 typedef struct Tilemap {
-    int width;
-    int height;
+    Vector2 size;
     Texture2D backgroundLayer;
     Texture2D source;
     char background[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
@@ -16,8 +15,8 @@ typedef struct Tilemap {
 
 Tilemap *createTestTilemap() {
     Tilemap *t = malloc(sizeof(Tilemap));
-    t->width = 16;
-    t->height = 16;
+    Vector2 size = { 16.0f, 16.0f };
+    t->size = size;
     t->source = LoadTexture("resources/overworld.png");
     strcpy(t->tiles[0].name, "foo");
     t->tiles[0].value = '0';

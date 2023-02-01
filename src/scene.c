@@ -32,6 +32,7 @@ void drawScene(Scene *s) {
     int start_x = s->player->x - (tiles_x / 2);
     int cur_x = 0;
     int cur_y = 0;
+    Vector2 sz = s->tilemap->size;
     for (int y = 0; y < tiles_y; y++) {
         cur_x = 0;
         for (int x = 0; x < tiles_x; x++) {
@@ -40,8 +41,8 @@ void drawScene(Scene *s) {
             }
             int index = s->tilemap->background[start_y + y][start_x + x];
             Tile t = s->tilemap->tiles[index];
-            Rectangle frameRec = {(float)t.x, (float)t.y, 16.0f, 16.0f};
-            Vector2 pos = {16.0f * (float)x, 16.0f * (float)y};
+            Rectangle frameRec = {(float)t.x, (float)t.y, sz.x, sz.y};
+            Vector2 pos = {sz.x * (float)x, sz.y * (float)y};
             DrawTextureRec(
                   s->tilemap->source,
                   frameRec,
