@@ -45,7 +45,7 @@ void incrementFrame(struct Sprite *sp) {
     sp->frameRec.x = (float) sp->currentFrame * HUMANOID_WIDTH;
 }
 
-void animateSprite(struct Sprite *sp) {
+void animateSprite(Sprite *sp) {
     sp->framesCounter = sp->framesCounter + 1;
     if (sp->framesCounter > 10) {
         sp->framesCounter = 0;
@@ -60,4 +60,13 @@ void animateSprite(struct Sprite *sp) {
     } else if (sp->direction == DIRECTION_RIGHT) {
         sp->frameRec.y = HUMANOID_HEIGHT * 2;
     }
+}
+
+void drawSprite(Sprite *sp) {
+    DrawTextureRec(
+            sp->source,
+            sp->frameRec,
+            sp->position,
+            WHITE
+    );
 }

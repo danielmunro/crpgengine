@@ -44,8 +44,7 @@ void checkInput(Scene *s) {
     }
 }
 
-void drawScene(Scene *s) {
-    ClearBackground(RAYWHITE);
+void drawBackground(Scene *s) {
     int tiles_y = 32;
     int tiles_x = 54;
     int start_y = s->player->y - (tiles_y / 2);
@@ -64,20 +63,19 @@ void drawScene(Scene *s) {
             Rectangle frameRec = {(float)t.x, (float)t.y, sz.x, sz.y};
             Vector2 pos = {(sz.x * (float)x) + s->player->offset.x, (sz.y * (float)y) + s->player->offset.y };
             DrawTextureRec(
-                  s->tilemap->source,
-                  frameRec,
-                  pos,
-                  WHITE
+                    s->tilemap->source,
+                    frameRec,
+                    pos,
+                    WHITE
             );
             cur_x = cur_x + 1;
         }
         cur_y = cur_y + 1;
     }
+}
 
-    DrawTextureRec(
-            s->player->sprite->source,
-            s->player->sprite->frameRec,
-            s->player->sprite->position,
-            WHITE
-    );
+void drawScene(Scene *s) {
+    ClearBackground(RAYWHITE);
+    drawBackground(s);
+    drawSprite(s->player->sprite);
 }
