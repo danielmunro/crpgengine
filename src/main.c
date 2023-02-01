@@ -1,7 +1,6 @@
 #include "header.h"
 
-int main(void)
-{
+int main(void) {
     const int screenWidth = 800;
     const int screenHeight = 450;
     SetTargetFPS(60);
@@ -9,9 +8,8 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "cjrpgengine");
 
     struct Game *g = createGameInstance();
-    
-    while (!WindowShouldClose())
-    {
+
+    while (!WindowShouldClose()) {
         if (IsKeyDown(KEY_RIGHT)) move(g->player->sprite, DIRECTION_RIGHT);
         else if (IsKeyDown(KEY_LEFT)) move(g->player->sprite, DIRECTION_LEFT);
         else if (IsKeyDown(KEY_UP)) move(g->player->sprite, DIRECTION_UP);
@@ -22,11 +20,11 @@ int main(void)
         ClearBackground(RAYWHITE);
 
         DrawTextureRec(
-                g->player->sprite->source,
-                g->player->sprite->frameRec,
-                g->player->sprite->position,
-                WHITE
-            );
+            g->player->sprite->source,
+            g->player->sprite->frameRec,
+            g->player->sprite->position,
+            WHITE
+        );
 
         EndDrawing();
     }
