@@ -45,8 +45,8 @@ void checkInput(Scene *s) {
 }
 
 void drawLayer(Scene *s, Layer layer) {
-    int tiles_y = 32;
-    int tiles_x = 54;
+    int tiles_x = SCREEN_WIDTH / s->tilemap->size.x + 1;
+    int tiles_y = SCREEN_HEIGHT / s->tilemap->size.y + 2;
     int start_y = s->player->y - (tiles_y / 2);
     int start_x = s->player->x - (tiles_x / 2);
     int cur_x = 0;
