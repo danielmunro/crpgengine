@@ -1,5 +1,6 @@
-main
 .idea/
 cmake-build-debug/
 CMakeFiles/
 build/
+.DS_Store
+Project.cbp
