@@ -49,11 +49,8 @@ void drawLayer(Scene *s, Layer layer) {
     int tiles_y = SCREEN_HEIGHT / s->tilemap->size.y + 2;
     int start_y = s->player->y - (tiles_y / 2);
     int start_x = s->player->x - (tiles_x / 2);
-    int cur_x = 0;
-    int cur_y = 0;
     Vector2 sz = s->tilemap->size;
     for (int y = -1; y < tiles_y; y++) {
-        cur_x = 0;
         for (int x = -1; x < tiles_x; x++) {
             if (start_x + x < 0 || start_y + y < 0 || start_x + x > MAX_LAYER_SIZE || start_y + y > MAX_LAYER_SIZE) {
                 continue;
@@ -68,9 +65,7 @@ void drawLayer(Scene *s, Layer layer) {
                     pos,
                     WHITE
             );
-            cur_x = cur_x + 1;
         }
-        cur_y = cur_y + 1;
     }
 }
 
