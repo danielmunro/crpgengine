@@ -56,7 +56,7 @@ void drawLayer(Scene *s, Layer layer) {
                 continue;
             }
             int index = layer[start_y + y][start_x + x];
-            Tile t = s->tilemap->tiles[index];
+            Vector2D t = getTileFromIndex(s->tilemap, index);
             Rectangle frameRec = {(float)t.x, (float)t.y, (float)sz.x, (float)sz.y};
             Vector2 pos = {
                     (float)((sz.x * x) + s->player->offset.x),
