@@ -5,13 +5,103 @@
 		<Option title="cjrpgengine"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\local\;CMake Files\..\..\..\..\usr\local\lib\;CMake Files\..\..\..\..\usr\local\lib\cmake\;CMake Files\..\..\..\..\usr\local\lib\cmake\raylib\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\_deps\;CMake Files\_deps\raylib-src\;CMake Files\_deps\raylib-src\src\;CMake Files\_deps\raylib-src\src\external\;CMake Files\_deps\raylib-src\src\external\glfw\;CMake Files\_deps\raylib-src\src\external\glfw\CMake\;CMake Files\_deps\raylib-src\src\external\glfw\src\;CMake Files\_deps\raylib-src\cmake\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
 				<Option type="4"/>
 				<MakeCommands>
 					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="list_install_components">
+				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cjrpgengine">
+				<Option output="/Users/danmunro/github/cjrpgengine/build/cjrpgengine" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="./build"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DPLATFORM_DESKTOP"/>
+					<Add option="-DGRAPHICS_API_OPENGL_33"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 cjrpgengine"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cjrpgengine/fast">
+				<Option output="/Users/danmunro/github/cjrpgengine/build/cjrpgengine" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="./build"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DPLATFORM_DESKTOP"/>
+					<Add option="-DGRAPHICS_API_OPENGL_33"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 cjrpgengine/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="package_source">
+				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 package_source"/>
 					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
@@ -37,52 +127,322 @@
 					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="cjrpgengine">
-				<Option output="/Users/danmunro/github/cjrpgengine/build/cjrpgengine" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="./build"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
-					<Add directory="/usr/local/Cellar/raylib/4.2.0/include"/>
-				</Compiler>
+			<Target title="package">
+				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
+				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 cjrpgengine"/>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 package"/>
 					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="cjrpgengine/fast">
-				<Option output="/Users/danmunro/github/cjrpgengine/build/cjrpgengine" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="./build"/>
+			<Target title="raylib">
+				<Option output="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/libraylib.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib"/>
 				<Option object_output="./"/>
-				<Option type="1"/>
+				<Option type="2"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
-					<Add directory="/usr/local/Cellar/raylib/4.2.0/include"/>
+					<Add option="-DPLATFORM_DESKTOP"/>
+					<Add option="-DGRAPHICS_API_OPENGL_33"/>
+					<Add option="-DGL_SILENCE_DEPRECATION"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 cjrpgengine/fast"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 raylib"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="raylib/fast">
+				<Option output="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/libraylib.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DPLATFORM_DESKTOP"/>
+					<Add option="-DGRAPHICS_API_OPENGL_33"/>
+					<Add option="-DGL_SILENCE_DEPRECATION"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 raylib/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="glfw">
+				<Option output="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/libglfw3.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_GLFW_USE_CONFIG_H"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 glfw"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="glfw/fast">
+				<Option output="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/libglfw3.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D_GLFW_USE_CONFIG_H"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 glfw/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/cocoa_init.m.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/cocoa_joystick.m.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/cocoa_monitor.m.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/cocoa_time.c.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/cocoa_window.m.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/context.c.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/init.c.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/input.c.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/monitor.c.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/nsgl_context.m.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/window.c.o">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/glfw_config.h">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include/GLFW/glfw3.h">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include/GLFW/glfw3native.h">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/cocoa_init.m">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/cocoa_joystick.h">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/cocoa_joystick.m">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/cocoa_monitor.m">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/cocoa_platform.h">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/cocoa_time.c">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/cocoa_window.m">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/context.c">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/egl_context.c">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/egl_context.h">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/init.c">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/input.c">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/internal.h">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/mappings.h">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/monitor.c">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/nsgl_context.h">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/nsgl_context.m">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/osmesa_context.c">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/osmesa_context.h">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/posix_thread.c">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/posix_thread.h">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/vulkan.c">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/window.c">
+			<Option target="glfw"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/raudio.c">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/raylib.h">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/raymath.h">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/rcore.c">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/rlgl.h">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/rmodels.c">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/rshapes.c">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/rtext.c">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/rtextures.c">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/utils.c">
+			<Option target="raylib"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/utils.h">
+			<Option target="raylib"/>
+		</Unit>
 		<Unit filename="/Users/danmunro/github/cjrpgengine/src/main.c">
 			<Option target="cjrpgengine"/>
 		</Unit>
 		<Unit filename="/Users/danmunro/github/cjrpgengine/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
-		<Unit filename="/Users/danmunro/github/cjrpgengine/../../../../usr/local/lib/cmake/raylib/raylib-config-version.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\raylib\"/>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\"/>
 		</Unit>
-		<Unit filename="/Users/danmunro/github/cjrpgengine/../../../../usr/local/lib/cmake/raylib/raylib-config.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\lib\cmake\raylib\"/>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/CMakeOptions.txt">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/raylib.pc.in">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\src\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\src\external\glfw\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/CMake/glfw3.pc.in">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\src\external\glfw\CMake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/CMake/glfw3Config.cmake.in">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\src\external\glfw\CMake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\src\external\glfw\src\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src/glfw_config.h.in">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\src\external\glfw\src\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/AddIfFlagCompiles.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/BuildOptions.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/CompileDefinitions.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/CompilerFlags.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/EnumOption.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/GlfwImport.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/InstallConfigurations.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/JoinPaths.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/LibraryConfigurations.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/LibraryPathToLinkerFlags.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/PackConfigurations.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/PopulateConfigVariablesLocally.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/raylib-config-version.cmake">
+			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
 		</Unit>
 	</Project>
 </CodeBlocks_project_file>
