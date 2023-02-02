@@ -28,6 +28,6 @@ Scene *loadScene() {
     Vector2D size = { height, width };
     tilemap->size = size;
     tilemap->source = LoadTexture(source);
-
+    
     return scene;
 }
