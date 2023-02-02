@@ -8,6 +8,10 @@ int main(void) {
     struct timeval start, end;
     long elapsed = 0;
 
+//    char *data = LoadFileText("./resources/tiled/firsttown.tmx");
+//    uint8_t *source = (uint8_t)atoi(data);
+//    struct xml_document* document = xml_parse_document(source, strlen(source));
+
     while (!WindowShouldClose()) {
         gettimeofday(&start, NULL);
         checkInput(g->scenes[g->scene]);
