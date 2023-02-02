@@ -7,6 +7,7 @@ int main(void) {
     SetWindowTitle(g->scenes[g->scene]->name);
     struct timeval start, end;
     long elapsed = 0;
+    loadScene();
 
 //    char *data = LoadFileText("./resources/tiled/firsttown.tmx");
 //    uint8_t *source = (uint8_t)atoi(data);
