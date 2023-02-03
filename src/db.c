@@ -30,10 +30,10 @@ char *parseSceneLayer(Tilemap *t, char *layer, int i) {
     printf("data parse complete\n");
 }
 
-Scene *loadScene() {
-    char *data = LoadFileText("./resources/firsttown.scene");
+Scene *loadScene(char *sceneName) {
+    printf("loading scene %s", sceneName);
+    char *data = LoadFileText(sceneName);
     char *pch = NULL;
-    printf("file: %s\n", data);
     pch = strtok(data, "\r\n");
     Scene *scene = malloc(sizeof(Scene));
     Tilemap *tilemap = malloc(sizeof(Tilemap));
@@ -51,7 +51,7 @@ Scene *loadScene() {
         pch = strtok(NULL, "\r\n");
         layerCount++;
     }
-    printf("layers: %d\n", layerCount);
+    printf("layers found: %d\n", layerCount);
     pch = strtok(sizeStr, ",");
     int height = atoi(pch);
     pch = strtok(NULL, ",");

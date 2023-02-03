@@ -7,15 +7,6 @@ typedef struct Scene {
     char name[SCENE_NAME_MAX_LENGTH];
 } Scene;
 
-Scene *createTestScene() {
-    Scene *scene = malloc(sizeof(Scene));
-    scene->tilemap = createTestTilemap();
-    scene->player = createTestPlayer();
-    scene->type = SCENE_TYPE_FREE_MOVE;
-    strcpy(scene->name, "test town map");
-    return scene;
-}
-
 void movePlayer(Scene *s, int direction) {
     if (s->player->offset.x != 0 || s->player->offset.y != 0) {
         return;
