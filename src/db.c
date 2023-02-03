@@ -43,6 +43,9 @@ Scene *loadScene(char *sceneName) {
     pch = strtok(NULL, "\r\n");
     char *source = pch;
     pch = strtok(NULL, "\r\n");
+    char *sceneType = pch;
+    printf("scene type: %s\n", sceneType);
+    pch = strtok(NULL, "\r\n");
     char *layers[MAX_LAYER_COUNT];
     int layerCount = 0;
     while (pch != NULL) {
@@ -58,16 +61,24 @@ Scene *loadScene(char *sceneName) {
     int width = atoi(pch);
     Vector2D size = { width, height };
     tilemap->size = size;
-    printf("size: %d, %d\n", width, height);
     tilemap->source = LoadTexture(source);
     int i = 0;
     while (i < layerCount) {
-        printf("parsing scene layer %s", layers[i]);
+        printf("parsing scene layer %s\n", layers[i]);
         parseSceneLayer(tilemap, layers[i], i);
+        i++;
+    }
+    i = 0;
+    int count = sizeof(sceneTypes) / sizeof(SceneType);
+    while (i <= count) {
+        if (strcmp(sceneTypes[i].scene, sceneType) == 0) {
+            scene->type = sceneTypes[i].code;
+        }
         i++;
     }
     scene->layers = layerCount;
     scene->tilemap = tilemap;
+    printf("done parsing scene %s\n", sceneName);
 
     return scene;
 }

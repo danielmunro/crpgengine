@@ -7,6 +7,17 @@ typedef struct Scene {
     char name[SCENE_NAME_MAX_LENGTH];
 } Scene;
 
+typedef struct SceneType {
+    int code;
+    const char *scene;
+} SceneType;
+
+const SceneType sceneTypes[] = {
+    {SCENE_TYPE_FREE_MOVE, "free-move"},
+    {SCENE_TYPE_FIGHT, "fight"},
+    {SCENE_TYPE_MENU, "menu"},
+};
+
 void movePlayer(Scene *s, int direction) {
     if (s->player->offset.x != 0 || s->player->offset.y != 0) {
         return;

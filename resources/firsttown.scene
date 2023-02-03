@@ -1,5 +1,6 @@
 First town
 16,16
 resources/tinytown.png
+free-move
 resources/tiled/firsttown_Background.csv
 resources/tiled/firsttown_Midground.csv
