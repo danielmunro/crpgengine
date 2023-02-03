@@ -8,7 +8,7 @@ typedef struct Tile {
 typedef struct Tilemap {
     Vector2D size;
     Texture2D source;
-    char background[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
+    char layers[MAX_LAYER_COUNT][MAX_LAYER_SIZE][MAX_LAYER_SIZE];
 } Tilemap;
 
 Tilemap *createTestTilemap() {
@@ -19,7 +19,7 @@ Tilemap *createTestTilemap() {
 
     for (int y = 0; y < MAX_LAYER_SIZE / 4; y++) {
         for (int x = 0; x < MAX_LAYER_SIZE / 4; x++) {
-            t->background[y][x] = 0;
+            t->layers[0][y][x] = 0;
         }
     }
 
@@ -29,13 +29,8 @@ Tilemap *createTestTilemap() {
 Vector2D getTileFromIndex(Tilemap *t, int index) {
     int width = t->source.width / t->size.x;
     int x, y;
-    if (index == 0) {
-        x = 0;
-        y = 0;
-    } else {
-        x = width % index;
-        y = width / index;
-    }
+    y = index / width;
+    x = (index % width);
     Vector2D pos = {x, y};
     return pos;
 }

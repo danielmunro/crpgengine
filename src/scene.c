@@ -2,6 +2,7 @@ typedef struct Scene {
     Sprite *sprites[MAX_SPRITES];
     Player *player;
     Tilemap *tilemap;
+    int layers;
     int type;
     char name[SCENE_NAME_MAX_LENGTH];
 } Scene;
@@ -50,30 +51,44 @@ void drawLayer(Scene *s, Layer layer) {
     int start_y = s->player->y - (tiles_y / 2);
     int start_x = s->player->x - (tiles_x / 2);
     Vector2D sz = s->tilemap->size;
-    for (int y = -1; y < tiles_y; y++) {
-        for (int x = -1; x < tiles_x; x++) {
-            if (start_x + x < 0 || start_y + y < 0 || start_x + x > MAX_LAYER_SIZE || start_y + y > MAX_LAYER_SIZE) {
-                continue;
+    int i = 0;
+    while (i < MAX_LAYER_COUNT && i < s->layers) {
+        for (int y = -1; y < tiles_y; y++) {
+            for (int x = -1; x < tiles_x; x++) {
+                if (start_x + x < 0 || start_y + y < 0 || start_x + x > MAX_LAYER_SIZE ||
+                    start_y + y > MAX_LAYER_SIZE) {
+                    continue;
+                }
+                int index = layer[i][start_y + y][start_x + x];
+                if (index < 0) {
+                    continue;
+                }
+                Vector2D t = getTileFromIndex(s->tilemap, index);
+//                printf("framerec %d (%d, %d)\n", index, (t.x * sz.x), (t.y * sz.y));
+                Rectangle frameRec = {
+                        (float) (t.x * sz.x),
+                        (float) (t.y * sz.y),
+                        (float) sz.x,
+                        (float) sz.y
+                };
+                Vector2 pos = {
+                        (float) ((sz.x * x) + s->player->offset.x),
+                        (float) ((sz.y * y) + s->player->offset.y)
+                };
+                DrawTextureRec(
+                        s->tilemap->source,
+                        frameRec,
+                        pos,
+                        WHITE
+                );
             }
-            int index = layer[start_y + y][start_x + x];
-            Vector2D t = getTileFromIndex(s->tilemap, index);
-            Rectangle frameRec = {(float)t.x, (float)t.y, (float)sz.x, (float)sz.y};
-            Vector2 pos = {
-                    (float)((sz.x * x) + s->player->offset.x),
-                    (float)((sz.y * y) + s->player->offset.y)
-            };
-            DrawTextureRec(
-                    s->tilemap->source,
-                    frameRec,
-                    pos,
-                    WHITE
-            );
         }
+        i++;
     }
 }
 
 void drawScene(Scene *s) {
     ClearBackground(RAYWHITE);
-    drawLayer(s, s->tilemap->background);
+    drawLayer(s, s->tilemap->layers);
     drawSprite(s->player->sprite);
 }

@@ -11,6 +11,7 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 450
 
+#define MAX_LAYER_COUNT 3
 #define MAX_SPRITES   128
 #define MAX_SCENES    256
 #define MAX_LAYER_SIZE 1024
@@ -22,7 +23,7 @@
 #define SCENE_TYPE_FIGHT 2
 #define SCENE_TYPE_MENU 3
 
-typedef char Layer[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
+typedef char Layer[MAX_LAYER_COUNT][MAX_LAYER_SIZE][MAX_LAYER_SIZE];
 
 #include "util.c"
 #include "sprite.c"
