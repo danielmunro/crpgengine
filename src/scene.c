@@ -66,7 +66,6 @@ void drawLayer(Scene *s, Layer layer) {
                     continue;
                 }
                 Vector2D t = getTileFromIndex(s->tilemap, index);
-//                printf("framerec %d (%d, %d)\n", index, (t.x * sz.x), (t.y * sz.y));
                 Rectangle frameRec = {
                         (float) (t.x * sz.x),
                         (float) (t.y * sz.y),
