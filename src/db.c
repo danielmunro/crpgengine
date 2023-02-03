@@ -4,8 +4,7 @@
 
 #define MAX_DATA_SIZE 2048
 
-char *parseSceneLayer(Tilemap *t, char *layer, int i) {
-    printf("parseSceneLayer %s\n", layer);
+void *parseSceneLayer(Tilemap *t, char *layer, int i) {
     char *rawData = LoadFileText(layer);
     char *line = strtok(rawData, "\r\n");
     char *data[MAX_DATA_SIZE];
@@ -15,7 +14,6 @@ char *parseSceneLayer(Tilemap *t, char *layer, int i) {
         line = strtok(NULL, "\r\n");
         it++;
     }
-    printf("data read complete\n");
     int y = 0, x = 0;
     while (y < it) {
         char *val = strtok(data[y], ",");
@@ -27,27 +25,19 @@ char *parseSceneLayer(Tilemap *t, char *layer, int i) {
         }
         y++;
     }
-    printf("data parse complete\n");
 }
 
 Scene *loadScene(char *sceneName) {
     printf("loading scene %s", sceneName);
     char *data = LoadFileText(sceneName);
-    char *pch = NULL;
-    pch = strtok(data, "\r\n");
     Scene *scene = malloc(sizeof(Scene));
-    Tilemap *tilemap = malloc(sizeof(Tilemap));
-    strcpy(scene->name, pch);
-    pch = strtok(NULL, "\r\n");
-    char *sizeStr = pch;
-    pch = strtok(NULL, "\r\n");
-    char *source = pch;
-    pch = strtok(NULL, "\r\n");
-    char *sceneType = pch;
-    printf("scene type: %s\n", sceneType);
-    pch = strtok(NULL, "\r\n");
+    strcpy(scene->name, strtok(data, "\r\n"));
+    char *sizeStr = strtok(NULL, "\r\n");
+    char *source = strtok(NULL, "\r\n");
+    char *sceneType = strtok(NULL, "\r\n");
     char *layers[MAX_LAYER_COUNT];
     int layerCount = 0;
+    char *pch = strtok(NULL, "\r\n");
     while (pch != NULL) {
         layers[layerCount] = pch;
         printf("adding to layers: %s\n", pch);
@@ -55,24 +45,32 @@ Scene *loadScene(char *sceneName) {
         layerCount++;
     }
     printf("layers found: %d\n", layerCount);
-    pch = strtok(sizeStr, ",");
-    int height = atoi(pch);
-    pch = strtok(NULL, ",");
-    int width = atoi(pch);
+
+    // size
+    int height = atoi(strtok(sizeStr, ","));
+    int width = atoi(strtok(NULL, ","));
     Vector2D size = { width, height };
+
+    // create tilemap
+    Tilemap *tilemap = malloc(sizeof(Tilemap));
     tilemap->size = size;
     tilemap->source = LoadTexture(source);
+
+    // parse the layers
     int i = 0;
     while (i < layerCount) {
         printf("parsing scene layer %s\n", layers[i]);
         parseSceneLayer(tilemap, layers[i], i);
         i++;
     }
+
+    // assign scene properties
     i = 0;
     int count = sizeof(sceneTypes) / sizeof(SceneType);
     while (i <= count) {
         if (strcmp(sceneTypes[i].scene, sceneType) == 0) {
             scene->type = sceneTypes[i].code;
+            break;
         }
         i++;
     }
