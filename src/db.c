@@ -119,6 +119,7 @@ Scene *loadScene(char *sceneName) {
     char *data = LoadFileText(sceneName);
     Scene *scene = malloc(sizeof(Scene));
     strcpy(scene->name, strtok(data, "\r\n"));
+    char *tilemapFile = strtok(NULL, "\r\n");
     char *sceneType = strtok(NULL, "\r\n");
     char *layers[MAX_LAYER_COUNT];
     int layerCount = 0;
@@ -132,7 +133,7 @@ Scene *loadScene(char *sceneName) {
     printf("layers found: %d\n", layerCount);
 
     // create tilemap
-    Tilemap *tilemap = parseTilemapXml("./resources/tiled/tinytown.tsx");
+    Tilemap *tilemap = parseTilemapXml(tilemapFile);
     parseTilemapLayers(tilemap, layers, layerCount);
 
     // assign scene properties
