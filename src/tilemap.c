@@ -15,6 +15,6 @@ Vector2D getTileFromIndex(Tilemap *t, int index) {
     int x, y;
     y = index / width;
     x = (index % width);
-    Vector2D pos = {x, y};
+    Vector2D pos = {x - 1, y};
     return pos;
 }

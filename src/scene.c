@@ -43,7 +43,7 @@ void drawLayer(Scene *s, Layer layer) {
                     continue;
                 }
                 int index = layer[i][start_y + y][start_x + x];
-                if (index < 0) {
+                if (index <= 0) {
                     continue;
                 }
                 Vector2D t = getTileFromIndex(s->tilemap, index);
