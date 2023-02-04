@@ -12,3 +12,15 @@ Game *createGameInstance() {
 //    streamXmlFile("./resources/tiled/tinytown.tsx");
     return g;
 }
+
+void run(Game *g) {
+    while (!WindowShouldClose()) {
+        checkInput(g->scenes[g->scene]);
+        BeginDrawing();
+        drawScene(g->scenes[g->scene]);
+        EndDrawing();
+        if (g->scenes[g->scene]->player->isMoving) {
+            animateSprite(g->scenes[g->scene]->player->sprite);
+        }
+    }
+}
