@@ -2,7 +2,8 @@ typedef struct Player {
     struct Sprite *sprite;
     int x;
     int y;
-    Vector2D offset;
+    int isMoving;
+    long duration;
 } Player;
 
 Player *createTestPlayer() {
@@ -10,15 +11,7 @@ Player *createTestPlayer() {
     player->sprite = createTestHumanoid();
     player->x = 10;
     player->y = 10;
-    Vector2D offset = {0, 0};
-    player->offset = offset;
+    player->isMoving = 0;
+    player->duration = 0;
     return player;
-}
-
-void animatePlayer(Player *p) {
-    if (p->offset.x < 0) p->offset.x = p->offset.x + 1;
-    else if (p->offset.x > 0) p->offset.x = p->offset.x - 1;
-    else if (p->offset.y < 0) p->offset.y = p->offset.y + 1;
-    else if (p->offset.y > 0) p->offset.y = p->offset.y - 1;
-    if (p->offset.x != 0 || p->offset.y != 0) animateSprite(p->sprite);
 }

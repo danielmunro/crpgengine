@@ -19,23 +19,18 @@ const SceneType sceneTypes[] = {
 };
 
 void movePlayer(Scene *s, int direction) {
-    if (s->player->offset.x != 0 || s->player->offset.y != 0) {
-        return;
-    }
     s->player->sprite->direction = direction;
     if (direction == DIRECTION_UP) {
         s->player->y = s->player->y - 1;
-        s->player->offset.y = -s->tilemap->size.y;
     } else if (direction == DIRECTION_DOWN) {
         s->player->y = s->player->y + 1;
-        s->player->offset.y = s->tilemap->size.y;
-    } else if (direction == DIRECTION_LEFT) {
+    }
+    if (direction == DIRECTION_LEFT) {
         s->player->x = s->player->x - 1;
-        s->player->offset.x = -s->tilemap->size.x;
     } else if (direction == DIRECTION_RIGHT) {
         s->player->x = s->player->x + 1;
-        s->player->offset.x = s->tilemap->size.x;
     }
+    s->player->isMoving = 1;
 }
 
 void checkInput(Scene *s) {
@@ -44,6 +39,7 @@ void checkInput(Scene *s) {
         else if (IsKeyDown(KEY_LEFT)) movePlayer(s, DIRECTION_LEFT);
         else if (IsKeyDown(KEY_UP)) movePlayer(s, DIRECTION_UP);
         else if (IsKeyDown(KEY_DOWN)) movePlayer(s, DIRECTION_DOWN);
+        else s->player->isMoving = 0;
     }
 }
 
@@ -73,8 +69,8 @@ void drawLayer(Scene *s, Layer layer) {
                         (float) sz.y
                 };
                 Vector2 pos = {
-                        (float) ((sz.x * x) + s->player->offset.x),
-                        (float) ((sz.y * y) + s->player->offset.y)
+                        (float) (sz.x * x),
+                        (float) (sz.y * y)
                 };
                 DrawTextureRec(
                         s->tilemap->source,

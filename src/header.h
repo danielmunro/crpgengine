@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <./_deps/raylib-src/src/raylib.h>
+#include <libxml/xmlreader.h>
 #include <string.h>
 #include <math.h>
 #include <sys/time.h>
@@ -31,6 +32,7 @@ typedef char Layer[MAX_LAYER_COUNT][MAX_LAYER_SIZE][MAX_LAYER_SIZE];
 #include "tilemap.c"
 #include "scene.c"
 #include "db.c"
+#include "xmldb.c"
 #include "game.c"
 
 #endif /* CJRPGENGINE_H_INCLUDED */
