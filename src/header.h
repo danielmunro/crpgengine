@@ -25,6 +25,8 @@
 #define SCENE_TYPE_FIGHT 2
 #define SCENE_TYPE_MENU 3
 
+#define MOVE_AMOUNT 0.1f
+
 typedef char Layer[MAX_LAYER_COUNT][MAX_LAYER_SIZE][MAX_LAYER_SIZE];
 
 #include "util.c"

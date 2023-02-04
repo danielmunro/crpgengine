@@ -19,14 +19,14 @@ void movePlayer(Player *p, int direction) {
     p->isMoving = 1;
     p->sprite->direction = direction;
     if (direction == DIRECTION_UP) {
-        p->pos.y -= 0.1f;
+        p->pos.y -= MOVE_AMOUNT;
     } else if (direction == DIRECTION_DOWN) {
-        p->pos.y += 0.1f;
+        p->pos.y += MOVE_AMOUNT;
     }
     if (direction == DIRECTION_LEFT) {
-        p->pos.x -= 0.1f;
+        p->pos.x -= MOVE_AMOUNT;
     } else if (direction == DIRECTION_RIGHT) {
-        p->pos.x += 0.1f;
+        p->pos.x += MOVE_AMOUNT;
     }
     gettimeofday(&p->lastMovement, NULL);
 }
