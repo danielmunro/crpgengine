@@ -119,8 +119,8 @@ Scene *loadScene(char *sceneName) {
     char *data = LoadFileText(sceneName);
     Scene *scene = malloc(sizeof(Scene));
     strcpy(scene->name, strtok(data, "\r\n"));
-    char *tilemapFile = strtok(NULL, "\r\n");
     char *sceneType = strtok(NULL, "\r\n");
+    char *tilemapFile = strtok(NULL, "\r\n");
     char *layers[MAX_LAYER_COUNT];
     int layerCount = 0;
     char *pch = strtok(NULL, "\r\n");
