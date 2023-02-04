@@ -64,17 +64,14 @@ void parseSceneLayer(Scene *s, char *rawData) {
     char *data[MAX_DATA_SIZE];
     int it = 0;
     while (line != NULL && it < MAX_DATA_SIZE) {
-        printf("line %d\n", it);
         data[it] = line;
         line = strtok(NULL, "\r\n");
         it++;
     }
     int y = 0, x = 0;
-    printf("looping layers - %d\n", s->layers - 1);
     while (y < it) {
         char *val = strtok(data[y], ",");
         x = 0;
-        printf("xy - %d, %d\n", x, y);
         while (val != NULL) {
             s->tilemap->layers[s->layers - 1][y][x] = atoi(val);
             val = strtok(NULL, ",");
