@@ -1,7 +1,13 @@
+typedef struct Object {
+    Rectangle *rect;
+    int tile;
+} Object;
+
 typedef struct Scene {
     Sprite *sprites[MAX_SPRITES];
     Player *player;
     Tilemap *tilemap;
+    Object objects[MAX_OBJECTS];
     int layers;
     int type;
     char name[SCENE_NAME_MAX_LENGTH];

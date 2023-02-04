@@ -11,9 +11,9 @@ static void processTilemapNode(Tilemap *t, xmlTextReaderPtr reader) {
     if (name == NULL)
         name = BAD_CAST "--";
 
-    value = xmlTextReaderConstValue(reader);
+//    value = xmlTextReaderConstValue(reader);
 
-//    printf("%d %d %s %d %d",
+//    printf("%d %d %s %d %d\n",
 //           xmlTextReaderDepth(reader),
 //           xmlTextReaderNodeType(reader),
 //           name,
@@ -28,14 +28,6 @@ static void processTilemapNode(Tilemap *t, xmlTextReaderPtr reader) {
         char source[255] = "./resources/tiled/";
         strcat(source, (char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)"source"));
         t->source = LoadTexture(source);
-    }
-    if (value == NULL)
-        printf("\n");
-    else {
-        if (xmlStrlen(value) > 40)
-            printf(" %.40s...\n", value);
-        else
-            printf(" %s\n", value);
     }
 }
 
