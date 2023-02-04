@@ -1,11 +1,16 @@
-//
-// Created by Dan Munro on 2/1/23.
-//
-
 #define MAX_DATA_SIZE 2048
+
+int getIntVal(xmlTextReaderPtr reader, char *attribute) {
+    return atoi((char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute));
+}
+
+char *getStringVal(xmlTextReaderPtr reader, char *attribute) {
+    return (char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute);
+}
 
 static void processTilemapNode(Tilemap *t, xmlTextReaderPtr reader) {
     const xmlChar *name, *value;
+    static int objects = 0;
 
     name = xmlTextReaderConstName(reader);
     if (name == NULL)
@@ -21,13 +26,25 @@ static void processTilemapNode(Tilemap *t, xmlTextReaderPtr reader) {
 //           xmlTextReaderHasValue(reader));
     char *strName = (char *)name;
     if (strcmp(strName, "tileset") == 0) {
-        const int width = atoi((char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)"tilewidth"));
-        const int height = atoi((char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)"tilewidth"));
+        const int width = getIntVal(reader, "tilewidth");
+        const int height = getIntVal(reader, "tilewidth");
         t->size = (Vector2D){ width, height };
     } else if (strcmp(strName, "image") == 0) {
         char source[255] = "./resources/tiled/";
-        strcat(source, (char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)"source"));
+        strcat(source, getStringVal(reader, "source"));
         t->source = LoadTexture(source);
+    } else if (strcmp(strName, "tile") == 0) {
+        Object *o = malloc(sizeof(Object));
+        o->tile = getIntVal(reader, "id");
+        t->objects[objects] = o;
+        objects++;
+    } else if (strcmp(strName, "object") == 0) {
+        int x = getIntVal(reader, "x");
+        int y = getIntVal(reader, "y");
+        int width = getIntVal(reader, "width");
+        int height = getIntVal(reader, "height");
+        Rectangle rect = {(float)x, (float)y, (float)width, (float)height};
+        t->objects[objects - 1]->rect = rect;
     }
 }
 

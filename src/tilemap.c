@@ -1,14 +1,13 @@
-typedef struct Tile {
-    char value;
-    char name[24];
-    int x;
-    int y;
-} Tile;
+typedef struct Object {
+    Rectangle rect;
+    int tile;
+} Object;
 
 typedef struct Tilemap {
     Vector2D size;
     Texture2D source;
     char layers[MAX_LAYER_COUNT][MAX_LAYER_SIZE][MAX_LAYER_SIZE];
+    Object *objects[MAX_OBJECTS];
 } Tilemap;
 
 Tilemap *createTestTilemap() {
