@@ -4,6 +4,64 @@
 
 #define MAX_DATA_SIZE 2048
 
+static void processTilemapNode(Tilemap *t, xmlTextReaderPtr reader) {
+    const xmlChar *name, *value;
+
+    name = xmlTextReaderConstName(reader);
+    if (name == NULL)
+        name = BAD_CAST "--";
+
+    value = xmlTextReaderConstValue(reader);
+
+//    printf("%d %d %s %d %d",
+//           xmlTextReaderDepth(reader),
+//           xmlTextReaderNodeType(reader),
+//           name,
+//           xmlTextReaderIsEmptyElement(reader),
+//           xmlTextReaderHasValue(reader));
+    char *strName = (char *)name;
+    if (strcmp(strName, "tileset") == 0) {
+        const int width = atoi((char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)"tilewidth"));
+        const int height = atoi((char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)"tilewidth"));
+        t->size = (Vector2D){ width, height };
+    } else if (strcmp(strName, "image") == 0) {
+        char source[255] = "./resources/tiled/";
+        strcat(source, (char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)"source"));
+        t->source = LoadTexture(source);
+    }
+    if (value == NULL)
+        printf("\n");
+    else {
+        if (xmlStrlen(value) > 40)
+            printf(" %.40s...\n", value);
+        else
+            printf(" %s\n", value);
+    }
+}
+
+static Tilemap *parseTilemapXml(const char *filename) {
+    Tilemap *tilemap = malloc(sizeof(Tilemap));
+    xmlTextReaderPtr reader;
+    int ret;
+
+    reader = xmlReaderForFile(filename, NULL, 0);
+    if (reader != NULL) {
+        ret = xmlTextReaderRead(reader);
+        while (ret == 1) {
+            processTilemapNode(tilemap, reader);
+            ret = xmlTextReaderRead(reader);
+        }
+        xmlFreeTextReader(reader);
+        if (ret != 0) {
+            fprintf(stderr, "%s : failed to parse\n", filename);
+        }
+    } else {
+        fprintf(stderr, "Unable to open %s\n", filename);
+    }
+    return tilemap;
+}
+
+
 void parseSceneLayer(Tilemap *t, char *layer, int i) {
     char *rawData = LoadFileText(layer);
     char *line = strtok(rawData, "\r\n");
@@ -48,12 +106,10 @@ void assignSceneType(Scene *s, char *sceneType) {
 }
 
 Scene *loadScene(char *sceneName) {
-    printf("loading scene %s", sceneName);
+    printf("loading scene %s\n", sceneName);
     char *data = LoadFileText(sceneName);
     Scene *scene = malloc(sizeof(Scene));
     strcpy(scene->name, strtok(data, "\r\n"));
-    char *sizeStr = strtok(NULL, "\r\n");
-    char *source = strtok(NULL, "\r\n");
     char *sceneType = strtok(NULL, "\r\n");
     char *layers[MAX_LAYER_COUNT];
     int layerCount = 0;
@@ -66,15 +122,8 @@ Scene *loadScene(char *sceneName) {
     }
     printf("layers found: %d\n", layerCount);
 
-    // size
-    int height = atoi(strtok(sizeStr, ","));
-    int width = atoi(strtok(NULL, ","));
-    Vector2D size = { width, height };
-
     // create tilemap
-    Tilemap *tilemap = malloc(sizeof(Tilemap));
-    tilemap->size = size;
-    tilemap->source = LoadTexture(source);
+    Tilemap *tilemap = parseTilemapXml("./resources/tiled/tinytown.tsx");
     parseTilemapLayers(tilemap, layers, layerCount);
 
     // assign scene properties

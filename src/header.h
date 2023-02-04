@@ -32,7 +32,6 @@ typedef char Layer[MAX_LAYER_COUNT][MAX_LAYER_SIZE][MAX_LAYER_SIZE];
 #include "tilemap.c"
 #include "scene.c"
 #include "db.c"
-#include "xmldb.c"
 #include "game.c"
 
 #endif /* CJRPGENGINE_H_INCLUDED */
