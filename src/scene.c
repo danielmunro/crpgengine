@@ -5,6 +5,7 @@ typedef struct Scene {
     int layers;
     int type;
     char name[SCENE_NAME_MAX_LENGTH];
+    int showCollisions;
 } Scene;
 
 typedef struct SceneType {
@@ -18,6 +19,19 @@ const SceneType sceneTypes[] = {
     {SCENE_TYPE_MENU, "menu"},
 };
 
+Object *getObject(Scene *s, int index) {
+    for (int l = 0; l < s->layers; l++) {
+        int o = 0;
+        while (s->tilemap->objects[o] != NULL) {
+            if (s->tilemap->objects[o]->tile == index) {
+                return s->tilemap->objects[o];
+            }
+            o++;
+        }
+    }
+    return NULL;
+}
+
 void checkInput(Scene *s) {
     if (s->type == SCENE_TYPE_FREE_MOVE) {
         if (IsKeyDown(KEY_RIGHT)) movePlayer(s->player, DIRECTION_RIGHT);
@@ -28,7 +42,7 @@ void checkInput(Scene *s) {
     }
 }
 
-void drawLayer(Scene *s, Layer layer) {
+void drawLayers(Scene *s) {
     int tiles_x = SCREEN_WIDTH / s->tilemap->size.x + 1;
     int tiles_y = SCREEN_HEIGHT / s->tilemap->size.y + 2;
     int start_y = (int)s->player->pos.y - (tiles_y / 2);
@@ -42,7 +56,7 @@ void drawLayer(Scene *s, Layer layer) {
                     start_y + y > MAX_LAYER_SIZE) {
                     continue;
                 }
-                int index = layer[i][start_y + y][start_x + x];
+                int index = s->tilemap->layers[i][start_y + y][start_x + x];
                 if (index <= 0) {
                     continue;
                 }
@@ -67,6 +81,18 @@ void drawLayer(Scene *s, Layer layer) {
                         pos,
                         WHITE
                 );
+                if (s->showCollisions) {
+                    Object *o = getObject(s, index - 1);
+                    if (o != NULL) {
+                        Rectangle r = {
+                                (float) (sz.x * x) - (xdiff * (float) sz.x) + o->rect.x,
+                                (float) (sz.y * y) - (ydiff * (float) sz.y) + o->rect.y,
+                                o->rect.width,
+                                o->rect.height,
+                        };
+                        DrawRectangleRec(r, PINK);
+                    }
+                }
             }
         }
         i++;
@@ -75,6 +101,6 @@ void drawLayer(Scene *s, Layer layer) {
 
 void drawScene(Scene *s) {
     ClearBackground(RAYWHITE);
-    drawLayer(s, s->tilemap->layers);
+    drawLayers(s);
     drawSprite(s->player->sprite);
 }

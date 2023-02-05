@@ -138,11 +138,12 @@ void assignSceneType(Scene *s, char *sceneType) {
     }
 }
 
-Scene *loadScene(char *sceneName) {
+Scene *loadScene(char *sceneName, int showCollisions) {
     printf("loading scene %s\n", sceneName);
     char *data = LoadFileText(sceneName);
     Scene *scene = malloc(sizeof(Scene));
     scene->layers = 0;
+    scene->showCollisions = showCollisions;
     strcpy(scene->name, strtok(data, "\r\n"));
     char *sceneType = strtok(NULL, "\r\n");
     char *sceneFile = strtok(NULL, "\r\n");

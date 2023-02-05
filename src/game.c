@@ -3,10 +3,10 @@ typedef struct Game {
     int scene;
 } Game;
 
-Game *createGameInstance() {
+Game *createGameInstance(int showCollisions) {
     Game *g = malloc(sizeof(Game));
     g->scene = 0;
-    g->scenes[g->scene] = loadScene("./resources/firsttown.scene");
+    g->scenes[g->scene] = loadScene("./resources/firsttown.scene", showCollisions);
     g->scenes[g->scene]->player = createTestPlayer();
     g->scenes[g->scene]->type = SCENE_TYPE_FREE_MOVE;
     return g;
