@@ -84,18 +84,19 @@ void parseSceneLayer(Scene *s, char *rawData) {
 
 void processSceneNode(Scene *s, xmlTextReaderPtr reader) {
     const xmlChar *name = xmlTextReaderConstName(reader);
+    static int dataOpen = 0;
     char *strName = (char *)name;
     if (strcmp(strName, "tileset") == 0) {
         char *source = getStringAttribute(reader, "source");
         s->tilemap = parseTilemapXml(source);
-    } else if (strcmp(strName, "layer") == 0) {
-        s->layers++;
-        printf("adding to layers - %d\n", s->layers);
     } else if (strcmp(strName, "data") == 0) {
-        xmlChar *data = xmlTextReaderReadString(reader);
-        if (data == NULL) {
+        if (dataOpen == 1) {
+            dataOpen = 0;
             return;
         }
+        dataOpen = 1;
+        xmlChar *data = xmlTextReaderReadString(reader);
+        s->layers++;
         parseSceneLayer(s, (char *)data);
     }
 }
