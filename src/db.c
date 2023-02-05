@@ -59,7 +59,6 @@ static Tilemap *parseTilemapXml(const char *filename) {
 }
 
 void parseSceneLayer(Scene *s, char *rawData) {
-    printf("process scene layer %s\n", rawData);
     char *line = strtok(rawData, "\r\n");
     char *data[MAX_DATA_SIZE];
     int it = 0;
