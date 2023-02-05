@@ -10,6 +10,7 @@ char *getStringAttribute(xmlTextReaderPtr reader, char *attribute) {
 
 static void processTilemapNode(Tilemap *t, xmlTextReaderPtr reader) {
     const xmlChar *name = xmlTextReaderConstName(reader);
+    static int tileOpen = 0;
     static int objects = 0;
     char *strName = (char *)name;
     if (strcmp(strName, "tileset") == 0) {
@@ -21,6 +22,11 @@ static void processTilemapNode(Tilemap *t, xmlTextReaderPtr reader) {
         strcat(source, getStringAttribute(reader, "source"));
         t->source = LoadTexture(source);
     } else if (strcmp(strName, "tile") == 0) {
+        if (tileOpen == 1) {
+            tileOpen = 0;
+            return;
+        }
+        tileOpen = 1;
         Object *o = malloc(sizeof(Object));
         o->tile = getIntAttribute(reader, "id");
         t->objects[objects] = o;
