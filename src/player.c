@@ -8,8 +8,8 @@ typedef struct Player {
 Player *createTestPlayer() {
     Player *player = malloc(sizeof(Player));
     player->sprite = createTestHumanoid();
-    player->pos.x = 10;
-    player->pos.y = 10;
+    player->pos.x = 20;
+    player->pos.y = 20;
     player->isMoving = 0;
     gettimeofday(&player->lastMovement, NULL);
     return player;
