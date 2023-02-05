@@ -1,7 +1,7 @@
 #include "raylib.h"
 
-#define HUMANOID_WIDTH     32.0f
-#define HUMANOID_HEIGHT    48.0f
+#define HUMANOID_WIDTH     16.0f
+#define HUMANOID_HEIGHT    24.0f
 #define DIRECTION_UP       1
 #define DIRECTION_DOWN     2
 #define DIRECTION_LEFT     3
@@ -20,7 +20,7 @@ typedef struct Sprite {
 Sprite *createTestHumanoid() {
     struct Sprite *sp = malloc(sizeof(Sprite));
 
-    sp->source = LoadTexture("resources/hatman.png");
+    sp->source = LoadTexture("resources/fireas.png");
 
     Vector2 position = { ((float)SCREEN_WIDTH / 2) - (HUMANOID_WIDTH / 2), ((float)SCREEN_HEIGHT / 2) - (HUMANOID_HEIGHT / 2) };
     Rectangle frameRec = { 0.0f, 0.0f, HUMANOID_WIDTH, HUMANOID_HEIGHT };
