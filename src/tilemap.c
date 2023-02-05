@@ -1,4 +1,5 @@
 typedef struct Object {
+    int id;
     Rectangle rect;
     int tile;
 } Object;

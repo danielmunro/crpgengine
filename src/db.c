@@ -32,12 +32,14 @@ static void processTilemapNode(Tilemap *t, xmlTextReaderPtr reader) {
         t->objects[objects] = o;
         objects++;
     } else if (strcmp(strName, "object") == 0) {
+        int id = getIntAttribute(reader, "x");
         int x = getIntAttribute(reader, "x");
         int y = getIntAttribute(reader, "y");
         int width = getIntAttribute(reader, "width");
         int height = getIntAttribute(reader, "height");
         Rectangle rect = {(float)x, (float)y, (float)width, (float)height};
         t->objects[objects - 1]->rect = rect;
+        t->objects[objects - 1]->id = id;
     }
 }
 
