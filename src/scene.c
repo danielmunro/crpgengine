@@ -71,7 +71,7 @@ int checkCollision(Scene *s, Vector2 playerPos) {
                 if (index <= 0) {
                     continue;
                 }
-                Vector2 offset = getOffset(s->player->pos);
+                Vector2 offset = getOffset(playerPos);
                 Object *o = getObject(s, index - 1);
                 if (o != NULL) {
                     Rectangle or = {
