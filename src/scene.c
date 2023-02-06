@@ -79,38 +79,44 @@ int checkCollision(Scene *s, Vector2 playerPos) {
     return 0;
 }
 
+int checkMoveKey(Scene *s, int key, int direction, Vector2 pos) {
+    if (IsKeyDown(key)) {
+        if (checkCollision(s, pos)) {
+            return 0;
+        }
+        movePlayer(s->player, direction, pos);
+        return 1;
+    }
+    return 0;
+}
 
 void checkInput(Scene *s) {
     if (s->type == SCENE_TYPE_FREE_MOVE) {
-        if (IsKeyDown(KEY_RIGHT)) {
-            Vector2 p = {s->player->pos.x + MOVE_AMOUNT, s->player->pos.y};
-            if (checkCollision(s, p)) {
-                return;
-            }
-            movePlayer(s->player, DIRECTION_RIGHT, p);
-        }
-        else if (IsKeyDown(KEY_LEFT)) {
-            Vector2 p = {s->player->pos.x - MOVE_AMOUNT, s->player->pos.y};
-            if (checkCollision(s, p)) {
-                return;
-            }
-            movePlayer(s->player, DIRECTION_LEFT, p);
-        }
-        else if (IsKeyDown(KEY_UP)) {
-            Vector2 p = {s->player->pos.x, s->player->pos.y - MOVE_AMOUNT};
-            if (checkCollision(s, p)) {
-                return;
-            }
-            movePlayer(s->player, DIRECTION_UP, p);
-        }
-        else if (IsKeyDown(KEY_DOWN)) {
-            Vector2 p = {s->player->pos.x, s->player->pos.y + MOVE_AMOUNT};
-            if (checkCollision(s, p)) {
-                return;
-            }
-            movePlayer(s->player, DIRECTION_DOWN, p);
-        }
-        else s->player->isMoving = 0;
+        int moveR = checkMoveKey(
+                s,
+                KEY_RIGHT,
+                DIRECTION_RIGHT,
+                (Vector2){s->player->pos.x + MOVE_AMOUNT, s->player->pos.y}
+        );
+        int moveL = checkMoveKey(
+                s,
+                KEY_LEFT,
+                DIRECTION_LEFT,
+                (Vector2){s->player->pos.x - MOVE_AMOUNT, s->player->pos.y}
+        );
+        int moveU = checkMoveKey(
+                s,
+                KEY_UP,
+                DIRECTION_UP,
+                (Vector2){s->player->pos.x, s->player->pos.y - MOVE_AMOUNT}
+        );
+        int moveD = checkMoveKey(
+                s,
+                KEY_DOWN,
+                DIRECTION_DOWN,
+                (Vector2){s->player->pos.x, s->player->pos.y + MOVE_AMOUNT}
+        );
+        s->player->isMoving = moveR || moveL || moveU || moveD;
     }
 }
 
