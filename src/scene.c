@@ -38,20 +38,26 @@ Vector2D getTileCount(Scene *s) {
     return (Vector2D){x, y};
 }
 
+Vector2D getStartTileCoords(Vector2 playerPos, Vector2D tiles) {
+    return (Vector2D){
+            (int)playerPos.x - (tiles.x / 2),
+            (int)playerPos.y - (tiles.y / 2),
+    };
+}
+
 int checkCollision(Scene *s, Vector2 playerPos) {
     Vector2D tiles = getTileCount(s);
-    int start_y = (int)playerPos.y - (tiles.y / 2);
-    int start_x = (int)playerPos.x - (tiles.x / 2);
+    Vector2D start = getStartTileCoords(playerPos, tiles);
     Vector2D sz = s->tilemap->size;
     int i = 0;
     while (i < MAX_LAYER_COUNT && i < s->layers) {
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
-                if (start_x + x < 0 || start_y + y < 0 || start_x + x > MAX_LAYER_SIZE ||
-                    start_y + y > MAX_LAYER_SIZE) {
+                if (start.x + x < 0 || start.y + y < 0 || start.x + x > MAX_LAYER_SIZE ||
+                    start.y + y > MAX_LAYER_SIZE) {
                     continue;
                 }
-                int index = s->tilemap->layers[i][start_y + y][start_x + x];
+                int index = s->tilemap->layers[i][start.y + y][start.x + x];
                 if (index <= 0) {
                     continue;
                 }
@@ -127,18 +133,19 @@ void checkInput(Scene *s) {
 
 void drawLayers(Scene *s) {
     Vector2D tiles = getTileCount(s);
-    int start_y = (int)s->player->pos.y - (tiles.y / 2);
-    int start_x = (int)s->player->pos.x - (tiles.x / 2);
+    Vector2D start = getStartTileCoords(s->player->pos, tiles);
     Vector2D sz = s->tilemap->size;
     int i = 0;
     while (i < MAX_LAYER_COUNT && i < s->layers) {
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
-                if (start_x + x < 0 || start_y + y < 0 || start_x + x > MAX_LAYER_SIZE ||
-                    start_y + y > MAX_LAYER_SIZE) {
+                if (start.x + x < 0 ||
+                    start.y + y < 0 ||
+                    start.x + x > MAX_LAYER_SIZE ||
+                    start.y + y > MAX_LAYER_SIZE) {
                     continue;
                 }
-                int index = s->tilemap->layers[i][start_y + y][start_x + x];
+                int index = s->tilemap->layers[i][start.y + y][start.x + x];
                 if (index <= 0) {
                     continue;
                 }
