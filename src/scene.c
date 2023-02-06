@@ -53,6 +53,13 @@ Vector2D getStartTileCoords(Vector2 playerPos, Vector2D tiles) {
     };
 }
 
+int isInBounds(Vector2D v, Vector2D c) {
+    return v.x + c.x > 0 &&
+           v.y + c.y > 0 &&
+           v.x + c.x < MAX_LAYER_SIZE &&
+           v.y + c.y < MAX_LAYER_SIZE;
+}
+
 int checkCollision(Scene *s, Vector2 playerPos) {
     Vector2D tiles = getTileCount(s);
     Vector2D start = getStartTileCoords(playerPos, tiles);
@@ -61,10 +68,7 @@ int checkCollision(Scene *s, Vector2 playerPos) {
     while (i < MAX_LAYER_COUNT && i < s->layers) {
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
-                if (start.x + x < 0 ||
-                    start.y + y < 0 ||
-                    start.x + x > MAX_LAYER_SIZE ||
-                    start.y + y > MAX_LAYER_SIZE) {
+                if (isInBounds(start, (Vector2D){x, y}) == 0) {
                     continue;
                 }
                 int index = s->tilemap->layers[i][start.y + y][start.x + x];
@@ -136,13 +140,6 @@ void checkInput(Scene *s) {
         );
         s->player->isMoving = moveR || moveL || moveU || moveD;
     }
-}
-
-int isInBounds(Vector2D v, Vector2D c) {
-    return v.x + c.x > 0 &&
-           v.y + c.y > 0 &&
-           v.x + c.x < MAX_LAYER_SIZE &&
-           v.y + c.y < MAX_LAYER_SIZE;
 }
 
 void drawLayers(Scene *s) {
