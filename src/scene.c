@@ -32,16 +32,21 @@ Object *getObject(Scene *s, int index) {
     return NULL;
 }
 
+Vector2D getTileCount(Scene *s) {
+    int x = SCREEN_WIDTH / s->tilemap->size.x + 1;
+    int y = SCREEN_HEIGHT / s->tilemap->size.y + 2;
+    return (Vector2D){x, y};
+}
+
 int checkCollision(Scene *s, Vector2 playerPos) {
-    int tiles_x = SCREEN_WIDTH / s->tilemap->size.x + 1;
-    int tiles_y = SCREEN_HEIGHT / s->tilemap->size.y + 2;
-    int start_y = (int)playerPos.y - (tiles_y / 2);
-    int start_x = (int)playerPos.x - (tiles_x / 2);
+    Vector2D tiles = getTileCount(s);
+    int start_y = (int)playerPos.y - (tiles.y / 2);
+    int start_x = (int)playerPos.x - (tiles.x / 2);
     Vector2D sz = s->tilemap->size;
     int i = 0;
     while (i < MAX_LAYER_COUNT && i < s->layers) {
-        for (int y = -1; y < tiles_y; y++) {
-            for (int x = -1; x < tiles_x; x++) {
+        for (int y = -1; y < tiles.y; y++) {
+            for (int x = -1; x < tiles.x; x++) {
                 if (start_x + x < 0 || start_y + y < 0 || start_x + x > MAX_LAYER_SIZE ||
                     start_y + y > MAX_LAYER_SIZE) {
                     continue;
@@ -121,15 +126,14 @@ void checkInput(Scene *s) {
 }
 
 void drawLayers(Scene *s) {
-    int tiles_x = SCREEN_WIDTH / s->tilemap->size.x + 1;
-    int tiles_y = SCREEN_HEIGHT / s->tilemap->size.y + 2;
-    int start_y = (int)s->player->pos.y - (tiles_y / 2);
-    int start_x = (int)s->player->pos.x - (tiles_x / 2);
+    Vector2D tiles = getTileCount(s);
+    int start_y = (int)s->player->pos.y - (tiles.y / 2);
+    int start_x = (int)s->player->pos.x - (tiles.x / 2);
     Vector2D sz = s->tilemap->size;
     int i = 0;
     while (i < MAX_LAYER_COUNT && i < s->layers) {
-        for (int y = -1; y < tiles_y; y++) {
-            for (int x = -1; x < tiles_x; x++) {
+        for (int y = -1; y < tiles.y; y++) {
+            for (int x = -1; x < tiles.x; x++) {
                 if (start_x + x < 0 || start_y + y < 0 || start_x + x > MAX_LAYER_SIZE ||
                     start_y + y > MAX_LAYER_SIZE) {
                     continue;
