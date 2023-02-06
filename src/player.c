@@ -15,18 +15,9 @@ Player *createTestPlayer() {
     return player;
 }
 
-void movePlayer(Player *p, int direction) {
+void movePlayer(Player *p, int direction, Vector2 pos) {
     p->isMoving = 1;
     p->sprite->direction = direction;
-    if (direction == DIRECTION_UP) {
-        p->pos.y -= MOVE_AMOUNT;
-    } else if (direction == DIRECTION_DOWN) {
-        p->pos.y += MOVE_AMOUNT;
-    }
-    if (direction == DIRECTION_LEFT) {
-        p->pos.x -= MOVE_AMOUNT;
-    } else if (direction == DIRECTION_RIGHT) {
-        p->pos.x += MOVE_AMOUNT;
-    }
+    p->pos = pos;
     gettimeofday(&p->lastMovement, NULL);
 }
