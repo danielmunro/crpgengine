@@ -16,7 +16,7 @@ static void processTilemapNode(Tilemap *t, xmlTextReaderPtr reader) {
     if (strcmp(strName, "tileset") == 0) {
         const int width = getIntAttribute(reader, "tilewidth");
         const int height = getIntAttribute(reader, "tilewidth");
-        t->size = (Vector2D){ width, height };
+        t->size = (Vector2d){width, height };
     } else if (strcmp(strName, "image") == 0) {
         char source[255] = "./resources/tiled/";
         strcat(source, getStringAttribute(reader, "source"));

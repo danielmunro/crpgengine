@@ -40,20 +40,20 @@ Object *getObject(Scene *s, int index) {
     return NULL;
 }
 
-Vector2D getTileCount(Scene *s) {
+Vector2d getTileCount(Scene *s) {
     int x = SCREEN_WIDTH / s->tilemap->size.x + 1;
     int y = SCREEN_HEIGHT / s->tilemap->size.y + 2;
-    return (Vector2D){x, y};
+    return (Vector2d){x, y};
 }
 
-Vector2D getStartTileCoords(Vector2 playerPos, Vector2D tiles) {
-    return (Vector2D){
+Vector2d getStartTileCoords(Vector2 playerPos, Vector2d tiles) {
+    return (Vector2d){
             (int)playerPos.x - (tiles.x / 2),
             (int)playerPos.y - (tiles.y / 2),
     };
 }
 
-int isInBounds(Vector2D v, Vector2D c) {
+int isInBounds(Vector2d v, Vector2d c) {
     return v.x + c.x > 0 &&
            v.y + c.y > 0 &&
            v.x + c.x < MAX_LAYER_SIZE &&
@@ -61,14 +61,14 @@ int isInBounds(Vector2D v, Vector2D c) {
 }
 
 int checkCollision(Scene *s, Vector2 playerPos) {
-    Vector2D tiles = getTileCount(s);
-    Vector2D start = getStartTileCoords(playerPos, tiles);
-    Vector2D sz = s->tilemap->size;
+    Vector2d tiles = getTileCount(s);
+    Vector2d start = getStartTileCoords(playerPos, tiles);
+    Vector2d sz = s->tilemap->size;
     int i = 0;
     while (i < MAX_LAYER_COUNT && i < s->layers) {
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
-                if (isInBounds(start, (Vector2D){x, y}) == 0) {
+                if (isInBounds(start, (Vector2d){x, y}) == 0) {
                     continue;
                 }
                 int index = s->tilemap->layers[i][start.y + y][start.x + x];
@@ -143,21 +143,21 @@ void checkInput(Scene *s) {
 }
 
 void drawLayers(Scene *s) {
-    Vector2D tiles = getTileCount(s);
-    Vector2D start = getStartTileCoords(s->player->pos, tiles);
-    Vector2D sz = s->tilemap->size;
+    Vector2d tiles = getTileCount(s);
+    Vector2d start = getStartTileCoords(s->player->pos, tiles);
+    Vector2d sz = s->tilemap->size;
     int i = 0;
     while (i < MAX_LAYER_COUNT && i < s->layers) {
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
-                if (isInBounds(start, (Vector2D){x, y}) == 0) {
+                if (isInBounds(start, (Vector2d){x, y}) == 0) {
                     continue;
                 }
                 int index = s->tilemap->layers[i][start.y + y][start.x + x];
                 if (index <= 0) {
                     continue;
                 }
-                Vector2D t = getTileFromIndex(s->tilemap, index);
+                Vector2d t = getTileFromIndex(s->tilemap, index);
                 Rectangle frameRec = {
                         (float) (t.x * sz.x),
                         (float) (t.y * sz.y),

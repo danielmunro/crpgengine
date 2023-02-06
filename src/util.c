@@ -1,4 +1,4 @@
-typedef struct Vector2D {
+typedef struct Vector2d {
     int x;
     int y;
-} Vector2D;
+} Vector2d;
