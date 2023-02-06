@@ -19,6 +19,14 @@ const SceneType sceneTypes[] = {
     {SCENE_TYPE_MENU, "menu"},
 };
 
+Vector2 getOffset(Vector2 pos) {
+    int xint = (int)pos.x;
+    float xdiff = pos.x - (float)xint;
+    int yint = (int)pos.y;
+    float ydiff = pos.y - (float)yint;
+    return (Vector2){xdiff, ydiff};
+}
+
 Object *getObject(Scene *s, int index) {
     for (int l = 0; l < s->layers; l++) {
         int o = 0;
@@ -53,7 +61,9 @@ int checkCollision(Scene *s, Vector2 playerPos) {
     while (i < MAX_LAYER_COUNT && i < s->layers) {
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
-                if (start.x + x < 0 || start.y + y < 0 || start.x + x > MAX_LAYER_SIZE ||
+                if (start.x + x < 0 ||
+                    start.y + y < 0 ||
+                    start.x + x > MAX_LAYER_SIZE ||
                     start.y + y > MAX_LAYER_SIZE) {
                     continue;
                 }
@@ -61,15 +71,12 @@ int checkCollision(Scene *s, Vector2 playerPos) {
                 if (index <= 0) {
                     continue;
                 }
-                int xint = (int)playerPos.x;
-                float xdiff = playerPos.x - (float)xint;
-                int yint = (int)playerPos.y;
-                float ydiff = playerPos.y - (float)yint;
+                Vector2 offset = getOffset(s->player->pos);
                 Object *o = getObject(s, index - 1);
                 if (o != NULL) {
-                    Rectangle r = {
-                            (float) (sz.x * x) - (xdiff * (float) sz.x) + o->rect.x,
-                            (float) (sz.y * y) - (ydiff * (float) sz.y) + o->rect.y,
+                    Rectangle or = {
+                            (float) (sz.x * x) - (offset.x * (float) sz.x) + o->rect.x,
+                            (float) (sz.y * y) - (offset.y * (float) sz.y) + o->rect.y,
                             o->rect.width,
                             o->rect.height,
                     };
@@ -79,7 +86,7 @@ int checkCollision(Scene *s, Vector2 playerPos) {
                             HUMANOID_WIDTH - 3,
                             HUMANOID_HEIGHT - 12,
                     };
-                    if (CheckCollisionRecs(pr, r)) {
+                    if (CheckCollisionRecs(pr, or)) {
                         return 1;
                     }
                 }
@@ -160,13 +167,10 @@ void drawLayers(Scene *s) {
                         (float) sz.x,
                         (float) sz.y
                 };
-                int xint = (int)s->player->pos.x;
-                float xdiff = s->player->pos.x - (float)xint;
-                int yint = (int)s->player->pos.y;
-                float ydiff = s->player->pos.y - (float)yint;
+                Vector2 offset = getOffset(s->player->pos);
                 Vector2 pos = {
-                        (float) (sz.x * x) - (xdiff * (float)sz.x),
-                        (float) (sz.y * y) - (ydiff * (float)sz.y)
+                        (float) (sz.x * x) - (offset.x * (float)sz.x),
+                        (float) (sz.y * y) - (offset.y * (float)sz.y)
                 };
                 DrawTextureRec(
                         s->tilemap->source,
@@ -178,8 +182,8 @@ void drawLayers(Scene *s) {
                     Object *o = getObject(s, index - 1);
                     if (o != NULL) {
                         Rectangle r = {
-                                (float) (sz.x * x) - (xdiff * (float) sz.x) + o->rect.x,
-                                (float) (sz.y * y) - (ydiff * (float) sz.y) + o->rect.y,
+                                (float) (sz.x * x) - (offset.x * (float) sz.x) + o->rect.x,
+                                (float) (sz.y * y) - (offset.y * (float) sz.y) + o->rect.y,
                                 o->rect.width,
                                 o->rect.height,
                         };
