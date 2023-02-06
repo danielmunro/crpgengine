@@ -8,7 +8,6 @@ int main(int argc, char *argv[]) {
         if (argv[i][0] == '-') {
             if (argv[i][1] == 'c') {
                 showCollisions = 1;
-                printf("DING\n");
             }
         }
     }

@@ -90,7 +90,17 @@ void drawLayers(Scene *s) {
                                 o->rect.width,
                                 o->rect.height,
                         };
-                        DrawRectangleRec(r, PINK);
+                        Color collision = PINK;
+                        Rectangle pr = {
+                                s->player->sprite->position.x,
+                                s->player->sprite->position.y,
+                                HUMANOID_WIDTH,
+                                HUMANOID_HEIGHT,
+                        };
+                        if (CheckCollisionRecs(pr, r)) {
+                            collision = PURPLE;
+                        }
+                        DrawRectangleRec(r, collision);
                     }
                 }
             }
