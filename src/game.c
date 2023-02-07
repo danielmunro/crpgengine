@@ -7,10 +7,11 @@ Scene *getScene(Game *g) {
     return g->scenes[g->scene];
 }
 
-Game *createGameInstance(char *resourceFile, int showCollisions) {
+Game *createGameInstance(int sceneIndex, int showCollisions) {
     Game *g = malloc(sizeof(Game));
-    g->scene = 0;
-    g->scenes[g->scene] = loadScene(resourceFile, showCollisions);
+    g->scene = sceneIndex;
+    g->scenes[0] = loadScene("./resources/firsttown.scene", showCollisions);
+    g->scenes[1] = loadScene("./resources/firstdungeon.scene", showCollisions);
     g->scenes[g->scene]->player = createTestPlayer();
     g->scenes[g->scene]->type = SCENE_TYPE_FREE_MOVE;
     return g;
