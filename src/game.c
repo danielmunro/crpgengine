@@ -3,10 +3,14 @@ typedef struct Game {
     int scene;
 } Game;
 
-Game *createGameInstance(int showCollisions) {
+Scene *getScene(Game *g) {
+    return g->scenes[g->scene];
+}
+
+Game *createGameInstance(char *resourceFile, int showCollisions) {
     Game *g = malloc(sizeof(Game));
     g->scene = 0;
-    g->scenes[g->scene] = loadScene("./resources/firsttown.scene", showCollisions);
+    g->scenes[g->scene] = loadScene(resourceFile, showCollisions);
     g->scenes[g->scene]->player = createTestPlayer();
     g->scenes[g->scene]->type = SCENE_TYPE_FREE_MOVE;
     return g;
@@ -14,12 +18,13 @@ Game *createGameInstance(int showCollisions) {
 
 void run(Game *g) {
     while (!WindowShouldClose()) {
-        checkInput(g->scenes[g->scene]);
+        Scene *s = getScene(g);
+        checkInput(s);
         BeginDrawing();
-        drawScene(g->scenes[g->scene]);
+        drawScene(s);
         EndDrawing();
-        if (g->scenes[g->scene]->player->isMoving) {
-            animateSprite(g->scenes[g->scene]->player->sprite);
+        if (s->player->isMoving) {
+            animateSprite(s->player->sprite);
         }
     }
 }
