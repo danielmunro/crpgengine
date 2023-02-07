@@ -110,7 +110,6 @@ void processSceneNode(Scene *s, xmlTextReaderPtr reader) {
         s->layers++;
         parseSceneLayer(s, (char *)data);
     } else if (strcmp(strName, "object") == 0) {
-        printf("get class\n");
         char *class = getStringAttribute(reader, "class");
         if (class == NULL) {
             return;
