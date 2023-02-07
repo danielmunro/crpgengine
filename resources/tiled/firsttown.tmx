@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="8">
  <editorsettings>
   <export target="firsttown.csv" format="csv"/>
  </editorsettings>
@@ -38,6 +38,17 @@
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 </data>
  </layer>
+ <objectgroup id="4" name="warps">
+  <object id="1" name="exit" class="exit" x="351.441" y="0.554324" width="143.015" height="30.4878">
+   <properties>
+    <property name="to" value="dungeon"/>
+   </properties>
+  </object>
+  <object id="2" x="320.953" y="208.98" width="13.3038" height="14.4124"/>
+  <object id="3" x="192.35" y="289.911" width="13.8581" height="13.3038"/>
+  <object id="4" x="560.421" y="305.987" width="13.8581" height="13.8581"/>
+  <object id="6" name="entrance" class="entrance" x="369.18" y="65.4102" width="63.1929" height="44.3459"/>
+ </objectgroup>
  <layer id="3" name="Midground" width="50" height="30">
   <data encoding="csv">
 20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,9,0,0,0,0,0,0,0,0,0,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,
