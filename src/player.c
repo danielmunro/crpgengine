@@ -9,8 +9,6 @@ typedef struct Player {
 Player *createTestPlayer() {
     Player *player = malloc(sizeof(Player));
     player->sprite = createTestHumanoid();
-    player->pos.x = 320;
-    player->pos.y = 320;
     player->isMoving = 0;
     player->moveSpeed = 0.9f;
     gettimeofday(&player->lastMovement, NULL);

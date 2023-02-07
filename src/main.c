@@ -13,7 +13,6 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    printf("scene %d\n", sceneIndex);
     SetTargetFPS(60);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "cjrpgengine");
     struct Game *g = createGameInstance(sceneIndex, showCollisions);

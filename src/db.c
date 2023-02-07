@@ -4,6 +4,10 @@ int getIntAttribute(xmlTextReaderPtr reader, char *attribute) {
     return atoi((char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute));
 }
 
+float getFloatAttribute(xmlTextReaderPtr reader, char *attribute) {
+    return atoll((char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute));
+}
+
 char *getStringAttribute(xmlTextReaderPtr reader, char *attribute) {
     return (char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute);
 }
@@ -105,6 +109,19 @@ void processSceneNode(Scene *s, xmlTextReaderPtr reader) {
         xmlChar *data = xmlTextReaderReadString(reader);
         s->layers++;
         parseSceneLayer(s, (char *)data);
+    } else if (strcmp(strName, "object") == 0) {
+        printf("get class\n");
+        char *class = getStringAttribute(reader, "class");
+        if (class != NULL && strcmp(class, "entrance") == 0) {
+            printf("start entrance\n");
+            s->entrance = (Rectangle){
+                    getFloatAttribute(reader, "x"),
+                    getFloatAttribute(reader, "y"),
+                    getFloatAttribute(reader, "width"),
+                    getFloatAttribute(reader, "height")
+            };
+            printf("end entrance\n");
+        }
     }
 }
 

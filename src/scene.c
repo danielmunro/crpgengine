@@ -6,6 +6,7 @@ typedef struct Scene {
     int type;
     char name[SCENE_NAME_MAX_LENGTH];
     int showCollisions;
+    Rectangle entrance;
 } Scene;
 
 typedef struct SceneType {
@@ -196,7 +197,7 @@ void drawLayers(Scene *s) {
 }
 
 void drawScene(Scene *s) {
-    ClearBackground(RAYWHITE);
+    ClearBackground(BLACK);
     drawLayers(s);
     drawSprite(s->player->sprite);
 }
