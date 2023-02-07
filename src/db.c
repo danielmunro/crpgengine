@@ -112,16 +112,26 @@ void processSceneNode(Scene *s, xmlTextReaderPtr reader) {
     } else if (strcmp(strName, "object") == 0) {
         printf("get class\n");
         char *class = getStringAttribute(reader, "class");
-        if (class != NULL && strcmp(class, "entrance") == 0) {
-            printf("start entrance\n");
+        if (class == NULL) {
+            return;
+        } else if (strcmp(class, "entrance") == 0) {
             s->entrance = (Rectangle){
                     getFloatAttribute(reader, "x"),
                     getFloatAttribute(reader, "y"),
                     getFloatAttribute(reader, "width"),
                     getFloatAttribute(reader, "height")
             };
-            printf("end entrance\n");
+        } else if (strcmp(class, "exit") == 0) {
+            s->exit = malloc(sizeof(Exit));
+            s->exit->area = (Rectangle){
+                    getFloatAttribute(reader, "x"),
+                    getFloatAttribute(reader, "y"),
+                    getFloatAttribute(reader, "width"),
+                    getFloatAttribute(reader, "height")
+            };
         }
+    } else if (strcmp(strName, "property") == 0) {
+        s->exit->to = getStringAttribute(reader, "value");
     }
 }
 

@@ -1,18 +1,25 @@
+typedef struct Exit {
+    Rectangle area;
+    char *to;
+} Exit;
+
+typedef struct SceneType {
+    int code;
+    const char *scene;
+} SceneType;
+
 typedef struct Scene {
     Sprite *sprites[MAX_SPRITES];
     Player *player;
     Tilemap *tilemap;
     int layers;
     int type;
-    char name[SCENE_NAME_MAX_LENGTH];
+    char name[255];
+    char filename[255];
     int showCollisions;
     Rectangle entrance;
+    Exit *exit;
 } Scene;
-
-typedef struct SceneType {
-    int code;
-    const char *scene;
-} SceneType;
 
 const SceneType sceneTypes[] = {
     {SCENE_TYPE_FREE_MOVE, "free-move"},

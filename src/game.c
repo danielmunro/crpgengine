@@ -17,8 +17,6 @@ Game *createGameInstance(int sceneIndex, int showCollisions) {
     Rectangle r = g->scenes[g->scene]->entrance;
     p->pos.x = r.x + (r.width / 2);
     p->pos.y = r.y + (r.height / 2);
-//    p->pos.x = 320;
-//    p->pos.y = 320;
     g->scenes[g->scene]->player = p;
     return g;
 }
@@ -31,6 +29,24 @@ void run(Game *g) {
         BeginDrawing();
         drawScene(s);
         EndDrawing();
+        Rectangle pr = {
+                s->player->pos.x,
+                s->player->pos.y,
+                HUMANOID_WIDTH,
+                HUMANOID_HEIGHT,
+        };
+        DrawRectangleRec(s->exit->area, PINK);
+        DrawRectangleRec(pr, BLUE);
+        if (CheckCollisionRecs(pr, s->exit->area)) {
+            printf("exit collision detected\n");
+            int i = 0;
+            while (g->scenes[i] != NULL) {
+                if (strcmp(g->scenes[i]->name, s->exit->to) == 0) {
+                    g->scene = i;
+                }
+                s++;
+            }
+        }
         if (s->player->isMoving) {
             animateSprite(s->player->sprite);
         }
