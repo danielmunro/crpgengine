@@ -3,14 +3,16 @@ typedef struct Player {
     Vector2 pos;
     int isMoving;
     struct timeval lastMovement;
+    float moveSpeed;
 } Player;
 
 Player *createTestPlayer() {
     Player *player = malloc(sizeof(Player));
     player->sprite = createTestHumanoid();
-    player->pos.x = 20;
-    player->pos.y = 20;
+    player->pos.x = 320;
+    player->pos.y = 320;
     player->isMoving = 0;
+    player->moveSpeed = 0.9f;
     gettimeofday(&player->lastMovement, NULL);
     return player;
 }

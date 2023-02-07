@@ -19,11 +19,13 @@ const SceneType sceneTypes[] = {
     {SCENE_TYPE_MENU, "menu"},
 };
 
-Vector2 getOffset(Vector2 pos) {
-    int xint = (int)pos.x;
-    float xdiff = pos.x - (float)xint;
-    int yint = (int)pos.y;
-    float ydiff = pos.y - (float)yint;
+Vector2 getOffset(Vector2d tileSize, Vector2 pos) {
+    float xf = pos.x / (float)tileSize.x;
+    int xint = (int)xf;
+    float xdiff = xf - (float)xint;
+    float yf = pos.y / (float)tileSize.y;
+    int yint = (int)yf;
+    float ydiff = yf - (float)yint;
     return (Vector2){xdiff, ydiff};
 }
 
@@ -46,10 +48,10 @@ Vector2d getTileCount(Scene *s) {
     return (Vector2d){x, y};
 }
 
-Vector2d getStartTileCoords(Vector2 playerPos, Vector2d tiles) {
+Vector2d getStartTileCoords(Vector2d tileSize, Vector2 playerPos, Vector2d tiles) {
     return (Vector2d){
-            (int)playerPos.x - (tiles.x / 2),
-            (int)playerPos.y - (tiles.y / 2),
+            (int)(playerPos.x / (float)tileSize.x) - (tiles.x / 2),
+            (int)(playerPos.y / (float)tileSize.y) - (tiles.y / 2),
     };
 }
 
@@ -62,7 +64,7 @@ int isInBounds(Vector2d v, Vector2d c) {
 
 int checkCollision(Scene *s, Vector2 playerPos) {
     Vector2d tiles = getTileCount(s);
-    Vector2d start = getStartTileCoords(playerPos, tiles);
+    Vector2d start = getStartTileCoords(s->tilemap->size, playerPos, tiles);
     Vector2d sz = s->tilemap->size;
     int i = 0;
     while (i < MAX_LAYER_COUNT && i < s->layers) {
@@ -75,7 +77,7 @@ int checkCollision(Scene *s, Vector2 playerPos) {
                 if (index <= 0) {
                     continue;
                 }
-                Vector2 offset = getOffset(playerPos);
+                Vector2 offset = getOffset(s->tilemap->size, playerPos);
                 Object *o = getObject(s, index - 1);
                 if (o != NULL) {
                     Rectangle or = {
@@ -118,25 +120,25 @@ void checkInput(Scene *s) {
                 s,
                 KEY_RIGHT,
                 DIRECTION_RIGHT,
-                (Vector2){s->player->pos.x + MOVE_AMOUNT, s->player->pos.y}
+                (Vector2){s->player->pos.x + s->player->moveSpeed, s->player->pos.y}
         );
         int moveL = checkMoveKey(
                 s,
                 KEY_LEFT,
                 DIRECTION_LEFT,
-                (Vector2){s->player->pos.x - MOVE_AMOUNT, s->player->pos.y}
+                (Vector2){s->player->pos.x - s->player->moveSpeed, s->player->pos.y}
         );
         int moveU = checkMoveKey(
                 s,
                 KEY_UP,
                 DIRECTION_UP,
-                (Vector2){s->player->pos.x, s->player->pos.y - MOVE_AMOUNT}
+                (Vector2){s->player->pos.x, s->player->pos.y - s->player->moveSpeed}
         );
         int moveD = checkMoveKey(
                 s,
                 KEY_DOWN,
                 DIRECTION_DOWN,
-                (Vector2){s->player->pos.x, s->player->pos.y + MOVE_AMOUNT}
+                (Vector2){s->player->pos.x, s->player->pos.y + s->player->moveSpeed}
         );
         s->player->isMoving = moveR || moveL || moveU || moveD;
     }
@@ -144,7 +146,7 @@ void checkInput(Scene *s) {
 
 void drawLayers(Scene *s) {
     Vector2d tiles = getTileCount(s);
-    Vector2d start = getStartTileCoords(s->player->pos, tiles);
+    Vector2d start = getStartTileCoords(s->tilemap->size, s->player->pos, tiles);
     Vector2d sz = s->tilemap->size;
     int i = 0;
     while (i < MAX_LAYER_COUNT && i < s->layers) {
@@ -164,7 +166,7 @@ void drawLayers(Scene *s) {
                         (float) sz.x,
                         (float) sz.y
                 };
-                Vector2 offset = getOffset(s->player->pos);
+                Vector2 offset = getOffset(s->tilemap->size, s->player->pos);
                 Vector2 pos = {
                         (float) (sz.x * x) - (offset.x * (float)sz.x),
                         (float) (sz.y * y) - (offset.y * (float)sz.y)
