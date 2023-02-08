@@ -2,6 +2,7 @@ typedef struct Player {
     struct Sprite *sprite;
     Vector2 pos;
     int isMoving;
+    float direction;
     struct timeval lastMovement;
     float moveSpeed;
 } Player;

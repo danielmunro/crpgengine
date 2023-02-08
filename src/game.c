@@ -12,7 +12,7 @@ Game *createGameInstance(int sceneIndex, int showCollisions) {
     g->scene = sceneIndex;
     g->scenes[0] = loadScene("./resources/firsttown.scene", showCollisions);
     g->scenes[1] = loadScene("./resources/firstdungeon.scene", showCollisions);
-    g->scenes[g->scene]->type = SCENE_TYPE_FREE_MOVE;
+    g->scenes[g->scene]->type = SCENE_TYPE_TOWN;
     Player *p = createTestPlayer();
     Rectangle r = g->scenes[g->scene]->entrance;
     p->pos.x = r.x + (r.width / 2);

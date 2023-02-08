@@ -22,9 +22,8 @@ typedef struct Scene {
 } Scene;
 
 const SceneType sceneTypes[] = {
-    {SCENE_TYPE_FREE_MOVE, "free-move"},
-    {SCENE_TYPE_FIGHT, "fight"},
-    {SCENE_TYPE_MENU, "menu"},
+    {SCENE_TYPE_TOWN,    "town"},
+    {SCENE_TYPE_DUNGEON, "dungeon"},
 };
 
 Vector2 getOffset(Vector2d tileSize, Vector2 pos) {
@@ -123,7 +122,7 @@ int checkMoveKey(Scene *s, int key, int direction, Vector2 pos) {
 }
 
 void checkInput(Scene *s) {
-    if (s->type == SCENE_TYPE_FREE_MOVE) {
+    if (s->type == SCENE_TYPE_TOWN) {
         int moveR = checkMoveKey(
                 s,
                 KEY_RIGHT,
@@ -149,6 +148,10 @@ void checkInput(Scene *s) {
                 (Vector2){s->player->pos.x, s->player->pos.y + s->player->moveSpeed}
         );
         s->player->isMoving = moveR || moveL || moveU || moveD;
+        if (moveU) s->player->direction = 0;
+        else if (moveL) s->player->direction = 270;
+        else if (moveR) s->player->direction = 90;
+        else if (moveD) s->player->direction = 180;
     }
 }
 

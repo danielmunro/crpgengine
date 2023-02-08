@@ -39,7 +39,7 @@
   <object id="1" name="entrance" class="entrance" x="304.43" y="317.304" width="159.788" height="52.2529"/>
   <object id="4" name="exit" class="exit" x="255.206" y="399.091" width="256.721" height="80.2726">
    <properties>
-    <property name="to" value="town"/>
+    <property name="to" value="town-1"/>
    </properties>
   </object>
  </objectgroup>
