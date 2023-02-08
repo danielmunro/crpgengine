@@ -35,23 +35,15 @@ void run(Game *g) {
                 HUMANOID_HEIGHT,
         };
         if (CheckCollisionRecs(pr, s->exit->area)) {
-            printf("exit detected\n");
             int i = 0;
             while (g->scenes[i] != NULL) {
-                printf("index %d\n", i);
-                printf("scene %s\n", g->scenes[i]->name);
-                printf("scene name %s\n", s->name);
-                printf("exit %s\n", s->exit->to);
                 if (strcmp(g->scenes[i]->name, s->exit->to) == 0) {
-                    printf("found\n");
                     Player *p = g->scenes[g->scene]->player;
                     g->scene = i;
-                    printf("set\n");
                     g->scenes[g->scene]->player = p;
                     Rectangle r = g->scenes[g->scene]->entrance;
                     s->player->pos.x = r.x + (r.width / 2);
                     s->player->pos.y = r.y + (r.height / 2);
-                    printf("break\n");
                     break;
                 }
                 i++;

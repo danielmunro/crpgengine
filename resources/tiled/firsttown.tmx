@@ -39,7 +39,7 @@
 </data>
  </layer>
  <objectgroup id="4" name="warps">
-  <object id="1" name="exit" class="exit" x="351.441" y="0.554324" width="143.015" height="30.4878">
+  <object id="1" name="exit" class="exit" x="335.92" y="-0.445676" width="175.166" height="49.3348">
    <properties>
     <property name="to" value="dungeon"/>
    </properties>
@@ -47,7 +47,7 @@
   <object id="2" x="320.953" y="208.98" width="13.3038" height="14.4124"/>
   <object id="3" x="192.35" y="289.911" width="13.8581" height="13.3038"/>
   <object id="4" x="560.421" y="305.987" width="13.8581" height="13.8581"/>
-  <object id="6" name="entrance" class="entrance" x="369.18" y="65.4102" width="63.1929" height="44.3459"/>
+  <object id="6" name="entrance" class="entrance" x="400.222" y="223.947" width="95.3437" height="95.898"/>
  </objectgroup>
  <layer id="3" name="Midground" width="50" height="30">
   <data encoding="csv">
