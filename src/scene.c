@@ -167,13 +167,6 @@ void drawLayers(Scene *s) {
                 if (index <= 0) {
                     continue;
                 }
-                Vector2d t = getTileFromIndex(s->tilemap, index);
-                Rectangle frameRec = {
-                        (float) (t.x * sz.x),
-                        (float) (t.y * sz.y),
-                        (float) sz.x,
-                        (float) sz.y
-                };
                 Vector2 offset = getOffset(s->tilemap->size, s->player->pos);
                 Vector2 pos = {
                         (float) (sz.x * x) - (offset.x * (float)sz.x),
@@ -181,7 +174,7 @@ void drawLayers(Scene *s) {
                 };
                 DrawTextureRec(
                         s->tilemap->source,
-                        frameRec,
+                        getRectForTile(s->tilemap, index),
                         pos,
                         WHITE
                 );
