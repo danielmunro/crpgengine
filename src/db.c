@@ -95,7 +95,7 @@ void parseSceneLayer(Scene *s, char *rawData) {
 
 void processSceneNode(Scene *s, xmlTextReaderPtr reader) {
     const xmlChar *name = xmlTextReaderConstName(reader);
-    static int dataOpen = 0;
+    static int dataOpen = 0, exitOpen = 0;
     char *strName = (char *)name;
     if (strcmp(strName, "tileset") == 0) {
         char *source = getStringAttribute(reader, "source");
@@ -121,6 +121,11 @@ void processSceneNode(Scene *s, xmlTextReaderPtr reader) {
                     getFloatAttribute(reader, "height")
             };
         } else if (strcmp(class, "exit") == 0) {
+            if (exitOpen) {
+                exitOpen = 0;
+                return;
+            }
+            exitOpen = 1;
             s->exit = malloc(sizeof(Exit));
             s->exit->area = (Rectangle){
                     getFloatAttribute(reader, "x"),
