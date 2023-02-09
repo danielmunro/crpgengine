@@ -4,10 +4,15 @@ typedef struct Object {
     int tile;
 } Object;
 
+typedef struct Layer {
+    int type;
+    char data[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
+} Layer;
+
 typedef struct Tilemap {
     Vector2d size;
     Texture2D source;
-    char layers[MAX_LAYER_COUNT][MAX_LAYER_SIZE][MAX_LAYER_SIZE];
+    Layer *layers[LAYER_COUNT];
     Object *objects[MAX_OBJECTS];
 } Tilemap;
 

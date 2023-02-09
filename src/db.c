@@ -84,7 +84,7 @@ void parseSceneLayer(Scene *s, char *rawData) {
         char *val = strtok(data[y], ",");
         x = 0;
         while (val != NULL) {
-            s->tilemap->layers[s->layers - 1][y][x] = atoi(val);
+            s->tilemap->layers[s->layers - 1]->data[y][x] = atoi(val);
             val = strtok(NULL, ",");
             x++;
         }
@@ -95,11 +95,23 @@ void parseSceneLayer(Scene *s, char *rawData) {
 
 void processSceneNode(Scene *s, xmlTextReaderPtr reader) {
     const xmlChar *name = xmlTextReaderConstName(reader);
-    static int dataOpen = 0, exitOpen = 0;
+    static int dataOpen = 0, exitOpen = 0, layerOpen = 0;
     char *strName = (char *)name;
     if (strcmp(strName, "tileset") == 0) {
         char *source = getStringAttribute(reader, "source");
         s->tilemap = parseTilemapXml(source);
+    } else if (strcmp(strName, "layer") == 0) {
+        if (layerOpen == 1) {
+            layerOpen = 0;
+            return;
+        }
+        layerOpen = 1;
+        s->tilemap->layers[s->layers] = malloc(sizeof(Layer));
+        char *layerName = getStringAttribute(reader, "name");
+        if (strcmp(layerName, "background") == 0) s->tilemap->layers[s->layers]->type = LAYER_TYPE_BACKGROUND;
+        else if (strcmp(layerName, "midground") == 0) s->tilemap->layers[s->layers]->type = LAYER_TYPE_MIDGROUND;
+        else if (strcmp(layerName, "foreground") == 0) s->tilemap->layers[s->layers]->type = LAYER_TYPE_FOREGROUND;
+        else printf("unknown layer: %s\n", layerName);
     } else if (strcmp(strName, "data") == 0) {
         if (dataOpen == 1) {
             dataOpen = 0;

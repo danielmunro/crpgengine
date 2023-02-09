@@ -74,13 +74,17 @@ int checkCollision(Scene *s, Vector2 playerPos) {
     Vector2d start = getStartTileCoords(s->tilemap->size, playerPos, tiles);
     Vector2d sz = s->tilemap->size;
     int i = 0;
-    while (i < MAX_LAYER_COUNT && i < s->layers) {
+    while (i < s->layers) {
+        if (s->tilemap->layers[i]->type == LAYER_TYPE_FOREGROUND) {
+            i++;
+            continue;
+        }
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
                 if (isInBounds(start, (Vector2d){x, y}) == 0) {
                     continue;
                 }
-                int index = s->tilemap->layers[i][start.y + y][start.x + x];
+                int index = s->tilemap->layers[i]->data[start.y + y][start.x + x];
                 if (index <= 0) {
                     continue;
                 }
@@ -89,7 +93,7 @@ int checkCollision(Scene *s, Vector2 playerPos) {
                 if (o != NULL) {
                     Rectangle or = {
                             (float) (sz.x * x) - (offset.x * (float) sz.x) + o->rect.x,
-                            (float) (sz.y * y) - (offset.y * (float) sz.y) + o->rect.y,
+                            (float) (sz.y * y) - (offset.y * (float) sz.y) - (float) sz.y + o->rect.y,
                             o->rect.width,
                             o->rect.height,
                     };
@@ -155,52 +159,50 @@ void checkInput(Scene *s) {
     }
 }
 
-void drawLayers(Scene *s) {
+void drawLayer(Scene *s, int layer) {
     Vector2d tiles = getTileCount(s);
     Vector2d start = getStartTileCoords(s->tilemap->size, s->player->pos, tiles);
     Vector2d sz = s->tilemap->size;
-    int i = 0;
-    while (i < MAX_LAYER_COUNT && i < s->layers) {
-        for (int y = -1; y < tiles.y; y++) {
-            for (int x = -1; x < tiles.x; x++) {
-                if (isInBounds(start, (Vector2d){x, y}) == 0) {
-                    continue;
-                }
-                int index = s->tilemap->layers[i][start.y + y][start.x + x];
-                if (index <= 0) {
-                    continue;
-                }
-                Vector2 offset = getOffset(s->tilemap->size, s->player->pos);
-                Vector2 pos = {
-                        (float) (sz.x * x) - (offset.x * (float)sz.x),
-                        (float) (sz.y * y) - (offset.y * (float)sz.y) - (float) sz.y,
-                };
-                DrawTextureRec(
-                        s->tilemap->source,
-                        getRectForTile(s->tilemap, index),
-                        pos,
-                        WHITE
-                );
-                if (s->showCollisions) {
-                    Object *o = getObject(s, index - 1);
-                    if (o != NULL) {
-                        Rectangle r = {
-                                (float) (sz.x * x) - (offset.x * (float) sz.x) + o->rect.x,
-                                (float) (sz.y * y) - (offset.y * (float) sz.y) + o->rect.y - (float) sz.y,
-                                o->rect.width,
-                                o->rect.height,
-                        };
-                        DrawRectangleRec(r, PINK);
-                    }
+    for (int y = -1; y < tiles.y; y++) {
+        for (int x = -1; x < tiles.x; x++) {
+            if (isInBounds(start, (Vector2d){x, y}) == 0) {
+                continue;
+            }
+            int index = s->tilemap->layers[layer]->data[start.y + y][start.x + x];
+            if (index <= 0) {
+                continue;
+            }
+            Vector2 offset = getOffset(s->tilemap->size, s->player->pos);
+            Vector2 pos = {
+                    (float) (sz.x * x) - (offset.x * (float)sz.x),
+                    (float) (sz.y * y) - (offset.y * (float)sz.y) - (float) sz.y,
+            };
+            DrawTextureRec(
+                    s->tilemap->source,
+                    getRectForTile(s->tilemap, index),
+                    pos,
+                    WHITE
+            );
+            if (s->showCollisions) {
+                Object *o = getObject(s, index - 1);
+                if (o != NULL) {
+                    Rectangle r = {
+                            (float) (sz.x * x) - (offset.x * (float) sz.x) + o->rect.x,
+                            (float) (sz.y * y) - (offset.y * (float) sz.y) + o->rect.y - (float) sz.y,
+                            o->rect.width,
+                            o->rect.height,
+                    };
+                    DrawRectangleRec(r, PINK);
                 }
             }
         }
-        i++;
     }
 }
 
 void drawScene(Scene *s) {
     ClearBackground(BLACK);
-    drawLayers(s);
+    drawLayer(s, 0);
+    drawLayer(s, 1);
     drawSprite(s->player->sprite);
+    drawLayer(s, 2);
 }

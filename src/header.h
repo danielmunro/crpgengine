@@ -17,14 +17,15 @@
 #define MAX_OBJECTS 255
 #define MAX_SCENES    256
 #define MAX_LAYER_SIZE 1024
-#define MAX_TILES 2048
+#define LAYER_COUNT 3
+#define LAYER_TYPE_BACKGROUND 1
+#define LAYER_TYPE_MIDGROUND 2
+#define LAYER_TYPE_FOREGROUND 3
 
 #define SCENE_NAME_MAX_LENGTH 64
 
 #define SCENE_TYPE_TOWN 1
 #define SCENE_TYPE_DUNGEON 2
-
-typedef char Layer[MAX_LAYER_COUNT][MAX_LAYER_SIZE][MAX_LAYER_SIZE];
 
 #include "util.c"
 #include "sprite.c"
