@@ -8,11 +8,24 @@ typedef struct SceneType {
     const char *scene;
 } SceneType;
 
+typedef struct Object {
+    int id;
+    Rectangle rect;
+    int tile;
+} Object;
+
+typedef struct Layer {
+    int type;
+    char data[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
+} Layer;
+
 typedef struct Scene {
     Sprite *sprites[MAX_SPRITES];
     Player *player;
     Tilemap *tilemap;
-    int layers;
+    Layer *layers[LAYER_COUNT];
+    Object *objects[MAX_OBJECTS];
+    int layerCount;
     int type;
     char name[255];
     char filename[255];
@@ -37,11 +50,11 @@ Vector2 getOffset(Vector2d tileSize, Vector2 pos) {
 }
 
 Object *getObject(Scene *s, int index) {
-    for (int l = 0; l < s->layers; l++) {
+    for (int l = 0; l < s->layerCount; l++) {
         int o = 0;
-        while (s->tilemap->objects[o] != NULL) {
-            if (s->tilemap->objects[o]->tile == index) {
-                return s->tilemap->objects[o];
+        while (s->objects[o] != NULL) {
+            if (s->objects[o]->tile == index) {
+                return s->objects[o];
             }
             o++;
         }
@@ -74,8 +87,8 @@ int checkCollision(Scene *s, Vector2 playerPos) {
     Vector2d start = getStartTileCoords(s->tilemap->size, playerPos, tiles);
     Vector2d sz = s->tilemap->size;
     int i = 0;
-    while (i < s->layers) {
-        if (s->tilemap->layers[i]->type == LAYER_TYPE_FOREGROUND) {
+    while (i < s->layerCount) {
+        if (s->layers[i]->type == LAYER_TYPE_FOREGROUND) {
             i++;
             continue;
         }
@@ -84,7 +97,7 @@ int checkCollision(Scene *s, Vector2 playerPos) {
                 if (isInBounds(start, (Vector2d){x, y}) == 0) {
                     continue;
                 }
-                int index = s->tilemap->layers[i]->data[start.y + y][start.x + x];
+                int index = s->layers[i]->data[start.y + y][start.x + x];
                 if (index <= 0) {
                     continue;
                 }
@@ -168,7 +181,7 @@ void drawLayer(Scene *s, int layer) {
             if (isInBounds(start, (Vector2d){x, y}) == 0) {
                 continue;
             }
-            int index = s->tilemap->layers[layer]->data[start.y + y][start.x + x];
+            int index = s->layers[layer]->data[start.y + y][start.x + x];
             if (index <= 0) {
                 continue;
             }
