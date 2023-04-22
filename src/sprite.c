@@ -13,7 +13,6 @@ typedef struct Sprite {
     Rectangle frameRec;
     int currentFrame;
     int framesCounter;
-    int framesSpeed;
     int direction;
 } Sprite;
 
@@ -29,7 +28,6 @@ Sprite *createTestHumanoid() {
     sp->frameRec = frameRec;
     sp->currentFrame = 0;
     sp->framesCounter = 0;
-    sp->framesSpeed = 8;
     sp->direction = DIRECTION_DOWN;
     return sp;
 }
