@@ -127,13 +127,14 @@ Mobile loadAnimations(const char *file, Animation *animations[MAX_ANIMATIONS]) {
         char *frameRate = strtok(NULL, ",");
         char *repeat = strtok(NULL, "\r\n");
         animations[anim] = malloc(sizeof(Animation));
-        animations[anim]->spriteSheet = sp;
-        animations[anim]->type = getAnimIdFromName(name);
-        animations[anim]->firstFrame = atoi(firstFrame);
-        animations[anim]->lastFrame = atoi(lastFrame);
-        animations[anim]->frameRate = atoi(frameRate);
-        animations[anim]->repeat = atoi(repeat);
-        animations[anim]->currentFrame = animations[anim]->firstFrame;
+        animations[anim] = createAnimation(
+                sp,
+                getAnimIdFromName(name),
+                atoi(firstFrame),
+                atoi(lastFrame),
+                atoi(frameRate),
+                atoi(repeat)
+        );
         anim++;
     }
     printf("%d animations loaded\n", anim);
