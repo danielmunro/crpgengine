@@ -39,7 +39,6 @@
 #define ANIM_DOWN 2
 #define ANIM_LEFT 3
 #define ANIM_RIGHT 4
-#define ANIM_MOB 5
 
 #include "util.c"
 #include "refactor.c"

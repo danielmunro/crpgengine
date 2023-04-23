@@ -50,7 +50,8 @@ int main(int argc, char *argv[]) {
         }
         BeginDrawing();
         ClearBackground(BLACK);
-        drawAnimation(findAnimation(mob->animations, getAnimationFromDirection(mob->direction)), position);
+        int anim = getAnimationFromDirection(mob->direction);
+        drawAnimation(findAnimation(mob->animations, anim), position);
         EndDrawing();
     }
     CloseWindow();

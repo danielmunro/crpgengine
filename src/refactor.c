@@ -79,20 +79,13 @@ void drawAnimation(Animation *a, Vector2 position) {
 }
 
 Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], int type) {
-    printf("type: %d\n", type);
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
-        printf("%d\n", i);
         if (animation[i] == NULL) {
-            printf("shoot\n");
             break;
         }
-        printf("sanity\n");
-        printf("type: %d\n", animation[i]->type);
         if (animation[i]->type == type) {
-            printf("found\n");
             return animation[i];
         }
-        printf("done loop\n");
     }
     return NULL;
 }
@@ -111,15 +104,13 @@ int getAnimIdFromName(char *name) {
         return ANIM_LEFT;
     } else if (strcmp(name, "right") == 0) {
         return ANIM_RIGHT;
-    } else if (strcmp(name, "mob") == 0) {
-        return ANIM_MOB;
     } else {
         printf("no animation id for name: %s\n", name);
         exit(1);
     }
 }
 
-Mobile loadAnimations(const char *file, Animation *animations) {
+Mobile loadAnimations(const char *file, Animation *animations[MAX_ANIMATIONS]) {
     char *data = LoadFileText(file);
     char *spriteSheetName = strtok(data, ",");
     char *width = strtok(NULL, ",");
@@ -135,13 +126,15 @@ Mobile loadAnimations(const char *file, Animation *animations) {
         char *lastFrame = strtok(NULL, ",");
         char *frameRate = strtok(NULL, ",");
         char *repeat = strtok(NULL, "\r\n");
-        animations[anim].spriteSheet = sp;
-        animations[anim].type = getAnimIdFromName(name);
-        animations[anim].firstFrame = atoi(firstFrame);
-        animations[anim].lastFrame = atoi(lastFrame);
-        animations[anim].frameRate = atoi(frameRate);
-        animations[anim].repeat = atoi(repeat);
-        animations[anim].currentFrame = animations[anim].firstFrame;
+        animations[anim] = malloc(sizeof(Animation));
+        animations[anim]->spriteSheet = sp;
+        animations[anim]->type = getAnimIdFromName(name);
+        animations[anim]->firstFrame = atoi(firstFrame);
+        animations[anim]->lastFrame = atoi(lastFrame);
+        animations[anim]->frameRate = atoi(frameRate);
+        animations[anim]->repeat = atoi(repeat);
+        animations[anim]->currentFrame = animations[anim]->firstFrame;
         anim++;
     }
+    printf("%d animations loaded\n", anim);
 }
