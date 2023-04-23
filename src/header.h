@@ -17,6 +17,7 @@
 #define MAX_OBJECTS 255
 #define MAX_SCENES    256
 #define MAX_LAYER_SIZE 1024
+#define MAX_ANIMATIONS 25
 #define LAYER_COUNT 3
 #define LAYER_TYPE_BACKGROUND 1
 #define LAYER_TYPE_MIDGROUND 2
@@ -28,6 +29,7 @@
 #define SCENE_TYPE_DUNGEON 2
 
 #include "util.c"
+#include "refactor.c"
 #include "sprite.c"
 #include "player.c"
 #include "tilemap.c"
