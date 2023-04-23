@@ -15,25 +15,11 @@ int main(int argc, char *argv[]) {
 //    }
     SetTargetFPS(60);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "cjrpgengine");
-//    struct Game *g = createGameInstance(sceneIndex, showCollisions);
-//    Scene *s = getScene(g);
-//    SetWindowTitle(s->name);
-//    run(g);
-
-//    Texture2D tex = LoadTexture("resources/fireas.png");
-//    SpriteSheet *sp = malloc(sizeof(SpriteSheet));
-//    sp->source = tex;
-//    sp->frameWidth = 16;
-//    sp->frameHeight = 24;
 
     Mobile *mob = malloc(sizeof(Mobile));
     mob->direction = DIRECTION_DOWN;
-//    mob->animations[0] = createAnimation(ANIM_DOWN, sp, 0, 3, 20, -1);
-//    mob->animations[1] = createAnimation(ANIM_LEFT, sp, 4, 7, 20, -1);
-//    mob->animations[2] = createAnimation(ANIM_RIGHT, sp, 8, 11, 20, -1);
-//    mob->animations[3] = createAnimation(ANIM_UP, sp, 12, 15, 20, -1);
-
     loadAnimations("resources/animations/fireas.txt", mob->animations);
+    
     Vector2 position = {100, 100};
     while (!WindowShouldClose()) {
         if (IsKeyDown(KEY_DOWN)) {
