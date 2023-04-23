@@ -14,43 +14,10 @@ int main(int argc, char *argv[]) {
         }
     }
     SetTargetFPS(60);
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "cjrpgengine");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "crpgengine");
 
     Game *g = createGameInstance(sceneIndex, showCollisions);
     run(g);
 
-//    while (!WindowShouldClose()) {
-//        mob->isMoving = 0;
-//        if (IsKeyDown(KEY_DOWN)) {
-//            mob->direction = DIRECTION_DOWN;
-//            mob->position.y += 1;
-//            mob->isMoving = 1;
-//        }
-//        if (IsKeyDown(KEY_UP)) {
-//            mob->direction = DIRECTION_UP;
-//            mob->position.y -= 1;
-//            mob->isMoving = 1;
-//        }
-//        if (IsKeyDown(KEY_LEFT)) {
-//            mob->direction = DIRECTION_LEFT;
-//            mob->position.x -= 1;
-//            mob->isMoving = 1;
-//        }
-//        if (IsKeyDown(KEY_RIGHT)) {
-//            mob->direction = DIRECTION_RIGHT;
-//            mob->position.x += 1;
-//            mob->isMoving = 1;
-//        }
-//        BeginDrawing();
-//        ClearBackground(BLACK);
-//        int animName = getAnimationFromDirection(mob->direction);
-//        Animation *anim = findAnimation(mob->animations, animName);
-//        drawAnimation(anim, mob->position);
-//        if (mob->isMoving) {
-//            incrementAnimFrame(anim);
-//        }
-//        EndDrawing();
-//    }
-//    CloseWindow();
     return 0;
 }

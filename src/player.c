@@ -26,10 +26,8 @@ Player *createTestPlayer() {
     return player;
 }
 
-
 void movePlayer(Player *p, int direction, Vector2 pos) {
     p->mob->isMoving = 1;
     p->mob->direction = direction;
     p->mob->position = pos;
-//    gettimeofday(&p->lastMovement, NULL);
 }

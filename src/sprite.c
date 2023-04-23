@@ -119,23 +119,6 @@ typedef struct Sprite {
     int direction;
 } Sprite;
 
-//
-//Sprite *createTestHumanoid() {
-//    struct Sprite *sp = malloc(sizeof(Sprite));
-//
-//    sp->source = LoadTexture("resources/fireas.png");
-//
-//    Vector2 position = { ((float)SCREEN_WIDTH / 2) - (HUMANOID_WIDTH / 2), ((float)SCREEN_HEIGHT / 2) - (HUMANOID_HEIGHT / 2) };
-//    Rectangle frameRec = { 0.0f, 0.0f, HUMANOID_WIDTH, HUMANOID_HEIGHT };
-//
-//    sp->position = position;
-//    sp->frameRec = frameRec;
-//    sp->currentFrame = 0;
-//    sp->framesCounter = 0;
-//    sp->direction = DIRECTION_DOWN;
-//    return sp;
-//}
-
 void incrementFrame(struct Sprite *sp) {
     sp->framesCounter = 0;
     sp->currentFrame++;
@@ -162,13 +145,4 @@ void animateSprite(Sprite *sp) {
     } else if (sp->direction == DIRECTION_RIGHT) {
         sp->frameRec.y = HUMANOID_HEIGHT * 2;
     }
-}
-
-void drawSprite(Sprite *sp) {
-    DrawTextureRec(
-            sp->source,
-            sp->frameRec,
-            sp->position,
-            WHITE
-    );
 }

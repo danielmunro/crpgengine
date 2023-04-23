@@ -143,9 +143,7 @@ int checkMoveKey(Scene *s, int key, int direction) {
             p.x += 1;
         }
         movePlayer(s->player, direction, p);
-        int animName = getAnimationFromDirection(s->player->mob->direction);
-        Animation *anim = findAnimation(s->player->mob->animations, animName);
-        incrementAnimFrame(anim);
+        incrementAnimFrame(getMobAnimation(s->player->mob));
         return 1;
     }
     return 0;
@@ -220,9 +218,6 @@ void drawScene(Scene *s) {
     ClearBackground(BLACK);
     drawLayer(s, 0);
     drawLayer(s, 1);
-//    drawSprite(s->player->mob);
-    int animName = getAnimationFromDirection(s->player->mob->direction);
-    Animation *anim = findAnimation(s->player->mob->animations, animName);
-    drawAnimation(anim, s->player->mob->position);
+    drawAnimation(getMobAnimation(s->player->mob), s->player->mob->position);
     drawLayer(s, 2);
 }

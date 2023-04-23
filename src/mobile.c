@@ -4,3 +4,8 @@ typedef struct Mobile {
     int isMoving;
     Vector2 position;
 } Mobile;
+
+Animation *getMobAnimation(Mobile *mob) {
+    int animName = getAnimationFromDirection(mob->direction);
+    return findAnimation(mob->animations, animName);
+}
