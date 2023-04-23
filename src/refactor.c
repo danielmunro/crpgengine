@@ -6,7 +6,7 @@ typedef struct SpriteSheet {
 
 typedef struct Animation {
     SpriteSheet *spriteSheet;
-    char name[255];
+    int type;
     int firstFrame;
     int lastFrame;
     int currentFrame;
@@ -14,9 +14,21 @@ typedef struct Animation {
     int frameRateCount;
 } Animation;
 
-Animation *createAnimation(char *name, SpriteSheet *spriteSheet, int firstFrame, int lastFrame) {
+int getAnimationFromDirection(int direction) {
+    if (direction == DIRECTION_DOWN) {
+        return ANIM_DOWN;
+    } else if (direction == DIRECTION_UP) {
+        return ANIM_UP;
+    } else if (direction == DIRECTION_LEFT) {
+        return ANIM_LEFT;
+    } else if (direction == DIRECTION_RIGHT) {
+        return ANIM_RIGHT;
+    }
+}
+
+Animation *createAnimation(int type, SpriteSheet *spriteSheet, int firstFrame, int lastFrame) {
     Animation *a = malloc(sizeof(Animation));
-    strcpy(a->name, name);
+    a->type = type;
     a->spriteSheet = spriteSheet;
     a->firstFrame = firstFrame;
     a->lastFrame = lastFrame;
@@ -52,12 +64,12 @@ void drawAnimation(Animation *a, Vector2 position) {
     }
 }
 
-Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], char *name) {
+Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], int type) {
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         if (animation[i] == NULL) {
             break;
         }
-        if (strcmp(animation[i]->name, name) == 0) {
+        if (animation[i]->type == type) {
             return animation[i];
         }
     }

@@ -28,6 +28,18 @@
 #define SCENE_TYPE_TOWN 1
 #define SCENE_TYPE_DUNGEON 2
 
+#define HUMANOID_WIDTH     16.0f
+#define HUMANOID_HEIGHT    24.0f
+#define DIRECTION_UP       1
+#define DIRECTION_DOWN     2
+#define DIRECTION_LEFT     3
+#define DIRECTION_RIGHT    4
+
+#define ANIM_UP 1
+#define ANIM_DOWN 2
+#define ANIM_LEFT 3
+#define ANIM_RIGHT 4
+
 #include "util.c"
 #include "refactor.c"
 #include "sprite.c"
