@@ -28,27 +28,27 @@ void run(Game *g) {
         BeginDrawing();
         drawScene(s);
         EndDrawing();
-        Rectangle pr = {
-                s->player->pos.x,
-                s->player->pos.y,
-                HUMANOID_WIDTH,
-                HUMANOID_HEIGHT,
-        };
-        if (CheckCollisionRecs(pr, s->exit->area)) {
-            int i = 0;
-            while (g->scenes[i] != NULL) {
-                if (strcmp(g->scenes[i]->name, s->exit->to) == 0) {
-                    Player *p = g->scenes[g->scene]->player;
-                    g->scene = i;
-                    g->scenes[g->scene]->player = p;
-                    Rectangle r = g->scenes[g->scene]->entrance;
-                    s->player->pos.x = r.x + (r.width / 2);
-                    s->player->pos.y = r.y + (r.height / 2);
-                    break;
-                }
-                i++;
-            }
-        }
+//        Rectangle pr = {
+//                s->player->pos.x,
+//                s->player->pos.y,
+//                HUMANOID_WIDTH,
+//                HUMANOID_HEIGHT,
+//        };
+//        if (CheckCollisionRecs(pr, s->exit->area)) {
+//            int i = 0;
+//            while (g->scenes[i] != NULL) {
+//                if (strcmp(g->scenes[i]->name, s->exit->to) == 0) {
+//                    Player *p = g->scenes[g->scene]->player;
+//                    g->scene = i;
+//                    g->scenes[g->scene]->player = p;
+//                    Rectangle r = g->scenes[g->scene]->entrance;
+//                    s->player->pos.x = r.x + (r.width / 2);
+//                    s->player->pos.y = r.y + (r.height / 2);
+//                    break;
+//                }
+//                i++;
+//            }
+//        }
         if (s->player->isMoving) {
             animateSprite(s->player->sprite);
         }

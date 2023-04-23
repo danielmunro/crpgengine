@@ -127,12 +127,25 @@ int checkCollision(Scene *s, Vector2 playerPos) {
     return 0;
 }
 
-int checkMoveKey(Scene *s, int key, int direction, Vector2 pos) {
+int checkMoveKey(Scene *s, int key, int direction) {
     if (IsKeyDown(key)) {
-        if (checkCollision(s, pos)) {
-            return 0;
+        Vector2 p = s->player->mob->position;
+        if (direction == DIRECTION_UP) {
+            p.y -= 1;
         }
-        movePlayer(s->player, direction, pos);
+        if (direction == DIRECTION_DOWN) {
+            p.y += 1;
+        }
+        if (direction == DIRECTION_LEFT) {
+            p.x -= 1;
+        }
+        if (direction == DIRECTION_RIGHT) {
+            p.x += 1;
+        }
+        movePlayer(s->player, direction, p);
+        int animName = getAnimationFromDirection(s->player->mob->direction);
+        Animation *anim = findAnimation(s->player->mob->animations, animName);
+        incrementAnimFrame(anim);
         return 1;
     }
     return 0;
@@ -140,35 +153,26 @@ int checkMoveKey(Scene *s, int key, int direction, Vector2 pos) {
 
 void checkInput(Scene *s) {
     if (s->type == SCENE_TYPE_TOWN) {
-        int moveR = checkMoveKey(
+        checkMoveKey(
                 s,
                 KEY_RIGHT,
-                DIRECTION_RIGHT,
-                (Vector2){s->player->pos.x + s->player->moveSpeed, s->player->pos.y}
+                DIRECTION_RIGHT
         );
-        int moveL = checkMoveKey(
+        checkMoveKey(
                 s,
                 KEY_LEFT,
-                DIRECTION_LEFT,
-                (Vector2){s->player->pos.x - s->player->moveSpeed, s->player->pos.y}
+                DIRECTION_LEFT
         );
-        int moveU = checkMoveKey(
+        checkMoveKey(
                 s,
                 KEY_UP,
-                DIRECTION_UP,
-                (Vector2){s->player->pos.x, s->player->pos.y - s->player->moveSpeed}
+                DIRECTION_UP
         );
-        int moveD = checkMoveKey(
+        checkMoveKey(
                 s,
                 KEY_DOWN,
-                DIRECTION_DOWN,
-                (Vector2){s->player->pos.x, s->player->pos.y + s->player->moveSpeed}
+                DIRECTION_DOWN
         );
-        s->player->isMoving = moveR || moveL || moveU || moveD;
-        if (moveU) s->player->direction = 0;
-        else if (moveL) s->player->direction = 270;
-        else if (moveR) s->player->direction = 90;
-        else if (moveD) s->player->direction = 180;
     }
 }
 
@@ -216,6 +220,9 @@ void drawScene(Scene *s) {
     ClearBackground(BLACK);
     drawLayer(s, 0);
     drawLayer(s, 1);
-    drawSprite(s->player->sprite);
+//    drawSprite(s->player->mob);
+    int animName = getAnimationFromDirection(s->player->mob->direction);
+    Animation *anim = findAnimation(s->player->mob->animations, animName);
+    drawAnimation(anim, s->player->mob->position);
     drawLayer(s, 2);
 }

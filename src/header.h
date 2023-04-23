@@ -41,8 +41,9 @@
 #define ANIM_RIGHT 4
 
 #include "util.c"
-#include "refactor.c"
 #include "sprite.c"
+#include "mobile.c"
+#include "anim.c"
 #include "player.c"
 #include "tilemap.c"
 #include "scene.c"
