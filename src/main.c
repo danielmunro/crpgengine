@@ -18,26 +18,40 @@ int main(int argc, char *argv[]) {
 
     Mobile *mob = malloc(sizeof(Mobile));
     mob->direction = DIRECTION_DOWN;
+    mob->position = (Vector2){ 100, 100 };
+    mob->isMoving = 0;
     loadAnimations("resources/animations/fireas.txt", mob->animations);
-    
-    Vector2 position = {100, 100};
+
     while (!WindowShouldClose()) {
+        mob->isMoving = 0;
         if (IsKeyDown(KEY_DOWN)) {
             mob->direction = DIRECTION_DOWN;
+            mob->position.y += 1;
+            mob->isMoving = 1;
         }
         if (IsKeyDown(KEY_UP)) {
             mob->direction = DIRECTION_UP;
+            mob->position.y -= 1;
+            mob->isMoving = 1;
         }
         if (IsKeyDown(KEY_LEFT)) {
             mob->direction = DIRECTION_LEFT;
+            mob->position.x -= 1;
+            mob->isMoving = 1;
         }
         if (IsKeyDown(KEY_RIGHT)) {
             mob->direction = DIRECTION_RIGHT;
+            mob->position.x += 1;
+            mob->isMoving = 1;
         }
         BeginDrawing();
         ClearBackground(BLACK);
-        int anim = getAnimationFromDirection(mob->direction);
-        drawAnimation(findAnimation(mob->animations, anim), position);
+        int animName = getAnimationFromDirection(mob->direction);
+        Animation *anim = findAnimation(mob->animations, animName);
+        drawAnimation(anim, mob->position);
+        if (mob->isMoving) {
+            incrementAnimFrame(anim);
+        }
         EndDrawing();
     }
     CloseWindow();

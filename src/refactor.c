@@ -68,6 +68,9 @@ void drawAnimation(Animation *a, Vector2 position) {
             position,
             WHITE
     );
+}
+
+void incrementAnimFrame(Animation *a) {
     a->frameRateCount++;
     if (a->frameRateCount > a->frameRate) {
         a->frameRateCount = 0;
@@ -93,6 +96,8 @@ Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], int type) {
 typedef struct Mobile {
     Animation *animations[MAX_ANIMATIONS];
     int direction;
+    int isMoving;
+    Vector2 position;
 } Mobile;
 
 int getAnimIdFromName(char *name) {
