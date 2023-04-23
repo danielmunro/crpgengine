@@ -4,12 +4,22 @@ typedef struct SpriteSheet {
     int frameHeight;
 } SpriteSheet;
 
+SpriteSheet *createSpriteSheet(char *filename, int width, int height) {
+    Texture2D tex = LoadTexture(filename);
+    SpriteSheet *sp = malloc(sizeof(SpriteSheet));
+    sp->source = tex;
+    sp->frameWidth = width;
+    sp->frameHeight = height;
+    return sp;
+}
+
 typedef struct Animation {
     SpriteSheet *spriteSheet;
     int type;
     int firstFrame;
     int lastFrame;
     int currentFrame;
+    int repeat;
     int frameRate;
     int frameRateCount;
 } Animation;
@@ -23,17 +33,21 @@ int getAnimationFromDirection(int direction) {
         return ANIM_LEFT;
     } else if (direction == DIRECTION_RIGHT) {
         return ANIM_RIGHT;
+    } else {
+        printf("no animation for direction %d\n", direction);
+        exit(1);
     }
 }
 
-Animation *createAnimation(int type, SpriteSheet *spriteSheet, int firstFrame, int lastFrame) {
+Animation *createAnimation(SpriteSheet *spriteSheet, int type, int firstFrame, int lastFrame, int frameRate, int repeat) {
     Animation *a = malloc(sizeof(Animation));
     a->type = type;
     a->spriteSheet = spriteSheet;
     a->firstFrame = firstFrame;
     a->lastFrame = lastFrame;
     a->currentFrame = firstFrame;
-    a->frameRate = 20;
+    a->frameRate = frameRate;
+    a->repeat = repeat;
     a->frameRateCount = 0;
     return a;
 }
@@ -65,13 +79,20 @@ void drawAnimation(Animation *a, Vector2 position) {
 }
 
 Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], int type) {
+    printf("type: %d\n", type);
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
+        printf("%d\n", i);
         if (animation[i] == NULL) {
+            printf("shoot\n");
             break;
         }
+        printf("sanity\n");
+        printf("type: %d\n", animation[i]->type);
         if (animation[i]->type == type) {
+            printf("found\n");
             return animation[i];
         }
+        printf("done loop\n");
     }
     return NULL;
 }
@@ -81,7 +102,46 @@ typedef struct Mobile {
     int direction;
 } Mobile;
 
-Mobile loadAnimation(const char *file) {
-    printf("%s", file);
-    exit(1);
+int getAnimIdFromName(char *name) {
+    if (strcmp(name, "up") == 0) {
+        return ANIM_UP;
+    } else if (strcmp(name, "down") == 0) {
+        return ANIM_DOWN;
+    } else if (strcmp(name, "left") == 0) {
+        return ANIM_LEFT;
+    } else if (strcmp(name, "right") == 0) {
+        return ANIM_RIGHT;
+    } else if (strcmp(name, "mob") == 0) {
+        return ANIM_MOB;
+    } else {
+        printf("no animation id for name: %s\n", name);
+        exit(1);
+    }
+}
+
+Mobile loadAnimations(const char *file, Animation *animations) {
+    char *data = LoadFileText(file);
+    char *spriteSheetName = strtok(data, ",");
+    char *width = strtok(NULL, ",");
+    char *height = strtok(NULL, "\r\n");
+    SpriteSheet *sp = createSpriteSheet(spriteSheetName, strToInt(width), strToInt(height));
+    int anim = 0;
+    while (true) {
+        char *name = strtok(NULL, ",");
+        if (name == NULL) {
+            break;
+        }
+        char *firstFrame = strtok(NULL, ",");
+        char *lastFrame = strtok(NULL, ",");
+        char *frameRate = strtok(NULL, ",");
+        char *repeat = strtok(NULL, "\r\n");
+        animations[anim].spriteSheet = sp;
+        animations[anim].type = getAnimIdFromName(name);
+        animations[anim].firstFrame = atoi(firstFrame);
+        animations[anim].lastFrame = atoi(lastFrame);
+        animations[anim].frameRate = atoi(frameRate);
+        animations[anim].repeat = atoi(repeat);
+        animations[anim].currentFrame = animations[anim].firstFrame;
+        anim++;
+    }
 }

@@ -1,4 +1,4 @@
-fireas.png
+resources/fireas.png,16,24
 down,0,3,20,-1
 left,4,7,20,-1
 right,8,11,20,-1
