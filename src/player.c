@@ -1,5 +1,4 @@
 typedef struct Player {
-    struct Sprite *sprite;
     Mobile *mob;
     Vector2 pos;
     int isMoving;
