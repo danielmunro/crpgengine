@@ -25,7 +25,7 @@ Game *createGameInstance(int sceneIndex, int showCollisions) {
 void run(Game *g) {
     while (!WindowShouldClose()) {
         Scene *s = getScene(g);
-        checkInput(s, g->player);
+        checkInput(g->player);
         BeginDrawing();
         drawScene(s, g->player);
         EndDrawing();

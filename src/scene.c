@@ -80,31 +80,6 @@ int isInBounds(Vector2d v, Vector2d c) {
            v.y + c.y < MAX_LAYER_SIZE;
 }
 
-void checkInput(Scene *s, Player *p) {
-    if (s->type == SCENE_TYPE_TOWN) {
-        checkMoveKey(
-                p,
-                KEY_UP,
-                DIRECTION_UP
-        );
-        checkMoveKey(
-                p,
-                KEY_DOWN,
-                DIRECTION_DOWN
-        );
-        checkMoveKey(
-                p,
-                KEY_RIGHT,
-                DIRECTION_RIGHT
-        );
-        checkMoveKey(
-                p,
-                KEY_LEFT,
-                DIRECTION_LEFT
-        );
-    }
-}
-
 void drawLayer(Scene *s, Player *p, int layer) {
     Vector2d tiles = getTileCount(s);
     Vector2d start = getStartTileCoords(s->tilemap->size, p->pos, tiles);
