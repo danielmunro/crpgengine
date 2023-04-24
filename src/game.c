@@ -1,5 +1,6 @@
 typedef struct Game {
     Scene *scenes[MAX_SCENES];
+    Player *player;
     int scene;
 } Game;
 
@@ -17,16 +18,16 @@ Game *createGameInstance(int sceneIndex, int showCollisions) {
     Rectangle r = g->scenes[g->scene]->entrance;
     p->pos.x = r.x + (r.width / 2);
     p->pos.y = r.y + (r.height / 2);
-    g->scenes[g->scene]->player = p;
+    g->player = p;
     return g;
 }
 
 void run(Game *g) {
     while (!WindowShouldClose()) {
         Scene *s = getScene(g);
-        checkInput(s);
+        checkInput(s, g->player);
         BeginDrawing();
-        drawScene(s);
+        drawScene(s, g->player);
         EndDrawing();
 //        Rectangle pr = {
 //                s->player->pos.x,
@@ -49,8 +50,8 @@ void run(Game *g) {
 //                i++;
 //            }
 //        }
-        if (s->player->isMoving) {
-            animateSprite(s->player->sprite);
+        if (g->player->isMoving) {
+            animateSprite(g->player->sprite);
         }
     }
 }
