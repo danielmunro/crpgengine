@@ -216,8 +216,8 @@ void drawLayer(Scene *s, int layer) {
 
 void drawScene(Scene *s) {
     ClearBackground(BLACK);
-    drawLayer(s, 0);
-    drawLayer(s, 1);
+    drawLayer(s, LAYER_TYPE_BACKGROUND);
+    drawLayer(s, LAYER_TYPE_MIDGROUND);
     drawAnimation(getMobAnimation(s->player->mob), s->player->mob->position);
-    drawLayer(s, 2);
+    drawLayer(s, LAYER_TYPE_FOREGROUND);
 }
