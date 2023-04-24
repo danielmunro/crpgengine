@@ -29,5 +29,10 @@ void run(Game *g) {
         BeginDrawing();
         drawScene(s, g->player);
         EndDrawing();
+
+        // move to animation manager
+        if (g->player->isMoving) {
+            incrementAnimFrame(getMobAnimation(g->player->mob));
+        }
     }
 }
