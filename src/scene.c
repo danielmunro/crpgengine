@@ -80,28 +80,6 @@ int isInBounds(Vector2d v, Vector2d c) {
            v.y + c.y < MAX_LAYER_SIZE;
 }
 
-int checkMoveKey(Player *p, int key, int direction) {
-    if (IsKeyDown(key)) {
-        Vector2 pos = p->mob->position;
-        if (direction == DIRECTION_UP) {
-            pos.y -= 1;
-        }
-        if (direction == DIRECTION_DOWN) {
-            pos.y += 1;
-        }
-        if (direction == DIRECTION_LEFT) {
-            pos.x -= 1;
-        }
-        if (direction == DIRECTION_RIGHT) {
-            pos.x += 1;
-        }
-        movePlayer(p, direction, pos);
-        incrementAnimFrame(getMobAnimation(p->mob));
-        return 1;
-    }
-    return 0;
-}
-
 void checkInput(Scene *s, Player *p) {
     if (s->type == SCENE_TYPE_TOWN) {
         checkMoveKey(
