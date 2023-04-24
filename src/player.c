@@ -1,14 +1,11 @@
 typedef struct Player {
     Mobile *mob;
     Vector2 pos;
-    int isMoving;
     float direction;
     struct timeval lastMovement;
-    float moveSpeed;
 } Player;
 
 void movePlayer(Player *p, int direction, Vector2 pos) {
-    p->mob->isMoving = 1;
     p->mob->direction = direction;
     p->mob->position = pos;
 }
@@ -29,12 +26,12 @@ void checkMoveKey(Player *p, int key, int direction) {
             pos.x += 1;
         }
         movePlayer(p, direction, pos);
-        p->isMoving = 1;
+        getMobAnimation(p->mob)->isPlaying = 1;
     }
 }
 
 void checkInput(Player *p) {
-    p->isMoving = 0;
+    getMobAnimation(p->mob)->isPlaying = 0;
     checkMoveKey(
             p,
             KEY_UP,

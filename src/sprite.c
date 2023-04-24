@@ -24,6 +24,7 @@ typedef struct Animation {
     int repeat;
     int frameRate;
     int frameRateCount;
+    int isPlaying;
 } Animation;
 
 int getAnimationFromDirection(int direction) {
@@ -51,6 +52,7 @@ Animation *createAnimation(SpriteSheet *spriteSheet, int type, int firstFrame, i
     a->frameRate = frameRate;
     a->repeat = repeat;
     a->frameRateCount = 0;
+    a->isPlaying = 0;
     return a;
 }
 
