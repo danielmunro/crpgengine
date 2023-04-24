@@ -153,16 +153,6 @@ void checkInput(Scene *s) {
     if (s->type == SCENE_TYPE_TOWN) {
         checkMoveKey(
                 s,
-                KEY_RIGHT,
-                DIRECTION_RIGHT
-        );
-        checkMoveKey(
-                s,
-                KEY_LEFT,
-                DIRECTION_LEFT
-        );
-        checkMoveKey(
-                s,
                 KEY_UP,
                 DIRECTION_UP
         );
@@ -170,6 +160,16 @@ void checkInput(Scene *s) {
                 s,
                 KEY_DOWN,
                 DIRECTION_DOWN
+        );
+        checkMoveKey(
+                s,
+                KEY_RIGHT,
+                DIRECTION_RIGHT
+        );
+        checkMoveKey(
+                s,
+                KEY_LEFT,
+                DIRECTION_LEFT
         );
     }
 }
