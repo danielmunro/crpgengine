@@ -76,7 +76,7 @@ void drawAnimation(Animation *a, Vector2 position) {
 
 void incrementAnimFrame(Animation *a) {
     a->frameRateCount++;
-    if (a->frameRateCount > a->frameRate) {
+    if (a->frameRateCount >= (TARGET_FRAMERATE / a->frameRate)) {
         a->frameRateCount = 0;
         a->currentFrame++;
         if (a->currentFrame > a->lastFrame) {

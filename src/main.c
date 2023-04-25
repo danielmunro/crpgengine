@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    SetTargetFPS(60);
+    SetTargetFPS(TARGET_FRAMERATE);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "crpgengine");
 
     Game *g = createGameInstance(sceneIndex, showCollisions);
