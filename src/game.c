@@ -27,6 +27,7 @@ void setScene(Game *g, Scene *scene) {
     g->currentScene->entrance = scene->entrance;
     g->currentScene->exit = scene->exit;
     g->currentScene->showCollisions = scene->showCollisions;
+    g->currentScene->layerCount = scene->layerCount;
     for (int i = 0; i < MAX_OBJECTS; i++) {
         if (scene->objects[i] == NULL) {
             break;
