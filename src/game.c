@@ -1,5 +1,6 @@
 typedef struct Game {
     Scene *scenes[MAX_SCENES];
+    Scene *currentScene;
     Player *player;
     Animation *animations[MAX_ANIMATIONS_IN_GAME];
     int animIndex;
@@ -20,18 +21,38 @@ void addAllAnimations(Game *g, Animation *animations[MAX_ANIMATIONS]) {
     }
 }
 
+void setScene(Game *g, Scene *scene) {
+    free(g->currentScene);
+    g->currentScene = malloc(sizeof(Scene));
+    g->currentScene->tilemap = scene->tilemap;
+    g->currentScene->entrance = scene->entrance;
+    g->currentScene->exit = scene->exit;
+    g->currentScene->showCollisions = scene->showCollisions;
+    for (int i = 0; i < MAX_OBJECTS; i++) {
+        if (scene->objects[i] == NULL) {
+            break;
+        }
+        g->currentScene->objects[i] = scene->objects[i];
+    }
+    for (int i = 0; i < LAYER_COUNT; i++) {
+        g->currentScene->layers[i] = scene->layers[i];
+    }
+    memset(g->animations, 0, sizeof(g->animations));
+    g->animIndex = 0;
+    addAllAnimations(g, g->player->mob->animations);
+}
+
 Game *createGameInstance(int sceneIndex, int showCollisions) {
     Game *g = malloc(sizeof(Game));
-    g->scene = sceneIndex;
     g->animIndex = 0;
     g->scenes[0] = loadScene("./resources/firsttown.scene", showCollisions);
     g->scenes[1] = loadScene("./resources/firstdungeon.scene", showCollisions);
     Player *p = createTestPlayer();
-    addAllAnimations(g, p->mob->animations);
-    Rectangle r = g->scenes[g->scene]->entrance;
+    g->player = p;
+    setScene(g, g->scenes[sceneIndex]);
+    Rectangle r = g->currentScene->entrance;
     p->pos.x = r.x + (r.width / 2);
     p->pos.y = r.y + (r.height / 2);
-    g->player = p;
     return g;
 }
 
@@ -43,16 +64,11 @@ void processAnimations(Game *g) {
     }
 }
 
-Scene *getScene(Game *g) {
-    return g->scenes[g->scene];
-}
-
 void run(Game *g) {
     while (!WindowShouldClose()) {
-        Scene *s = getScene(g);
         checkInput(g->player);
         BeginDrawing();
-        drawScene(s, g->player);
+        drawScene(g->currentScene, g->player);
         EndDrawing();
         processAnimations(g);
     }
