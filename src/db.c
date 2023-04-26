@@ -36,7 +36,7 @@ static void processTilemapNode(Scene *s, xmlTextReaderPtr reader) {
         s->objects[objects] = o;
         objects++;
     } else if (strcmp(strName, "object") == 0) {
-        int id = getIntAttribute(reader, "x");
+        int id = getIntAttribute(reader, "id");
         int x = getIntAttribute(reader, "x");
         int y = getIntAttribute(reader, "y");
         int width = getIntAttribute(reader, "width");
