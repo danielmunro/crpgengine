@@ -20,7 +20,7 @@ static void processTilemapNode(Scene *s, xmlTextReaderPtr reader) {
     if (strcmp(strName, "tileset") == 0) {
         const int width = getIntAttribute(reader, "tilewidth");
         const int height = getIntAttribute(reader, "tilewidth");
-        s->tilemap->size = (Vector2d){width, height };
+        s->tilemap->size = (Vector2d){ width, height };
     } else if (strcmp(strName, "image") == 0) {
         char source[255] = "./resources/tiled/";
         strcat(source, getStringAttribute(reader, "source"));
@@ -54,6 +54,7 @@ void *parseTilemapXml(Scene *s, const char *filename) {
     int ret;
     char source[255] = "./resources/tiled/";
     strcat(source, filename);
+    printf("processing tilemap %s\n", source);
     reader = xmlReaderForFile(source, NULL, 0);
     if (reader != NULL) {
         ret = xmlTextReaderRead(reader);
