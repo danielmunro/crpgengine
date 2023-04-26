@@ -26,7 +26,6 @@ Game *createGameInstance(int sceneIndex, int showCollisions) {
     g->animIndex = 0;
     g->scenes[0] = loadScene("./resources/firsttown.scene", showCollisions);
     g->scenes[1] = loadScene("./resources/firstdungeon.scene", showCollisions);
-    g->scenes[g->scene]->type = SCENE_TYPE_TOWN;
     Player *p = createTestPlayer();
     addAllAnimations(g, p->mob->animations);
     Rectangle r = g->scenes[g->scene]->entrance;
