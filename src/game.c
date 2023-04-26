@@ -4,7 +4,6 @@ typedef struct Game {
     Player *player;
     Animation *animations[MAX_ANIMATIONS_IN_GAME];
     int animIndex;
-    int scene;
 } Game;
 
 void addAnimation(Game *g, Animation *a) {
