@@ -40,6 +40,9 @@ void setScene(Game *g, Scene *scene) {
     memset(g->animations, 0, sizeof(g->animations));
     g->animIndex = 0;
     addAllAnimations(g, g->player->mob->animations);
+    Rectangle r = g->currentScene->entrance;
+    g->player->pos.x = r.x + (r.width / 2);
+    g->player->pos.y = r.y + (r.height / 2);
 }
 
 Game *createGameInstance(int sceneIndex, int showCollisions) {
@@ -47,12 +50,8 @@ Game *createGameInstance(int sceneIndex, int showCollisions) {
     g->animIndex = 0;
     g->scenes[0] = loadScene("./resources/firsttown.scene", showCollisions);
     g->scenes[1] = loadScene("./resources/firstdungeon.scene", showCollisions);
-    Player *p = createTestPlayer();
-    g->player = p;
+    g->player = createTestPlayer();
     setScene(g, g->scenes[sceneIndex]);
-    Rectangle r = g->currentScene->entrance;
-    p->pos.x = r.x + (r.width / 2);
-    p->pos.y = r.y + (r.height / 2);
     return g;
 }
 
