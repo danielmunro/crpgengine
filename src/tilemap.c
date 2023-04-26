@@ -1,6 +1,6 @@
 typedef struct Tilemap {
     Vector2d size;
-    Texture2D source;
+    Image source;
 } Tilemap;
 
 Vector2d getTileFromIndex(Tilemap *t, int index) {

@@ -43,6 +43,7 @@ void setScene(Game *g, Scene *scene) {
     Rectangle r = g->currentScene->entrance;
     g->player->pos.x = r.x + (r.width / 2);
     g->player->pos.y = r.y + (r.height / 2);
+    drawScene(g->currentScene, g->player);
 }
 
 Game *createGameInstance(int sceneIndex, int showCollisions) {
@@ -67,7 +68,7 @@ void run(Game *g) {
     while (!WindowShouldClose()) {
         checkInput(g->player);
         BeginDrawing();
-        drawScene(g->currentScene, g->player);
+        renderScene(g->currentScene, g->player);
         EndDrawing();
         processAnimations(g);
     }

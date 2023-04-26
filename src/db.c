@@ -24,7 +24,7 @@ static void processTilemapNode(Scene *s, xmlTextReaderPtr reader) {
     } else if (strcmp(strName, "image") == 0) {
         char source[255] = "./resources/tiled/";
         strcat(source, getStringAttribute(reader, "source"));
-        s->tilemap->source = LoadTexture(source);
+        s->tilemap->source = LoadImage(source);
     } else if (strcmp(strName, "tile") == 0) {
         if (tileOpen == 1) {
             tileOpen = 0;

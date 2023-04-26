@@ -23,6 +23,7 @@ typedef struct Scene {
     Tilemap *tilemap;
     Layer *layers[LAYER_COUNT];
     Object *objects[MAX_OBJECTS];
+    Texture2D renderedLayers[LAYER_COUNT];
     int layerCount;
     int type;
     char name[255];
@@ -80,50 +81,56 @@ int isInBounds(Vector2d v, Vector2d c) {
            v.y + c.y < MAX_LAYER_SIZE;
 }
 
-void drawLayer(Scene *s, Player *p, int layer) {
+void drawLayer(Scene *s, int layer) {
     Vector2d tiles = getTileCount(s);
-    Vector2d start = getStartTileCoords(s->tilemap->size, p->pos, tiles);
     Vector2d sz = s->tilemap->size;
+    Image renderedLayer = GenImageColor(tiles.x * sz.x, tiles.y * sz.y, BLANK);
     for (int y = -1; y < tiles.y; y++) {
         for (int x = -1; x < tiles.x; x++) {
-            if (isInBounds(start, (Vector2d){x, y}) == 0) {
-                continue;
-            }
-            int index = s->layers[layer]->data[start.y + y][start.x + x];
+            int index = s->layers[layer]->data[y][x];
             if (index <= 0) {
                 continue;
             }
-            Vector2 offset = getOffset(s->tilemap->size, p->pos);
             Vector2 pos = {
-                    (float) (sz.x * x) - (offset.x * (float)sz.x),
-                    (float) (sz.y * y) - (offset.y * (float)sz.y) - (float) sz.y,
+                    (float) (sz.x * x),
+                    (float) (sz.y * y),
             };
-            DrawTextureRec(
+            ImageDraw(
+                    &renderedLayer,
                     s->tilemap->source,
                     getRectForTile(s->tilemap, index),
-                    pos,
+                    (Rectangle) { pos.x, pos.y, (float) sz.x, (float) sz.y },
                     WHITE
             );
-            if (s->showCollisions) {
-                Object *o = getObject(s, index - 1);
-                if (o != NULL) {
-                    Rectangle r = {
-                            (float) (sz.x * x) - (offset.x * (float) sz.x) + o->rect.x,
-                            (float) (sz.y * y) - (offset.y * (float) sz.y) + o->rect.y - (float) sz.y,
-                            o->rect.width,
-                            o->rect.height,
-                    };
-                    DrawRectangleRec(r, PINK);
-                }
-            }
+//            if (s->showCollisions) {
+//                Object *o = getObject(s, index - 1);
+//                if (o != NULL) {
+//                    Rectangle r = {
+//                            (float) (sz.x * x) + o->rect.x,
+//                            (float) (sz.y * y) + o->rect.y,
+//                            o->rect.width,
+//                            o->rect.height,
+//                    };
+//                    DrawRectangleRec(r, PINK);
+//                }
+//            }
         }
     }
+    s->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
 }
 
 void drawScene(Scene *s, Player *p) {
     ClearBackground(BLACK);
-    drawLayer(s, p, LAYER_TYPE_BACKGROUND);
-    drawLayer(s, p, LAYER_TYPE_MIDGROUND);
+    drawLayer(s, LAYER_TYPE_BACKGROUND);
+    drawLayer(s, LAYER_TYPE_MIDGROUND);
+    drawLayer(s, LAYER_TYPE_FOREGROUND);
+}
+
+void renderScene(Scene *s, Player *p) {
+    ClearBackground(BLACK);
+    DrawTexture(s->renderedLayers[LAYER_TYPE_BACKGROUND], 0, 0, WHITE);
+    DrawTexture(s->renderedLayers[LAYER_TYPE_MIDGROUND], 0, 0, WHITE);
     drawAnimation(getMobAnimation(p->mob), p->mob->position);
-    drawLayer(s, p, LAYER_TYPE_FOREGROUND);
+    DrawTexture(s->renderedLayers[LAYER_TYPE_FOREGROUND], 0, 0, WHITE);
+
 }
