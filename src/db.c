@@ -27,7 +27,6 @@ char *getStringAttribute(xmlTextReaderPtr reader, char *attribute) {
 }
 
 static void processTilemapNode(SceneReader *sceneReader) {
-    printf("processTilemapNode\n");
     const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
     static int tileOpen = 0;
     char *strName = (char *)name;
@@ -50,14 +49,13 @@ static void processTilemapNode(SceneReader *sceneReader) {
         sceneReader->scene->objects[sceneReader->objectCount] = o;
         sceneReader->objectCount++;
     } else if (strcmp(strName, "object") == 0) {
-        int id = getIntAttribute(sceneReader->reader, "id");
         int x = getIntAttribute(sceneReader->reader, "x");
         int y = getIntAttribute(sceneReader->reader, "y");
         int width = getIntAttribute(sceneReader->reader, "width");
         int height = getIntAttribute(sceneReader->reader, "height");
         Rectangle rect = {(float)x, (float)y, (float)width, (float)height};
         sceneReader->scene->objects[sceneReader->objectCount - 1]->rect = rect;
-        sceneReader->scene->objects[sceneReader->objectCount - 1]->id = id;
+        sceneReader->scene->objects[sceneReader->objectCount - 1]->id = sceneReader->objectCount;
     }
 }
 
@@ -67,7 +65,6 @@ void parseTilemapXml(Scene *s, const char *filename) {
     int ret;
     char source[255] = "./resources/tiled/";
     strcat(source, filename);
-    printf("processing tilemap %s\n", source);
     SceneReader *sceneReader = createSceneReader(s, source);
     if (sceneReader->reader != NULL) {
         ret = xmlTextReaderRead(sceneReader->reader);
@@ -75,6 +72,7 @@ void parseTilemapXml(Scene *s, const char *filename) {
             processTilemapNode(sceneReader);
             ret = xmlTextReaderRead(sceneReader->reader);
         }
+        printf("found %d objects\n", sceneReader->objectCount);
         xmlFreeTextReader(sceneReader->reader);
         if (ret != 0) {
             fprintf(stderr, "%s : failed to parse\n", filename);

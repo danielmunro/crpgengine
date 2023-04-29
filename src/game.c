@@ -29,9 +29,6 @@ void setScene(Game *g, Scene *scene) {
     g->currentScene->showCollisions = scene->showCollisions;
     g->currentScene->layerCount = scene->layerCount;
     for (int i = 0; i < MAX_OBJECTS; i++) {
-        if (scene->objects[i] == NULL) {
-            break;
-        }
         g->currentScene->objects[i] = scene->objects[i];
     }
     for (int i = 0; i < LAYER_COUNT; i++) {
@@ -50,7 +47,7 @@ Game *createGameInstance(int sceneIndex, int showCollisions) {
     Game *g = malloc(sizeof(Game));
     g->animIndex = 0;
     g->scenes[0] = loadScene("./resources/firsttown.scene", showCollisions);
-    g->scenes[1] = loadScene("./resources/firstdungeon.scene", showCollisions);
+//    g->scenes[1] = loadScene("./resources/firstdungeon.scene", showCollisions);
     g->player = createTestPlayer();
     setScene(g, g->scenes[sceneIndex]);
     return g;

@@ -49,13 +49,12 @@ Vector2 getOffset(Vector2d tileSize, Vector2 pos) {
 }
 
 Object *getObject(Scene *s, int index) {
-    for (int l = 0; l < s->layerCount; l++) {
-        int o = 0;
-        while (s->objects[o] != NULL) {
-            if (s->objects[o]->tile == index) {
-                return s->objects[o];
-            }
-            o++;
+    for (int i = 0; i < MAX_OBJECTS; i++) {
+        if (s->objects[i] == NULL) {
+            return NULL;
+        }
+        if (s->objects[i]->tile == index) {
+            return s->objects[i];
         }
     }
     return NULL;
@@ -102,18 +101,25 @@ void drawLayer(Scene *s, int layer) {
                     (Rectangle) { pos.x, pos.y, (float) sz.x, (float) sz.y },
                     WHITE
             );
-//            if (s->showCollisions) {
-//                Object *o = getObject(s, index - 1);
-//                if (o != NULL) {
-//                    Rectangle r = {
-//                            (float) (sz.x * x) + o->rect.x,
-//                            (float) (sz.y * y) + o->rect.y,
-//                            o->rect.width,
-//                            o->rect.height,
-//                    };
-//                    DrawRectangleRec(r, PINK);
-//                }
-//            }
+            if (s->showCollisions) {
+                Object *o = getObject(s, index - 1);
+                if (o != NULL) {
+                    Rectangle r = {
+                            (float) (sz.x * x) + o->rect.x,
+                            (float) (sz.y * y) + o->rect.y,
+                            o->rect.width,
+                            o->rect.height,
+                    };
+                    ImageDrawRectangle(
+                            &renderedLayer,
+                            (int) r.x,
+                            (int) r.y,
+                            (int) r.width,
+                            (int) r.height,
+                            PINK
+                    );
+                }
+            }
         }
     }
     s->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
