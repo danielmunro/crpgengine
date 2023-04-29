@@ -1,5 +1,19 @@
 #define MAX_DATA_SIZE 2048
 
+typedef struct SceneReader {
+    xmlTextReaderPtr reader;
+    Scene *scene;
+    int objectCount;
+} SceneReader;
+
+SceneReader *createSceneReader(Scene *scene, char *sceneFile) {
+    SceneReader *sceneReader = malloc(sizeof(SceneReader));
+    sceneReader->scene = scene;
+    sceneReader->reader = xmlReaderForFile(sceneFile, NULL, 0);
+    sceneReader->objectCount = 0;
+    return sceneReader;
+}
+
 int getIntAttribute(xmlTextReaderPtr reader, char *attribute) {
     return atoi((char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute));
 }
@@ -12,19 +26,19 @@ char *getStringAttribute(xmlTextReaderPtr reader, char *attribute) {
     return (char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute);
 }
 
-static void processTilemapNode(Scene *s, xmlTextReaderPtr reader) {
-    const xmlChar *name = xmlTextReaderConstName(reader);
+static void processTilemapNode(SceneReader *sceneReader) {
+    printf("processTilemapNode\n");
+    const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
     static int tileOpen = 0;
-    static int objects = 0;
     char *strName = (char *)name;
     if (strcmp(strName, "tileset") == 0) {
-        const int width = getIntAttribute(reader, "tilewidth");
-        const int height = getIntAttribute(reader, "tilewidth");
-        s->tilemap->size = (Vector2d){ width, height };
+        const int width = getIntAttribute(sceneReader->reader, "tilewidth");
+        const int height = getIntAttribute(sceneReader->reader, "tilewidth");
+        sceneReader->scene->tilemap->size = (Vector2d){ width, height };
     } else if (strcmp(strName, "image") == 0) {
         char source[255] = "./resources/tiled/";
-        strcat(source, getStringAttribute(reader, "source"));
-        s->tilemap->source = LoadImage(source);
+        strcat(source, getStringAttribute(sceneReader->reader, "source"));
+        sceneReader->scene->tilemap->source = LoadImage(source);
     } else if (strcmp(strName, "tile") == 0) {
         if (tileOpen == 1) {
             tileOpen = 0;
@@ -32,37 +46,36 @@ static void processTilemapNode(Scene *s, xmlTextReaderPtr reader) {
         }
         tileOpen = 1;
         Object *o = malloc(sizeof(Object));
-        o->tile = getIntAttribute(reader, "id");
-        s->objects[objects] = o;
-        objects++;
+        o->tile = getIntAttribute(sceneReader->reader, "id");
+        sceneReader->scene->objects[sceneReader->objectCount] = o;
+        sceneReader->objectCount++;
     } else if (strcmp(strName, "object") == 0) {
-        int id = getIntAttribute(reader, "id");
-        int x = getIntAttribute(reader, "x");
-        int y = getIntAttribute(reader, "y");
-        int width = getIntAttribute(reader, "width");
-        int height = getIntAttribute(reader, "height");
+        int id = getIntAttribute(sceneReader->reader, "id");
+        int x = getIntAttribute(sceneReader->reader, "x");
+        int y = getIntAttribute(sceneReader->reader, "y");
+        int width = getIntAttribute(sceneReader->reader, "width");
+        int height = getIntAttribute(sceneReader->reader, "height");
         Rectangle rect = {(float)x, (float)y, (float)width, (float)height};
-        s->objects[objects - 1]->rect = rect;
-        s->objects[objects - 1]->id = id;
+        sceneReader->scene->objects[sceneReader->objectCount - 1]->rect = rect;
+        sceneReader->scene->objects[sceneReader->objectCount - 1]->id = id;
     }
 }
 
-void *parseTilemapXml(Scene *s, const char *filename) {
+void parseTilemapXml(Scene *s, const char *filename) {
     Tilemap *tilemap = malloc(sizeof(Tilemap));
     s->tilemap = tilemap;
-    xmlTextReaderPtr reader;
     int ret;
     char source[255] = "./resources/tiled/";
     strcat(source, filename);
     printf("processing tilemap %s\n", source);
-    reader = xmlReaderForFile(source, NULL, 0);
-    if (reader != NULL) {
-        ret = xmlTextReaderRead(reader);
+    SceneReader *sceneReader = createSceneReader(s, source);
+    if (sceneReader->reader != NULL) {
+        ret = xmlTextReaderRead(sceneReader->reader);
         while (ret == 1) {
-            processTilemapNode(s, reader);
-            ret = xmlTextReaderRead(reader);
+            processTilemapNode(sceneReader);
+            ret = xmlTextReaderRead(sceneReader->reader);
         }
-        xmlFreeTextReader(reader);
+        xmlFreeTextReader(sceneReader->reader);
         if (ret != 0) {
             fprintf(stderr, "%s : failed to parse\n", filename);
         }
@@ -94,44 +107,45 @@ void parseSceneLayer(Scene *s, char *rawData) {
     printf("done processing scene layer\n");
 }
 
-void processSceneNode(Scene *s, xmlTextReaderPtr reader) {
-    const xmlChar *name = xmlTextReaderConstName(reader);
+void processSceneNode(SceneReader *sceneReader) {
+    const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
     static int dataOpen = 0, exitOpen = 0, layerOpen = 0;
     char *strName = (char *)name;
     if (strcmp(strName, "tileset") == 0) {
-        char *source = getStringAttribute(reader, "source");
-        parseTilemapXml(s, source);
+        char *source = getStringAttribute(sceneReader->reader, "source");
+        parseTilemapXml(sceneReader->scene, source);
     } else if (strcmp(strName, "layer") == 0) {
         if (layerOpen == 1) {
             layerOpen = 0;
             return;
         }
         layerOpen = 1;
-        s->layers[s->layerCount] = malloc(sizeof(Layer));
-        char *layerName = getStringAttribute(reader, "name");
-        if (strcmp(layerName, "background") == 0) s->layers[s->layerCount]->type = LAYER_TYPE_BACKGROUND;
-        else if (strcmp(layerName, "midground") == 0) s->layers[s->layerCount]->type = LAYER_TYPE_MIDGROUND;
-        else if (strcmp(layerName, "foreground") == 0) s->layers[s->layerCount]->type = LAYER_TYPE_FOREGROUND;
+        Layer *layer = malloc(sizeof(Layer));
+        char *layerName = getStringAttribute(sceneReader->reader, "name");
+        if (strcmp(layerName, "background") == 0) layer->type = LAYER_TYPE_BACKGROUND;
+        else if (strcmp(layerName, "midground") == 0) layer->type = LAYER_TYPE_MIDGROUND;
+        else if (strcmp(layerName, "foreground") == 0) layer->type = LAYER_TYPE_FOREGROUND;
         else printf("unknown layer: %s\n", layerName);
+        sceneReader->scene->layers[sceneReader->scene->layerCount] = layer;
     } else if (strcmp(strName, "data") == 0) {
         if (dataOpen == 1) {
             dataOpen = 0;
             return;
         }
         dataOpen = 1;
-        xmlChar *data = xmlTextReaderReadString(reader);
-        s->layerCount++;
-        parseSceneLayer(s, (char *)data);
+        xmlChar *data = xmlTextReaderReadString(sceneReader->reader);
+        sceneReader->scene->layerCount++;
+        parseSceneLayer(sceneReader->scene, (char *)data);
     } else if (strcmp(strName, "object") == 0) {
-        char *class = getStringAttribute(reader, "class");
+        char *class = getStringAttribute(sceneReader->reader, "class");
         if (class == NULL) {
             return;
         } else if (strcmp(class, "entrance") == 0) {
-            s->entrance = (Rectangle){
-                    getFloatAttribute(reader, "x"),
-                    getFloatAttribute(reader, "y"),
-                    getFloatAttribute(reader, "width"),
-                    getFloatAttribute(reader, "height")
+            sceneReader->scene->entrance = (Rectangle){
+                    getFloatAttribute(sceneReader->reader, "x"),
+                    getFloatAttribute(sceneReader->reader, "y"),
+                    getFloatAttribute(sceneReader->reader, "width"),
+                    getFloatAttribute(sceneReader->reader, "height")
             };
         } else if (strcmp(class, "exit") == 0) {
             if (exitOpen) {
@@ -139,35 +153,33 @@ void processSceneNode(Scene *s, xmlTextReaderPtr reader) {
                 return;
             }
             exitOpen = 1;
-            s->exit = malloc(sizeof(Exit));
-            s->exit->area = (Rectangle){
-                    getFloatAttribute(reader, "x"),
-                    getFloatAttribute(reader, "y"),
-                    getFloatAttribute(reader, "width"),
-                    getFloatAttribute(reader, "height")
+            sceneReader->scene->exit = malloc(sizeof(Exit));
+            sceneReader->scene->exit->area = (Rectangle){
+                    getFloatAttribute(sceneReader->reader, "x"),
+                    getFloatAttribute(sceneReader->reader, "y"),
+                    getFloatAttribute(sceneReader->reader, "width"),
+                    getFloatAttribute(sceneReader->reader, "height")
             };
         }
     } else if (strcmp(strName, "property") == 0) {
-        s->exit->to = getStringAttribute(reader, "value");
+        sceneReader->scene->exit->to = getStringAttribute(sceneReader->reader, "value");
     }
 }
 
-void parseSceneXml(Scene *s, const char *filename) {
-    xmlTextReaderPtr reader;
+void parseSceneXml(SceneReader *sceneReader) {
     int ret;
-    reader = xmlReaderForFile(filename, NULL, 0);
-    if (reader != NULL) {
-        ret = xmlTextReaderRead(reader);
+    if (sceneReader->reader != NULL) {
+        ret = xmlTextReaderRead(sceneReader->reader);
         while (ret == 1) {
-            processSceneNode(s, reader);
-            ret = xmlTextReaderRead(reader);
+            processSceneNode(sceneReader);
+            ret = xmlTextReaderRead(sceneReader->reader);
         }
-        xmlFreeTextReader(reader);
+        xmlFreeTextReader(sceneReader->reader);
         if (ret != 0) {
-            fprintf(stderr, "%s : failed to parse\n", filename);
+            fprintf(stderr, "%s : failed to read scene\n", sceneReader->scene->name);
         }
     } else {
-        fprintf(stderr, "Unable to open %s\n", filename);
+        fprintf(stderr, "Unable to file for %s scene\n", sceneReader->scene->name);
     }
 }
 
@@ -183,7 +195,7 @@ void assignSceneType(Scene *s, char *sceneType) {
 }
 
 Scene *loadScene(char *sceneName, int showCollisions) {
-    printf("loading scene %s\n", sceneName);
+    printf("parsing scene %s\n", sceneName);
     char *data = LoadFileText(sceneName);
     Scene *scene = malloc(sizeof(Scene));
     scene->layerCount = 0;
@@ -191,9 +203,10 @@ Scene *loadScene(char *sceneName, int showCollisions) {
     strcpy(scene->name, strtok(data, "\r\n"));
     char *sceneType = strtok(NULL, "\r\n");
     char *sceneFile = strtok(NULL, "\r\n");
+    SceneReader *sceneReader = createSceneReader(scene, sceneFile);
 
     // create tilemap
-    parseSceneXml(scene, sceneFile);
+    parseSceneXml(sceneReader);
 
     // assign scene properties
     assignSceneType(scene, sceneType);
@@ -202,7 +215,7 @@ Scene *loadScene(char *sceneName, int showCollisions) {
     return scene;
 }
 
-Mobile loadAnimations(const char *file, Animation *animations[MAX_ANIMATIONS]) {
+void loadAnimations(const char *file, Animation *animations[MAX_ANIMATIONS]) {
     char *data = LoadFileText(file);
     char *spriteSheetName = strtok(data, ",");
     char *width = strtok(NULL, ",");
@@ -218,7 +231,6 @@ Mobile loadAnimations(const char *file, Animation *animations[MAX_ANIMATIONS]) {
         char *lastFrame = strtok(NULL, ",");
         char *frameRate = strtok(NULL, ",");
         char *repeat = strtok(NULL, "\r\n");
-        animations[anim] = malloc(sizeof(Animation));
         animations[anim] = createAnimation(
                 sp,
                 getAnimIdFromName(name),
