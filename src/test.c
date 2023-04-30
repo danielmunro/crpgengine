@@ -9,6 +9,10 @@ Mobile *createTestHumanoid() {
 Player *createTestPlayer() {
     Player *player = malloc(sizeof(Player));
     player->mob = createTestHumanoid();
+    player->moving.down = 0;
+    player->moving.up = 0;
+    player->moving.left = 0;
+    player->moving.right = 0;
     gettimeofday(&player->lastMovement, NULL);
     return player;
 }

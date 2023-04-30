@@ -101,7 +101,7 @@ void drawLayer(Scene *s, int layer) {
     s->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
 }
 
-void drawScene(Scene *s, Player *p) {
+void drawScene(Scene *s) {
     ClearBackground(BLACK);
     drawLayer(s, LAYER_TYPE_BACKGROUND);
     drawLayer(s, LAYER_TYPE_MIDGROUND);
@@ -114,5 +114,19 @@ void renderScene(Scene *s, Player *p) {
     DrawTexture(s->renderedLayers[LAYER_TYPE_MIDGROUND], 0, 0, WHITE);
     drawAnimation(getMobAnimation(p->mob), p->mob->position);
     DrawTexture(s->renderedLayers[LAYER_TYPE_FOREGROUND], 0, 0, WHITE);
+}
 
+void evaluateMovement(Player *p) {
+    if (p->moving.up == 1) {
+            p->mob->position.y -= 1;
+    }
+    if (p->moving.down == 1) {
+            p->mob->position.y += 1;
+    }
+    if (p->moving.left == 1) {
+            p->mob->position.x -= 1;
+    }
+    if (p->moving.right == 1) {
+            p->mob->position.x += 1;
+    }
 }
