@@ -57,7 +57,7 @@ Game *createGameInstance(int sceneIndex, int showCollisions) {
 
 void processAnimations(Game *g) {
     for (int i = 0; i < g->animIndex; i++) {
-        if (g->animations[i]->isPlaying) {
+        if (g->animations[i] != NULL && g->animations[i]->isPlaying) {
             incrementAnimFrame(g->animations[i]);
         }
     }
