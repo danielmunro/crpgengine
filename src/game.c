@@ -70,6 +70,6 @@ void run(Game *g) {
         renderScene(g->currentScene, g->player);
         EndDrawing();
         processAnimations(g);
-        evaluateMovement(g->player);
+        evaluateMovement(g->currentScene, g->player);
     }
 }

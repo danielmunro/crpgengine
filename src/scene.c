@@ -116,17 +116,47 @@ void renderScene(Scene *s, Player *p) {
     DrawTexture(s->renderedLayers[LAYER_TYPE_FOREGROUND], 0, 0, WHITE);
 }
 
-void evaluateMovement(Player *p) {
-    if (p->moving.up == 1) {
-            p->mob->position.y -= 1;
+int isBlocked(Scene *s, Vector2 pos) {
+    Rectangle pRect = {
+            pos.x,
+            pos.y,
+            16,
+            24
+    };
+    Vector2d tiles = getTileCount(s);
+    for (int y = -1; y < tiles.y; y++) {
+        for (int x = -1; x < tiles.x; x++) {
+            int index = s->layers[LAYER_TYPE_MIDGROUND]->data[y][x];
+            Object *o = getObject(s, index - 1);
+            if (o != NULL) {
+                Rectangle oRect = {
+                        (float) (s->tilemap->size.x * x) + o->rect.x,
+                        (float) (s->tilemap->size.y * y) + o->rect.y,
+                        o->rect.width,
+                        o->rect.height,
+                };
+                Rectangle c = GetCollisionRec(pRect, oRect);
+                if (c.height > 0 || c.width > 0) {
+                    return 1;
+                }
+            }
+        }
     }
-    if (p->moving.down == 1) {
-            p->mob->position.y += 1;
+    return 0;
+}
+
+void evaluateMovement(Scene *s, Player *p) {
+    Vector2 pos = p->mob->position;
+    if (p->moving.up == 1 && !isBlocked(s, (Vector2){pos.x, pos.y - 1})) {
+        p->mob->position.y -= 1;
     }
-    if (p->moving.left == 1) {
-            p->mob->position.x -= 1;
+    if (p->moving.down == 1 && !isBlocked(s, (Vector2){pos.x, pos.y + 1})) {
+        p->mob->position.y += 1;
     }
-    if (p->moving.right == 1) {
-            p->mob->position.x += 1;
+    if (p->moving.left == 1 && !isBlocked(s, (Vector2){pos.x - 1, pos.y})) {
+        p->mob->position.x -= 1;
+    }
+    if (p->moving.right == 1 && !isBlocked(s, (Vector2){pos.x + 1, pos.y})) {
+        p->mob->position.x += 1;
     }
 }
