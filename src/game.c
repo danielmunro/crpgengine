@@ -21,7 +21,9 @@ void addAllAnimations(Game *g, Animation *animations[MAX_ANIMATIONS]) {
 }
 
 void setScene(Game *g, Scene *scene) {
-    free(g->currentScene);
+    if (g->currentScene != NULL) {
+        free(g->currentScene);
+    }
     g->currentScene = malloc(sizeof(Scene));
     g->currentScene->tilemap = scene->tilemap;
     g->currentScene->entrance = scene->entrance;
