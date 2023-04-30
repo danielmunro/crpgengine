@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
             if (argv[i][1] == 'c') {
                 showCollisions = 1;
             } else if (argv[i][1] == 's') {
-                sceneIndex = atoi(&argv[i][2]);
+                sceneIndex = strToInt(&argv[i][2]);
             }
         }
     }
