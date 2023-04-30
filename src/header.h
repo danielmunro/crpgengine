@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <./_deps/raylib-src/src/raylib.h>
+#include <raylib.h>
 #include <libxml/xmlreader.h>
 #include <string.h>
 #include <math.h>
