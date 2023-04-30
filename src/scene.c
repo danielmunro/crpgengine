@@ -38,16 +38,6 @@ const SceneType sceneTypes[] = {
     {SCENE_TYPE_DUNGEON, "dungeon"},
 };
 
-Vector2 getOffset(Vector2d tileSize, Vector2 pos) {
-    float xf = pos.x / (float)tileSize.x;
-    int xint = (int)xf;
-    float xdiff = xf - (float)xint;
-    float yf = pos.y / (float)tileSize.y;
-    int yint = (int)yf;
-    float ydiff = yf - (float)yint;
-    return (Vector2){xdiff, ydiff};
-}
-
 Object *getObject(Scene *s, int index) {
     for (int i = 0; i < MAX_OBJECTS; i++) {
         if (s->objects[i] == NULL) {
@@ -64,20 +54,6 @@ Vector2d getTileCount(Scene *s) {
     int x = SCREEN_WIDTH / s->tilemap->size.x + 1;
     int y = SCREEN_HEIGHT / s->tilemap->size.y + 2;
     return (Vector2d){x, y};
-}
-
-Vector2d getStartTileCoords(Vector2d tileSize, Vector2 playerPos, Vector2d tiles) {
-    return (Vector2d){
-            (int)(playerPos.x / (float)tileSize.x) - (tiles.x / 2),
-            (int)(playerPos.y / (float)tileSize.y) - (tiles.y / 2),
-    };
-}
-
-int isInBounds(Vector2d v, Vector2d c) {
-    return v.x + c.x > 0 &&
-           v.y + c.y > 0 &&
-           v.x + c.x < MAX_LAYER_SIZE &&
-           v.y + c.y < MAX_LAYER_SIZE;
 }
 
 void drawLayer(Scene *s, int layer) {
