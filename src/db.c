@@ -15,11 +15,7 @@ SceneReader *createSceneReader(Scene *scene, char *sceneFile) {
 }
 
 int getIntAttribute(xmlTextReaderPtr reader, char *attribute) {
-    char *ptr;
-    long ret;
-    char *value = (char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute);
-    ret = strtol(value, &ptr, 10);
-    return (int) ret;
+    return strToInt((char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute));
 }
 
 float getFloatAttribute(xmlTextReaderPtr reader, char *attribute) {
@@ -100,7 +96,7 @@ void parseSceneLayer(Scene *s, char *rawData) {
         char *val = strtok(data[y], ",");
         x = 0;
         while (val != NULL) {
-            s->layers[s->layerCount - 1]->data[y][x] = atoi(val);
+            s->layers[s->layerCount - 1]->data[y][x] = strToInt(val);
             val = strtok(NULL, ",");
             x++;
         }
@@ -236,10 +232,10 @@ void loadAnimations(const char *file, Animation *animations[MAX_ANIMATIONS]) {
         animations[anim] = createAnimation(
                 sp,
                 getAnimIdFromName(name),
-                atoi(firstFrame),
-                atoi(lastFrame),
-                atoi(frameRate),
-                atoi(repeat)
+                strToInt(firstFrame),
+                strToInt(lastFrame),
+                strToInt(frameRate),
+                strToInt(repeat)
         );
         anim++;
     }

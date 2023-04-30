@@ -4,14 +4,8 @@ typedef struct Vector2d {
 } Vector2d;
 
 int strToInt(char *value) {
-    int iterations;
-    const char *errstr;
-
-    iterations = (int) strtonum(value, 1, 64,	&errstr);
-    if (errstr != NULL) {
-        printf("number of iterations is %s:	%s", errstr, value);
-        exit(1);
-    }
-
-    return iterations;
+    char *ptr;
+    long ret;
+    ret = strtol(value, &ptr, 10);
+    return (int) ret;
 }
