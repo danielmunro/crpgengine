@@ -15,7 +15,11 @@ SceneReader *createSceneReader(Scene *scene, char *sceneFile) {
 }
 
 int getIntAttribute(xmlTextReaderPtr reader, char *attribute) {
-    return atoi((char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute));
+    char *ptr;
+    long ret;
+    char *value = (char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute);
+    ret = strtol(value, &ptr, 10);
+    return (int) ret;
 }
 
 float getFloatAttribute(xmlTextReaderPtr reader, char *attribute) {
