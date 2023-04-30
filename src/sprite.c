@@ -1,5 +1,3 @@
-#include "raylib.h"
-
 typedef struct SpriteSheet {
     Texture2D source;
     int frameWidth;
