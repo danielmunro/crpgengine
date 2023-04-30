@@ -5,27 +5,21 @@ typedef struct Player {
     struct timeval lastMovement;
 } Player;
 
-void movePlayer(Player *p, int direction, Vector2 pos) {
-    p->mob->direction = direction;
-    p->mob->position = pos;
-}
-
 void checkMoveKey(Player *p, int key, int direction) {
     if (IsKeyDown(key)) {
-        Vector2 pos = p->mob->position;
         if (direction == DIRECTION_UP) {
-            pos.y -= 1;
+            p->mob->position.y -= 1;
         }
         if (direction == DIRECTION_DOWN) {
-            pos.y += 1;
+            p->mob->position.y += 1;
         }
         if (direction == DIRECTION_LEFT) {
-            pos.x -= 1;
+            p->mob->position.x -= 1;
         }
         if (direction == DIRECTION_RIGHT) {
-            pos.x += 1;
+            p->mob->position.x += 1;
         }
-        movePlayer(p, direction, pos);
+        p->mob->direction = direction;
         getMobAnimation(p->mob)->isPlaying = 1;
     }
 }
