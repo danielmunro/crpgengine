@@ -47,7 +47,6 @@
 #include "tilemap.c"
 #include "scene.c"
 #include "db.c"
-#include "test.c"
 #include "game.c"
 
 #endif /* CJRPGENGINE_H_INCLUDED */

@@ -13,6 +13,16 @@ typedef struct Player {
     struct timeval lastMovement;
 } Player;
 
+Player *createPlayer() {
+    Player *player = malloc(sizeof(Player));
+    player->moving.down = 0;
+    player->moving.up = 0;
+    player->moving.left = 0;
+    player->moving.right = 0;
+    gettimeofday(&player->lastMovement, NULL);
+    return player;
+}
+
 void resetMoving(Player *p) {
     p->moving.up = 0;
     p->moving.down = 0;

@@ -17,6 +17,7 @@ void addAllAnimations(Game *g, Animation *animations[MAX_ANIMATIONS]) {
         if (animations[i] == NULL) {
             break;
         }
+        printf("add animation %d\n", i);
         addAnimation(g, animations[i]);
     }
 }
@@ -62,7 +63,7 @@ Game *createGameInstance(int sceneIndex, int showCollisions, char indexDir[255])
         g->scenes[i] = loadScene(indexDir, scenes[i], showCollisions);
     }
 //    g->scenes[1] = loadScene("./resources/firstdungeon.scene", showCollisions);
-    g->player = createTestPlayer();
+    g->player = loadPlayer(indexDir);
     setScene(g, g->scenes[sceneIndex]);
     return g;
 }

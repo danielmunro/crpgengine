@@ -258,3 +258,16 @@ void loadAnimations(const char *file, Animation *animations[MAX_ANIMATIONS]) {
     }
     printf("%d animations loaded\n", anim);
 }
+
+Player *loadPlayer(char indexDir[255]) {
+    char playerData[255] = "";
+    strcat(playerData, indexDir);
+    strcat(playerData, "/player.txt");
+    printf("player file: %s\n", playerData);
+    char *data = LoadFileText(playerData);
+    char *animationsFile = strtok(data, "\r\n");
+    Player *player = createPlayer();
+    player->mob = createTestHumanoid();
+    loadAnimations(animationsFile, player->mob->animations);
+    return player;
+}
