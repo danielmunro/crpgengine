@@ -1,6 +1,8 @@
 .idea/
+.cmake/
 cmake-build-debug/
 CMakeFiles/
+Testing/
 build/
 _deps/
 .DS_Store
