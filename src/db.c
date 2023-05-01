@@ -199,7 +199,7 @@ void assignSceneType(Scene *s, char *sceneType) {
 void loadIndex(char *indexDir, char *scenes[MAX_SCENES]) {
     char indexFile[255];
     strcat(indexFile, indexDir);
-    strcat(indexFile, "/index.txt");
+    strcat(indexFile, "/scenes.txt");
     char *data = LoadFileText(indexFile);
     char *row = strtok(data, "\r\n");
     int i = 0;
