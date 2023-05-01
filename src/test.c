@@ -1,5 +1,5 @@
 Mobile *createTestHumanoid() {
-    Mobile *mob = malloc(sizeof(Mobile));
+    Mobile *mob = createMobile();
     mob->direction = DIRECTION_DOWN;
     mob->position = (Vector2){ ((float)SCREEN_WIDTH / 2) - (HUMANOID_WIDTH / 2), ((float)SCREEN_HEIGHT / 2) - (HUMANOID_HEIGHT / 2) };
     loadAnimations("resources/animations/fireas.txt", mob->animations);

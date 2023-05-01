@@ -38,6 +38,15 @@ const SceneType sceneTypes[] = {
     {SCENE_TYPE_DUNGEON, "dungeon"},
 };
 
+Scene *createScene() {
+    Scene *scene = malloc(sizeof(Scene));
+    scene->layerCount = 0;
+    for (int i = 0; i < MAX_OBJECTS; i++) {
+        scene->objects[i] = NULL;
+    }
+    return scene;
+}
+
 Object *getObject(Scene *s, int index) {
     for (int i = 0; i < MAX_OBJECTS; i++) {
         if (s->objects[i] == NULL) {
@@ -119,25 +128,27 @@ void renderScene(Scene *s, Player *p) {
 int isBlocked(Scene *s, Vector2 pos) {
     Rectangle pRect = {
             pos.x,
-            pos.y,
+            pos.y + 12,
             16,
-            24
+            12
     };
     Vector2d tiles = getTileCount(s);
-    for (int y = -1; y < tiles.y; y++) {
-        for (int x = -1; x < tiles.x; x++) {
-            int index = s->layers[LAYER_TYPE_MIDGROUND]->data[y][x];
-            Object *o = getObject(s, index - 1);
-            if (o != NULL) {
-                Rectangle oRect = {
-                        (float) (s->tilemap->size.x * x) + o->rect.x,
-                        (float) (s->tilemap->size.y * y) + o->rect.y,
-                        o->rect.width,
-                        o->rect.height,
-                };
-                Rectangle c = GetCollisionRec(pRect, oRect);
-                if (c.height > 0 || c.width > 0) {
-                    return 1;
+    for (int l = 0; l < LAYER_COUNT; l++) {
+        for (int y = -1; y < tiles.y; y++) {
+            for (int x = -1; x < tiles.x; x++) {
+                int index = s->layers[l]->data[y][x];
+                Object *o = getObject(s, index - 1);
+                if (o != NULL) {
+                    Rectangle oRect = {
+                            (float) (s->tilemap->size.x * x) + o->rect.x,
+                            (float) (s->tilemap->size.y * y) + o->rect.y,
+                            o->rect.width,
+                            o->rect.height,
+                    };
+                    Rectangle c = GetCollisionRec(pRect, oRect);
+                    if (c.height > 0 || c.width > 0) {
+                        return 1;
+                    }
                 }
             }
         }

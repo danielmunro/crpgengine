@@ -195,8 +195,7 @@ void assignSceneType(Scene *s, char *sceneType) {
 Scene *loadScene(char *sceneName, int showCollisions) {
     printf("parsing scene %s\n", sceneName);
     char *data = LoadFileText(sceneName);
-    Scene *scene = malloc(sizeof(Scene));
-    scene->layerCount = 0;
+    Scene *scene = createScene();
     scene->showCollisions = showCollisions;
     strcpy(scene->name, strtok(data, "\r\n"));
     char *sceneType = strtok(NULL, "\r\n");

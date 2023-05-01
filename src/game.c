@@ -48,6 +48,9 @@ void setScene(Game *g, Scene *scene) {
 Game *createGameInstance(int sceneIndex, int showCollisions) {
     Game *g = malloc(sizeof(Game));
     g->animIndex = 0;
+    for (int i = 0; i < MAX_SCENES; i++) {
+        g->scenes[i] = NULL;
+    }
     g->scenes[0] = loadScene("./resources/firsttown.scene", showCollisions);
 //    g->scenes[1] = loadScene("./resources/firstdungeon.scene", showCollisions);
     g->player = createTestPlayer();
