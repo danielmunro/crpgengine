@@ -330,11 +330,18 @@ FETCHCONTENT_QUIET:BOOL=ON
 // for raylib
 FETCHCONTENT_SOURCE_DIR_RAYLIB:PATH=
 
+//When not empty, overrides where to find pre-populated content
+// for tap
+FETCHCONTENT_SOURCE_DIR_TAP:PATH=
+
 //Enables UPDATE_DISCONNECTED behavior for all content population
 FETCHCONTENT_UPDATES_DISCONNECTED:BOOL=OFF
 
 //Enables UPDATE_DISCONNECTED behavior just for population of raylib
 FETCHCONTENT_UPDATES_DISCONNECTED_RAYLIB:BOOL=OFF
+
+//Enables UPDATE_DISCONNECTED behavior just for population of tap
+FETCHCONTENT_UPDATES_DISCONNECTED_TAP:BOOL=OFF
 
 //Value Computed by CMake
 GLFW_BINARY_DIR:STATIC=/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw
@@ -393,6 +400,9 @@ PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/local/bin/pkg-config
 //Platform to build for.
 PLATFORM:STRING=Desktop
 
+//The directory containing a CMake configuration file for Tap.
+Tap_DIR:PATH=Tap_DIR-NOTFOUND
+
 //Link raylib against system GLFW instead of embedded one
 USE_EXTERNAL_GLFW:STRING=OFF
 
@@ -434,6 +444,9 @@ raylib_LIB_DEPENDS:STATIC=general;/Applications/Xcode.app/Contents/Developer/Pla
 
 //Value Computed by CMake
 raylib_SOURCE_DIR:STATIC=/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src
+
+//The directory containing a CMake configuration file for tap.
+tap_DIR:PATH=tap_DIR-NOTFOUND
 
 
 ########################

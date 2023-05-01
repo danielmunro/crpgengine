@@ -17,6 +17,50 @@
 					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="tests">
+				<Option output="/Users/danmunro/github/cjrpgengine/build/tests" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="./build"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DPLATFORM_DESKTOP"/>
+					<Add option="-DGRAPHICS_API_OPENGL_33"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 tests"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tests/fast">
+				<Option output="/Users/danmunro/github/cjrpgengine/build/tests" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="./build"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DPLATFORM_DESKTOP"/>
+					<Add option="-DGRAPHICS_API_OPENGL_33"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 tests/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 			<Target title="cjrpgengine">
 				<Option output="/Users/danmunro/github/cjrpgengine/build/cjrpgengine" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="./build"/>
@@ -26,6 +70,7 @@
 				<Compiler>
 					<Add option="-DPLATFORM_DESKTOP"/>
 					<Add option="-DGRAPHICS_API_OPENGL_33"/>
+					<Add directory="/usr/local/include"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
@@ -47,6 +92,7 @@
 				<Compiler>
 					<Add option="-DPLATFORM_DESKTOP"/>
 					<Add option="-DGRAPHICS_API_OPENGL_33"/>
+					<Add directory="/usr/local/include"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
@@ -376,6 +422,9 @@
 		</Unit>
 		<Unit filename="/Users/danmunro/github/cjrpgengine/src/main.c">
 			<Option target="cjrpgengine"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/src/test.c">
+			<Option target="tests"/>
 		</Unit>
 		<Unit filename="/Users/danmunro/github/cjrpgengine/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
