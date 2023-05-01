@@ -26,7 +26,7 @@ char *getStringAttribute(xmlTextReaderPtr reader, char *attribute) {
     return (char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute);
 }
 
-static void processTilemapNode(SceneReader *sceneReader) {
+static void processTilemapNode(SceneReader *sceneReader, char indexDir[255]) {
     const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
     static int tileOpen = 0;
     char *strName = (char *)name;
@@ -35,7 +35,9 @@ static void processTilemapNode(SceneReader *sceneReader) {
         const int height = getIntAttribute(sceneReader->reader, "tilewidth");
         sceneReader->scene->tilemap->size = (Vector2d){ width, height };
     } else if (strcmp(strName, "image") == 0) {
-        char source[255] = "./resources/tiled/";
+        char source[255] = "";
+        strcat(source, indexDir);
+        strcat(source, "/");
         strcat(source, getStringAttribute(sceneReader->reader, "source"));
         sceneReader->scene->tilemap->source = LoadImage(source);
     } else if (strcmp(strName, "tile") == 0) {
@@ -59,17 +61,19 @@ static void processTilemapNode(SceneReader *sceneReader) {
     }
 }
 
-void parseTilemapXml(Scene *s, const char *filename) {
+void parseTilemapXml(Scene *s, char indexDir[255], const char *filename) {
     Tilemap *tilemap = malloc(sizeof(Tilemap));
     s->tilemap = tilemap;
     int ret;
-    char source[255] = "./resources/tiled/";
+    char source[255] = "";
+    strcat(source, indexDir);
+    strcat(source, "/");
     strcat(source, filename);
     SceneReader *sceneReader = createSceneReader(s, source);
     if (sceneReader->reader != NULL) {
         ret = xmlTextReaderRead(sceneReader->reader);
         while (ret == 1) {
-            processTilemapNode(sceneReader);
+            processTilemapNode(sceneReader, indexDir);
             ret = xmlTextReaderRead(sceneReader->reader);
         }
         printf("found %d objects\n", sceneReader->objectCount);
@@ -105,13 +109,13 @@ void parseSceneLayer(Scene *s, char *rawData) {
     printf("done processing scene layer\n");
 }
 
-void processSceneNode(SceneReader *sceneReader) {
+void processSceneNode(SceneReader *sceneReader, char indexDir[255]) {
     const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
     static int dataOpen = 0, exitOpen = 0, layerOpen = 0;
     char *strName = (char *)name;
     if (strcmp(strName, "tileset") == 0) {
         char *source = getStringAttribute(sceneReader->reader, "source");
-        parseTilemapXml(sceneReader->scene, source);
+        parseTilemapXml(sceneReader->scene, indexDir, source);
     } else if (strcmp(strName, "layer") == 0) {
         if (layerOpen == 1) {
             layerOpen = 0;
@@ -164,12 +168,12 @@ void processSceneNode(SceneReader *sceneReader) {
     }
 }
 
-void parseSceneXml(SceneReader *sceneReader) {
+void parseSceneXml(SceneReader *sceneReader, char indexDir[255]) {
     int ret;
     if (sceneReader->reader != NULL) {
         ret = xmlTextReaderRead(sceneReader->reader);
         while (ret == 1) {
-            processSceneNode(sceneReader);
+            processSceneNode(sceneReader, indexDir);
             ret = xmlTextReaderRead(sceneReader->reader);
         }
         xmlFreeTextReader(sceneReader->reader);
@@ -192,7 +196,21 @@ void assignSceneType(Scene *s, char *sceneType) {
     }
 }
 
-Scene *loadScene(char *sceneName, int showCollisions) {
+void loadIndex(char *indexDir, char *scenes[MAX_SCENES]) {
+    char indexFile[255];
+    strcat(indexFile, indexDir);
+    strcat(indexFile, "/index.txt");
+    char *data = LoadFileText(indexFile);
+    char *row = strtok(data, "\r\n");
+    int i = 0;
+    while (row != NULL) {
+        scenes[i] = row;
+        i++;
+        row = strtok(NULL, "\r\n");
+    }
+}
+
+Scene *loadScene(char indexDir[255], char *sceneName, int showCollisions) {
     printf("parsing scene %s\n", sceneName);
     char *data = LoadFileText(sceneName);
     Scene *scene = createScene();
@@ -203,7 +221,7 @@ Scene *loadScene(char *sceneName, int showCollisions) {
     SceneReader *sceneReader = createSceneReader(scene, sceneFile);
 
     // create tilemap
-    parseSceneXml(sceneReader);
+    parseSceneXml(sceneReader, indexDir);
 
     // assign scene properties
     assignSceneType(scene, sceneType);

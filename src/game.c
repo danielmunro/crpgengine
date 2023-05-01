@@ -3,6 +3,7 @@ typedef struct Game {
     Scene *currentScene;
     Player *player;
     Animation *animations[MAX_ANIMATIONS_IN_GAME];
+    char indexDir[255];
     int animIndex;
 } Game;
 
@@ -45,13 +46,21 @@ void setScene(Game *g, Scene *scene) {
     drawScene(g->currentScene);
 }
 
-Game *createGameInstance(int sceneIndex, int showCollisions) {
+Game *createGameInstance(int sceneIndex, int showCollisions, char indexDir[255]) {
     Game *g = malloc(sizeof(Game));
     g->animIndex = 0;
+    strcpy(g->indexDir, indexDir);
     for (int i = 0; i < MAX_SCENES; i++) {
         g->scenes[i] = NULL;
     }
-    g->scenes[0] = loadScene("./resources/firsttown.scene", showCollisions);
+    char *scenes[MAX_SCENES];
+    loadIndex(indexDir, scenes);
+    for (int i = 0; i < MAX_SCENES; i++) {
+        if (scenes[i] == NULL) {
+            break;
+        }
+        g->scenes[i] = loadScene(indexDir, scenes[i], showCollisions);
+    }
 //    g->scenes[1] = loadScene("./resources/firstdungeon.scene", showCollisions);
     g->player = createTestPlayer();
     setScene(g, g->scenes[sceneIndex]);

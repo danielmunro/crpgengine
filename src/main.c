@@ -4,6 +4,7 @@ int main(int argc, char *argv[]) {
     int sceneIndex = 0;
     int showCollisions = false;
     int dump = false;
+    char *indexDir = NULL;
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
             if (argv[i][1] == 'c') {
@@ -12,13 +13,15 @@ int main(int argc, char *argv[]) {
                 sceneIndex = strToInt(&argv[i][2]);
             } else if (argv[i][1] == 'd') {
                 dump = true;
+            } else if (argv[i][1] == 'i') {
+                indexDir = argv[i + 1];
             }
         }
     }
     SetTargetFPS(TARGET_FRAMERATE);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "crpgengine");
 
-    Game *g = createGameInstance(sceneIndex, showCollisions);
+    Game *g = createGameInstance(sceneIndex, showCollisions, indexDir);
     if (dump == true) {
         printf("animations\n==============\n");
         for (int i = 0; i < g->animIndex; i++) {
