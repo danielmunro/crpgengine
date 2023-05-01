@@ -69,6 +69,7 @@ void parseTilemapXml(Scene *s, char indexDir[255], const char *filename) {
     strcat(source, indexDir);
     strcat(source, "/");
     strcat(source, filename);
+    printf("parse xml tilemap %s\n", source);
     SceneReader *sceneReader = createSceneReader(s, source);
     if (sceneReader->reader != NULL) {
         ret = xmlTextReaderRead(sceneReader->reader);
@@ -211,17 +212,31 @@ void loadIndex(char *indexDir, char *scenes[MAX_SCENES]) {
 }
 
 Scene *loadScene(char indexDir[255], char *sceneName, int showCollisions) {
-    printf("parsing scene %s\n", sceneName);
-    char *data = LoadFileText(sceneName);
+    char indexFile[255] = "";
+    strcat(indexFile, indexDir);
+    strcat(indexFile, "/");
+    strcat(indexFile, sceneName);
+    strcat(indexFile, "/scene.txt");
+    char *data = LoadFileText(indexFile);
     Scene *scene = createScene();
     scene->showCollisions = showCollisions;
     strcpy(scene->name, strtok(data, "\r\n"));
     char *sceneType = strtok(NULL, "\r\n");
-    char *sceneFile = strtok(NULL, "\r\n");
+    char *sceneFilename = strtok(NULL, "\r\n");
+    char sceneFile[255] = "";
+    strcat(sceneFile, indexDir);
+    strcat(sceneFile, "/");
+    strcat(sceneFile, sceneName);
+    strcat(sceneFile, "/");
+    strcat(sceneFile, sceneFilename);
     SceneReader *sceneReader = createSceneReader(scene, sceneFile);
 
     // create tilemap
-    parseSceneXml(sceneReader, indexDir);
+    char sceneDir[255] = "";
+    strcat(sceneDir, indexDir);
+    strcat(sceneDir, "/");
+    strcat(sceneDir, sceneName);
+    parseSceneXml(sceneReader, sceneDir);
 
     // assign scene properties
     assignSceneType(scene, sceneType);
@@ -265,9 +280,14 @@ Player *loadPlayer(char indexDir[255]) {
     strcat(playerData, "/player.txt");
     printf("player file: %s\n", playerData);
     char *data = LoadFileText(playerData);
-    char *animationsFile = strtok(data, "\r\n");
+    char *animationsFilename = strtok(data, "\r\n");
     Player *player = createPlayer();
     player->mob = createTestHumanoid();
+    char animationsFile[255] = "";
+    strcat(animationsFile, indexDir);
+    strcat(animationsFile, "/");
+    strcat(animationsFile, animationsFilename);
+    printf("animation file %s\n", animationsFile);
     loadAnimations(animationsFile, player->mob->animations);
     return player;
 }

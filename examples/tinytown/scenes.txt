@@ -1,1 +1,1 @@
-./examples/tinytown/tinytown.scene
+tinytown
