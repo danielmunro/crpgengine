@@ -3,7 +3,7 @@
  <editorsettings>
   <export target="firsttown.csv" format="csv"/>
  </editorsettings>
- <tileset firstgid="1" source="tinytown.tsx"/>
+ <tileset firstgid="1" source="tileset.tsx"/>
  <layer id="1" name="background" width="50" height="30">
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,25,27,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,

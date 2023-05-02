@@ -18,6 +18,10 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+    if (indexDir == NULL) {
+        fprintf(stderr, "-i indexDir required\n");
+        return 1;
+    }
     SetTargetFPS(TARGET_FRAMERATE);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "crpgengine");
 

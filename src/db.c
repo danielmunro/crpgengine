@@ -222,13 +222,13 @@ Scene *loadScene(char indexDir[255], char *sceneName, int showCollisions) {
     scene->showCollisions = showCollisions;
     strcpy(scene->name, strtok(data, "\r\n"));
     char *sceneType = strtok(NULL, "\r\n");
-    char *sceneFilename = strtok(NULL, "\r\n");
+//    char *sceneFilename = strtok(NULL, "\r\n");
     char sceneFile[255] = "";
     strcat(sceneFile, indexDir);
     strcat(sceneFile, "/");
     strcat(sceneFile, sceneName);
-    strcat(sceneFile, "/");
-    strcat(sceneFile, sceneFilename);
+    strcat(sceneFile, "/tilemap.tmx");
+//    strcat(sceneFile, sceneFilename);
     SceneReader *sceneReader = createSceneReader(scene, sceneFile);
 
     // create tilemap

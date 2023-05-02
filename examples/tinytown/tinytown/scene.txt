@@ -1,3 +1,2 @@
 town-1
 town
-./tinytown.tmx
