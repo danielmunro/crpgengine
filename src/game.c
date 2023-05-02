@@ -63,7 +63,7 @@ Game *createGameInstance(int sceneIndex, int showCollisions, char indexDir[255])
         g->scenes[i] = loadScene(indexDir, scenes[i], showCollisions);
     }
     g->player = loadPlayer(indexDir);
-    setScene(g, g->scenes[sceneIndex]);
+    setScene(g, g->scenes[0]);
     return g;
 }
 
