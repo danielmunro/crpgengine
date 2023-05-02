@@ -1,2 +1,2 @@
-town-1
+Tiny Town
 town
