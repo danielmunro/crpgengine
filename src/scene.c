@@ -71,7 +71,7 @@ void drawLayer(Scene *s, int layer) {
     Image renderedLayer = GenImageColor(tiles.x * sz.x, tiles.y * sz.y, BLANK);
     for (int y = -1; y < tiles.y; y++) {
         for (int x = -1; x < tiles.x; x++) {
-            int index = s->layers[layer]->data[y][x];
+            int index = (int) s->layers[layer]->data[y][x];
             if (index <= 0) {
                 continue;
             }
