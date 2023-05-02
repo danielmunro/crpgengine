@@ -62,7 +62,6 @@ Game *createGameInstance(int sceneIndex, int showCollisions, char indexDir[255])
         }
         g->scenes[i] = loadScene(indexDir, scenes[i], showCollisions);
     }
-//    g->scenes[1] = loadScene("./resources/firstdungeon.scene", showCollisions);
     g->player = loadPlayer(indexDir);
     setScene(g, g->scenes[sceneIndex]);
     return g;
