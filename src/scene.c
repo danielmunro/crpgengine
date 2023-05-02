@@ -136,7 +136,7 @@ int isBlocked(Scene *s, Vector2 pos) {
     for (int l = 0; l < LAYER_COUNT; l++) {
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
-                int index = s->layers[l]->data[y][x];
+                int index = (int) s->layers[l]->data[y][x];
                 Object *o = getObject(s, index - 1);
                 if (o != NULL) {
                     Rectangle oRect = {
