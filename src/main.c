@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
             if (argv[i][1] == 'c') {
                 showCollisions = true;
             } else if (argv[i][1] == 's') {
-                sceneIndex = strToInt(&argv[i][2]);
+                sceneIndex = strToInt(argv[i + 1]);
             } else if (argv[i][1] == 'd') {
                 dump = true;
             } else if (argv[i][1] == 'i') {
