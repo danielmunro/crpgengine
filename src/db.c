@@ -225,7 +225,7 @@ Scene *loadScene(char indexDir[255], char *sceneName, int showCollisions) {
     Scene *scene = createScene();
     scene->showCollisions = showCollisions;
     strcpy(scene->name, sceneName);
-    char *sceneType = strtok(indexFile, "\r\n");
+    char *sceneType = strtok(data, "\r\n");
     char sceneFile[255] = "";
     strcat(sceneFile, indexDir);
     strcat(sceneFile, "/");
