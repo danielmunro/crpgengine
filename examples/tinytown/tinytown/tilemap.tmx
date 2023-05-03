@@ -75,7 +75,7 @@
  <objectgroup id="4" name="warps">
   <object id="1" name="exit" class="exit" x="335.92" y="-0.445676" width="175.166" height="49.3348">
    <properties>
-    <property name="to" value="dungeon-1"/>
+    <property name="to" value="greenforest"/>
    </properties>
   </object>
   <object id="2" x="320.953" y="208.98" width="13.3038" height="14.4124"/>

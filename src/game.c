@@ -23,15 +23,19 @@ void addAllAnimations(Game *g, Animation *animations[MAX_ANIMATIONS]) {
 }
 
 void setScene(Game *g, Scene *scene) {
+    printf("request scene set to %s\n", scene->name);
     if (g->currentScene != NULL) {
         free(g->currentScene);
     }
-    g->currentScene = malloc(sizeof(Scene));
+    g->currentScene = createScene();
+    strcpy(g->currentScene->name, scene->name);
     g->currentScene->tilemap = scene->tilemap;
     g->currentScene->entrance = scene->entrance;
-    g->currentScene->exit = scene->exit;
     g->currentScene->showCollisions = scene->showCollisions;
     g->currentScene->layerCount = scene->layerCount;
+    for (int i = 0; i < MAX_EXITS; i++) {
+        g->currentScene->exits[i] = scene->exits[i];
+    }
     for (int i = 0; i < MAX_OBJECTS; i++) {
         g->currentScene->objects[i] = scene->objects[i];
     }
@@ -45,6 +49,7 @@ void setScene(Game *g, Scene *scene) {
     g->player->pos.x = r.x + (r.width / 2);
     g->player->pos.y = r.y + (r.height / 2);
     drawScene(g->currentScene);
+    printf("scene set to %s\n", g->currentScene->name);
 }
 
 Game *createGameInstance(int sceneIndex, int showCollisions, char indexDir[255]) {
@@ -83,5 +88,20 @@ void run(Game *g) {
         EndDrawing();
         processAnimations(g);
         evaluateMovement(g->currentScene, g->player);
+        int exit = atExit(g->currentScene, g->player);
+        if (exit > -1) {
+            char *to = g->currentScene->exits[exit]->to;
+            for (int i = 0; i < MAX_SCENES; i++) {
+                if (g->scenes[i] == NULL) {
+                    break;
+                }
+                if (strcmp(to, g->scenes[i]->name) == 0) {
+                    setScene(g, g->scenes[i]);
+                    g->player->mob->position.x = g->scenes[i]->entrance.x + (g->scenes[i]->entrance.width / 2);
+                    g->player->mob->position.y = g->scenes[i]->entrance.y + (g->scenes[i]->entrance.height / 2);
+                    break;
+                }
+            }
+        }
     }
 }

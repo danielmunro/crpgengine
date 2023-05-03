@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
             if (g->scenes[i] == NULL) {
                 break;
             }
-            printf("scene %d objects\n===============\n", i);
+            printf("scene %s objects\n===============\n", g->scenes[i]->name);
             for (int o = 0; o < MAX_OBJECTS; o++) {
                 if (g->scenes[i]->objects[o] == NULL) {
                     break;

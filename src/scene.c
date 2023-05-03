@@ -27,10 +27,12 @@ typedef struct Scene {
     int layerCount;
     int type;
     char name[255];
+    char displayName[255];
     char filename[255];
     int showCollisions;
     Rectangle entrance;
-    Exit *exit;
+    Exit *exits[MAX_EXITS];
+    int nextExit;
 } Scene;
 
 const SceneType sceneTypes[] = {
@@ -41,8 +43,12 @@ const SceneType sceneTypes[] = {
 Scene *createScene() {
     Scene *scene = malloc(sizeof(Scene));
     scene->layerCount = 0;
+    scene->nextExit = 0;
     for (int i = 0; i < MAX_OBJECTS; i++) {
         scene->objects[i] = NULL;
+    }
+    for (int i = 0; i < MAX_EXITS; i++) {
+        scene->exits[i] = NULL;
     }
     return scene;
 }
@@ -154,6 +160,25 @@ int isBlocked(Scene *s, Vector2 pos) {
         }
     }
     return 0;
+}
+
+int atExit(Scene *s, Player *p) {
+    for (int i = 0; i < MAX_EXITS; i++) {
+        if (s->exits[i] == NULL) {
+            return -1;
+        }
+        Rectangle pRect = {
+                p->mob->position.x,
+                p->mob->position.y + 12,
+                16,
+                12,
+        };
+        Rectangle c = GetCollisionRec(s->exits[i]->area, pRect);
+        if (c.height > 0 || c.width > 0) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 void evaluateMovement(Scene *s, Player *p) {

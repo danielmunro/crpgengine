@@ -156,16 +156,21 @@ void processSceneNode(SceneReader *sceneReader, char indexDir[255]) {
                 return;
             }
             exitOpen = 1;
-            sceneReader->scene->exit = malloc(sizeof(Exit));
-            sceneReader->scene->exit->area = (Rectangle){
+            sceneReader->scene->exits[sceneReader->scene->nextExit] = malloc(sizeof(Exit));
+            sceneReader->scene->exits[sceneReader->scene->nextExit]->area = (Rectangle){
                     getFloatAttribute(sceneReader->reader, "x"),
                     getFloatAttribute(sceneReader->reader, "y"),
                     getFloatAttribute(sceneReader->reader, "width"),
                     getFloatAttribute(sceneReader->reader, "height")
             };
+            sceneReader->scene->nextExit += 1;
         }
     } else if (strcmp(strName, "property") == 0) {
-        sceneReader->scene->exit->to = getStringAttribute(sceneReader->reader, "value");
+        char *propName = getStringAttribute(sceneReader->reader, "name");
+        if (strcmp(propName, "to") == 0) {
+            sceneReader->scene->exits[sceneReader->scene->nextExit - 1]->to = getStringAttribute(sceneReader->reader, "value");
+            printf("to property set to %s\n", sceneReader->scene->exits[sceneReader->scene->nextExit - 1]->to);
+        }
     }
 }
 
@@ -220,8 +225,8 @@ Scene *loadScene(char indexDir[255], char *sceneName, int showCollisions) {
     char *data = LoadFileText(indexFile);
     Scene *scene = createScene();
     scene->showCollisions = showCollisions;
-    strcpy(scene->name, strtok(data, "\r\n"));
-    char *sceneType = strtok(NULL, "\r\n");
+    strcpy(scene->name, sceneName);
+    char *sceneType = strtok(indexFile, "\r\n");
     char sceneFile[255] = "";
     strcat(sceneFile, indexDir);
     strcat(sceneFile, "/");
@@ -230,11 +235,13 @@ Scene *loadScene(char indexDir[255], char *sceneName, int showCollisions) {
     SceneReader *sceneReader = createSceneReader(scene, sceneFile);
 
     // create tilemap
+    printf("initialize tilemap\n");
     char sceneDir[255] = "";
     strcat(sceneDir, indexDir);
     strcat(sceneDir, "/");
     strcat(sceneDir, sceneName);
     parseSceneXml(sceneReader, sceneDir);
+    printf("done initializing tilemap\n");
 
     // assign scene properties
     assignSceneType(scene, sceneType);
