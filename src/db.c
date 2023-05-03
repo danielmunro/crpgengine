@@ -26,7 +26,7 @@ char *getStringAttribute(xmlTextReaderPtr reader, const char *attribute) {
     return (char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute);
 }
 
-static void processTilemapNode(SceneReader *sceneReader, char indexDir[255]) {
+static void processTilemapNode(SceneReader *sceneReader, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
     static int tileOpen = 0;
     char *strName = (char *)name;
@@ -58,7 +58,7 @@ static void processTilemapNode(SceneReader *sceneReader, char indexDir[255]) {
     }
 }
 
-void parseTilemapXml(Scene *s, char indexDir[255], const char *filename) {
+void parseTilemapXml(Scene *s, char *indexDir, const char *filename) {
     Tilemap *tilemap = malloc(sizeof(Tilemap));
     s->tilemap = tilemap;
     int ret;
