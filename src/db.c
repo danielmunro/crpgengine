@@ -6,7 +6,7 @@ typedef struct SceneReader {
     int objectCount;
 } SceneReader;
 
-SceneReader *createSceneReader(Scene *scene, char *sceneFile) {
+SceneReader *createSceneReader(Scene *scene, const char *sceneFile) {
     SceneReader *sceneReader = malloc(sizeof(SceneReader));
     sceneReader->scene = scene;
     sceneReader->reader = xmlReaderForFile(sceneFile, NULL, 0);
@@ -14,15 +14,15 @@ SceneReader *createSceneReader(Scene *scene, char *sceneFile) {
     return sceneReader;
 }
 
-int getIntAttribute(xmlTextReaderPtr reader, char *attribute) {
+int getIntAttribute(xmlTextReaderPtr reader, const char *attribute) {
     return strToInt((char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute));
 }
 
-float getFloatAttribute(xmlTextReaderPtr reader, char *attribute) {
+float getFloatAttribute(xmlTextReaderPtr reader, const char *attribute) {
     return atoll((char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute));
 }
 
-char *getStringAttribute(xmlTextReaderPtr reader, char *attribute) {
+char *getStringAttribute(xmlTextReaderPtr reader, const char *attribute) {
     return (char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute);
 }
 
