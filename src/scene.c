@@ -1,6 +1,8 @@
 typedef struct Exit {
     Rectangle area;
     char *to;
+    int x;
+    int y;
 } Exit;
 
 typedef struct SceneType {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="11">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="11">
  <editorsettings>
   <export target="firsttown.csv" format="csv"/>
  </editorsettings>
@@ -73,24 +73,26 @@
 </data>
  </layer>
  <objectgroup id="4" name="warps">
-  <object id="1" name="exit" class="exit" x="335.92" y="-0.445676" width="175.166" height="49.3348">
+  <object id="1" name="exit" type="exit" x="335.92" y="-0.445676" width="175.166" height="49.3348">
    <properties>
     <property name="to" value="greenforest"/>
+    <property name="x" value="384"/>
+    <property name="y" value="336"/>
    </properties>
   </object>
   <object id="2" x="320.953" y="208.98" width="13.3038" height="14.4124"/>
   <object id="3" x="192.35" y="289.911" width="13.8581" height="13.3038"/>
   <object id="4" x="560.421" y="305.987" width="13.8581" height="13.8581"/>
-  <object id="6" name="entrance" class="entrance" x="400.222" y="223.947" width="95.3437" height="95.898"/>
+  <object id="6" name="entrance" type="entrance" x="400.222" y="223.947" width="95.3437" height="95.898"/>
  </objectgroup>
  <objectgroup id="5" name="npcs">
-  <object id="8" class="npc" x="241.131" y="353.659" width="13.8581" height="13.3038">
+  <object id="8" type="npc" x="241.131" y="353.659" width="13.8581" height="13.3038">
    <properties>
     <property name="sprite" value="young_villager"/>
     <property name="wanders" value="true"/>
    </properties>
   </object>
-  <object id="10" class="npc" x="496.674" y="336.475" width="14.4124" height="14.4124">
+  <object id="10" type="npc" x="496.674" y="336.475" width="14.4124" height="14.4124">
    <properties>
     <property name="sprite" value="old_villager"/>
     <property name="wanders" value="true"/>

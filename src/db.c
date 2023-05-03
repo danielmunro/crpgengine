@@ -82,6 +82,7 @@ void parseTilemapXml(Scene *s, const char *indexDir, const char *filename) {
 }
 
 void parseSceneLayer(Scene *s, char *rawData) {
+    printf("processing scene layer %d\n", s->layerCount - 1);
     char *line = strtok(rawData, "\r\n");
     char *data[MAX_DATA_SIZE];
     int it = 0;
@@ -134,7 +135,7 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
         sceneReader->scene->layerCount++;
         parseSceneLayer(sceneReader->scene, (char *)data);
     } else if (strcmp(strName, "object") == 0) {
-        char *class = getStringAttribute(sceneReader->reader, "class");
+        char *class = getStringAttribute(sceneReader->reader, "type");
         if (class == NULL) {
             return;
         } else if (strcmp(class, "entrance") == 0) {
@@ -163,6 +164,10 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
         char *propName = getStringAttribute(sceneReader->reader, "name");
         if (strcmp(propName, "to") == 0) {
             sceneReader->scene->exits[sceneReader->scene->nextExit - 1]->to = getStringAttribute(sceneReader->reader, "value");
+        } else if (strcmp(propName, "x") == 0) {
+            sceneReader->scene->exits[sceneReader->scene->nextExit - 1]->x = getIntAttribute(sceneReader->reader, "value");
+        } else if (strcmp(propName, "y") == 0) {
+            sceneReader->scene->exits[sceneReader->scene->nextExit - 1]->y = getIntAttribute(sceneReader->reader, "value");
         }
     }
 }

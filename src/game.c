@@ -90,9 +90,9 @@ void evaluateExits(Game *g) {
                 break;
             }
             if (strcmp(to, g->scenes[i]->name) == 0) {
+                g->player->mob->position.x = (float) g->currentScene->exits[exit]->x;
+                g->player->mob->position.y = (float) g->currentScene->exits[exit]->y;
                 setScene(g, g->scenes[i]);
-                g->player->mob->position.x = g->scenes[i]->entrance.x + (g->scenes[i]->entrance.width / 2);
-                g->player->mob->position.y = g->scenes[i]->entrance.y + (g->scenes[i]->entrance.height / 2);
                 break;
             }
         }
