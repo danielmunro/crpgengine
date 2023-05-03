@@ -96,6 +96,7 @@ void evaluateExits(Game *g) {
                 break;
             }
         }
+        fprintf(stderr, "warp to %s not found\n", to);
     }
 }
 
