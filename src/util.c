@@ -10,7 +10,7 @@ int strToInt(char *value) {
     return (int) ret;
 }
 
-char *pathCat(char *part1, char *part2) {
+char *pathCat(const char *part1, const char *part2) {
     char *result = (char *)malloc(strlen(part1) + strlen(part2) + 1);
     strcat(result, part1);
     if (part1[strlen(part1) - 1] != '/') {
