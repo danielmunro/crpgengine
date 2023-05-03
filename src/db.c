@@ -169,7 +169,6 @@ void processSceneNode(SceneReader *sceneReader, char indexDir[255]) {
         char *propName = getStringAttribute(sceneReader->reader, "name");
         if (strcmp(propName, "to") == 0) {
             sceneReader->scene->exits[sceneReader->scene->nextExit - 1]->to = getStringAttribute(sceneReader->reader, "value");
-            printf("to property set to %s\n", sceneReader->scene->exits[sceneReader->scene->nextExit - 1]->to);
         }
     }
 }
