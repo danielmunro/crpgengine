@@ -35,10 +35,7 @@ static void processTilemapNode(SceneReader *sceneReader, char indexDir[255]) {
         const int height = getIntAttribute(sceneReader->reader, "tilewidth");
         sceneReader->scene->tilemap->size = (Vector2d){ width, height };
     } else if (strcmp(strName, "image") == 0) {
-        char source[255] = "";
-        strcat(source, indexDir);
-        strcat(source, "/");
-        strcat(source, getStringAttribute(sceneReader->reader, "source"));
+        char *source = pathCat(pathCat(indexDir, "/"), getStringAttribute(sceneReader->reader, "source"));
         sceneReader->scene->tilemap->source = LoadImage(source);
     } else if (strcmp(strName, "tile") == 0) {
         if (tileOpen == 1) {
@@ -65,10 +62,7 @@ void parseTilemapXml(Scene *s, char indexDir[255], const char *filename) {
     Tilemap *tilemap = malloc(sizeof(Tilemap));
     s->tilemap = tilemap;
     int ret;
-    char source[255] = "";
-    strcat(source, indexDir);
-    strcat(source, "/");
-    strcat(source, filename);
+    char *source = pathCat(pathCat(indexDir, "/"), filename);
     printf("parse xml tilemap %s\n", source);
     SceneReader *sceneReader = createSceneReader(s, source);
     if (sceneReader->reader != NULL) {
@@ -202,9 +196,7 @@ void assignSceneType(Scene *s, char *sceneType) {
 }
 
 void loadIndex(char *indexDir, char *scenes[MAX_SCENES]) {
-    char indexFile[255];
-    strcat(indexFile, indexDir);
-    strcat(indexFile, "/scenes.txt");
+    char *indexFile = pathCat(indexDir, "/scenes.txt");
     char *data = LoadFileText(indexFile);
     char *row = strtok(data, "\r\n");
     int i = 0;
@@ -216,29 +208,18 @@ void loadIndex(char *indexDir, char *scenes[MAX_SCENES]) {
 }
 
 Scene *loadScene(char *indexDir, char *sceneName, int showCollisions) {
-    char indexFile[255] = "";
-    strcat(indexFile, indexDir);
-    strcat(indexFile, "/");
-    strcat(indexFile, sceneName);
-    strcat(indexFile, "/scene.txt");
+    char *indexFile = pathCat(pathCat(pathCat(indexDir, "/"), sceneName), "/scene.txt");
     char *data = LoadFileText(indexFile);
     Scene *scene = createScene();
     scene->showCollisions = showCollisions;
     strcpy(scene->name, sceneName);
     char *sceneType = strtok(data, "\r\n");
-    char sceneFile[255] = "";
-    strcat(sceneFile, indexDir);
-    strcat(sceneFile, "/");
-    strcat(sceneFile, sceneName);
-    strcat(sceneFile, "/tilemap.tmx");
+    char *sceneFile = pathCat(pathCat(pathCat(indexDir, "/"), sceneName), "/tilemap.tmx");
     SceneReader *sceneReader = createSceneReader(scene, sceneFile);
 
     // create tilemap
     printf("initialize tilemap\n");
-    char sceneDir[255] = "";
-    strcat(sceneDir, indexDir);
-    strcat(sceneDir, "/");
-    strcat(sceneDir, sceneName);
+    char *sceneDir = pathCat(pathCat(indexDir, "/"), sceneName);
     parseSceneXml(sceneReader, sceneDir);
     printf("done initializing tilemap\n");
 
