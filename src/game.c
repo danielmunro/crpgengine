@@ -81,6 +81,24 @@ void processAnimations(Game *g) {
     }
 }
 
+void evaluateExits(Game *g) {
+    int exit = atExit(g->currentScene, g->player);
+    if (exit > -1) {
+        char *to = g->currentScene->exits[exit]->to;
+        for (int i = 0; i < MAX_SCENES; i++) {
+            if (g->scenes[i] == NULL) {
+                break;
+            }
+            if (strcmp(to, g->scenes[i]->name) == 0) {
+                setScene(g, g->scenes[i]);
+                g->player->mob->position.x = g->scenes[i]->entrance.x + (g->scenes[i]->entrance.width / 2);
+                g->player->mob->position.y = g->scenes[i]->entrance.y + (g->scenes[i]->entrance.height / 2);
+                break;
+            }
+        }
+    }
+}
+
 void run(Game *g) {
     while (!WindowShouldClose()) {
         checkInput(g->player);
@@ -89,20 +107,6 @@ void run(Game *g) {
         EndDrawing();
         processAnimations(g);
         evaluateMovement(g->currentScene, g->player);
-        int exit = atExit(g->currentScene, g->player);
-        if (exit > -1) {
-            char *to = g->currentScene->exits[exit]->to;
-            for (int i = 0; i < MAX_SCENES; i++) {
-                if (g->scenes[i] == NULL) {
-                    break;
-                }
-                if (strcmp(to, g->scenes[i]->name) == 0) {
-                    setScene(g, g->scenes[i]);
-                    g->player->mob->position.x = g->scenes[i]->entrance.x + (g->scenes[i]->entrance.width / 2);
-                    g->player->mob->position.y = g->scenes[i]->entrance.y + (g->scenes[i]->entrance.height / 2);
-                    break;
-                }
-            }
-        }
+        evaluateExits(g);
     }
 }
