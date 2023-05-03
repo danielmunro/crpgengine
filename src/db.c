@@ -184,7 +184,7 @@ void parseSceneXml(SceneReader *sceneReader, char indexDir[255]) {
     }
 }
 
-void assignSceneType(Scene *s, char *sceneType) {
+void assignSceneType(Scene *s, const char *sceneType) {
     int i = 0, count = sizeof(sceneTypes) / sizeof(SceneType);
     while (i <= count) {
         if (strcmp(sceneTypes[i].scene, sceneType) == 0) {
@@ -195,7 +195,7 @@ void assignSceneType(Scene *s, char *sceneType) {
     }
 }
 
-void loadIndex(char *indexDir, char *scenes[MAX_SCENES]) {
+void loadIndex(const char *indexDir, char *scenes[MAX_SCENES]) {
     char *indexFile = pathCat(indexDir, "/scenes.txt");
     char *data = LoadFileText(indexFile);
     char *row = strtok(data, "\r\n");
@@ -207,7 +207,7 @@ void loadIndex(char *indexDir, char *scenes[MAX_SCENES]) {
     }
 }
 
-Scene *loadScene(char *indexDir, char *sceneName, int showCollisions) {
+Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions) {
     char *indexFile = pathCat(pathCat(pathCat(indexDir, "/"), sceneName), "/scene.txt");
     char *data = LoadFileText(indexFile);
     Scene *scene = createScene();
