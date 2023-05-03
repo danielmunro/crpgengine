@@ -215,7 +215,7 @@ void loadIndex(char *indexDir, char *scenes[MAX_SCENES]) {
     }
 }
 
-Scene *loadScene(char indexDir[255], char *sceneName, int showCollisions) {
+Scene *loadScene(char *indexDir, char *sceneName, int showCollisions) {
     char indexFile[255] = "";
     strcat(indexFile, indexDir);
     strcat(indexFile, "/");
@@ -278,20 +278,13 @@ void loadAnimations(const char *file, Animation *animations[MAX_ANIMATIONS]) {
     printf("%d animations loaded\n", anim);
 }
 
-Player *loadPlayer(char indexDir[255]) {
-    char playerData[255] = "";
-    strcat(playerData, indexDir);
-    strcat(playerData, "/player.txt");
-    printf("player file: %s\n", playerData);
-    char *data = LoadFileText(playerData);
-    char *animationsFilename = strtok(data, "\r\n");
+Player *loadPlayer(char *indexDir) {
+    char *playerFile = pathCat(indexDir, "/player.txt");
+    char *data = LoadFileText(playerFile);
+    char *animationsFragment = strtok(data, "\r\n");
     Player *player = createPlayer();
     player->mob = createTestHumanoid();
-    char animationsFile[255] = "";
-    strcat(animationsFile, indexDir);
-    strcat(animationsFile, "/");
-    strcat(animationsFile, animationsFilename);
-    printf("animation file %s\n", animationsFile);
+    char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
     loadAnimations(animationsFile, player->mob->animations);
     return player;
 }
