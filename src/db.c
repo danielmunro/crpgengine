@@ -58,7 +58,7 @@ static void processTilemapNode(SceneReader *sceneReader, const char *indexDir) {
     }
 }
 
-void parseTilemapXml(Scene *s, char *indexDir, const char *filename) {
+void parseTilemapXml(Scene *s, const char *indexDir, const char *filename) {
     Tilemap *tilemap = malloc(sizeof(Tilemap));
     s->tilemap = tilemap;
     int ret;
@@ -104,7 +104,7 @@ void parseSceneLayer(Scene *s, char *rawData) {
     printf("done processing scene layer\n");
 }
 
-void processSceneNode(SceneReader *sceneReader, char indexDir[255]) {
+void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
     static int dataOpen = 0, exitOpen = 0, layerOpen = 0;
     char *strName = (char *)name;
@@ -167,7 +167,7 @@ void processSceneNode(SceneReader *sceneReader, char indexDir[255]) {
     }
 }
 
-void parseSceneXml(SceneReader *sceneReader, char indexDir[255]) {
+void parseSceneXml(SceneReader *sceneReader, const char *indexDir) {
     int ret;
     if (sceneReader->reader != NULL) {
         ret = xmlTextReaderRead(sceneReader->reader);
