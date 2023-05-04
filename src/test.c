@@ -1,6 +1,32 @@
 #include "header.h"
 #include "tap.h"
 
+void pathCatDealsWithMultipleSlashTest() {
+    // given
+    char *path1 = "/path/to/";
+    char *path2 = "/dir";
+
+    // when
+    char *result = pathCat(path1, path2);
+    char *expected = "/path/to/dir";
+
+    // then
+    is(result, expected, "paths should match");
+}
+
+void pathCatDealsWithLeadingSlashTest() {
+    // given
+    char *path1 = "/path/to";
+    char *path2 = "/dir";
+
+    // when
+    char *result = pathCat(path1, path2);
+    char *expected = "/path/to/dir";
+
+    // then
+    is(result, expected, "paths should match");
+}
+
 void pathCatTest() {
     // given
     char *path1 = "/path/to/";
@@ -21,7 +47,9 @@ void strToIntTest() {
 }
 
 int main() {
-    plan(2);
+    plan(4);
     pathCatTest();
+    pathCatDealsWithLeadingSlashTest();
+    pathCatDealsWithMultipleSlashTest();
     strToIntTest();
 }
