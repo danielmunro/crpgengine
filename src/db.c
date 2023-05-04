@@ -235,12 +235,13 @@ Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions
     return scene;
 }
 
-void loadAnimations(const char *file, Animation *animations[MAX_ANIMATIONS]) {
+void loadAnimations(const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
     char *data = LoadFileText(file);
-    char *spriteSheetName = strtok(data, ",");
+    char *imageFilename = strtok(data, ",");
     char *width = strtok(NULL, ",");
     char *height = strtok(NULL, "\r\n");
-    SpriteSheet *sp = createSpriteSheet(spriteSheetName, strToInt(width), strToInt(height));
+    char *imagePath = pathCat(indexDir, pathCat("animations", imageFilename));
+    SpriteSheet *sp = createSpriteSheet(imagePath, strToInt(width), strToInt(height));
     int anim = 0;
     while (true) {
         char *name = strtok(NULL, ",");
@@ -271,6 +272,6 @@ Player *loadPlayer(char *indexDir) {
     Player *player = createPlayer();
     player->mob = createTestHumanoid();
     char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
-    loadAnimations(animationsFile, player->mob->animations);
+    loadAnimations(animationsFile, indexDir, player->mob->animations);
     return player;
 }
