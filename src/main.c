@@ -26,6 +26,8 @@ int main(int argc, char *argv[]) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "crpgengine");
 
     Game *g = createGameInstance(sceneIndex, showCollisions, indexDir);
+    validateGameData(g);
+
     if (dump == true) {
         printf("animations\n==============\n");
         for (int i = 0; i < g->animIndex; i++) {

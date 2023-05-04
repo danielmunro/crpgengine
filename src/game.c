@@ -17,7 +17,6 @@ void addAllAnimations(Game *g, Animation *animations[MAX_ANIMATIONS]) {
         if (animations[i] == NULL) {
             break;
         }
-        printf("add animation %d\n", i);
         addAnimation(g, animations[i]);
     }
 }

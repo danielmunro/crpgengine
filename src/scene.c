@@ -29,7 +29,6 @@ typedef struct Scene {
     int layerCount;
     int type;
     char name[255];
-    char displayName[255];
     char filename[255];
     int showCollisions;
     Rectangle entrance;
