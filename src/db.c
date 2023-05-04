@@ -213,18 +213,18 @@ void loadIndex(const char *indexDir, char *scenes[MAX_SCENES]) {
 }
 
 Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions) {
-    char *indexFile = pathCat(pathCat(pathCat(indexDir, "/"), sceneName), "/scene.txt");
+    char *indexFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/scene.txt");
     char *data = LoadFileText(indexFile);
     Scene *scene = createScene();
     scene->showCollisions = showCollisions;
     strcpy(scene->name, sceneName);
     char *sceneType = strtok(data, "\r\n");
-    char *sceneFile = pathCat(pathCat(pathCat(indexDir, "/"), sceneName), "/tilemap.tmx");
+    char *sceneFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/tilemap.tmx");
     SceneReader *sceneReader = createSceneReader(scene, sceneFile);
 
     // create tilemap
     printf("initialize tilemap\n");
-    char *sceneDir = pathCat(pathCat(indexDir, "/"), sceneName);
+    char *sceneDir = pathCat(pathCat(indexDir, "/scenes"), sceneName);
     parseSceneXml(sceneReader, sceneDir);
     printf("done initializing tilemap\n");
 
