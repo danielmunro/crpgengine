@@ -3,7 +3,7 @@ typedef struct Game {
     Scene *currentScene;
     Player *player;
     Animation *animations[MAX_ANIMATIONS_IN_GAME];
-    char indexDir[255];
+    char *indexDir;
     int animIndex;
 } Game;
 
@@ -55,7 +55,7 @@ Game *createGameInstance(int sceneIndex, int showCollisions, char *indexDir) {
     Game *g = malloc(sizeof(Game));
     g->animIndex = 0;
     g->currentScene = NULL;
-    strcpy(g->indexDir, indexDir);
+    g->indexDir = &indexDir[0];
     for (int i = 0; i < MAX_SCENES; i++) {
         g->scenes[i] = NULL;
     }
