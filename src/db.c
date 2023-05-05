@@ -1,3 +1,5 @@
+#include <dirent.h>
+
 #define MAX_DATA_SIZE 2048
 
 typedef struct SceneReader {
@@ -82,7 +84,7 @@ void parseTilemapXml(Scene *s, const char *indexDir, const char *filename) {
 }
 
 void parseSceneLayer(Scene *s, char *rawData) {
-    printf("processing scene layer %d\n", s->layerCount - 1);
+    printf("processing scene '%s' layer %d\n", s->name, s->layerCount - 1);
     char *line = strtok(rawData, "\r\n");
     char *data[MAX_DATA_SIZE];
     int it = 0;
@@ -102,7 +104,6 @@ void parseSceneLayer(Scene *s, char *rawData) {
         }
         y++;
     }
-    printf("done processing scene layer\n");
 }
 
 void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
@@ -201,18 +202,31 @@ void assignSceneType(Scene *s, const char *sceneType) {
 }
 
 void loadIndex(const char *indexDir, char *scenes[MAX_SCENES]) {
-    char *indexFile = pathCat(indexDir, "/scenes.txt");
-    char *data = LoadFileText(indexFile);
-    char *row = strtok(data, "\r\n");
-    int i = 0;
-    while (row != NULL) {
-        scenes[i] = row;
-        i++;
-        row = strtok(NULL, "\r\n");
+    struct dirent *de;
+    char *sceneDir = pathCat(indexDir, "/scenes");
+    DIR *dr = opendir(sceneDir);
+    if (dr == NULL) {
+        fprintf(stderr, "Could not open scene index directory");
     }
+    int i = 0;
+    while (true) {
+        de = readdir(dr);
+        if (de == NULL) {
+            break;
+        }
+        if (strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0) {
+            continue;
+        }
+        scenes[i] = (char *) malloc(strlen(de->d_name));
+        strcpy(scenes[i], de->d_name);
+        printf("added scene %s\n", scenes[i]);
+        i++;
+    }
+    closedir(dr);
 }
 
 Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions) {
+    printf("parse scene '%s' index\n", sceneName);
     char *indexFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/scene.txt");
     char *data = LoadFileText(indexFile);
     Scene *scene = createScene();
@@ -223,10 +237,9 @@ Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions
     SceneReader *sceneReader = createSceneReader(scene, sceneFile);
 
     // create tilemap
-    printf("initialize tilemap\n");
+    printf("create scene '%s' tilemap\n", sceneName);
     char *sceneDir = pathCat(pathCat(indexDir, "/scenes"), sceneName);
     parseSceneXml(sceneReader, sceneDir);
-    printf("done initializing tilemap\n");
 
     // assign scene properties
     assignSceneType(scene, sceneType);

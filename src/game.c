@@ -56,10 +56,11 @@ Game *createGameInstance(int sceneIndex, int showCollisions, char *indexDir) {
     g->animIndex = 0;
     g->currentScene = NULL;
     g->indexDir = &indexDir[0];
+    char *scenes[MAX_SCENES];
     for (int i = 0; i < MAX_SCENES; i++) {
         g->scenes[i] = NULL;
+        scenes[i] = NULL;
     }
-    char *scenes[MAX_SCENES];
     loadIndex(indexDir, scenes);
     for (int i = 0; i < MAX_SCENES; i++) {
         if (scenes[i] == NULL) {
