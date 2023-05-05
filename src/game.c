@@ -3,7 +3,6 @@ typedef struct Game {
     Scene *currentScene;
     Player *player;
     Animation *animations[MAX_ANIMATIONS_IN_GAME];
-    char *indexDir;
     int animIndex;
 } Game;
 
