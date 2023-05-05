@@ -16,12 +16,11 @@ char *pathCat(const char *part1, const char *part2) {
     if (part1[strlen(part1) - 1] != '/' && part2[0] != '/') {
         // need to add a slash
         strcat(result, "/");
+        strcat(result, part2);
     } else if (part1[strlen(part1) - 1] == '/' && part2[0] == '/') {
-        // need to remove a slash
-        char intermediate[strlen(part1) - 1];
-        strncpy(intermediate, part1, strlen(part1) - 1);
-        result = &intermediate[0];
+        strcat(result, &part2[1]);
+    } else {
+        strcat(result, part2);
     }
-    strcat(result, part2);
     return result;
 }
