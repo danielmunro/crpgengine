@@ -1,1 +1,1 @@
-./animations/fireas.txt
+animations:./animations/fireas.txt

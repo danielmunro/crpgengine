@@ -46,10 +46,24 @@ void pathCatDealsWithMultipleSlashTest() {
     is(result, expected, "paths should match");
 }
 
+void canParseKV() {
+    // given
+    char data[] = "property:value";
+    char *result[2];
+
+    // when
+    parseKV(data, result);
+
+    // then
+    is(result[0], "property", "key should be 'property'");
+    is(result[1], "value", "value should be 'value'");
+}
+
 int main() {
-    plan(4);
+    plan(5);
     strToIntTest();
     pathCatTest();
     pathCatDealsWithLeadingSlashTest();
     pathCatDealsWithMultipleSlashTest();
+    canParseKV();
 }

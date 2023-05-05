@@ -281,7 +281,18 @@ void loadAnimations(const char *file, const char *indexDir, Animation *animation
 Player *loadPlayer(char *indexDir) {
     char *playerFile = pathCat(indexDir, "/player.txt");
     char *data = LoadFileText(playerFile);
-    char *animationsFragment = strtok(data, "\r\n");
+    char *animationsFragment;
+    char *row = strtok(data, "\r\n");
+    int i = 0;
+    while (row != NULL) {
+        char *kv[2];
+        parseKV(row, kv);
+        if (strcmp(kv[0], "animations") == 0) {
+            animationsFragment = kv[1];
+        }
+        row = strtok(NULL, "\r\n");
+        i++;
+    }
     Player *player = createPlayer();
     player->mob = createTestHumanoid();
     char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);

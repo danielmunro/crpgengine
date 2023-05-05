@@ -3,6 +3,11 @@ typedef struct Vector2d {
     int y;
 } Vector2d;
 
+void parseKV(char *data, char *result[2]) {
+    result[0] = strtok(data, ":");
+    result[1] = strtok(NULL, "\r\n");
+}
+
 int strToInt(const char *value) {
     char *ptr;
     long ret;
