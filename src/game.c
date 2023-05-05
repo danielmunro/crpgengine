@@ -51,7 +51,7 @@ void setScene(Game *g, Scene *scene) {
     printf("scene set to %s\n", g->currentScene->name);
 }
 
-Game *createGameInstance(int sceneIndex, int showCollisions, char *indexDir) {
+Game *createGame(int sceneIndex, int showCollisions, char *indexDir) {
     Game *g = malloc(sizeof(Game));
     g->animIndex = 0;
     g->currentScene = NULL;

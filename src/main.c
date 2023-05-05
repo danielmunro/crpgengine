@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     SetTargetFPS(TARGET_FRAMERATE);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "crpgengine");
 
-    Game *g = createGameInstance(sceneIndex, showCollisions, indexDir);
+    Game *g = createGame(sceneIndex, showCollisions, indexDir);
     validateGameData(g);
 
     if (dump == true) {
