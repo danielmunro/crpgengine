@@ -54,7 +54,6 @@ Game *createGame(int sceneIndex, int showCollisions, char *indexDir) {
     Game *g = malloc(sizeof(Game));
     g->animIndex = 0;
     g->currentScene = NULL;
-    g->indexDir = &indexDir[0];
     char *scenes[MAX_SCENES];
     for (int i = 0; i < MAX_SCENES; i++) {
         g->scenes[i] = NULL;
