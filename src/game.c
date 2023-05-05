@@ -50,6 +50,15 @@ void setScene(Game *g, Scene *scene) {
     printf("scene set to %s\n", g->currentScene->name);
 }
 
+void loadScenes(Game *g, int showCollisions, char *indexDir, char *scenes[MAX_SCENES]) {
+    for (int i = 0; i < MAX_SCENES; i++) {
+        if (scenes[i] == NULL) {
+            break;
+        }
+        g->scenes[i] = loadScene(indexDir, scenes[i], showCollisions);
+    }
+}
+
 Game *createGame(int sceneIndex, int showCollisions, char *indexDir) {
     Game *g = malloc(sizeof(Game));
     g->animIndex = 0;
@@ -60,12 +69,7 @@ Game *createGame(int sceneIndex, int showCollisions, char *indexDir) {
         scenes[i] = NULL;
     }
     loadIndex(indexDir, scenes);
-    for (int i = 0; i < MAX_SCENES; i++) {
-        if (scenes[i] == NULL) {
-            break;
-        }
-        g->scenes[i] = loadScene(indexDir, scenes[i], showCollisions);
-    }
+    loadScenes(g, showCollisions, indexDir, scenes);
     g->player = loadPlayer(indexDir);
     setScene(g, g->scenes[sceneIndex]);
     return g;
