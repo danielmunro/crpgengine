@@ -279,10 +279,14 @@ void loadAnimations(const char *file, const char *indexDir, Animation *animation
 }
 
 Player *loadPlayer(char *indexDir) {
+    printf("loading player from dir %s\n", indexDir);
     char *playerFile = pathCat(indexDir, "/player.txt");
     char *data = LoadFileText(playerFile);
     char *animationsFragment;
     char *kvpairs[255];
+    for (int i = 0; i < 255; i++) {
+        kvpairs[i] = NULL;
+    }
     parseKVPairs(data, kvpairs);
     int i = 0;
     while(kvpairs[i] != NULL) {
