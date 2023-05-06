@@ -282,16 +282,14 @@ Player *loadPlayer(char *indexDir) {
     char *playerFile = pathCat(indexDir, "/player.txt");
     char *data = LoadFileText(playerFile);
     char *animationsFragment;
-    char *row = strtok(data, "\r\n");
+    char *kvpairs[255];
+    parseKVPairs(data, kvpairs);
     int i = 0;
-    while (row != NULL) {
-        char *kv[2];
-        parseKV(row, kv);
-        if (strcmp(kv[0], "animations") == 0) {
-            animationsFragment = kv[1];
+    while(kvpairs[i] != NULL) {
+        if (strcmp(kvpairs[i], "animations") == 0) {
+            animationsFragment = kvpairs[i + 1];
         }
-        row = strtok(NULL, "\r\n");
-        i++;
+        i += 2;
     }
     Player *player = createPlayer();
     player->mob = createTestHumanoid();
