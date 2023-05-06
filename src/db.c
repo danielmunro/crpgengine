@@ -243,6 +243,8 @@ Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions
 
     // assign scene properties
     assignSceneType(scene, sceneType);
+
+    free(sceneReader);
     printf("done parsing scene %s\n", sceneName);
 
     return scene;
