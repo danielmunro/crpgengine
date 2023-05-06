@@ -56,6 +56,5 @@ int main(int argc, char *argv[]) {
         return 0;
     }
     run(g);
-    free(g);
     return 0;
 }
