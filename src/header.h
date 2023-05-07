@@ -48,5 +48,6 @@
 #include "db.c"
 #include "game.c"
 #include "validate.c"
+#include "dump.c"
 
 #endif /* CJRPGENGINE_H_INCLUDED */
