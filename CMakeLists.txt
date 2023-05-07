@@ -1,5 +1,6 @@
 cmake_minimum_required (VERSION 3.6)
 project (cjrpgengine)
+include(ExternalProject)
 
 set(RAYLIB_VERSION 4.2.0)
 find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
@@ -20,9 +21,14 @@ endif()
 
 find_package(LibXml2 REQUIRED)
 
-# libtap local install
-link_directories(/usr/local/lib)
-include_directories(/usr/local/include)
+ExternalProject_Add(LibTap
+        URL https://github.com/zorgnax/libtap/archive/refs/tags/0.1.0.tar.gz
+        PREFIX _deps
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND make
+        BUILD_IN_SOURCE 1)
+link_directories(_deps/src/LibTap)
+include_directories(_deps/src/LibTap)
 
 add_executable(tests src/test.c)
 target_link_libraries(tests raylib)
