@@ -303,3 +303,23 @@ Player *loadPlayer(char *indexDir) {
     loadAnimations(animationsFile, indexDir, player->mob->animations);
     return player;
 }
+
+Config *loadConfig(char *indexDir) {
+    printf("loading game from dir %s\n", indexDir);
+    Config *cfg = createConfig();
+    char *gameFile = pathCat(indexDir, "/config.txt");
+    char *data = LoadFileText(gameFile);
+    char *kvpairs[255];
+    for (int i = 0; i < 255; i++) {
+        kvpairs[i] = NULL;
+    }
+    parseKVPairs(data, kvpairs);
+    int i = 0;
+    while(kvpairs[i] != NULL) {
+        if (strcmp(kvpairs[i], "title") == 0) {
+            cfg->title = &kvpairs[i + 1][0];
+        }
+        i += 2;
+    }
+    return cfg;
+}

@@ -22,8 +22,11 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "-i indexDir required\n");
         return 1;
     }
+
+    Config *cfg = loadConfig(indexDir);
+
     SetTargetFPS(TARGET_FRAMERATE);
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "crpgengine");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, cfg->title);
 
     Game *g = createGame(sceneIndex, showCollisions, indexDir);
     validateGameData(g);
