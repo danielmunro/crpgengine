@@ -11,20 +11,20 @@
 				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="LibTap">
 				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 LibTap"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 LibTap"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="tests">
@@ -41,12 +41,18 @@
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 tests"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 tests"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="tests/fast">
@@ -63,12 +69,18 @@
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 tests/fast"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 tests/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="cjrpgengine">
@@ -85,12 +97,18 @@
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 cjrpgengine"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 cjrpgengine"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="cjrpgengine/fast">
@@ -107,92 +125,98 @@
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 cjrpgengine/fast"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 cjrpgengine/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="package">
 				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 package"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 package"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="package_source">
 				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 package_source"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 package_source"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
 				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
 				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="list_install_components">
 				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 list_install_components"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="install">
 				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 install"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="install/local">
 				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 install/local"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="install/strip">
 				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 install/strip"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="raylib">
@@ -207,12 +231,18 @@
 					<Add option="-DGL_SILENCE_DEPRECATION"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 raylib"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 raylib"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="raylib/fast">
@@ -227,12 +257,18 @@
 					<Add option="-DGL_SILENCE_DEPRECATION"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 raylib/fast"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 raylib/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="glfw">
@@ -246,12 +282,18 @@
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 glfw"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 glfw"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="glfw/fast">
@@ -265,12 +307,18 @@
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/src"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 glfw/fast"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 glfw/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/Users/danmunro/github/cjrpgengine/_deps/raylib-build/raylib/external/glfw/src/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
@@ -505,7 +553,7 @@
 		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/cmake/raylib-config-version.cmake">
 			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
 		</Unit>
-		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/tmp/LibTap-mkdirs.cmake">
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/tmp/LibTap-cfgcmd.txt.in">
 			<Option virtualFolder="CMake Files\_deps\tmp\"/>
 		</Unit>
 	</Project>
