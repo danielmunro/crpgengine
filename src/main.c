@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
         dumpGame(g);
         return 0;
     }
+    
     run(g);
     return 0;
 }
