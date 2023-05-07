@@ -20,12 +20,6 @@ endif()
 
 find_package(LibXml2 REQUIRED)
 
-FetchContent_Declare(
-        tap
-        GIT_REPOSITORY https://github.com/zorgnax/libtap.git
-        GIT_TAG        0.1.0
-)
-
 # libtap local install
 link_directories(/usr/local/lib)
 include_directories(/usr/local/include)
