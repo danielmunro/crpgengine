@@ -286,6 +286,8 @@ Player *loadPlayer(char *indexDir) {
     char *data = LoadFileText(playerFile);
     char *animationsFragment;
     char *kvpairs[255];
+    Player *player = createPlayer();
+    player->mob = createMobile();
     for (int i = 0; i < 255; i++) {
         kvpairs[i] = NULL;
     }
@@ -295,10 +297,17 @@ Player *loadPlayer(char *indexDir) {
         if (strcmp(kvpairs[i], "animations") == 0) {
             animationsFragment = kvpairs[i + 1];
         }
+        if (strcmp(kvpairs[i], "name") == 0) {
+            player->mob->name = &kvpairs[i][0];
+        }
+        if (strcmp(kvpairs[i], "coordinates") == 0) {
+            char *x = strtok(kvpairs[i + 1], ",");
+            char *y = strtok(NULL, ",");
+            player->mob->position.x = (float) strToInt(x);
+            player->mob->position.y = (float) strToInt(y);
+        }
         i += 2;
     }
-    Player *player = createPlayer();
-    player->mob = createTestHumanoid();
     char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
     loadAnimations(animationsFile, indexDir, player->mob->animations);
     return player;

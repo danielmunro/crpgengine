@@ -1,1 +1,3 @@
+name: Fireas
 animations:./animations/fireas.txt
+coordinates:400,300
