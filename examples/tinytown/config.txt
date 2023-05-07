@@ -1,1 +1,1 @@
-title:My TinyTown Demo
+title: "My TinyTown Demo"

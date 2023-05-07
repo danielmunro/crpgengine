@@ -59,6 +59,19 @@ void canParseKV() {
     is(result[1], "value", "value is 'value'");
 }
 
+void canParseKVWithQuotedValue() {
+    // given
+    char data[] = "property: \"value\"";
+    char *result[2];
+
+    // when
+    parseKV(data, result);
+
+    // then
+    is(result[0], "property", "key is 'property'");
+    is(result[1], "value", "value is 'value'");
+}
+
 void canParseKVPairs() {
     // given
     char data[] = "abc:xyz\nzyx:cba";
@@ -75,12 +88,13 @@ void canParseKVPairs() {
 }
 
 int main() {
-    plan(10);
+    plan(12);
     strToIntTest();
     pathCatTest();
     pathCatDealsWithLeadingSlashTest();
     pathCatDealsWithMultipleSlashTest();
     canParseKV();
+    canParseKVWithQuotedValue();
     canParseKVPairs();
     done_testing();
 }

@@ -3,9 +3,23 @@ typedef struct Vector2d {
     int y;
 } Vector2d;
 
+void clean(char *value) {
+    if (value[0] == ' ') {
+        memmove(&value[0], &value[1], strlen(value));
+    }
+    if (value[0] == '"') {
+        memmove(&value[0], &value[1], strlen(value));
+    }
+    int l = strlen(value);
+    if (value[l-1] == '"') {
+        memmove(&value[l-1], &value[l], strlen(value));
+    }
+}
+
 void parseKV(char *data, char *result[2]) {
     result[0] = strtok(data, ":");
     result[1] = strtok(NULL, "\r\n");
+    clean(result[1]);
 }
 
 void parseKVPairs(char *data, char *result[255]) {
