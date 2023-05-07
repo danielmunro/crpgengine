@@ -17,7 +17,7 @@ void pathCatTest() {
     char *result = pathCat(part, path3);
 
     // then
-    is(result, expected, "paths match");
+    is(result, expected, "paths match adding three fragments");
 }
 
 void pathCatDealsWithLeadingSlashTest() {
@@ -30,7 +30,7 @@ void pathCatDealsWithLeadingSlashTest() {
     char *expected = "/path/to/dir";
 
     // then
-    is(result, expected, "paths match");
+    is(result, expected, "paths match when second fragment has a leading slash");
 }
 
 void pathCatDealsWithMultipleSlashTest() {
@@ -43,7 +43,7 @@ void pathCatDealsWithMultipleSlashTest() {
     char *expected = "/path/to/dir";
 
     // then
-    is(result, expected, "paths match");
+    is(result, expected, "paths match with slashes that need to be removed");
 }
 
 void canParseKV() {
