@@ -24,6 +24,7 @@ find_package(LibXml2 REQUIRED)
 ExternalProject_Add(LibTap
         URL https://github.com/zorgnax/libtap/archive/refs/tags/0.1.0.tar.gz
         PREFIX _deps
+        INSTALL_COMMAND ""
         CONFIGURE_COMMAND ""
         BUILD_COMMAND make
         BUILD_IN_SOURCE 1)
