@@ -82,4 +82,5 @@ int main() {
     pathCatDealsWithMultipleSlashTest();
     canParseKV();
     canParseKVPairs();
+    done_testing();
 }
