@@ -306,6 +306,9 @@ Player *loadPlayer(char *indexDir) {
             player->mob->position.x = (float) strToInt(x);
             player->mob->position.y = (float) strToInt(y);
         }
+        if (strcmp(kvpairs[i], "direction") == 0) {
+            player->mob->direction = getDirectionFromString(kvpairs[i + 1]);
+        }
         i += 2;
     }
     char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);

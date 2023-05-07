@@ -3,6 +3,20 @@ typedef struct Vector2d {
     int y;
 } Vector2d;
 
+int getDirectionFromString(char *value) {
+    if (strcmp(value, "up") == 0) {
+        return DIRECTION_UP;
+    } else if (strcmp(value, "down") == 0) {
+        return DIRECTION_DOWN;
+    } else if (strcmp(value, "left") == 0) {
+        return DIRECTION_LEFT;
+    } else if (strcmp(value, "right") == 0) {
+        return DIRECTION_RIGHT;
+    } else {
+        fprintf(stderr, "invalid direction: %s\n", value);
+    }
+}
+
 void clean(char *value) {
     if (value[0] == ' ') {
         memmove(&value[0], &value[1], strlen(value));
