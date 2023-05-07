@@ -25,9 +25,12 @@ FetchContent_Declare(
         GIT_REPOSITORY https://github.com/zorgnax/libtap.git
         GIT_TAG        0.1.0
 )
+
+# libtap local install
 link_directories(/usr/local/lib)
-add_executable(tests src/test.c)
 include_directories(/usr/local/include)
+
+add_executable(tests src/test.c)
 target_link_libraries(tests raylib)
 target_link_libraries(tests tap)
 target_link_libraries(tests ${LIBXML2_LIBRARIES})
