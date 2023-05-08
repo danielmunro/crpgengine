@@ -225,31 +225,6 @@ void loadIndex(const char *indexDir, char *scenes[MAX_SCENES]) {
     closedir(dr);
 }
 
-Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions) {
-    printf("parse scene '%s' index\n", sceneName);
-    char *indexFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/scene.txt");
-    char *data = LoadFileText(indexFile);
-    Scene *scene = createScene();
-    scene->showCollisions = showCollisions;
-    strcpy(scene->name, sceneName);
-    char *sceneType = strtok(data, "\r\n");
-    char *sceneFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/tilemap.tmx");
-    SceneReader *sceneReader = createSceneReader(scene, sceneFile);
-
-    // create tilemap
-    printf("create scene '%s' tilemap\n", sceneName);
-    char *sceneDir = pathCat(pathCat(indexDir, "/scenes"), sceneName);
-    parseSceneXml(sceneReader, sceneDir);
-
-    // assign scene properties
-    assignSceneType(scene, sceneType);
-
-    free(sceneReader);
-    printf("done parsing scene %s\n", sceneName);
-
-    return scene;
-}
-
 void loadAnimations(const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
     char *data = LoadFileText(file);
     char *imageFilename = strtok(data, ",");
@@ -278,6 +253,72 @@ void loadAnimations(const char *file, const char *indexDir, Animation *animation
         anim++;
     }
     printf("%d animations loaded\n", anim);
+}
+
+void loadMobiles(const char *indexDir, const char *sceneName, Mobile *mobiles[MAX_MOBILES]) {
+    char *mobFile = pathCat(indexDir, pathCat("/scenes/", pathCat(sceneName, "/mobs/vill1.txt")));
+    printf("load mobiles from %s\n", mobFile);
+    if (!FileExists(mobFile)) {
+        printf("file does not exist, skipping mob loading\n");
+        return;
+    }
+    char *data = LoadFileText(mobFile);
+    char *animationsFragment;
+    char *kvpairs[255];
+    mobiles[0] = createMobile();
+    for (int i = 0; i < 255; i++) {
+        kvpairs[i] = NULL;
+    }
+    parseKVPairs(data, kvpairs);
+    int i = 0;
+    while(kvpairs[i] != NULL) {
+        if (strcmp(kvpairs[i], "animations") == 0) {
+            animationsFragment = kvpairs[i + 1];
+        }
+        if (strcmp(kvpairs[i], "name") == 0) {
+            mobiles[0]->name = &kvpairs[i][0];
+        }
+        if (strcmp(kvpairs[i], "coordinates") == 0) {
+            char *x = strtok(kvpairs[i + 1], ",");
+            char *y = strtok(NULL, ",");
+            mobiles[0]->position.x = (float) strToInt(x);
+            mobiles[0]->position.y = (float) strToInt(y);
+        }
+        if (strcmp(kvpairs[i], "direction") == 0) {
+            mobiles[0]->direction = getDirectionFromString(kvpairs[i + 1]);
+        }
+        i += 2;
+    }
+    char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
+    loadAnimations(animationsFile, indexDir, mobiles[0]->animations);
+}
+
+Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions) {
+    printf("parse scene '%s' index\n", sceneName);
+    char *indexFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/scene.txt");
+    char *data = LoadFileText(indexFile);
+    Scene *scene = createScene();
+    scene->showCollisions = showCollisions;
+    strcpy(scene->name, sceneName);
+    char *sceneType = strtok(data, "\r\n");
+    char *sceneFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/tilemap.tmx");
+    SceneReader *sceneReader = createSceneReader(scene, sceneFile);
+
+    // create tilemap
+    printf("create scene '%s' tilemap\n", sceneName);
+    char *sceneDir = pathCat(pathCat(indexDir, "/scenes"), sceneName);
+    parseSceneXml(sceneReader, sceneDir);
+
+    // load mobiles
+    loadMobiles(indexDir, sceneName, scene->mobiles);
+
+    // assign scene properties
+    assignSceneType(scene, sceneType);
+
+    free(sceneReader);
+    printf("done parsing scene %s\n", sceneName);
+
+    return scene;
 }
 
 Player *loadPlayer(char *indexDir) {

@@ -1,0 +1,4 @@
+name:Villager 1
+animations:./animations/fireas.txt
+coordinates:200,200
+direction:down

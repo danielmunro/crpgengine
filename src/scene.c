@@ -34,6 +34,7 @@ typedef struct Scene {
     Rectangle entrance;
     Exit *exits[MAX_EXITS];
     int nextExit;
+    Mobile *mobiles[MAX_MOBILES];
 } Scene;
 
 const SceneType sceneTypes[] = {
@@ -50,6 +51,9 @@ Scene *createScene() {
     }
     for (int i = 0; i < MAX_EXITS; i++) {
         scene->exits[i] = NULL;
+    }
+    for (int i = 0; i < MAX_MOBILES; i++) {
+        scene->mobiles[i] = NULL;
     }
     return scene;
 }
@@ -128,6 +132,12 @@ void renderScene(Scene *s, Player *p) {
     ClearBackground(BLACK);
     DrawTexture(s->renderedLayers[LAYER_TYPE_BACKGROUND], 0, 0, WHITE);
     DrawTexture(s->renderedLayers[LAYER_TYPE_MIDGROUND], 0, 0, WHITE);
+    for (int i = 0; i < MAX_MOBILES; i++) {
+        if (s->mobiles[i] == NULL) {
+            break;
+        }
+        drawAnimation(getMobAnimation(s->mobiles[i]), s->mobiles[i]->position);
+    }
     drawAnimation(getMobAnimation(p->mob), p->mob->position);
     DrawTexture(s->renderedLayers[LAYER_TYPE_FOREGROUND], 0, 0, WHITE);
 }
