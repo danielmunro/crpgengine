@@ -71,7 +71,8 @@ Game *createGame(RuntimeArgs *r) {
         g->scenes[i] = NULL;
         scenes[i] = NULL;
     }
-    loadIndex(r->indexDir, scenes);
+    char *sceneDir = pathCat(r->indexDir, "/scenes");
+    getFilesInDirectory(sceneDir, scenes);
     loadScenes(g, r->showCollisions, r->indexDir, scenes);
     g->player = loadPlayer(r->indexDir);
     setScene(g, g->scenes[r->sceneIndex]);

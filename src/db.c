@@ -201,10 +201,9 @@ void assignSceneType(Scene *s, const char *sceneType) {
     }
 }
 
-void loadIndex(const char *indexDir, char *scenes[MAX_SCENES]) {
+void getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
     struct dirent *de;
-    char *sceneDir = pathCat(indexDir, "/scenes");
-    DIR *dr = opendir(sceneDir);
+    DIR *dr = opendir(dir);
     if (dr == NULL) {
         fprintf(stderr, "Could not open scene index directory");
     }
@@ -256,41 +255,52 @@ void loadAnimations(const char *file, const char *indexDir, Animation *animation
 }
 
 void loadMobiles(const char *indexDir, const char *sceneName, Mobile *mobiles[MAX_MOBILES]) {
-    char *mobFile = pathCat(indexDir, pathCat("/scenes/", pathCat(sceneName, "/mobiles/vill1.txt")));
-    printf("load mobiles from %s\n", mobFile);
-    if (!FileExists(mobFile)) {
+    char *mobFiles[MAX_MOBILES];
+    for (int i = 0; i < MAX_MOBILES; i++) {
+        mobFiles[i] = NULL;
+    }
+    char *mobDir = pathCat(indexDir, pathCat("/scenes/", pathCat(sceneName, "/mobiles")));
+    printf("load mobiles from %s\n", mobDir);
+    if (!FileExists(mobDir)) {
         printf("file does not exist, skipping mob loading\n");
         return;
     }
-    char *data = LoadFileText(mobFile);
-    char *animationsFragment;
-    char *kvpairs[255];
-    mobiles[0] = createMobile();
-    for (int i = 0; i < 255; i++) {
-        kvpairs[i] = NULL;
+    getFilesInDirectory(mobDir, mobFiles);
+    for (int i = 0; i < MAX_MOBILES; i++) {
+        if (mobFiles[i] == NULL) {
+            break;
+        }
+        char *fullPath = pathCat(mobDir, pathCat("/", mobFiles[i]));
+        char *data = LoadFileText(fullPath);
+        char *animationsFragment;
+        char *kvpairs[255];
+        mobiles[i] = createMobile();
+        for (int j = 0; j < 255; j++) {
+            kvpairs[j] = NULL;
+        }
+        parseKVPairs(data, kvpairs);
+        int j = 0;
+        while(kvpairs[j] != NULL) {
+            if (strcmp(kvpairs[j], "animations") == 0) {
+                animationsFragment = kvpairs[j + 1];
+            }
+            if (strcmp(kvpairs[j], "name") == 0) {
+                mobiles[i]->name = &kvpairs[j][0];
+            }
+            if (strcmp(kvpairs[j], "coordinates") == 0) {
+                char *x = strtok(kvpairs[j + 1], ",");
+                char *y = strtok(NULL, ",");
+                mobiles[i]->position.x = (float) strToInt(x);
+                mobiles[i]->position.y = (float) strToInt(y);
+            }
+            if (strcmp(kvpairs[i], "direction") == 0) {
+                mobiles[i]->direction = getDirectionFromString(kvpairs[j + 1]);
+            }
+            j += 2;
+        }
+        char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
+        loadAnimations(animationsFile, indexDir, mobiles[0]->animations);
     }
-    parseKVPairs(data, kvpairs);
-    int i = 0;
-    while(kvpairs[i] != NULL) {
-        if (strcmp(kvpairs[i], "animations") == 0) {
-            animationsFragment = kvpairs[i + 1];
-        }
-        if (strcmp(kvpairs[i], "name") == 0) {
-            mobiles[0]->name = &kvpairs[i][0];
-        }
-        if (strcmp(kvpairs[i], "coordinates") == 0) {
-            char *x = strtok(kvpairs[i + 1], ",");
-            char *y = strtok(NULL, ",");
-            mobiles[0]->position.x = (float) strToInt(x);
-            mobiles[0]->position.y = (float) strToInt(y);
-        }
-        if (strcmp(kvpairs[i], "direction") == 0) {
-            mobiles[0]->direction = getDirectionFromString(kvpairs[i + 1]);
-        }
-        i += 2;
-    }
-    char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
-    loadAnimations(animationsFile, indexDir, mobiles[0]->animations);
 }
 
 Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions) {
