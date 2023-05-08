@@ -256,7 +256,7 @@ void loadAnimations(const char *file, const char *indexDir, Animation *animation
 }
 
 void loadMobiles(const char *indexDir, const char *sceneName, Mobile *mobiles[MAX_MOBILES]) {
-    char *mobFile = pathCat(indexDir, pathCat("/scenes/", pathCat(sceneName, "/mobs/vill1.txt")));
+    char *mobFile = pathCat(indexDir, pathCat("/scenes/", pathCat(sceneName, "/mobiles/vill1.txt")));
     printf("load mobiles from %s\n", mobFile);
     if (!FileExists(mobFile)) {
         printf("file does not exist, skipping mob loading\n");
