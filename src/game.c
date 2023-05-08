@@ -59,7 +59,7 @@ void loadScenes(Game *g, int showCollisions, char *indexDir, char *scenes[MAX_SC
     }
 }
 
-Game *createGame(int sceneIndex, int showCollisions, char *indexDir) {
+Game *createGame(RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
     g->animIndex = 0;
     g->currentScene = NULL;
@@ -68,10 +68,10 @@ Game *createGame(int sceneIndex, int showCollisions, char *indexDir) {
         g->scenes[i] = NULL;
         scenes[i] = NULL;
     }
-    loadIndex(indexDir, scenes);
-    loadScenes(g, showCollisions, indexDir, scenes);
-    g->player = loadPlayer(indexDir);
-    setScene(g, g->scenes[sceneIndex]);
+    loadIndex(r->indexDir, scenes);
+    loadScenes(g, r->showCollisions, r->indexDir, scenes);
+    g->player = loadPlayer(r->indexDir);
+    setScene(g, g->scenes[r->sceneIndex]);
     return g;
 }
 
