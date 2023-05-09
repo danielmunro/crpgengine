@@ -275,12 +275,8 @@ void loadMobiles(const char *indexDir, const char *sceneName, Mobile *mobiles[MA
         char *animationsFragment;
         char *kvpairs[255];
         mobiles[i] = createMobile();
-        for (int j = 0; j < 255; j++) {
-            kvpairs[j] = NULL;
-        }
-        parseKVPairs(data, kvpairs);
-        int j = 0;
-        while(kvpairs[j] != NULL) {
+        int pairs = parseKVPairs(data, kvpairs);
+        for (int j = 0; j < pairs; j+=2) {
             if (strcmp(kvpairs[j], "animations") == 0) {
                 animationsFragment = kvpairs[j + 1];
             }
@@ -296,7 +292,6 @@ void loadMobiles(const char *indexDir, const char *sceneName, Mobile *mobiles[MA
             if (strcmp(kvpairs[i], "direction") == 0) {
                 mobiles[i]->direction = getDirectionFromString(kvpairs[j + 1]);
             }
-            j += 2;
         }
         char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
         loadAnimations(animationsFile, indexDir, mobiles[0]->animations);
@@ -373,16 +368,11 @@ Config *loadConfig(char *indexDir) {
     char *gameFile = pathCat(indexDir, "/config.txt");
     char *data = LoadFileText(gameFile);
     char *kvpairs[255];
-    for (int i = 0; i < 255; i++) {
-        kvpairs[i] = NULL;
-    }
-    parseKVPairs(data, kvpairs);
-    int i = 0;
-    while(kvpairs[i] != NULL) {
+    int pairs = parseKVPairs(data, kvpairs);
+    for (int i = 0; i < pairs; i+=2) {
         if (strcmp(kvpairs[i], "title") == 0) {
             cfg->title = &kvpairs[i + 1][0];
         }
-        i += 2;
     }
     return cfg;
 }

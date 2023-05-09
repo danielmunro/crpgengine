@@ -36,7 +36,7 @@ void parseKV(char *data, char *result[2]) {
     clean(result[1]);
 }
 
-void parseKVPairs(char *data, char *result[255]) {
+int parseKVPairs(char *data, char *result[255]) {
     char *rows[255];
     char *row = strtok(data, "\r\n");
     int r = 0;
@@ -53,6 +53,7 @@ void parseKVPairs(char *data, char *result[255]) {
         result[j + 1] = kv[1];
         j += 2;
     }
+    return r;
 }
 
 int strToInt(const char *value) {
