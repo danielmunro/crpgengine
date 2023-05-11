@@ -279,18 +279,17 @@ void loadMobiles(const char *indexDir, const char *sceneName, Mobile *mobiles[MA
         for (int j = 0; j < pairs; j+=2) {
             if (strcmp(kvpairs[j], "animations") == 0) {
                 animationsFragment = kvpairs[j + 1];
-            }
-            if (strcmp(kvpairs[j], "name") == 0) {
+            } else if (strcmp(kvpairs[j], "name") == 0) {
                 mobiles[i]->name = &kvpairs[j][0];
-            }
-            if (strcmp(kvpairs[j], "coordinates") == 0) {
+            } else if (strcmp(kvpairs[j], "coordinates") == 0) {
                 char *x = strtok(kvpairs[j + 1], ",");
                 char *y = strtok(NULL, ",");
                 mobiles[i]->position.x = (float) strToInt(x);
                 mobiles[i]->position.y = (float) strToInt(y);
-            }
-            if (strcmp(kvpairs[i], "direction") == 0) {
+            } else if (strcmp(kvpairs[i], "direction") == 0) {
                 mobiles[i]->direction = getDirectionFromString(kvpairs[j + 1]);
+            } else if (strcmp(kvpairs[i], "id") == 0) {
+                mobiles[i]->id = &kvpairs[j][0];
             }
         }
         char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
