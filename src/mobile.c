@@ -1,5 +1,6 @@
 typedef struct Mobile {
     Animation *animations[MAX_ANIMATIONS];
+    char *id;
     char *name;
     int direction;
     Vector2 position;
