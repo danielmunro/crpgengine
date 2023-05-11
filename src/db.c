@@ -336,25 +336,20 @@ Player *loadPlayer(char *indexDir) {
     for (int i = 0; i < 255; i++) {
         kvpairs[i] = NULL;
     }
-    parseKVPairs(data, kvpairs);
-    int i = 0;
-    while(kvpairs[i] != NULL) {
+    int pairs = parseKVPairs(data, kvpairs);
+    for (int i = 0; i < pairs; i+=2) {
         if (strcmp(kvpairs[i], "animations") == 0) {
             animationsFragment = kvpairs[i + 1];
-        }
-        if (strcmp(kvpairs[i], "name") == 0) {
+        } else if (strcmp(kvpairs[i], "name") == 0) {
             player->mob->name = &kvpairs[i][0];
-        }
-        if (strcmp(kvpairs[i], "coordinates") == 0) {
+        } else if (strcmp(kvpairs[i], "coordinates") == 0) {
             char *x = strtok(kvpairs[i + 1], ",");
             char *y = strtok(NULL, ",");
             player->mob->position.x = (float) strToInt(x);
             player->mob->position.y = (float) strToInt(y);
-        }
-        if (strcmp(kvpairs[i], "direction") == 0) {
+        } else if (strcmp(kvpairs[i], "direction") == 0) {
             player->mob->direction = getDirectionFromString(kvpairs[i + 1]);
         }
-        i += 2;
     }
     char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
     loadAnimations(animationsFile, indexDir, player->mob->animations);
