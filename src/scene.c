@@ -128,10 +128,7 @@ void drawScene(Scene *s) {
     drawLayer(s, LAYER_TYPE_FOREGROUND);
 }
 
-void renderScene(Scene *s, Player *p) {
-    ClearBackground(BLACK);
-    DrawTexture(s->renderedLayers[LAYER_TYPE_BACKGROUND], 0, 0, WHITE);
-    DrawTexture(s->renderedLayers[LAYER_TYPE_MIDGROUND], 0, 0, WHITE);
+void drawMobiles(Scene *s, Player *p) {
     Mobile *mobsByY[MAX_LAYER_SIZE][MAX_MOBILES];
     int indices[MAX_LAYER_SIZE];
     for (int y = 0; y < MAX_LAYER_SIZE; y++) {
@@ -160,7 +157,13 @@ void renderScene(Scene *s, Player *p) {
             drawAnimation(getMobAnimation(mobsByY[y][m]), mobsByY[y][m]->position);
         }
     }
-//    drawAnimation(getMobAnimation(p->mob), p->mob->position);
+}
+
+void renderScene(Scene *s, Player *p) {
+    ClearBackground(BLACK);
+    DrawTexture(s->renderedLayers[LAYER_TYPE_BACKGROUND], 0, 0, WHITE);
+    DrawTexture(s->renderedLayers[LAYER_TYPE_MIDGROUND], 0, 0, WHITE);
+    drawMobiles(s, p);
     DrawTexture(s->renderedLayers[LAYER_TYPE_FOREGROUND], 0, 0, WHITE);
 }
 
