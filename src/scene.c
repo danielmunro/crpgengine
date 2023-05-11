@@ -145,9 +145,9 @@ void renderScene(Scene *s, Player *p) {
 int isBlocked(Scene *s, Vector2 pos) {
     Rectangle pRect = {
             pos.x,
-            pos.y + 12,
-            16,
-            12
+            pos.y + MOB_COLLISION_HEIGHT_OFFSET,
+            MOB_COLLISION_WIDTH,
+            MOB_COLLISION_HEIGHT
     };
     Vector2d tiles = getTileCount(s);
     for (int l = 0; l < LAYER_COUNT; l++) {
@@ -168,6 +168,21 @@ int isBlocked(Scene *s, Vector2 pos) {
                     }
                 }
             }
+        }
+    }
+    for (int i = 0; i < MAX_MOBILES; i++) {
+        if (s->mobiles[i] == NULL) {
+            break;
+        }
+        Rectangle mRect = {
+                s->mobiles[i]->position.x,
+                s->mobiles[i]->position.y + MOB_COLLISION_HEIGHT_OFFSET,
+                MOB_COLLISION_WIDTH,
+                MOB_COLLISION_HEIGHT,
+        };
+        Rectangle c = GetCollisionRec(pRect, mRect);
+        if (c.height > 0 || c.width > 0) {
+            return 1;
         }
     }
     return 0;
