@@ -47,6 +47,7 @@
 #include "tilemap.c"
 #include "scene.c"
 #include "config.c"
+#include "parser.c"
 #include "db.c"
 #include "game.c"
 #include "validate.c"

@@ -53,7 +53,7 @@ int parseKVPairs(char *data, char *result[255]) {
         result[j + 1] = kv[1];
         j += 2;
     }
-    return r;
+    return j;
 }
 
 int strToInt(const char *value) {

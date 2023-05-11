@@ -327,30 +327,9 @@ Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions
 
 Player *loadPlayer(char *indexDir) {
     printf("loading player from dir %s\n", indexDir);
-    char *playerFile = pathCat(indexDir, "/player.txt");
-    char *data = LoadFileText(playerFile);
-    char *animationsFragment;
-    char *kvpairs[255];
     Player *player = createPlayer();
     player->mob = createMobile();
-    for (int i = 0; i < 255; i++) {
-        kvpairs[i] = NULL;
-    }
-    int pairs = parseKVPairs(data, kvpairs);
-    for (int i = 0; i < pairs; i+=2) {
-        if (strcmp(kvpairs[i], "animations") == 0) {
-            animationsFragment = kvpairs[i + 1];
-        } else if (strcmp(kvpairs[i], "name") == 0) {
-            player->mob->name = &kvpairs[i][0];
-        } else if (strcmp(kvpairs[i], "coordinates") == 0) {
-            char *x = strtok(kvpairs[i + 1], ",");
-            char *y = strtok(NULL, ",");
-            player->mob->position.x = (float) strToInt(x);
-            player->mob->position.y = (float) strToInt(y);
-        } else if (strcmp(kvpairs[i], "direction") == 0) {
-            player->mob->direction = getDirectionFromString(kvpairs[i + 1]);
-        }
-    }
+    char *animationsFragment = assignMobValues(player->mob, indexDir);
     char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
     loadAnimations(animationsFile, indexDir, player->mob->animations);
     return player;
@@ -359,14 +338,6 @@ Player *loadPlayer(char *indexDir) {
 Config *loadConfig(char *indexDir) {
     printf("loading game from dir %s\n", indexDir);
     Config *cfg = createConfig();
-    char *gameFile = pathCat(indexDir, "/config.txt");
-    char *data = LoadFileText(gameFile);
-    char *kvpairs[255];
-    int pairs = parseKVPairs(data, kvpairs);
-    for (int i = 0; i < pairs; i+=2) {
-        if (strcmp(kvpairs[i], "title") == 0) {
-            cfg->title = &kvpairs[i + 1][0];
-        }
-    }
+    assignConfigValues(cfg, indexDir);
     return cfg;
 }
