@@ -72,4 +72,7 @@ void checkInput(Player *p) {
             KEY_LEFT,
             DIRECTION_LEFT
     );
+    if (IsKeyDown(KEY_C)) {
+        printf("player coordinates: %f, %f\n", p->mob->position.x, p->mob->position.y);
+    }
 }

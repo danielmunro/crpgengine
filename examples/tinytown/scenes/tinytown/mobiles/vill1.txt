@@ -1,5 +1,5 @@
 id:vill1
 name:Villager 1
 animations:./animations/fireas.txt
-coordinates:200,200
-direction:down
+coordinates:271,242
+direction:up
