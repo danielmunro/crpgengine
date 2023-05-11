@@ -10,9 +10,8 @@ void assignConfigValues(Config *config, char *indexDir) {
     }
 }
 
-char *assignMobValues(Mobile *mob, char *indexDir) {
-    char *playerFile = pathCat(indexDir, "/player.txt");
-    char *data = LoadFileText(playerFile);
+char *assignMobValues(Mobile *mob, char *dataFile) {
+    char *data = LoadFileText(dataFile);
     char *animationsFragment;
     char *kvpairs[255];
     int pairs = parseKVPairs(data, kvpairs);
@@ -29,6 +28,8 @@ char *assignMobValues(Mobile *mob, char *indexDir) {
             mob->position.y = (float) strToInt(y);
         } else if (strcmp(kvpairs[i], "direction") == 0) {
             mob->direction = getDirectionFromString(kvpairs[i + 1]);
+        } else if (strcmp(kvpairs[i], "id") == 0) {
+            mob->id = &kvpairs[i + 1][0];
         }
     }
     return animationsFragment;

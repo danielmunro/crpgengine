@@ -270,28 +270,9 @@ void loadMobiles(const char *indexDir, const char *sceneName, Mobile *mobiles[MA
         if (mobFiles[i] == NULL) {
             break;
         }
-        char *fullPath = pathCat(mobDir, pathCat("/", mobFiles[i]));
-        char *data = LoadFileText(fullPath);
-        char *animationsFragment;
-        char *kvpairs[255];
+        char *mobDataFile = pathCat(mobDir, pathCat("/", mobFiles[i]));
         mobiles[i] = createMobile();
-        int pairs = parseKVPairs(data, kvpairs);
-        for (int j = 0; j < pairs; j+=2) {
-            if (strcmp(kvpairs[j], "animations") == 0) {
-                animationsFragment = kvpairs[j + 1];
-            } else if (strcmp(kvpairs[j], "name") == 0) {
-                mobiles[i]->name = &kvpairs[j][0];
-            } else if (strcmp(kvpairs[j], "coordinates") == 0) {
-                char *x = strtok(kvpairs[j + 1], ",");
-                char *y = strtok(NULL, ",");
-                mobiles[i]->position.x = (float) strToInt(x);
-                mobiles[i]->position.y = (float) strToInt(y);
-            } else if (strcmp(kvpairs[i], "direction") == 0) {
-                mobiles[i]->direction = getDirectionFromString(kvpairs[j + 1]);
-            } else if (strcmp(kvpairs[i], "id") == 0) {
-                mobiles[i]->id = &kvpairs[j][0];
-            }
-        }
+        char *animationsFragment = assignMobValues(mobiles[i], mobDataFile);
         char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
         loadAnimations(animationsFile, indexDir, mobiles[0]->animations);
     }
@@ -329,7 +310,8 @@ Player *loadPlayer(char *indexDir) {
     printf("loading player from dir %s\n", indexDir);
     Player *player = createPlayer();
     player->mob = createMobile();
-    char *animationsFragment = assignMobValues(player->mob, indexDir);
+    char *playerFile = pathCat(indexDir, "/player.txt");
+    char *animationsFragment = assignMobValues(player->mob, playerFile);
     char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
     loadAnimations(animationsFile, indexDir, player->mob->animations);
     return player;
