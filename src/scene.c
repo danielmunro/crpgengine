@@ -132,13 +132,35 @@ void renderScene(Scene *s, Player *p) {
     ClearBackground(BLACK);
     DrawTexture(s->renderedLayers[LAYER_TYPE_BACKGROUND], 0, 0, WHITE);
     DrawTexture(s->renderedLayers[LAYER_TYPE_MIDGROUND], 0, 0, WHITE);
+    Mobile *mobsByY[MAX_LAYER_SIZE][MAX_MOBILES];
+    int indices[MAX_LAYER_SIZE];
+    for (int y = 0; y < MAX_LAYER_SIZE; y++) {
+        for (int i = 0; i < MAX_MOBILES; i++) {
+            mobsByY[y][i] = NULL;
+        }
+    }
+    for (int i = 0; i < MAX_LAYER_SIZE; i++) {
+        indices[i] = 0;
+    }
     for (int i = 0; i < MAX_MOBILES; i++) {
         if (s->mobiles[i] == NULL) {
             break;
         }
-        drawAnimation(getMobAnimation(s->mobiles[i]), s->mobiles[i]->position);
+        int y = (int) s->mobiles[i]->position.y / s->tilemap->size.y;
+        mobsByY[y][indices[y]] = s->mobiles[i];
+        indices[y]++;
     }
-    drawAnimation(getMobAnimation(p->mob), p->mob->position);
+    int playerY = (int) p->mob->position.y / s->tilemap->size.y;
+    mobsByY[playerY][indices[playerY]] = p->mob;
+    for (int y = 0; y < MAX_LAYER_SIZE; y++) {
+        for (int m = 0; m < MAX_MOBILES; m++) {
+            if (mobsByY[y][m] == NULL) {
+                break;
+            }
+            drawAnimation(getMobAnimation(mobsByY[y][m]), mobsByY[y][m]->position);
+        }
+    }
+//    drawAnimation(getMobAnimation(p->mob), p->mob->position);
     DrawTexture(s->renderedLayers[LAYER_TYPE_FOREGROUND], 0, 0, WHITE);
 }
 
