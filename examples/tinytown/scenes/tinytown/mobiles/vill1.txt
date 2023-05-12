@@ -1,5 +1,21 @@
-id:vill1
-name:Villager 1
+id: vill1
+name: Villager 1
 animations:./animations/fireas.txt
-coordinates:271,242
+coordinates:271,292
 direction:up
+when_not_has:forest_amulet
+    vill1.speak:"She always said not to live in the past. That one day I'll need to give this away to someone who needs it."
+    vill1.move_to:x,y
+    vill1.direction:down
+    vill1.sprite:look_down
+    wait: 1
+    vill1.speak:"It's in here somewhere..."
+    wait: 1
+    vill1.speak:"Ah! Here it is."
+    vill1.move_to:x,y
+    vill1.give:forest_amulet
+    vill1.speak:"I know you'll take good care of this amulet. Some say it has special powers, but it never did anything special for me."
+end:when_not_has
+when_has:forest_amulet
+    vill1.speak:"I know you'll take good care of this amulet. Some say it has special powers, but it never did anything special for me."
+end:when_has
