@@ -20,6 +20,7 @@
 #define MAX_EXITS 64
 #define MAX_MOBILES 255
 #define MAX_INSTRUCTIONS 255
+#define MAX_CONTROLS 255
 #define LAYER_COUNT 3
 #define LAYER_TYPE_BACKGROUND 0
 #define LAYER_TYPE_MIDGROUND 1
@@ -44,6 +45,7 @@
 #define ANIM_LEFT 3
 #define ANIM_RIGHT 4
 
+#include "control_block.c"
 #include "util.c"
 #include "sprite.c"
 #include "mobile.c"

@@ -27,8 +27,8 @@ void clean(char *value) {
     if (value[0] == '"') {
         memmove(&value[0], &value[1], strlen(value));
         unsigned long l = strlen(value);
-        if (value[l-1] == '"') {
-            memmove(&value[l-1], &value[l], strlen(value));
+        if (value[l - 1] == '"') {
+            memmove(&value[l - 1], &value[l], 1);
         }
     }
 }
@@ -36,7 +36,7 @@ void clean(char *value) {
 void parseKV(char *data, char *result[2]) {
     result[0] = strtok(data, ":");
     result[1] = strtok(NULL, "\r\n");
-//    clean(result[0]);
+    clean(result[0]);
     clean(result[1]);
 }
 

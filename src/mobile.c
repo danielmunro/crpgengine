@@ -4,6 +4,7 @@ typedef struct Mobile {
     char *name;
     int direction;
     Vector2 position;
+    ControlBlock *controlBlocks[MAX_CONTROLS];
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {
@@ -16,6 +17,9 @@ Mobile *createMobile() {
     mobile->direction = DIRECTION_DOWN;
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         mobile->animations[i] = NULL;
+    }
+    for (int i = 0; i < MAX_CONTROLS; i++) {
+        mobile->controlBlocks[i] = NULL;
     }
     return mobile;
 }
