@@ -201,7 +201,7 @@ void assignSceneType(Scene *s, const char *sceneType) {
     }
 }
 
-void getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
+int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
     struct dirent *de;
     DIR *dr = opendir(dir);
     if (dr == NULL) {
@@ -222,6 +222,7 @@ void getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
         i++;
     }
     closedir(dr);
+    return i;
 }
 
 void loadAnimations(const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
@@ -265,11 +266,8 @@ void loadMobiles(const char *indexDir, const char *sceneName, Mobile *mobiles[MA
         printf("file does not exist, skipping mob loading\n");
         return;
     }
-    getFilesInDirectory(mobDir, mobFiles);
-    for (int i = 0; i < MAX_MOBILES; i++) {
-        if (mobFiles[i] == NULL) {
-            break;
-        }
+    int files = getFilesInDirectory(mobDir, mobFiles);
+    for (int i = 0; i < files; i++) {
         char *mobDataFile = pathCat(mobDir, pathCat("/", mobFiles[i]));
         mobiles[i] = createMobile();
         char *animationsFragment = assignMobValues(mobiles[i], mobDataFile);
