@@ -98,19 +98,5 @@ char *assignMobValues(Mobile *mob, char *dataFile) {
             mob->id = &kvpairs[i + 1][0];
         }
     }
-    for (int i = 0; i < MAX_CONTROLS; i++) {
-        if (mob->controlBlocks[i] == NULL) {
-            break;
-        }
-        printf("controlBlock: %s, %s\n", mob->controlBlocks[i]->condition, mob->controlBlocks[i]->test);
-        for (int j = 0; j < mob->controlBlocks[i]->instructionCount; j++) {
-            if (mob->controlBlocks[i]->instructions[j] == NULL) {
-                break;
-            }
-            printf("instruction: %s, %s\n",
-                   mob->controlBlocks[i]->instructions[j][0],
-                   mob->controlBlocks[i]->instructions[j][1]);
-        }
-    }
     return animationsFragment;
 }
