@@ -44,18 +44,20 @@ int parseKVPairs(char *data, char *result[255]) {
     return j;
 }
 
-int isWhen(char *key) {
-    if (strcmp(key, CONTROL_WHEN) == 0) {
+int isSpecial(char *key) {
+    if (strcmp(key, CONTROL_WHEN) == 0 || strcmp(key, CONTROL_THEN) == 0) {
         return true;
     }
     return false;
 }
 
-int isThen(char *key) {
-    if (strcmp(key, CONTROL_WHEN) == 0) {
-        return true;
+int getControlTypeFromString(char *control) {
+    if (strcmp(control, CONTROL_WHEN) == 0) {
+        return CONTROL_TYPE_WHEN;
+    } else if (strcmp(control, CONTROL_THEN) == 0) {
+        return CONTROL_TYPE_THEN;
     }
-    return false;
+    return CONTROL_TYPE_NONE;
 }
 
 void assignConfigValues(Config *config, char *indexDir) {
@@ -78,15 +80,18 @@ char *assignMobValues(Mobile *mob, char *dataFile) {
     int controlBlock = CONTROL_TYPE_NONE;
     int controlBlocks = 0;
     for (int i = 0; i < pairs; i+=2) {
-        if (isWhen(kvpairs[i])) {
+        if (isSpecial(kvpairs[i])) {
             mob->controlBlocks[controlBlocks] = createControlBlock(kvpairs[i], kvpairs[i + 1]);
-            controlBlock = CONTROL_TYPE_WHEN;
+            controlBlock = getControlTypeFromString(kvpairs[i]);
         } else if (controlBlock == CONTROL_TYPE_WHEN && strcmp(kvpairs[i], CONTROL_END) != 0) {
             mob->controlBlocks[controlBlocks]->when[mob->controlBlocks[controlBlocks]->whenCount][0] = kvpairs[i];
             mob->controlBlocks[controlBlocks]->when[mob->controlBlocks[controlBlocks]->whenCount][1] = kvpairs[i + 1];
             mob->controlBlocks[controlBlocks]->whenCount++;
-        } else if (mob->controlBlocks[controlBlocks] != NULL &&
-                    strcmp(kvpairs[i], CONTROL_END) == 0) {
+        } else if (controlBlock == CONTROL_TYPE_THEN && strcmp(kvpairs[i], CONTROL_END) != 0) {
+            mob->controlBlocks[controlBlocks]->then[mob->controlBlocks[controlBlocks]->thenCount][0] = kvpairs[i];
+            mob->controlBlocks[controlBlocks]->then[mob->controlBlocks[controlBlocks]->thenCount][1] = kvpairs[i + 1];
+            mob->controlBlocks[controlBlocks]->thenCount++;
+        } else if (controlBlock != CONTROL_TYPE_NONE && strcmp(kvpairs[i], CONTROL_END) == 0) {
             controlBlock = CONTROL_TYPE_NONE;
             controlBlocks++;
         } else if (strcmp(kvpairs[i], CONTROL_ANIMATIONS) == 0) {
