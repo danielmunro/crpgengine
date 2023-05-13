@@ -45,6 +45,14 @@
 #define ANIM_LEFT 3
 #define ANIM_RIGHT 4
 
+#define CONTROL_ID "id"
+#define CONTROL_TITLE "title"
+#define CONTROL_END "end"
+#define CONTROL_ANIMATIONS "animations"
+#define CONTROL_NAME "name"
+#define CONTROL_COORDINATES "coordinates"
+#define CONTROL_DIRECTION "direction"
+
 #include "control_block.c"
 #include "util.c"
 #include "sprite.c"
