@@ -1,4 +1,4 @@
 name: Fireas
 animations:./animations/fireas.txt
-coordinates:400,300
+coordinates:440,257
 direction:down
