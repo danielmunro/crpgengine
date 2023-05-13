@@ -45,7 +45,7 @@ int parseKVPairs(char *data, char *result[255]) {
 }
 
 int isControl(char *key) {
-    if (strcmp(key, "when") == 0) {
+    if (strcmp(key, CONTROL_WHEN) == 0) {
         return true;
     }
     return false;

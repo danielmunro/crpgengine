@@ -46,6 +46,7 @@
 #define ANIM_RIGHT 4
 
 #define CONTROL_ID "id"
+#define CONTROL_WHEN "when"
 #define CONTROL_TITLE "title"
 #define CONTROL_END "end"
 #define CONTROL_ANIMATIONS "animations"
