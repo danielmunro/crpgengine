@@ -45,6 +45,10 @@
 #define ANIM_LEFT 3
 #define ANIM_RIGHT 4
 
+#define CONTROL_TYPE_NONE 0
+#define CONTROL_TYPE_WHEN 1
+#define CONTROL_TYPE_THEN 2
+
 #define CONTROL_ID "id"
 #define CONTROL_WHEN "when"
 #define CONTROL_TITLE "title"

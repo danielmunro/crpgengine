@@ -18,10 +18,10 @@ then:
     vill1.move_to:x,y
     vill1.give:forest_amulet
     vill1.speak:"I know you'll take good care of this amulet. Some say it has special powers, but it never did anything special for me."
-end:when
+end
 when:
     engaged: vill1
     has: forest_amulet
 then:
     vill1.speak:"I know you'll take good care of this amulet. Some say it has special powers, but it never did anything special for me."
-end:when
+end

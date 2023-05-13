@@ -44,7 +44,14 @@ int parseKVPairs(char *data, char *result[255]) {
     return j;
 }
 
-int isControl(char *key) {
+int isWhen(char *key) {
+    if (strcmp(key, CONTROL_WHEN) == 0) {
+        return true;
+    }
+    return false;
+}
+
+int isThen(char *key) {
     if (strcmp(key, CONTROL_WHEN) == 0) {
         return true;
     }
@@ -68,20 +75,19 @@ char *assignMobValues(Mobile *mob, char *dataFile) {
     char *animationsFragment;
     char *kvpairs[255];
     int pairs = parseKVPairs(data, kvpairs);
-    int isInControlBlock = false;
+    int controlBlock = CONTROL_TYPE_NONE;
     int controlBlocks = 0;
     for (int i = 0; i < pairs; i+=2) {
-        if (isControl(kvpairs[i])) {
+        if (isWhen(kvpairs[i])) {
             mob->controlBlocks[controlBlocks] = createControlBlock(kvpairs[i], kvpairs[i + 1]);
-            isInControlBlock = true;
-        } else if (isInControlBlock && strcmp(kvpairs[i], CONTROL_END) != 0) {
-            mob->controlBlocks[controlBlocks]->instructions[mob->controlBlocks[controlBlocks]->instructionCount][0] = kvpairs[i];
-            mob->controlBlocks[controlBlocks]->instructions[mob->controlBlocks[controlBlocks]->instructionCount][1] = kvpairs[i + 1];
-            mob->controlBlocks[controlBlocks]->instructionCount++;
+            controlBlock = CONTROL_TYPE_WHEN;
+        } else if (controlBlock == CONTROL_TYPE_WHEN && strcmp(kvpairs[i], CONTROL_END) != 0) {
+            mob->controlBlocks[controlBlocks]->when[mob->controlBlocks[controlBlocks]->whenCount][0] = kvpairs[i];
+            mob->controlBlocks[controlBlocks]->when[mob->controlBlocks[controlBlocks]->whenCount][1] = kvpairs[i + 1];
+            mob->controlBlocks[controlBlocks]->whenCount++;
         } else if (mob->controlBlocks[controlBlocks] != NULL &&
-                    strcmp(kvpairs[i], CONTROL_END) == 0 &&
-                    strcmp(kvpairs[i + 1], mob->controlBlocks[controlBlocks]->condition) == 0) {
-            isInControlBlock = false;
+                    strcmp(kvpairs[i], CONTROL_END) == 0) {
+            controlBlock = CONTROL_TYPE_NONE;
             controlBlocks++;
         } else if (strcmp(kvpairs[i], CONTROL_ANIMATIONS) == 0) {
             animationsFragment = kvpairs[i + 1];
