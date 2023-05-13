@@ -37,7 +37,9 @@ void parseKV(char *data, char *result[2]) {
     result[0] = strtok(data, ":");
     result[1] = strtok(NULL, "\r\n");
     clean(result[0]);
-    clean(result[1]);
+    if (result[1] != NULL) {
+        clean(result[1]);
+    }
 }
 
 int parseKVPairs(char *data, char *result[255]) {
@@ -55,6 +57,7 @@ int parseKVPairs(char *data, char *result[255]) {
         parseKV(rows[i], kv);
         result[j] = kv[0];
         result[j + 1] = kv[1];
+        printf("kv: %s, %s\n", kv[0], kv[1]);
         j += 2;
     }
     return j;

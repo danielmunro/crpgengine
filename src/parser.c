@@ -1,6 +1,5 @@
 int isControl(char *key) {
-    if (strcmp(key, "when_has") == 0 ||
-        strcmp(key, "when_not_has") == 0) {
+    if (strcmp(key, "when") == 0) {
         return true;
     }
     return false;
@@ -25,16 +24,14 @@ char *assignMobValues(Mobile *mob, char *dataFile) {
     int pairs = parseKVPairs(data, kvpairs);
     int isInControlBlock = false;
     int controlBlocks = 0;
-    int instructions = 0;
     for (int i = 0; i < pairs; i+=2) {
         if (isControl(kvpairs[i])) {
             mob->controlBlocks[controlBlocks] = createControlBlock(kvpairs[i], kvpairs[i + 1]);
             isInControlBlock = true;
-            instructions = 0;
         } else if (isInControlBlock && strcmp(kvpairs[i], "end") != 0) {
-            mob->controlBlocks[controlBlocks]->instructions[instructions][0] = kvpairs[i];
-            mob->controlBlocks[controlBlocks]->instructions[instructions][1] = kvpairs[i + 1];
-            instructions++;
+            mob->controlBlocks[controlBlocks]->instructions[mob->controlBlocks[controlBlocks]->instructionCount][0] = kvpairs[i];
+            mob->controlBlocks[controlBlocks]->instructions[mob->controlBlocks[controlBlocks]->instructionCount][1] = kvpairs[i + 1];
+            mob->controlBlocks[controlBlocks]->instructionCount++;
         } else if (mob->controlBlocks[controlBlocks] != NULL &&
                     strcmp(kvpairs[i], "end") == 0 &&
                     strcmp(kvpairs[i + 1], mob->controlBlocks[controlBlocks]->condition) == 0) {
@@ -53,6 +50,20 @@ char *assignMobValues(Mobile *mob, char *dataFile) {
             mob->direction = getDirectionFromString(kvpairs[i + 1]);
         } else if (strcmp(kvpairs[i], "id") == 0) {
             mob->id = &kvpairs[i + 1][0];
+        }
+    }
+    for (int i = 0; i < MAX_CONTROLS; i++) {
+        if (mob->controlBlocks[i] == NULL) {
+            break;
+        }
+        printf("controlBlock: %s, %s\n", mob->controlBlocks[i]->condition, mob->controlBlocks[i]->test);
+        for (int j = 0; j < mob->controlBlocks[i]->instructionCount; j++) {
+            if (mob->controlBlocks[i]->instructions[j] == NULL) {
+                break;
+            }
+            printf("instruction: %s, %s\n",
+                   mob->controlBlocks[i]->instructions[j][0],
+                   mob->controlBlocks[i]->instructions[j][1]);
         }
     }
     return animationsFragment;
