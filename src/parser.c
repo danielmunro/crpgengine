@@ -81,6 +81,9 @@ char *assignMobValues(Mobile *mob, char *dataFile) {
     int controlBlocks = 0;
     for (int i = 0; i < pairs; i+=2) {
         if (isSpecial(kvpairs[i])) {
+            if (controlBlock == CONTROL_TYPE_WHEN) {
+                controlBlocks++;
+            }
             mob->controlBlocks[controlBlocks] = createControlBlock(kvpairs[i], kvpairs[i + 1]);
             controlBlock = getControlTypeFromString(kvpairs[i]);
         } else if (controlBlock == CONTROL_TYPE_WHEN && strcmp(kvpairs[i], CONTROL_END) != 0) {
