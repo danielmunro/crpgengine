@@ -4,6 +4,8 @@ typedef struct Mobile {
     char *name;
     int direction;
     Vector2 position;
+    Attributes *attributes;
+    Item *items[MAX_ITEMS];
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {

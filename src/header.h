@@ -21,6 +21,8 @@
 #define MAX_MOBILES 255
 #define MAX_INSTRUCTIONS 255
 #define MAX_CONTROLS 255
+#define MAX_ITEMS 255
+
 #define LAYER_COUNT 3
 #define LAYER_TYPE_BACKGROUND 0
 #define LAYER_TYPE_MIDGROUND 1
@@ -59,9 +61,25 @@
 #define CONTROL_COORDINATES "coordinates"
 #define CONTROL_DIRECTION "direction"
 
+#define CHECK_ENGAGED "engaged"
+#define CHECK_HAS "has"
+#define CHECK_NOT_HAS "not_has"
+
+#define OUTCOME_SPEAK "speak"
+#define OUTCOME_MOVE_TO "move_to"
+#define OUTCOME_DIRECTION "direction"
+#define OUTCOME_SPRITE "sprite"
+#define OUTCOME_WAIT "wait"
+#define OUTCOME_GIVE_ITEM "give_item"
+#define OUTCOME_TAKE "take"
+
+typedef struct Mobile Mobile;
+
 #include "control_block.c"
 #include "util.c"
 #include "sprite.c"
+#include "attributes.c"
+#include "item.c"
 #include "mobile.c"
 #include "player.c"
 #include "tilemap.c"

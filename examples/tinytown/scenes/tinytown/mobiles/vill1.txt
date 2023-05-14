@@ -4,8 +4,8 @@ animations:./animations/fireas.txt
 coordinates:271,242
 direction:up
 when:
-    engaged: vill1
-    not_has: forest_amulet
+    player.engaged: vill1
+    player.not_has: forest_amulet
 then:
     vill1.speak:"She always said not to live in the past. That one day I'll need to give this away to someone who needs it."
     vill1.move_to:x,y
@@ -16,12 +16,12 @@ then:
     wait: 1
     vill1.speak:"Ah! Here it is."
     vill1.move_to:x,y
-    vill1.give:forest_amulet
+    vill1.give_item:forest_amulet
     vill1.speak:"I know you'll take good care of this amulet. Some say it has special powers, but it never did anything special for me."
 end
 when:
-    engaged: vill1
-    has: forest_amulet
+    player.engaged: vill1
+    player.has: forest_amulet
 then:
     vill1.speak:"I know you'll take good care of this amulet. Some say it has special powers, but it never did anything special for me."
 end

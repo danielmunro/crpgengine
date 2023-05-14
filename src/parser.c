@@ -84,7 +84,7 @@ char *assignMobValues(Scene *scene, Mobile *mob, char *dataFile) {
             if (controlBlock == CONTROL_TYPE_WHEN) {
                 controlBlocks++;
             }
-            scene->controlBlocks[controlBlocks] = createControlBlock(kvpairs[i], kvpairs[i + 1]);
+            scene->controlBlocks[controlBlocks] = createControlBlock(getControlTypeFromString(kvpairs[i]));
             controlBlock = getControlTypeFromString(kvpairs[i]);
         } else if (controlBlock == CONTROL_TYPE_WHEN && strcmp(kvpairs[i], CONTROL_END) != 0) {
             scene->controlBlocks[controlBlocks]->when[scene->controlBlocks[controlBlocks]->whenCount][0] = kvpairs[i];
