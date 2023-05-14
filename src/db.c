@@ -255,24 +255,21 @@ void loadAnimations(const char *file, const char *indexDir, Animation *animation
     printf("%d animations loaded\n", anim);
 }
 
-void loadMobiles(const char *indexDir, const char *sceneName, Mobile *mobiles[MAX_MOBILES]) {
-    char *mobFiles[MAX_MOBILES];
-    for (int i = 0; i < MAX_MOBILES; i++) {
-        mobFiles[i] = NULL;
-    }
-    char *mobDir = pathCat(indexDir, pathCat("/scenes/", pathCat(sceneName, "/mobiles")));
+void loadMobiles(Scene *scene, const char *indexDir) {
+    char *mobDir = pathCat(indexDir, pathCat("/scenes/", pathCat(scene->name, "/mobiles")));
     printf("load mobiles from %s\n", mobDir);
     if (!FileExists(mobDir)) {
         printf("file does not exist, skipping mob loading\n");
         return;
     }
+    char *mobFiles[MAX_MOBILES];
     int files = getFilesInDirectory(mobDir, mobFiles);
     for (int i = 0; i < files; i++) {
         char *mobDataFile = pathCat(mobDir, pathCat("/", mobFiles[i]));
-        mobiles[i] = createMobile();
-        char *animationsFragment = assignMobValues(mobiles[i], mobDataFile);
+        scene->mobiles[i] = createMobile();
+        char *animationsFragment = assignMobValues(scene, scene->mobiles[i], mobDataFile);
         char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
-        loadAnimations(animationsFile, indexDir, mobiles[0]->animations);
+        loadAnimations(animationsFile, indexDir, scene->mobiles[0]->animations);
     }
 }
 
@@ -291,12 +288,10 @@ Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions
     printf("create scene '%s' tilemap\n", sceneName);
     char *sceneDir = pathCat(pathCat(indexDir, "/scenes"), sceneName);
     parseSceneXml(sceneReader, sceneDir);
+    assignSceneType(scene, sceneType);
 
     // load mobiles
-    loadMobiles(indexDir, sceneName, scene->mobiles);
-
-    // assign scene properties
-    assignSceneType(scene, sceneType);
+    loadMobiles(scene, indexDir);
 
     free(sceneReader);
     printf("done parsing scene %s\n", sceneName);
@@ -309,7 +304,7 @@ Player *loadPlayer(char *indexDir) {
     Player *player = createPlayer();
     player->mob = createMobile();
     char *playerFile = pathCat(indexDir, "/player.txt");
-    char *animationsFragment = assignMobValues(player->mob, playerFile);
+    char *animationsFragment = assignMobValues(NULL, player->mob, playerFile);
     char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
     loadAnimations(animationsFile, indexDir, player->mob->animations);
     return player;

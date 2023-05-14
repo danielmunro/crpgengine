@@ -72,7 +72,7 @@ void assignConfigValues(Config *config, char *indexDir) {
     }
 }
 
-char *assignMobValues(Mobile *mob, char *dataFile) {
+char *assignMobValues(Scene *scene, Mobile *mob, char *dataFile) {
     char *data = LoadFileText(dataFile);
     char *animationsFragment;
     char *kvpairs[255];
@@ -84,16 +84,16 @@ char *assignMobValues(Mobile *mob, char *dataFile) {
             if (controlBlock == CONTROL_TYPE_WHEN) {
                 controlBlocks++;
             }
-            mob->controlBlocks[controlBlocks] = createControlBlock(kvpairs[i], kvpairs[i + 1]);
+            scene->controlBlocks[controlBlocks] = createControlBlock(kvpairs[i], kvpairs[i + 1]);
             controlBlock = getControlTypeFromString(kvpairs[i]);
         } else if (controlBlock == CONTROL_TYPE_WHEN && strcmp(kvpairs[i], CONTROL_END) != 0) {
-            mob->controlBlocks[controlBlocks]->when[mob->controlBlocks[controlBlocks]->whenCount][0] = kvpairs[i];
-            mob->controlBlocks[controlBlocks]->when[mob->controlBlocks[controlBlocks]->whenCount][1] = kvpairs[i + 1];
-            mob->controlBlocks[controlBlocks]->whenCount++;
+            scene->controlBlocks[controlBlocks]->when[scene->controlBlocks[controlBlocks]->whenCount][0] = kvpairs[i];
+            scene->controlBlocks[controlBlocks]->when[scene->controlBlocks[controlBlocks]->whenCount][1] = kvpairs[i + 1];
+            scene->controlBlocks[controlBlocks]->whenCount++;
         } else if (controlBlock == CONTROL_TYPE_THEN && strcmp(kvpairs[i], CONTROL_END) != 0) {
-            mob->controlBlocks[controlBlocks]->then[mob->controlBlocks[controlBlocks]->thenCount][0] = kvpairs[i];
-            mob->controlBlocks[controlBlocks]->then[mob->controlBlocks[controlBlocks]->thenCount][1] = kvpairs[i + 1];
-            mob->controlBlocks[controlBlocks]->thenCount++;
+            scene->controlBlocks[controlBlocks]->then[scene->controlBlocks[controlBlocks]->thenCount][0] = kvpairs[i];
+            scene->controlBlocks[controlBlocks]->then[scene->controlBlocks[controlBlocks]->thenCount][1] = kvpairs[i + 1];
+            scene->controlBlocks[controlBlocks]->thenCount++;
         } else if (controlBlock != CONTROL_TYPE_NONE && strcmp(kvpairs[i], CONTROL_END) == 0) {
             controlBlock = CONTROL_TYPE_NONE;
             controlBlocks++;
