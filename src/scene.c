@@ -56,6 +56,9 @@ Scene *createScene() {
     for (int i = 0; i < MAX_MOBILES; i++) {
         scene->mobiles[i] = NULL;
     }
+    for (int i = 0; i < MAX_CONTROLS; i++) {
+        scene->controlBlocks[i] = NULL;
+    }
     return scene;
 }
 

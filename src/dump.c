@@ -22,5 +22,17 @@ void dumpGame(Game *g) {
                    g->scenes[i]->objects[o]->tile
             );
         }
+        printf("mobiles\n===============\n");
+        for (int j = 0; j < MAX_CONTROLS; j++) {
+            if (g->scenes[i]->controlBlocks[j] == NULL) {
+                break;
+            }
+            for (int w = 0; w < g->scenes[i]->controlBlocks[j]->whenCount; w++) {
+                printf("when - %s:%s\n", g->scenes[i]->controlBlocks[j]->when[w][0], g->scenes[i]->controlBlocks[j]->when[w][1]);
+            }
+            for (int w = 0; w < g->scenes[i]->controlBlocks[j]->thenCount; w++) {
+                printf("then - %s:%s\n", g->scenes[i]->controlBlocks[j]->then[w][0], g->scenes[i]->controlBlocks[j]->then[w][1]);
+            }
+        }
     }
 }
