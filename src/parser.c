@@ -84,16 +84,16 @@ char *assignMobValues(Scene *scene, Mobile *mob, char *dataFile) {
             if (controlBlock == CONTROL_TYPE_WHEN) {
                 controlBlocks++;
             }
-            scene->controlBlocks[controlBlocks] = createControlBlock(getControlTypeFromString(kvpairs[i]));
+            scene->controlBlocksInt[controlBlocks] = createControlBlock(getControlTypeFromString(kvpairs[i]));
             controlBlock = getControlTypeFromString(kvpairs[i]);
         } else if (controlBlock == CONTROL_TYPE_WHEN && strcmp(kvpairs[i], CONTROL_END) != 0) {
-            scene->controlBlocks[controlBlocks]->when[scene->controlBlocks[controlBlocks]->whenCount][0] = kvpairs[i];
-            scene->controlBlocks[controlBlocks]->when[scene->controlBlocks[controlBlocks]->whenCount][1] = kvpairs[i + 1];
-            scene->controlBlocks[controlBlocks]->whenCount++;
+            scene->controlBlocksInt[controlBlocks]->when[scene->controlBlocksInt[controlBlocks]->whenCount][0] = kvpairs[i];
+            scene->controlBlocksInt[controlBlocks]->when[scene->controlBlocksInt[controlBlocks]->whenCount][1] = kvpairs[i + 1];
+            scene->controlBlocksInt[controlBlocks]->whenCount++;
         } else if (controlBlock == CONTROL_TYPE_THEN && strcmp(kvpairs[i], CONTROL_END) != 0) {
-            scene->controlBlocks[controlBlocks]->then[scene->controlBlocks[controlBlocks]->thenCount][0] = kvpairs[i];
-            scene->controlBlocks[controlBlocks]->then[scene->controlBlocks[controlBlocks]->thenCount][1] = kvpairs[i + 1];
-            scene->controlBlocks[controlBlocks]->thenCount++;
+            scene->controlBlocksInt[controlBlocks]->then[scene->controlBlocksInt[controlBlocks]->thenCount][0] = kvpairs[i];
+            scene->controlBlocksInt[controlBlocks]->then[scene->controlBlocksInt[controlBlocks]->thenCount][1] = kvpairs[i + 1];
+            scene->controlBlocksInt[controlBlocks]->thenCount++;
         } else if (controlBlock != CONTROL_TYPE_NONE && strcmp(kvpairs[i], CONTROL_END) == 0) {
             controlBlock = CONTROL_TYPE_NONE;
             controlBlocks++;

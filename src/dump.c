@@ -24,14 +24,14 @@ void dumpGame(Game *g) {
         }
         printf("mobiles\n===============\n");
         for (int j = 0; j < MAX_CONTROLS; j++) {
-            if (g->scenes[i]->controlBlocks[j] == NULL) {
+            if (g->scenes[i]->controlBlocksInt[j] == NULL) {
                 break;
             }
-            for (int w = 0; w < g->scenes[i]->controlBlocks[j]->whenCount; w++) {
-                printf("when - %s:%s\n", g->scenes[i]->controlBlocks[j]->when[w][0], g->scenes[i]->controlBlocks[j]->when[w][1]);
+            for (int w = 0; w < g->scenes[i]->controlBlocksInt[j]->whenCount; w++) {
+                printf("when - %s:%s\n", g->scenes[i]->controlBlocksInt[j]->when[w][0], g->scenes[i]->controlBlocksInt[j]->when[w][1]);
             }
-            for (int w = 0; w < g->scenes[i]->controlBlocks[j]->thenCount; w++) {
-                printf("then - %s:%s\n", g->scenes[i]->controlBlocks[j]->then[w][0], g->scenes[i]->controlBlocks[j]->then[w][1]);
+            for (int w = 0; w < g->scenes[i]->controlBlocksInt[j]->thenCount; w++) {
+                printf("then - %s:%s\n", g->scenes[i]->controlBlocksInt[j]->then[w][0], g->scenes[i]->controlBlocksInt[j]->then[w][1]);
             }
         }
     }

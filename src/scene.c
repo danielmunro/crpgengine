@@ -35,7 +35,8 @@ typedef struct Scene {
     Exit *exits[MAX_EXITS];
     int nextExit;
     Mobile *mobiles[MAX_MOBILES];
-    ControlBlockInt *controlBlocks[MAX_CONTROLS];
+    ControlBlockInt *controlBlocksInt[MAX_CONTROLS];
+    ControlBlock *controlBlocks[MAX_CONTROLS];
 } Scene;
 
 const SceneType sceneTypes[] = {
@@ -57,7 +58,7 @@ Scene *createScene() {
         scene->mobiles[i] = NULL;
     }
     for (int i = 0; i < MAX_CONTROLS; i++) {
-        scene->controlBlocks[i] = NULL;
+        scene->controlBlocksInt[i] = NULL;
     }
     return scene;
 }
