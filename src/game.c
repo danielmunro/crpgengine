@@ -53,12 +53,95 @@ void setScene(Game *g, Scene *scene) {
     printf("scene set to %s\n", g->currentScene->name);
 }
 
+ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
+    printf("mapping int control blocks to real %d\n", cbi->whenCount);
+    ControlBlock *c = createControlBlock(cbi->control);
+    c->whenCount = cbi->whenCount;
+    c->thenCount = cbi->thenCount;
+    for (int i = 0; i < cbi->whenCount; i++) {
+        printf("start when loop\n");
+        char *source = strtok(cbi->when[i][0], ".");
+        char *adjective = strtok(NULL, ".");
+        printf("source, adj -- %s, %s\n", source, adjective);
+        c->when[i] = malloc(sizeof(When));
+        if (strcmp(source, "player") == 0) {
+            c->when[i]->source = g->player->mob;
+            continue;
+        }
+        printf("looking in scenes\n");
+        for (int s = 0; s < MAX_SCENES; s++) {
+            if (g->scenes[s] == NULL) {
+                break;
+            }
+            for (int m = 0; m < MAX_MOBILES; m++) {
+                if (g->scenes[s]->mobiles[m] == NULL) {
+                    break;
+                }
+                printf("check mob %s\n", g->scenes[s]->mobiles[m]->id);
+                if (strcmp(g->scenes[s]->mobiles[m]->id, source) == 0) {
+                    c->when[i]->source = g->scenes[s]->mobiles[m];
+                    printf("found source %s\n", source);
+                }
+            }
+        }
+        if (c->when[i]->source == NULL) {
+            fprintf(stderr, "source not found: %s!", source);
+        }
+    }
+    for (int i = 0; i < cbi->thenCount; i++) {
+        printf("start then loop\n");
+        char *target = strtok(cbi->then[i][0], ".");
+        char *adjective = strtok(NULL, ".");
+        printf("target, adj -- %s, %s\n", target, adjective);
+        printf("looking in scenes\n");
+        c->then[i] = malloc(sizeof(Then));
+        if (strcmp(target, "player") == 0) {
+            c->then[i]->target = g->player->mob;
+            continue;
+        } else if (strcmp(target, OUTCOME_WAIT) == 0) {
+            printf("found a wait\n");
+            c->then[i]->outcome = OUTCOME_WAIT_ID;
+            continue;
+        }
+        for (int s = 0; s < MAX_SCENES; s++) {
+            if (g->scenes[s] == NULL) {
+                break;
+            }
+            for (int m = 0; m < MAX_MOBILES; m++) {
+                if (g->scenes[s]->mobiles[m] == NULL) {
+                    break;
+                }
+                printf("check mob %s\n", g->scenes[s]->mobiles[m]->id);
+                if (strcmp(g->scenes[s]->mobiles[m]->id, target) == 0) {
+                    c->then[i]->target = g->scenes[s]->mobiles[m];
+                    printf("found target %s\n", target);
+                }
+            }
+        }
+        if (c->then[i]->target == NULL) {
+            fprintf(stderr, "target not found: %s!\n", target);
+        }
+    }
+    return c;
+}
+
 void loadScenes(Game *g, int showCollisions, char *indexDir, char *scenes[MAX_SCENES]) {
     for (int i = 0; i < MAX_SCENES; i++) {
         if (scenes[i] == NULL) {
             break;
         }
         g->scenes[i] = loadScene(indexDir, scenes[i], showCollisions);
+    }
+    for (int i = 0; i < MAX_SCENES; i++) {
+        if (scenes[i] == NULL) {
+            break;
+        }
+        for (int c = 0; c < MAX_CONTROLS; c++) {
+            if (g->scenes[i]->controlBlocksInt[c] == NULL) {
+                break;
+            }
+            g->scenes[i]->controlBlocks[c] = mapIntermediateToReal(g, g->scenes[i]->controlBlocksInt[c]);
+        }
     }
 }
 
@@ -73,8 +156,8 @@ Game *createGame(RuntimeArgs *r) {
     }
     char *sceneDir = pathCat(r->indexDir, "/scenes");
     getFilesInDirectory(sceneDir, scenes);
-    loadScenes(g, r->showCollisions, r->indexDir, scenes);
     g->player = loadPlayer(r->indexDir);
+    loadScenes(g, r->showCollisions, r->indexDir, scenes);
     setScene(g, g->scenes[r->sceneIndex]);
     return g;
 }

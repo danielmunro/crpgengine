@@ -1,21 +1,28 @@
 typedef struct When {
     Mobile *source;
     int condition;
-    Mobile *target;
 } When;
 
 typedef struct Then {
-    Mobile *source;
-    int outcome;
     Mobile *target;
-
+    int outcome;
 } Then;
 
 typedef struct ControlBlock {
     int control;
-    When *conditions[MAX_INSTRUCTIONS];
-    Then *outcomes[MAX_INSTRUCTIONS];
+    When *when[MAX_INSTRUCTIONS];
+    Then *then[MAX_INSTRUCTIONS];
+    int whenCount;
+    int thenCount;
 } ControlBlock;
+
+ControlBlock *createControlBlock(int control) {
+    ControlBlock *cb = malloc(sizeof(ControlBlock));
+    cb->control = control;
+    cb->whenCount = 0;
+    cb->thenCount = 0;
+    return cb;
+}
 
 typedef struct ControlBlockInt {
     int control;
@@ -25,7 +32,7 @@ typedef struct ControlBlockInt {
     int thenCount;
 } ControlBlockInt;
 
-ControlBlockInt *createControlBlock(int control) {
+ControlBlockInt *createControlBlockInt(int control) {
     ControlBlockInt *cb = malloc(sizeof(ControlBlockInt));
     cb->control = control;
     cb->whenCount = 0;

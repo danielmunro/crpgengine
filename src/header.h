@@ -73,6 +73,8 @@
 #define OUTCOME_GIVE_ITEM "give_item"
 #define OUTCOME_TAKE "take"
 
+#define OUTCOME_WAIT_ID 5
+
 typedef struct Mobile Mobile;
 
 #include "control_block.c"
