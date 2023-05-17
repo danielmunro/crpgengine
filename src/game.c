@@ -89,7 +89,6 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
     c->whenCount = cbi->whenCount;
     c->thenCount = cbi->thenCount;
     for (int i = 0; i < cbi->whenCount; i++) {
-        printf("start when loop\n");
         char *source = strtok(cbi->when[i][0], ".");
         char *condition = strtok(NULL, ".");
         printf("source, condition -- %s, %s\n", source, condition);
@@ -119,7 +118,6 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
         }
     }
     for (int i = 0; i < cbi->thenCount; i++) {
-        printf("start then loop\n");
         char *target = strtok(cbi->then[i][0], ".");
         char *outcome = strtok(NULL, ".");
         printf("target, outcome -- %s, %s\n", target, outcome);
@@ -152,7 +150,7 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
                 }
             }
         }
-        if (c->then[i]->target == NULL) {
+        if (c->then[i]->target == NULL && c->then[i]->outcome != OUTCOME_WAIT) {
             fprintf(stderr, "target not found: %s!\n", target);
         }
     }
