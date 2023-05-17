@@ -36,10 +36,12 @@ int parseKVPairs(char *data, char *result[255]) {
     for (int i = 0; i < r; i++) {
         char *kv[2];
         parseKV(rows[i], kv);
-        result[j] = kv[0];
-        result[j + 1] = kv[1];
-        printf("kv: %s, %s\n", kv[0], kv[1]);
-        j += 2;
+        if (kv[0][0] != '#') {
+            result[j] = kv[0];
+            result[j + 1] = kv[1];
+            printf("kv: %s, %s\n", kv[0], kv[1]);
+            j += 2;
+        }
     }
     return j;
 }
