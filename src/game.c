@@ -53,6 +53,36 @@ void setScene(Game *g, Scene *scene) {
     printf("scene set to %s\n", g->currentScene->name);
 }
 
+int mapCondition(char *when) {
+    if (strcmp(when, WHEN_HAS) == 0) {
+        return CONDITION_HAS;
+    } else if (strcmp(when, WHEN_NOT_HAS) == 0) {
+        return CONDITION_NOT_HAS;
+    } else if (strcmp(when, WHEN_ENGAGED) == 0) {
+        return CONDITION_ENGAGED;
+    } else if (strcmp(when, WHEN_AT) == 0) {
+        return CONDITION_AT;
+    }
+}
+
+int mapOutcome(char *then) {
+    if (strcmp(then, THEN_SPEAK) == 0) {
+        return OUTCOME_SPEAK;
+    } else if (strcmp(then, THEN_MOVE_TO) == 0) {
+        return OUTCOME_MOVE_TO;
+    } else if (strcmp(then, THEN_DIRECTION) == 0) {
+        return OUTCOME_DIRECTION;
+    } else if (strcmp(then, THEN_SPRITE) == 0) {
+        return OUTCOME_SPRITE;
+    } else if (strcmp(then, THEN_WAIT) == 0) {
+        return OUTCOME_WAIT;
+    } else if (strcmp(then, THEN_GIVE_ITEM) == 0) {
+        return OUTCOME_GIVE_ITEM;
+    } else if (strcmp(then, THEN_TAKE) == 0) {
+        return OUTCOME_TAKE;
+    }
+}
+
 ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
     printf("mapping int control blocks to real %d\n", cbi->whenCount);
     ControlBlock *c = createControlBlock(cbi->control);
@@ -61,26 +91,26 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
     for (int i = 0; i < cbi->whenCount; i++) {
         printf("start when loop\n");
         char *source = strtok(cbi->when[i][0], ".");
-        char *adjective = strtok(NULL, ".");
-        printf("source, adj -- %s, %s\n", source, adjective);
+        char *condition = strtok(NULL, ".");
+        printf("source, condition -- %s, %s\n", source, condition);
         c->when[i] = malloc(sizeof(When));
+        c->when[i]->condition = mapCondition(condition);
         if (strcmp(source, "player") == 0) {
             c->when[i]->source = g->player->mob;
-            continue;
-        }
-        printf("looking in scenes\n");
-        for (int s = 0; s < MAX_SCENES; s++) {
-            if (g->scenes[s] == NULL) {
-                break;
-            }
-            for (int m = 0; m < MAX_MOBILES; m++) {
-                if (g->scenes[s]->mobiles[m] == NULL) {
+        } else {
+            for (int s = 0; s < MAX_SCENES; s++) {
+                if (g->scenes[s] == NULL) {
                     break;
                 }
-                printf("check mob %s\n", g->scenes[s]->mobiles[m]->id);
-                if (strcmp(g->scenes[s]->mobiles[m]->id, source) == 0) {
-                    c->when[i]->source = g->scenes[s]->mobiles[m];
-                    printf("found source %s\n", source);
+                for (int m = 0; m < MAX_MOBILES; m++) {
+                    if (g->scenes[s]->mobiles[m] == NULL) {
+                        break;
+                    }
+                    printf("check mob %s\n", g->scenes[s]->mobiles[m]->id);
+                    if (strcmp(g->scenes[s]->mobiles[m]->id, source) == 0) {
+                        c->when[i]->source = g->scenes[s]->mobiles[m];
+                        printf("found source %s\n", source);
+                    }
                 }
             }
         }
@@ -91,30 +121,34 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
     for (int i = 0; i < cbi->thenCount; i++) {
         printf("start then loop\n");
         char *target = strtok(cbi->then[i][0], ".");
-        char *adjective = strtok(NULL, ".");
-        printf("target, adj -- %s, %s\n", target, adjective);
-        printf("looking in scenes\n");
+        char *outcome = strtok(NULL, ".");
+        printf("target, outcome -- %s, %s\n", target, outcome);
         c->then[i] = malloc(sizeof(Then));
+        char *toMap;
+        if (outcome != NULL) {
+            toMap = outcome;
+        } else {
+            toMap = target;
+        }
+        c->then[i]->outcome = mapOutcome(toMap);
         if (strcmp(target, "player") == 0) {
             c->then[i]->target = g->player->mob;
-            continue;
-        } else if (strcmp(target, OUTCOME_WAIT) == 0) {
-            printf("found a wait\n");
-            c->then[i]->outcome = OUTCOME_WAIT_ID;
-            continue;
-        }
-        for (int s = 0; s < MAX_SCENES; s++) {
-            if (g->scenes[s] == NULL) {
-                break;
-            }
-            for (int m = 0; m < MAX_MOBILES; m++) {
-                if (g->scenes[s]->mobiles[m] == NULL) {
+        } else if (strcmp(target, THEN_WAIT) == 0) {
+            c->then[i]->outcome = OUTCOME_WAIT;
+        } else {
+            for (int s = 0; s < MAX_SCENES; s++) {
+                if (g->scenes[s] == NULL) {
                     break;
                 }
-                printf("check mob %s\n", g->scenes[s]->mobiles[m]->id);
-                if (strcmp(g->scenes[s]->mobiles[m]->id, target) == 0) {
-                    c->then[i]->target = g->scenes[s]->mobiles[m];
-                    printf("found target %s\n", target);
+                for (int m = 0; m < MAX_MOBILES; m++) {
+                    if (g->scenes[s]->mobiles[m] == NULL) {
+                        break;
+                    }
+                    printf("check mob %s\n", g->scenes[s]->mobiles[m]->id);
+                    if (strcmp(g->scenes[s]->mobiles[m]->id, target) == 0) {
+                        c->then[i]->target = g->scenes[s]->mobiles[m];
+                        printf("found target %s\n", target);
+                    }
                 }
             }
         }

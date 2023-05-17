@@ -60,6 +60,9 @@ Scene *createScene() {
     for (int i = 0; i < MAX_CONTROLS; i++) {
         scene->controlBlocksInt[i] = NULL;
     }
+    for (int i = 0; i < MAX_CONTROLS; i++) {
+        scene->controlBlocks[i] = NULL;
+    }
     return scene;
 }
 

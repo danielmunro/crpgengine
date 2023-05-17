@@ -61,19 +61,31 @@
 #define CONTROL_COORDINATES "coordinates"
 #define CONTROL_DIRECTION "direction"
 
-#define CHECK_ENGAGED "engaged"
-#define CHECK_HAS "has"
-#define CHECK_NOT_HAS "not_has"
+#define WHEN_ENGAGED "when"
+#define WHEN_HAS "has"
+#define WHEN_NOT_HAS "not_has"
+#define WHEN_AT "at"
 
-#define OUTCOME_SPEAK "speak"
-#define OUTCOME_MOVE_TO "move_to"
-#define OUTCOME_DIRECTION "direction"
-#define OUTCOME_SPRITE "sprite"
-#define OUTCOME_WAIT "wait"
-#define OUTCOME_GIVE_ITEM "give_item"
-#define OUTCOME_TAKE "take"
+#define CONDITION_ENGAGED 1
+#define CONDITION_HAS 2
+#define CONDITION_NOT_HAS 3
+#define CONDITION_AT 4
 
-#define OUTCOME_WAIT_ID 5
+#define THEN_SPEAK "speak"
+#define THEN_MOVE_TO "move_to"
+#define THEN_DIRECTION "direction"
+#define THEN_SPRITE "sprite"
+#define THEN_WAIT "wait"
+#define THEN_GIVE_ITEM "give_item"
+#define THEN_TAKE "take"
+
+#define OUTCOME_SPEAK 1
+#define OUTCOME_MOVE_TO 2
+#define OUTCOME_DIRECTION 3
+#define OUTCOME_SPRITE 4
+#define OUTCOME_WAIT 5
+#define OUTCOME_GIVE_ITEM 6
+#define OUTCOME_TAKE 7
 
 typedef struct Mobile Mobile;
 

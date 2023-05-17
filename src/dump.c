@@ -1,5 +1,5 @@
 void dumpGame(Game *g) {
-    printf("animations\n==============\n");
+    printf("\nanimations\n==============\n");
     for (int i = 0; i < g->animIndex; i++) {
         printf("%d %d %d %d %d\n",
                g->animations[i]->type,
@@ -12,7 +12,7 @@ void dumpGame(Game *g) {
         if (g->scenes[i] == NULL) {
             break;
         }
-        printf("scene %s objects\n===============\n", g->scenes[i]->name);
+        printf("\nscene %s objects\n===============\n", g->scenes[i]->name);
         for (int o = 0; o < MAX_OBJECTS; o++) {
             if (g->scenes[i]->objects[o] == NULL) {
                 break;
@@ -22,16 +22,28 @@ void dumpGame(Game *g) {
                    g->scenes[i]->objects[o]->tile
             );
         }
-        printf("mobiles\n===============\n");
-        for (int j = 0; j < MAX_CONTROLS; j++) {
-            if (g->scenes[i]->controlBlocksInt[j] == NULL) {
+        printf("\nmobiles\n===============\n");
+        for (int j = 0; j < MAX_MOBILES; j++) {
+            if (g->scenes[i]->mobiles[j] == NULL) {
                 break;
             }
-            for (int w = 0; w < g->scenes[i]->controlBlocksInt[j]->whenCount; w++) {
-                printf("when - %s:%s\n", g->scenes[i]->controlBlocksInt[j]->when[w][0], g->scenes[i]->controlBlocksInt[j]->when[w][1]);
+            printf("%s\n", g->scenes[i]->mobiles[j]->name);
+        }
+        printf("\ncontrols\n==============\n");
+        for (int j = 0; j < MAX_CONTROLS; j++) {
+            if (g->scenes[i]->controlBlocks[j] == NULL) {
+                break;
             }
-            for (int w = 0; w < g->scenes[i]->controlBlocksInt[j]->thenCount; w++) {
-                printf("then - %s:%s\n", g->scenes[i]->controlBlocksInt[j]->then[w][0], g->scenes[i]->controlBlocksInt[j]->then[w][1]);
+            printf("in control block %d\n", j);
+            for (int w = 0; w < g->scenes[i]->controlBlocks[j]->whenCount; w++) {
+                printf("when - %s:%d\n", g->scenes[i]->controlBlocks[j]->when[w]->source->name, g->scenes[i]->controlBlocks[j]->when[w]->condition);
+            }
+            for (int w = 0; w < g->scenes[i]->controlBlocks[j]->thenCount; w++) {
+                char *target = "";
+                if (g->scenes[i]->controlBlocks[j]->then[w]->target != NULL) {
+                    target = g->scenes[i]->controlBlocks[j]->then[w]->target->name;
+                }
+                printf("then - %s:%d\n", target, g->scenes[i]->controlBlocks[j]->then[w]->outcome);
             }
         }
     }
