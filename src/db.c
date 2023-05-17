@@ -280,7 +280,13 @@ Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions
     Scene *scene = createScene();
     scene->showCollisions = showCollisions;
     strcpy(scene->name, sceneName);
-    char *sceneType = strtok(data, "\r\n");
+    char *kvpairs[255];
+    int pairs = parseKVPairs(data, kvpairs);
+    for (int i = 0; i < pairs; i+=2) {
+        if (strcmp(kvpairs[i], SCENE_ATTRIBUTE_TYPE) == 0) {
+            assignSceneType(scene, kvpairs[i + 1]);
+        }
+    }
     char *sceneFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/tilemap.tmx");
     SceneReader *sceneReader = createSceneReader(scene, sceneFile);
 
@@ -288,7 +294,6 @@ Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions
     printf("create scene '%s' tilemap\n", sceneName);
     char *sceneDir = pathCat(pathCat(indexDir, "/scenes"), sceneName);
     parseSceneXml(sceneReader, sceneDir);
-    assignSceneType(scene, sceneType);
 
     // load mobiles
     loadMobiles(scene, indexDir);

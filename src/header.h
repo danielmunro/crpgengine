@@ -87,6 +87,8 @@
 #define OUTCOME_GIVE_ITEM 6
 #define OUTCOME_TAKE 7
 
+#define SCENE_ATTRIBUTE_TYPE "type"
+
 typedef struct Mobile Mobile;
 
 #include "control_block.c"

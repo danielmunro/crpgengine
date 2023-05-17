@@ -1,1 +1,2 @@
-town
+type:town
+play_sound:town
