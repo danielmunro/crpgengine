@@ -173,9 +173,14 @@ void renderScene(Scene *s, Player *p) {
     DrawTexture(s->renderedLayers[LAYER_TYPE_MIDGROUND], 0, 0, WHITE);
     drawMobiles(s, p);
     DrawTexture(s->renderedLayers[LAYER_TYPE_FOREGROUND], 0, 0, WHITE);
+    if (p->engaged) {
+        DrawRectangleGradientH(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT, BLUE, DARKBLUE);
+        DrawText("hello world", 15, SCREEN_HEIGHT - 185, 16, WHITE);
+    }
 }
 
-int isBlocked(Scene *s, Vector2 pos) {
+int isBlocked(Scene *s, Player *p, Vector2 pos) {
+    p->engageable = NULL;
     Rectangle pRect = {
             pos.x,
             pos.y + MOB_COLLISION_HEIGHT_OFFSET,
@@ -215,6 +220,7 @@ int isBlocked(Scene *s, Vector2 pos) {
         };
         Rectangle c = GetCollisionRec(pRect, mRect);
         if (c.height > 0 || c.width > 0) {
+            p->engageable = s->mobiles[i];
             return 1;
         }
     }
@@ -242,16 +248,16 @@ int atExit(Scene *s, Player *p) {
 
 void evaluateMovement(Scene *s, Player *p) {
     Vector2 pos = p->mob->position;
-    if (p->moving.up == 1 && !isBlocked(s, (Vector2){pos.x, pos.y - 1})) {
+    if (p->moving.up == 1 && !isBlocked(s, p, (Vector2){pos.x, pos.y - 1})) {
         p->mob->position.y -= 1;
     }
-    if (p->moving.down == 1 && !isBlocked(s, (Vector2){pos.x, pos.y + 1})) {
+    if (p->moving.down == 1 && !isBlocked(s, p, (Vector2){pos.x, pos.y + 1})) {
         p->mob->position.y += 1;
     }
-    if (p->moving.left == 1 && !isBlocked(s, (Vector2){pos.x - 1, pos.y})) {
+    if (p->moving.left == 1 && !isBlocked(s, p, (Vector2){pos.x - 1, pos.y})) {
         p->mob->position.x -= 1;
     }
-    if (p->moving.right == 1 && !isBlocked(s, (Vector2){pos.x + 1, pos.y})) {
+    if (p->moving.right == 1 && !isBlocked(s, p, (Vector2){pos.x + 1, pos.y})) {
         p->mob->position.x += 1;
     }
 }

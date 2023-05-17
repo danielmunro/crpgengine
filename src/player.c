@@ -11,6 +11,9 @@ typedef struct Player {
     float direction;
     Moving moving;
     struct timeval lastMovement;
+    Mobile *engageable;
+    int engaged;
+    char *dialog;
 } Player;
 
 Player *createPlayer() {
@@ -20,6 +23,8 @@ Player *createPlayer() {
     player->moving.left = 0;
     player->moving.right = 0;
     gettimeofday(&player->lastMovement, NULL);
+    player->engageable = false;
+    player->engaged = false;
     return player;
 }
 
@@ -31,7 +36,7 @@ void resetMoving(Player *p) {
 }
 
 void checkMoveKey(Player *p, int key, int direction) {
-    if (IsKeyDown(key)) {
+    if (IsKeyDown(key) && !p->engaged) {
         if (direction == DIRECTION_UP) {
             p->moving.up = 1;
         }
@@ -74,5 +79,15 @@ void checkInput(Player *p) {
     );
     if (IsKeyDown(KEY_C)) {
         printf("player coordinates: %f, %f\n", p->mob->position.x, p->mob->position.y);
+    }
+    if (IsKeyPressed(KEY_SPACE)) {
+        if (p->engaged) {
+            p->engaged = false;
+            p->dialog = NULL;
+        } else if (p->engageable != NULL) {
+            printf("engaging with %s\n", p->engageable->name);
+            p->engaged = true;
+            p->dialog = "hello world";
+        }
     }
 }
