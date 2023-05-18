@@ -3,6 +3,7 @@ typedef struct Game {
     Scene *currentScene;
     Player *player;
     Animation *animations[MAX_ANIMATIONS_IN_GAME];
+    AudioManager *audioManager;
     int animIndex;
 } Game;
 
@@ -31,6 +32,7 @@ void setScene(Game *g, Scene *scene) {
     g->currentScene->entrance = scene->entrance;
     g->currentScene->showCollisions = scene->showCollisions;
     g->currentScene->layerCount = scene->layerCount;
+    g->currentScene->music = scene->music;
     for (int i = 0; i < MAX_EXITS; i++) {
         g->currentScene->exits[i] = scene->exits[i];
     }
@@ -50,6 +52,9 @@ void setScene(Game *g, Scene *scene) {
     g->player->pos.x = r.x + (r.width / 2);
     g->player->pos.y = r.y + (r.height / 2);
     drawScene(g->currentScene);
+    printf("current scene: %s\n", g->currentScene->name);
+    printf("play music %s\n", g->currentScene->music);
+    playMusic(g->audioManager, g->currentScene->music);
     printf("scene set to %s\n", g->currentScene->name);
 }
 
@@ -177,23 +182,6 @@ void loadScenes(Game *g, int showCollisions, char *indexDir, char *scenes[MAX_SC
     }
 }
 
-Game *createGame(RuntimeArgs *r) {
-    Game *g = malloc(sizeof(Game));
-    g->animIndex = 0;
-    g->currentScene = NULL;
-    char *scenes[MAX_SCENES];
-    for (int i = 0; i < MAX_SCENES; i++) {
-        g->scenes[i] = NULL;
-        scenes[i] = NULL;
-    }
-    char *sceneDir = pathCat(r->indexDir, "/scenes");
-    getFilesInDirectory(sceneDir, scenes);
-    g->player = loadPlayer(r->indexDir);
-    loadScenes(g, r->showCollisions, r->indexDir, scenes);
-    setScene(g, g->scenes[r->sceneIndex]);
-    return g;
-}
-
 void processAnimations(Game *g) {
     for (int i = 0; i < g->animIndex; i++) {
         if (g->animations[i] != NULL && g->animations[i]->isPlaying) {
@@ -230,5 +218,25 @@ void run(Game *g) {
         processAnimations(g);
         evaluateMovement(g->currentScene, g->player);
         evaluateExits(g);
+        UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
     }
+}
+
+Game *createGame(RuntimeArgs *r) {
+    Game *g = malloc(sizeof(Game));
+    g->animIndex = 0;
+    g->currentScene = NULL;
+    g->audioManager = loadAudioManager(r->indexDir);
+    printf("audio manager loaded %d songs\n", g->audioManager->musicCount);
+    char *scenes[MAX_SCENES];
+    for (int i = 0; i < MAX_SCENES; i++) {
+        g->scenes[i] = NULL;
+        scenes[i] = NULL;
+    }
+    char *sceneDir = pathCat(r->indexDir, "/scenes");
+    getFilesInDirectory(sceneDir, scenes);
+    g->player = loadPlayer(r->indexDir);
+    loadScenes(g, r->showCollisions, r->indexDir, scenes);
+    setScene(g, g->scenes[r->sceneIndex]);
+    return g;
 }

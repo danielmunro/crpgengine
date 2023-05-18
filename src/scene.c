@@ -30,6 +30,7 @@ typedef struct Scene {
     int type;
     char name[255];
     char filename[255];
+    char *music;
     int showCollisions;
     Rectangle entrance;
     Exit *exits[MAX_EXITS];

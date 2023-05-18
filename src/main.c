@@ -11,6 +11,12 @@ int main(int argc, char *argv[]) {
     Config *cfg = loadConfig(r->indexDir);
     SetTargetFPS(TARGET_FRAMERATE);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, cfg->title);
+    InitAudioDevice();
+    if (!IsAudioDeviceReady()) {
+        printf("not ready");
+        exit(1);
+    }
+//    SetMusicVolume((float) 100.0);
     Game *g = createGame(r);
     validateGameData(g);
 

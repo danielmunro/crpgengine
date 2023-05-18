@@ -285,6 +285,10 @@ Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions
     for (int i = 0; i < pairs; i+=2) {
         if (strcmp(kvpairs[i], SCENE_ATTRIBUTE_TYPE) == 0) {
             assignSceneType(scene, kvpairs[i + 1]);
+        } else if (strcmp(kvpairs[i], "music") == 0) {
+            printf("setting scene music to '%s'\n", kvpairs[i + 1]);
+            scene->music = &kvpairs[i + 1][0];
+            printf("scene->music debug: %s\n", scene->music);
         }
     }
     char *sceneFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/tilemap.tmx");
@@ -320,4 +324,12 @@ Config *loadConfig(char *indexDir) {
     Config *cfg = createConfig();
     assignConfigValues(cfg, indexDir);
     return cfg;
+}
+
+AudioManager *loadAudioManager(char *indexDir) {
+    printf("loading audio manager from dir %s\n", indexDir);
+    AudioManager *am = createAudioManager();
+    assignAudioManagerValues(am, indexDir);
+    return am;
+
 }

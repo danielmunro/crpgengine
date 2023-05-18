@@ -22,6 +22,7 @@
 #define MAX_INSTRUCTIONS 255
 #define MAX_CONTROLS 255
 #define MAX_ITEMS 255
+#define MAX_AUDIO 1024
 
 #define LAYER_COUNT 3
 #define LAYER_TYPE_BACKGROUND 0
@@ -91,6 +92,7 @@
 
 typedef struct Mobile Mobile;
 
+#include "audio.c"
 #include "control_block.c"
 #include "util.c"
 #include "sprite.c"

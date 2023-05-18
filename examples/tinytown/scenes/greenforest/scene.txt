@@ -1,2 +1,2 @@
 type:dungeon
-play_sound:town
+music:town

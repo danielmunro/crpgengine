@@ -1,2 +1,2 @@
 type:town
-play_sound:town
+music:town
