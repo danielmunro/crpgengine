@@ -87,6 +87,17 @@ Vector2d getTileCount(Scene *s) {
     return (Vector2d){x, y};
 }
 
+void drawControl(Player *player, ControlBlock *cb) {
+    if (cb != NULL) {
+        int p = cb->progress;
+        if (cb->then[p]->outcome == OUTCOME_SPEAK && player->engaged && cb->then[p]->target == player->engageable) {
+            DrawRectangleGradientH(0, SCREEN_HEIGHT - 150, SCREEN_WIDTH, SCREEN_HEIGHT, BLUE, DARKBLUE);
+
+            DrawText(cb->then[p]->message, 15, SCREEN_HEIGHT - 135, 20, WHITE);
+        }
+    }
+}
+
 void controlWhenCheck(Scene *s, Player *p) {
     if (s->activeControlBlock != NULL) {
         return;
@@ -95,12 +106,11 @@ void controlWhenCheck(Scene *s, Player *p) {
         if (s->controlBlocks[i] == NULL) {
             return;
         }
-        printf("hello?\n");
         for (int c = 0; c < s->controlBlocks[i]->whenCount; c++) {
-            printf("condition %d, %s\n", s->controlBlocks[i]->when[c]->condition, s->controlBlocks[i]->when[c]->source->name);
             if (s->controlBlocks[i]->when[c]->condition == CONDITION_ENGAGED &&
-                s->controlBlocks[i]->when[c]->source == p->engageable) {
+                s->controlBlocks[i]->when[c]->mobileTrigger == p->engageable) {
                 s->activeControlBlock = s->controlBlocks[i];
+                printf("set active control block %d\n", i);
             }
         }
     }
@@ -238,7 +248,7 @@ int isBlocked(Scene *s, Player *p, Vector2 pos) {
         };
         Rectangle c = GetCollisionRec(pRect, mRect);
         if (c.height > 0 || c.width > 0) {
-            p->engageable = s->mobiles[i];
+            p->blockedBy = s->mobiles[i];
             return 1;
         }
     }

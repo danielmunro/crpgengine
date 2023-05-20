@@ -26,25 +26,27 @@ void setScene(Game *g, Scene *scene) {
     if (g->currentScene != NULL) {
         free(g->currentScene);
     }
-    g->currentScene = createScene();
-    strcpy(g->currentScene->name, scene->name);
-    g->currentScene->tilemap = scene->tilemap;
-    g->currentScene->entrance = scene->entrance;
-    g->currentScene->showCollisions = scene->showCollisions;
-    g->currentScene->layerCount = scene->layerCount;
-    g->currentScene->music = scene->music;
-    for (int i = 0; i < MAX_EXITS; i++) {
-        g->currentScene->exits[i] = scene->exits[i];
-    }
-    for (int i = 0; i < MAX_OBJECTS; i++) {
-        g->currentScene->objects[i] = scene->objects[i];
-    }
-    for (int i = 0; i < LAYER_COUNT; i++) {
-        g->currentScene->layers[i] = scene->layers[i];
-    }
-    for (int i = 0; i < MAX_MOBILES; i++) {
-        g->currentScene->mobiles[i] = scene->mobiles[i];
-    }
+//    g->currentScene = createScene();
+//    strcpy(g->currentScene->name, scene->name);
+//    g->currentScene->tilemap = scene->tilemap;
+//    g->currentScene->entrance = scene->entrance;
+//    g->currentScene->showCollisions = scene->showCollisions;
+//    g->currentScene->layerCount = scene->layerCount;
+//    g->currentScene->music = scene->music;
+//    for (int i = 0; i < MAX_EXITS; i++) {
+//        g->currentScene->exits[i] = scene->exits[i];
+//    }
+//    for (int i = 0; i < MAX_OBJECTS; i++) {
+//        g->currentScene->objects[i] = scene->objects[i];
+//    }
+//    for (int i = 0; i < LAYER_COUNT; i++) {
+//        g->currentScene->layers[i] = scene->layers[i];
+//    }
+//    for (int i = 0; i < MAX_MOBILES; i++) {
+//        g->currentScene->mobiles[i] = scene->mobiles[i];
+//    }
+    g->currentScene = scene;
+
     memset(g->animations, 0, sizeof(g->animations));
     g->animIndex = 0;
     addAllAnimations(g, g->player->mob->animations);
@@ -86,10 +88,11 @@ int mapOutcome(char *then) {
     } else if (strcmp(then, THEN_TAKE) == 0) {
         return OUTCOME_TAKE;
     }
+    return -1;
 }
 
 ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
-    printf("mapping int control blocks to real %d\n", cbi->whenCount);
+    printf("mapping int control blocks to real %d, %d\n", cbi->whenCount, cbi->thenCount);
     ControlBlock *c = createControlBlock(cbi->control);
     c->whenCount = cbi->whenCount;
     c->thenCount = cbi->thenCount;
@@ -101,20 +104,24 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
         c->when[i]->condition = mapCondition(condition);
         if (strcmp(source, "player") == 0) {
             c->when[i]->source = g->player->mob;
-        } else {
-            for (int s = 0; s < MAX_SCENES; s++) {
-                if (g->scenes[s] == NULL) {
+        }
+        for (int s = 0; s < MAX_SCENES; s++) {
+            if (g->scenes[s] == NULL) {
+                break;
+            }
+            for (int m = 0; m < MAX_MOBILES; m++) {
+                if (g->scenes[s]->mobiles[m] == NULL) {
                     break;
                 }
-                for (int m = 0; m < MAX_MOBILES; m++) {
-                    if (g->scenes[s]->mobiles[m] == NULL) {
-                        break;
-                    }
-                    printf("check mob %s\n", g->scenes[s]->mobiles[m]->id);
-                    if (strcmp(g->scenes[s]->mobiles[m]->id, source) == 0) {
-                        c->when[i]->source = g->scenes[s]->mobiles[m];
-                        printf("found source %s\n", source);
-                    }
+                printf("check mob %s\n", g->scenes[s]->mobiles[m]->id);
+                if (strcmp(g->scenes[s]->mobiles[m]->id, source) == 0) {
+                    c->when[i]->source = g->scenes[s]->mobiles[m];
+                    printf("found source %s\n", source);
+                }
+                printf("condition check %s, %s\n", condition, cbi->when[i][1]);
+                if (c->when[i]->condition == CONDITION_ENGAGED && strcmp(g->scenes[s]->mobiles[m]->id, cbi->when[i][1]) == 0) {
+                    printf("set mobile trigger to %s\n", g->scenes[s]->mobiles[m]->name);
+                    c->when[i]->mobileTrigger = g->scenes[s]->mobiles[m];
                 }
             }
         }
@@ -134,22 +141,22 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
             toMap = target;
         }
         c->then[i]->outcome = mapOutcome(toMap);
+        printf("outcome is set to %d\n", c->then[i]->outcome);
         if (strcmp(target, "player") == 0) {
             c->then[i]->target = g->player->mob;
-        } else {
-            for (int s = 0; s < MAX_SCENES; s++) {
-                if (g->scenes[s] == NULL) {
+        }
+        for (int s = 0; s < MAX_SCENES; s++) {
+            if (g->scenes[s] == NULL) {
+                break;
+            }
+            for (int m = 0; m < MAX_MOBILES; m++) {
+                if (g->scenes[s]->mobiles[m] == NULL) {
                     break;
                 }
-                for (int m = 0; m < MAX_MOBILES; m++) {
-                    if (g->scenes[s]->mobiles[m] == NULL) {
-                        break;
-                    }
-                    printf("check mob %s\n", g->scenes[s]->mobiles[m]->id);
-                    if (strcmp(g->scenes[s]->mobiles[m]->id, target) == 0) {
-                        c->then[i]->target = g->scenes[s]->mobiles[m];
-                        printf("found target %s\n", target);
-                    }
+                printf("check mob %s\n", g->scenes[s]->mobiles[m]->id);
+                if (strcmp(g->scenes[s]->mobiles[m]->id, target) == 0) {
+                    c->then[i]->target = g->scenes[s]->mobiles[m];
+                    printf("found target %s\n", target);
                 }
             }
         }
@@ -215,15 +222,7 @@ void run(Game *g) {
         checkInput(g->player);
         BeginDrawing();
         renderScene(g->currentScene, g->player);
-        if (g->currentScene->activeControlBlock != NULL) {
-            printf("has active control block\n");
-            if (g->currentScene->activeControlBlock->then[g->currentScene->activeControlBlock->progress]->outcome == OUTCOME_SPEAK &&
-                    g->currentScene->activeControlBlock->then[g->currentScene->activeControlBlock->progress]->target == g->player->engageable) {
-                printf("should draw\n");
-                DrawRectangleGradientH(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT, BLUE, DARKBLUE);
-                DrawText(g->currentScene->activeControlBlock->then[g->currentScene->activeControlBlock->progress]->message, 15, SCREEN_HEIGHT - 185, 16, WHITE);
-            }
-        }
+        drawControl(g->player, g->currentScene->activeControlBlock);
         EndDrawing();
         processAnimations(g);
         evaluateMovement(g->currentScene, g->player);

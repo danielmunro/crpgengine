@@ -11,9 +11,9 @@ typedef struct Player {
     float direction;
     Moving moving;
     struct timeval lastMovement;
+    Mobile *blockedBy;
     Mobile *engageable;
     int engaged;
-    char *dialog;
 } Player;
 
 Player *createPlayer() {
@@ -83,7 +83,8 @@ void checkInput(Player *p) {
     if (IsKeyPressed(KEY_SPACE)) {
         if (p->engaged) {
             p->engaged = false;
-        } else if (p->engageable != NULL) {
+        } else if (p->blockedBy != NULL) {
+            p->engageable = p->blockedBy;
             printf("engaging with %s\n", p->engageable->name);
             p->engaged = true;
         }

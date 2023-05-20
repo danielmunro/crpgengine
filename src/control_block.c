@@ -1,6 +1,7 @@
 typedef struct When {
     Mobile *source;
     int condition;
+    Mobile *mobileTrigger;
 } When;
 
 typedef struct Then {
