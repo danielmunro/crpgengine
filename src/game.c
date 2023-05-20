@@ -157,6 +157,7 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
         }
         if (c->then[i]->outcome == OUTCOME_SPEAK) {
             c->then[i]->message = &cbi->then[i][1][0];
+            printf("mob message set to: '%s'\n", c->then[i]->message);
         }
         if (c->then[i]->target == NULL && c->then[i]->outcome != OUTCOME_WAIT) {
             fprintf(stderr, "target not found: %s!\n", target);
@@ -208,7 +209,7 @@ void evaluateExits(Game *g) {
 
 void run(Game *g) {
     while (!WindowShouldClose()) {
-        checkInput(g->player);
+        checkInput(g->currentScene, g->player);
         BeginDrawing();
         renderScene(g->currentScene, g->player);
         drawControl(g->player, g->currentScene->activeControlBlock);

@@ -90,6 +90,10 @@ Vector2d getTileCount(Scene *s) {
 void drawControl(Player *player, ControlBlock *cb) {
     if (cb != NULL) {
         int p = cb->progress;
+//        printf("progress check for draw control is %d\n", p);
+//        if (p > cb->thenCount) {
+//            return;
+//        }
         if (cb->then[p]->outcome == OUTCOME_SPEAK && isSpeakingTo(player, cb->then[p]->target)) {
             drawDialogBox(cb->then[p]->message);
         }
@@ -112,6 +116,12 @@ void controlWhenCheck(Scene *s, Player *p) {
                 printf("set active control block %d\n", i);
             }
         }
+    }
+}
+
+void activeControlRemoveCheck(Scene *s) {
+    if (s->activeControlBlock != NULL && s->activeControlBlock->progress >= s->activeControlBlock->thenCount) {
+        s->activeControlBlock = NULL;
     }
 }
 
@@ -286,5 +296,50 @@ void evaluateMovement(Scene *s, Player *p) {
     }
     if (p->moving.right == 1 && !isBlocked(s, p, (Vector2){pos.x + 1, pos.y})) {
         p->mob->position.x += 1;
+    }
+}
+
+
+void checkInput(Scene *s, Player *p) {
+    resetMoving(p);
+    getMobAnimation(p->mob)->isPlaying = 0;
+    checkMoveKey(
+            p,
+            KEY_UP,
+            DIRECTION_UP
+    );
+    checkMoveKey(
+            p,
+            KEY_DOWN,
+            DIRECTION_DOWN
+    );
+    checkMoveKey(
+            p,
+            KEY_RIGHT,
+            DIRECTION_RIGHT
+    );
+    checkMoveKey(
+            p,
+            KEY_LEFT,
+            DIRECTION_LEFT
+    );
+    if (IsKeyDown(KEY_C)) {
+        printf("player coordinates: %f, %f\n", p->mob->position.x, p->mob->position.y);
+    }
+    if (IsKeyPressed(KEY_SPACE)) {
+        if (p->engaged) {
+            if (s->activeControlBlock != NULL) {
+                s->activeControlBlock->progress++;
+                printf("active control block progress at %d\n", s->activeControlBlock->progress);
+                activeControlRemoveCheck(s);
+            }
+            if (s->activeControlBlock == NULL) {
+                p->engaged = false;
+            }
+        } else if (p->blockedBy != NULL) {
+            p->engageable = p->blockedBy;
+            printf("engaging with %s\n", p->engageable->name);
+            p->engaged = true;
+        }
     }
 }

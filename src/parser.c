@@ -120,7 +120,7 @@ char *assignMobValues(Scene *scene, Mobile *mob, char *dataFile) {
     int controlBlock = CONTROL_TYPE_NONE;
     int controlBlocks = 0;
     for (int i = 0; i < pairs; i+=2) {
-        printf("iterate %d %d\n", i, controlBlocks);
+        printf("iterate %d %d %d %s\n", i, controlBlocks, controlBlock, kvpairs[i]);
         if (isSpecial(kvpairs[i])) {
             controlBlock = getControlTypeFromString(kvpairs[i]);
             if (controlBlock == CONTROL_TYPE_WHEN) {
@@ -134,6 +134,7 @@ char *assignMobValues(Scene *scene, Mobile *mob, char *dataFile) {
             scene->controlBlocksInt[controlBlocks]->then[scene->controlBlocksInt[controlBlocks]->thenCount][0] = kvpairs[i];
             scene->controlBlocksInt[controlBlocks]->then[scene->controlBlocksInt[controlBlocks]->thenCount][1] = kvpairs[i + 1];
             scene->controlBlocksInt[controlBlocks]->thenCount++;
+            printf("then count: %d\n", scene->controlBlocksInt[controlBlocks]->thenCount);
         } else if (controlBlock != CONTROL_TYPE_NONE && strcmp(kvpairs[i], CONTROL_END) == 0) {
             controlBlock = CONTROL_TYPE_NONE;
             controlBlocks++;

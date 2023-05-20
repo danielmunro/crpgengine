@@ -54,43 +54,6 @@ void checkMoveKey(Player *p, int key, int direction) {
     }
 }
 
-void checkInput(Player *p) {
-    resetMoving(p);
-    getMobAnimation(p->mob)->isPlaying = 0;
-    checkMoveKey(
-            p,
-            KEY_UP,
-            DIRECTION_UP
-    );
-    checkMoveKey(
-            p,
-            KEY_DOWN,
-            DIRECTION_DOWN
-    );
-    checkMoveKey(
-            p,
-            KEY_RIGHT,
-            DIRECTION_RIGHT
-    );
-    checkMoveKey(
-            p,
-            KEY_LEFT,
-            DIRECTION_LEFT
-    );
-    if (IsKeyDown(KEY_C)) {
-        printf("player coordinates: %f, %f\n", p->mob->position.x, p->mob->position.y);
-    }
-    if (IsKeyPressed(KEY_SPACE)) {
-        if (p->engaged) {
-            p->engaged = false;
-        } else if (p->blockedBy != NULL) {
-            p->engageable = p->blockedBy;
-            printf("engaging with %s\n", p->engageable->name);
-            p->engaged = true;
-        }
-    }
-}
-
 int isSpeakingTo(Player *p, Mobile *target) {
     return p->engaged && target == p->engageable;
 }
