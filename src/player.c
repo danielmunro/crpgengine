@@ -90,3 +90,7 @@ void checkInput(Player *p) {
         }
     }
 }
+
+int isSpeakingTo(Player *p, Mobile *target) {
+    return p->engaged && target == p->engageable;
+}

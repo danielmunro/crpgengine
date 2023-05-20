@@ -226,11 +226,10 @@ Game *createGame(RuntimeArgs *r) {
     g->animIndex = 0;
     g->currentScene = NULL;
     g->audioManager = loadAudioManager(r->indexDir);
-    printf("audio manager loaded %d songs\n", g->audioManager->musicCount);
+    g->player = loadPlayer(r->indexDir);
     char *scenes[MAX_SCENES];
     char *sceneDir = pathCat(r->indexDir, "/scenes");
     g->sceneCount = getFilesInDirectory(sceneDir, scenes);
-    g->player = loadPlayer(r->indexDir);
     loadScenes(g, r->showCollisions, r->indexDir, scenes);
     setScene(g, g->scenes[r->sceneIndex]);
     return g;

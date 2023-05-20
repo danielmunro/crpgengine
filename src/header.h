@@ -96,6 +96,7 @@
 
 typedef struct Mobile Mobile;
 
+#include "ui.c"
 #include "audio.c"
 #include "control_block.c"
 #include "util.c"

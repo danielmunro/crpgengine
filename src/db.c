@@ -330,6 +330,7 @@ AudioManager *loadAudioManager(char *indexDir) {
     printf("loading audio manager from dir %s\n", indexDir);
     AudioManager *am = createAudioManager();
     assignAudioManagerValues(am, indexDir);
+    printf("audio manager loaded %d songs\n", am->musicCount);
     return am;
 
 }
