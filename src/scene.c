@@ -92,8 +92,14 @@ void drawControl(Player *player, ControlBlock *cb) {
         int p = cb->progress;
         if (cb->then[p]->outcome == OUTCOME_SPEAK && player->engaged && cb->then[p]->target == player->engageable) {
             DrawRectangleGradientH(0, SCREEN_HEIGHT - 150, SCREEN_WIDTH, SCREEN_HEIGHT, BLUE, DARKBLUE);
-
-            DrawText(cb->then[p]->message, 15, SCREEN_HEIGHT - 135, 20, WHITE);
+            unsigned long lines = (strlen(cb->then[p]->message) / MAX_CHARACTERS_PER_LINE) + 1;
+            int startY = SCREEN_HEIGHT - 135;
+            for (int i = 0; i < lines; i++) {
+                char line[MAX_CHARACTERS_PER_LINE + 1];
+                memcpy(line, &cb->then[p]->message[i * MAX_CHARACTERS_PER_LINE], MAX_CHARACTERS_PER_LINE);
+                line[MAX_CHARACTERS_PER_LINE] = '\0';
+                DrawText(&line[0], 15, startY + (LINE_HEIGHT * i), FONT_SIZE, WHITE);
+            }
         }
     }
 }

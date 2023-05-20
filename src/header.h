@@ -91,6 +91,9 @@
 
 #define SCENE_ATTRIBUTE_TYPE "type"
 
+#define FONT_SIZE 20
+#define LINE_HEIGHT 30
+
 typedef struct Mobile Mobile;
 
 #include "audio.c"
