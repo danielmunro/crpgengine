@@ -8,10 +8,7 @@ void dumpGame(Game *g) {
                g->animations[i]->frameRate,
                g->animations[i]->frameRateCount);
     }
-    for (int i = 0; i < MAX_SCENES; i++) {
-        if (g->scenes[i] == NULL) {
-            break;
-        }
+    for (int i = 0; i < g->sceneCount; i++) {
         printf("\nscene %s objects\n===============\n", g->scenes[i]->name);
         for (int o = 0; o < MAX_OBJECTS; o++) {
             if (g->scenes[i]->objects[o] == NULL) {

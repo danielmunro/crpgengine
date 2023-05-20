@@ -1,14 +1,11 @@
 void validateExits(Game *g) {
-    for (int i = 0; i < MAX_SCENES; i++) {
-        if (g->scenes[i] == NULL) {
-            return;
-        }
+    for (int i = 0; i < g->sceneCount; i++) {
         for (int j = 0; j < MAX_EXITS; j++) {
             if (g->scenes[i]->exits[j] == NULL) {
                 break;
             }
             int found = false;
-            for (int q = 0; q < MAX_SCENES; q++) {
+            for (int q = 0; q < g->sceneCount; q++) {
                 if (g->scenes[q] == NULL) {
                     break;
                 }

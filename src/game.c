@@ -1,5 +1,6 @@
 typedef struct Game {
     Scene *scenes[MAX_SCENES];
+    int sceneCount;
     Scene *currentScene;
     Player *player;
     Animation *animations[MAX_ANIMATIONS_IN_GAME];
@@ -105,10 +106,7 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
         if (strcmp(source, "player") == 0) {
             c->when[i]->source = g->player->mob;
         }
-        for (int s = 0; s < MAX_SCENES; s++) {
-            if (g->scenes[s] == NULL) {
-                break;
-            }
+        for (int s = 0; s < g->sceneCount; s++) {
             for (int m = 0; m < MAX_MOBILES; m++) {
                 if (g->scenes[s]->mobiles[m] == NULL) {
                     break;
@@ -145,10 +143,7 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
         if (strcmp(target, "player") == 0) {
             c->then[i]->target = g->player->mob;
         }
-        for (int s = 0; s < MAX_SCENES; s++) {
-            if (g->scenes[s] == NULL) {
-                break;
-            }
+        for (int s = 0; s < g->sceneCount; s++) {
             for (int m = 0; m < MAX_MOBILES; m++) {
                 if (g->scenes[s]->mobiles[m] == NULL) {
                     break;
@@ -171,16 +166,10 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
 }
 
 void loadScenes(Game *g, int showCollisions, char *indexDir, char *scenes[MAX_SCENES]) {
-    for (int i = 0; i < MAX_SCENES; i++) {
-        if (scenes[i] == NULL) {
-            break;
-        }
+    for (int i = 0; i < g->sceneCount; i++) {
         g->scenes[i] = loadScene(indexDir, scenes[i], showCollisions);
     }
-    for (int i = 0; i < MAX_SCENES; i++) {
-        if (scenes[i] == NULL) {
-            break;
-        }
+    for (int i = 0; i < g->sceneCount; i++) {
         for (int c = 0; c < MAX_CONTROLS; c++) {
             if (g->scenes[i]->controlBlocksInt[c] == NULL) {
                 break;
@@ -199,16 +188,16 @@ void processAnimations(Game *g) {
 }
 
 void evaluateExits(Game *g) {
-    int exit = atExit(g->currentScene, g->player);
+    Scene *s = g->currentScene;
+    int exit = atExit(s, g->player);
     if (exit > -1) {
-        char *to = g->currentScene->exits[exit]->to;
-        for (int i = 0; i < MAX_SCENES; i++) {
-            if (g->scenes[i] == NULL) {
-                break;
-            }
+        char *to = s->exits[exit]->to;
+        for (int i = 0; i < g->sceneCount; i++) {
             if (strcmp(to, g->scenes[i]->name) == 0) {
-                g->player->mob->position.x = (float) g->currentScene->exits[exit]->x;
-                g->player->mob->position.y = (float) g->currentScene->exits[exit]->y;
+                g->player->mob->position = (Vector2) {
+                    (float) s->exits[exit]->x,
+                    (float) s->exits[exit]->y
+                };
                 setScene(g, g->scenes[i]);
                 break;
             }
@@ -239,12 +228,8 @@ Game *createGame(RuntimeArgs *r) {
     g->audioManager = loadAudioManager(r->indexDir);
     printf("audio manager loaded %d songs\n", g->audioManager->musicCount);
     char *scenes[MAX_SCENES];
-    for (int i = 0; i < MAX_SCENES; i++) {
-        g->scenes[i] = NULL;
-        scenes[i] = NULL;
-    }
     char *sceneDir = pathCat(r->indexDir, "/scenes");
-    getFilesInDirectory(sceneDir, scenes);
+    g->sceneCount = getFilesInDirectory(sceneDir, scenes);
     g->player = loadPlayer(r->indexDir);
     loadScenes(g, r->showCollisions, r->indexDir, scenes);
     setScene(g, g->scenes[r->sceneIndex]);
