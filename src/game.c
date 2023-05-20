@@ -136,8 +136,6 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
         c->then[i]->outcome = mapOutcome(toMap);
         if (strcmp(target, "player") == 0) {
             c->then[i]->target = g->player->mob;
-        } else if (strcmp(target, THEN_WAIT) == 0) {
-            c->then[i]->outcome = OUTCOME_WAIT;
         } else {
             for (int s = 0; s < MAX_SCENES; s++) {
                 if (g->scenes[s] == NULL) {
@@ -154,6 +152,9 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
                     }
                 }
             }
+        }
+        if (c->then[i]->outcome == OUTCOME_SPEAK) {
+            c->then[i]->message = &cbi->then[i][1][0];
         }
         if (c->then[i]->target == NULL && c->then[i]->outcome != OUTCOME_WAIT) {
             fprintf(stderr, "target not found: %s!\n", target);
@@ -214,10 +215,20 @@ void run(Game *g) {
         checkInput(g->player);
         BeginDrawing();
         renderScene(g->currentScene, g->player);
+        if (g->currentScene->activeControlBlock != NULL) {
+            printf("has active control block\n");
+            if (g->currentScene->activeControlBlock->then[g->currentScene->activeControlBlock->progress]->outcome == OUTCOME_SPEAK &&
+                    g->currentScene->activeControlBlock->then[g->currentScene->activeControlBlock->progress]->target == g->player->engageable) {
+                printf("should draw\n");
+                DrawRectangleGradientH(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT, BLUE, DARKBLUE);
+                DrawText(g->currentScene->activeControlBlock->then[g->currentScene->activeControlBlock->progress]->message, 15, SCREEN_HEIGHT - 185, 16, WHITE);
+            }
+        }
         EndDrawing();
         processAnimations(g);
         evaluateMovement(g->currentScene, g->player);
         evaluateExits(g);
+        controlWhenCheck(g->currentScene, g->player);
         UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
     }
 }

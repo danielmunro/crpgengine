@@ -38,6 +38,7 @@ typedef struct Scene {
     Mobile *mobiles[MAX_MOBILES];
     ControlBlockInt *controlBlocksInt[MAX_CONTROLS];
     ControlBlock *controlBlocks[MAX_CONTROLS];
+    ControlBlock *activeControlBlock;
 } Scene;
 
 const SceneType sceneTypes[] = {
@@ -49,6 +50,7 @@ Scene *createScene() {
     Scene *scene = malloc(sizeof(Scene));
     scene->layerCount = 0;
     scene->nextExit = 0;
+    scene->activeControlBlock = NULL;
     for (int i = 0; i < MAX_OBJECTS; i++) {
         scene->objects[i] = NULL;
     }
@@ -83,6 +85,25 @@ Vector2d getTileCount(Scene *s) {
     int x = SCREEN_WIDTH / s->tilemap->size.x + 1;
     int y = SCREEN_HEIGHT / s->tilemap->size.y + 2;
     return (Vector2d){x, y};
+}
+
+void controlWhenCheck(Scene *s, Player *p) {
+    if (s->activeControlBlock != NULL) {
+        return;
+    }
+    for (int i = 0; i < MAX_CONTROLS; i++) {
+        if (s->controlBlocks[i] == NULL) {
+            return;
+        }
+        printf("hello?\n");
+        for (int c = 0; c < s->controlBlocks[i]->whenCount; c++) {
+            printf("condition %d, %s\n", s->controlBlocks[i]->when[c]->condition, s->controlBlocks[i]->when[c]->source->name);
+            if (s->controlBlocks[i]->when[c]->condition == CONDITION_ENGAGED &&
+                s->controlBlocks[i]->when[c]->source == p->engageable) {
+                s->activeControlBlock = s->controlBlocks[i];
+            }
+        }
+    }
 }
 
 void drawLayer(Scene *s, int layer) {
@@ -174,10 +195,6 @@ void renderScene(Scene *s, Player *p) {
     DrawTexture(s->renderedLayers[LAYER_TYPE_MIDGROUND], 0, 0, WHITE);
     drawMobiles(s, p);
     DrawTexture(s->renderedLayers[LAYER_TYPE_FOREGROUND], 0, 0, WHITE);
-    if (p->engaged) {
-        DrawRectangleGradientH(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT, BLUE, DARKBLUE);
-        DrawText("hello world", 15, SCREEN_HEIGHT - 185, 16, WHITE);
-    }
 }
 
 int isBlocked(Scene *s, Player *p, Vector2 pos) {

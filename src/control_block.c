@@ -5,6 +5,7 @@ typedef struct When {
 
 typedef struct Then {
     Mobile *target;
+    char *message;
     int outcome;
 } Then;
 
@@ -14,6 +15,7 @@ typedef struct ControlBlock {
     Then *then[MAX_INSTRUCTIONS];
     int whenCount;
     int thenCount;
+    int progress;
 } ControlBlock;
 
 ControlBlock *createControlBlock(int control) {
@@ -21,6 +23,7 @@ ControlBlock *createControlBlock(int control) {
     cb->control = control;
     cb->whenCount = 0;
     cb->thenCount = 0;
+    cb->progress = 0;
     return cb;
 }
 

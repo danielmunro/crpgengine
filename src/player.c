@@ -23,7 +23,7 @@ Player *createPlayer() {
     player->moving.left = 0;
     player->moving.right = 0;
     gettimeofday(&player->lastMovement, NULL);
-    player->engageable = false;
+    player->engageable = NULL;
     player->engaged = false;
     return player;
 }
@@ -83,11 +83,9 @@ void checkInput(Player *p) {
     if (IsKeyPressed(KEY_SPACE)) {
         if (p->engaged) {
             p->engaged = false;
-            p->dialog = NULL;
         } else if (p->engageable != NULL) {
             printf("engaging with %s\n", p->engageable->name);
             p->engaged = true;
-            p->dialog = "hello world";
         }
     }
 }
