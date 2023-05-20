@@ -104,10 +104,11 @@ void controlWhenCheck(Scene *s, Player *p) {
         if (s->controlBlocks[i] == NULL) {
             return;
         }
-        for (int c = 0; c < s->controlBlocks[i]->whenCount; c++) {
-            if (s->controlBlocks[i]->when[c]->condition == CONDITION_ENGAGED &&
-                s->controlBlocks[i]->when[c]->mobileTrigger == p->engageable) {
-                s->activeControlBlock = s->controlBlocks[i];
+        ControlBlock *cb = s->controlBlocks[i];
+        for (int c = 0; c < cb->whenCount; c++) {
+            if (cb->when[c]->condition == CONDITION_ENGAGED &&
+                    isSpeakingTo(p, cb->when[c]->mobileTrigger)) {
+                s->activeControlBlock = cb;
                 printf("set active control block %d\n", i);
             }
         }
