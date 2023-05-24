@@ -14,6 +14,8 @@ typedef struct Player {
     Mobile *blockedBy;
     Mobile *engageable;
     int engaged;
+    char *stories[MAX_STORIES];
+    int storyCount;
 } Player;
 
 Player *createPlayer() {
@@ -25,7 +27,25 @@ Player *createPlayer() {
     gettimeofday(&player->lastMovement, NULL);
     player->engageable = NULL;
     player->engaged = false;
+    player->storyCount = 0;
     return player;
+}
+
+void addStory(Player *p, char *story) {
+    p->stories[p->storyCount++] = story;
+    printf("debug %s %d\n", p->stories[0], p->storyCount);
+}
+
+int hasStory(Player *p, char *story) {
+    printf("check has story: %s\n", story);
+    for (int j = 0; j < p->storyCount; j++) {
+        if (strcmp(story, p->stories[j]) == 0) {
+            printf("player has story\n");
+            return true;
+        }
+    }
+    printf("player does not have story\n");
+    return false;
 }
 
 void resetMoving(Player *p) {

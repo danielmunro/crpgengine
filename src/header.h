@@ -24,6 +24,8 @@
 #define MAX_ITEMS 255
 #define MAX_AUDIO 1024
 #define MAX_CHARACTERS_PER_LINE 72
+#define MAX_STORIES 1024
+#define MAX_STORY_LENGTH 255
 
 #define LAYER_COUNT 3
 #define LAYER_TYPE_BACKGROUND 0
@@ -62,16 +64,22 @@
 #define CONTROL_NAME "name"
 #define CONTROL_COORDINATES "coordinates"
 #define CONTROL_DIRECTION "direction"
+#define CONTROL_HAS_STORY "has_story"
+#define CONTROL_NOT_HAS_STORY "not_has_story"
 
 #define WHEN_ENGAGED "when"
 #define WHEN_HAS "has"
 #define WHEN_NOT_HAS "not_has"
 #define WHEN_AT "at"
+#define WHEN_HAS_STORY "has_story"
+#define WHEN_NOT_HAS_STORY "not_has_story"
 
 #define CONDITION_ENGAGED 1
 #define CONDITION_HAS 2
 #define CONDITION_NOT_HAS 3
 #define CONDITION_AT 4
+#define CONDITION_HAS_STORY 5
+#define CONDITION_NOT_HAS_STORY 6
 
 #define THEN_SPEAK "speak"
 #define THEN_MOVE_TO "move_to"
@@ -80,6 +88,7 @@
 #define THEN_WAIT "wait"
 #define THEN_GIVE_ITEM "give_item"
 #define THEN_TAKE "take"
+#define THEN_ADD_STORY "add_story"
 
 #define OUTCOME_SPEAK 1
 #define OUTCOME_MOVE_TO 2
@@ -88,6 +97,7 @@
 #define OUTCOME_WAIT 5
 #define OUTCOME_GIVE_ITEM 6
 #define OUTCOME_TAKE 7
+#define OUTCOME_ADD_STORY 8
 
 #define SCENE_ATTRIBUTE_TYPE "type"
 

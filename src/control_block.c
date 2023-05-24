@@ -2,11 +2,13 @@ typedef struct When {
     Mobile *source;
     int condition;
     Mobile *mobileTrigger;
+    char *story;
 } When;
 
 typedef struct Then {
     Mobile *target;
     char *message;
+    char *story;
     int outcome;
 } Then;
 

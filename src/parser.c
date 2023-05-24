@@ -119,22 +119,24 @@ char *assignMobValues(Scene *scene, Mobile *mob, char *dataFile) {
     int pairs = parseKVPairs(data, kvpairs);
     int controlBlock = CONTROL_TYPE_NONE;
     int controlBlocks = 0;
+    ControlBlockInt *cb;
     for (int i = 0; i < pairs; i+=2) {
         printf("iterate %d %d %d %s\n", i, controlBlocks, controlBlock, kvpairs[i]);
         if (isSpecial(kvpairs[i])) {
             controlBlock = getControlTypeFromString(kvpairs[i]);
             if (controlBlock == CONTROL_TYPE_WHEN) {
                 scene->controlBlocksInt[controlBlocks] = createControlBlockInt(controlBlock);
+                cb = scene->controlBlocksInt[controlBlocks];
             }
         } else if (controlBlock == CONTROL_TYPE_WHEN && strcmp(kvpairs[i], CONTROL_END) != 0) {
-            scene->controlBlocksInt[controlBlocks]->when[scene->controlBlocksInt[controlBlocks]->whenCount][0] = kvpairs[i];
-            scene->controlBlocksInt[controlBlocks]->when[scene->controlBlocksInt[controlBlocks]->whenCount][1] = kvpairs[i + 1];
-            scene->controlBlocksInt[controlBlocks]->whenCount++;
+            cb->when[cb->whenCount][0] = kvpairs[i];
+            cb->when[cb->whenCount][1] = kvpairs[i + 1];
+            cb->whenCount++;
         } else if (controlBlock == CONTROL_TYPE_THEN && strcmp(kvpairs[i], CONTROL_END) != 0) {
-            scene->controlBlocksInt[controlBlocks]->then[scene->controlBlocksInt[controlBlocks]->thenCount][0] = kvpairs[i];
-            scene->controlBlocksInt[controlBlocks]->then[scene->controlBlocksInt[controlBlocks]->thenCount][1] = kvpairs[i + 1];
-            scene->controlBlocksInt[controlBlocks]->thenCount++;
-            printf("then count: %d\n", scene->controlBlocksInt[controlBlocks]->thenCount);
+            cb->then[cb->thenCount][0] = kvpairs[i];
+            cb->then[cb->thenCount][1] = kvpairs[i + 1];
+            cb->thenCount++;
+            printf("then count: %d\n", cb->thenCount);
         } else if (controlBlock != CONTROL_TYPE_NONE && strcmp(kvpairs[i], CONTROL_END) == 0) {
             controlBlock = CONTROL_TYPE_NONE;
             controlBlocks++;
@@ -152,6 +154,10 @@ char *assignMobValues(Scene *scene, Mobile *mob, char *dataFile) {
             mob->direction = getDirectionFromString(kvpairs[i + 1]);
         } else if (strcmp(kvpairs[i], CONTROL_ID) == 0) {
             mob->id = &kvpairs[i + 1][0];
+        } else if (strcmp(kvpairs[i], CONTROL_HAS_STORY) == 0 || strcmp(kvpairs[i], CONTROL_NOT_HAS_STORY) == 0) {
+            cb->when[cb->whenCount][0] = &kvpairs[i][0];
+            cb->when[cb->whenCount][1] = &kvpairs[i + 1][0];
+            cb->whenCount++;
         }
     }
     return animationsFragment;

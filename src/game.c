@@ -70,6 +70,10 @@ int mapCondition(char *when) {
         return CONDITION_ENGAGED;
     } else if (strcmp(when, WHEN_AT) == 0) {
         return CONDITION_AT;
+    } else if (strcmp(when, WHEN_HAS_STORY) == 0) {
+        return CONDITION_HAS_STORY;
+    } else if (strcmp(when, WHEN_NOT_HAS_STORY) == 0) {
+        return CONDITION_NOT_HAS_STORY;
     }
 }
 
@@ -88,6 +92,8 @@ int mapOutcome(char *then) {
         return OUTCOME_GIVE_ITEM;
     } else if (strcmp(then, THEN_TAKE) == 0) {
         return OUTCOME_TAKE;
+    } else if (strcmp(then, THEN_ADD_STORY) == 0) {
+        return OUTCOME_ADD_STORY;
     }
     return -1;
 }
@@ -120,6 +126,9 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
                 if (c->when[i]->condition == CONDITION_ENGAGED && strcmp(g->scenes[s]->mobiles[m]->id, cbi->when[i][1]) == 0) {
                     printf("set mobile trigger to %s\n", g->scenes[s]->mobiles[m]->name);
                     c->when[i]->mobileTrigger = g->scenes[s]->mobiles[m];
+                } else if (c->when[i]->condition == CONDITION_HAS_STORY
+                            || c->when[i]->condition == CONDITION_NOT_HAS_STORY) {
+                    c->when[i]->story = cbi->when[i][1];
                 }
             }
         }
@@ -158,6 +167,9 @@ ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
         if (c->then[i]->outcome == OUTCOME_SPEAK) {
             c->then[i]->message = &cbi->then[i][1][0];
             printf("mob message set to: '%s'\n", c->then[i]->message);
+        } else if (c->then[i]->outcome == OUTCOME_ADD_STORY) {
+            c->then[i]->story = &cbi->then[i][1][0];
+            printf("add story to control block: %s\n", c->then[i]->story);
         }
         if (c->then[i]->target == NULL && c->then[i]->outcome != OUTCOME_WAIT) {
             fprintf(stderr, "target not found: %s!\n", target);
@@ -218,6 +230,8 @@ void run(Game *g) {
         evaluateMovement(g->currentScene, g->player);
         evaluateExits(g);
         controlWhenCheck(g->currentScene, g->player);
+        controlThen(g->currentScene, g->player);
+        activeControlRemoveCheck(g->currentScene);
         UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
     }
 }
