@@ -161,6 +161,7 @@ void activeControlRemoveCheck(Scene *s) {
     }
     if (s->activeControlBlock != NULL && s->activeControlBlock->progress >= s->activeControlBlock->thenCount) {
         printf("unset active control block %d\n", s->activeControlBlock->control);
+        s->activeControlBlock->progress = 0;
         s->activeControlBlock = NULL;
     }
 }
@@ -379,12 +380,15 @@ void checkInput(Scene *s, Player *p) {
                 p->engaged = false;
             }
             if (s->activeControlBlock->progress >= s->activeControlBlock->thenCount) {
+                s->activeControlBlock->progress = 0;
                 s->activeControlBlock = NULL;
             }
         } else if (p->blockedBy != NULL) {
+            printf("foobar\n");
             p->engageable = p->blockedBy;
             printf("engaging with %s\n", p->engageable->name);
             p->engaged = true;
         }
+        printf("done\n");
     }
 }
