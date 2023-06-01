@@ -33,7 +33,7 @@ Player *createPlayer() {
 
 void addStory(Player *p, char *story) {
     p->stories[p->storyCount++] = story;
-    printf("debug %s %d\n", p->stories[0], p->storyCount);
+    printf("add story to player %s, total stories: %d\n", p->stories[0], p->storyCount);
 }
 
 int hasStory(Player *p, char *story) {
