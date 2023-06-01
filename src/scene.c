@@ -108,6 +108,18 @@ void controlThen(Scene *s, Player *p) {
     }
 }
 
+int needsEngagedAndIsNot(int condition, Player *p, Mobile *mobileTrigger) {
+    return condition == CONDITION_ENGAGED && !isSpeakingTo(p, mobileTrigger);
+}
+
+int needsStoryAndMissing(int condition, Player *p, char *story) {
+    return condition == CONDITION_HAS_STORY && !hasStory(p, story);
+}
+
+int needsNotHaveStoryAndPresent(int condition, Player *p, char *story) {
+    return condition == CONDITION_NOT_HAS_STORY && hasStory(p, story);
+}
+
 void controlWhenCheck(Scene *s, Player *p) {
     if (s->activeControlBlock != NULL) {
         return;
@@ -119,20 +131,12 @@ void controlWhenCheck(Scene *s, Player *p) {
         ControlBlock *cb = s->controlBlocks[i];
         int matched = true;
         for (int c = 0; c < cb->whenCount; c++) {
-            if (cb->when[c]->condition == CONDITION_ENGAGED &&
-                    !isSpeakingTo(p, cb->when[c]->mobileTrigger)) {
-                matched = false;
-            } else if (cb->when[c]->condition == CONDITION_HAS_STORY
-                            && !hasStory(p, cb->when[c]->story)) {
-                matched = false;
-            } else if (cb->when[c]->condition == CONDITION_NOT_HAS_STORY
-                            && hasStory(p, cb->when[c]->story)) {
+            if (needsEngagedAndIsNot(cb->when[c]->condition, p, cb->when[c]->mobileTrigger)
+                || needsStoryAndMissing(cb->when[c]->condition, p, cb->when[c]->story)
+                || needsNotHaveStoryAndPresent(cb->when[c]->condition, p, cb->when[c]->story)) {
                 matched = false;
             }
             if (!matched) {
-                if (p->engaged) {
-                    printf("not matched\n");
-                }
                 break;
             }
         }
