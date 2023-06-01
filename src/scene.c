@@ -90,7 +90,6 @@ Vector2d getTileCount(Scene *s) {
 void drawControl(Player *player, ControlBlock *cb) {
     if (cb != NULL && cb->progress < cb->thenCount) {
         int p = cb->progress;
-        printf("has control block %d %d\n", p, cb->thenCount);
 //        printf("progress check for draw control is %d\n", p);
 //        if (p > cb->thenCount) {
 //            return;
@@ -106,30 +105,24 @@ void controlThen(Scene *s, Player *p) {
         return;
     }
     ControlBlock *cb = s->activeControlBlock;
-    printf("control then - %d\n",cb->then[cb->progress]->outcome);
     if (cb->then[cb->progress]->outcome == OUTCOME_ADD_STORY) {
-        printf("adding story");
+        printf("add story %s\n", cb->then[cb->progress]->story);
         addStory(p, cb->then[cb->progress]->story);
         cb->progress++;
     }
 }
 
 void controlWhenCheck(Scene *s, Player *p) {
-    printf("control check\n");
     if (s->activeControlBlock != NULL) {
         return;
     }
     for (int i = 0; i < MAX_CONTROLS; i++) {
-        printf("start control block loop %d\n", i);
         if (s->controlBlocks[i] == NULL) {
             return;
         }
-        printf("next\n");
         ControlBlock *cb = s->controlBlocks[i];
         int matched = true;
-        printf("1\n");
         for (int c = 0; c < cb->whenCount; c++) {
-            printf("2 - %d\n", cb->when[c]->condition);
             if (cb->when[c]->condition == CONDITION_ENGAGED &&
                     !isSpeakingTo(p, cb->when[c]->mobileTrigger)) {
                 matched = false;
@@ -140,14 +133,16 @@ void controlWhenCheck(Scene *s, Player *p) {
                             && hasStory(p, cb->when[c]->story)) {
                 matched = false;
             }
-            printf("3 - %d\n", matched);
             if (!matched) {
+                if (p->engaged) {
+                    printf("not matched\n");
+                }
                 break;
             }
         }
         if (matched) {
             s->activeControlBlock = cb;
-            printf("set active control block %d\n", i);
+            printf("set active control block %d, progress %d\n", i, s->activeControlBlock->progress);
             return;
         }
     }
@@ -155,10 +150,6 @@ void controlWhenCheck(Scene *s, Player *p) {
 }
 
 void activeControlRemoveCheck(Scene *s) {
-    if (s->activeControlBlock != NULL) {
-        printf("check active control remove %d %d\n", s->activeControlBlock->progress,
-               s->activeControlBlock->thenCount);
-    }
     if (s->activeControlBlock != NULL && s->activeControlBlock->progress >= s->activeControlBlock->thenCount) {
         printf("unset active control block %d\n", s->activeControlBlock->control);
         s->activeControlBlock->progress = 0;
@@ -258,7 +249,6 @@ void renderScene(Scene *s, Player *p) {
 }
 
 int isBlocked(Scene *s, Player *p, Vector2 pos) {
-    p->engageable = NULL;
     Rectangle pRect = {
             pos.x,
             pos.y + MOB_COLLISION_HEIGHT_OFFSET,
@@ -328,15 +318,19 @@ void evaluateMovement(Scene *s, Player *p) {
     Vector2 pos = p->mob->position;
     if (p->moving.up == 1 && !isBlocked(s, p, (Vector2){pos.x, pos.y - 1})) {
         p->mob->position.y -= 1;
+        p->engageable = NULL;
     }
     if (p->moving.down == 1 && !isBlocked(s, p, (Vector2){pos.x, pos.y + 1})) {
         p->mob->position.y += 1;
+        p->engageable = NULL;
     }
     if (p->moving.left == 1 && !isBlocked(s, p, (Vector2){pos.x - 1, pos.y})) {
         p->mob->position.x -= 1;
+        p->engageable = NULL;
     }
     if (p->moving.right == 1 && !isBlocked(s, p, (Vector2){pos.x + 1, pos.y})) {
         p->mob->position.x += 1;
+        p->engageable = NULL;
     }
 }
 
@@ -368,27 +362,38 @@ void checkInput(Scene *s, Player *p) {
         printf("player coordinates: %f, %f\n", p->mob->position.x, p->mob->position.y);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        printf("space hit\n");
+        printf("======================\nspace key pressed\n");
+        if (s == NULL) {
+            printf("scene is null?\n");
+        }
+        if (s->activeControlBlock != NULL) {
+            printf("active control block progress: %d\n", s->activeControlBlock->progress);
+        } else {
+            printf("no active control blocks set\n");
+        }
+        if (p->engaged && s->activeControlBlock == NULL) {
+            printf("player is engaged with no active control blocks\n");
+            return;
+        }
         if (p->engaged && s->activeControlBlock->then[s->activeControlBlock->progress]->outcome == OUTCOME_SPEAK) {
-            printf("yolo\n");
             if (s->activeControlBlock != NULL) {
                 s->activeControlBlock->progress++;
                 printf("active control block progress at %d\n", s->activeControlBlock->progress);
             }
             if (s->activeControlBlock->progress >= s->activeControlBlock->thenCount
                     || s->activeControlBlock->then[s->activeControlBlock->progress]->outcome != OUTCOME_SPEAK) {
+                printf("unset engaged\n");
                 p->engaged = false;
             }
             if (s->activeControlBlock->progress >= s->activeControlBlock->thenCount) {
+                printf("unsetting active control block\n");
                 s->activeControlBlock->progress = 0;
                 s->activeControlBlock = NULL;
             }
         } else if (p->blockedBy != NULL) {
-            printf("foobar\n");
             p->engageable = p->blockedBy;
             printf("engaging with %s\n", p->engageable->name);
             p->engaged = true;
         }
-        printf("done\n");
     }
 }
