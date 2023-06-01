@@ -90,10 +90,6 @@ Vector2d getTileCount(Scene *s) {
 void drawControl(Player *player, ControlBlock *cb) {
     if (cb != NULL && cb->progress < cb->thenCount) {
         int p = cb->progress;
-//        printf("progress check for draw control is %d\n", p);
-//        if (p > cb->thenCount) {
-//            return;
-//        }
         if (cb->then[p]->outcome == OUTCOME_SPEAK && isSpeakingTo(player, cb->then[p]->target)) {
             drawDialogBox(cb->then[p]->message);
         }
