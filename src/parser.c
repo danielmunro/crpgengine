@@ -64,7 +64,6 @@ int getControlTypeFromString(char *control) {
 
 void assignMusicValues(AudioManager *am, char *indexDir) {
     MusicYaml *music = loadMusicYaml(indexDir);
-
     char *basePath = pathCat(indexDir, "audio");
     char *filePath = pathCat(basePath, music->town);
 
@@ -77,17 +76,13 @@ void assignMusicValues(AudioManager *am, char *indexDir) {
 }
 
 void assignSoundValues(AudioManager *am, char *indexDir) {
-    char *soundFile = pathCat(indexDir, "/sounds.txt");
-    char *data = LoadFileText(soundFile);
-    char *kvpairs[255];
-    int pairs = parseKVPairs(data, kvpairs);
-    char *basePath = pathCat(indexDir, "audio");
-    for (int i = 0; i < pairs; i+=2) {
-        Music_ *m = malloc(sizeof(Music_));
-        m->name = kvpairs[0];
-        char *filePath = pathCat(basePath, kvpairs[1]);
-        m->music = LoadMusicStream(filePath);
-    }
+//    SoundYaml *sound = loadSoundYaml(indexDir);
+
+//    Sound_ *s = malloc(sizeof(Sound_));
+//    s->name = "bump";
+//    s->sound = LoadMusicStream(sound->foo);
+//    am->sounds[am->soundCount] = s;
+//    am->soundCount++;
 }
 
 void assignAudioManagerValues(AudioManager *am, char *indexDir) {

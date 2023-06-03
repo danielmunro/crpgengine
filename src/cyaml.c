@@ -25,3 +25,14 @@ MusicYaml *loadMusicYaml(char *indexDir) {
     }
     return music;
 }
+
+SoundYaml *loadSoundYaml(char *indexDir) {
+    SoundYaml *sound = malloc(sizeof(SoundYaml));
+    char *filepath = pathCat(indexDir, "/sound.yaml");
+    cyaml_err_t err = cyaml_load_file(filepath, &config,
+                                      &musicTopSchema, (cyaml_data_t **)&sound, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error parsing music config file: %s\n", cyaml_strerror(err));
+    }
+    return sound;
+}

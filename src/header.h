@@ -110,6 +110,7 @@ typedef struct Mobile Mobile;
 #include "util.c"
 #include "yaml/config.c"
 #include "yaml/music.c"
+#include "yaml/sound.c"
 #include "cyaml.c"
 #include "ui.c"
 #include "audio.c"
