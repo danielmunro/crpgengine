@@ -63,22 +63,17 @@ int getControlTypeFromString(char *control) {
 }
 
 void assignMusicValues(AudioManager *am, char *indexDir) {
-    char *musicFile = pathCat(indexDir, "/music.txt");
-    char *data = LoadFileText(musicFile);
-    char *kvpairs[255];
-    int pairs = parseKVPairs(data, kvpairs);
+    MusicYaml *music = loadMusicYaml(indexDir);
+
     char *basePath = pathCat(indexDir, "audio");
-    printf("assign music values\n");
-    for (int i = 0; i < pairs; i+=2) {
-        printf("music: %s: %s\n", kvpairs[0], kvpairs[1]);
-        Music_ *m = malloc(sizeof(Music_));
-        m->name = kvpairs[0];
-        char *filePath = pathCat(basePath, kvpairs[1]);
-        printf("file path for music: %s\n", filePath);
-        m->music = LoadMusicStream(filePath);
-        am->music[am->musicCount] = m;
-        am->musicCount++;
-    }
+    char *filePath = pathCat(basePath, music->town);
+
+    Music_ *m = malloc(sizeof(Music_));
+    m->name = "town";
+    m->music = LoadMusicStream(filePath);
+
+    am->music[am->musicCount] = m;
+    am->musicCount++;
 }
 
 void assignSoundValues(AudioManager *am, char *indexDir) {
@@ -98,18 +93,6 @@ void assignSoundValues(AudioManager *am, char *indexDir) {
 void assignAudioManagerValues(AudioManager *am, char *indexDir) {
     assignMusicValues(am, indexDir);
     assignSoundValues(am, indexDir);
-}
-
-void assignConfigValues(Config *config, char *indexDir) {
-    char *gameFile = pathCat(indexDir, "/config.txt");
-    char *data = LoadFileText(gameFile);
-    char *kvpairs[255];
-    int pairs = parseKVPairs(data, kvpairs);
-    for (int i = 0; i < pairs; i+=2) {
-        if (strcmp(kvpairs[i], CONTROL_TITLE) == 0) {
-            config->title = &kvpairs[i + 1][0];
-        }
-    }
 }
 
 char *assignMobValues(Scene *scene, Mobile *mob, char *dataFile) {

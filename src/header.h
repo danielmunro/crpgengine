@@ -108,6 +108,9 @@
 typedef struct Mobile Mobile;
 
 #include "util.c"
+#include "yaml/config.c"
+#include "yaml/music.c"
+#include "cyaml.c"
 #include "ui.c"
 #include "audio.c"
 #include "control_block.c"
@@ -118,11 +121,9 @@ typedef struct Mobile Mobile;
 #include "player.c"
 #include "tilemap.c"
 #include "scene.c"
-#include "config.c"
+#include "runtime_args.c"
 #include "parser.c"
 #include "db.c"
-#include "yaml/config.c"
-#include "cyaml.c"
 #include "game.c"
 #include "validate.c"
 #include "dump.c"

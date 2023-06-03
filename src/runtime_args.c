@@ -1,12 +1,3 @@
-typedef struct Config {
-    char *title;
-} Config;
-
-Config *createConfig() {
-    Config *cfg = malloc(sizeof(Config));
-    return cfg;
-}
-
 typedef struct RuntimeArgs {
     int sceneIndex;
     int showCollisions;

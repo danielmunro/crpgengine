@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    Config *cfg = loadAppConfig(r->indexDir);
+    ConfigYaml *cfg = loadAppConfig(r->indexDir);
     SetTargetFPS(TARGET_FRAMERATE);
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, cfg->title);
     InitAudioDevice();

@@ -4,8 +4,8 @@ static const cyaml_config_t config = {
         .log_level = CYAML_LOG_WARNING,
 };
 
-Config *loadAppConfig(char *indexDir) {
-    Config *appConfig = malloc(sizeof(Config));
+ConfigYaml *loadAppConfig(char *indexDir) {
+    ConfigYaml *appConfig = malloc(sizeof(ConfigYaml));
     char *filepath = pathCat(indexDir, "/config.yaml");
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &appConfigTopSchema, (cyaml_data_t **)&appConfig, NULL);
@@ -13,4 +13,15 @@ Config *loadAppConfig(char *indexDir) {
         fprintf(stderr, "error parsing app config file");
     }
     return appConfig;
+}
+
+MusicYaml *loadMusicYaml(char *indexDir) {
+    MusicYaml *music = malloc(sizeof(MusicYaml));
+    char *filepath = pathCat(indexDir, "/music.yaml");
+    cyaml_err_t err = cyaml_load_file(filepath, &config,
+                                      &musicTopSchema, (cyaml_data_t **)&music, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error parsing music config file: %s\n", cyaml_strerror(err));
+    }
+    return music;
 }

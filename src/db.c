@@ -319,13 +319,6 @@ Player *loadPlayer(char *indexDir) {
     return player;
 }
 
-Config *loadConfig(char *indexDir) {
-    printf("loading game from dir %s\n", indexDir);
-    Config *cfg = createConfig();
-    assignConfigValues(cfg, indexDir);
-    return cfg;
-}
-
 AudioManager *loadAudioManager(char *indexDir) {
     printf("loading audio manager from dir %s\n", indexDir);
     AudioManager *am = createAudioManager();
