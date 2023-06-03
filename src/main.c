@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
         printf("not ready");
         exit(1);
     }
-//    SetMusicVolume((float) 100.0);
+
     Game *g = createGame(r);
     validateGameData(g);
 
