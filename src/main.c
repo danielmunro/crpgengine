@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
     Game *g = createGame(r);
     validateGameData(g);
 
-    if (r->dump == true) {
+    if (r->dump) {
         dumpGame(g);
         return 0;
     }
