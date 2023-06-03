@@ -31,10 +31,21 @@ ExternalProject_Add(LibTap
 link_directories(_deps/src/LibTap)
 include_directories(_deps/src/LibTap)
 
+ExternalProject_Add(LibYaml
+        URL https://github.com/tlsa/libcyaml/archive/refs/tags/v1.4.1.tar.gz
+        PREFIX _deps
+        INSTALL_COMMAND make install DESTDIR=release
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND make
+        BUILD_IN_SOURCE 1)
+link_directories(_deps/src/CYaml/release/usr/local/lib)
+include_directories(_deps/src/CYaml/release/usr/local/include)
+
 add_executable(tests src/test.c)
 target_link_libraries(tests raylib)
 target_link_libraries(tests tap)
 target_link_libraries(tests ${LIBXML2_LIBRARIES})
+target_link_libraries(tests cyaml)
 
 add_executable(cjrpgengine src/main.c)
 set(EXECUTABLE_OUTPUT_PATH ./build CACHE PATH "Build directory" FORCE)
@@ -42,3 +53,4 @@ include_directories(.)
 include_directories(${LIBXML2_INCLUDE_DIR})
 target_link_libraries(cjrpgengine raylib)
 target_link_libraries(cjrpgengine ${LIBXML2_LIBRARIES})
+target_link_libraries(cjrpgengine cyaml)

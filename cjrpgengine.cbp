@@ -27,6 +27,16 @@
 					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="LibYaml">
+				<Option working_dir="/Users/danmunro/github/cjrpgengine"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 LibYaml"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/danmunro/github/cjrpgengine/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 			<Target title="tests">
 				<Option output="/Users/danmunro/github/cjrpgengine/build/tests" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="./build"/>
@@ -37,6 +47,7 @@
 					<Add option="-DPLATFORM_DESKTOP"/>
 					<Add option="-DGRAPHICS_API_OPENGL_33"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/LibTap"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/CYaml/release/usr/local/include"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
@@ -59,6 +70,7 @@
 					<Add option="-DPLATFORM_DESKTOP"/>
 					<Add option="-DGRAPHICS_API_OPENGL_33"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/LibTap"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/CYaml/release/usr/local/include"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
@@ -81,6 +93,7 @@
 					<Add option="-DPLATFORM_DESKTOP"/>
 					<Add option="-DGRAPHICS_API_OPENGL_33"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/LibTap"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/CYaml/release/usr/local/include"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
@@ -103,6 +116,7 @@
 					<Add option="-DPLATFORM_DESKTOP"/>
 					<Add option="-DGRAPHICS_API_OPENGL_33"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/LibTap"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/CYaml/release/usr/local/include"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
@@ -506,6 +520,9 @@
 			<Option virtualFolder="CMake Files\_deps\raylib-src\cmake\"/>
 		</Unit>
 		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/tmp/LibTap-mkdirs.cmake">
+			<Option virtualFolder="CMake Files\_deps\tmp\"/>
+		</Unit>
+		<Unit filename="/Users/danmunro/github/cjrpgengine/_deps/tmp/LibYaml-mkdirs.cmake">
 			<Option virtualFolder="CMake Files\_deps\tmp\"/>
 		</Unit>
 	</Project>
