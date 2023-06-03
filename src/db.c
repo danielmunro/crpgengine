@@ -312,10 +312,15 @@ Player *loadPlayer(char *indexDir) {
     printf("loading player from dir %s\n", indexDir);
     Player *player = createPlayer();
     player->mob = createMobile();
-    char *playerFile = pathCat(indexDir, "/player.txt");
-    char *animationsFragment = assignMobValues(NULL, player->mob, playerFile);
-    char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
+    PlayerYaml *playerYaml = loadPlayerYaml(indexDir);
+    player->mob->name = playerYaml->name;
+    player->mob->direction = getDirectionFromString(playerYaml->direction);
+    char *animationsFile = pathCat(pathCat(indexDir, "/"), playerYaml->animations);
     loadAnimations(animationsFile, indexDir, player->mob->animations);
+    char *x = strtok(playerYaml->position, ",");
+    char *y = strtok(NULL, ",");
+    player->mob->position.x = (float) strToInt(x);
+    player->mob->position.y = (float) strToInt(y);
     return player;
 }
 

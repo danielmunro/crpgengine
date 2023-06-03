@@ -76,7 +76,7 @@ void assignMusicValues(AudioManager *am, char *indexDir) {
 }
 
 void assignSoundValues(AudioManager *am, char *indexDir) {
-//    SoundYaml *sound = loadSoundYaml(indexDir);
+    SoundYaml *sound = loadSoundYaml(indexDir);
 
 //    Sound_ *s = malloc(sizeof(Sound_));
 //    s->name = "bump";

@@ -36,3 +36,14 @@ SoundYaml *loadSoundYaml(char *indexDir) {
     }
     return sound;
 }
+
+PlayerYaml *loadPlayerYaml(char *indexDir) {
+    PlayerYaml *player = malloc(sizeof(PlayerYaml));
+    char *filepath = pathCat(indexDir, "/player.yaml");
+    cyaml_err_t err = cyaml_load_file(filepath, &config,
+                                      &playerTopSchema, (cyaml_data_t **)&player, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error parsing player config file: %s\n", cyaml_strerror(err));
+    }
+    return player;
+}

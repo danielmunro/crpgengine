@@ -1,0 +1,4 @@
+name: Fireas
+animations: ./animations/fireas.txt
+position: 440,257
+direction: down
