@@ -6,7 +6,7 @@ static const cyaml_config_t config = {
 
 Config *loadAppConfig(char *indexDir) {
     Config *appConfig = malloc(sizeof(Config));
-    char *filepath = pathCat(indexDir, "/config.txt");
+    char *filepath = pathCat(indexDir, "/config.yaml");
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &appConfigTopSchema, (cyaml_data_t **)&appConfig, NULL);
     if (err != CYAML_OK) {
