@@ -1,8 +1,14 @@
 cmake_minimum_required (VERSION 3.6)
 project (cjrpgengine)
 include(ExternalProject)
+set(EXECUTABLE_OUTPUT_PATH ./build CACHE PATH "Build directory" FORCE)
 
+# versions
 set(RAYLIB_VERSION 4.2.0)
+set(LIBTAP_VERSION 0.1.0)
+set(LIBYAML_VERSION 1.4.1)
+
+# add raylib
 find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
 if (NOT raylib_FOUND) # If there's none, fetch and build raylib
     include(FetchContent)
@@ -19,10 +25,13 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
     endif()
 endif()
 
+# add libxml2
 find_package(LibXml2 REQUIRED)
+include_directories(${LIBXML2_INCLUDE_DIR})
 
+# add libtap
 ExternalProject_Add(LibTap
-        URL https://github.com/zorgnax/libtap/archive/refs/tags/0.1.0.tar.gz
+        URL https://github.com/zorgnax/libtap/archive/refs/tags/${LIBTAP_VERSION}.tar.gz
         PREFIX _deps
         INSTALL_COMMAND ""
         CONFIGURE_COMMAND ""
@@ -31,8 +40,9 @@ ExternalProject_Add(LibTap
 link_directories(_deps/src/LibTap)
 include_directories(_deps/src/LibTap)
 
+# add libyaml
 ExternalProject_Add(LibYaml
-        URL https://github.com/tlsa/libcyaml/archive/refs/tags/v1.4.1.tar.gz
+        URL https://github.com/tlsa/libcyaml/archive/refs/tags/v${LIBYAML_VERSION}.tar.gz
         PREFIX _deps
         INSTALL_COMMAND make install DESTDIR=release
         CONFIGURE_COMMAND ""
@@ -41,16 +51,18 @@ ExternalProject_Add(LibYaml
 link_directories(_deps/src/CYaml/release/usr/local/lib)
 include_directories(_deps/src/CYaml/release/usr/local/include)
 
+# add project source
+include_directories(.)
+
+# define tests executable
 add_executable(tests src/test.c)
 target_link_libraries(tests raylib)
 target_link_libraries(tests tap)
 target_link_libraries(tests ${LIBXML2_LIBRARIES})
 target_link_libraries(tests cyaml)
 
+# define main executable
 add_executable(cjrpgengine src/main.c)
-set(EXECUTABLE_OUTPUT_PATH ./build CACHE PATH "Build directory" FORCE)
-include_directories(.)
-include_directories(${LIBXML2_INCLUDE_DIR})
 target_link_libraries(cjrpgengine raylib)
 target_link_libraries(cjrpgengine ${LIBXML2_LIBRARIES})
 target_link_libraries(cjrpgengine cyaml)
