@@ -3,7 +3,7 @@ sprite:
   size: 16,24
 slices:
   - name: down
-    frames: 0,3
+    frames: 0-3
     rate: 6
     repeat: -1
   - name: left
