@@ -3,18 +3,18 @@ sprite:
   size: [16, 24]
 slices:
   - name: down
-    frames: 0-3
+    frames: [0, 3]
     rate: 6
     repeat: -1
   - name: left
-    frames: 4-7
+    frames: [4, 7]
     rate: 6
     repeat: -1
   - name: right
-    frames: 8-11
+    frames: [8, 11]
     rate: 6
     repeat: -1
   - name: up
-    frames: 12-15
+    frames: [12, 15]
     rate: 6
     repeat: -1

@@ -7,6 +7,7 @@ typedef struct SpriteYaml {
 typedef struct SliceYaml {
     char *name;
     char *frames;
+    int frames_count;
     int rate;
     int repeat;
 } SliceYaml;
@@ -29,11 +30,15 @@ static const cyaml_schema_field_t spriteSchema[] = {
         CYAML_FIELD_END
 };
 
+static const cyaml_schema_value_t framesEntry = {
+        CYAML_VALUE_INT(CYAML_FLAG_DEFAULT, int),
+};
+
 static const cyaml_schema_field_t slicesFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
                 "name", CYAML_FLAG_POINTER, SliceYaml, name, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_STRING_PTR(
-                "frames", CYAML_FLAG_POINTER, SliceYaml, frames, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_SEQUENCE(
+                "frames", CYAML_FLAG_POINTER, SliceYaml, frames, &framesEntry, 0, CYAML_UNLIMITED),
         CYAML_FIELD_UINT(
                 "rate", CYAML_FLAG_OPTIONAL, SliceYaml, rate),
         CYAML_FIELD_INT(

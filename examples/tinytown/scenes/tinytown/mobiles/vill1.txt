@@ -1,6 +1,6 @@
 id: vill1
 name: Villager 1
-animations:./animations/fireas.txt
+animations:./animations/fireas.yaml
 coordinates:271,242
 direction:up
 when:

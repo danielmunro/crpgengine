@@ -226,54 +226,21 @@ int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
 }
 
 void loadAnimations(const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
-    printf("filename: %s\n", file);
     AnimationYaml *animation = loadAnimationYaml(file);
-    printf("animation: %s, %d %d\n", animation->sprite->file, animation->sprite->size[0], animation->sprite->size[1]);
+    char *imagePath = pathCat(indexDir, pathCat("animations", animation->sprite->file));
+    SpriteSheet *sp = createSpriteSheet(imagePath, animation->sprite->size[0], animation->sprite->size[1]);
     for (int i = 0; i < animation->slices_count; i++) {
         SliceYaml *s = &animation->slices[i];
-        printf("slice: %s, %s, %d, %d\n",
-               s->name, s->frames,
-               s->rate, s->repeat);
         animations[i] = createAnimation(
-                NULL,
+                sp,
                 getAnimIdFromName(s->name),
-                0,
-                1,
+                s->frames[0],
+                s->frames[1],
                 s->rate,
                 s->repeat
         );
     }
-    exit(-1);
-
-
-
-    char *data = LoadFileText(file);
-    char *imageFilename = strtok(data, ",");
-    char *width = strtok(NULL, ",");
-    char *height = strtok(NULL, "\r\n");
-    char *imagePath = pathCat(indexDir, pathCat("animations", imageFilename));
-    SpriteSheet *sp = createSpriteSheet(imagePath, strToInt(width), strToInt(height));
-    int anim = 0;
-    while (true) {
-        char *name = strtok(NULL, ",");
-        if (name == NULL) {
-            break;
-        }
-        char *firstFrame = strtok(NULL, ",");
-        char *lastFrame = strtok(NULL, ",");
-        char *frameRate = strtok(NULL, ",");
-        char *repeat = strtok(NULL, "\r\n");
-        animations[anim] = createAnimation(
-                sp,
-                getAnimIdFromName(name),
-                strToInt(firstFrame),
-                strToInt(lastFrame),
-                strToInt(frameRate),
-                strToInt(repeat)
-        );
-        anim++;
-    }
-    printf("%d animations loaded\n", anim);
+    printf("%d animations loaded\n", animation->slices_count);
 }
 
 void loadMobiles(Scene *scene, const char *indexDir) {
@@ -290,7 +257,9 @@ void loadMobiles(Scene *scene, const char *indexDir) {
         scene->mobiles[i] = createMobile();
         char *animationsFragment = assignMobValues(scene, scene->mobiles[i], mobDataFile);
         char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
+        printf("load mobile animations\n");
         loadAnimations(animationsFile, indexDir, scene->mobiles[0]->animations);
+        printf("done load mobile animations\n");
     }
 }
 
