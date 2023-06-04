@@ -193,6 +193,7 @@ void parseSceneXml(SceneReader *sceneReader, const char *indexDir) {
 void assignSceneType(Scene *s, const char *sceneType) {
     int i = 0, count = sizeof(sceneTypes) / sizeof(SceneType);
     while (i <= count) {
+        printf("i %d %d\n", i, count);
         if (strcmp(sceneTypes[i].scene, sceneType) == 0) {
             s->type = sceneTypes[i].code;
             break;
@@ -264,23 +265,13 @@ void loadMobiles(Scene *scene, const char *indexDir) {
 }
 
 Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions) {
-    printf("parse scene '%s' index\n", sceneName);
-    char *indexFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/scene.txt");
-    char *data = LoadFileText(indexFile);
+    printf("create scene: %s\n", sceneName);
+    SceneYaml *sceneYaml = loadSceneYaml(pathCat(pathCat(indexDir, "/scenes"), sceneName));
     Scene *scene = createScene();
     scene->showCollisions = showCollisions;
     strcpy(scene->name, sceneName);
-    char *kvpairs[255];
-    int pairs = parseKVPairs(data, kvpairs);
-    for (int i = 0; i < pairs; i+=2) {
-        if (strcmp(kvpairs[i], SCENE_ATTRIBUTE_TYPE) == 0) {
-            assignSceneType(scene, kvpairs[i + 1]);
-        } else if (strcmp(kvpairs[i], "music") == 0) {
-            printf("setting scene music to '%s'\n", kvpairs[i + 1]);
-            scene->music = &kvpairs[i + 1][0];
-            printf("scene->music debug: %s\n", scene->music);
-        }
-    }
+    assignSceneType(scene, sceneYaml->type);
+    scene->music = &sceneYaml->music[0];
     char *sceneFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/tilemap.tmx");
     SceneReader *sceneReader = createSceneReader(scene, sceneFile);
 

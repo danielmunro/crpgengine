@@ -4,18 +4,18 @@ static const cyaml_config_t config = {
         .log_level = CYAML_LOG_WARNING,
 };
 
-ConfigYaml *loadAppConfig(char *indexDir) {
+ConfigYaml *loadAppConfig(const char *indexDir) {
     ConfigYaml *appConfig = malloc(sizeof(ConfigYaml));
     char *filepath = pathCat(indexDir, "/config.yaml");
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &appConfigTopSchema, (cyaml_data_t **)&appConfig, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing app config file");
+        fprintf(stderr, "error parsing app config file\n");
     }
     return appConfig;
 }
 
-MusicYaml *loadMusicYaml(char *indexDir) {
+MusicYaml *loadMusicYaml(const char *indexDir) {
     MusicYaml *music = malloc(sizeof(MusicYaml));
     char *filepath = pathCat(indexDir, "/music.yaml");
     cyaml_err_t err = cyaml_load_file(filepath, &config,
@@ -26,7 +26,7 @@ MusicYaml *loadMusicYaml(char *indexDir) {
     return music;
 }
 
-SoundYaml *loadSoundYaml(char *indexDir) {
+SoundYaml *loadSoundYaml(const char *indexDir) {
     SoundYaml *sound = malloc(sizeof(SoundYaml));
     char *filepath = pathCat(indexDir, "/sound.yaml");
     cyaml_err_t err = cyaml_load_file(filepath, &config,
@@ -37,7 +37,7 @@ SoundYaml *loadSoundYaml(char *indexDir) {
     return sound;
 }
 
-PlayerYaml *loadPlayerYaml(char *indexDir) {
+PlayerYaml *loadPlayerYaml(const char *indexDir) {
     PlayerYaml *player = malloc(sizeof(PlayerYaml));
     char *filepath = pathCat(indexDir, "/player.yaml");
     cyaml_err_t err = cyaml_load_file(filepath, &config,
@@ -56,4 +56,17 @@ AnimationYaml *loadAnimationYaml(const char *filepath) {
         fprintf(stderr, "error parsing animation config file: %s\n", cyaml_strerror(err));
     }
     return animation;
+}
+
+SceneYaml *loadSceneYaml(const char *indexDir) {
+    SceneYaml *scene = malloc(sizeof(SceneYaml));
+    char *filepath = pathCat(indexDir, "/scene.yaml");
+    printf("filepath: %s\n", filepath);
+    cyaml_err_t err = cyaml_load_file(filepath, &config,
+                                      &sceneTopSchema, (cyaml_data_t **)&scene, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error parsing scene config file\n");
+        printf("error %s\n", cyaml_strerror(err));
+    }
+    return scene;
 }
