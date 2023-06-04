@@ -1,17 +1,22 @@
 typedef struct PlayerYaml {
     char *name;
     char *animations;
-    char *position;
+    int *position;
     char *direction;
+    int position_count;
 } PlayerYaml;
+
+static const cyaml_schema_value_t positionEntry = {
+        CYAML_VALUE_INT(CYAML_FLAG_DEFAULT, int),
+};
 
 static const cyaml_schema_field_t playerTopMappingField[] = {
         CYAML_FIELD_STRING_PTR(
                 "name", CYAML_FLAG_POINTER, PlayerYaml, name, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "animations", CYAML_FLAG_POINTER, PlayerYaml, animations, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_STRING_PTR(
-                "position", CYAML_FLAG_POINTER, PlayerYaml, position, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_SEQUENCE(
+                "position", CYAML_FLAG_POINTER, PlayerYaml, position, &positionEntry, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "direction", CYAML_FLAG_POINTER, PlayerYaml, direction, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END

@@ -307,10 +307,8 @@ Player *loadPlayer(char *indexDir) {
     player->mob->direction = getDirectionFromString(playerYaml->direction);
     char *animationsFile = pathCat(pathCat(indexDir, "/"), playerYaml->animations);
     loadAnimations(animationsFile, indexDir, player->mob->animations);
-    char *x = strtok(playerYaml->position, ",");
-    char *y = strtok(NULL, ",");
-    player->mob->position.x = (float) strToInt(x);
-    player->mob->position.y = (float) strToInt(y);
+    player->mob->position.x = (float) playerYaml->position[0];
+    player->mob->position.y = (float) playerYaml->position[1];
     return player;
 }
 
