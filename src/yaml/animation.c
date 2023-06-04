@@ -1,6 +1,7 @@
 typedef struct SpriteYaml {
     char *file;
-    char *size;
+    int *size;
+    int size_count;
 } SpriteYaml;
 
 typedef struct SliceYaml {
@@ -16,11 +17,15 @@ typedef struct AnimationYaml {
     int slices_count;
 } AnimationYaml;
 
+static const cyaml_schema_value_t sizeEntry = {
+        CYAML_VALUE_INT(CYAML_FLAG_DEFAULT, int),
+};
+
 static const cyaml_schema_field_t spriteSchema[] = {
         CYAML_FIELD_STRING_PTR(
                 "file", CYAML_FLAG_POINTER, SpriteYaml, file, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_STRING_PTR(
-                "size", CYAML_FLAG_POINTER, SpriteYaml, size, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_SEQUENCE(
+                "size", CYAML_FLAG_POINTER, SpriteYaml, size, &sizeEntry, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 
