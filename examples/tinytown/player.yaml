@@ -1,4 +1,4 @@
 name: Fireas
-animations: ./animations/fireas.txt
+animations: ./animations/fireas.yaml
 position: 440,257
 direction: down

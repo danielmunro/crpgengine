@@ -226,6 +226,27 @@ int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
 }
 
 void loadAnimations(const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
+    printf("filename: %s\n", file);
+    AnimationYaml *animation = loadAnimationYaml(file);
+    printf("animation: %s, %s\n", animation->sprite->file, animation->sprite->size);
+    for (int i = 0; i < animation->slices_count; i++) {
+        SliceYaml *s = &animation->slices[i];
+        printf("slice: %s, %s, %d, %d\n",
+               s->name, s->frames,
+               s->rate, s->repeat);
+        animations[i] = createAnimation(
+                NULL,
+                getAnimIdFromName(s->name),
+                0,
+                1,
+                s->rate,
+                s->repeat
+        );
+    }
+    exit(-1);
+
+
+
     char *data = LoadFileText(file);
     char *imageFilename = strtok(data, ",");
     char *width = strtok(NULL, ",");

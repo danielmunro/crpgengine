@@ -47,3 +47,13 @@ PlayerYaml *loadPlayerYaml(char *indexDir) {
     }
     return player;
 }
+
+AnimationYaml *loadAnimationYaml(const char *filepath) {
+    AnimationYaml *animation = malloc(sizeof(AnimationYaml));
+    cyaml_err_t err = cyaml_load_file(filepath, &config,
+                                      &animationTopSchema, (cyaml_data_t **)&animation, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error parsing animation config file: %s\n", cyaml_strerror(err));
+    }
+    return animation;
+}
