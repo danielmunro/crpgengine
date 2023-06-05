@@ -61,12 +61,20 @@ AnimationYaml *loadAnimationYaml(const char *filepath) {
 SceneYaml *loadSceneYaml(const char *indexDir) {
     SceneYaml *scene = malloc(sizeof(SceneYaml));
     char *filepath = pathCat(indexDir, "/scene.yaml");
-    printf("filepath: %s\n", filepath);
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &sceneTopSchema, (cyaml_data_t **)&scene, NULL);
     if (err != CYAML_OK) {
         fprintf(stderr, "error parsing scene config file\n");
-        printf("error %s\n", cyaml_strerror(err));
     }
     return scene;
+}
+
+MobileYaml *loadMobYaml(const char *filepath) {
+    MobileYaml *mob = malloc(sizeof(MobileYaml));
+    cyaml_err_t err = cyaml_load_file(filepath, &config,
+                                      &mobileTopSchema, (cyaml_data_t **)&mob, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error parsing mob config file\n");
+    }
+    return mob;
 }

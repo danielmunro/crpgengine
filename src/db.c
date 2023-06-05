@@ -245,13 +245,16 @@ void loadAnimations(const char *file, const char *indexDir, Animation *animation
 }
 
 void loadMobiles(Scene *scene, const char *indexDir) {
-    char *mobDir = pathCat(indexDir, pathCat("/scenes/", pathCat(scene->name, "/mobiles")));
+    const char *mobDir = pathCat(indexDir, pathCat("/scenes/", pathCat(scene->name, "/mobiles")));
     printf("load mobiles from %s\n", mobDir);
     if (!FileExists(mobDir)) {
         fprintf(stderr, "file does not exist, skipping mob loading\n");
         return;
     }
-
+    const char *filepath = pathCat(mobDir, "/vill1.yaml");
+    MobileYaml *mob = loadMobYaml(filepath);
+    printf("mob %s:\n", mob->id);
+    exit(1);
 
 
 
