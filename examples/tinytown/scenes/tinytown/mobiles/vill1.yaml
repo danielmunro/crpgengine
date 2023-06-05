@@ -1,1 +1,5 @@
 id: vill1
+name: Villager 1
+animations: ./animations/fireas.yaml
+position: [271,242]
+direction: up

@@ -254,6 +254,7 @@ void loadMobiles(Scene *scene, const char *indexDir) {
     const char *filepath = pathCat(mobDir, "/vill1.yaml");
     MobileYaml *mob = loadMobYaml(filepath);
     printf("mob %s:\n", mob->id);
+    printf("%s, %s, %s, %d, %d\n", mob->name, mob->animations, mob->direction, mob->position[0], mob->position[1]);
     exit(1);
 
 
