@@ -248,11 +248,19 @@ void loadMobiles(Scene *scene, const char *indexDir) {
     char *mobDir = pathCat(indexDir, pathCat("/scenes/", pathCat(scene->name, "/mobiles")));
     printf("load mobiles from %s\n", mobDir);
     if (!FileExists(mobDir)) {
-        printf("file does not exist, skipping mob loading\n");
+        fprintf(stderr, "file does not exist, skipping mob loading\n");
         return;
     }
+
+
+
+
+
+
     char *mobFiles[MAX_MOBILES];
-    int files = getFilesInDirectory(mobDir, mobFiles);
+//    int files = getFilesInDirectory(mobDir, mobFiles);
+    int files = 1;
+    mobFiles[0] = "vill1.txt";
     for (int i = 0; i < files; i++) {
         char *mobDataFile = pathCat(mobDir, pathCat("/", mobFiles[i]));
         scene->mobiles[i] = createMobile();
