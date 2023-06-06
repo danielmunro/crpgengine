@@ -69,12 +69,22 @@ SceneYaml *loadSceneYaml(const char *indexDir) {
     return scene;
 }
 
-MobileYaml *loadMobYaml(const char *filepath) {
-    MobileYaml *mob = malloc(sizeof(MobileYaml));
+//MobileYaml *loadMobYaml(const char *filepath) {
+//    MobileYaml *mob = malloc(sizeof(MobileYaml));
+//    cyaml_err_t err = cyaml_load_file(filepath, &config,
+//                                      &mobileTopSchema, (cyaml_data_t **)&mob, NULL);
+//    if (err != CYAML_OK) {
+//        fprintf(stderr, "error parsing mob config file\n");
+//    }
+//    return mob;
+//}
+
+WhenYaml *loadWhenYaml(const char *filepath) {
+    WhenYaml *when = malloc(sizeof(WhenYaml));
     cyaml_err_t err = cyaml_load_file(filepath, &config,
-                                      &mobileTopSchema, (cyaml_data_t **)&mob, NULL);
+                                      &mobileTopSchema, (cyaml_data_t **)&when, NULL);
     if (err != CYAML_OK) {
         fprintf(stderr, "error parsing mob config file\n");
     }
-    return mob;
+    return when;
 }

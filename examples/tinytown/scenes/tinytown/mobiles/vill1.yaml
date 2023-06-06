@@ -3,3 +3,18 @@ name: Villager 1
 animations: ./animations/fireas.yaml
 position: [271,242]
 direction: up
+storylines:
+  - when:
+    - player: true
+      condition: engaged
+      mob: vill1
+    - player: true
+      condition: not_has_story
+      story: from_the_past
+  - when:
+    - player: true
+      condition: engaged
+      mob: vill1
+    - player: true
+      condition: has_story
+      story: from_the_past

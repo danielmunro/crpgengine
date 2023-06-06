@@ -114,7 +114,7 @@ typedef struct Mobile Mobile;
 #include "yaml/player.c"
 #include "yaml/scene.c"
 #include "yaml/sound.c"
-#include "yaml/mobile.c"
+#include "yaml/mobile2.c"
 #include "cyaml.c"
 #include "ui.c"
 #include "audio.c"
