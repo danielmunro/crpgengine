@@ -251,20 +251,24 @@ void loadMobiles(Scene *scene, const char *indexDir) {
         fprintf(stderr, "file does not exist, skipping mob loading\n");
         return;
     }
-    const char *filepath = pathCat(mobDir, "/vill2.yaml");
-    WhenYaml *when = loadWhenYaml(filepath);
-    printf("when: %s %s %s %s\n", when->condition, when->story, when->player, when->mob);
-//    MobileYaml *mob = loadMobYaml(filepath);
-//    printf("mob %s:\n", mob->id);
-//    printf("%s, %s, %s, %d, %d\n", mob->name, mob->animations, mob->direction, mob->position[0], mob->position[1]);
-//    printf("storyline count: %d\n", mob->storylines_count);
-//    for (int i = 0; i < mob->storylines_count; i++) {
-//        printf("%s, %s, %s, %s\n",
-//               mob->storylines[i].when[0].condition,
-//               mob->storylines[i].when[0].story,
-//               mob->storylines[i].when[0].mob,
-//               mob->storylines[i].when[0].player);
-//    }
+    const char *filepath = pathCat(mobDir, "/vill1.yaml");
+    MobileYaml *mob = loadMobYaml(filepath);
+    printf("mob %s:\n", mob->id);
+    printf("%s, %s, %s, %d, %d\n", mob->name, mob->animations, mob->direction, mob->position[0], mob->position[1]);
+    printf("storyline count: %d\n", mob->storylines_count);
+    for (int i = 0; i < mob->storylines_count; i++) {
+        printf("%s, %s, %s, %s\n",
+               mob->storylines[i].when[0].condition,
+               mob->storylines[i].when[0].story,
+               mob->storylines[i].when[0].mob,
+               mob->storylines[i].when[0].player);
+        printf("%i, %s, %s, %s, %s\n",
+               mob->storylines[i].then[0].player,
+               mob->storylines[i].then[0].story,
+               mob->storylines[i].then[0].message,
+               mob->storylines[i].then[0].action,
+               mob->storylines[i].then[0].mob);
+    }
     exit(1);
 
 

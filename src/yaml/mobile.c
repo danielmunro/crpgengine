@@ -14,8 +14,8 @@ typedef struct ThenYaml {
 } ThenYaml;
 
 typedef struct StorylineYaml {
-    WhenYaml when[255];
-    ThenYaml then[255];
+    WhenYaml *when;
+    ThenYaml *then;
     int when_count;
     int then_count;
 } StorylineYaml;
@@ -27,7 +27,7 @@ typedef struct MobileYaml {
     int *position;
     int position_count;
     char *direction;
-    StorylineYaml storylines[255];
+    StorylineYaml *storylines;
     int storylines_count;
 } MobileYaml;
 
@@ -51,9 +51,29 @@ static const cyaml_schema_value_t whenSchema = {
         CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT, WhenYaml, whenFieldSchema),
 };
 
+static const cyaml_schema_field_t thenFieldSchema[] = {
+        CYAML_FIELD_STRING_PTR(
+                "mob", CYAML_FLAG_OPTIONAL, ThenYaml, mob, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "player", CYAML_FLAG_OPTIONAL, ThenYaml, player, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "action", CYAML_FLAG_POINTER, ThenYaml, action, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "message", CYAML_FLAG_OPTIONAL, ThenYaml, message, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "story", CYAML_FLAG_OPTIONAL, ThenYaml, story, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_END
+};
+
+static const cyaml_schema_value_t thenSchema = {
+        CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT, WhenYaml, thenFieldSchema),
+};
+
 static const cyaml_schema_field_t storylinesFieldSchema[] = {
         CYAML_FIELD_SEQUENCE(
                 "when", CYAML_FLAG_POINTER, StorylineYaml, when, &whenSchema, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_SEQUENCE(
+                "then", CYAML_FLAG_POINTER, StorylineYaml, then, &thenSchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 
