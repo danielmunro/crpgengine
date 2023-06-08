@@ -265,6 +265,10 @@ void loadMobiles(Scene *scene, const char *indexDir) {
         mob->position.y = (float) mobData->position[1];
         char *animationsFile = pathCat(pathCat(indexDir, "/"), mobData->animations);
         loadAnimations(animationsFile, indexDir, mob->animations);
+        for (int j = 0; j < mobData->storylines_count; j++) {
+            scene->storylines[scene->storylineCount] = &mobData->storylines[j];
+            scene->storylineCount++;
+        }
         scene->mobiles[i] = mob;
     }
 }

@@ -36,7 +36,8 @@ typedef struct Scene {
     Exit *exits[MAX_EXITS];
     int nextExit;
     Mobile *mobiles[MAX_MOBILES];
-    StorylineYaml *storylines;
+    StorylineYaml *storylines[MAX_STORIES];
+    int storylineCount;
     ControlBlockInt *controlBlocksInt[MAX_CONTROLS];
     ControlBlock *controlBlocks[MAX_CONTROLS];
     ControlBlock *activeControlBlock;
@@ -51,6 +52,7 @@ Scene *createScene() {
     Scene *scene = malloc(sizeof(Scene));
     scene->layerCount = 0;
     scene->nextExit = 0;
+    scene->storylineCount = 0;
     scene->activeControlBlock = NULL;
     for (int i = 0; i < MAX_OBJECTS; i++) {
         scene->objects[i] = NULL;
