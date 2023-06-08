@@ -36,6 +36,7 @@ typedef struct Scene {
     Exit *exits[MAX_EXITS];
     int nextExit;
     Mobile *mobiles[MAX_MOBILES];
+    StorylineYaml *storylines;
     ControlBlockInt *controlBlocksInt[MAX_CONTROLS];
     ControlBlock *controlBlocks[MAX_CONTROLS];
     ControlBlock *activeControlBlock;

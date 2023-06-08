@@ -227,6 +227,7 @@ int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
 }
 
 void loadAnimations(const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
+    printf("load animations file: %s\n", file);
     AnimationYaml *animation = loadAnimationYaml(file);
     char *imagePath = pathCat(indexDir, pathCat("animations", animation->sprite->file));
     SpriteSheet *sp = createSpriteSheet(imagePath, animation->sprite->size[0], animation->sprite->size[1]);
@@ -251,42 +252,20 @@ void loadMobiles(Scene *scene, const char *indexDir) {
         fprintf(stderr, "file does not exist, skipping mob loading\n");
         return;
     }
-    const char *filepath = pathCat(mobDir, "/vill1.yaml");
-    MobileYaml *mob = loadMobYaml(filepath);
-    printf("mob %s:\n", mob->id);
-    printf("%s, %s, %s, %d, %d\n", mob->name, mob->animations, mob->direction, mob->position[0], mob->position[1]);
-    printf("storyline count: %d\n", mob->storylines_count);
-    for (int i = 0; i < mob->storylines_count; i++) {
-        printf("%s, %s, %s, %s\n",
-               mob->storylines[i].when[0].condition,
-               mob->storylines[i].when[0].story,
-               mob->storylines[i].when[0].mob,
-               mob->storylines[i].when[0].player);
-        printf("%i, %s, %s, %s, %s\n",
-               mob->storylines[i].then[0].player,
-               mob->storylines[i].then[0].story,
-               mob->storylines[i].then[0].message,
-               mob->storylines[i].then[0].action,
-               mob->storylines[i].then[0].mob);
-    }
-    exit(1);
-
-
-
-
-
     char *mobFiles[MAX_MOBILES];
-//    int files = getFilesInDirectory(mobDir, mobFiles);
-    int files = 1;
-    mobFiles[0] = "vill1.txt";
+    int files = getFilesInDirectory(mobDir, mobFiles);
     for (int i = 0; i < files; i++) {
-        char *mobDataFile = pathCat(mobDir, pathCat("/", mobFiles[i]));
-        scene->mobiles[i] = createMobile();
-        char *animationsFragment = assignMobValues(scene, scene->mobiles[i], mobDataFile);
-        char *animationsFile = pathCat(pathCat(indexDir, "/"), animationsFragment);
-        printf("load mobile animations\n");
-        loadAnimations(animationsFile, indexDir, scene->mobiles[0]->animations);
-        printf("done load mobile animations\n");
+        const char *filepath = pathCat(mobDir, mobFiles[i]);
+        MobileYaml *mobData = loadMobYaml(filepath);
+        Mobile *mob = createMobile();
+        mob->id = &mobData->id[0];
+        mob->name = &mobData->name[0];
+        mob->direction = getDirectionFromString(mobData->direction);
+        mob->position.x = (float) mobData->position[0];
+        mob->position.y = (float) mobData->position[1];
+        char *animationsFile = pathCat(pathCat(indexDir, "/"), mobData->animations);
+        loadAnimations(animationsFile, indexDir, mob->animations);
+        scene->mobiles[i] = mob;
     }
 }
 
