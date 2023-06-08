@@ -46,22 +46,6 @@ int parseKVPairs(char *data, char *result[255]) {
     return j;
 }
 
-int isSpecial(char *key) {
-    if (strcmp(key, CONTROL_WHEN) == 0 || strcmp(key, CONTROL_THEN) == 0) {
-        return true;
-    }
-    return false;
-}
-
-int getControlTypeFromString(char *control) {
-    if (strcmp(control, CONTROL_WHEN) == 0) {
-        return CONTROL_TYPE_WHEN;
-    } else if (strcmp(control, CONTROL_THEN) == 0) {
-        return CONTROL_TYPE_THEN;
-    }
-    return CONTROL_TYPE_NONE;
-}
-
 void assignMusicValues(AudioManager *am, char *indexDir) {
     MusicYaml *music = loadMusicYaml(indexDir);
     char *basePath = pathCat(indexDir, "audio");
