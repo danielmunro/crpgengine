@@ -214,33 +214,46 @@ void drawScene(Scene *s) {
     drawLayer(s, LAYER_TYPE_FOREGROUND);
 }
 
-void drawMobiles(Scene *s, Player *p) {
-    Mobile *mobsByY[MAX_LAYER_SIZE][MAX_MOBILES];
-    int indices[MAX_LAYER_SIZE];
+void createMobileLayer(Mobile *mobLayer[MAX_LAYER_SIZE][MAX_MOBILES]) {
     for (int y = 0; y < MAX_LAYER_SIZE; y++) {
         for (int i = 0; i < MAX_MOBILES; i++) {
-            mobsByY[y][i] = NULL;
+            mobLayer[y][i] = NULL;
         }
     }
+}
+
+void drawMobiles(Scene *s, Player *p) {
+    /**
+     * Start by putting mobs on a layer. This is necessary for drawing them in
+     * the right order.
+     */
+    Mobile *mobLayer[MAX_LAYER_SIZE][MAX_MOBILES];
+    createMobileLayer(mobLayer);
+    int count[MAX_LAYER_SIZE];
     for (int i = 0; i < MAX_LAYER_SIZE; i++) {
-        indices[i] = 0;
+        count[i] = 0;
     }
-    for (int i = 0; i < MAX_MOBILES; i++) {
-        if (s->mobiles[i] == NULL) {
-            break;
-        }
+    for (int i = 0; i < s->mobileCount; i++) {
         int y = (int) s->mobiles[i]->position.y / s->tilemap->size.y;
-        mobsByY[y][indices[y]] = s->mobiles[i];
-        indices[y]++;
+        mobLayer[y][count[y]] = s->mobiles[i];
+        count[y]++;
     }
+
+    /**
+     * The player goes on the layer too.
+     */
     int playerY = (int) p->mob->position.y / s->tilemap->size.y;
-    mobsByY[playerY][indices[playerY]] = p->mob;
+    mobLayer[playerY][count[playerY]] = p->mob;
+
+    /**
+     * Now go through the layer and draw mobs in order.
+     */
     for (int y = 0; y < MAX_LAYER_SIZE; y++) {
         for (int m = 0; m < MAX_MOBILES; m++) {
-            if (mobsByY[y][m] == NULL) {
+            if (mobLayer[y][m] == NULL) {
                 break;
             }
-            drawAnimation(getMobAnimation(mobsByY[y][m]), mobsByY[y][m]->position);
+            drawAnimation(getMobAnimation(mobLayer[y][m]), mobLayer[y][m]->position);
         }
     }
 }
