@@ -39,7 +39,6 @@ typedef struct Scene {
     int mobileCount;
     StorylineYaml *storylines[MAX_STORIES];
     int storylineCount;
-    ControlBlockInt *controlBlocksInt[MAX_CONTROLS];
     ControlBlock *controlBlocks[MAX_CONTROLS];
     ControlBlock *activeControlBlock;
 } Scene;
@@ -64,9 +63,6 @@ Scene *createScene() {
     }
     for (int i = 0; i < MAX_MOBILES; i++) {
         scene->mobiles[i] = NULL;
-    }
-    for (int i = 0; i < MAX_CONTROLS; i++) {
-        scene->controlBlocksInt[i] = NULL;
     }
     for (int i = 0; i < MAX_CONTROLS; i++) {
         scene->controlBlocks[i] = NULL;
