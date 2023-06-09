@@ -3,6 +3,11 @@ typedef struct Mobile {
     char *id;
     char *name;
     int direction;
+    int gp;
+    int level;
+    int experienceToLevel;
+    int hp;
+    int mana;
     Vector2 position;
     Attributes *attributes;
     Item *items[MAX_ITEMS];
@@ -20,5 +25,11 @@ Mobile *createMobile() {
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         mobile->animations[i] = NULL;
     }
+    mobile->attributes = createAttributes();
+    mobile->gp = 0;
+    mobile->level = 1;
+    mobile->experienceToLevel = 0;
+    mobile->hp = 1;
+    mobile->mana = 0;
     return mobile;
 }
