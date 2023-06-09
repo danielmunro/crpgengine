@@ -46,55 +46,11 @@ void pathCatDealsWithMultipleSlashTest() {
     is(result, expected, "paths match with slashes that need to be removed");
 }
 
-void canParseKV() {
-    // given
-    char data[] = "property:value";
-    char *result[2];
-
-    // when
-    parseKV(data, result);
-
-    // then
-    is(result[0], "property", "key is 'property'");
-    is(result[1], "value", "value is 'value'");
-}
-
-void canParseKVWithQuotedValue() {
-    // given
-    char data[] = "property: \"value\"";
-    char *result[2];
-
-    // when
-    parseKV(data, result);
-
-    // then
-    is(result[0], "property", "key is 'property'");
-    is(result[1], "value", "value is 'value'");
-}
-
-void canParseKVPairs() {
-    // given
-    char data[] = "abc:xyz\nzyx:cba";
-    char *kvpairs[4];
-
-    // when
-    parseKVPairs(data, kvpairs);
-
-    // then
-    is(kvpairs[0], "abc", "key is 'abc'");
-    is(kvpairs[1], "xyz", "value is 'xyz'");
-    is(kvpairs[2], "zyx", "key is 'zyx'");
-    is(kvpairs[3], "cba", "value is 'cba'");
-}
-
 int main() {
-    plan(12);
+    plan(4);
     strToIntTest();
     pathCatTest();
     pathCatDealsWithLeadingSlashTest();
     pathCatDealsWithMultipleSlashTest();
-    canParseKV();
-    canParseKVWithQuotedValue();
-    canParseKVPairs();
     done_testing();
 }

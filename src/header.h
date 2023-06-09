@@ -127,7 +127,6 @@ typedef struct Mobile Mobile;
 #include "tilemap.c"
 #include "scene.c"
 #include "runtime_args.c"
-#include "parser.c"
 #include "db.c"
 #include "game.c"
 #include "validate.c"

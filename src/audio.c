@@ -48,3 +48,31 @@ void playSound(AudioManager *s, char *name) {
         }
     }
 }
+
+void assignMusicValues(AudioManager *am, char *indexDir) {
+    MusicYaml *music = loadMusicYaml(indexDir);
+    char *basePath = pathCat(indexDir, "audio");
+    char *filePath = pathCat(basePath, music->town);
+
+    Music_ *m = malloc(sizeof(Music_));
+    m->name = "town";
+    m->music = LoadMusicStream(filePath);
+
+    am->music[am->musicCount] = m;
+    am->musicCount++;
+}
+
+void assignSoundValues(AudioManager *am, char *indexDir) {
+    SoundYaml *sound = loadSoundYaml(indexDir);
+
+//    Sound_ *s = malloc(sizeof(Sound_));
+//    s->name = "bump";
+//    s->sound = LoadMusicStream(sound->foo);
+//    am->sounds[am->soundCount] = s;
+//    am->soundCount++;
+}
+
+void assignAudioManagerValues(AudioManager *am, char *indexDir) {
+    assignMusicValues(am, indexDir);
+    assignSoundValues(am, indexDir);
+}
