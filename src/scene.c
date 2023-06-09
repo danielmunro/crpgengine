@@ -36,6 +36,7 @@ typedef struct Scene {
     Exit *exits[MAX_EXITS];
     int nextExit;
     Mobile *mobiles[MAX_MOBILES];
+    int mobileCount;
     StorylineYaml *storylines[MAX_STORIES];
     int storylineCount;
     ControlBlockInt *controlBlocksInt[MAX_CONTROLS];
@@ -53,6 +54,7 @@ Scene *createScene() {
     scene->layerCount = 0;
     scene->nextExit = 0;
     scene->storylineCount = 0;
+    scene->mobileCount = 0;
     scene->activeControlBlock = NULL;
     for (int i = 0; i < MAX_OBJECTS; i++) {
         scene->objects[i] = NULL;
@@ -366,9 +368,6 @@ void checkInput(Scene *s, Player *p) {
     }
     if (IsKeyPressed(KEY_SPACE)) {
         printf("======================\nspace key pressed\n");
-        if (s == NULL) {
-            printf("scene is null?\n");
-        }
         if (s->activeControlBlock != NULL) {
             printf("active control block progress: %d\n", s->activeControlBlock->progress);
         } else {

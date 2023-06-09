@@ -75,6 +75,7 @@ int mapCondition(char *when) {
     } else if (strcmp(when, WHEN_NOT_HAS_STORY) == 0) {
         return CONDITION_NOT_HAS_STORY;
     }
+    return -1;
 }
 
 int mapOutcome(char *then) {
@@ -98,82 +99,55 @@ int mapOutcome(char *then) {
     return -1;
 }
 
-ControlBlock *mapIntermediateToReal(Game *g, ControlBlockInt *cbi) {
-    printf("mapping int control blocks to real %d, %d\n", cbi->whenCount, cbi->thenCount);
-    ControlBlock *c = createControlBlock(cbi->control);
-    c->whenCount = cbi->whenCount;
-    c->thenCount = cbi->thenCount;
-    for (int i = 0; i < cbi->whenCount; i++) {
-        char *source = strtok(cbi->when[i][0], ".");
-        char *condition = strtok(NULL, ".");
-        printf("source, condition -- %s, %s\n", source, condition);
-        c->when[i] = malloc(sizeof(When));
-        c->when[i]->condition = mapCondition(condition);
-        if (strcmp(source, "player") == 0) {
-            c->when[i]->source = g->player->mob;
-        }
-        for (int s = 0; s < g->sceneCount; s++) {
-            for (int m = 0; m < MAX_MOBILES; m++) {
-                if (g->scenes[s]->mobiles[m] == NULL) {
-                    break;
-                }
-                printf("check mob %s\n", g->scenes[s]->mobiles[m]->id);
-                if (strcmp(g->scenes[s]->mobiles[m]->id, source) == 0) {
-                    c->when[i]->source = g->scenes[s]->mobiles[m];
-                    printf("found source %s\n", source);
-                }
-                printf("condition check %s, %s\n", condition, cbi->when[i][1]);
-                if (c->when[i]->condition == CONDITION_ENGAGED && strcmp(g->scenes[s]->mobiles[m]->id, cbi->when[i][1]) == 0) {
-                    printf("set mobile trigger to %s\n", g->scenes[s]->mobiles[m]->name);
-                    c->when[i]->mobileTrigger = g->scenes[s]->mobiles[m];
-                } else if (c->when[i]->condition == CONDITION_HAS_STORY
-                            || c->when[i]->condition == CONDITION_NOT_HAS_STORY) {
-                    c->when[i]->story = cbi->when[i][1];
-                }
+Mobile *findMobById(Game *g, char *id) {
+    for (int s = 0; s < g->sceneCount; s++) {
+        for (int m = 0; m < g->scenes[s]->mobileCount; m++) {
+            if (strcmp(g->scenes[s]->mobiles[m]->id, id) == 0) {
+                return g->scenes[s]->mobiles[m];
             }
-        }
-        if (c->when[i]->source == NULL) {
-            fprintf(stderr, "source not found: %s!", source);
         }
     }
-    for (int i = 0; i < cbi->thenCount; i++) {
-        char *target = strtok(cbi->then[i][0], ".");
-        char *outcome = strtok(NULL, ".");
-        printf("target, outcome -- %s, %s\n", target, outcome);
-        c->then[i] = malloc(sizeof(Then));
-        char *toMap;
-        if (outcome != NULL) {
-            toMap = outcome;
-        } else {
-            toMap = target;
+    fprintf(stderr, "mob not found: %s\n", id);
+    return NULL;
+}
+
+ControlBlock *mapStorylineToControlBlock(Game *g, StorylineYaml *storyline) {
+    ControlBlock *c = createControlBlock(CONTROL_TYPE_WHEN);
+    c->whenCount = storyline->when_count;
+    c->thenCount = storyline->then_count;
+    printf("when count: %d\n", storyline->when_count);
+    for (int i = 0; i < storyline->when_count; i++) {
+        c->when[i] = createWhen();
+        printf("condition: %s\n", storyline->when[i].condition);
+        c->when[i]->condition = mapCondition(storyline->when[i].condition);
+        printf("mapped condition: %d\n", c->when[i]->condition);
+        printf("story: %s\n", storyline->when[i].story);
+        if (storyline->when[i].story != NULL) {
+            c->when[i]->story = storyline->when[i].story;
         }
-        c->then[i]->outcome = mapOutcome(toMap);
-        printf("outcome is set to %d\n", c->then[i]->outcome);
-        if (strcmp(target, "player") == 0) {
+        c->when[i]->source = g->player->mob;
+        if (storyline->when[i].mob != NULL) {
+            printf("mobileTrigger: %s\n", storyline->when[i].mob);
+            c->when[i]->mobileTrigger = findMobById(g, storyline->when[i].mob);
+            printf("mob: %s\n", c->when[i]->mobileTrigger->name);
+        }
+    }
+    printf("then count: %d\n", storyline->then_count);
+    for (int i = 0; i < storyline->then_count; i++) {
+        c->then[i] = createThen();
+        if (storyline->then[i].player) {
+            printf("player is target\n");
             c->then[i]->target = g->player->mob;
+        } else {
+            printf("mob %s is target\n", storyline->then[i].mob);
+            c->then[i]->target = findMobById(g, storyline->then[i].mob);
         }
-        for (int s = 0; s < g->sceneCount; s++) {
-            for (int m = 0; m < MAX_MOBILES; m++) {
-                if (g->scenes[s]->mobiles[m] == NULL) {
-                    break;
-                }
-                printf("check mob %s\n", g->scenes[s]->mobiles[m]->id);
-                if (strcmp(g->scenes[s]->mobiles[m]->id, target) == 0) {
-                    c->then[i]->target = g->scenes[s]->mobiles[m];
-                    printf("found target %s\n", target);
-                }
-            }
-        }
-        if (c->then[i]->outcome == OUTCOME_SPEAK) {
-            c->then[i]->message = &cbi->then[i][1][0];
-            printf("mob message set to: '%s'\n", c->then[i]->message);
-        } else if (c->then[i]->outcome == OUTCOME_ADD_STORY) {
-            c->then[i]->story = &cbi->then[i][1][0];
-            printf("add story to control block: %s\n", c->then[i]->story);
-        }
-        if (c->then[i]->target == NULL && c->then[i]->outcome != OUTCOME_WAIT) {
-            fprintf(stderr, "target not found: %s!\n", target);
-        }
+        c->then[i]->story = &storyline->then[i].story[0];
+        c->then[i]->message = &storyline->then[i].message[0];
+        c->then[i]->outcome = mapOutcome(storyline->then[i].action);
+        printf("story: %s\n", c->then[i]->story);
+        printf("message: %s\n", c->then[i]->message);
+        printf("outcome: %d\n", c->then[i]->outcome);
     }
     return c;
 }
@@ -183,11 +157,8 @@ void loadScenes(Game *g, int showCollisions, char *indexDir, char *scenes[MAX_SC
         g->scenes[i] = loadScene(indexDir, scenes[i], showCollisions);
     }
     for (int i = 0; i < g->sceneCount; i++) {
-        for (int c = 0; c < MAX_CONTROLS; c++) {
-            if (g->scenes[i]->controlBlocksInt[c] == NULL) {
-                break;
-            }
-            g->scenes[i]->controlBlocks[c] = mapIntermediateToReal(g, g->scenes[i]->controlBlocksInt[c]);
+        for (int c = 0; c < g->scenes[i]->storylineCount; c++) {
+            g->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(g, g->scenes[i]->storylines[c]);
         }
     }
 }

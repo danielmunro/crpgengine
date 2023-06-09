@@ -269,7 +269,8 @@ void loadMobiles(Scene *scene, const char *indexDir) {
             scene->storylines[scene->storylineCount] = &mobData->storylines[j];
             scene->storylineCount++;
         }
-        scene->mobiles[i] = mob;
+        scene->mobiles[scene->mobileCount] = mob;
+        scene->mobileCount++;
     }
 }
 

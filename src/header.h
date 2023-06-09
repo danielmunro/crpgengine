@@ -68,7 +68,7 @@
 #define CONTROL_HAS_STORY "has_story"
 #define CONTROL_NOT_HAS_STORY "not_has_story"
 
-#define WHEN_ENGAGED "when"
+#define WHEN_ENGAGED "engaged"
 #define WHEN_HAS "has"
 #define WHEN_NOT_HAS "not_has"
 #define WHEN_AT "at"

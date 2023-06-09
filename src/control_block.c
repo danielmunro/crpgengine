@@ -45,3 +45,16 @@ ControlBlockInt *createControlBlockInt(int control) {
     cb->thenCount = 0;
     return cb;
 }
+
+When *createWhen() {
+    When *when = malloc(sizeof(When));
+    when->mobileTrigger = NULL;
+    when->source = NULL;
+    return when;
+}
+
+Then *createThen() {
+    Then *then = malloc(sizeof(Then));
+    then->target = NULL;
+    return then;
+}
