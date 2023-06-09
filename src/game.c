@@ -128,7 +128,11 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineYaml *storyline) {
         c->when[i]->source = g->player->mob;
         if (storyline->when[i].mob != NULL) {
             printf("mobileTrigger: %s\n", storyline->when[i].mob);
-            c->when[i]->mobileTrigger = findMobById(g, storyline->when[i].mob);
+            if (strcmp(storyline->when[i].mob, "true") == 0) {
+                c->when[i]->mobileTrigger = storyline->mob;
+            } else {
+                c->when[i]->mobileTrigger = findMobById(g, storyline->when[i].mob);
+            }
             printf("mob: %s\n", c->when[i]->mobileTrigger->name);
         }
     }
@@ -140,7 +144,11 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineYaml *storyline) {
             c->then[i]->target = g->player->mob;
         } else {
             printf("mob %s is target\n", storyline->then[i].mob);
-            c->then[i]->target = findMobById(g, storyline->then[i].mob);
+            if (strcmp(storyline->then[i].mob, "true") == 0) {
+                c->then[i]->target = storyline->mob;
+            } else {
+                c->then[i]->target = findMobById(g, storyline->then[i].mob);
+            }
         }
         c->then[i]->story = &storyline->then[i].story[0];
         c->then[i]->message = &storyline->then[i].message[0];

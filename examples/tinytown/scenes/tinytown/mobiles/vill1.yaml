@@ -1,5 +1,5 @@
 id: vill1
-name: Villager 1
+name: Kessamina
 animations: ./animations/fireas.yaml
 position: [271,242]
 direction: up
@@ -7,15 +7,15 @@ storylines:
   - when:
     - player: true
       condition: engaged
-      mob: vill1
+      mob: true
     - player: true
       condition: not_has_story
       story: from_the_past
     then:
-    - mob: vill1
+    - mob: true
       action: speak
       message: "She always said not to live in the past. That one day I'll need to give this away to someone who needs it."
-    - mob: vill1
+    - mob: true
       action: speak
       message: "You look like a trustworthy person. Please keep this safe, adventurer. In return, it will help you in a time of need."
     - player: true
@@ -24,11 +24,11 @@ storylines:
   - when:
     - player: true
       condition: engaged
-      mob: vill1
+      mob: true
     - player: true
       condition: has_story
       story: from_the_past
     then:
-    - mob: vill1
+    - mob: true
       action: speak
       message: "Please take good care of the amulet."

@@ -18,6 +18,7 @@ typedef struct StorylineYaml {
     ThenYaml *then;
     int when_count;
     int then_count;
+    Mobile *mob;
 } StorylineYaml;
 
 typedef struct MobileYaml {
