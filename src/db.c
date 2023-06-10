@@ -228,11 +228,11 @@ int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
 
 void loadAnimations(const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
     printf("load animations file: %s\n", file);
-    AnimationYaml *animation = loadAnimationYaml(file);
+    AnimationData *animation = loadAnimationYaml(file);
     char *imagePath = pathCat(indexDir, pathCat("animations", animation->sprite->file));
     SpriteSheet *sp = createSpriteSheet(imagePath, animation->sprite->size[0], animation->sprite->size[1]);
     for (int i = 0; i < animation->slices_count; i++) {
-        SliceYaml *s = &animation->slices[i];
+        SliceData *s = &animation->slices[i];
         animations[i] = createAnimation(
                 sp,
                 getAnimIdFromName(s->name),
@@ -256,7 +256,7 @@ void loadMobiles(Scene *scene, const char *indexDir) {
     int files = getFilesInDirectory(mobDir, mobFiles);
     for (int i = 0; i < files; i++) {
         const char *filepath = pathCat(mobDir, mobFiles[i]);
-        MobileYaml *mobData = loadMobYaml(filepath);
+        MobileData *mobData = loadMobYaml(filepath);
         Mobile *mob = createMobile();
         mob->id = &mobData->id[0];
         mob->name = &mobData->name[0];
@@ -277,7 +277,7 @@ void loadMobiles(Scene *scene, const char *indexDir) {
 
 Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions) {
     printf("create scene: %s\n", sceneName);
-    SceneYaml *sceneYaml = loadSceneYaml(pathCat(pathCat(indexDir, "/scenes"), sceneName));
+    SceneData *sceneYaml = loadSceneYaml(pathCat(pathCat(indexDir, "/scenes"), sceneName));
     Scene *scene = createScene();
     scene->showCollisions = showCollisions;
     strcpy(scene->name, sceneName);
@@ -304,7 +304,7 @@ Player *loadPlayer(char *indexDir) {
     printf("loading player from dir %s\n", indexDir);
     Player *player = createPlayer();
     player->mob = createMobile();
-    PlayerYaml *playerYaml = loadPlayerYaml(indexDir);
+    PlayerData *playerYaml = loadPlayerYaml(indexDir);
     player->mob->name = playerYaml->name;
     player->mob->direction = getDirectionFromString(playerYaml->direction);
     char *animationsFile = pathCat(pathCat(indexDir, "/"), playerYaml->animations);

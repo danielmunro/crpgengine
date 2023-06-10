@@ -50,7 +50,7 @@ void playSound(AudioManager *s, char *name) {
 }
 
 void assignMusicValues(AudioManager *am, char *indexDir) {
-    MusicYaml *music = loadMusicYaml(indexDir);
+    MusicData *music = loadMusicYaml(indexDir);
     char *basePath = pathCat(indexDir, "audio");
     char *filePath = pathCat(basePath, music->town);
 
@@ -63,7 +63,7 @@ void assignMusicValues(AudioManager *am, char *indexDir) {
 }
 
 void assignSoundValues(AudioManager *am, char *indexDir) {
-    SoundYaml *sound = loadSoundYaml(indexDir);
+    SoundData *sound = loadSoundYaml(indexDir);
 
 //    Sound_ *s = malloc(sizeof(Sound_));
 //    s->name = "bump";

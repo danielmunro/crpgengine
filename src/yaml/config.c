@@ -1,14 +1,14 @@
-typedef struct ConfigYaml {
+typedef struct ConfigData {
     char *title;
-} ConfigYaml;
+} ConfigData;
 
 static const cyaml_schema_field_t appConfigTopMappingField[] = {
         CYAML_FIELD_STRING_PTR(
-                "title", CYAML_FLAG_POINTER, ConfigYaml, title, 0, CYAML_UNLIMITED),
+                "title", CYAML_FLAG_POINTER, ConfigData, title, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 
 static const cyaml_schema_value_t appConfigTopSchema = {
         CYAML_VALUE_MAPPING(
-                CYAML_FLAG_POINTER, ConfigYaml, appConfigTopMappingField),
+                CYAML_FLAG_POINTER, ConfigData, appConfigTopMappingField),
 };

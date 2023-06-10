@@ -111,7 +111,7 @@ Mobile *findMobById(Game *g, char *id) {
     return NULL;
 }
 
-ControlBlock *mapStorylineToControlBlock(Game *g, StorylineYaml *storyline) {
+ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
     ControlBlock *c = createControlBlock(CONTROL_TYPE_WHEN);
     c->whenCount = storyline->when_count;
     c->thenCount = storyline->then_count;

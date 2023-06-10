@@ -4,8 +4,8 @@ static const cyaml_config_t config = {
         .log_level = CYAML_LOG_WARNING,
 };
 
-ConfigYaml *loadAppConfig(const char *indexDir) {
-    ConfigYaml *appConfig = malloc(sizeof(ConfigYaml));
+ConfigData *loadAppConfigYaml(const char *indexDir) {
+    ConfigData *appConfig = malloc(sizeof(ConfigData));
     char *filepath = pathCat(indexDir, "/config.yaml");
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &appConfigTopSchema, (cyaml_data_t **)&appConfig, NULL);
@@ -15,8 +15,8 @@ ConfigYaml *loadAppConfig(const char *indexDir) {
     return appConfig;
 }
 
-MusicYaml *loadMusicYaml(const char *indexDir) {
-    MusicYaml *music = malloc(sizeof(MusicYaml));
+MusicData *loadMusicYaml(const char *indexDir) {
+    MusicData *music = malloc(sizeof(MusicData));
     char *filepath = pathCat(indexDir, "/music.yaml");
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &musicTopSchema, (cyaml_data_t **)&music, NULL);
@@ -26,8 +26,8 @@ MusicYaml *loadMusicYaml(const char *indexDir) {
     return music;
 }
 
-SoundYaml *loadSoundYaml(const char *indexDir) {
-    SoundYaml *sound = malloc(sizeof(SoundYaml));
+SoundData *loadSoundYaml(const char *indexDir) {
+    SoundData *sound = malloc(sizeof(SoundData));
     char *filepath = pathCat(indexDir, "/sound.yaml");
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &musicTopSchema, (cyaml_data_t **)&sound, NULL);
@@ -37,8 +37,8 @@ SoundYaml *loadSoundYaml(const char *indexDir) {
     return sound;
 }
 
-PlayerYaml *loadPlayerYaml(const char *indexDir) {
-    PlayerYaml *player = malloc(sizeof(PlayerYaml));
+PlayerData *loadPlayerYaml(const char *indexDir) {
+    PlayerData *player = malloc(sizeof(PlayerData));
     char *filepath = pathCat(indexDir, "/player.yaml");
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &playerTopSchema, (cyaml_data_t **)&player, NULL);
@@ -48,8 +48,8 @@ PlayerYaml *loadPlayerYaml(const char *indexDir) {
     return player;
 }
 
-AnimationYaml *loadAnimationYaml(const char *filepath) {
-    AnimationYaml *animation = malloc(sizeof(AnimationYaml));
+AnimationData *loadAnimationYaml(const char *filepath) {
+    AnimationData *animation = malloc(sizeof(AnimationData));
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &animationTopSchema, (cyaml_data_t **)&animation, NULL);
     if (err != CYAML_OK) {
@@ -58,8 +58,8 @@ AnimationYaml *loadAnimationYaml(const char *filepath) {
     return animation;
 }
 
-SceneYaml *loadSceneYaml(const char *indexDir) {
-    SceneYaml *scene = malloc(sizeof(SceneYaml));
+SceneData *loadSceneYaml(const char *indexDir) {
+    SceneData *scene = malloc(sizeof(SceneData));
     char *filepath = pathCat(indexDir, "/scene.yaml");
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &sceneTopSchema, (cyaml_data_t **)&scene, NULL);
@@ -69,8 +69,8 @@ SceneYaml *loadSceneYaml(const char *indexDir) {
     return scene;
 }
 
-MobileYaml *loadMobYaml(const char *filepath) {
-    MobileYaml *mob = malloc(sizeof(MobileYaml));
+MobileData *loadMobYaml(const char *filepath) {
+    MobileData *mob = malloc(sizeof(MobileData));
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &mobileTopSchema, (cyaml_data_t **)&mob, NULL);
     if (err != CYAML_OK) {
