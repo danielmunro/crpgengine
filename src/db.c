@@ -267,11 +267,14 @@ void loadMobiles(Scene *scene, const char *indexDir) {
         loadAnimations(animationsFile, indexDir, mob->animations);
         for (int j = 0; j < mobData->storylines_count; j++) {
             scene->storylines[scene->storylineCount] = &mobData->storylines[j];
+            /**
+             * Add a reference to the mob where these storylines came from. This allows
+             * the `mob: true` convenience syntax to work in when/then clauses.
+             */
             scene->storylines[scene->storylineCount]->mob = mob;
             scene->storylineCount++;
         }
-        scene->mobiles[scene->mobileCount] = mob;
-        scene->mobileCount++;
+        addMobile(scene, mob);
     }
 }
 

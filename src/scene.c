@@ -70,6 +70,11 @@ Scene *createScene() {
     return scene;
 }
 
+void addMobile(Scene *scene, Mobile *mob) {
+    scene->mobiles[scene->mobileCount] = mob;
+    scene->mobileCount++;
+}
+
 Object *getObject(Scene *s, int index) {
     for (int i = 0; i < MAX_OBJECTS; i++) {
         if (s->objects[i] == NULL) {
