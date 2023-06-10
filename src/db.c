@@ -265,27 +265,21 @@ void loadMobiles(Scene *scene, const char *indexDir) {
         mob->position.y = (float) mobData->position[1];
         char *animationsFile = pathCat(pathCat(indexDir, "/"), mobData->animations);
         loadAnimations(animationsFile, indexDir, mob->animations);
-        for (int j = 0; j < mobData->storylines_count; j++) {
-            scene->storylines[scene->storylineCount] = &mobData->storylines[j];
-            /**
-             * Add a reference to the mob where these storylines came from. This allows
-             * the `mob: true` convenience syntax to work in when/then clauses.
-             */
-            scene->storylines[scene->storylineCount]->mob = mob;
-            scene->storylineCount++;
-        }
         addMobile(scene, mob);
     }
 }
 
 Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions) {
     printf("create scene: %s\n", sceneName);
-    SceneData *sceneYaml = loadSceneYaml(pathCat(pathCat(indexDir, "/scenes"), sceneName));
+    SceneData *sceneData = loadSceneYaml(pathCat(pathCat(indexDir, "/scenes"), sceneName));
     Scene *scene = createScene();
     scene->showCollisions = showCollisions;
     strcpy(scene->name, sceneName);
-    assignSceneType(scene, sceneYaml->type);
-    scene->music = &sceneYaml->music[0];
+    assignSceneType(scene, sceneData->type);
+    scene->music = &sceneData->music[0];
+    for (int i = 0; i < sceneData->storylines_count; i++) {
+        addStoryline(scene, &sceneData->storylines[i]);
+    }
     char *sceneFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/tilemap.tmx");
     SceneReader *sceneReader = createSceneReader(scene, sceneFile);
 

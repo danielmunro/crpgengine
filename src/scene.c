@@ -75,6 +75,11 @@ void addMobile(Scene *scene, Mobile *mob) {
     scene->mobileCount++;
 }
 
+void addStoryline(Scene *scene, StorylineData *storyline) {
+    scene->storylines[scene->storylineCount] = storyline;
+    scene->storylineCount++;
+}
+
 Object *getObject(Scene *s, int index) {
     for (int i = 0; i < MAX_OBJECTS; i++) {
         if (s->objects[i] == NULL) {
