@@ -7,7 +7,6 @@ typedef struct Moving {
 
 typedef struct Player {
     Mobile *mob;
-    Vector2 pos;
     float direction;
     Moving moving;
     struct timeval lastMovement;

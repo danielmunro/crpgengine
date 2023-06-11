@@ -168,11 +168,12 @@ void activeControlRemoveCheck(Scene *s) {
 }
 
 void drawLayer(Scene *s, int layer) {
-    Vector2d tiles = getTileCount(s);
+    int width = 56;
+    int height = 200;
     Vector2d sz = s->tilemap->size;
-    Image renderedLayer = GenImageColor(tiles.x * sz.x, tiles.y * sz.y, BLANK);
-    for (int y = -1; y < tiles.y; y++) {
-        for (int x = -1; x < tiles.x; x++) {
+    Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
+    for (int y = -1; y < height; y++) {
+        for (int x = -1; x < width; x++) {
             int index = (int) s->layers[layer]->data[y][x];
             if (index <= 0) {
                 continue;
@@ -227,7 +228,7 @@ void createMobileLayer(Mobile *mobLayer[MAX_LAYER_SIZE][MAX_MOBILES]) {
     }
 }
 
-void drawMobiles(Scene *s, Player *p) {
+void drawMobiles(Scene *s, Player *p, Vector2 offset) {
     /**
      * Start by putting mobs on a layer. This is necessary for drawing them in
      * the right order.
@@ -258,17 +259,25 @@ void drawMobiles(Scene *s, Player *p) {
             if (mobLayer[y][m] == NULL) {
                 break;
             }
-            drawAnimation(getMobAnimation(mobLayer[y][m]), mobLayer[y][m]->position);
+            Vector2 position = {
+                    mobLayer[y][m]->position.x + offset.x,
+                    mobLayer[y][m]->position.y + offset.y,
+            };
+            drawAnimation(getMobAnimation(mobLayer[y][m]), position);
         }
     }
 }
 
 void renderScene(Scene *s, Player *p) {
     ClearBackground(BLACK);
-    DrawTexture(s->renderedLayers[LAYER_TYPE_BACKGROUND], 0, 0, WHITE);
-    DrawTexture(s->renderedLayers[LAYER_TYPE_MIDGROUND], 0, 0, WHITE);
-    drawMobiles(s, p);
-    DrawTexture(s->renderedLayers[LAYER_TYPE_FOREGROUND], 0, 0, WHITE);
+    Vector2 offset = {
+            ((float) SCREEN_WIDTH / 2) - p->mob->position.x,
+            ((float) SCREEN_HEIGHT / 2) - p->mob->position.y
+    };
+    DrawTextureEx(s->renderedLayers[LAYER_TYPE_BACKGROUND], offset, 0, SCALE, WHITE);
+    DrawTextureEx(s->renderedLayers[LAYER_TYPE_MIDGROUND], offset, 0, SCALE, WHITE);
+    drawMobiles(s, p, offset);
+    DrawTextureEx(s->renderedLayers[LAYER_TYPE_FOREGROUND], offset, 0, SCALE, WHITE);
 }
 
 int isBlocked(Scene *s, Player *p, Vector2 pos) {

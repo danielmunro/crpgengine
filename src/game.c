@@ -53,8 +53,8 @@ void setScene(Game *g, Scene *scene) {
     g->animIndex = 0;
     addAllAnimations(g, g->player->mob->animations);
     Rectangle r = g->currentScene->entrance;
-    g->player->pos.x = r.x + (r.width / 2);
-    g->player->pos.y = r.y + (r.height / 2);
+    g->player->mob->position.x = r.x + (r.width / 2);
+    g->player->mob->position.y = r.y + (r.height / 2);
     drawScene(g->currentScene);
     printf("current scene: %s\n", g->currentScene->name);
     printf("play music %s\n", g->currentScene->music);

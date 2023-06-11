@@ -10,8 +10,9 @@
 #include <math.h>
 #include <sys/time.h>
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 450
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+#define SCALE (float) 1.0
 
 #define MAX_OBJECTS 255
 #define MAX_SCENES    256
