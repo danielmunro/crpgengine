@@ -18,7 +18,6 @@ typedef struct StorylineData {
     ThenData *then;
     int when_count;
     int then_count;
-    Mobile *mob;
 } StorylineData;
 
 typedef struct SceneData {

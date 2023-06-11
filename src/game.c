@@ -6,6 +6,7 @@ typedef struct Game {
     Animation *animations[MAX_ANIMATIONS_IN_GAME];
     AudioManager *audioManager;
     int animIndex;
+    Beastiary *beastiary;
 } Game;
 
 void addAnimation(Game *g, Animation *a) {
@@ -128,11 +129,7 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
         c->when[i]->source = g->player->mob;
         if (storyline->when[i].mob != NULL) {
             printf("mobileTrigger: %s\n", storyline->when[i].mob);
-            if (strcmp(storyline->when[i].mob, "true") == 0) {
-                c->when[i]->mobileTrigger = storyline->mob;
-            } else {
-                c->when[i]->mobileTrigger = findMobById(g, storyline->when[i].mob);
-            }
+            c->when[i]->mobileTrigger = findMobById(g, storyline->when[i].mob);
             printf("mob: %s\n", c->when[i]->mobileTrigger->name);
         }
     }
@@ -144,11 +141,7 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
             c->then[i]->target = g->player->mob;
         } else {
             printf("mob %s is target\n", storyline->then[i].mob);
-            if (strcmp(storyline->then[i].mob, "true") == 0) {
-                c->then[i]->target = storyline->mob;
-            } else {
-                c->then[i]->target = findMobById(g, storyline->then[i].mob);
-            }
+            c->then[i]->target = findMobById(g, storyline->then[i].mob);
         }
         c->then[i]->story = &storyline->then[i].story[0];
         c->then[i]->message = &storyline->then[i].message[0];
@@ -168,6 +161,14 @@ void loadScenes(Game *g, int showCollisions, char *indexDir, char *scenes[MAX_SC
         for (int c = 0; c < g->scenes[i]->storylineCount; c++) {
             g->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(g, g->scenes[i]->storylines[c]);
         }
+    }
+}
+
+void loadBeastiary(Game *g, const char *indexDir) {
+    char *filepath = pathCat(indexDir, "/beastiary.yaml");
+    BeastiaryData *data = loadBeastiaryYaml(filepath);
+    for (int i = 0; i < data->beasts_count; i++) {
+        g->beastiary[i].beasts[i] = createBeastFromData(indexDir, &data->beasts[i]);
     }
 }
 
@@ -221,10 +222,12 @@ Game *createGame(RuntimeArgs *r) {
     g->currentScene = NULL;
     g->audioManager = loadAudioManager(r->indexDir);
     g->player = loadPlayer(r->indexDir);
+    g->beastiary = createBeastiary();
     char *scenes[MAX_SCENES];
     char *sceneDir = pathCat(r->indexDir, "/scenes");
     g->sceneCount = getFilesInDirectory(sceneDir, scenes);
     loadScenes(g, r->showCollisions, r->indexDir, scenes);
     setScene(g, g->scenes[r->sceneIndex]);
+    loadBeastiary(g, r->indexDir);
     return g;
 }

@@ -6,12 +6,12 @@ typedef struct Attributes {
     int constitution;
 } Attributes;
 
-Attributes *createAttributes() {
+Attributes *createAttributesFromData(AttributesData *data) {
     Attributes *a = malloc(sizeof(Attributes));
-    a->strength = 0;
-    a->dexterity = 0;
-    a->intelligence = 0;
-    a->wisdom = 0;
-    a->constitution = 0;
+    a->strength = data->strength;
+    a->dexterity = data->dexterity;
+    a->intelligence = data->intelligence;
+    a->wisdom = data->wisdom;
+    a->constitution = data->constitution;
     return a;
 }

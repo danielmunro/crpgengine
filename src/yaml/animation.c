@@ -39,7 +39,7 @@ static const cyaml_schema_field_t slicesFieldSchema[] = {
                 "name", CYAML_FLAG_POINTER, SliceData, name, 0, CYAML_UNLIMITED),
         CYAML_FIELD_SEQUENCE(
                 "frames", CYAML_FLAG_POINTER, SliceData, frames, &framesEntry, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_UINT(
+        CYAML_FIELD_INT(
                 "rate", CYAML_FLAG_OPTIONAL, SliceData, rate),
         CYAML_FIELD_INT(
                 "repeat", CYAML_FLAG_OPTIONAL, SliceData, repeat),

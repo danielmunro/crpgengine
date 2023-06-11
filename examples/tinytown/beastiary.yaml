@@ -1,0 +1,31 @@
+beasts:
+- id: warg
+  name: Warg
+  attributes:
+    str: 1
+    dex: 1
+    con: 1
+  level: 3
+  hp: 20
+  gp: 100
+  image: warg.png
+- id: werewarg
+  name: Werewarg
+  attributes:
+    str: 4
+    dex: 4
+    con: 4
+  level: 6
+  hp: 30
+  gp: 140
+  image: warg.png
+- id: goblin
+  name: Goblin
+  attributes:
+    str: 2
+    dex: 1
+    con: 1
+  level: 4
+  hp: 25
+  gp: 185
+  image: warg.png

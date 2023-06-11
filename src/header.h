@@ -27,6 +27,7 @@
 #define MAX_CHARACTERS_PER_LINE 72
 #define MAX_STORIES 1024
 #define MAX_STORY_LENGTH 255
+#define MAX_BEASTIARY_SIZE 1024
 
 #define LAYER_COUNT 3
 #define LAYER_TYPE_BACKGROUND 0
@@ -111,9 +112,11 @@ typedef struct Mobile Mobile;
 #include "yaml/animation.c"
 #include "yaml/config.c"
 #include "yaml/music.c"
+#include "yaml/attributes.c"
 #include "yaml/player.c"
 #include "yaml/scene.c"
 #include "yaml/sound.c"
+#include "yaml/beastiary.c"
 #include "yaml/mobile.c"
 #include "cyaml.c"
 #include "ui.c"
@@ -122,6 +125,7 @@ typedef struct Mobile Mobile;
 #include "sprite.c"
 #include "attributes.c"
 #include "item.c"
+#include "beastiary.c"
 #include "mobile.c"
 #include "player.c"
 #include "tilemap.c"

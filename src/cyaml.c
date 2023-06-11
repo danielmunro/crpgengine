@@ -10,7 +10,7 @@ ConfigData *loadAppConfigYaml(const char *indexDir) {
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &appConfigTopSchema, (cyaml_data_t **)&appConfig, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing app config file\n");
+        fprintf(stderr, "error parsing app config yaml\n");
     }
     return appConfig;
 }
@@ -21,7 +21,7 @@ MusicData *loadMusicYaml(const char *indexDir) {
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &musicTopSchema, (cyaml_data_t **)&music, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing music config file: %s\n", cyaml_strerror(err));
+        fprintf(stderr, "error parsing music yaml: %s\n", cyaml_strerror(err));
     }
     return music;
 }
@@ -32,7 +32,7 @@ SoundData *loadSoundYaml(const char *indexDir) {
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &musicTopSchema, (cyaml_data_t **)&sound, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing music config file: %s\n", cyaml_strerror(err));
+        fprintf(stderr, "error parsing music yaml: %s\n", cyaml_strerror(err));
     }
     return sound;
 }
@@ -53,7 +53,7 @@ AnimationData *loadAnimationYaml(const char *filepath) {
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &animationTopSchema, (cyaml_data_t **)&animation, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing animation config file: %s\n", cyaml_strerror(err));
+        fprintf(stderr, "error parsing animation yaml: %s\n", cyaml_strerror(err));
     }
     return animation;
 }
@@ -64,7 +64,7 @@ SceneData *loadSceneYaml(const char *indexDir) {
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &sceneTopSchema, (cyaml_data_t **)&scene, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing scene config file\n");
+        fprintf(stderr, "error parsing scene yaml\n");
     }
     return scene;
 }
@@ -74,7 +74,17 @@ MobileData *loadMobYaml(const char *filepath) {
     cyaml_err_t err = cyaml_load_file(filepath, &config,
                                       &mobileTopSchema, (cyaml_data_t **)&mob, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing mob config file\n");
+        fprintf(stderr, "error parsing mob yaml\n");
     }
     return mob;
+}
+
+BeastiaryData *loadBeastiaryYaml(const char *filepath) {
+    BeastiaryData *beastiary = malloc(sizeof(BeastiaryData));
+    cyaml_err_t err = cyaml_load_file(filepath, &config,
+                                      &beastiaryTopSchema, (cyaml_data_t **)&beastiary, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error parsing beast yaml\n");
+    }
+    return beastiary;
 }
