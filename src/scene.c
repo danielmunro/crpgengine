@@ -28,7 +28,7 @@ typedef struct Scene {
     Texture2D renderedLayers[LAYER_COUNT];
     int layerCount;
     int type;
-    char name[255];
+    char *name;
     char *music;
     int showCollisions;
     Rectangle entrance;

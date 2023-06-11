@@ -269,12 +269,12 @@ void loadMobiles(Scene *scene, const char *indexDir) {
     }
 }
 
-Scene *loadScene(const char *indexDir, const char *sceneName, int showCollisions) {
+Scene *loadScene(const char *indexDir, char *sceneName, int showCollisions) {
     printf("create scene: %s\n", sceneName);
     SceneData *sceneData = loadSceneYaml(pathCat(pathCat(indexDir, "/scenes"), sceneName));
     Scene *scene = createScene();
     scene->showCollisions = showCollisions;
-    strcpy(scene->name, sceneName);
+    scene->name = &sceneName[0];
     assignSceneType(scene, sceneData->type);
     scene->music = &sceneData->music[0];
     for (int i = 0; i < sceneData->storylines_count; i++) {
