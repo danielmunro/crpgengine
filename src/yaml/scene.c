@@ -1,3 +1,8 @@
+typedef struct BeastEncounterData {
+    char *id;
+    int max;
+} BeastEncounterData;
+
 typedef struct WhenData {
     char *player;
     char *mob;
@@ -25,6 +30,8 @@ typedef struct SceneData {
     char *music;
     StorylineData *storylines;
     int storylines_count;
+    BeastEncounterData *beasts;
+    int beasts_count;
 } SceneData;
 
 static const cyaml_schema_field_t whenFieldSchema[] = {
@@ -74,9 +81,23 @@ static const cyaml_schema_value_t storylinesSchema = {
                             WhenData, storylinesFieldSchema),
 };
 
+static const cyaml_schema_field_t beastsFieldSchema[] = {
+        CYAML_FIELD_STRING_PTR(
+                "id", CYAML_FLAG_POINTER, BeastEncounterData, id, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_INT(
+                "max", CYAML_FLAG_POINTER, BeastEncounterData, max),
+        CYAML_FIELD_END
+};
+
+static const cyaml_schema_value_t beastsSchema = {
+        CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT, BeastEncounterData, beastsFieldSchema),
+};
+
 static const cyaml_schema_field_t sceneTopMappingField[] = {
         CYAML_FIELD_STRING_PTR(
                 "type", CYAML_FLAG_POINTER, SceneData, type, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_SEQUENCE(
+                "beasts", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, SceneData, beasts, &beastsSchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "music", CYAML_FLAG_POINTER, SceneData, music, 0, CYAML_UNLIMITED),
         CYAML_FIELD_SEQUENCE(

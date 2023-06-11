@@ -25,9 +25,9 @@ void addAllAnimations(Game *g, Animation *animations[MAX_ANIMATIONS]) {
 
 void setScene(Game *g, Scene *scene) {
     printf("request scene set to %s\n", scene->name);
-    if (g->currentScene != NULL) {
-        free(g->currentScene);
-    }
+//    if (g->currentScene != NULL) {
+//        free(g->currentScene);
+//    }
 //    g->currentScene = createScene();
 //    strcpy(g->currentScene->name, scene->name);
 //    g->currentScene->tilemap = scene->tilemap;
@@ -60,44 +60,6 @@ void setScene(Game *g, Scene *scene) {
     printf("play music %s\n", g->currentScene->music);
     playMusic(g->audioManager, g->currentScene->music);
     printf("scene set to %s\n", g->currentScene->name);
-}
-
-int mapCondition(char *when) {
-    if (strcmp(when, WHEN_HAS) == 0) {
-        return CONDITION_HAS;
-    } else if (strcmp(when, WHEN_NOT_HAS) == 0) {
-        return CONDITION_NOT_HAS;
-    } else if (strcmp(when, WHEN_ENGAGED) == 0) {
-        return CONDITION_ENGAGED;
-    } else if (strcmp(when, WHEN_AT) == 0) {
-        return CONDITION_AT;
-    } else if (strcmp(when, WHEN_HAS_STORY) == 0) {
-        return CONDITION_HAS_STORY;
-    } else if (strcmp(when, WHEN_NOT_HAS_STORY) == 0) {
-        return CONDITION_NOT_HAS_STORY;
-    }
-    return -1;
-}
-
-int mapOutcome(char *then) {
-    if (strcmp(then, THEN_SPEAK) == 0) {
-        return OUTCOME_SPEAK;
-    } else if (strcmp(then, THEN_MOVE_TO) == 0) {
-        return OUTCOME_MOVE_TO;
-    } else if (strcmp(then, THEN_DIRECTION) == 0) {
-        return OUTCOME_DIRECTION;
-    } else if (strcmp(then, THEN_SPRITE) == 0) {
-        return OUTCOME_SPRITE;
-    } else if (strcmp(then, THEN_WAIT) == 0) {
-        return OUTCOME_WAIT;
-    } else if (strcmp(then, THEN_GIVE_ITEM) == 0) {
-        return OUTCOME_GIVE_ITEM;
-    } else if (strcmp(then, THEN_TAKE) == 0) {
-        return OUTCOME_TAKE;
-    } else if (strcmp(then, THEN_ADD_STORY) == 0) {
-        return OUTCOME_ADD_STORY;
-    }
-    return -1;
 }
 
 Mobile *findMobById(Game *g, char *id) {

@@ -30,6 +30,9 @@ void playMusic(AudioManager *am, char *name) {
         printf("music: %s\n", am->music[i]->name);
         if (strcmp(am->music[i]->name, name) == 0) {
             printf("music found, playing now\n");
+            if (am->musicIndex == i) {
+                return;
+            }
             if (am->musicIndex > -1 && IsMusicStreamPlaying(am->music[am->musicIndex]->music)) {
                 StopMusicStream(am->music[am->musicIndex]->music);
             }
