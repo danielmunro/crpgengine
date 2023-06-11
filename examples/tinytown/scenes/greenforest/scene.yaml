@@ -1,7 +1,9 @@
 type: dungeon
 music: town
-beasts:
-  - id: warg
-    max: 9
-  - id: werewarg
-    max: 6
+fight:
+  background: foo.png
+  beasts:
+    - id: warg
+      max: 9
+    - id: werewarg
+      max: 6
