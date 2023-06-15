@@ -51,11 +51,6 @@ typedef enum {
 #define HUMANOID_WIDTH     16.0f
 #define HUMANOID_HEIGHT    24.0f
 
-#define DIRECTION_UP       1
-#define DIRECTION_DOWN     2
-#define DIRECTION_LEFT     3
-#define DIRECTION_RIGHT    4
-
 typedef enum {
     UP = 1,
     DOWN,

@@ -12,7 +12,7 @@ Animation *getMobAnimation(Mobile *mob) {
 
 Mobile *createMobile() {
     Mobile *mobile = malloc(sizeof(Mobile));
-    mobile->direction = DIRECTION_DOWN;
+    mobile->direction = DOWN;
     mobile->position = (Vector2) {0, 0 };
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         mobile->animations[i] = NULL;

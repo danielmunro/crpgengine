@@ -418,22 +418,22 @@ void checkInput(Scene *s, Player *p) {
     checkMoveKey(
             p,
             KEY_UP,
-            DIRECTION_UP
+            UP
     );
     checkMoveKey(
             p,
             KEY_DOWN,
-            DIRECTION_DOWN
+            DOWN
     );
     checkMoveKey(
             p,
             KEY_RIGHT,
-            DIRECTION_RIGHT
+            RIGHT
     );
     checkMoveKey(
             p,
             KEY_LEFT,
-            DIRECTION_LEFT
+            LEFT
     );
     if (IsKeyDown(KEY_C)) {
         printf("player coordinates: %f, %f\n", p->mob->position.x, p->mob->position.y);

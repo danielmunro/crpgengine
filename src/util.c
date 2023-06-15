@@ -69,13 +69,13 @@ int mapOutcome(char *then) {
 
 int getDirectionFromString(char *value) {
     if (strcmp(value, "up") == 0) {
-        return DIRECTION_UP;
+        return UP;
     } else if (strcmp(value, "down") == 0) {
-        return DIRECTION_DOWN;
+        return DOWN;
     } else if (strcmp(value, "left") == 0) {
-        return DIRECTION_LEFT;
+        return LEFT;
     } else if (strcmp(value, "right") == 0) {
-        return DIRECTION_RIGHT;
+        return RIGHT;
     } else {
         fprintf(stderr, "invalid direction: %s\n", value);
         return 0;
