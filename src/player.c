@@ -56,16 +56,16 @@ void resetMoving(Player *p) {
 
 void checkMoveKey(Player *p, int key, int direction) {
     if (IsKeyDown(key) && !p->engaged) {
-        if (direction == DIRECTION_UP) {
+        if (direction == UP) {
             p->moving.up = 1;
         }
-        if (direction == DIRECTION_DOWN) {
+        if (direction == DOWN) {
             p->moving.down = 1;
         }
-        if (direction == DIRECTION_LEFT) {
+        if (direction == LEFT) {
             p->moving.left = 1;
         }
-        if (direction == DIRECTION_RIGHT) {
+        if (direction == RIGHT) {
             p->moving.right = 1;
         }
         p->mob->direction = direction;

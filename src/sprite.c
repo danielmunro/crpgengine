@@ -25,21 +25,6 @@ typedef struct Animation {
     int isPlaying;
 } Animation;
 
-int getAnimationFromDirection(int direction) {
-    if (direction == DIRECTION_DOWN) {
-        return ANIM_DOWN;
-    } else if (direction == DIRECTION_UP) {
-        return ANIM_UP;
-    } else if (direction == DIRECTION_LEFT) {
-        return ANIM_LEFT;
-    } else if (direction == DIRECTION_RIGHT) {
-        return ANIM_RIGHT;
-    } else {
-        printf("no animation for direction %d\n", direction);
-        exit(1);
-    }
-}
-
 Animation *createAnimation(SpriteSheet *spriteSheet, int type, int firstFrame, int lastFrame, int frameRate, int repeat) {
     Animation *a = malloc(sizeof(Animation));
     a->type = type;
@@ -83,12 +68,12 @@ void incrementAnimFrame(Animation *a) {
     }
 }
 
-Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], int type) {
+Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], int direction) {
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         if (animation[i] == NULL) {
             break;
         }
-        if (animation[i]->type == type) {
+        if (animation[i]->type == direction) {
             return animation[i];
         }
     }
@@ -97,13 +82,13 @@ Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], int type) {
 
 int getAnimIdFromName(char *name) {
     if (strcmp(name, "up") == 0) {
-        return ANIM_UP;
+        return UP;
     } else if (strcmp(name, "down") == 0) {
-        return ANIM_DOWN;
+        return DOWN;
     } else if (strcmp(name, "left") == 0) {
-        return ANIM_LEFT;
+        return LEFT;
     } else if (strcmp(name, "right") == 0) {
-        return ANIM_RIGHT;
+        return RIGHT;
     } else {
         printf("no animation id for name: %s\n", name);
         exit(1);

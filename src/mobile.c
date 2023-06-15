@@ -7,8 +7,7 @@ typedef struct Mobile {
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {
-    int animName = getAnimationFromDirection(mob->direction);
-    return findAnimation(mob->animations, animName);
+    return findAnimation(mob->animations, mob->direction);
 }
 
 Mobile *createMobile() {
