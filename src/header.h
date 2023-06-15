@@ -106,8 +106,6 @@ typedef enum {
 #define OUTCOME_TAKE 7
 #define OUTCOME_ADD_STORY 8
 
-#define SCENE_ATTRIBUTE_TYPE "type"
-
 #define FONT_SIZE 20
 #define LINE_HEIGHT 30
 
