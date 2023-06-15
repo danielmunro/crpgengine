@@ -15,3 +15,13 @@ Attributes *createAttributesFromData(AttributesData *data) {
     a->constitution = data->constitution;
     return a;
 }
+
+Attributes *cloneAttributes(Attributes *original) {
+    Attributes *a = malloc(sizeof(Attributes));
+    a->strength = original->strength;
+    a->intelligence = original->intelligence;
+    a->wisdom = original->wisdom;
+    a->dexterity = original->dexterity;
+    a->constitution = original->constitution;
+    return a;
+}

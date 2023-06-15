@@ -1,7 +1,33 @@
+#include <dirent.h>
+
 typedef struct Vector2d {
     int x;
     int y;
 } Vector2d;
+
+int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
+    struct dirent *de;
+    DIR *dr = opendir(dir);
+    if (dr == NULL) {
+        fprintf(stderr, "Could not open scene index directory");
+    }
+    int i = 0;
+    while (true) {
+        de = readdir(dr);
+        if (de == NULL) {
+            break;
+        }
+        if (strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0) {
+            continue;
+        }
+        scenes[i] = (char *) malloc(strlen(de->d_name));
+        strcpy(scenes[i], de->d_name);
+        printf("added scene %s\n", scenes[i]);
+        i++;
+    }
+    closedir(dr);
+    return i;
+}
 
 int mapCondition(char *when) {
     if (strcmp(when, WHEN_HAS) == 0) {
@@ -52,6 +78,7 @@ int getDirectionFromString(char *value) {
         return DIRECTION_RIGHT;
     } else {
         fprintf(stderr, "invalid direction: %s\n", value);
+        return 0;
     }
 }
 

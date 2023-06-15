@@ -76,3 +76,10 @@ void checkMoveKey(Player *p, int key, int direction) {
 int isSpeakingTo(Player *p, Mobile *target) {
     return p->engaged && target == p->engageable;
 }
+
+int isMoving(Player *p) {
+    return p->moving.down
+           || p->moving.up
+           || p->moving.left
+           || p->moving.right;
+}

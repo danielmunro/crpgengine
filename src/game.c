@@ -117,7 +117,7 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
 
 void loadScenes(Game *g, int showCollisions, char *indexDir, char *scenes[MAX_SCENES]) {
     for (int i = 0; i < g->sceneCount; i++) {
-        g->scenes[i] = loadScene(indexDir, scenes[i], showCollisions);
+        g->scenes[i] = loadScene(g->beastiary, indexDir, scenes[i], showCollisions);
     }
     for (int i = 0; i < g->sceneCount; i++) {
         for (int c = 0; c < g->scenes[i]->storylineCount; c++) {
@@ -130,7 +130,9 @@ void loadBeastiary(Game *g, const char *indexDir) {
     char *filepath = pathCat(indexDir, "/beastiary.yaml");
     BeastiaryData *data = loadBeastiaryYaml(filepath);
     for (int i = 0; i < data->beasts_count; i++) {
-        g->beastiary[i].beasts[i] = createBeastFromData(indexDir, &data->beasts[i]);
+        g->beastiary->beasts[i] = createBeastFromData(indexDir, &data->beasts[i]);
+        printf("beast created: %s\n", g->beastiary->beasts[i]->id);
+        g->beastiary->beastCount++;
     }
 }
 
@@ -161,6 +163,39 @@ void evaluateExits(Game *g) {
     }
 }
 
+void checkControls(Scene *s, Player *p) {
+    controlWhenCheck(s, p);
+    controlThenCheck(s, p);
+    activeControlRemoveCheck(s);
+}
+
+void checkToInitiateFight(Scene *s, Player *p) {
+    if (!isDungeon(s) || isFighting(s) || !isMoving(p)) {
+        return;
+    }
+    int chance = rand() % 100 + 1;
+    if (chance == 1) {
+        Beast *beasts[MAX_BEASTS_IN_FIGHT];
+        int beastsToCreate = rand() % 9 + 1;
+        int created = 0;
+        while (created < beastsToCreate) {
+            int e = rand() % s->encounters->beastEncountersCount + 0;
+            int max = s->encounters->beastEncounters[e]->max;
+            int amount = rand() % max + 1;
+            for (int i = 0; i < amount; i++) {
+                beasts[created] = cloneBeast(s->encounters->beastEncounters[e]->beast);
+            }
+            created += amount;
+        }
+        s->fight = createFight(beasts);
+        printf("fight encountered with %d opponents\n", created);
+    }
+}
+
+void checkFights(Scene *s, Player *p) {
+    checkToInitiateFight(s, p);
+}
+
 void run(Game *g) {
     while (!WindowShouldClose()) {
         checkInput(g->currentScene, g->player);
@@ -171,9 +206,8 @@ void run(Game *g) {
         processAnimations(g);
         evaluateMovement(g->currentScene, g->player);
         evaluateExits(g);
-        controlWhenCheck(g->currentScene, g->player);
-        controlThen(g->currentScene, g->player);
-        activeControlRemoveCheck(g->currentScene);
+        checkControls(g->currentScene, g->player);
+        checkFights(g->currentScene, g->player);
         UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
     }
 }
@@ -188,8 +222,8 @@ Game *createGame(RuntimeArgs *r) {
     char *scenes[MAX_SCENES];
     char *sceneDir = pathCat(r->indexDir, "/scenes");
     g->sceneCount = getFilesInDirectory(sceneDir, scenes);
+    loadBeastiary(g, r->indexDir);
     loadScenes(g, r->showCollisions, r->indexDir, scenes);
     setScene(g, g->scenes[r->sceneIndex]);
-    loadBeastiary(g, r->indexDir);
     return g;
 }

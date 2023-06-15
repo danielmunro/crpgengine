@@ -40,12 +40,27 @@ typedef struct Scene {
     int storylineCount;
     ControlBlock *controlBlocks[MAX_CONTROLS];
     ControlBlock *activeControlBlock;
+    Encounters *encounters;
+    Fight *fight;
 } Scene;
 
 const SceneType sceneTypes[] = {
     {SCENE_TYPE_TOWN,    "town"},
     {SCENE_TYPE_DUNGEON, "dungeon"},
 };
+
+void setSceneTypeFromString(Scene *s, const char *sceneType) {
+    int count = sizeof(sceneTypes) / sizeof(SceneType);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(sceneTypes[i].scene, sceneType) == 0) {
+            s->type = sceneTypes[i].code;
+            printf("scene %s type set to '%s'\n", s->name, sceneType);
+            return;
+        }
+    }
+    fprintf(stderr, "scene type not found: %s, setting to default of 'town'\n", sceneType);
+    s->type = SCENE_TYPE_TOWN;
+}
 
 Scene *createScene() {
     Scene *scene = malloc(sizeof(Scene));
@@ -54,6 +69,8 @@ Scene *createScene() {
     scene->storylineCount = 0;
     scene->mobileCount = 0;
     scene->activeControlBlock = NULL;
+    scene->fight = NULL;
+    scene->encounters = createEncounters();
     for (int i = 0; i < MAX_OBJECTS; i++) {
         scene->objects[i] = NULL;
     }
@@ -67,6 +84,14 @@ Scene *createScene() {
         scene->controlBlocks[i] = NULL;
     }
     return scene;
+}
+
+int isFighting(Scene *s) {
+    return s->fight != NULL;
+}
+
+int isDungeon(Scene *s) {
+    return s->type == SCENE_TYPE_DUNGEON;
 }
 
 void addMobile(Scene *scene, Mobile *mob) {
@@ -106,7 +131,7 @@ void drawControl(Player *player, ControlBlock *cb) {
     }
 }
 
-void controlThen(Scene *s, Player *p) {
+void controlThenCheck(Scene *s, Player *p) {
     if (s->activeControlBlock == NULL || s->activeControlBlock->progress > s->activeControlBlock->thenCount) {
         return;
     }
@@ -268,8 +293,17 @@ void drawMobiles(Scene *s, Player *p, Vector2 offset) {
     }
 }
 
+void renderFight(Scene *s) {
+    float scale = (float) SCREEN_WIDTH / s->encounters->background.width;
+    DrawTextureEx(s->encounters->background, (Vector2) {0, 0}, 0, scale, WHITE);
+}
+
 void renderScene(Scene *s, Player *p) {
     ClearBackground(BLACK);
+    if (isFighting(s)) {
+        renderFight(s);
+        return;
+    }
     Vector2 offset = {
             ((float) SCREEN_WIDTH / 2) - p->mob->position.x,
             ((float) SCREEN_HEIGHT / 2) - p->mob->position.y
@@ -288,7 +322,7 @@ int isBlocked(Scene *s, Player *p, Vector2 pos) {
             MOB_COLLISION_HEIGHT
     };
     Vector2d tiles = getTileCount(s);
-    for (int l = 0; l < LAYER_COUNT; l++) {
+    for (int l = 0; l < LAYER_COUNT - 1; l++) {
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
                 int index = (int) s->layers[l]->data[y][x];
@@ -366,9 +400,11 @@ void evaluateMovement(Scene *s, Player *p) {
     }
 }
 
-
 void checkInput(Scene *s, Player *p) {
     resetMoving(p);
+    if (isFighting(s)) {
+        return;
+    }
     getMobAnimation(p->mob)->isPlaying = 0;
     checkMoveKey(
             p,

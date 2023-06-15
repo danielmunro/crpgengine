@@ -10,8 +10,8 @@
 #include <math.h>
 #include <sys/time.h>
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 720
+#define SCREEN_HEIGHT 450
 #define SCALE (float) 1.0
 
 #define MAX_OBJECTS 255
@@ -25,10 +25,12 @@
 #define MAX_CONTROLS 255
 #define MAX_ITEMS 255
 #define MAX_AUDIO 1024
-#define MAX_CHARACTERS_PER_LINE 72
+#define MAX_CHARACTERS_PER_LINE 60
 #define MAX_STORIES 1024
 #define MAX_STORY_LENGTH 255
 #define MAX_BEASTIARY_SIZE 1024
+#define MAX_BEASTS 255
+#define MAX_BEASTS_IN_FIGHT 9
 
 #define LAYER_COUNT 3
 #define LAYER_TYPE_BACKGROUND 0
@@ -120,6 +122,7 @@ typedef struct Mobile Mobile;
 #include "yaml/beastiary.c"
 #include "yaml/mobile.c"
 #include "cyaml.c"
+#include "window.c"
 #include "ui.c"
 #include "audio.c"
 #include "control_block.c"
@@ -129,6 +132,7 @@ typedef struct Mobile Mobile;
 #include "beastiary.c"
 #include "mobile.c"
 #include "player.c"
+#include "fight.c"
 #include "tilemap.c"
 #include "scene.c"
 #include "runtime_args.c"

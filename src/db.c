@@ -1,5 +1,3 @@
-#include <dirent.h>
-
 #define MAX_DATA_SIZE 2048
 
 typedef struct SceneReader {
@@ -190,47 +188,15 @@ void parseSceneXml(SceneReader *sceneReader, const char *indexDir) {
     }
 }
 
-void assignSceneType(Scene *s, const char *sceneType) {
-    int i = 0, count = sizeof(sceneTypes) / sizeof(SceneType);
-    while (i <= count) {
-        printf("i %d %d\n", i, count);
-        if (strcmp(sceneTypes[i].scene, sceneType) == 0) {
-            s->type = sceneTypes[i].code;
-            break;
-        }
-        i++;
-    }
-}
-
-int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
-    struct dirent *de;
-    DIR *dr = opendir(dir);
-    if (dr == NULL) {
-        fprintf(stderr, "Could not open scene index directory");
-    }
-    int i = 0;
-    while (true) {
-        de = readdir(dr);
-        if (de == NULL) {
-            break;
-        }
-        if (strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0) {
-            continue;
-        }
-        scenes[i] = (char *) malloc(strlen(de->d_name));
-        strcpy(scenes[i], de->d_name);
-        printf("added scene %s\n", scenes[i]);
-        i++;
-    }
-    closedir(dr);
-    return i;
-}
-
 void loadAnimations(const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
     printf("load animations file: %s\n", file);
     AnimationData *animation = loadAnimationYaml(file);
-    char *imagePath = pathCat(indexDir, pathCat("animations", animation->sprite->file));
-    SpriteSheet *sp = createSpriteSheet(imagePath, animation->sprite->size[0], animation->sprite->size[1]);
+    char *imagePath = pathCat(indexDir,
+                              pathCat("animations", animation->sprite->file));
+    SpriteSheet *sp = createSpriteSheet(
+            imagePath,
+            animation->sprite->size[0],
+            animation->sprite->size[1]);
     for (int i = 0; i < animation->slices_count; i++) {
         SliceData *s = &animation->slices[i];
         animations[i] = createAnimation(
@@ -245,8 +211,28 @@ void loadAnimations(const char *file, const char *indexDir, Animation *animation
     printf("%d animations loaded\n", animation->slices_count);
 }
 
+BeastEncounter *mapBeastEncounterFromData(Beast *beast, BeastEncounterData data) {
+    BeastEncounter *beastEncounter = malloc(sizeof(BeastEncounter));
+    beastEncounter->beast = beast;
+    beastEncounter->max = data.max;
+    return beastEncounter;
+}
+
+Mobile *mapMobileFromData(MobileData *data, const char *indexDir) {
+    Mobile *mob = malloc(sizeof(Mobile));
+    mob->id = &data->id[0];
+    mob->name = &data->name[0];
+    mob->direction = getDirectionFromString(data->direction);
+    mob->position.x = (float) data->position[0];
+    mob->position.y = (float) data->position[1];
+    char *animationsFile = pathCat(pathCat(indexDir, "/"), data->animations);
+    loadAnimations(animationsFile, indexDir, mob->animations);
+    return mob;
+}
+
 void loadMobiles(Scene *scene, const char *indexDir) {
-    const char *mobDir = pathCat(indexDir, pathCat("/scenes/", pathCat(scene->name, "/mobiles")));
+    const char *mobDir = pathCat(indexDir,
+                                 pathCat("/scenes/", pathCat(scene->name, "/mobiles")));
     printf("load mobiles from %s\n", mobDir);
     if (!FileExists(mobDir)) {
         fprintf(stderr, "file does not exist, skipping mob loading\n");
@@ -257,39 +243,65 @@ void loadMobiles(Scene *scene, const char *indexDir) {
     for (int i = 0; i < files; i++) {
         const char *filepath = pathCat(mobDir, mobFiles[i]);
         MobileData *mobData = loadMobYaml(filepath);
-        Mobile *mob = createMobile();
-        mob->id = &mobData->id[0];
-        mob->name = &mobData->name[0];
-        mob->direction = getDirectionFromString(mobData->direction);
-        mob->position.x = (float) mobData->position[0];
-        mob->position.y = (float) mobData->position[1];
-        char *animationsFile = pathCat(pathCat(indexDir, "/"), mobData->animations);
-        loadAnimations(animationsFile, indexDir, mob->animations);
+        Mobile *mob = mapMobileFromData(mobData, indexDir);
         addMobile(scene, mob);
     }
 }
 
-Scene *loadScene(const char *indexDir, char *sceneName, int showCollisions) {
+void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, const char *indexDir) {
+    const char *filepath = pathCat(pathCat(indexDir, "/images/"), data->background);
+    scene->encounters->background = LoadTextureFromImage(LoadImage(filepath));
+    printf("beast count: %d, beastiary count: %d\n", data->beasts_count, beastiary->beastCount);
+    for (int i = 0; i < data->beasts_count; i++) {
+        for (int b = 0; b < beastiary->beastCount; b++) {
+            if (strcmp(data->beasts[i].id, beastiary->beasts[b]->id) == 0) {
+                scene->encounters->beastEncounters[i] = mapBeastEncounterFromData(beastiary->beasts[b], data->beasts[i]);
+                scene->encounters->beastEncountersCount++;
+                printf("scene %s encounter -- %s, max %d\n",
+                       scene->name,
+                       scene->encounters->beastEncounters[i]->beast->id,
+                       scene->encounters->beastEncounters[i]->max);
+                break;
+            }
+        }
+        if (scene->encounters->beastEncounters[i] == NULL) {
+            fprintf(stderr, "unable to find beast with id: %s\n", data->beasts[i].id);
+        }
+    }
+    printf("done loading encounters for scene %s with beast count %d\n",
+           scene->name,
+           scene->encounters->beastEncountersCount);
+}
+
+Scene *loadScene(Beastiary *beastiary, const char *indexDir, char *sceneName, int showCollisions) {
     printf("create scene: %s\n", sceneName);
     SceneData *sceneData = loadSceneYaml(pathCat(pathCat(indexDir, "/scenes"), sceneName));
     Scene *scene = createScene();
+
+    // scene properties
     scene->showCollisions = showCollisions;
     scene->name = &sceneName[0];
-    assignSceneType(scene, sceneData->type);
+    setSceneTypeFromString(scene, sceneData->type);
     scene->music = &sceneData->music[0];
+
+    // storylines
     for (int i = 0; i < sceneData->storylines_count; i++) {
         addStoryline(scene, &sceneData->storylines[i]);
     }
+
+    // create scene reader for reading tiled xml
     char *sceneFile = pathCat(pathCat(pathCat(indexDir, "/scenes"), sceneName), "/tilemap.tmx");
     SceneReader *sceneReader = createSceneReader(scene, sceneFile);
-
-    // create tilemap
     printf("create scene '%s' tilemap\n", sceneName);
     char *sceneDir = pathCat(pathCat(indexDir, "/scenes"), sceneName);
     parseSceneXml(sceneReader, sceneDir);
 
     // load mobiles
     loadMobiles(scene, indexDir);
+
+    if (sceneData->encounters != NULL) {
+        loadEncounters(beastiary, scene, sceneData->encounters, indexDir);
+    }
 
     free(sceneReader);
     printf("done parsing scene %s\n", sceneName);
