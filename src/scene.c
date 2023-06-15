@@ -314,6 +314,11 @@ void renderScene(Scene *s, Player *p) {
     DrawTextureEx(s->renderedLayers[LAYER_TYPE_FOREGROUND], offset, 0, SCALE, WHITE);
 }
 
+void drawScreen(Scene *s, Player *p) {
+    renderScene(s, p);
+    drawControl(p, s->activeControlBlock);
+}
+
 int isBlocked(Scene *s, Player *p, Vector2 pos) {
     Rectangle pRect = {
             pos.x,

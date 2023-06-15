@@ -200,8 +200,7 @@ void run(Game *g) {
     while (!WindowShouldClose()) {
         checkInput(g->currentScene, g->player);
         BeginDrawing();
-        renderScene(g->currentScene, g->player);
-        drawControl(g->player, g->currentScene->activeControlBlock);
+        drawScreen(g->currentScene, g->player);
         EndDrawing();
         processAnimations(g);
         evaluateMovement(g->currentScene, g->player);
