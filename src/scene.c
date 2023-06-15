@@ -298,12 +298,7 @@ void renderFight(Scene *s) {
     DrawTextureEx(s->encounters->background, (Vector2) {0, 0}, 0, scale, WHITE);
 }
 
-void renderScene(Scene *s, Player *p) {
-    ClearBackground(BLACK);
-    if (isFighting(s)) {
-        renderFight(s);
-        return;
-    }
+void renderDefaultView(Scene *s, Player *p) {
     Vector2 offset = {
             ((float) SCREEN_WIDTH / 2) - p->mob->position.x,
             ((float) SCREEN_HEIGHT / 2) - p->mob->position.y
@@ -312,6 +307,15 @@ void renderScene(Scene *s, Player *p) {
     DrawTextureEx(s->renderedLayers[LAYER_TYPE_MIDGROUND], offset, 0, SCALE, WHITE);
     drawMobiles(s, p, offset);
     DrawTextureEx(s->renderedLayers[LAYER_TYPE_FOREGROUND], offset, 0, SCALE, WHITE);
+}
+
+void renderScene(Scene *s, Player *p) {
+    ClearBackground(BLACK);
+    if (isFighting(s)) {
+        renderFight(s);
+    } else {
+        renderDefaultView(s, p);
+    }
 }
 
 void drawScreen(Scene *s, Player *p) {
