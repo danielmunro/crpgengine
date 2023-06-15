@@ -23,11 +23,9 @@
 #define MAX_MOBILES 255
 #define MAX_INSTRUCTIONS 255
 #define MAX_CONTROLS 255
-#define MAX_ITEMS 255
 #define MAX_AUDIO 1024
 #define MAX_CHARACTERS_PER_LINE 60
 #define MAX_STORIES 1024
-#define MAX_STORY_LENGTH 255
 #define MAX_BEASTIARY_SIZE 1024
 #define MAX_BEASTS 255
 #define MAX_BEASTS_IN_FIGHT 9
@@ -48,9 +46,6 @@ typedef enum {
 #define SCENE_TYPE_TOWN 1
 #define SCENE_TYPE_DUNGEON 2
 
-#define HUMANOID_WIDTH     16.0f
-#define HUMANOID_HEIGHT    24.0f
-
 typedef enum {
     UP = 1,
     DOWN,
@@ -61,18 +56,6 @@ typedef enum {
 #define CONTROL_TYPE_NONE 0
 #define CONTROL_TYPE_WHEN 1
 #define CONTROL_TYPE_THEN 2
-
-#define CONTROL_ID "id"
-#define CONTROL_WHEN "when"
-#define CONTROL_THEN "then"
-#define CONTROL_TITLE "title"
-#define CONTROL_END "end"
-#define CONTROL_ANIMATIONS "animations"
-#define CONTROL_NAME "name"
-#define CONTROL_COORDINATES "coordinates"
-#define CONTROL_DIRECTION "direction"
-#define CONTROL_HAS_STORY "has_story"
-#define CONTROL_NOT_HAS_STORY "not_has_story"
 
 #define WHEN_ENGAGED "engaged"
 #define WHEN_HAS "has"
