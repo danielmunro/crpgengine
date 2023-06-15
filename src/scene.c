@@ -240,9 +240,9 @@ void drawLayer(Scene *s, int layer) {
 
 void drawScene(Scene *s) {
     ClearBackground(BLACK);
-    drawLayer(s, LAYER_TYPE_BACKGROUND);
-    drawLayer(s, LAYER_TYPE_MIDGROUND);
-    drawLayer(s, LAYER_TYPE_FOREGROUND);
+    drawLayer(s, BACKGROUND);
+    drawLayer(s, MIDGROUND);
+    drawLayer(s, FOREGROUND);
 }
 
 void createMobileLayer(Mobile *mobLayer[MAX_LAYER_SIZE][MAX_MOBILES]) {
@@ -303,10 +303,10 @@ void renderDefaultView(Scene *s, Player *p) {
             ((float) SCREEN_WIDTH / 2) - p->mob->position.x,
             ((float) SCREEN_HEIGHT / 2) - p->mob->position.y
     };
-    DrawTextureEx(s->renderedLayers[LAYER_TYPE_BACKGROUND], offset, 0, SCALE, WHITE);
-    DrawTextureEx(s->renderedLayers[LAYER_TYPE_MIDGROUND], offset, 0, SCALE, WHITE);
+    DrawTextureEx(s->renderedLayers[BACKGROUND], offset, 0, SCALE, WHITE);
+    DrawTextureEx(s->renderedLayers[MIDGROUND], offset, 0, SCALE, WHITE);
     drawMobiles(s, p, offset);
-    DrawTextureEx(s->renderedLayers[LAYER_TYPE_FOREGROUND], offset, 0, SCALE, WHITE);
+    DrawTextureEx(s->renderedLayers[FOREGROUND], offset, 0, SCALE, WHITE);
 }
 
 void renderScene(Scene *s, Player *p) {

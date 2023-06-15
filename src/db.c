@@ -119,9 +119,9 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
         layerOpen = 1;
         Layer *layer = malloc(sizeof(Layer));
         char *layerName = getStringAttribute(sceneReader->reader, "name");
-        if (strcmp(layerName, "background") == 0) layer->type = LAYER_TYPE_BACKGROUND;
-        else if (strcmp(layerName, "midground") == 0) layer->type = LAYER_TYPE_MIDGROUND;
-        else if (strcmp(layerName, "foreground") == 0) layer->type = LAYER_TYPE_FOREGROUND;
+        if (strcmp(layerName, "background") == 0) layer->type = BACKGROUND;
+        else if (strcmp(layerName, "midground") == 0) layer->type = MIDGROUND;
+        else if (strcmp(layerName, "foreground") == 0) layer->type = FOREGROUND;
         else printf("unknown layer: %s\n", layerName);
         sceneReader->scene->layers[sceneReader->scene->layerCount] = layer;
     } else if (strcmp(strName, "data") == 0) {
