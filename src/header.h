@@ -92,8 +92,6 @@ typedef enum {
 #define FONT_SIZE 20
 #define LINE_HEIGHT 30
 
-typedef struct Mobile Mobile;
-
 #include "util.c"
 #include "yaml/animation.c"
 #include "yaml/config.c"
@@ -108,12 +106,12 @@ typedef struct Mobile Mobile;
 #include "window.c"
 #include "ui.c"
 #include "audio.c"
-#include "control_block.c"
 #include "sprite.c"
 #include "attributes.c"
 #include "item.c"
 #include "beastiary.c"
 #include "mobile.c"
+#include "control_block.c"
 #include "player.c"
 #include "fight.c"
 #include "tilemap.c"
