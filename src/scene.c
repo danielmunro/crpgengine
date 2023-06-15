@@ -125,7 +125,7 @@ Vector2d getTileCount(Scene *s) {
 void drawControl(Player *player, ControlBlock *cb) {
     if (cb != NULL && cb->progress < cb->thenCount) {
         int p = cb->progress;
-        if (cb->then[p]->outcome == OUTCOME_SPEAK && isSpeakingTo(player, cb->then[p]->target)) {
+        if (cb->then[p]->outcome == SPEAK && isSpeakingTo(player, cb->then[p]->target)) {
             drawDialogBox(cb->then[p]->message);
         }
     }
@@ -136,7 +136,7 @@ void controlThenCheck(Scene *s, Player *p) {
         return;
     }
     ControlBlock *cb = s->activeControlBlock;
-    if (cb->then[cb->progress]->outcome == OUTCOME_ADD_STORY) {
+    if (cb->then[cb->progress]->outcome == ADD_STORY) {
         printf("add story %s\n", cb->then[cb->progress]->story);
         addStory(p, cb->then[cb->progress]->story);
         cb->progress++;
@@ -144,15 +144,15 @@ void controlThenCheck(Scene *s, Player *p) {
 }
 
 int needsEngagedAndIsNot(int condition, Player *p, Mobile *mobileTrigger) {
-    return condition == CONDITION_ENGAGED && !isSpeakingTo(p, mobileTrigger);
+    return condition == ENGAGED && !isSpeakingTo(p, mobileTrigger);
 }
 
 int needsStoryAndMissing(int condition, Player *p, char *story) {
-    return condition == CONDITION_HAS_STORY && !hasStory(p, story);
+    return condition == HAS_STORY && !hasStory(p, story);
 }
 
 int needsNotHaveStoryAndPresent(int condition, Player *p, char *story) {
-    return condition == CONDITION_NOT_HAS_STORY && hasStory(p, story);
+    return condition == NOT_HAS_STORY && hasStory(p, story);
 }
 
 void controlWhenCheck(Scene *s, Player *p) {
@@ -449,13 +449,13 @@ void checkInput(Scene *s, Player *p) {
             printf("player is engaged with no active control blocks\n");
             return;
         }
-        if (p->engaged && s->activeControlBlock->then[s->activeControlBlock->progress]->outcome == OUTCOME_SPEAK) {
+        if (p->engaged && s->activeControlBlock->then[s->activeControlBlock->progress]->outcome == SPEAK) {
             if (s->activeControlBlock != NULL) {
                 s->activeControlBlock->progress++;
                 printf("active control block progress at %d\n", s->activeControlBlock->progress);
             }
             if (s->activeControlBlock->progress >= s->activeControlBlock->thenCount
-                    || s->activeControlBlock->then[s->activeControlBlock->progress]->outcome != OUTCOME_SPEAK) {
+                    || s->activeControlBlock->then[s->activeControlBlock->progress]->outcome != SPEAK) {
                 printf("unset engaged\n");
                 p->engaged = false;
             }

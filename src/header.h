@@ -32,12 +32,6 @@
 
 #define LAYER_COUNT 3
 
-typedef enum {
-    BACKGROUND = 0,
-    MIDGROUND,
-    FOREGROUND,
-} LayerType;
-
 #define TARGET_FRAMERATE 60
 #define MOB_COLLISION_WIDTH 16
 #define MOB_COLLISION_HEIGHT 12
@@ -46,16 +40,8 @@ typedef enum {
 #define SCENE_TYPE_TOWN 1
 #define SCENE_TYPE_DUNGEON 2
 
-typedef enum {
-    UP = 1,
-    DOWN,
-    LEFT,
-    RIGHT
-} AnimationDirection;
-
-#define CONTROL_TYPE_NONE 0
-#define CONTROL_TYPE_WHEN 1
-#define CONTROL_TYPE_THEN 2
+#define FONT_SIZE 20
+#define LINE_HEIGHT 30
 
 #define WHEN_ENGAGED "engaged"
 #define WHEN_HAS "has"
@@ -63,13 +49,6 @@ typedef enum {
 #define WHEN_AT "at"
 #define WHEN_HAS_STORY "has_story"
 #define WHEN_NOT_HAS_STORY "not_has_story"
-
-#define CONDITION_ENGAGED 1
-#define CONDITION_HAS 2
-#define CONDITION_NOT_HAS 3
-#define CONDITION_AT 4
-#define CONDITION_HAS_STORY 5
-#define CONDITION_NOT_HAS_STORY 6
 
 #define THEN_SPEAK "speak"
 #define THEN_MOVE_TO "move_to"
@@ -80,17 +59,38 @@ typedef enum {
 #define THEN_TAKE "take"
 #define THEN_ADD_STORY "add_story"
 
-#define OUTCOME_SPEAK 1
-#define OUTCOME_MOVE_TO 2
-#define OUTCOME_DIRECTION 3
-#define OUTCOME_SPRITE 4
-#define OUTCOME_WAIT 5
-#define OUTCOME_GIVE_ITEM 6
-#define OUTCOME_TAKE 7
-#define OUTCOME_ADD_STORY 8
+typedef enum {
+    ENGAGED = 1,
+    HAS,
+    NOT_HAS,
+    AT,
+    HAS_STORY,
+    NOT_HAS_STORY,
+} Condition;
 
-#define FONT_SIZE 20
-#define LINE_HEIGHT 30
+typedef enum {
+    SPEAK = 1,
+    MOVE_TO,
+    DIRECTION,
+    SPRITE,
+    WAIT,
+    GIVE_ITEM,
+    TAKE,
+    ADD_STORY,
+} Outcome;
+
+typedef enum {
+    BACKGROUND = 0,
+    MIDGROUND,
+    FOREGROUND,
+} LayerType;
+
+typedef enum {
+    UP = 1,
+    DOWN,
+    LEFT,
+    RIGHT
+} AnimationDirection;
 
 #include "util.c"
 #include "yaml/animation.c"
