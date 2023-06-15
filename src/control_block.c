@@ -30,22 +30,6 @@ ControlBlock *createControlBlock(int control) {
     return cb;
 }
 
-typedef struct ControlBlockInt {
-    int control;
-    char *when[MAX_INSTRUCTIONS][2];
-    char *then[MAX_INSTRUCTIONS][2];
-    int whenCount;
-    int thenCount;
-} ControlBlockInt;
-
-ControlBlockInt *createControlBlockInt(int control) {
-    ControlBlockInt *cb = malloc(sizeof(ControlBlockInt));
-    cb->control = control;
-    cb->whenCount = 0;
-    cb->thenCount = 0;
-    return cb;
-}
-
 When *createWhen() {
     When *when = malloc(sizeof(When));
     when->mobileTrigger = NULL;
