@@ -13,7 +13,6 @@ typedef struct Then {
 } Then;
 
 typedef struct ControlBlock {
-    int control;
     When *when[MAX_INSTRUCTIONS];
     Then *then[MAX_INSTRUCTIONS];
     int whenCount;
@@ -21,9 +20,8 @@ typedef struct ControlBlock {
     int progress;
 } ControlBlock;
 
-ControlBlock *createControlBlock(int control) {
+ControlBlock *createControlBlock() {
     ControlBlock *cb = malloc(sizeof(ControlBlock));
-    cb->control = control;
     cb->whenCount = 0;
     cb->thenCount = 0;
     cb->progress = 0;

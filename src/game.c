@@ -75,7 +75,7 @@ Mobile *findMobById(Game *g, char *id) {
 }
 
 ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
-    ControlBlock *c = createControlBlock(CONTROL_TYPE_WHEN);
+    ControlBlock *c = createControlBlock();
     c->whenCount = storyline->when_count;
     c->thenCount = storyline->then_count;
     printf("when count: %d\n", storyline->when_count);

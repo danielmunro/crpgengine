@@ -186,7 +186,7 @@ void controlWhenCheck(Scene *s, Player *p) {
 
 void activeControlRemoveCheck(Scene *s) {
     if (s->activeControlBlock != NULL && s->activeControlBlock->progress >= s->activeControlBlock->thenCount) {
-        printf("unset active control block %d\n", s->activeControlBlock->control);
+        printf("unset active control block\n");
         s->activeControlBlock->progress = 0;
         s->activeControlBlock = NULL;
     }
