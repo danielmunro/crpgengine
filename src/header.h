@@ -33,6 +33,7 @@
 #define LAYER_COUNT 3
 
 #define TARGET_FRAMERATE 60
+
 #define MOB_COLLISION_WIDTH 16
 #define MOB_COLLISION_HEIGHT 12
 #define MOB_COLLISION_HEIGHT_OFFSET 12
@@ -43,24 +44,17 @@
 #define FONT_SIZE 20
 #define LINE_HEIGHT 30
 
-#define WHEN_ENGAGED "engaged"
-#define WHEN_HAS "has"
-#define WHEN_NOT_HAS "not_has"
-#define WHEN_AT "at"
-#define WHEN_HAS_STORY "has_story"
-#define WHEN_NOT_HAS_STORY "not_has_story"
-
-#define THEN_SPEAK "speak"
-#define THEN_MOVE_TO "move_to"
-#define THEN_DIRECTION "direction"
-#define THEN_SPRITE "sprite"
-#define THEN_WAIT "wait"
-#define THEN_GIVE_ITEM "give_item"
-#define THEN_TAKE "take"
-#define THEN_ADD_STORY "add_story"
+char *conditions[] = {
+    "engaged",
+    "has",
+    "not_has",
+    "at",
+    "has_story",
+    "not_has_story",
+};
 
 typedef enum {
-    ENGAGED = 1,
+    ENGAGED = 0,
     HAS,
     NOT_HAS,
     AT,
@@ -68,8 +62,19 @@ typedef enum {
     NOT_HAS_STORY,
 } Condition;
 
+char *outcomes[] = {
+        "speak",
+        "move_to",
+        "direction",
+        "sprite",
+        "wait",
+        "give_item",
+        "take",
+        "add_story",
+};
+
 typedef enum {
-    SPEAK = 1,
+    SPEAK = 0,
     MOVE_TO,
     DIRECTION,
     SPRITE,

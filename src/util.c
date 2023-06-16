@@ -30,39 +30,21 @@ int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
 }
 
 int mapCondition(char *when) {
-    if (strcmp(when, WHEN_HAS) == 0) {
-        return HAS;
-    } else if (strcmp(when, WHEN_NOT_HAS) == 0) {
-        return NOT_HAS;
-    } else if (strcmp(when, WHEN_ENGAGED) == 0) {
-        return ENGAGED;
-    } else if (strcmp(when, WHEN_AT) == 0) {
-        return AT;
-    } else if (strcmp(when, WHEN_HAS_STORY) == 0) {
-        return HAS_STORY;
-    } else if (strcmp(when, WHEN_NOT_HAS_STORY) == 0) {
-        return NOT_HAS_STORY;
+    int count = sizeof(conditions) / sizeof(char*);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(conditions[i], when) == 0) {
+            return i;
+        }
     }
     return -1;
 }
 
 int mapOutcome(char *then) {
-    if (strcmp(then, THEN_SPEAK) == 0) {
-        return SPEAK;
-    } else if (strcmp(then, THEN_MOVE_TO) == 0) {
-        return MOVE_TO;
-    } else if (strcmp(then, THEN_DIRECTION) == 0) {
-        return DIRECTION;
-    } else if (strcmp(then, THEN_SPRITE) == 0) {
-        return SPRITE;
-    } else if (strcmp(then, THEN_WAIT) == 0) {
-        return WAIT;
-    } else if (strcmp(then, THEN_GIVE_ITEM) == 0) {
-        return GIVE_ITEM;
-    } else if (strcmp(then, THEN_TAKE) == 0) {
-        return TAKE;
-    } else if (strcmp(then, THEN_ADD_STORY) == 0) {
-        return ADD_STORY;
+    int count = sizeof(outcomes) / sizeof(char*);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(outcomes[i], then) == 0) {
+            return i;
+        }
     }
     return -1;
 }
