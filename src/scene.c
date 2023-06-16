@@ -42,6 +42,7 @@ typedef struct Scene {
     ControlBlock *activeControlBlock;
     Encounters *encounters;
     Fight *fight;
+    Log *log;
 } Scene;
 
 const SceneType sceneTypes[] = {
@@ -62,7 +63,7 @@ void setSceneTypeFromString(Scene *s, const char *sceneType) {
     s->type = SCENE_TYPE_TOWN;
 }
 
-Scene *createScene() {
+Scene *createScene(Log *log) {
     Scene *scene = malloc(sizeof(Scene));
     scene->layerCount = 0;
     scene->nextExit = 0;
@@ -71,6 +72,7 @@ Scene *createScene() {
     scene->activeControlBlock = NULL;
     scene->fight = NULL;
     scene->encounters = createEncounters();
+    scene->log = log;
     for (int i = 0; i < MAX_OBJECTS; i++) {
         scene->objects[i] = NULL;
     }
@@ -137,7 +139,7 @@ void controlThenCheck(Scene *s, Player *p) {
     }
     ControlBlock *cb = s->activeControlBlock;
     if (cb->then[cb->progress]->outcome == ADD_STORY) {
-        printf("add story %s\n", cb->then[cb->progress]->story);
+        addDebug(s->log, "add storyline '%s' for player", cb->then[cb->progress]->story);
         addStory(p, cb->then[cb->progress]->story);
         cb->progress++;
     }
@@ -177,16 +179,16 @@ void controlWhenCheck(Scene *s, Player *p) {
         }
         if (matched) {
             s->activeControlBlock = cb;
-            printf("set active control block %d, progress %d\n", i, s->activeControlBlock->progress);
+            addDebug(s->log, "set active control block %d, progress %d", i, s->activeControlBlock->progress);
             return;
         }
     }
-    printf("done control check\n");
+    addDebug(s->log, "done control check");
 }
 
 void activeControlRemoveCheck(Scene *s) {
     if (s->activeControlBlock != NULL && s->activeControlBlock->progress >= s->activeControlBlock->thenCount) {
-        printf("unset active control block\n");
+        addDebug(s->log, "unset active control block");
         s->activeControlBlock->progress = 0;
         s->activeControlBlock = NULL;
     }

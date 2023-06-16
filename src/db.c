@@ -273,10 +273,10 @@ void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, co
            scene->encounters->beastEncountersCount);
 }
 
-Scene *loadScene(Beastiary *beastiary, const char *indexDir, char *sceneName, int showCollisions) {
+Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sceneName, int showCollisions) {
     printf("create scene: %s\n", sceneName);
     SceneData *sceneData = loadSceneYaml(pathCat(pathCat(indexDir, "/scenes"), sceneName));
-    Scene *scene = createScene();
+    Scene *scene = createScene(log);
 
     // scene properties
     scene->showCollisions = showCollisions;

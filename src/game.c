@@ -95,8 +95,8 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
 
 void loadScenes(Game *g, RuntimeArgs  *r, char *scenes[MAX_SCENES]) {
     for (int i = 0; i < g->sceneCount; i++) {
-        g->scenes[i] = loadScene(g->beastiary, r->indexDir, scenes[i], r->showCollisions);
-        addLog(g->log, "scene %s (%d) loaded", g->scenes[i]->name, i);
+        g->scenes[i] = loadScene(g->log, g->beastiary, r->indexDir, scenes[i], r->showCollisions);
+        addDebug(g->log, "scene %s (%d) loaded", g->scenes[i]->name, i);
     }
     for (int i = 0; i < g->sceneCount; i++) {
         for (int c = 0; c < g->scenes[i]->storylineCount; c++) {
@@ -201,7 +201,7 @@ Game *createGame(RuntimeArgs *r) {
     g->audioManager = loadAudioManager(r->indexDir);
     g->player = loadPlayer(r->indexDir);
     g->log = createLog(r->debug);
-    printf("log level: %d\n", g->log->level);
+    addLog(g->log, "log level set to %s", getLogLevelStr(g->log->level));
     g->beastiary = createBeastiary();
     char *scenes[MAX_SCENES];
     char *sceneDir = pathCat(r->indexDir, "/scenes");
@@ -209,6 +209,6 @@ Game *createGame(RuntimeArgs *r) {
     loadBeastiary(g, r->indexDir);
     loadScenes(g, r, scenes);
     setScene(g, g->scenes[r->sceneIndex]);
-    addLog(g->log, DEBUG, "done creating game object");
+    addDebug(g->log, "done creating game object");
     return g;
 }

@@ -8,6 +8,11 @@ typedef struct RuntimeArgs {
 
 RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
     RuntimeArgs *r = malloc(sizeof(RuntimeArgs));
+    r->sceneIndex = 0;
+    r->showCollisions = false;
+    r->dump = false;
+    r->debug = false;
+    r->indexDir = "";
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
             if (argv[i][1] == 'c') {
