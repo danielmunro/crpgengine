@@ -14,30 +14,31 @@ typedef struct AudioManager {
     int soundCount;
     int musicCount;
     int musicIndex;
+    Log *log;
 } AudioManager;
 
-AudioManager *createAudioManager() {
+AudioManager *createAudioManager(Log *log) {
     AudioManager *s = malloc(sizeof(AudioManager));
     s->soundCount = 0;
     s->musicCount = 0;
     s->musicIndex = -1;
+    s->log = log;
     return s;
 }
 
 void playMusic(AudioManager *am, char *name) {
-    printf("play music %s requested, %d total songs\n", name, am->musicCount);
     for (int i = 0; i < am->musicCount; i++) {
-        printf("music: %s\n", am->music[i]->name);
         if (strcmp(am->music[i]->name, name) == 0) {
-            printf("music found, playing now\n");
             if (am->musicIndex == i) {
                 return;
             }
             if (am->musicIndex > -1 && IsMusicStreamPlaying(am->music[am->musicIndex]->music)) {
                 StopMusicStream(am->music[am->musicIndex]->music);
+                addDebug(am->log, "stopping music '%s'", am->music[am->musicIndex]->name);
             }
             am->musicIndex = i;
             PlayMusicStream(am->music[i]->music);
+            addDebug(am->log, "playing music '%s'", name);
             return;
         }
     }

@@ -25,7 +25,7 @@ void addAllAnimations(Game *g, Animation *animations[MAX_ANIMATIONS]) {
 }
 
 void setScene(Game *g, Scene *scene) {
-    printf("request scene set to %s\n", scene->name);
+    addDebug(g->log, "setting scene to '%s'", scene->name);
     g->currentScene = scene;
     memset(g->animations, 0, sizeof(g->animations));
     g->animIndex = 0;
@@ -34,10 +34,8 @@ void setScene(Game *g, Scene *scene) {
     g->player->mob->position.x = r.x + (r.width / 2);
     g->player->mob->position.y = r.y + (r.height / 2);
     drawScene(g->currentScene);
-    printf("current scene: %s\n", g->currentScene->name);
-    printf("play music %s\n", g->currentScene->music);
     playMusic(g->audioManager, g->currentScene->music);
-    printf("scene set to %s\n", g->currentScene->name);
+    addDebug(g->log, "finished setting scene to '%s'", g->currentScene->name);
 }
 
 Mobile *findMobById(Game *g, char *id) {
@@ -142,43 +140,6 @@ void evaluateExits(Game *g) {
     }
 }
 
-void checkControls(Scene *s, Player *p) {
-    controlWhenCheck(s, p);
-    controlThenCheck(s, p);
-    activeControlRemoveCheck(s);
-}
-
-void checkToInitiateFight(Scene *s, Player *p) {
-    if (!isDungeon(s) || isFighting(s) || !isMoving(p)) {
-        return;
-    }
-    int chance = rand() % 100 + 1;
-    if (chance == 1) {
-        Beast *beasts[MAX_BEASTS_IN_FIGHT];
-        int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
-        int created = 0;
-        while (created < beastsToCreate) {
-            int e = rand() % s->encounters->beastEncountersCount + 0;
-            int max = s->encounters->beastEncounters[e]->max;
-            int amount = rand() % max + 1;
-            if (amount > beastsToCreate) {
-                amount = beastsToCreate;
-            }
-            for (int i = 0; i < amount; i++) {
-                beasts[created] = cloneBeast(s->encounters->beastEncounters[e]->beast);
-                created++;
-            }
-        }
-        s->fight = createFight(beasts);
-        s->fight->beastCount = created;
-        printf("fight encountered with %d opponents\n", s->fight->beastCount);
-    }
-}
-
-void checkFights(Scene *s, Player *p) {
-    checkToInitiateFight(s, p);
-}
-
 void run(Game *g) {
     while (!WindowShouldClose()) {
         checkInput(g->currentScene, g->player);
@@ -198,9 +159,9 @@ Game *createGame(RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
     g->animIndex = 0;
     g->currentScene = NULL;
-    g->audioManager = loadAudioManager(r->indexDir);
-    g->player = loadPlayer(r->indexDir);
     g->log = createLog(r->debug);
+    g->audioManager = loadAudioManager(g->log, r->indexDir);
+    g->player = loadPlayer(r->indexDir);
     addLog(g->log, "log level set to %s", getLogLevelStr(g->log->level));
     g->beastiary = createBeastiary();
     char *scenes[MAX_SCENES];

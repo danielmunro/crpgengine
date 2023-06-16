@@ -323,9 +323,9 @@ Player *loadPlayer(char *indexDir) {
     return player;
 }
 
-AudioManager *loadAudioManager(char *indexDir) {
+AudioManager *loadAudioManager(Log *log, char *indexDir) {
     printf("loading audio manager from dir %s\n", indexDir);
-    AudioManager *am = createAudioManager();
+    AudioManager *am = createAudioManager(log);
     assignAudioManagerValues(am, indexDir);
     printf("audio manager loaded %d songs\n", am->musicCount);
     return am;

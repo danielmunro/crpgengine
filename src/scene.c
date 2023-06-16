@@ -487,3 +487,40 @@ void checkInput(Scene *s, Player *p) {
         }
     }
 }
+
+void checkToInitiateFight(Scene *s, Player *p) {
+    if (!isDungeon(s) || isFighting(s) || !isMoving(p)) {
+        return;
+    }
+    int chance = rand() % 100 + 1;
+    if (chance == 1) {
+        Beast *beasts[MAX_BEASTS_IN_FIGHT];
+        int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
+        int created = 0;
+        while (created < beastsToCreate) {
+            int e = rand() % s->encounters->beastEncountersCount + 0;
+            int max = s->encounters->beastEncounters[e]->max;
+            int amount = rand() % max + 1;
+            if (amount > beastsToCreate) {
+                amount = beastsToCreate;
+            }
+            for (int i = 0; i < amount; i++) {
+                beasts[created] = cloneBeast(s->encounters->beastEncounters[e]->beast);
+                created++;
+            }
+        }
+        s->fight = createFight(beasts);
+        s->fight->beastCount = created;
+        addDebug(s->log, "fight encountered with %d opponents", s->fight->beastCount);
+    }
+}
+
+void checkControls(Scene *s, Player *p) {
+    controlWhenCheck(s, p);
+    controlThenCheck(s, p);
+    activeControlRemoveCheck(s);
+}
+
+void checkFights(Scene *s, Player *p) {
+    checkToInitiateFight(s, p);
+}
