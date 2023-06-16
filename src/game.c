@@ -25,30 +25,7 @@ void addAllAnimations(Game *g, Animation *animations[MAX_ANIMATIONS]) {
 
 void setScene(Game *g, Scene *scene) {
     printf("request scene set to %s\n", scene->name);
-//    if (g->currentScene != NULL) {
-//        free(g->currentScene);
-//    }
-//    g->currentScene = createScene();
-//    strcpy(g->currentScene->name, scene->name);
-//    g->currentScene->tilemap = scene->tilemap;
-//    g->currentScene->entrance = scene->entrance;
-//    g->currentScene->showCollisions = scene->showCollisions;
-//    g->currentScene->layerCount = scene->layerCount;
-//    g->currentScene->music = scene->music;
-//    for (int i = 0; i < MAX_EXITS; i++) {
-//        g->currentScene->exits[i] = scene->exits[i];
-//    }
-//    for (int i = 0; i < MAX_OBJECTS; i++) {
-//        g->currentScene->objects[i] = scene->objects[i];
-//    }
-//    for (int i = 0; i < LAYER_COUNT; i++) {
-//        g->currentScene->layers[i] = scene->layers[i];
-//    }
-//    for (int i = 0; i < MAX_MOBILES; i++) {
-//        g->currentScene->mobiles[i] = scene->mobiles[i];
-//    }
     g->currentScene = scene;
-
     memset(g->animations, 0, sizeof(g->animations));
     g->animIndex = 0;
     addAllAnimations(g, g->player->mob->animations);
