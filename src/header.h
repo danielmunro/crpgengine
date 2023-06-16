@@ -44,6 +44,11 @@
 #define FONT_SIZE 20
 #define LINE_HEIGHT 30
 
+typedef enum {
+    NORMAL = 0,
+    DEBUG = 1,
+} LogLevel;
+
 char *conditions[] = {
     "engaged",
     "has",
@@ -97,6 +102,7 @@ typedef enum {
     RIGHT
 } AnimationDirection;
 
+#include "log.c"
 #include "util.c"
 #include "yaml/animation.c"
 #include "yaml/config.c"

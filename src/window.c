@@ -11,5 +11,5 @@ void initWindow(const char *indexDir) {
 }
 
 void postInitWindow() {
-    ToggleFullscreen();
+//    ToggleFullscreen();
 }

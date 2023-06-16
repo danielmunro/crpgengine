@@ -7,6 +7,7 @@ typedef struct Game {
     AudioManager *audioManager;
     int animIndex;
     Beastiary *beastiary;
+    Log *log;
 } Game;
 
 void addAnimation(Game *g, Animation *a) {
@@ -92,9 +93,10 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
     return c;
 }
 
-void loadScenes(Game *g, int showCollisions, char *indexDir, char *scenes[MAX_SCENES]) {
+void loadScenes(Game *g, RuntimeArgs  *r, char *scenes[MAX_SCENES]) {
     for (int i = 0; i < g->sceneCount; i++) {
-        g->scenes[i] = loadScene(g->beastiary, indexDir, scenes[i], showCollisions);
+        g->scenes[i] = loadScene(g->beastiary, r->indexDir, scenes[i], r->showCollisions);
+        addLog(g->log, "scene %s (%d) loaded", g->scenes[i]->name, i);
     }
     for (int i = 0; i < g->sceneCount; i++) {
         for (int c = 0; c < g->scenes[i]->storylineCount; c++) {
@@ -198,12 +200,15 @@ Game *createGame(RuntimeArgs *r) {
     g->currentScene = NULL;
     g->audioManager = loadAudioManager(r->indexDir);
     g->player = loadPlayer(r->indexDir);
+    g->log = createLog(r->debug);
+    printf("log level: %d\n", g->log->level);
     g->beastiary = createBeastiary();
     char *scenes[MAX_SCENES];
     char *sceneDir = pathCat(r->indexDir, "/scenes");
     g->sceneCount = getFilesInDirectory(sceneDir, scenes);
     loadBeastiary(g, r->indexDir);
-    loadScenes(g, r->showCollisions, r->indexDir, scenes);
+    loadScenes(g, r, scenes);
     setScene(g, g->scenes[r->sceneIndex]);
+    addLog(g->log, DEBUG, "done creating game object");
     return g;
 }
