@@ -176,19 +176,23 @@ void checkToInitiateFight(Scene *s, Player *p) {
     int chance = rand() % 100 + 1;
     if (chance == 1) {
         Beast *beasts[MAX_BEASTS_IN_FIGHT];
-        int beastsToCreate = rand() % 9 + 1;
+        int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
         int created = 0;
         while (created < beastsToCreate) {
             int e = rand() % s->encounters->beastEncountersCount + 0;
             int max = s->encounters->beastEncounters[e]->max;
             int amount = rand() % max + 1;
+            if (amount > beastsToCreate) {
+                amount = beastsToCreate;
+            }
             for (int i = 0; i < amount; i++) {
                 beasts[created] = cloneBeast(s->encounters->beastEncounters[e]->beast);
+                created++;
             }
-            created += amount;
         }
         s->fight = createFight(beasts);
-        printf("fight encountered with %d opponents\n", created);
+        s->fight->beastCount = created;
+        printf("fight encountered with %d opponents\n", s->fight->beastCount);
     }
 }
 

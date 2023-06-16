@@ -1,7 +1,7 @@
 typedef struct Beast {
     char *id;
     char *name;
-    Image image;
+    Texture2D image;
     Attributes *attributes;
     int level;
     int hp;
@@ -34,7 +34,7 @@ Beast *createBeastFromData(const char *indexDir, BeastData *data) {
     beast->mana = data->mana;
     beast->level = data->level;
     char *filepath = pathCat(indexDir, pathCat("/images/", data->image));
-    beast->image = LoadImage(filepath);
+    beast->image = LoadTextureFromImage(LoadImage(filepath));
     beast->attributes = createAttributesFromData(data->attributes);
     return beast;
 }

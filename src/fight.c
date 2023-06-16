@@ -24,11 +24,11 @@ Fight *createFight(Beast *beasts[MAX_BEASTS_IN_FIGHT]) {
     Fight *fight = malloc(sizeof(Fight));
     int i = 0;
     while(true) {
-        fight->beasts[i] = beasts[i];
-        i++;
         if (beasts[i] == NULL) {
             break;
         }
+        fight->beasts[i] = beasts[i];
+        i++;
     }
     fight->beastCount = i;
     return fight;

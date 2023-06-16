@@ -293,9 +293,23 @@ void drawMobiles(Scene *s, Player *p, Vector2 offset) {
     }
 }
 
-void renderFight(Scene *s) {
-    float scale = (float) SCREEN_WIDTH / s->encounters->background.width;
+void renderFight(Scene *s, Player *p) {
+    float scale = (float) SCREEN_WIDTH / (float) s->encounters->background.width;
     DrawTextureEx(s->encounters->background, (Vector2) {0, 0}, 0, scale, WHITE);
+    int width = 0;
+    int height = 0;
+    for (int i = 0; i < s->fight->beastCount; i++) {
+        const int x = i % 3;
+        DrawTextureEx(s->fight->beasts[i]->image,
+                      (Vector2) {(float) width, (float) height},
+                      0, SCALE, WHITE);
+        width += s->fight->beasts[i]->image.width;
+        if (x > 0 && x % 2 == 0) {
+            height += s->fight->beasts[i]->image.height;
+            width = 0;
+        }
+    }
+    drawAnimation(findAnimation(p->mob->animations, LEFT), (Vector2) {SCREEN_WIDTH * .8, 100 });
 }
 
 void renderDefaultView(Scene *s, Player *p) {
@@ -312,7 +326,7 @@ void renderDefaultView(Scene *s, Player *p) {
 void renderScene(Scene *s, Player *p) {
     ClearBackground(BLACK);
     if (isFighting(s)) {
-        renderFight(s);
+        renderFight(s, p);
     } else {
         renderDefaultView(s, p);
     }
