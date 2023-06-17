@@ -24,6 +24,7 @@ Player *createPlayer() {
     player->moving.left = 0;
     player->moving.right = 0;
     gettimeofday(&player->lastMovement, NULL);
+    player->blockedBy = NULL;
     player->engageable = NULL;
     player->engaged = false;
     player->storyCount = 0;

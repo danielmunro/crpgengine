@@ -45,7 +45,7 @@ static void processTilemapNode(SceneReader *sceneReader, const char *indexDir) {
             return;
         }
         tileOpen = 1;
-        Object *o = malloc(sizeof(Object));
+        Object *o = createObject();
         o->tile = getIntAttribute(sceneReader->reader, "id");
         sceneReader->scene->objects[sceneReader->objectCount] = o;
         sceneReader->objectCount++;
@@ -120,6 +120,7 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
         }
         layerOpen = 1;
         Layer *layer = malloc(sizeof(Layer));
+        layer->type = -1;
         char *layerName = getStringAttribute(sceneReader->reader, "name");
         if (strcmp(layerName, "background") == 0) layer->type = BACKGROUND;
         else if (strcmp(layerName, "midground") == 0) layer->type = MIDGROUND;
@@ -152,7 +153,7 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
                 return;
             }
             exitOpen = 1;
-            sceneReader->scene->exits[sceneReader->scene->nextExit] = malloc(sizeof(Exit));
+            sceneReader->scene->exits[sceneReader->scene->nextExit] = createExit();
             sceneReader->scene->exits[sceneReader->scene->nextExit]->area = (Rectangle){
                     getFloatAttribute(sceneReader->reader, "x"),
                     getFloatAttribute(sceneReader->reader, "y"),
@@ -223,7 +224,7 @@ BeastEncounter *mapBeastEncounterFromData(Beast *beast, BeastEncounterData data)
 }
 
 Mobile *mapMobileFromData(Log *log, MobileData *data, const char *indexDir) {
-    Mobile *mob = malloc(sizeof(Mobile));
+    Mobile *mob = createMobile();
     mob->id = &data->id[0];
     mob->name = &data->name[0];
     mob->direction = getDirectionFromString(data->direction);

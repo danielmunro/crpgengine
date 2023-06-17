@@ -50,6 +50,20 @@ const SceneType sceneTypes[] = {
     {SCENE_TYPE_DUNGEON, "dungeon"},
 };
 
+Exit *createExit() {
+    Exit *e = malloc(sizeof(Exit));
+    e->x = 0;
+    e->y = 0;
+    return e;
+}
+
+Object *createObject() {
+    Object *o = malloc(sizeof(Object));
+    o->id = 0;
+    o->tile = 0;
+    return o;
+}
+
 void setSceneTypeFromString(Scene *s, const char *sceneType) {
     int count = sizeof(sceneTypes) / sizeof(SceneType);
     for (int i = 0; i < count; i++) {
@@ -492,33 +506,36 @@ void checkInput(Scene *s, Player *p) {
     }
 }
 
+Fight *createFightInScene(Scene *s) {
+    Beast *beasts[MAX_BEASTS_IN_FIGHT];
+    int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
+    addDebug(s->log, "creating %d beasts for fight", beastsToCreate);
+    int created = 0;
+    while (created < beastsToCreate) {
+        int e = rand() % s->encounters->beastEncountersCount + 0;
+        int max = s->encounters->beastEncounters[e]->max;
+        int amount = rand() % max + 1;
+        if (amount > beastsToCreate - created) {
+            amount = beastsToCreate - created;
+        }
+        for (int i = 0; i < amount; i++) {
+            beasts[created] = cloneBeast(s->encounters->beastEncounters[e]->beast);
+            created++;
+        }
+    }
+    s->fight = createFight(beasts);
+    s->fight->beastCount = created;
+    addDebug(s->log, "fight encountered with %d opponents", s->fight->beastCount);
+    return s->fight;
+}
+
 void checkToInitiateFight(Scene *s, Player *p) {
     if (!isDungeon(s) || isFighting(s) || !isMoving(p)) {
         return;
     }
     int chance = rand() % 100 + 1;
     if (chance == 1) {
-        Beast *beasts[MAX_BEASTS_IN_FIGHT];
-        int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
-        if (beastsToCreate > MAX_BEASTS_IN_FIGHT) {
-            beastsToCreate = MAX_BEASTS_IN_FIGHT;
-        }
-        int created = 0;
-        while (created < beastsToCreate) {
-            int e = rand() % s->encounters->beastEncountersCount + 0;
-            int max = s->encounters->beastEncounters[e]->max;
-            int amount = rand() % max + 1;
-            if (amount > beastsToCreate) {
-                amount = beastsToCreate;
-            }
-            for (int i = 0; i < amount; i++) {
-                beasts[created] = cloneBeast(s->encounters->beastEncounters[e]->beast);
-                created++;
-            }
-        }
-        s->fight = createFight(beasts);
-        s->fight->beastCount = created;
-        addDebug(s->log, "fight encountered with %d opponents", s->fight->beastCount);
+        createFightInScene(s);
     }
 }
 
