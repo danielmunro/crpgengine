@@ -57,21 +57,23 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
     addDebug(g->log, "processing storyline with %d when and %d then clauses",
              storyline->when_count, storyline->then_count);
     for (int i = 0; i < storyline->when_count; i++) {
-        c->when[i] = createWhen();
-        c->when[i]->condition = mapCondition(storyline->when[i].condition);
+        WhenData wd = storyline->when[i];
+        When *w = createWhen();
+        w->condition = mapCondition(wd.condition);
         addDebug(g->log, "condition: %s, mapped to: %d, story: %s",
-                 storyline->when[i].condition,
-                 c->when[i]->condition,
-                 storyline->when[i].story);
-        if (storyline->when[i].story != NULL) {
-            c->when[i]->story = storyline->when[i].story;
+                 wd.condition,
+                 w->condition,
+                 wd.story);
+        if (wd.story != NULL) {
+            w->story = wd.story;
         }
-        c->when[i]->source = g->player->mob;
-        if (storyline->when[i].mob != NULL) {
-            printf("mobileTrigger: %s\n", storyline->when[i].mob);
-            c->when[i]->mobileTrigger = findMobById(g, storyline->when[i].mob);
-            printf("mob: %s\n", c->when[i]->mobileTrigger->name);
+        w->source = g->player->mob;
+        if (wd.mob != NULL) {
+            printf("mobileTrigger: %s\n", wd.mob);
+            w->mobileTrigger = findMobById(g, wd.mob);
+            printf("mob: %s\n", w->mobileTrigger->name);
         }
+        c->when[i] = w;
     }
     printf("then count: %d\n", storyline->then_count);
     for (int i = 0; i < storyline->then_count; i++) {
