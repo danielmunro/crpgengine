@@ -46,7 +46,7 @@ Mobile *findMobById(Game *g, char *id) {
             }
         }
     }
-    fprintf(stderr, "mob not found: %s\n", id);
+    addError(g->log, "mob not found: %s", id);
     return NULL;
 }
 
@@ -54,13 +54,15 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
     ControlBlock *c = createControlBlock();
     c->whenCount = storyline->when_count;
     c->thenCount = storyline->then_count;
-    printf("when count: %d\n", storyline->when_count);
+    addDebug(g->log, "processing storyline with %d when and %d then clauses",
+             storyline->when_count, storyline->then_count);
     for (int i = 0; i < storyline->when_count; i++) {
         c->when[i] = createWhen();
-        printf("condition: %s\n", storyline->when[i].condition);
         c->when[i]->condition = mapCondition(storyline->when[i].condition);
-        printf("mapped condition: %d\n", c->when[i]->condition);
-        printf("story: %s\n", storyline->when[i].story);
+        addDebug(g->log, "condition: %s, mapped to: %d, story: %s",
+                 storyline->when[i].condition,
+                 c->when[i]->condition,
+                 storyline->when[i].story);
         if (storyline->when[i].story != NULL) {
             c->when[i]->story = storyline->when[i].story;
         }
@@ -162,7 +164,7 @@ Game *createGame(RuntimeArgs *r) {
     g->log = createLog(r->debug);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     g->player = loadPlayer(r->indexDir);
-    addLog(g->log, "log level set to %s", getLogLevelStr(g->log->level));
+    addInfo(g->log, "log level set to %s", getLogLevelStr(g->log->level));
     g->beastiary = createBeastiary();
     char *scenes[MAX_SCENES];
     char *sceneDir = pathCat(r->indexDir, "/scenes");

@@ -45,8 +45,10 @@
 #define LINE_HEIGHT 30
 
 typedef enum {
-    NORMAL = 0,
-    DEBUG = 1,
+    ERROR = 0,
+    WARN = 1,
+    INFO = 2,
+    DEBUG = 3,
 } LogLevel;
 
 char *conditions[] = {

@@ -4,9 +4,9 @@ typedef struct {
 
 char *getLogLevelStr(LogLevel logLevel) {
     if (logLevel == DEBUG) {
-        return "debug";
-    } else if (logLevel == NORMAL) {
-        return "normal";
+        return "DEBUG";
+    } else if (logLevel == INFO) {
+        return "INFO";
     } else {
         return "unknown";
     }
@@ -37,9 +37,16 @@ void addDebug(Log *log, char *message, ...) {
     va_end(args);
 }
 
-void addLog(Log *log, char *message, ...) {
+void addInfo(Log *log, char *message, ...) {
     va_list args;
     va_start(args, message);
-    addLogWithLevel(log, NORMAL, message, args);
+    addLogWithLevel(log, INFO, message, args);
+    va_end(args);
+}
+
+void addError(Log *log, char *message, ...) {
+    va_list args;
+    va_start(args, message);
+    addLogWithLevel(log, ERROR, message, args);
     va_end(args);
 }
