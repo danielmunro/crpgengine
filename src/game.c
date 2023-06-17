@@ -74,22 +74,21 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
         }
         c->when[i] = w;
     }
-    printf("then count: %d\n", storyline->then_count);
+    addDebug(g->log, "done processing when conditions");
     for (int i = 0; i < storyline->then_count; i++) {
-        c->then[i] = createThen();
-        if (storyline->then[i].player) {
-            printf("player is target\n");
-            c->then[i]->target = g->player->mob;
+//        c->then[i] = createThen();
+        ThenData td = storyline->then[i];
+        Then *t = createThen();
+        if (td.player) {
+            t->target = g->player->mob;
         } else {
-            printf("mob %s is target\n", storyline->then[i].mob);
-            c->then[i]->target = findMobById(g, storyline->then[i].mob);
+            t->target = findMobById(g, td.mob);
         }
-        c->then[i]->story = &storyline->then[i].story[0];
-        c->then[i]->message = &storyline->then[i].message[0];
-        c->then[i]->outcome = mapOutcome(storyline->then[i].action);
-        printf("story: %s\n", c->then[i]->story);
-        printf("message: %s\n", c->then[i]->message);
-        printf("outcome: %d\n", c->then[i]->outcome);
+        t->story = &td.story[0];
+        t->outcome = mapOutcome(td.action);
+        t->message = &td.message[0];
+        addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
+                 t->story, t->outcome, t->message);
     }
     return c;
 }
@@ -111,7 +110,7 @@ void loadBeastiary(Game *g, const char *indexDir) {
     BeastiaryData *data = loadBeastiaryYaml(filepath);
     for (int i = 0; i < data->beasts_count; i++) {
         g->beastiary->beasts[i] = createBeastFromData(indexDir, &data->beasts[i]);
-        printf("beast created: %s\n", g->beastiary->beasts[i]->id);
+        addDebug(g->log, "beast '%s' created", g->beastiary->beasts[i]->id);
         g->beastiary->beastCount++;
     }
 }
@@ -136,10 +135,10 @@ void evaluateExits(Game *g) {
                     (float) s->exits[exit]->y
                 };
                 setScene(g, g->scenes[i]);
-                break;
+                return;
             }
         }
-        fprintf(stderr, "warp to %s not found\n", to);
+        addError(g->log, "warp to '%s' not found", to);
     }
 }
 

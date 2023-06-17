@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
     }
     initWindow(r->indexDir);
     Game *g = createGame(r);
+    exit(1);
     validateGameData(g);
     if (r->dump) {
         dumpGame(g);
