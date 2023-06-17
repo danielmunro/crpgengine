@@ -20,16 +20,11 @@ Encounters *createEncounters() {
     return e;
 }
 
-Fight *createFight(Beast *beasts[MAX_BEASTS_IN_FIGHT]) {
+Fight *createFight(int count, Beast *beasts[MAX_BEASTS_IN_FIGHT]) {
     Fight *fight = malloc(sizeof(Fight));
-    int i = 0;
-    while(true) {
-        if (beasts[i] == NULL) {
-            break;
-        }
+    fight->beastCount = count;
+    for (int i = 0; i < count; i++) {
         fight->beasts[i] = beasts[i];
-        i++;
     }
-    fight->beastCount = i;
     return fight;
 }

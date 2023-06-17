@@ -523,7 +523,7 @@ Fight *createFightInScene(Scene *s) {
             created++;
         }
     }
-    s->fight = createFight(beasts);
+    s->fight = createFight(created, beasts);
     s->fight->beastCount = created;
     addDebug(s->log, "fight encountered with %d opponents", s->fight->beastCount);
     return s->fight;

@@ -10,7 +10,8 @@ void createFightInSceneTest() {
             "",
             "-i",
             "examples/tinytown",
-            "-d"
+            "-l",
+            "debug",
     };
     RuntimeArgs *r = createRuntimeArgs(4, args);
     Game *g = createGame(r);
