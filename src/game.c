@@ -76,7 +76,6 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
     }
     addDebug(g->log, "done processing when conditions");
     for (int i = 0; i < storyline->then_count; i++) {
-//        c->then[i] = createThen();
         ThenData td = storyline->then[i];
         Then *t = createThen();
         if (td.player) {
@@ -89,6 +88,7 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
         t->message = &td.message[0];
         addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
                  t->story, t->outcome, t->message);
+        c->then[i] = t;
     }
     return c;
 }
