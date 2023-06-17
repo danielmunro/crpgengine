@@ -24,7 +24,7 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
             } else if (argv[i][1] == 'i') {
                 r->indexDir = &argv[i + 1][0];
             } else if (argv[i][1] == 'd') {
-                r->debug = true;
+                r->debug = DEBUG;
             }
         }
     }

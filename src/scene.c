@@ -209,10 +209,11 @@ void drawLayer(Scene *s, int layer) {
                     (float) (sz.x * x),
                     (float) (sz.y * y),
             };
+            Rectangle rect = getRectForTile(s->tilemap, index);
             ImageDraw(
                     &renderedLayer,
                     s->tilemap->source,
-                    getRectForTile(s->tilemap, index),
+                    rect,
                     (Rectangle) { pos.x, pos.y, (float) sz.x, (float) sz.y },
                     WHITE
             );
@@ -242,9 +243,12 @@ void drawLayer(Scene *s, int layer) {
 
 void drawScene(Scene *s) {
     ClearBackground(BLACK);
+    addDebug(s->log, "scene '%s' layer %d drawing", s->name, BACKGROUND);
     drawLayer(s, BACKGROUND);
+    addDebug(s->log, "scene '%s' layer %s drawn", s->name, BACKGROUND);
     drawLayer(s, MIDGROUND);
     drawLayer(s, FOREGROUND);
+    addDebug(s->log, "scene '%s' successfully drawn", s->name);
 }
 
 void createMobileLayer(Mobile *mobLayer[MAX_LAYER_SIZE][MAX_MOBILES]) {
