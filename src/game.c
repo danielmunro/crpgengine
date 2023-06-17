@@ -69,9 +69,8 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
         }
         w->source = g->player->mob;
         if (wd.mob != NULL) {
-            printf("mobileTrigger: %s\n", wd.mob);
             w->mobileTrigger = findMobById(g, wd.mob);
-            printf("mob: %s\n", w->mobileTrigger->name);
+            addDebug(g->log, "mobileTrigger is '%s', mob: '%s'", wd.mob, w->mobileTrigger->name);
         }
         c->when[i] = w;
     }
