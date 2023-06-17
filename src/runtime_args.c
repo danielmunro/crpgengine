@@ -23,10 +23,14 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
                 r->dump = true;
             } else if (argv[i][1] == 'i') {
                 r->indexDir = &argv[i + 1][0];
-            } else if (argv[i][1] == 'd') {
-                r->debug = DEBUG;
+            } else if (argv[i][1] == 'l') {
+                r->debug = getLogLevelFromString(&argv[i + 1][0]);
             }
         }
+    }
+    if (strcmp(r->indexDir, "") == 0) {
+        fprintf(stderr, "indexDir (-i) argument is required");
+        exit(1);
     }
     return r;
 }

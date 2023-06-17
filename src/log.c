@@ -2,13 +2,17 @@ typedef struct {
     LogLevel level;
 } Log;
 
-char *getLogLevelStr(LogLevel logLevel) {
+char *getLogLevelString(LogLevel logLevel) {
     if (logLevel == DEBUG) {
         return "DEBUG";
     } else if (logLevel == INFO) {
         return "INFO";
+    } else if (logLevel == WARN) {
+        return "WARN";
+    } else if (logLevel == ERROR) {
+        return "ERROR";
     } else {
-        return "unknown";
+        return "UNKNOWN";
     }
 }
 
@@ -25,7 +29,7 @@ void addLogWithLevel(Log *log, LogLevel logLevel, char *message, va_list ag) {
         char s[64];
         strftime(s, sizeof(s), "%Y-%m-%d %H:%M:%S", tm);
         char toLog[1024];
-        sprintf(toLog, "[%s - %s] %s\n", s, getLogLevelStr(logLevel), message);
+        sprintf(toLog, "[%s - %s] %s\n", s, getLogLevelString(logLevel), message);
         vprintf(toLog, ag);
     }
 }

@@ -48,6 +48,16 @@ int mapOutcome(char *then) {
     return -1;
 }
 
+int getLogLevelFromString(char *value) {
+    int count = (sizeof(logLevels)) / sizeof(LogLevel);
+    for (int i = 0; i < count - 1; i++) {
+        if (strcmp(logLevels[i], value) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 int getDirectionFromString(char *value) {
     if (strcmp(value, "up") == 0) {
         return UP;

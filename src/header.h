@@ -44,6 +44,13 @@
 #define FONT_SIZE 20
 #define LINE_HEIGHT 30
 
+const char *logLevels[] = {
+        "error",
+        "warn",
+        "info",
+        "debug"
+};
+
 typedef enum {
     ERROR = 0,
     WARN = 1,
@@ -51,7 +58,7 @@ typedef enum {
     DEBUG = 3,
 } LogLevel;
 
-char *conditions[] = {
+const char *conditions[] = {
     "engaged",
     "has",
     "not_has",
@@ -69,7 +76,7 @@ typedef enum {
     NOT_HAS_STORY,
 } Condition;
 
-char *outcomes[] = {
+const char *outcomes[] = {
         "speak",
         "move_to",
         "direction",

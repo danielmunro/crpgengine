@@ -165,7 +165,7 @@ Game *createGame(RuntimeArgs *r) {
     g->log = createLog(r->debug);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     g->player = loadPlayer(g->log, r->indexDir);
-    addInfo(g->log, "log level set to %s", getLogLevelStr(g->log->level));
+    addInfo(g->log, "log level set to %s", getLogLevelString(g->log->level));
     g->beastiary = createBeastiary();
     char *scenes[MAX_SCENES];
     char sceneDir[255];
