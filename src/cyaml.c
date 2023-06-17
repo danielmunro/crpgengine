@@ -40,14 +40,14 @@ SoundData *loadSoundYaml(const char *indexDir) {
     return sound;
 }
 
-PlayerData *loadPlayerYaml(const char *indexDir) {
+PlayerData *loadPlayerYaml(Log *log, const char *indexDir) {
     PlayerData *player = malloc(sizeof(PlayerData));
     char filePath[255];
     sprintf(filePath, "%s/player.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &playerTopSchema, (cyaml_data_t **)&player, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing player config file: %s\n", cyaml_strerror(err));
+        addError(log, "error parsing player config file: %s", cyaml_strerror(err));
     }
     return player;
 }

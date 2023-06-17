@@ -22,7 +22,6 @@ int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
         }
         scenes[i] = (char *) malloc(strlen(de->d_name));
         strcpy(scenes[i], de->d_name);
-        printf("added scene %s\n", scenes[i]);
         i++;
     }
     closedir(dr);

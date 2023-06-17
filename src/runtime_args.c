@@ -11,7 +11,7 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
     r->sceneIndex = 0;
     r->showCollisions = false;
     r->dump = false;
-    r->debug = false;
+    r->debug = INFO;
     r->indexDir = "";
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {

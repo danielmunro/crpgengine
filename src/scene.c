@@ -55,11 +55,11 @@ void setSceneTypeFromString(Scene *s, const char *sceneType) {
     for (int i = 0; i < count; i++) {
         if (strcmp(sceneTypes[i].scene, sceneType) == 0) {
             s->type = sceneTypes[i].code;
-            printf("scene %s type set to '%s'\n", s->name, sceneType);
+            addDebug(s->log, "scene '%s' type set to '%s'", s->name, sceneType);
             return;
         }
     }
-    fprintf(stderr, "scene type not found: %s, setting to default of 'town'\n", sceneType);
+    addError(s->log, "scene type not found: %s, setting to default of 'town'", sceneType);
     s->type = SCENE_TYPE_TOWN;
 }
 
@@ -500,6 +500,9 @@ void checkToInitiateFight(Scene *s, Player *p) {
     if (chance == 1) {
         Beast *beasts[MAX_BEASTS_IN_FIGHT];
         int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
+        if (beastsToCreate > MAX_BEASTS_IN_FIGHT) {
+            beastsToCreate = MAX_BEASTS_IN_FIGHT;
+        }
         int created = 0;
         while (created < beastsToCreate) {
             int e = rand() % s->encounters->beastEncountersCount + 0;

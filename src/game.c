@@ -30,11 +30,9 @@ void setScene(Game *g, Scene *scene) {
     memset(g->animations, 0, sizeof(g->animations));
     g->animIndex = 0;
     addAllAnimations(g, g->player->mob->animations);
-    addDebug(g->log, "player animations added");
     Rectangle r = g->currentScene->entrance;
     g->player->mob->position.x = r.x + (r.width / 2);
     g->player->mob->position.y = r.y + (r.height / 2);
-    addDebug(g->log, "player position set to %f, %f", g->player->mob->position.x, g->player->mob->position.y);
     drawScene(g->currentScene);
     playMusic(g->audioManager, g->currentScene->music);
     addDebug(g->log, "finished setting scene to '%s'", g->currentScene->name);
@@ -166,7 +164,7 @@ Game *createGame(RuntimeArgs *r) {
     g->currentScene = NULL;
     g->log = createLog(r->debug);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
-    g->player = loadPlayer(r->indexDir);
+    g->player = loadPlayer(g->log, r->indexDir);
     addInfo(g->log, "log level set to %s", getLogLevelStr(g->log->level));
     g->beastiary = createBeastiary();
     char *scenes[MAX_SCENES];

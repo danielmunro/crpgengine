@@ -19,7 +19,7 @@ Log *createLog(LogLevel configuredLogLevel) {
 }
 
 void addLogWithLevel(Log *log, LogLevel logLevel, char *message, va_list ag) {
-    if (log->level <= logLevel) {
+    if (log->level >= logLevel) {
         time_t t = time(NULL);
         struct tm *tm = localtime(&t);
         char s[64];
