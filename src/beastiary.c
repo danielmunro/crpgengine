@@ -33,8 +33,9 @@ Beast *createBeastFromData(const char *indexDir, BeastData *data) {
     beast->hp = data->hp;
     beast->mana = data->mana;
     beast->level = data->level;
-    char *filepath = pathCat(indexDir, pathCat("/images/", data->image));
-    beast->image = LoadTextureFromImage(LoadImage(filepath));
+    char filePath[255];
+    sprintf(filePath, "%s/images/%s", indexDir, data->image);
+    beast->image = LoadTextureFromImage(LoadImage(filePath));
     beast->attributes = createAttributesFromData(data->attributes);
     return beast;
 }
