@@ -1,4 +1,4 @@
-typedef struct Game {
+typedef struct {
     Scene *scenes[MAX_SCENES];
     int sceneCount;
     Scene *currentScene;

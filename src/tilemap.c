@@ -1,4 +1,4 @@
-typedef struct Tilemap {
+typedef struct {
     Vector2d size;
     Image source;
 } Tilemap;

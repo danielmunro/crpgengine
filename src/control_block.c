@@ -1,18 +1,18 @@
-typedef struct When {
+typedef struct {
     Mobile *source;
     int condition;
     Mobile *mobileTrigger;
     char *story;
 } When;
 
-typedef struct Then {
+typedef struct {
     Mobile *target;
     char *message;
     char *story;
     int outcome;
 } Then;
 
-typedef struct ControlBlock {
+typedef struct {
     When *when[MAX_INSTRUCTIONS];
     Then *then[MAX_INSTRUCTIONS];
     int whenCount;

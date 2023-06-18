@@ -1,14 +1,14 @@
-typedef struct Sound_ {
+typedef struct {
     Sound sound;
     char *name;
 } Sound_;
 
-typedef struct Music_ {
+typedef struct {
     Music music;
     char *name;
 } Music_;
 
-typedef struct AudioManager {
+typedef struct {
     Sound_ *sounds[MAX_AUDIO];
     Music_ *music[MAX_AUDIO];
     int soundCount;

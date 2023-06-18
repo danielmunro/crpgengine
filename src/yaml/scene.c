@@ -1,16 +1,16 @@
-typedef struct BeastEncounterData {
+typedef struct {
     char *id;
     int max;
 } BeastEncounterData;
 
-typedef struct WhenData {
+typedef struct {
     char *player;
     char *mob;
     char *condition;
     char *story;
 } WhenData;
 
-typedef struct ThenData {
+typedef struct {
     int player;
     char *mob;
     char *action;
@@ -18,20 +18,20 @@ typedef struct ThenData {
     char *story;
 } ThenData;
 
-typedef struct StorylineData {
+typedef struct {
     WhenData *when;
     ThenData *then;
     int when_count;
     int then_count;
 } StorylineData;
 
-typedef struct EncountersData {
+typedef struct {
     BeastEncounterData *beasts;
     int beasts_count;
     char *background;
 } EncountersData;
 
-typedef struct SceneData {
+typedef struct {
     char *type;
     char *music;
     StorylineData *storylines;

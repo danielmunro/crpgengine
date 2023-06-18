@@ -1,4 +1,4 @@
-typedef struct RuntimeArgs {
+typedef struct {
     int sceneIndex;
     int showCollisions;
     int dump;

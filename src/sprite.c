@@ -1,19 +1,10 @@
-typedef struct SpriteSheet {
+typedef struct {
     Texture2D source;
     int frameWidth;
     int frameHeight;
 } SpriteSheet;
 
-SpriteSheet *createSpriteSheet(char *filename, int width, int height) {
-    Texture2D tex = LoadTexture(filename);
-    SpriteSheet *sp = malloc(sizeof(SpriteSheet));
-    sp->source = tex;
-    sp->frameWidth = width;
-    sp->frameHeight = height;
-    return sp;
-}
-
-typedef struct Animation {
+typedef struct {
     SpriteSheet *spriteSheet;
     int type;
     int firstFrame;
@@ -24,6 +15,15 @@ typedef struct Animation {
     int frameRateCount;
     int isPlaying;
 } Animation;
+
+SpriteSheet *createSpriteSheet(char *filename, int width, int height) {
+    Texture2D tex = LoadTexture(filename);
+    SpriteSheet *sp = malloc(sizeof(SpriteSheet));
+    sp->source = tex;
+    sp->frameWidth = width;
+    sp->frameHeight = height;
+    return sp;
+}
 
 Animation *createAnimation(SpriteSheet *spriteSheet, int type, int firstFrame, int lastFrame, int frameRate, int repeat) {
     Animation *a = malloc(sizeof(Animation));

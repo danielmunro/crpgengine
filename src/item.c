@@ -1,4 +1,4 @@
-typedef struct Item {
+typedef struct {
     char *id;
     char *name;
     Attributes *attributes;

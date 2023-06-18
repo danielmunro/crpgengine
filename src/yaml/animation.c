@@ -1,10 +1,10 @@
-typedef struct SpriteData {
+typedef struct {
     char *file;
     int *size;
     int size_count;
 } SpriteData;
 
-typedef struct SliceData {
+typedef struct {
     char *name;
     char *frames;
     int frames_count;
@@ -12,7 +12,7 @@ typedef struct SliceData {
     int repeat;
 } SliceData;
 
-typedef struct AnimationData {
+typedef struct {
     SpriteData *sprite;
     SliceData *slices;
     int slices_count;

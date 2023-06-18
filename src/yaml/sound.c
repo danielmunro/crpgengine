@@ -1,4 +1,4 @@
-typedef struct SoundData {
+typedef struct {
 } SoundData;
 
 static const cyaml_schema_field_t soundTopMappingField[] = {

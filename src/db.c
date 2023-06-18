@@ -1,6 +1,6 @@
 #define MAX_DATA_SIZE 2048
 
-typedef struct SceneReader {
+typedef struct {
     xmlTextReaderPtr reader;
     Exploration *exploration;
     int objectCount;

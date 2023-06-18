@@ -1,11 +1,11 @@
-typedef struct Moving {
+typedef struct {
     int up;
     int down;
     int left;
     int right;
 } Moving;
 
-typedef struct Player {
+typedef struct {
     Mobile *mob;
     float direction;
     Moving moving;

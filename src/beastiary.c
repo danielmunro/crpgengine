@@ -1,4 +1,4 @@
-typedef struct Beast {
+typedef struct {
     char *id;
     char *name;
     Texture2D image;
@@ -9,7 +9,7 @@ typedef struct Beast {
     int gp;
 } Beast;
 
-typedef struct Beastiary {
+typedef struct {
     Beast *beasts[MAX_BEASTIARY_SIZE];
     int beastCount;
 } Beastiary;

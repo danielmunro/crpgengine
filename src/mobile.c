@@ -1,4 +1,4 @@
-typedef struct Mobile {
+typedef struct {
     Animation *animations[MAX_ANIMATIONS];
     char *id;
     char *name;

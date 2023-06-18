@@ -1,4 +1,4 @@
-typedef struct PlayerData {
+typedef struct {
     char *name;
     char *animations;
     int *position;

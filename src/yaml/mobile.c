@@ -1,4 +1,4 @@
-typedef struct MobileData {
+typedef struct {
     char *id;
     char *name;
     char *animations;

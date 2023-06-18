@@ -1,6 +1,6 @@
 #include <dirent.h>
 
-typedef struct Vector2d {
+typedef struct {
     int x;
     int y;
 } Vector2d;

@@ -1,9 +1,9 @@
-typedef struct SceneType {
+typedef struct {
     int code;
     const char *scene;
 } SceneType;
 
-typedef struct Scene {
+typedef struct {
     int type;
     char *name;
     char *music;

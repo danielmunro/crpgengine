@@ -1,4 +1,4 @@
-typedef struct Object {
+typedef struct {
     int id;
     Rectangle rect;
     int tile;

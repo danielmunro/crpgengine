@@ -1,4 +1,4 @@
-typedef struct MusicData {
+typedef struct {
     char *town;
 } MusicData;
 

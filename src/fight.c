@@ -1,15 +1,15 @@
-typedef struct BeastEncounter {
+typedef struct {
     Beast *beast;
     int max;
 } BeastEncounter;
 
-typedef struct Encounters {
+typedef struct {
     Texture2D background;
     BeastEncounter *beastEncounters[MAX_BEASTS];
     int beastEncountersCount;
 } Encounters;
 
-typedef struct Fight {
+typedef struct {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastCount;
     Log *log;

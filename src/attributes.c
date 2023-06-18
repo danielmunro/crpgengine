@@ -1,4 +1,4 @@
-typedef struct Attributes {
+typedef struct {
     int strength;
     int dexterity;
     int intelligence;

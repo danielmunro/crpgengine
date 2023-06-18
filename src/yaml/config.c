@@ -1,4 +1,4 @@
-typedef struct ConfigData {
+typedef struct {
     char *title;
 } ConfigData;
 

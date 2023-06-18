@@ -1,4 +1,4 @@
-typedef struct BeastData {
+typedef struct {
     char *id;
     char *name;
     char *image;
@@ -10,7 +10,7 @@ typedef struct BeastData {
     int gp;
 } BeastData;
 
-typedef struct BeastiaryData {
+typedef struct {
     BeastData *beasts;
     int beasts_count;
 } BeastiaryData;
