@@ -401,6 +401,7 @@ int isBlocked(Scene *s, Player *p, Vector2 pos) {
             return 1;
         }
     }
+    p->blockedBy = NULL;
     return 0;
 }
 
@@ -470,37 +471,37 @@ void checkInput(Scene *s, Player *p) {
             LEFT
     );
     if (IsKeyDown(KEY_C)) {
-        printf("player coordinates: %f, %f\n", p->mob->position.x, p->mob->position.y);
+        addDebug(s->log, "player coordinates: %f, %f", p->mob->position.x, p->mob->position.y);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        printf("======================\nspace key pressed\n");
+        addInfo(s->log, "space key pressed");
         if (s->activeControlBlock != NULL) {
-            printf("active control block progress: %d\n", s->activeControlBlock->progress);
+            addDebug(s->log, "active control block progress: %d", s->activeControlBlock->progress);
         } else {
-            printf("no active control blocks set\n");
+            addDebug(s->log, "no active control blocks set");
         }
         if (p->engaged && s->activeControlBlock == NULL) {
-            printf("player is engaged with no active control blocks\n");
+            p->engaged = false;
             return;
         }
         if (p->engaged && s->activeControlBlock->then[s->activeControlBlock->progress]->outcome == SPEAK) {
             if (s->activeControlBlock != NULL) {
                 s->activeControlBlock->progress++;
-                printf("active control block progress at %d\n", s->activeControlBlock->progress);
+                addDebug(s->log, "active control block progress at %d", s->activeControlBlock->progress);
             }
             if (s->activeControlBlock->progress >= s->activeControlBlock->thenCount
                     || s->activeControlBlock->then[s->activeControlBlock->progress]->outcome != SPEAK) {
-                printf("unset engaged\n");
+                addDebug(s->log, "unset engaged");
                 p->engaged = false;
             }
             if (s->activeControlBlock->progress >= s->activeControlBlock->thenCount) {
-                printf("unsetting active control block\n");
+                addDebug(s->log, "unsetting active control block");
                 s->activeControlBlock->progress = 0;
                 s->activeControlBlock = NULL;
             }
         } else if (p->blockedBy != NULL) {
             p->engageable = p->blockedBy;
-            printf("engaging with %s\n", p->engageable->name);
+            addInfo(s->log, "engaging with %s", p->engageable->name);
             p->engaged = true;
         }
     }
