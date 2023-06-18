@@ -16,7 +16,7 @@ void createFightInSceneTest() {
     RuntimeArgs *r = createRuntimeArgs(4, args);
     Game *g = createGame(r);
     for (int i = 0; i < 100; i++) {
-        Fight *f = createFightInScene(g->scenes[1]);
+        Fight *f = createFightFromEncounters(g->log, g->scenes[1]->encounters);
         char message[255];
         sprintf(message, "beast count is not within expected range: %d", f->beastCount);
         ok(0 < f->beastCount && f->beastCount <= 9, message);

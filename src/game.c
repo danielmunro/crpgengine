@@ -34,19 +34,19 @@ void setScene(Game *g, Scene *scene) {
     g->currentScene = scene;
     clearAnimations(g);
     addAllAnimations(g, g->player->mob->animations);
-    Rectangle r = g->currentScene->entrance;
+    Rectangle r = g->currentScene->exploration->entrance;
     g->player->mob->position.x = r.x + (r.width / 2);
     g->player->mob->position.y = r.y + (r.height / 2);
-    drawScene(g->currentScene);
+    renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
     addDebug(g->log, "finished setting scene to '%s'", g->currentScene->name);
 }
 
 Mobile *findMobById(Game *g, char *id) {
     for (int s = 0; s < g->sceneCount; s++) {
-        for (int m = 0; m < g->scenes[s]->mobileCount; m++) {
-            if (strcmp(g->scenes[s]->mobiles[m]->id, id) == 0) {
-                return g->scenes[s]->mobiles[m];
+        for (int m = 0; m < g->scenes[s]->exploration->mobileCount; m++) {
+            if (strcmp(g->scenes[s]->exploration->mobiles[m]->id, id) == 0) {
+                return g->scenes[s]->exploration->mobiles[m];
             }
         }
     }
@@ -120,7 +120,7 @@ void loadBeastiary(Game *g, const char *indexDir) {
     }
 }
 
-void processAnimations(Game *g) {
+void processExplorationAnimations(Game *g) {
     for (int i = 0; i < g->animIndex; i++) {
         if (g->animations[i] != NULL && g->animations[i]->isPlaying) {
             incrementAnimFrame(g->animations[i]);
@@ -129,15 +129,15 @@ void processAnimations(Game *g) {
 }
 
 void evaluateExits(Game *g) {
-    Scene *s = g->currentScene;
-    int exit = atExit(s, g->player);
+    Exploration *e = g->currentScene->exploration;
+    int exit = atExit(e, g->player);
     if (exit > -1) {
-        char *to = s->exits[exit]->to;
+        char *to = e->exits[exit]->to;
         for (int i = 0; i < g->sceneCount; i++) {
             if (strcmp(to, g->scenes[i]->name) == 0) {
                 g->player->mob->position = (Vector2) {
-                    (float) s->exits[exit]->x,
-                    (float) s->exits[exit]->y
+                    (float) e->exits[exit]->x,
+                    (float) e->exits[exit]->y
                 };
                 setScene(g, g->scenes[i]);
                 return;
@@ -147,18 +147,39 @@ void evaluateExits(Game *g) {
     }
 }
 
+void doExplorationLoop(Game *g) {
+    checkExplorationInput(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);
+    BeginDrawing();
+    drawExplorationView(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);
+    EndDrawing();
+    processExplorationAnimations(g);
+    evaluateMovement(g->currentScene->exploration, g->player);
+    evaluateExits(g);
+    checkControls(g->currentScene, g->player);
+    checkFights(g->currentScene, g->player);
+    UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
+}
+
+void doFightLoop(Game *g) {
+//    checkInput(g->currentScene, g->player);
+    BeginDrawing();
+    drawFightView(g->currentScene->encounters, g->currentScene->fight, g->player);
+    EndDrawing();
+//    processAnimations(g);
+//    evaluateMovement(g->currentScene, g->player);
+//    evaluateExits(g);
+//    checkControls(g->currentScene, g->player);
+//    checkFights(g->currentScene, g->player);
+    UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
+}
+
 void run(Game *g) {
     while (!WindowShouldClose()) {
-        checkInput(g->currentScene, g->player);
-        BeginDrawing();
-        drawScreen(g->currentScene, g->player);
-        EndDrawing();
-        processAnimations(g);
-        evaluateMovement(g->currentScene, g->player);
-        evaluateExits(g);
-        checkControls(g->currentScene, g->player);
-        checkFights(g->currentScene, g->player);
-        UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
+        if (isFighting(g->currentScene)) {
+            doFightLoop(g);
+        } else if (isExploring(g->currentScene)) {
+            doExplorationLoop(g);
+        }
     }
 }
 

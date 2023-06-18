@@ -12,6 +12,7 @@ typedef struct Encounters {
 typedef struct Fight {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastCount;
+    Log *log;
 } Fight;
 
 Encounters *createEncounters() {
@@ -20,11 +21,58 @@ Encounters *createEncounters() {
     return e;
 }
 
-Fight *createFight(int count, Beast *beasts[MAX_BEASTS_IN_FIGHT]) {
+Fight *createFight(Log *log, int count, Beast *beasts[MAX_BEASTS_IN_FIGHT]) {
     Fight *fight = malloc(sizeof(Fight));
     fight->beastCount = count;
+    fight->log = log;
     for (int i = 0; i < count; i++) {
         fight->beasts[i] = beasts[i];
     }
     return fight;
 }
+
+Fight *createFightFromEncounters(Log *log, Encounters *encounters) {
+    Beast *beasts[MAX_BEASTS_IN_FIGHT];
+    int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
+    addDebug(log, "creating %d beasts for fight", beastsToCreate);
+    int created = 0;
+    while (created < beastsToCreate) {
+        int e = rand() % encounters->beastEncountersCount + 0;
+        int max = encounters->beastEncounters[e]->max;
+        int amount = rand() % max + 1;
+        if (amount > beastsToCreate - created) {
+            amount = beastsToCreate - created;
+        }
+        for (int i = 0; i < amount; i++) {
+            beasts[created] = cloneBeast(encounters->beastEncounters[e]->beast);
+            created++;
+        }
+    }
+    Fight *fight = createFight(log, created, beasts);
+    fight->beastCount = created;
+    addDebug(log, "fight encountered with %d opponents", fight->beastCount);
+    return fight;
+}
+
+void drawFightView(Encounters *encounters, Fight *fight, Player *player) {
+    ClearBackground(BLACK);
+    float scale = (float) SCREEN_WIDTH / (float) encounters->background.width;
+    DrawTextureEx(encounters->background, (Vector2) {0, 0}, 0, scale, WHITE);
+    int width = 0;
+    int height = 0;
+    for (int i = 0; i < fight->beastCount; i++) {
+        const int x = i % 3;
+        DrawTextureEx(fight->beasts[i]->image,
+                      (Vector2) {(float) width, (float) height},
+                      0, SCALE, WHITE);
+        width += fight->beasts[i]->image.width;
+        if (x > 0 && x % 2 == 0) {
+            height += fight->beasts[i]->image.height;
+            width = 0;
+        }
+    }
+    drawAnimation(
+            findAnimation(player->mob->animations, LEFT),
+            (Vector2) {SCREEN_WIDTH * .8, 100 });
+}
+

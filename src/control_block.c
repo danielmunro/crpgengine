@@ -40,3 +40,7 @@ Then *createThen() {
     then->target = NULL;
     return then;
 }
+
+int needsToRemoveActiveControlBlock(ControlBlock *control) {
+    return control != NULL && control->progress >= control->thenCount;
+}

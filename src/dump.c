@@ -11,20 +11,20 @@ void dumpGame(Game *g) {
     for (int i = 0; i < g->sceneCount; i++) {
         printf("\nscene %s objects\n===============\n", g->scenes[i]->name);
         for (int o = 0; o < MAX_OBJECTS; o++) {
-            if (g->scenes[i]->objects[o] == NULL) {
+            if (g->scenes[i]->exploration->objects[o] == NULL) {
                 break;
             }
             printf("%d %d\n",
-                   g->scenes[i]->objects[o]->id,
-                   g->scenes[i]->objects[o]->tile
+                   g->scenes[i]->exploration->objects[o]->id,
+                   g->scenes[i]->exploration->objects[o]->tile
             );
         }
         printf("\nmobiles\n===============\n");
         for (int j = 0; j < MAX_MOBILES; j++) {
-            if (g->scenes[i]->mobiles[j] == NULL) {
+            if (g->scenes[i]->exploration->mobiles[j] == NULL) {
                 break;
             }
-            printf("%s\n", g->scenes[i]->mobiles[j]->name);
+            printf("%s\n", g->scenes[i]->exploration->mobiles[j]->name);
         }
         printf("\ncontrols\n==============\n");
         for (int j = 0; j < MAX_CONTROLS; j++) {
