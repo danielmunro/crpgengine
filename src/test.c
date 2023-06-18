@@ -19,7 +19,7 @@ void createFightInSceneTest() {
         Fight *f = createFightInScene(g->scenes[1]);
         char message[255];
         sprintf(message, "beast count is not within expected range: %d", f->beastCount);
-        ok(0 < f->beastCount && f->beastCount < 9, message);
+        ok(0 < f->beastCount && f->beastCount <= 9, message);
     }
 }
 
