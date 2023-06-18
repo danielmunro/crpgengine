@@ -48,6 +48,13 @@ void addInfo(Log *log, char *message, ...) {
     va_end(args);
 }
 
+void addWarning(Log *log, char *message, ...) {
+    va_list args;
+    va_start(args, message);
+    addLogWithLevel(log, WARN, message, args);
+    va_end(args);
+}
+
 void addError(Log *log, char *message, ...) {
     va_list args;
     va_start(args, message);
