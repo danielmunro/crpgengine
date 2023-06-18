@@ -24,11 +24,15 @@ void addAllAnimations(Game *g, Animation *animations[MAX_ANIMATIONS]) {
     }
 }
 
+void clearAnimations(Game *g) {
+    memset(g->animations, 0, sizeof(g->animations));
+    g->animIndex = 0;
+}
+
 void setScene(Game *g, Scene *scene) {
     addDebug(g->log, "setting scene to '%s'", scene->name);
     g->currentScene = scene;
-    memset(g->animations, 0, sizeof(g->animations));
-    g->animIndex = 0;
+    clearAnimations(g);
     addAllAnimations(g, g->player->mob->animations);
     Rectangle r = g->currentScene->entrance;
     g->player->mob->position.x = r.x + (r.width / 2);
