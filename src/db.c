@@ -324,7 +324,7 @@ Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sce
 
 Player *loadPlayer(Log *log, char *indexDir) {
     addDebug(log, "loading player from dir %s", indexDir);
-    Player *player = createPlayer();
+    Player *player = createPlayer(log);
     player->mob = createMobile();
     PlayerData *playerYaml = loadPlayerYaml(log, indexDir);
     player->mob->name = playerYaml->name;

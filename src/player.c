@@ -15,9 +15,10 @@ typedef struct Player {
     int engaged;
     char *stories[MAX_STORIES];
     int storyCount;
+    Log *log;
 } Player;
 
-Player *createPlayer() {
+Player *createPlayer(Log *log) {
     Player *player = malloc(sizeof(Player));
     player->moving.down = 0;
     player->moving.up = 0;
@@ -28,23 +29,23 @@ Player *createPlayer() {
     player->engageable = NULL;
     player->engaged = false;
     player->storyCount = 0;
+    player->log = log;
     return player;
 }
 
 void addStory(Player *p, char *story) {
     p->stories[p->storyCount++] = story;
-    printf("add story to player %s, total stories: %d\n", p->stories[0], p->storyCount);
+    addInfo(p->log, "add story to player: %s", p->stories[0]);
 }
 
 int hasStory(Player *p, char *story) {
-    printf("check has story: %s\n", story);
     for (int j = 0; j < p->storyCount; j++) {
         if (strcmp(story, p->stories[j]) == 0) {
-            printf("player has story\n");
+            addDebug(p->log, "player has story: %s", story);
             return true;
         }
     }
-    printf("player does not have story\n");
+    addDebug(p->log, "player does not have story: %s", story);
     return false;
 }
 
