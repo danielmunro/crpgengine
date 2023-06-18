@@ -166,9 +166,7 @@ void doFightLoop(Game *g) {
     drawFightView(g->currentScene->encounters, g->currentScene->fight, g->player);
     EndDrawing();
 //    processAnimations(g);
-//    evaluateMovement(g->currentScene, g->player);
-//    evaluateExits(g);
-//    checkControls(g->currentScene, g->player);
+    checkControls(g->currentScene, g->player);
 //    checkFights(g->currentScene, g->player);
     UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
 }
