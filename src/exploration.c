@@ -18,7 +18,6 @@ typedef struct {
     Texture2D renderedLayers[LAYER_COUNT];
     Rectangle entrance;
     Exit *exits[MAX_EXITS];
-    int nextExit;
     Object *objects[MAX_OBJECTS];
     Log *log;
     int showCollisions;
@@ -36,7 +35,6 @@ Exit *createExit() {
 Exploration *createExploration(Log *log, int showCollisions) {
     Exploration *exploration = malloc(sizeof(Exploration));
     exploration->layerCount = 0;
-    exploration->nextExit = 0;
     exploration->showCollisions = showCollisions;
     for (int i = 0; i < MAX_OBJECTS; i++) {
         exploration->objects[i] = NULL;

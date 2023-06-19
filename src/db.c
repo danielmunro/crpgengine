@@ -4,6 +4,7 @@ typedef struct {
     xmlTextReaderPtr reader;
     Exploration *exploration;
     int objectCount;
+    int nextExit;
 } SceneReader;
 
 SceneReader *createSceneReader(Exploration *exploration, const char *sceneFile) {
@@ -153,23 +154,23 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
                 return;
             }
             exitOpen = 1;
-            sceneReader->exploration->exits[sceneReader->exploration->nextExit] = createExit();
-            sceneReader->exploration->exits[sceneReader->exploration->nextExit]->area = (Rectangle){
+            sceneReader->exploration->exits[sceneReader->nextExit] = createExit();
+            sceneReader->exploration->exits[sceneReader->nextExit]->area = (Rectangle){
                     getFloatAttribute(sceneReader->reader, "x"),
                     getFloatAttribute(sceneReader->reader, "y"),
                     getFloatAttribute(sceneReader->reader, "width"),
                     getFloatAttribute(sceneReader->reader, "height")
             };
-            sceneReader->exploration->nextExit += 1;
+            sceneReader->nextExit += 1;
         }
     } else if (strcmp(strName, "property") == 0) {
         char *propName = getStringAttribute(sceneReader->reader, "name");
         if (strcmp(propName, "to") == 0) {
-            sceneReader->exploration->exits[sceneReader->exploration->nextExit - 1]->to = getStringAttribute(sceneReader->reader, "value");
+            sceneReader->exploration->exits[sceneReader->nextExit - 1]->to = getStringAttribute(sceneReader->reader, "value");
         } else if (strcmp(propName, "x") == 0) {
-            sceneReader->exploration->exits[sceneReader->exploration->nextExit - 1]->x = getIntAttribute(sceneReader->reader, "value");
+            sceneReader->exploration->exits[sceneReader->nextExit - 1]->x = getIntAttribute(sceneReader->reader, "value");
         } else if (strcmp(propName, "y") == 0) {
-            sceneReader->exploration->exits[sceneReader->exploration->nextExit - 1]->y = getIntAttribute(sceneReader->reader, "value");
+            sceneReader->exploration->exits[sceneReader->nextExit - 1]->y = getIntAttribute(sceneReader->reader, "value");
         }
     }
 }
