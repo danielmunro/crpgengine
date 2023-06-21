@@ -145,10 +145,10 @@ void checkExplorationInput(Exploration *exploration, Player *player, ControlBloc
 }
 
 
-void renderExplorationLayer(Tilemap *tilemap, Object *objects[255], Layer *layers[3], Texture2D renderedLayers[3], int showCollisions, int layer) {
-    int width = 56;
-    int height = 200;
+void renderExplorationLayer(Tilemap *tilemap, Object *objects[MAX_OBJECTS], Layer *layers[LAYER_COUNT], Texture2D renderedLayers[LAYER_COUNT], int showCollisions, int layer) {
     Vector2d sz = tilemap->size;
+    int width = SCREEN_WIDTH / sz.x;
+    int height = SCREEN_HEIGHT / sz.y;
     Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
     for (int y = -1; y < height; y++) {
         for (int x = -1; x < width; x++) {
