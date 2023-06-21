@@ -29,14 +29,14 @@ void clearAnimations(Game *g) {
     g->animIndex = 0;
 }
 
-void setScene(Game *g, Scene *scene) {
+void setScene(Game *g, Scene *scene, char *entranceName) {
     addDebug(g->log, "setting scene to '%s'", scene->name);
     g->currentScene = scene;
     clearAnimations(g);
     addAllAnimations(g, g->player->mob->animations);
-    Rectangle r = g->currentScene->exploration->entrance;
-    g->player->mob->position.x = r.x + (r.width / 2);
-    g->player->mob->position.y = r.y + (r.height / 2);
+    Entrance *entrance = findEntrance(scene->exploration, entranceName);
+    g->player->mob->position.x = entrance->area.x + (entrance->area.width / 2);
+    g->player->mob->position.y = entrance->area.y + (entrance->area.height / 2);
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
     addDebug(g->log, "finished setting scene to '%s'", g->currentScene->name);
@@ -121,6 +121,7 @@ void loadBeastiary(Game *g, const char *indexDir) {
 }
 
 void processExplorationAnimations(Game *g) {
+    addDebug(g->log, "exploration -- process animations");
     for (int i = 0; i < g->animIndex; i++) {
         if (g->animations[i] != NULL && g->animations[i]->isPlaying) {
             incrementAnimFrame(g->animations[i]);
@@ -129,21 +130,32 @@ void processExplorationAnimations(Game *g) {
 }
 
 void evaluateExits(Game *g) {
+    addDebug(g->log, "exploration -- evaluate exits");
     Exploration *e = g->currentScene->exploration;
+    addDebug(g->log, "sanity check");
     int exit = atExit(e, g->player);
+    addDebug(g->log, "exit check: %d", exit);
     if (exit > -1) {
-        char *to = e->exits[exit]->to;
+        addDebug(g->log, "player at exit");
+        char *sceneName = e->exits[exit]->scene;
+        char *entranceName = e->exits[exit]->to;
         for (int i = 0; i < g->sceneCount; i++) {
-            if (strcmp(to, g->scenes[i]->name) == 0) {
-                g->player->mob->position = (Vector2) {
-                    (float) e->exits[exit]->x,
-                    (float) e->exits[exit]->y
-                };
-                setScene(g, g->scenes[i]);
+            addDebug(g->log, "scene %d", i);
+            if (strcmp(sceneName, g->scenes[i]->name) == 0) {
+                Entrance *entrance = findEntrance(g->scenes[i]->exploration, entranceName);
+                if (entrance != NULL) {
+                    addDebug(g->log, "entrance %s found at %f, %f, %f, %f", entranceName, entrance->area.x, entrance->area.y, entrance->area.width, entrance->area.height);
+                    g->player->mob->position = (Vector2) {
+                            entrance->area.x,
+                            entrance->area.y
+                    };
+                    setScene(g, g->scenes[i], entranceName);
+                }
+                printf("done\n");
                 return;
             }
         }
-        addError(g->log, "warp to '%s' not found", to);
+        addError(g->log, "warp to '%s' not found", sceneName);
     }
 }
 
@@ -196,7 +208,7 @@ Game *createGame(RuntimeArgs *r) {
     g->sceneCount = getFilesInDirectory(sceneDir, scenes);
     loadBeastiary(g, r->indexDir);
     loadScenes(g, r, scenes);
-    setScene(g, g->scenes[r->sceneIndex]);
+    setScene(g, g->scenes[r->sceneIndex], "start");
     addDebug(g->log, "done creating game object");
     return g;
 }

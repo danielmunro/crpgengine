@@ -127,6 +127,7 @@ int canTriggerFight(Scene *s, Player *p) {
 }
 
 void checkControls(Scene *s, Player *p) {
+    addDebug(s->log, "exploration -- check control blocks");
     controlWhenCheck(s, p);
     controlThenCheck(s, p);
     if (needsToRemoveActiveControlBlock(s->activeControlBlock)) {
@@ -136,6 +137,7 @@ void checkControls(Scene *s, Player *p) {
 }
 
 void checkFights(Scene *s, Player *p) {
+    addDebug(s->log, "exploration -- check for fight");
     if (!canTriggerFight(s, p)) {
         return;
     }

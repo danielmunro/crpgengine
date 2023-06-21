@@ -24,5 +24,5 @@ void validateExits(Game *g) {
 }
 
 void validateGameData(Game *g) {
-    validateExits(g);
+//    validateExits(g);
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="11">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="15">
  <editorsettings>
-  <export target="firsttown.csv" format="csv"/>
+  <export format="csv"/>
  </editorsettings>
  <tileset firstgid="1" source="tileset.tsx"/>
  <layer id="1" name="background" width="50" height="30">
@@ -73,32 +73,22 @@
 </data>
  </layer>
  <objectgroup id="4" name="warps">
-  <object id="1" name="exit" type="exit" x="335.92" y="-0.445676" width="175.166" height="49.3348">
+  <object id="1" name="to_greenforest" type="exit" x="335.92" y="-0.445676" width="175.166" height="49.3348">
    <properties>
-    <property name="to" value="greenforest"/>
-    <property name="x" value="384"/>
-    <property name="y" value="336"/>
+    <property name="scene" value="greenforest"/>
+    <property name="to" value="from_tinytown"/>
    </properties>
   </object>
-  <object id="2" x="320.953" y="208.98" width="13.3038" height="14.4124"/>
-  <object id="3" x="192.35" y="289.911" width="13.8581" height="13.3038"/>
-  <object id="4" x="560.421" y="305.987" width="13.8581" height="13.8581"/>
-  <object id="6" name="entrance" type="entrance" x="400.222" y="223.947" width="95.3437" height="95.898"/>
+  <object id="2" name="to_building3" type="exit" x="320.953" y="208.98" width="13.3038" height="14.4124"/>
+  <object id="3" name="to_building2" type="exit" x="192.35" y="289.911" width="13.8581" height="13.3038"/>
+  <object id="4" name="to_building1" type="exit" x="560.421" y="305.987" width="13.8581" height="13.8581"/>
+  <object id="6" name="start" type="entrance" x="400.222" y="223.947" width="95.3437" height="95.898"/>
+  <object id="11" name="from_greenforest" type="entrance" x="370.314" y="65.1268" width="61.3404" height="45.4373"/>
+  <object id="12" name="from_building3" type="entrance" x="321.09" y="226.429" width="13.6312" height="20.4468"/>
+  <object id="13" name="from_building2" type="entrance" x="192.351" y="308.217" width="14.3885" height="15.9031"/>
+  <object id="14" name="from_building1" type="entrance" x="559.637" y="322.605" width="15.9031" height="17.4176"/>
  </objectgroup>
- <objectgroup id="5" name="npcs">
-  <object id="8" type="npc" x="241.131" y="353.659" width="13.8581" height="13.3038">
-   <properties>
-    <property name="sprite" value="young_villager"/>
-    <property name="wanders" value="true"/>
-   </properties>
-  </object>
-  <object id="10" type="npc" x="496.674" y="336.475" width="14.4124" height="14.4124">
-   <properties>
-    <property name="sprite" value="old_villager"/>
-    <property name="wanders" value="true"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="5" name="npcs"/>
  <layer id="6" name="foreground" width="50" height="30">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

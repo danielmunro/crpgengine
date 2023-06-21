@@ -4,7 +4,6 @@ typedef struct {
     xmlTextReaderPtr reader;
     Exploration *exploration;
     int objectCount;
-    int nextExit;
 } SceneReader;
 
 SceneReader *createSceneReader(Exploration *exploration, const char *sceneFile) {
@@ -109,8 +108,9 @@ void parseSceneLayer(Exploration *e, char *rawData) {
 
 void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
-    static int dataOpen = 0, exitOpen = 0, layerOpen = 0;
+    static int dataOpen = 0, exitOpen = 0, layerOpen = 0, entranceOpen;
     char *strName = (char *)name;
+    printf("name: %s\n", strName);
     if (strcmp(strName, "tileset") == 0) {
         char *source = getStringAttribute(sceneReader->reader, "source");
         parseTilemapXml(sceneReader->exploration, indexDir, source);
@@ -139,38 +139,44 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
         parseSceneLayer(sceneReader->exploration, (char *)data);
     } else if (strcmp(strName, "object") == 0) {
         char *class = getStringAttribute(sceneReader->reader, "type");
+        printf("object type: %s\n", class);
         if (class == NULL) {
             return;
         } else if (strcmp(class, "entrance") == 0) {
-            sceneReader->exploration->entrance = (Rectangle){
+            printf("creating an entrance\n");
+            Rectangle rect = {
                     getFloatAttribute(sceneReader->reader, "x"),
                     getFloatAttribute(sceneReader->reader, "y"),
                     getFloatAttribute(sceneReader->reader, "width"),
                     getFloatAttribute(sceneReader->reader, "height")
             };
+            printf("entrance rect: %f, %f, %f, %f", rect.x, rect.y, rect.width, rect.height);
+            Entrance *e = createEntrance(getStringAttribute(sceneReader->reader, "name"), rect);
+            sceneReader->exploration->entrances[sceneReader->exploration->entranceCount] = e;
+            sceneReader->exploration->entranceCount++;
         } else if (strcmp(class, "exit") == 0) {
-            if (exitOpen) {
-                exitOpen = 0;
-                return;
-            }
-            exitOpen = 1;
-            sceneReader->exploration->exits[sceneReader->nextExit] = createExit();
-            sceneReader->exploration->exits[sceneReader->nextExit]->area = (Rectangle){
+            printf("creating an exit\n");
+            Exploration *e = sceneReader->exploration;
+            e->exits[e->exitCount] = createExit();
+            e->exits[e->exitCount]->area = (Rectangle){
                     getFloatAttribute(sceneReader->reader, "x"),
                     getFloatAttribute(sceneReader->reader, "y"),
                     getFloatAttribute(sceneReader->reader, "width"),
                     getFloatAttribute(sceneReader->reader, "height")
             };
-            sceneReader->nextExit += 1;
+            e->exitCount += 1;
+            printf("exit increment\n");
         }
     } else if (strcmp(strName, "property") == 0) {
+        Exploration *e = sceneReader->exploration;
         char *propName = getStringAttribute(sceneReader->reader, "name");
-        if (strcmp(propName, "to") == 0) {
-            sceneReader->exploration->exits[sceneReader->nextExit - 1]->to = getStringAttribute(sceneReader->reader, "value");
-        } else if (strcmp(propName, "x") == 0) {
-            sceneReader->exploration->exits[sceneReader->nextExit - 1]->x = getIntAttribute(sceneReader->reader, "value");
-        } else if (strcmp(propName, "y") == 0) {
-            sceneReader->exploration->exits[sceneReader->nextExit - 1]->y = getIntAttribute(sceneReader->reader, "value");
+        if (strcmp(propName, "scene") == 0) {
+            printf("scene: %s\n", name);
+            printf("exit count: %d\n", e->exitCount);
+            printf("wut: %s\n", getStringAttribute(sceneReader->reader, "value"));
+            e->exits[e->exitCount - 1]->scene = getStringAttribute(sceneReader->reader, "value");
+        } else if (strcmp(propName, "to") == 0) {
+            e->exits[e->exitCount - 1]->to = getStringAttribute(sceneReader->reader, "value");
         }
     }
 }

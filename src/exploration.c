@@ -1,9 +1,15 @@
 typedef struct {
     Rectangle area;
     char *to;
+    char *scene;
     int x;
     int y;
 } Exit;
+
+typedef struct {
+    char *name;
+    Rectangle area;
+} Entrance;
 
 typedef struct {
     int type;
@@ -16,8 +22,10 @@ typedef struct {
     Layer *layers[LAYER_COUNT];
     int layerCount;
     Texture2D renderedLayers[LAYER_COUNT];
-    Rectangle entrance;
     Exit *exits[MAX_EXITS];
+    int exitCount;
+    Entrance *entrances[MAX_ENTRANCES];
+    int entranceCount;
     Object *objects[MAX_OBJECTS];
     Log *log;
     int showCollisions;
@@ -27,9 +35,37 @@ typedef struct {
 
 Exit *createExit() {
     Exit *e = malloc(sizeof(Exit));
+    e->to = "";
     e->x = 0;
     e->y = 0;
     return e;
+}
+
+Entrance *createEntrance(char *name, Rectangle area) {
+    Entrance *e = malloc(sizeof(Entrance));
+    e->name = &name[0];
+    e->area = area;
+    return e;
+}
+
+Entrance *findExit(Exploration *e, char *name) {
+    for (int i = 0; i < e->entranceCount; i++) {
+        if (strcmp(e->entrances[i]->name, name) == 0) {
+            return e->entrances[i];
+        }
+    }
+    addError(e->log, "entrance not found: %s", name);
+    return NULL;
+}
+
+Entrance *findEntrance(Exploration *e, char *name) {
+    for (int i = 0; i < e->entranceCount; i++) {
+        if (strcmp(e->entrances[i]->name, name) == 0) {
+            return e->entrances[i];
+        }
+    }
+    addError(e->log, "entrance not found: %s", name);
+    return NULL;
 }
 
 Exploration *createExploration(Log *log, int showCollisions) {
@@ -39,13 +75,9 @@ Exploration *createExploration(Log *log, int showCollisions) {
     for (int i = 0; i < MAX_OBJECTS; i++) {
         exploration->objects[i] = NULL;
     }
-    for (int i = 0; i < MAX_EXITS; i++) {
-        exploration->exits[i] = NULL;
-    }
     exploration->mobileCount = 0;
-    for (int i = 0; i < MAX_MOBILES; i++) {
-        exploration->mobiles[i] = NULL;
-    }
+    exploration->entranceCount = 0;
+    exploration->exitCount = 0;
     exploration->log = log;
     return exploration;
 }
@@ -57,6 +89,7 @@ Vector2d getTileCount(Exploration *e) {
 }
 
 void checkExplorationInput(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
+    addDebug(exploration->log, "exploration -- check player input");
     resetMoving(player);
     getMobAnimation(player->mob)->isPlaying = 0;
     checkMoveKey(
@@ -264,10 +297,7 @@ int isBlocked(Exploration *e, Player *p, Vector2 pos) {
 }
 
 int atExit(Exploration *e, Player *p) {
-    for (int i = 0; i < MAX_EXITS; i++) {
-        if (e->exits[i] == NULL) {
-            return -1;
-        }
+    for (int i = 0; i < e->exitCount; i++) {
         Rectangle pRect = {
                 p->mob->position.x,
                 p->mob->position.y + 12,
@@ -284,6 +314,7 @@ int atExit(Exploration *e, Player *p) {
 
 void evaluateMovement(Exploration *e, Player *p) {
     Vector2 pos = p->mob->position;
+    addDebug(e->log, "exploration -- evaluate movement -- %f, %f", pos.x, pos.y);
     if (p->moving.up == 1 && !isBlocked(e, p, (Vector2){pos.x, pos.y - 1})) {
         p->mob->position.y -= 1;
         p->engageable = NULL;
@@ -312,6 +343,7 @@ void drawExplorationControls(Player *player, ControlBlock *cb) {
 }
 
 void drawExplorationView(Exploration *e, Player *p, ControlBlock *c) {
+    addDebug(e->log, "exploration -- draw");
     ClearBackground(BLACK);
     Vector2 offset = {
             ((float) SCREEN_WIDTH / 2) - p->mob->position.x,
