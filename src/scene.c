@@ -148,3 +148,9 @@ void checkFights(Scene *s, Player *p) {
         animation->currentFrame = animation->firstFrame;
     }
 }
+
+void checkRemoveFight(Scene *s) {
+    if (isFightDone(s->fight)) {
+        s->fight = NULL;
+    }
+}

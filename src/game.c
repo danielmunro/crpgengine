@@ -173,13 +173,13 @@ void doExplorationLoop(Game *g) {
 }
 
 void doFightLoop(Game *g) {
-//    checkInput(g->currentScene, g->player);
+    checkFightInput(g->currentScene->fight, g->player);
     BeginDrawing();
     drawFightView(g->currentScene->encounters, g->currentScene->fight, g->player);
     EndDrawing();
 //    processAnimations(g);
     checkControls(g->currentScene, g->player);
-//    checkFights(g->currentScene, g->player);
+    checkRemoveFight(g->currentScene);
     UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
 }
 

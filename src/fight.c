@@ -54,6 +54,10 @@ Fight *createFightFromEncounters(Log *log, Encounters *encounters) {
     return fight;
 }
 
+void cancelFight(Fight *fight) {
+    fight->beastCount = 0;
+}
+
 void drawFightView(Encounters *encounters, Fight *fight, Player *player) {
     ClearBackground(BLACK);
     float scale = (float) SCREEN_WIDTH / (float) encounters->background.width;
@@ -76,3 +80,17 @@ void drawFightView(Encounters *encounters, Fight *fight, Player *player) {
             (Vector2) {SCREEN_WIDTH * .8, 100 });
 }
 
+void fightSpaceKeyPressed(Fight *fight) {
+    cancelFight(fight);
+}
+
+void checkFightInput(Fight *fight, Player *player) {
+    addDebug(fight->log, "fight -- check player input");
+    if (IsKeyPressed(KEY_SPACE)) {
+        fightSpaceKeyPressed(fight);
+    }
+}
+
+int isFightDone(Fight *fight) {
+    return fight->beastCount == 0;
+}
