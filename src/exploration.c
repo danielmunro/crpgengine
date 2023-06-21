@@ -249,6 +249,7 @@ void drawExplorationMobiles(int mobileCount, Mobile *mobiles[255], Player *p, Ve
 }
 
 int isBlocked(Exploration *e, Player *p, Vector2 pos) {
+    addDebug(e->log, "check blocked by");
     Rectangle pRect = {
             pos.x,
             pos.y + MOB_COLLISION_HEIGHT_OFFSET,
@@ -256,6 +257,7 @@ int isBlocked(Exploration *e, Player *p, Vector2 pos) {
             MOB_COLLISION_HEIGHT
     };
     Vector2d tiles = getTileCount(e);
+    addDebug(e->log, "tiles check");
     for (int l = 0; l < LAYER_COUNT - 1; l++) {
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
@@ -276,10 +278,8 @@ int isBlocked(Exploration *e, Player *p, Vector2 pos) {
             }
         }
     }
-    for (int i = 0; i < MAX_MOBILES; i++) {
-        if (e->mobiles[i] == NULL) {
-            break;
-        }
+    addDebug(e->log, "mob check");
+    for (int i = 0; i < e->mobileCount; i++) {
         Rectangle mRect = {
                 e->mobiles[i]->position.x,
                 e->mobiles[i]->position.y + MOB_COLLISION_HEIGHT_OFFSET,
@@ -292,6 +292,7 @@ int isBlocked(Exploration *e, Player *p, Vector2 pos) {
             return 1;
         }
     }
+    addDebug(e->log, "not blocked");
     p->blockedBy = NULL;
     return 0;
 }
@@ -315,19 +316,19 @@ int atExit(Exploration *e, Player *p) {
 void evaluateMovement(Exploration *e, Player *p) {
     Vector2 pos = p->mob->position;
     addDebug(e->log, "exploration -- evaluate movement -- %f, %f", pos.x, pos.y);
-    if (p->moving.up == 1 && !isBlocked(e, p, (Vector2){pos.x, pos.y - 1})) {
+    if (p->moving.up && !isBlocked(e, p, (Vector2){pos.x, pos.y - 1})) {
         p->mob->position.y -= 1;
         p->engageable = NULL;
     }
-    if (p->moving.down == 1 && !isBlocked(e, p, (Vector2){pos.x, pos.y + 1})) {
+    if (p->moving.down && !isBlocked(e, p, (Vector2){pos.x, pos.y + 1})) {
         p->mob->position.y += 1;
         p->engageable = NULL;
     }
-    if (p->moving.left == 1 && !isBlocked(e, p, (Vector2){pos.x - 1, pos.y})) {
+    if (p->moving.left && !isBlocked(e, p, (Vector2){pos.x - 1, pos.y})) {
         p->mob->position.x -= 1;
         p->engageable = NULL;
     }
-    if (p->moving.right == 1 && !isBlocked(e, p, (Vector2){pos.x + 1, pos.y})) {
+    if (p->moving.right && !isBlocked(e, p, (Vector2){pos.x + 1, pos.y})) {
         p->mob->position.x += 1;
         p->engageable = NULL;
     }
