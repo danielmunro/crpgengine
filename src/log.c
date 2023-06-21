@@ -24,12 +24,8 @@ Log *createLog(LogLevel configuredLogLevel) {
 
 void addLogWithLevel(Log *log, LogLevel logLevel, char *message, va_list ag) {
     if (log->level >= logLevel) {
-        time_t t = time(NULL);
-        struct tm *tm = localtime(&t);
-        char s[64];
-        strftime(s, sizeof(s), "%Y-%m-%d %H:%M:%S", tm);
-        char toLog[1024];
-        sprintf(toLog, "[%s - %s] %s\n", s, getLogLevelString(logLevel), message);
+        char toLog[MAX_LOG_LINE_LENGTH];
+        sprintf(toLog, "%s -- %s\n", getLogLevelString(logLevel), message);
         vprintf(toLog, ag);
     }
 }

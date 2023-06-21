@@ -110,7 +110,8 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
     static int dataOpen = 0, exitOpen = 0, layerOpen = 0, entranceOpen;
     char *strName = (char *)name;
-    printf("name: %s\n", strName);
+    Log *log = sceneReader->exploration->log;
+    addDebug(log, "process scene node -- %s", strName);
     if (strcmp(strName, "tileset") == 0) {
         char *source = getStringAttribute(sceneReader->reader, "source");
         parseTilemapXml(sceneReader->exploration, indexDir, source);
@@ -126,7 +127,7 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
         if (strcmp(layerName, "background") == 0) layer->type = BACKGROUND;
         else if (strcmp(layerName, "midground") == 0) layer->type = MIDGROUND;
         else if (strcmp(layerName, "foreground") == 0) layer->type = FOREGROUND;
-        else addError(sceneReader->exploration->log, "unknown layer: %s", layerName);
+        else addError(log, "unknown layer: %s", layerName);
         sceneReader->exploration->layers[sceneReader->exploration->layerCount] = layer;
     } else if (strcmp(strName, "data") == 0) {
         if (dataOpen == 1) {
@@ -138,24 +139,21 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
         sceneReader->exploration->layerCount++;
         parseSceneLayer(sceneReader->exploration, (char *)data);
     } else if (strcmp(strName, "object") == 0) {
-        char *class = getStringAttribute(sceneReader->reader, "type");
-        printf("object type: %s\n", class);
-        if (class == NULL) {
+        char *type = getStringAttribute(sceneReader->reader, "type");
+        addDebug(log, "object type: %s", type);
+        if (type == NULL) {
             return;
-        } else if (strcmp(class, "entrance") == 0) {
-            printf("creating an entrance\n");
+        } else if (strcmp(type, "entrance") == 0) {
             Rectangle rect = {
                     getFloatAttribute(sceneReader->reader, "x"),
                     getFloatAttribute(sceneReader->reader, "y"),
                     getFloatAttribute(sceneReader->reader, "width"),
                     getFloatAttribute(sceneReader->reader, "height")
             };
-            printf("entrance rect: %f, %f, %f, %f", rect.x, rect.y, rect.width, rect.height);
             Entrance *e = createEntrance(getStringAttribute(sceneReader->reader, "name"), rect);
             sceneReader->exploration->entrances[sceneReader->exploration->entranceCount] = e;
             sceneReader->exploration->entranceCount++;
-        } else if (strcmp(class, "exit") == 0) {
-            printf("creating an exit\n");
+        } else if (strcmp(type, "exit") == 0) {
             Exploration *e = sceneReader->exploration;
             e->exits[e->exitCount] = createExit();
             e->exits[e->exitCount]->area = (Rectangle){
@@ -165,15 +163,11 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
                     getFloatAttribute(sceneReader->reader, "height")
             };
             e->exitCount += 1;
-            printf("exit increment\n");
         }
     } else if (strcmp(strName, "property") == 0) {
         Exploration *e = sceneReader->exploration;
         char *propName = getStringAttribute(sceneReader->reader, "name");
         if (strcmp(propName, "scene") == 0) {
-            printf("scene: %s\n", name);
-            printf("exit count: %d\n", e->exitCount);
-            printf("wut: %s\n", getStringAttribute(sceneReader->reader, "value"));
             e->exits[e->exitCount - 1]->scene = getStringAttribute(sceneReader->reader, "value");
         } else if (strcmp(propName, "to") == 0) {
             e->exits[e->exitCount - 1]->to = getStringAttribute(sceneReader->reader, "value");
@@ -199,7 +193,7 @@ void parseSceneXml(SceneReader *sceneReader, const char *indexDir) {
 }
 
 void loadAnimations(Log *log, const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
-    addDebug(log, "load animations file: %s", file);
+    addInfo(log, "load animations file: %s", file);
     AnimationData *animation = loadAnimationYaml(file);
     char filePath[255];
     sprintf(filePath, "%s/animations/%s", indexDir, animation->sprite->file);
@@ -244,7 +238,7 @@ Mobile *mapMobileFromData(Log *log, MobileData *data, const char *indexDir) {
 void loadMobiles(Scene *scene, const char *indexDir) {
     char directory[255];
     sprintf(directory, "%s/scenes/%s/mobiles", indexDir, scene->name);
-    addDebug(scene->log, "load mobiles from %s", directory);
+    addInfo(scene->log, "load mobiles from %s", directory);
     if (!FileExists(directory)) {
         addError(scene->log, "file does not exist, skipping mob loading");
         return;
@@ -281,13 +275,13 @@ void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, co
             addError(scene->log, "unable to find beast with id: %s", data->beasts[i].id);
         }
     }
-    addDebug(scene->log, "done loading encounters for scene %s with beast count %d",
+    addInfo(scene->log, "done loading encounters for scene %s with beast count %d",
            scene->name,
            scene->encounters->beastEncountersCount);
 }
 
 Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sceneName, int showCollisions) {
-    addDebug(log, "create scene '%s'", sceneName);
+    addInfo(log, "create scene '%s'", sceneName);
     char filePath[255];
     sprintf(filePath, "%s/scenes/%s", indexDir, sceneName);
     SceneData *sceneData = loadSceneYaml(filePath);
@@ -327,7 +321,7 @@ Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sce
 }
 
 Player *loadPlayer(Log *log, char *indexDir) {
-    addDebug(log, "loading player from dir %s", indexDir);
+    addInfo(log, "loading player from dir %s", indexDir);
     Player *player = createPlayer(log);
     player->mob = createMobile();
     PlayerData *playerYaml = loadPlayerYaml(log, indexDir);
@@ -342,10 +336,10 @@ Player *loadPlayer(Log *log, char *indexDir) {
 }
 
 AudioManager *loadAudioManager(Log *log, char *indexDir) {
-    addDebug(log, "loading audio manager from dir '%s'", indexDir);
+    addInfo(log, "load audio manager from dir '%s'", indexDir);
     AudioManager *am = createAudioManager(log);
     assignAudioManagerValues(am, indexDir);
-    addDebug(log, "audio manager loaded %d songs", am->musicCount);
+    addInfo(log, "audio manager loaded %d songs", am->musicCount);
     return am;
 
 }
