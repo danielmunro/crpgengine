@@ -14,6 +14,21 @@
 #define SCREEN_HEIGHT 450
 #define SCALE (float) 1.0
 
+#define LAYER_COUNT 3
+
+#define TARGET_FRAMERATE 60
+
+#define MOB_COLLISION_WIDTH 16
+#define MOB_COLLISION_HEIGHT 12
+#define MOB_COLLISION_HEIGHT_OFFSET 12
+
+#define SCENE_TYPE_TOWN 1
+#define SCENE_TYPE_DUNGEON 2
+
+#define FONT_SIZE 20
+#define LINE_HEIGHT 30
+#define UI_PADDING 20
+
 #define MAX_OBJECTS 255
 #define MAX_SCENES    256
 #define MAX_LAYER_SIZE 1024
@@ -31,20 +46,6 @@
 #define MAX_BEASTS 255
 #define MAX_BEASTS_IN_FIGHT 9
 #define MAX_LOG_LINE_LENGTH 2048
-
-#define LAYER_COUNT 3
-
-#define TARGET_FRAMERATE 60
-
-#define MOB_COLLISION_WIDTH 16
-#define MOB_COLLISION_HEIGHT 12
-#define MOB_COLLISION_HEIGHT_OFFSET 12
-
-#define SCENE_TYPE_TOWN 1
-#define SCENE_TYPE_DUNGEON 2
-
-#define FONT_SIZE 20
-#define LINE_HEIGHT 30
 
 const char *logLevels[] = {
         "error",
@@ -143,6 +144,7 @@ int DIRECTION_COUNT = 4;
 #include "fight.c"
 #include "tilemap.c"
 #include "exploration.c"
+#include "menu.c"
 #include "scene.c"
 #include "runtime_args.c"
 #include "db.c"

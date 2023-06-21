@@ -31,6 +31,7 @@ typedef struct {
     int showCollisions;
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
+    int isMenuOpen;
 } Exploration;
 
 Exit *createExit() {
@@ -47,16 +48,16 @@ Entrance *createEntrance(char *name, Rectangle area) {
     e->area = area;
     return e;
 }
-
-Entrance *findExit(Exploration *e, char *name) {
-    for (int i = 0; i < e->entranceCount; i++) {
-        if (strcmp(e->entrances[i]->name, name) == 0) {
-            return e->entrances[i];
-        }
-    }
-    addError(e->log, "entrance not found: %s", name);
-    return NULL;
-}
+//
+//Entrance *findExit(Exploration *e, char *name) {
+//    for (int i = 0; i < e->entranceCount; i++) {
+//        if (strcmp(e->entrances[i]->name, name) == 0) {
+//            return e->entrances[i];
+//        }
+//    }
+//    addError(e->log, "entrance not found: %s", name);
+//    return NULL;
+//}
 
 Entrance *findEntrance(Exploration *e, char *name) {
     for (int i = 0; i < e->entranceCount; i++) {
@@ -78,6 +79,7 @@ Exploration *createExploration(Log *log, int showCollisions) {
     exploration->mobileCount = 0;
     exploration->entranceCount = 0;
     exploration->exitCount = 0;
+    exploration->isMenuOpen = false;
     exploration->log = log;
     return exploration;
 }
@@ -88,7 +90,7 @@ Vector2d getTileCount(Exploration *e) {
     return (Vector2d){x, y};
 }
 
-void explorationCKeyPressed(Exploration *e, Vector2 position) {
+void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
     addDebug(e->log, "player coordinates: %f, %f", position.x, position.y);
 }
 
@@ -131,16 +133,23 @@ void explorationCheckMoveKeys(Player *player) {
     }
 }
 
+void explorationMenuKeyPressed(Exploration *exploration) {
+    exploration->isMenuOpen = true;
+}
+
 void checkExplorationInput(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
     addDebug(exploration->log, "exploration -- check player input");
     resetMoving(player);
     getMobAnimation(player->mob)->isPlaying = 0;
     explorationCheckMoveKeys(player);
     if (IsKeyDown(KEY_C)) {
-        explorationCKeyPressed(exploration, player->mob->position);
+        explorationDebugKeyPressed(exploration, player->mob->position);
     }
     if (IsKeyPressed(KEY_SPACE)) {
         explorationSpaceKeyPressed(exploration, player, controlBlock);
+    }
+    if (IsKeyPressed(KEY_M)) {
+        explorationMenuKeyPressed(exploration);
     }
 }
 

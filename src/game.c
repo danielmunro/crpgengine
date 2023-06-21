@@ -183,10 +183,20 @@ void doFightLoop(Game *g) {
     UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
 }
 
+void doInGameMenuLoop(Game *g) {
+    checkMenuInput(g->currentScene->exploration);
+    BeginDrawing();
+    drawMenuView(g->player);
+    EndDrawing();
+    UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
+}
+
 void run(Game *g) {
     while (!WindowShouldClose()) {
         if (isFighting(g->currentScene)) {
             doFightLoop(g);
+        } else if (g->currentScene->exploration->isMenuOpen) {
+            doInGameMenuLoop(g);
         } else if (isExploring(g->currentScene)) {
             doExplorationLoop(g);
         }
