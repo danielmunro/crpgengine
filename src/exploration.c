@@ -88,65 +88,59 @@ Vector2d getTileCount(Exploration *e) {
     return (Vector2d){x, y};
 }
 
+void explorationCKeyPressed(Exploration *e, Vector2 position) {
+    addDebug(e->log, "player coordinates: %f, %f", position.x, position.y);
+}
+
+void explorationSpaceKeyPressed(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
+    addInfo(exploration->log, "space key pressed");
+    if (controlBlock != NULL) {
+        addDebug(exploration->log, "active control block progress: %d", controlBlock->progress);
+    } else {
+        addDebug(exploration->log, "no active control blocks set");
+    }
+    if (player->engaged && controlBlock == NULL) {
+        player->engaged = false;
+        return;
+    }
+    if (player->engaged && controlBlock->then[controlBlock->progress]->outcome == SPEAK) {
+        if (controlBlock != NULL) {
+            controlBlock->progress++;
+            addDebug(exploration->log, "active control block progress at %d", controlBlock->progress);
+        }
+        if (controlBlock->progress >= controlBlock->thenCount
+            || controlBlock->then[controlBlock->progress]->outcome != SPEAK) {
+            addDebug(exploration->log, "unset engaged");
+            player->engaged = false;
+        }
+        if (controlBlock->progress >= controlBlock->thenCount) {
+            addDebug(exploration->log, "unsetting active control block");
+            controlBlock->progress = 0;
+            controlBlock = NULL;
+        }
+    } else if (player->blockedBy != NULL) {
+        player->engageable = player->blockedBy;
+        addInfo(exploration->log, "engaging with %s", player->engageable->name);
+        player->engaged = true;
+    }
+}
+
+void explorationCheckMoveKeys(Player *player) {
+    for (int i = 0; i < DIRECTION_COUNT; i++) {
+        checkMoveKey(player, MOVE_KEYS[i], DIRECTIONS[i]);
+    }
+}
+
 void checkExplorationInput(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
     addDebug(exploration->log, "exploration -- check player input");
     resetMoving(player);
     getMobAnimation(player->mob)->isPlaying = 0;
-    checkMoveKey(
-            player,
-            KEY_UP,
-            UP
-    );
-    checkMoveKey(
-            player,
-            KEY_DOWN,
-            DOWN
-    );
-    checkMoveKey(
-            player,
-            KEY_RIGHT,
-            RIGHT
-    );
-    checkMoveKey(
-            player,
-            KEY_LEFT,
-            LEFT
-    );
+    explorationCheckMoveKeys(player);
     if (IsKeyDown(KEY_C)) {
-        addDebug(exploration->log, "player coordinates: %f, %f",
-                 player->mob->position.x, player->mob->position.y);
+        explorationCKeyPressed(exploration, player->mob->position);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        addInfo(exploration->log, "space key pressed");
-        if (controlBlock != NULL) {
-            addDebug(exploration->log, "active control block progress: %d", controlBlock->progress);
-        } else {
-            addDebug(exploration->log, "no active control blocks set");
-        }
-        if (player->engaged && controlBlock == NULL) {
-            player->engaged = false;
-            return;
-        }
-        if (player->engaged && controlBlock->then[controlBlock->progress]->outcome == SPEAK) {
-            if (controlBlock != NULL) {
-                controlBlock->progress++;
-                addDebug(exploration->log, "active control block progress at %d", controlBlock->progress);
-            }
-            if (controlBlock->progress >= controlBlock->thenCount
-                || controlBlock->then[controlBlock->progress]->outcome != SPEAK) {
-                addDebug(exploration->log, "unset engaged");
-                player->engaged = false;
-            }
-            if (controlBlock->progress >= controlBlock->thenCount) {
-                addDebug(exploration->log, "unsetting active control block");
-                controlBlock->progress = 0;
-                controlBlock = NULL;
-            }
-        } else if (player->blockedBy != NULL) {
-            player->engageable = player->blockedBy;
-            addInfo(exploration->log, "engaging with %s", player->engageable->name);
-            player->engaged = true;
-        }
+        explorationSpaceKeyPressed(exploration, player, controlBlock);
     }
 }
 
@@ -218,7 +212,6 @@ void drawExplorationMobiles(int mobileCount, Mobile *mobiles[255], Player *p, Ve
         count[i] = 0;
     }
     for (int i = 0; i < mobileCount; i++) {
-//        int y = (int) mobiles[i]->position.y / tilemap->size.y;
         int y = (int) mobiles[i]->position.y;
         mobLayer[y][count[y]] = mobiles[i];
         count[y]++;
@@ -227,7 +220,6 @@ void drawExplorationMobiles(int mobileCount, Mobile *mobiles[255], Player *p, Ve
     /**
      * The player goes on the layer too.
      */
-//    int playerY = (int) p->mob->position.y / s->tilemap->size.y;
     int playerY = (int) p->mob->position.y;
     mobLayer[playerY][count[playerY]] = p->mob;
 

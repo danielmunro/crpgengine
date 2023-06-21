@@ -113,6 +113,10 @@ typedef enum {
     RIGHT
 } AnimationDirection;
 
+int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
+int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
+int DIRECTION_COUNT = 4;
+
 #include "log.c"
 #include "util.c"
 #include "yaml/animation.c"
