@@ -58,10 +58,12 @@ void cancelFight(Fight *fight) {
     fight->beastCount = 0;
 }
 
-void drawFightView(Encounters *encounters, Fight *fight, Player *player) {
-    ClearBackground(BLACK);
+void drawFightBackground(Encounters *encounters) {
     float scale = (float) SCREEN_WIDTH / (float) encounters->background.width;
     DrawTextureEx(encounters->background, (Vector2) {0, 0}, 0, scale, WHITE);
+}
+
+void drawFightBeasts(Fight *fight) {
     int width = 0;
     int height = 0;
     for (int i = 0; i < fight->beastCount; i++) {
@@ -75,9 +77,19 @@ void drawFightView(Encounters *encounters, Fight *fight, Player *player) {
             width = 0;
         }
     }
+}
+
+void drawFightPlayer(Player *player) {
     drawAnimation(
             findAnimation(player->mob->animations, LEFT),
             (Vector2) {SCREEN_WIDTH * .8, 100 });
+}
+
+void drawFightView(Encounters *encounters, Fight *fight, Player *player) {
+    ClearBackground(BLACK);
+    drawFightBackground(encounters);
+    drawFightBeasts(fight);
+    drawFightPlayer(player);
 }
 
 void fightSpaceKeyPressed(Fight *fight) {
@@ -93,4 +105,8 @@ void checkFightInput(Fight *fight, Player *player) {
 
 int isFightDone(Fight *fight) {
     return fight->beastCount == 0;
+}
+
+void processFightAnimations() {
+    // stub
 }
