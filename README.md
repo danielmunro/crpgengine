@@ -41,4 +41,4 @@ Debug arguments:
 
 `-l` -- specify the log level, one of [debug, info, warn, error]. Default is `info`.
 
-`-s` -- override the game config and start at specified scene.
+`-s` -- override the game config and start at specified scene index.
