@@ -17,7 +17,7 @@ typedef struct {
     Log *log;
 } Player;
 
-Player *createPlayer(Log *log) {
+Player *createPlayer(Log *log, Mobile *mob) {
     Player *player = malloc(sizeof(Player));
     player->moving.down = 0;
     player->moving.up = 0;
@@ -28,6 +28,7 @@ Player *createPlayer(Log *log) {
     player->engageable = NULL;
     player->engaged = false;
     player->storyCount = 0;
+    player->mob = mob;
     player->log = log;
     return player;
 }

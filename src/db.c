@@ -232,15 +232,16 @@ BeastEncounter *mapBeastEncounterFromData(Beast *beast, BeastEncounterData data)
 }
 
 Mobile *mapMobileFromData(Log *log, MobileData *data, const char *indexDir) {
-    Mobile *mob = createMobile();
-    mob->id = &data->id[0];
-    mob->name = &data->name[0];
-    mob->direction = getDirectionFromString(data->direction);
-    mob->position.x = (float) data->position[0];
-    mob->position.y = (float) data->position[1];
+    Animation *animations[MAX_ANIMATIONS];
     char filePath[255];
     sprintf(filePath, "%s/%s", indexDir, data->animations);
-    loadAnimations(log, filePath, indexDir, mob->animations);
+    loadAnimations(log, filePath, indexDir, animations);
+    Mobile *mob = createMobile(
+            data->id,
+            data->name,
+            (Vector2){(float) data->position[0], (float) data->position[1]},
+            getDirectionFromString(data->direction),
+            animations);
     return mob;
 }
 
@@ -331,13 +332,19 @@ Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sce
 
 Player *loadPlayer(Log *log, char *indexDir) {
     addInfo(log, "loading player from dir %s", indexDir);
-    Player *player = createPlayer(log);
-    player->mob = createMobile();
     PlayerData *playerYaml = loadPlayerYaml(log, indexDir);
-    player->mob->name = playerYaml->name;
+    Animation *animations[MAX_ANIMATIONS];
     char filePath[255];
     sprintf(filePath, "%s/%s", indexDir, playerYaml->animations);
-    loadAnimations(log, filePath, indexDir, player->mob->animations);
+    loadAnimations(log, filePath, indexDir, animations);
+    Player *player = createPlayer(
+            log,
+            createMobile(
+                    "player",
+                    playerYaml->name,
+                    (Vector2){0, 0},
+                    DOWN,
+                    animations));
     return player;
 }
 
