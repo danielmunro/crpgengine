@@ -108,7 +108,7 @@ void parseSceneLayer(Exploration *e, char *rawData) {
 
 void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
-    static int dataOpen = 0, exitOpen = 0, layerOpen = 0, entranceOpen;
+    static int dataOpen = 0, exitOpen = 0, layerOpen = 0, objectType;
     char *strName = (char *)name;
     Log *log = sceneReader->exploration->log;
     addDebug(log, "process scene node -- %s", strName);
@@ -153,6 +153,7 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
             Entrance *e = createEntrance(getStringAttribute(sceneReader->reader, "name"), rect);
             sceneReader->exploration->entrances[sceneReader->exploration->entranceCount] = e;
             sceneReader->exploration->entranceCount++;
+            objectType = ENTRANCE;
         } else if (strcmp(type, "exit") == 0) {
             Exploration *e = sceneReader->exploration;
             e->exits[e->exitCount] = createExit();
@@ -163,14 +164,22 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
                     getFloatAttribute(sceneReader->reader, "height")
             };
             e->exitCount += 1;
+            objectType = EXIT;
         }
     } else if (strcmp(strName, "property") == 0) {
         Exploration *e = sceneReader->exploration;
         char *propName = getStringAttribute(sceneReader->reader, "name");
-        if (strcmp(propName, "scene") == 0) {
-            e->exits[e->exitCount - 1]->scene = getStringAttribute(sceneReader->reader, "value");
-        } else if (strcmp(propName, "to") == 0) {
-            e->exits[e->exitCount - 1]->to = getStringAttribute(sceneReader->reader, "value");
+        if (objectType == EXIT) {
+            if (strcmp(propName, "scene") == 0) {
+                e->exits[e->exitCount - 1]->scene = getStringAttribute(sceneReader->reader, "value");
+            } else if (strcmp(propName, "to") == 0) {
+                e->exits[e->exitCount - 1]->to = getStringAttribute(sceneReader->reader, "value");
+            }
+        } else if (objectType == ENTRANCE) {
+            if (strcmp(propName, "direction") == 0) {
+                e->entrances[e->entranceCount - 1]->direction =
+                        getDirectionFromString(getStringAttribute(sceneReader->reader, "value"));
+            }
         }
     }
 }
@@ -326,7 +335,6 @@ Player *loadPlayer(Log *log, char *indexDir) {
     player->mob = createMobile();
     PlayerData *playerYaml = loadPlayerYaml(log, indexDir);
     player->mob->name = playerYaml->name;
-    player->mob->direction = DOWN;
     char filePath[255];
     sprintf(filePath, "%s/%s", indexDir, playerYaml->animations);
     loadAnimations(log, filePath, indexDir, player->mob->animations);

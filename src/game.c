@@ -37,6 +37,7 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     Entrance *entrance = findEntrance(scene->exploration, entranceName);
     g->player->mob->position.x = entrance->area.x + (entrance->area.width / 2);
     g->player->mob->position.y = entrance->area.y + (entrance->area.height / 2);
+    g->player->mob->direction = entrance->direction;
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
     addDebug(g->log, "finished setting scene to '%s'", g->currentScene->name);

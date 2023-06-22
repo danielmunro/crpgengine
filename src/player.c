@@ -7,7 +7,6 @@ typedef struct {
 
 typedef struct {
     Mobile *mob;
-    float direction;
     Moving moving;
     struct timeval lastMovement;
     Mobile *blockedBy;

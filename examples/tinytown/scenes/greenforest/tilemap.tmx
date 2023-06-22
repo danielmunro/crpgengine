@@ -43,7 +43,11 @@
     <property name="to" value="from_greenforest"/>
    </properties>
   </object>
-  <object id="6" name="start" type="entrance" x="349.867" y="316.547" width="75.7289" height="53.7675"/>
+  <object id="6" name="start" type="entrance" x="349.867" y="316.547" width="75.7289" height="53.7675">
+   <properties>
+    <property name="direction" value="up"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer id="6" name="midground" width="50" height="30">
   <data encoding="csv">

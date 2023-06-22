@@ -116,6 +116,11 @@ typedef enum {
     RIGHT
 } AnimationDirection;
 
+typedef enum {
+    EXIT = 1,
+    ENTRANCE,
+} ObjectType;
+
 int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
 int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
 int DIRECTION_COUNT = 4;

@@ -9,6 +9,7 @@ typedef struct {
 typedef struct {
     char *name;
     Rectangle area;
+    AnimationDirection direction;
 } Entrance;
 
 typedef struct {
