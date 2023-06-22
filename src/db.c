@@ -326,12 +326,10 @@ Player *loadPlayer(Log *log, char *indexDir) {
     player->mob = createMobile();
     PlayerData *playerYaml = loadPlayerYaml(log, indexDir);
     player->mob->name = playerYaml->name;
-    player->mob->direction = getDirectionFromString(playerYaml->direction);
+    player->mob->direction = DOWN;
     char filePath[255];
     sprintf(filePath, "%s/%s", indexDir, playerYaml->animations);
     loadAnimations(log, filePath, indexDir, player->mob->animations);
-    player->mob->position.x = (float) playerYaml->position[0];
-    player->mob->position.y = (float) playerYaml->position[1];
     return player;
 }
 
