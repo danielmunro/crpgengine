@@ -36,7 +36,7 @@ void dumpGame(Game *g) {
                 printf("when - %s:%d\n", g->scenes[i]->controlBlocks[j]->when[w]->source->name, g->scenes[i]->controlBlocks[j]->when[w]->condition);
             }
             for (int w = 0; w < g->scenes[i]->controlBlocks[j]->thenCount; w++) {
-                char *target = "";
+                const char *target = "";
                 if (g->scenes[i]->controlBlocks[j]->then[w]->target != NULL) {
                     target = g->scenes[i]->controlBlocks[j]->then[w]->target->name;
                 }

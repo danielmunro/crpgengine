@@ -82,12 +82,16 @@
   <object id="2" name="to_building3" type="exit" x="320.953" y="208.98" width="13.3038" height="14.4124"/>
   <object id="3" name="to_building2" type="exit" x="192.35" y="289.911" width="13.8581" height="13.3038"/>
   <object id="4" name="to_building1" type="exit" x="560.421" y="305.987" width="13.8581" height="13.8581"/>
-  <object id="6" name="start" type="entrance" x="429.756" y="253.481" width="33.246" height="33.8003">
+  <object id="6" name="start" type="entrance" x="429.756" y="252.481" width="33.246" height="33.8003">
    <properties>
     <property name="direction" value="down"/>
    </properties>
   </object>
-  <object id="11" name="from_greenforest" type="entrance" x="370.314" y="65.1268" width="61.3404" height="45.4373"/>
+  <object id="11" name="from_greenforest" type="entrance" x="370.314" y="65.1268" width="61.3404" height="45.4373">
+   <properties>
+    <property name="direction" value="left"/>
+   </properties>
+  </object>
   <object id="12" name="from_building3" type="entrance" x="321.09" y="226.429" width="13.6312" height="20.4468"/>
   <object id="13" name="from_building2" type="entrance" x="192.351" y="308.217" width="14.3885" height="15.9031"/>
   <object id="14" name="from_building1" type="entrance" x="559.637" y="322.605" width="15.9031" height="17.4176"/>
