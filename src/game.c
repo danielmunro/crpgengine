@@ -152,7 +152,6 @@ void evaluateExits(Game *g) {
                     };
                     setScene(g, g->scenes[i], entranceName);
                 }
-                printf("done\n");
                 return;
             }
         }

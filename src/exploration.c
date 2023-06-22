@@ -46,6 +46,7 @@ Exit *createExit() {
 Entrance *createEntrance(char *name, Rectangle area) {
     Entrance *e = malloc(sizeof(Entrance));
     e->name = &name[0];
+    e->direction = DOWN;
     e->area = area;
     return e;
 }
