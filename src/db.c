@@ -240,7 +240,7 @@ void loadMobiles(Scene *scene, const char *indexDir) {
     sprintf(directory, "%s/scenes/%s/mobiles", indexDir, scene->name);
     addInfo(scene->log, "load mobiles from %s", directory);
     if (!FileExists(directory)) {
-        addError(scene->log, "file does not exist, skipping mob loading");
+        addInfo(scene->log, "mobiles directory does not exist, skipping -- %s", directory);
         return;
     }
     char *mobFiles[MAX_MOBILES];

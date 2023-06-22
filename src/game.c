@@ -207,7 +207,7 @@ Game *createGame(RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
     g->animIndex = 0;
     g->currentScene = NULL;
-    g->log = createLog(r->debug);
+    g->log = createLog(r->logLevel);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     g->player = loadPlayer(g->log, r->indexDir);
     addInfo(g->log, "log level set to %s", getLogLevelString(g->log->level));
