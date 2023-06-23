@@ -1,13 +1,12 @@
 typedef struct {
-    int id;
     Rectangle rect;
     int tile;
 } Object;
 
-Object *createObject() {
+Object *createTileObject(int tile, Rectangle rect) {
     Object *o = malloc(sizeof(Object));
-    o->id = 0;
-    o->tile = 0;
+    o->tile = tile;
+    o->rect = rect;
     return o;
 }
 

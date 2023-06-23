@@ -14,8 +14,7 @@ void dumpGame(Game *g) {
             if (g->scenes[i]->exploration->objects[o] == NULL) {
                 break;
             }
-            printf("%d %d\n",
-                   g->scenes[i]->exploration->objects[o]->id,
+            printf("%d\n",
                    g->scenes[i]->exploration->objects[o]->tile
             );
         }

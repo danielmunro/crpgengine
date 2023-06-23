@@ -12,7 +12,7 @@ char *getStringAttribute(xmlTextReaderPtr reader, const char *attribute) {
 
 static void processTilemapNode(SceneReader *sceneReader, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
-    static int tileOpen = 0;
+    static int tileOpen = 0, lastObjectId = 0;
     char *strName = (char *)name;
     if (strcmp(strName, "tileset") == 0) {
         const int width = getIntAttribute(sceneReader->reader, "tilewidth");
@@ -28,18 +28,16 @@ static void processTilemapNode(SceneReader *sceneReader, const char *indexDir) {
             return;
         }
         tileOpen = 1;
-        Object *o = createObject();
-        o->tile = getIntAttribute(sceneReader->reader, "id");
+        lastObjectId = getIntAttribute(sceneReader->reader, "id");
+    } else if (strcmp(strName, "object") == 0) {
+        Rectangle rect = {
+                getFloatAttribute(sceneReader->reader, "x"),
+                getFloatAttribute(sceneReader->reader, "y"),
+                getFloatAttribute(sceneReader->reader, "width"),
+                getFloatAttribute(sceneReader->reader, "height")};
+        Object *o = createTileObject(lastObjectId, rect);
         sceneReader->exploration->objects[sceneReader->objectCount] = o;
         sceneReader->objectCount++;
-    } else if (strcmp(strName, "object") == 0) {
-        int x = getIntAttribute(sceneReader->reader, "x");
-        int y = getIntAttribute(sceneReader->reader, "y");
-        int width = getIntAttribute(sceneReader->reader, "width");
-        int height = getIntAttribute(sceneReader->reader, "height");
-        Rectangle rect = {(float)x, (float)y, (float)width, (float)height};
-        sceneReader->exploration->objects[sceneReader->objectCount - 1]->rect = rect;
-        sceneReader->exploration->objects[sceneReader->objectCount - 1]->id = sceneReader->objectCount;
     }
 }
 
