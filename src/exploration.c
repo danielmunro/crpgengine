@@ -50,16 +50,6 @@ Entrance *createEntrance(char *name, Rectangle area) {
     e->area = area;
     return e;
 }
-//
-//Entrance *findExit(Exploration *e, char *name) {
-//    for (int i = 0; i < e->entranceCount; i++) {
-//        if (strcmp(e->entrances[i]->name, name) == 0) {
-//            return e->entrances[i];
-//        }
-//    }
-//    addError(e->log, "entrance not found: %s", name);
-//    return NULL;
-//}
 
 Entrance *findEntrance(Exploration *e, char *name) {
     for (int i = 0; i < e->entranceCount; i++) {
