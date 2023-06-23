@@ -48,7 +48,7 @@
 					<Add option="-DGRAPHICS_API_OPENGL_33"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/LibTap"/>
-					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/CYaml/release/usr/local/include"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/LibYaml/release/usr/local/include"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
@@ -71,7 +71,7 @@
 					<Add option="-DGRAPHICS_API_OPENGL_33"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/LibTap"/>
-					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/CYaml/release/usr/local/include"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/LibYaml/release/usr/local/include"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
@@ -94,7 +94,7 @@
 					<Add option="-DGRAPHICS_API_OPENGL_33"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/LibTap"/>
-					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/CYaml/release/usr/local/include"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/LibYaml/release/usr/local/include"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>
@@ -117,7 +117,7 @@
 					<Add option="-DGRAPHICS_API_OPENGL_33"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/include/libxml2"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/LibTap"/>
-					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/CYaml/release/usr/local/include"/>
+					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/src/LibYaml/release/usr/local/include"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/."/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src"/>
 					<Add directory="/Users/danmunro/github/cjrpgengine/_deps/raylib-src/src/external/glfw/include"/>

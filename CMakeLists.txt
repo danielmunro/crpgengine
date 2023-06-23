@@ -48,8 +48,8 @@ ExternalProject_Add(LibYaml
         CONFIGURE_COMMAND ""
         BUILD_COMMAND make
         BUILD_IN_SOURCE 1)
-link_directories(_deps/src/CYaml/release/usr/local/lib)
-include_directories(_deps/src/CYaml/release/usr/local/include)
+link_directories(_deps/src/LibYaml/release/usr/local/lib)
+include_directories(_deps/src/LibYaml/release/usr/local/include)
 
 # add project source
 include_directories(.)
