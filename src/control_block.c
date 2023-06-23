@@ -1,14 +1,14 @@
 typedef struct {
     Mobile *source;
     int condition;
-    Mobile *mobileTrigger;
-    char *story;
+    Mobile *trigger;
+    const char *story;
 } When;
 
 typedef struct {
     Mobile *target;
-    char *message;
-    char *story;
+    const char *message;
+    const char *story;
     int outcome;
 } Then;
 
@@ -28,16 +28,21 @@ ControlBlock *createControlBlock() {
     return cb;
 }
 
-When *createWhen() {
+When *createWhen(Mobile *source, Mobile *trigger, int condition, const char *story) {
     When *when = malloc(sizeof(When));
-    when->mobileTrigger = NULL;
-    when->source = NULL;
+    when->source = source;
+    when->trigger = trigger;
+    when->condition = condition;
+    when->story = story;
     return when;
 }
 
-Then *createThen() {
+Then *createThen(Mobile *target, const char *message, const char *story, const Outcome outcome) {
     Then *then = malloc(sizeof(Then));
-    then->target = NULL;
+    then->target = target;
+    then->message = message;
+    then->story = story;
+    then->outcome = outcome;
     return then;
 }
 

@@ -12,7 +12,7 @@ typedef struct {
     Mobile *blockedBy;
     Mobile *engageable;
     int engaged;
-    char *stories[MAX_STORIES];
+    const char *stories[MAX_STORIES];
     int storyCount;
     Log *log;
 } Player;
@@ -33,12 +33,12 @@ Player *createPlayer(Log *log, Mobile *mob) {
     return player;
 }
 
-void addStory(Player *p, char *story) {
+void addStory(Player *p, const char *story) {
     p->stories[p->storyCount++] = story;
     addInfo(p->log, "add story to player: %s", p->stories[0]);
 }
 
-int hasStory(Player *p, char *story) {
+int hasStory(Player *p, const char *story) {
     for (int j = 0; j < p->storyCount; j++) {
         if (strcmp(story, p->stories[j]) == 0) {
             addDebug(p->log, "player has story: %s", story);

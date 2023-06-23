@@ -14,19 +14,8 @@ typedef struct {
     int beastCount;
 } Beastiary;
 
-Beast *createBeast() {
-    Beast *b = malloc(sizeof(Beast));
-    b->id = "";
-    b->name = "";
-    b->level = 0;
-    b->hp = 0;
-    b->mana = 0;
-    b->gp = 0;
-    return b;
-}
-
 Beast *createBeastFromData(const char *indexDir, BeastData *data) {
-    Beast *beast = createBeast();
+    Beast *beast = malloc(sizeof(Beast));
     beast->id = data->id;
     beast->name = data->name;
     beast->gp = data->gp;
@@ -41,7 +30,7 @@ Beast *createBeastFromData(const char *indexDir, BeastData *data) {
 }
 
 Beast *cloneBeast(Beast *original) {
-    Beast *new = createBeast();
+    Beast *new = malloc(sizeof(Beast));
     new->id = original->id;
     new->name = original->name;
     new->image = original->image;

@@ -63,34 +63,36 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
              storyline->when_count, storyline->then_count);
     for (int i = 0; i < storyline->when_count; i++) {
         WhenData wd = storyline->when[i];
-        When *w = createWhen();
-        w->condition = mapCondition(wd.condition);
+        Mobile *trigger = NULL;
+        if (wd.mob != NULL) {
+            trigger = findMobById(g, wd.mob);
+            addDebug(g->log, "mobile trigger is '%s'", trigger->name);
+        }
+        When *w = createWhen(
+                g->player->mob,
+                trigger,
+                mapCondition(wd.condition),
+                wd.story);
         addDebug(g->log, "condition: %s, mapped to: %d, story: %s",
                  wd.condition,
                  w->condition,
                  wd.story);
-        if (wd.story != NULL) {
-            w->story = wd.story;
-        }
-        w->source = g->player->mob;
-        if (wd.mob != NULL) {
-            w->mobileTrigger = findMobById(g, wd.mob);
-            addDebug(g->log, "mobileTrigger is '%s', mob: '%s'", wd.mob, w->mobileTrigger->name);
-        }
         c->when[i] = w;
     }
     addDebug(g->log, "done processing when conditions");
     for (int i = 0; i < storyline->then_count; i++) {
         ThenData td = storyline->then[i];
-        Then *t = createThen();
+        Mobile *target;
         if (td.player) {
-            t->target = g->player->mob;
+            target = g->player->mob;
         } else {
-            t->target = findMobById(g, td.mob);
+            target = findMobById(g, td.mob);
         }
-        t->story = &td.story[0];
-        t->outcome = mapOutcome(td.action);
-        t->message = &td.message[0];
+        Then *t = createThen(
+                target,
+                &td.message[0],
+                &td.story[0],
+                mapOutcome(td.action));
         addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
                  t->story, t->outcome, t->message);
         c->then[i] = t;
