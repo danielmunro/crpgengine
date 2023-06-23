@@ -48,6 +48,7 @@
 #define MAX_BEASTS 255
 #define MAX_BEASTS_IN_FIGHT 9
 #define MAX_LOG_LINE_LENGTH 2048
+#define MAX_DATA_SIZE 2048
 
 const char *logLevels[] = {
         "error",
@@ -154,6 +155,8 @@ int DIRECTION_COUNT = 4;
 #include "menu.c"
 #include "scene.c"
 #include "runtime_args.c"
+#include "scene_reader.c"
+#include "xmlparser.c"
 #include "db.c"
 #include "game.c"
 #include "validate.c"

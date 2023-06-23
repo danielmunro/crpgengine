@@ -21,3 +21,13 @@ Mobile *createMobile(const char *id, const char *name, Vector2 position, Animati
     }
     return mobile;
 }
+
+Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATIONS]) {
+    Mobile *mob = createMobile(
+            data->id,
+            data->name,
+            (Vector2){(float) data->position[0], (float) data->position[1]},
+            getDirectionFromString(data->direction),
+            animations);
+    return mob;
+}
