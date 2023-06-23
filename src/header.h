@@ -155,7 +155,7 @@ int DIRECTION_COUNT = 4;
 #include "menu.c"
 #include "scene.c"
 #include "runtime_args.c"
-#include "scene_reader.c"
+#include "tilemapXmlReader.c"
 #include "xmlparser.c"
 #include "db.c"
 #include "game.c"

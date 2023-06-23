@@ -10,34 +10,34 @@ char *getStringAttribute(xmlTextReaderPtr reader, const char *attribute) {
     return (char *)xmlTextReaderGetAttribute(reader, (const xmlChar*)attribute);
 }
 
-static void processTilemapNode(SceneReader *sceneReader, const char *indexDir) {
-    const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
+static void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
+    const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
     static int tileOpen = 0, lastObjectId = 0;
     char *strName = (char *)name;
     if (strcmp(strName, "tileset") == 0) {
-        const int width = getIntAttribute(sceneReader->reader, "tilewidth");
-        const int height = getIntAttribute(sceneReader->reader, "tilewidth");
-        sceneReader->exploration->tilemap->size = (Vector2d){ width, height };
+        const int width = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
+        const int height = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
+        tilemapXmlReader->exploration->tilemap->size = (Vector2d){width, height };
     } else if (strcmp(strName, "image") == 0) {
         char filePath[255];
-        sprintf(filePath, "%s/%s", indexDir, getStringAttribute(sceneReader->reader, "source"));
-        sceneReader->exploration->tilemap->source = LoadImage(filePath);
+        sprintf(filePath, "%s/%s", indexDir, getStringAttribute(tilemapXmlReader->reader, "source"));
+        tilemapXmlReader->exploration->tilemap->source = LoadImage(filePath);
     } else if (strcmp(strName, "tile") == 0) {
         if (tileOpen == 1) {
             tileOpen = 0;
             return;
         }
         tileOpen = 1;
-        lastObjectId = getIntAttribute(sceneReader->reader, "id");
+        lastObjectId = getIntAttribute(tilemapXmlReader->reader, "id");
     } else if (strcmp(strName, "object") == 0) {
         Rectangle rect = {
-                getFloatAttribute(sceneReader->reader, "x"),
-                getFloatAttribute(sceneReader->reader, "y"),
-                getFloatAttribute(sceneReader->reader, "width"),
-                getFloatAttribute(sceneReader->reader, "height")};
+                getFloatAttribute(tilemapXmlReader->reader, "x"),
+                getFloatAttribute(tilemapXmlReader->reader, "y"),
+                getFloatAttribute(tilemapXmlReader->reader, "width"),
+                getFloatAttribute(tilemapXmlReader->reader, "height")};
         Object *o = createTileObject(lastObjectId, rect);
-        sceneReader->exploration->objects[sceneReader->objectCount] = o;
-        sceneReader->objectCount++;
+        tilemapXmlReader->exploration->objects[tilemapXmlReader->objectCount] = o;
+        tilemapXmlReader->objectCount++;
     }
 }
 
@@ -47,18 +47,18 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
     int ret;
     char filePath[255];
     sprintf(filePath, "%s/%s", indexDir, filename);
-    SceneReader *sceneReader = createSceneReader(e, filePath);
-    if (sceneReader->reader == NULL) {
+    TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(e, filePath);
+    if (tilemapXmlReader->reader == NULL) {
         addError(e->log, "unable to open file: %s", filename);
         return;
     }
-    ret = xmlTextReaderRead(sceneReader->reader);
+    ret = xmlTextReaderRead(tilemapXmlReader->reader);
     while (ret == 1) {
-        processTilemapNode(sceneReader, indexDir);
-        ret = xmlTextReaderRead(sceneReader->reader);
+        processTilemapNode(tilemapXmlReader, indexDir);
+        ret = xmlTextReaderRead(tilemapXmlReader->reader);
     }
-    addDebug(e->log, "found %d objects", sceneReader->objectCount);
-    xmlFreeTextReader(sceneReader->reader);
+    addDebug(e->log, "found %d objects", tilemapXmlReader->objectCount);
+    xmlFreeTextReader(tilemapXmlReader->reader);
     if (ret != 0) {
         addError(e->log, "failed to parse file: %s", filename);
     }
@@ -87,15 +87,15 @@ void parseSceneLayer(Exploration *e, char *rawData) {
     }
 }
 
-void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
-    const xmlChar *name = xmlTextReaderConstName(sceneReader->reader);
+void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
+    const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
     static int dataOpen = 0, exitOpen = 0, layerOpen = 0, objectType;
     char *strName = (char *)name;
-    Log *log = sceneReader->exploration->log;
+    Log *log = tilemapXmlReader->exploration->log;
     addDebug(log, "process scene node -- %s", strName);
     if (strcmp(strName, "tileset") == 0) {
-        char *source = getStringAttribute(sceneReader->reader, "source");
-        parseTilemapXml(sceneReader->exploration, indexDir, source);
+        char *source = getStringAttribute(tilemapXmlReader->reader, "source");
+        parseTilemapXml(tilemapXmlReader->exploration, indexDir, source);
     } else if (strcmp(strName, "layer") == 0) {
         if (layerOpen == 1) {
             layerOpen = 0;
@@ -104,80 +104,80 @@ void processSceneNode(SceneReader *sceneReader, const char *indexDir) {
         layerOpen = 1;
         Layer *layer = malloc(sizeof(Layer));
         layer->type = -1;
-        char *layerName = getStringAttribute(sceneReader->reader, "name");
+        char *layerName = getStringAttribute(tilemapXmlReader->reader, "name");
         if (strcmp(layerName, "background") == 0) layer->type = BACKGROUND;
         else if (strcmp(layerName, "midground") == 0) layer->type = MIDGROUND;
         else if (strcmp(layerName, "foreground") == 0) layer->type = FOREGROUND;
         else addError(log, "unknown layer: %s", layerName);
-        sceneReader->exploration->layers[sceneReader->exploration->layerCount] = layer;
+        tilemapXmlReader->exploration->layers[tilemapXmlReader->exploration->layerCount] = layer;
     } else if (strcmp(strName, "data") == 0) {
         if (dataOpen == 1) {
             dataOpen = 0;
             return;
         }
         dataOpen = 1;
-        xmlChar *data = xmlTextReaderReadString(sceneReader->reader);
-        sceneReader->exploration->layerCount++;
-        parseSceneLayer(sceneReader->exploration, (char *)data);
+        xmlChar *data = xmlTextReaderReadString(tilemapXmlReader->reader);
+        tilemapXmlReader->exploration->layerCount++;
+        parseSceneLayer(tilemapXmlReader->exploration, (char *)data);
     } else if (strcmp(strName, "object") == 0) {
-        char *type = getStringAttribute(sceneReader->reader, "type");
+        char *type = getStringAttribute(tilemapXmlReader->reader, "type");
         addDebug(log, "object type: %s", type);
         if (type == NULL) {
             return;
         } else if (strcmp(type, "entrance") == 0) {
             Rectangle rect = {
-                    getFloatAttribute(sceneReader->reader, "x"),
-                    getFloatAttribute(sceneReader->reader, "y"),
-                    getFloatAttribute(sceneReader->reader, "width"),
-                    getFloatAttribute(sceneReader->reader, "height")
+                    getFloatAttribute(tilemapXmlReader->reader, "x"),
+                    getFloatAttribute(tilemapXmlReader->reader, "y"),
+                    getFloatAttribute(tilemapXmlReader->reader, "width"),
+                    getFloatAttribute(tilemapXmlReader->reader, "height")
             };
-            Entrance *e = createEntrance(getStringAttribute(sceneReader->reader, "name"), rect);
-            sceneReader->exploration->entrances[sceneReader->exploration->entranceCount] = e;
-            sceneReader->exploration->entranceCount++;
+            Entrance *e = createEntrance(getStringAttribute(tilemapXmlReader->reader, "name"), rect);
+            tilemapXmlReader->exploration->entrances[tilemapXmlReader->exploration->entranceCount] = e;
+            tilemapXmlReader->exploration->entranceCount++;
             objectType = ENTRANCE;
         } else if (strcmp(type, "exit") == 0) {
-            Exploration *e = sceneReader->exploration;
+            Exploration *e = tilemapXmlReader->exploration;
             e->exits[e->exitCount] = createExit();
             e->exits[e->exitCount]->area = (Rectangle){
-                    getFloatAttribute(sceneReader->reader, "x"),
-                    getFloatAttribute(sceneReader->reader, "y"),
-                    getFloatAttribute(sceneReader->reader, "width"),
-                    getFloatAttribute(sceneReader->reader, "height")
+                    getFloatAttribute(tilemapXmlReader->reader, "x"),
+                    getFloatAttribute(tilemapXmlReader->reader, "y"),
+                    getFloatAttribute(tilemapXmlReader->reader, "width"),
+                    getFloatAttribute(tilemapXmlReader->reader, "height")
             };
             e->exitCount += 1;
             objectType = EXIT;
         }
     } else if (strcmp(strName, "property") == 0) {
-        Exploration *e = sceneReader->exploration;
-        char *propName = getStringAttribute(sceneReader->reader, "name");
+        Exploration *e = tilemapXmlReader->exploration;
+        char *propName = getStringAttribute(tilemapXmlReader->reader, "name");
         if (objectType == EXIT) {
             if (strcmp(propName, "scene") == 0) {
-                e->exits[e->exitCount - 1]->scene = getStringAttribute(sceneReader->reader, "value");
+                e->exits[e->exitCount - 1]->scene = getStringAttribute(tilemapXmlReader->reader, "value");
             } else if (strcmp(propName, "to") == 0) {
-                e->exits[e->exitCount - 1]->to = getStringAttribute(sceneReader->reader, "value");
+                e->exits[e->exitCount - 1]->to = getStringAttribute(tilemapXmlReader->reader, "value");
             }
         } else if (objectType == ENTRANCE) {
             if (strcmp(propName, "direction") == 0) {
                 e->entrances[e->entranceCount - 1]->direction =
-                        getDirectionFromString(getStringAttribute(sceneReader->reader, "value"));
+                        getDirectionFromString(getStringAttribute(tilemapXmlReader->reader, "value"));
             }
         }
     }
 }
 
-void parseSceneXml(SceneReader *sceneReader, const char *indexDir) {
+void parseSceneXml(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
     int ret;
-    if (sceneReader->reader == NULL) {
-        addError(sceneReader->exploration->log, "unable to find file for scene");
+    if (tilemapXmlReader->reader == NULL) {
+        addError(tilemapXmlReader->exploration->log, "unable to find file for scene");
         return;
     }
-    ret = xmlTextReaderRead(sceneReader->reader);
+    ret = xmlTextReaderRead(tilemapXmlReader->reader);
     while (ret == 1) {
-        processSceneNode(sceneReader, indexDir);
-        ret = xmlTextReaderRead(sceneReader->reader);
+        processSceneNode(tilemapXmlReader, indexDir);
+        ret = xmlTextReaderRead(tilemapXmlReader->reader);
     }
-    xmlFreeTextReader(sceneReader->reader);
+    xmlFreeTextReader(tilemapXmlReader->reader);
     if (ret != 0) {
-        addError(sceneReader->exploration->log,"failed to read scene");
+        addError(tilemapXmlReader->exploration->log, "failed to read scene");
     }
 }

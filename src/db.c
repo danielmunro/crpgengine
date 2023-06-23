@@ -90,13 +90,12 @@ Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sce
 
     // create scene reader for reading tiled xml
     char sceneDir[255];
-    sprintf(sceneDir, "%s/scenes/%s", indexDir, sceneName);
-
+    sprintf(sceneDir, "%s/scenes/%s/map", indexDir, sceneName);
     char sceneFilePath[255];
     sprintf(sceneFilePath, "%s/tilemap.tmx", sceneDir);
-    SceneReader *sceneReader = createSceneReader(scene->exploration, sceneFilePath);
+    TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(scene->exploration, sceneFilePath);
     addDebug(scene->log, "create scene '%s' tilemap", sceneName);
-    parseSceneXml(sceneReader, sceneDir);
+    parseSceneXml(tilemapXmlReader, sceneDir);
 
     // load mobiles
     loadMobiles(scene, indexDir);
@@ -105,7 +104,7 @@ Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sce
         loadEncounters(beastiary, scene, sceneData->encounters, indexDir);
     }
 
-    free(sceneReader);
+    free(tilemapXmlReader);
     addDebug(scene->log, "done parsing scene %s", sceneName);
 
     return scene;
