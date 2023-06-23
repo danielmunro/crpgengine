@@ -6,7 +6,14 @@ void drawPlayer(Player *player) {
 }
 
 void drawStats(Player *player) {
-    drawText("playername", (Vector2d){(UI_PADDING * 2) + MOB_COLLISION_WIDTH, UI_PADDING});
+    drawText(player->mob->name, (Vector2d){(UI_PADDING * 2) + MOB_COLLISION_WIDTH, UI_PADDING});
+    char hp[64];
+    sprintf(hp, "hp %d/%d", 20, 20);
+    drawText(hp, (Vector2d){(UI_PADDING * 2) + MOB_COLLISION_WIDTH, UI_PADDING + LINE_HEIGHT});
+    char mp[64];
+    sprintf(mp, "mp %d/%d", 20, 20);
+    drawText(mp, (Vector2d){(UI_PADDING * 2) + MOB_COLLISION_WIDTH, UI_PADDING + (LINE_HEIGHT * 2)});
+
 }
 
 void drawMenuView(Player *player) {
