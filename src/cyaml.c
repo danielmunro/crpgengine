@@ -93,3 +93,14 @@ BeastiaryData *loadBeastiaryYaml(const char *filePath) {
     }
     return beastiary;
 }
+
+StorylinesData *loadStorylinesYaml(const char *filePath) {
+    StorylinesData *storylines = malloc(sizeof(StorylinesData));
+    cyaml_err_t err = cyaml_load_file(filePath, &config,
+                                      &storylinesTopSchema, (cyaml_data_t **)&storylines, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "%s\n", cyaml_strerror(err));
+        return NULL;
+    }
+    return storylines;
+}

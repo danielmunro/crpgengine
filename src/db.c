@@ -73,9 +73,9 @@ void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, co
 
 Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sceneName, int showCollisions) {
     addInfo(log, "create scene '%s'", sceneName);
-    char filePath[255];
-    sprintf(filePath, "%s/scenes/%s", indexDir, sceneName);
-    SceneData *sceneData = loadSceneYaml(filePath);
+    char sceneFilePath[255];
+    sprintf(sceneFilePath, "%s/scenes/%s", indexDir, sceneName);
+    SceneData *sceneData = loadSceneYaml(sceneFilePath);
     Scene *scene = createScene(log, showCollisions);
 
     // scene properties
@@ -84,16 +84,21 @@ Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sce
     scene->music = &sceneData->music[0];
 
     // storylines
-    for (int i = 0; i < sceneData->storylines_count; i++) {
-        addStoryline(scene, &sceneData->storylines[i]);
+    char storylinesFilePath[255];
+    sprintf(storylinesFilePath, "%s/scenes/%s/storylines.yaml", indexDir, sceneName);
+    StorylinesData *storylines = loadStorylinesYaml(storylinesFilePath);
+    if (storylines != NULL) {
+        for (int i = 0; i < storylines->storylines_count; i++) {
+            addStoryline(scene, &storylines->storylines[i]);
+        }
     }
 
     // create scene reader for reading tiled xml
     char sceneDir[255];
     sprintf(sceneDir, "%s/scenes/%s/map", indexDir, sceneName);
-    char sceneFilePath[255];
-    sprintf(sceneFilePath, "%s/tilemap.tmx", sceneDir);
-    TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(scene->exploration, sceneFilePath);
+    char tilemapFilePath[255];
+    sprintf(tilemapFilePath, "%s/tilemap.tmx", sceneDir);
+    TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(scene->exploration, tilemapFilePath);
     addDebug(scene->log, "create scene '%s' tilemap", sceneName);
     parseSceneXml(tilemapXmlReader, sceneDir);
 

@@ -133,6 +133,7 @@ int DIRECTION_COUNT = 4;
 #include "yaml/music.c"
 #include "yaml/attributes.c"
 #include "yaml/player.c"
+#include "yaml/storyline.c"
 #include "yaml/scene.c"
 #include "yaml/sound.c"
 #include "yaml/beastiary.c"
