@@ -79,3 +79,17 @@ int strToInt(const char *value) {
     ret = strtol(value, &ptr, 10);
     return (int) ret;
 }
+
+int min(int a, int b) {
+    if (a > b) {
+        return b;
+    }
+    return a;
+}
+
+int max(int a, int b) {
+    if (a > b) {
+        return a;
+    }
+    return b;
+}

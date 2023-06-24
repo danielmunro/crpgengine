@@ -32,6 +32,7 @@ typedef struct {
     int showCollisions;
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
+    Menu *menu;
     int isMenuOpen;
 } Exploration;
 
@@ -71,6 +72,7 @@ Exploration *createExploration(Log *log, int showCollisions) {
     exploration->mobileCount = 0;
     exploration->entranceCount = 0;
     exploration->exitCount = 0;
+    exploration->menu = NULL;
     exploration->isMenuOpen = false;
     exploration->log = log;
     return exploration;
@@ -127,6 +129,7 @@ void explorationCheckMoveKeys(Player *player) {
 
 void explorationMenuKeyPressed(Exploration *exploration) {
     exploration->isMenuOpen = true;
+    exploration->menu = createMenu();
 }
 
 void checkExplorationInput(Exploration *exploration, Player *player, ControlBlock *controlBlock) {

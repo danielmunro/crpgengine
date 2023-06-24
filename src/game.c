@@ -162,6 +162,25 @@ void evaluateExits(Game *g) {
     }
 }
 
+void drawMenuView(Menu *menu, Player *player) {
+    ClearBackground(BLACK);
+    drawInGameMenuBox();
+    drawPlayer(player);
+    drawStats(menu, player);
+}
+
+void checkMenuInput(Exploration *exploration) {
+    if (IsKeyPressed(KEY_M)) {
+        exploration->isMenuOpen = false;
+    }
+    if (IsKeyPressed(KEY_DOWN)) {
+        exploration->menu->cursor = min(exploration->menu->cursor + 1, 4);
+    }
+    if (IsKeyPressed(KEY_UP)) {
+        exploration->menu->cursor = max(exploration->menu->cursor - 1, 0);
+    }
+}
+
 void doExplorationLoop(Game *g) {
     checkExplorationInput(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);
     BeginDrawing();
@@ -189,7 +208,7 @@ void doFightLoop(Game *g) {
 void doInGameMenuLoop(Game *g) {
     checkMenuInput(g->currentScene->exploration);
     BeginDrawing();
-    drawMenuView(g->player);
+    drawMenuView(g->currentScene->exploration->menu, g->player);
     EndDrawing();
     UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
 }

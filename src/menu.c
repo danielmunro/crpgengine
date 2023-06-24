@@ -1,3 +1,13 @@
+typedef struct {
+    int cursor;
+} Menu;
+
+Menu *createMenu() {
+    Menu *menu = malloc(sizeof(Menu));
+    menu->cursor = 0;
+    return menu;
+}
+
 void drawPlayer(Player *player) {
     drawAnimation(
             findAnimation(player->mob->animations, DOWN),
@@ -5,26 +15,21 @@ void drawPlayer(Player *player) {
             );
 }
 
-void drawStats(Player *player) {
-    drawText(player->mob->name, (Vector2d){(UI_PADDING * 2) + MOB_COLLISION_WIDTH, UI_PADDING});
+void drawStats(Menu *menu, Player *player) {
+    int column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;
+    int column2 = SCREEN_WIDTH - 200;
+    drawText(player->mob->name, (Vector2d){column1, UI_PADDING});
     char hp[64];
     sprintf(hp, "hp %d/%d", 20, 20);
-    drawText(hp, (Vector2d){(UI_PADDING * 2) + MOB_COLLISION_WIDTH, UI_PADDING + LINE_HEIGHT});
+    drawText(hp, (Vector2d){column1, UI_PADDING + line(1)});
     char mp[64];
     sprintf(mp, "mp %d/%d", 20, 20);
-    drawText(mp, (Vector2d){(UI_PADDING * 2) + MOB_COLLISION_WIDTH, UI_PADDING + (LINE_HEIGHT * 2)});
+    drawText(mp, (Vector2d){column1, UI_PADDING + line(2)});
 
-}
-
-void drawMenuView(Player *player) {
-    ClearBackground(BLACK);
-    drawInGameMenuBox();
-    drawPlayer(player);
-    drawStats(player);
-}
-
-void checkMenuInput(Exploration *exploration) {
-    if (IsKeyPressed(KEY_M)) {
-        exploration->isMenuOpen = false;
-    }
+    drawText("Items", (Vector2d){column2, UI_PADDING});
+    drawText("Rearrange", (Vector2d){column2, UI_PADDING + line(1)});
+    drawText("Config", (Vector2d){column2, UI_PADDING + line(2)});
+    drawText("Save", (Vector2d){column2, UI_PADDING + line(3)});
+    drawText("Quit", (Vector2d){column2, UI_PADDING + line(4)});
+    drawText(">", (Vector2d){column2 - 20, UI_PADDING + line(menu->cursor)});
 }

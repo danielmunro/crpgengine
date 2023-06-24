@@ -28,3 +28,7 @@ void drawDialogBox(const char *message) {
         drawText(&line[0], (Vector2d) {15, startY + (LINE_HEIGHT * i)});
     }
 }
+
+int line(int line) {
+    return line * LINE_HEIGHT;
+}
