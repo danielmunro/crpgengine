@@ -108,6 +108,7 @@ void loadScenes(Game *g, RuntimeArgs  *r, char *scenes[MAX_SCENES]) {
     for (int i = 0; i < g->sceneCount; i++) {
         for (int c = 0; c < g->scenes[i]->storylineCount; c++) {
             g->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(g, g->scenes[i]->storylines[c]);
+            g->scenes[i]->controlBlockCount++;
         }
     }
 }

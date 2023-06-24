@@ -10,6 +10,7 @@ typedef struct {
     StorylineData *storylines[MAX_STORIES];
     int storylineCount;
     ControlBlock *controlBlocks[MAX_CONTROLS];
+    int controlBlockCount;
     ControlBlock *activeControlBlock;
     Encounters *encounters;
     Fight *fight;
@@ -43,9 +44,7 @@ Scene *createScene(Log *log, int showCollisions) {
     scene->encounters = createEncounters();
     scene->log = log;
     scene->exploration = createExploration(log, showCollisions);
-    for (int i = 0; i < MAX_CONTROLS; i++) {
-        scene->controlBlocks[i] = NULL;
-    }
+    scene->controlBlockCount = 0;
     return scene;
 }
 
@@ -94,10 +93,7 @@ void controlWhenCheck(Scene *s, Player *p) {
     if (s->activeControlBlock != NULL) {
         return;
     }
-    for (int i = 0; i < MAX_CONTROLS; i++) {
-        if (s->controlBlocks[i] == NULL) {
-            return;
-        }
+    for (int i = 0; i < s->controlBlockCount; i++) {
         ControlBlock *cb = s->controlBlocks[i];
         int matched = true;
         for (int c = 0; c < cb->whenCount; c++) {
