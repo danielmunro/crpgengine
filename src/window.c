@@ -8,6 +8,7 @@ void initWindow(const char *indexDir) {
         exit(1);
     }
     HideCursor();
+    SetExitKey(0);
 }
 
 void postInitWindow() {

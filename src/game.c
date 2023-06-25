@@ -170,7 +170,7 @@ void drawMenuView(Menu *menu, Player *player) {
 }
 
 void checkMenuInput(Exploration *exploration) {
-    if (IsKeyPressed(KEY_M)) {
+    if (IsKeyPressed(KEY_ESCAPE)) {
         exploration->isMenuOpen = false;
     }
     if (IsKeyPressed(KEY_DOWN)) {
