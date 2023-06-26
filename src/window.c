@@ -9,8 +9,5 @@ void initWindow(const char *indexDir) {
     }
     HideCursor();
     SetExitKey(0);
-}
-
-void postInitWindow() {
-//    ToggleFullscreen();
+    ToggleFullscreen();
 }

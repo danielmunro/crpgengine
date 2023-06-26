@@ -14,7 +14,6 @@ int main(int argc, char *argv[]) {
         dumpGame(g);
         return 0;
     }
-    postInitWindow();
     run(g);
 
     return 0;
