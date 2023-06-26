@@ -123,9 +123,24 @@ typedef enum {
     ENTRANCE,
 } ObjectType;
 
+typedef enum {
+    ITEMS = 0,
+    REARRANGE,
+    CONFIG,
+    SAVE,
+    QUIT,
+} MainInGameMenuItem;
+
 int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
 int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
-int DIRECTION_COUNT = 4;
+int DIRECTION_COUNT = sizeof(DIRECTIONS);
+char *MainInGameMenuItems[] = {
+        "Items",
+        "Rearrange",
+        "Config",
+        "Save",
+        "Quit",
+};
 
 #include "log.c"
 #include "util.c"

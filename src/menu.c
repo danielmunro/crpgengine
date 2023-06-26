@@ -26,10 +26,9 @@ void drawStats(Menu *menu, Player *player) {
     sprintf(mp, "mp %d/%d", 20, 20);
     drawText(mp, (Vector2d){column1, UI_PADDING + line(2)});
 
-    drawText("Items", (Vector2d){column2, UI_PADDING});
-    drawText("Rearrange", (Vector2d){column2, UI_PADDING + line(1)});
-    drawText("Config", (Vector2d){column2, UI_PADDING + line(2)});
-    drawText("Save", (Vector2d){column2, UI_PADDING + line(3)});
-    drawText("Quit", (Vector2d){column2, UI_PADDING + line(4)});
+    int count = sizeof(MainInGameMenuItem) + 1;
+    for (int i = 0; i < count; i++) {
+        drawText(MainInGameMenuItems[i], (Vector2d){column2, UI_PADDING + line(i)});
+    }
     drawText(">", (Vector2d){column2 - 20, UI_PADDING + line(menu->cursor)});
 }
