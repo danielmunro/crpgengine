@@ -162,12 +162,14 @@ void evaluateExits(Game *g) {
     }
 }
 
-void drawMenuView(Menu *menu, Player *player) {
+void drawMenuView(Exploration  *exploration, Player *player) {
     BeginDrawing();
     ClearBackground(BLACK);
     drawInGameMenuBox();
     drawPlayer(player);
-    drawStats(menu, player);
+    for (int i = 0; i < exploration->menuCount; i++) {
+        drawStats(exploration->menus[i], player);
+    }
     EndDrawing();
 }
 
@@ -207,7 +209,7 @@ void doFightLoop(Game *g) {
 }
 
 void doInGameMenuLoop(Game *g) {
-    drawMenuView(getCurrentMenu(g->currentScene->exploration), g->player);
+    drawMenuView(g->currentScene->exploration, g->player);
     checkMenuInput(g->currentScene->exploration);
     updateMusicStream(g->audioManager);
 }
