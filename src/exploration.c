@@ -86,7 +86,7 @@ Vector2d getTileCount(Exploration *e) {
 }
 
 void addMenu(Exploration *e, Menu *m) {
-    e->menus[e->menuCount] = createMenu();
+    e->menus[e->menuCount] = m;
     e->menuCount++;
 }
 
