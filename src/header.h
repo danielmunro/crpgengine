@@ -133,7 +133,7 @@ typedef enum {
 
 int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
 int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
-int DIRECTION_COUNT = sizeof(DIRECTIONS);
+int DIRECTION_COUNT = sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0]);
 char *MainInGameMenuItems[] = {
         "Items",
         "Rearrange",
