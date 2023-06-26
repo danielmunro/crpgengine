@@ -1,10 +1,12 @@
 typedef struct {
+    int type;
     int cursor;
 } Menu;
 
-Menu *createMenu() {
+Menu *createMenu(int type) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;
+    menu->type = type;
     return menu;
 }
 
@@ -15,7 +17,7 @@ void drawPlayer(Player *player) {
             );
 }
 
-void drawStats(Menu *menu, Player *player) {
+void drawInGameMainMenuScreen(Menu *menu, Player *player) {
     int column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;
     int column2 = SCREEN_WIDTH - 200;
     drawText(player->mob->name, (Vector2d){column1, UI_PADDING});
@@ -31,4 +33,12 @@ void drawStats(Menu *menu, Player *player) {
         drawText(MainInGameMenuItems[i], (Vector2d){column2, UI_PADDING + line(i)});
     }
     drawText(">", (Vector2d){column2 - 20, UI_PADDING + line(menu->cursor)});
+}
+
+void drawAllMenus(Player *player, Menu *menu[MAX_MENUS], int menuCount) {
+    for (int i = 0; i < menuCount; i++) {
+        if (menu[i]->type == MENU_IN_GAME_MAIN) {
+            drawInGameMainMenuScreen(menu[i], player);
+        }
+    }
 }

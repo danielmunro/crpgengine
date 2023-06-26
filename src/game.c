@@ -168,7 +168,7 @@ void drawMenuView(Exploration  *exploration, Player *player) {
     drawInGameMenuBox();
     drawPlayer(player);
     for (int i = 0; i < exploration->menuCount; i++) {
-        drawStats(exploration->menus[i], player);
+        drawAllMenus(player, exploration->menus, exploration->menuCount);
     }
     EndDrawing();
 }

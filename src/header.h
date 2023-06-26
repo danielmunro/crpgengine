@@ -31,6 +31,8 @@
 
 #define EXIT_NO_INDEX_DIR 1
 
+#define MENU_IN_GAME_MAIN 1
+
 #define MAX_OBJECTS 255
 #define MAX_SCENES    256
 #define MAX_LAYER_SIZE 1024
