@@ -49,7 +49,7 @@ Scene *createScene(Log *log, int showCollisions) {
 }
 
 int isExploring(Scene *s) {
-    return s->fight == NULL && !s->exploration->isMenuOpen;
+    return s->fight == NULL && !getCurrentMenu(s->exploration);
 }
 
 int isFighting(Scene *s) {

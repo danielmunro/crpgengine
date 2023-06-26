@@ -34,7 +34,6 @@ typedef struct {
     int mobileCount;
     Menu *menus[MAX_MENUS];
     int menuCount;
-    int isMenuOpen;
 } Exploration;
 
 Exit *createExit() {
@@ -74,7 +73,6 @@ Exploration *createExploration(Log *log, int showCollisions) {
     exploration->entranceCount = 0;
     exploration->exitCount = 0;
     exploration->menuCount = 0;
-    exploration->isMenuOpen = false;
     exploration->log = log;
     return exploration;
 }
@@ -91,6 +89,9 @@ void addMenu(Exploration *e, Menu *m) {
 }
 
 Menu *getCurrentMenu(Exploration *e) {
+    if (e->menuCount < 1) {
+        return NULL;
+    }
     return e->menus[e->menuCount - 1];
 }
 
@@ -138,7 +139,6 @@ void explorationCheckMoveKeys(Player *player) {
 }
 
 void explorationMenuKeyPressed(Exploration *exploration) {
-    exploration->isMenuOpen = true;
     addMenu(exploration, createMenu());
 }
 

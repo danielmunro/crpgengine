@@ -173,7 +173,6 @@ void drawMenuView(Menu *menu, Player *player) {
 
 void checkMenuInput(Exploration *exploration) {
     if (IsKeyPressed(KEY_ESCAPE)) {
-        exploration->isMenuOpen = false;
         free(getCurrentMenu(exploration));
         exploration->menuCount--;
     }
@@ -208,8 +207,8 @@ void doFightLoop(Game *g) {
 }
 
 void doInGameMenuLoop(Game *g) {
-    checkMenuInput(g->currentScene->exploration);
     drawMenuView(getCurrentMenu(g->currentScene->exploration), g->player);
+    checkMenuInput(g->currentScene->exploration);
     updateMusicStream(g->audioManager);
 }
 
@@ -217,7 +216,7 @@ void run(Game *g) {
     while (!WindowShouldClose()) {
         if (isFighting(g->currentScene)) {
             doFightLoop(g);
-        } else if (g->currentScene->exploration->isMenuOpen) {
+        } else if (getCurrentMenu(g->currentScene->exploration) != NULL) {
             doInGameMenuLoop(g);
         } else if (isExploring(g->currentScene)) {
             doExplorationLoop(g);
