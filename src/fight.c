@@ -93,10 +93,12 @@ void drawFightPlayer(Player *player) {
 }
 
 void drawFightView(Encounters *encounters, Fight *fight, Player *player) {
+    BeginDrawing();
     ClearBackground(BLACK);
     drawFightBackground(encounters);
     drawFightBeasts(fight);
     drawFightPlayer(player);
+    EndDrawing();
 }
 
 void fightSpaceKeyPressed(Fight *fight) {

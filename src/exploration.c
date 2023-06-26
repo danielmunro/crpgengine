@@ -341,6 +341,7 @@ void drawExplorationControls(Player *player, ControlBlock *cb) {
 
 void drawExplorationView(Exploration *e, Player *p, ControlBlock *c) {
     addDebug(e->log, "exploration -- draw");
+    BeginDrawing();
     ClearBackground(BLACK);
     Vector2 offset = {
             ((float) SCREEN_WIDTH / 2) - p->mob->position.x,
@@ -351,6 +352,7 @@ void drawExplorationView(Exploration *e, Player *p, ControlBlock *c) {
     drawExplorationMobiles(e->mobileCount, e->mobiles, p, offset);
     DrawTextureEx(e->renderedLayers[FOREGROUND], offset, 0, SCALE, WHITE);
     drawExplorationControls(p, c);
+    EndDrawing();
 }
 
 void addMobile(Exploration *exploration, Mobile *mob) {

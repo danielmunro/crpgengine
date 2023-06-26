@@ -26,6 +26,14 @@ AudioManager *createAudioManager(Log *log) {
     return s;
 }
 
+void updateMusicStream(AudioManager *am) {
+    if (am->musicIndex < 0) {
+        addError(am->log, "cannot play music with negative index");
+        return;
+    }
+    UpdateMusicStream(am->music[am->musicIndex]->music);
+}
+
 void playMusic(AudioManager *am, char *name) {
     for (int i = 0; i < am->musicCount; i++) {
         if (strcmp(am->music[i]->name, name) == 0) {

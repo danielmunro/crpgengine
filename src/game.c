@@ -163,10 +163,12 @@ void evaluateExits(Game *g) {
 }
 
 void drawMenuView(Menu *menu, Player *player) {
+    BeginDrawing();
     ClearBackground(BLACK);
     drawInGameMenuBox();
     drawPlayer(player);
     drawStats(menu, player);
+    EndDrawing();
 }
 
 void checkMenuInput(Exploration *exploration) {
@@ -183,34 +185,28 @@ void checkMenuInput(Exploration *exploration) {
 
 void doExplorationLoop(Game *g) {
     checkExplorationInput(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);
-    BeginDrawing();
     drawExplorationView(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);
-    EndDrawing();
     processExplorationAnimations(g);
     evaluateMovement(g->currentScene->exploration, g->player);
     evaluateExits(g);
     checkControls(g->currentScene, g->player);
     checkFights(g->currentScene, g->player);
-    UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
+    updateMusicStream(g->audioManager);
 }
 
 void doFightLoop(Game *g) {
     checkFightInput(g->currentScene->fight, g->player);
-    BeginDrawing();
     drawFightView(g->currentScene->encounters, g->currentScene->fight, g->player);
-    EndDrawing();
     processFightAnimations();
     checkControls(g->currentScene, g->player);
     checkRemoveFight(g->currentScene);
-    UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
+    updateMusicStream(g->audioManager);
 }
 
 void doInGameMenuLoop(Game *g) {
     checkMenuInput(g->currentScene->exploration);
-    BeginDrawing();
     drawMenuView(g->currentScene->exploration->menu, g->player);
-    EndDrawing();
-    UpdateMusicStream(g->audioManager->music[g->audioManager->musicIndex]->music);
+    updateMusicStream(g->audioManager);
 }
 
 void run(Game *g) {
