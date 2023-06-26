@@ -32,7 +32,8 @@ typedef struct {
     int showCollisions;
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
-    Menu *menu;
+    Menu *menus[MAX_MENUS];
+    int menuCount;
     int isMenuOpen;
 } Exploration;
 
@@ -72,7 +73,7 @@ Exploration *createExploration(Log *log, int showCollisions) {
     exploration->mobileCount = 0;
     exploration->entranceCount = 0;
     exploration->exitCount = 0;
-    exploration->menu = NULL;
+    exploration->menuCount = 0;
     exploration->isMenuOpen = false;
     exploration->log = log;
     return exploration;
@@ -82,6 +83,15 @@ Vector2d getTileCount(Exploration *e) {
     int x = SCREEN_WIDTH / e->tilemap->size.x + 1;
     int y = SCREEN_HEIGHT / e->tilemap->size.y + 2;
     return (Vector2d){x, y};
+}
+
+void addMenu(Exploration *e, Menu *m) {
+    e->menus[e->menuCount] = createMenu();
+    e->menuCount++;
+}
+
+Menu *getCurrentMenu(Exploration *e) {
+    return e->menus[e->menuCount - 1];
 }
 
 void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
@@ -129,7 +139,7 @@ void explorationCheckMoveKeys(Player *player) {
 
 void explorationMenuKeyPressed(Exploration *exploration) {
     exploration->isMenuOpen = true;
-    exploration->menu = createMenu();
+    addMenu(exploration, createMenu());
 }
 
 void checkExplorationInput(Exploration *exploration, Player *player, ControlBlock *controlBlock) {

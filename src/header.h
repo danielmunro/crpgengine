@@ -49,6 +49,7 @@
 #define MAX_BEASTS_IN_FIGHT 9
 #define MAX_LOG_LINE_LENGTH 2048
 #define MAX_DATA_SIZE 2048
+#define MAX_MENUS 12
 
 const char *logLevels[] = {
         "error",
