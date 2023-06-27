@@ -178,14 +178,15 @@ void menuSpaceKeyPressed(Exploration *exploration, Menu *menu) {
     }
 }
 
-void checkMenuInput(Exploration *exploration) {
+void checkMenuInput(Exploration *exploration, Player *player) {
     if (IsKeyPressed(KEY_ESCAPE)) {
         free(getCurrentMenu(exploration));
         exploration->menuCount--;
     }
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *menu = getCurrentMenu(exploration);
-        menu->cursor = min(menu->cursor + 1, 4);
+        menu->cursor = min(menu->cursor + 1,
+                           getCursorLengthForMenu(menu, player));
     }
     if (IsKeyPressed(KEY_UP)) {
         Menu *menu = getCurrentMenu(exploration);
@@ -218,7 +219,7 @@ void doFightLoop(Game *g) {
 
 void doInGameMenuLoop(Game *g) {
     drawMenuView(g->currentScene->exploration, g->player);
-    checkMenuInput(g->currentScene->exploration);
+    checkMenuInput(g->currentScene->exploration, g->player);
     updateMusicStream(g->audioManager);
 }
 
