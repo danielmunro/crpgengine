@@ -139,7 +139,7 @@ void explorationCheckMoveKeys(Player *player) {
 }
 
 void explorationMenuKeyPressed(Exploration *exploration) {
-    addMenu(exploration, createMenu(MENU_IN_GAME_MAIN));
+    addMenu(exploration, createMenu(PARTY_MENU));
 }
 
 void checkExplorationInput(Exploration *exploration, Player *player, ControlBlock *controlBlock) {

@@ -15,6 +15,7 @@ typedef struct {
     const char *stories[MAX_STORIES];
     int storyCount;
     Log *log;
+    Item *items[MAX_ITEMS];
 } Player;
 
 Player *createPlayer(Log *log, Mobile *mob) {

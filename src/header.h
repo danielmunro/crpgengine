@@ -31,8 +31,6 @@
 
 #define EXIT_NO_INDEX_DIR 1
 
-#define MENU_IN_GAME_MAIN 1
-
 #define MAX_OBJECTS 255
 #define MAX_SCENES    256
 #define MAX_LAYER_SIZE 1024
@@ -52,6 +50,7 @@
 #define MAX_LOG_LINE_LENGTH 2048
 #define MAX_DATA_SIZE 2048
 #define MAX_MENUS 12
+#define MAX_ITEMS 255
 
 const char *logLevels[] = {
         "error",
@@ -126,12 +125,16 @@ typedef enum {
 } ObjectType;
 
 typedef enum {
-    ITEMS = 0,
-    REARRANGE,
-    CONFIG,
-    SAVE,
-    QUIT,
-} MainInGameMenuItem;
+    PARTY_MENU = 0,
+} TopLevelMenu;
+
+typedef enum {
+    ITEMS_MENU = 0,
+    REARRANGE_MENU,
+    CONFIG_MENU,
+    SAVE_MENU,
+    QUIT_MENU,
+} PartyMenu;
 
 int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
 int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
@@ -167,7 +170,8 @@ char *MainInGameMenuItems[] = {
 #include "mobile.c"
 #include "control_block.c"
 #include "player.c"
-#include "menu/main_in_game.c"
+#include "menu/items_menu.c"
+#include "menu/party_menu.c"
 #include "menu.c"
 #include "object.c"
 #include "fight.c"

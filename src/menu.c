@@ -19,8 +19,10 @@ void drawPlayer(Player *player) {
 
 void drawAllMenus(Player *player, Menu *menu[MAX_MENUS], int menuCount) {
     for (int i = 0; i < menuCount; i++) {
-        if (menu[i]->type == MENU_IN_GAME_MAIN) {
-            drawInGameMainMenuScreen(menu[i]->cursor, player);
+        if (menu[i]->type == PARTY_MENU) {
+            drawPartyMenuScreen(menu[i]->cursor, player);
+        } else if (menu[i]->type == ITEMS_MENU) {
+            drawItemsMenuScreen(menu[i]->cursor, player);
         }
     }
 }
