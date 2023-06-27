@@ -16,7 +16,13 @@ typedef struct {
     int storyCount;
     Log *log;
     Item *items[MAX_ITEMS];
+    int itemCount;
 } Player;
+
+void addItem(Player *player, Item *item) {
+    player->items[player->itemCount] = item;
+    player->itemCount++;
+}
 
 Player *createPlayer(Log *log, Mobile *mob) {
     Player *player = malloc(sizeof(Player));
@@ -31,6 +37,15 @@ Player *createPlayer(Log *log, Mobile *mob) {
     player->storyCount = 0;
     player->mob = mob;
     player->log = log;
+    ConsumeAffect *affect = malloc(sizeof(ConsumeAffect));
+    affect->hp = 20;
+    player->itemCount = 0;
+    addItem(player, createItem(
+            CONSUMABLE,
+            "id",
+            "potion",
+            NULL,
+            affect));
     return player;
 }
 

@@ -126,20 +126,19 @@ typedef enum {
 
 typedef enum {
     PARTY_MENU = 0,
-} TopLevelMenu;
+    ITEMS_MENU,
+} MenuType;
 
 typedef enum {
-    ITEMS_MENU = 0,
-    REARRANGE_MENU,
-    CONFIG_MENU,
-    SAVE_MENU,
-    QUIT_MENU,
-} PartyMenu;
+    CONSUMABLE,
+    EQUIPMENT,
+    CRAFTING_MATERIAL,
+} ItemType;
 
 int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
 int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
 int DIRECTION_COUNT = sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0]);
-char *MainInGameMenuItems[] = {
+char *PartyMenuItems[] = {
         "Items",
         "Rearrange",
         "Config",

@@ -139,6 +139,7 @@ void explorationCheckMoveKeys(Player *player) {
 }
 
 void explorationMenuKeyPressed(Exploration *exploration) {
+    addInfo(exploration->log, "create party menu");
     addMenu(exploration, createMenu(PARTY_MENU));
 }
 

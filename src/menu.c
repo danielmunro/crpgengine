@@ -10,19 +10,12 @@ Menu *createMenu(int type) {
     return menu;
 }
 
-void drawPlayer(Player *player) {
-    drawAnimation(
-            findAnimation(player->mob->animations, DOWN),
-            (Vector2) {20, 20}
-    );
-}
-
-void drawAllMenus(Player *player, Menu *menu[MAX_MENUS], int menuCount) {
+void drawAllMenus(Player *player, Menu *menus[MAX_MENUS], int menuCount) {
     for (int i = 0; i < menuCount; i++) {
-        if (menu[i]->type == PARTY_MENU) {
-            drawPartyMenuScreen(menu[i]->cursor, player);
-        } else if (menu[i]->type == ITEMS_MENU) {
-            drawItemsMenuScreen(menu[i]->cursor, player);
+        if (menus[i]->type == PARTY_MENU) {
+            drawPartyMenuScreen(menus[i]->cursor, player);
+        } else if (menus[i]->type == ITEMS_MENU) {
+            drawItemsMenuScreen(menus[i]->cursor, player);
         }
     }
 }

@@ -165,13 +165,17 @@ void evaluateExits(Game *g) {
 
 void drawMenuView(Exploration *exploration, Player *player) {
     BeginDrawing();
-    ClearBackground(BLACK);
-    drawInGameMenuBox();
-    drawPlayer(player);
-    for (int i = 0; i < exploration->menuCount; i++) {
-        drawAllMenus(player, exploration->menus, exploration->menuCount);
-    }
+    drawAllMenus(player, exploration->menus, exploration->menuCount);
     EndDrawing();
+}
+
+void menuSpaceKeyPressed(Exploration *exploration, Menu *menu) {
+    if (menu->type == PARTY_MENU) {
+        if (strcmp(PartyMenuItems[menu->cursor], "Items") == 0) {
+            addInfo(exploration->log, "create items menu");
+            addMenu(exploration, createMenu(ITEMS_MENU));
+        }
+    }
 }
 
 void checkMenuInput(Exploration *exploration) {
@@ -186,6 +190,9 @@ void checkMenuInput(Exploration *exploration) {
     if (IsKeyPressed(KEY_UP)) {
         Menu *menu = getCurrentMenu(exploration);
         menu->cursor = max(menu->cursor - 1, 0);
+    }
+    if (IsKeyPressed(KEY_SPACE)) {
+        menuSpaceKeyPressed(exploration, getCurrentMenu(exploration));
     }
 }
 
