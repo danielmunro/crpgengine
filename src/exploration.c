@@ -80,7 +80,7 @@ Exploration *createExploration(Log *log, int showCollisions) {
 Vector2d getTileCount(Exploration *e) {
     int x = SCREEN_WIDTH / e->tilemap->size.x + 1;
     int y = SCREEN_HEIGHT / e->tilemap->size.y + 2;
-    return (Vector2d){x, y};
+    return (Vector2d) {x, y};
 }
 
 void addMenu(Exploration *e, Menu *m) {
@@ -159,7 +159,8 @@ void checkExplorationInput(Exploration *exploration, Player *player, ControlBloc
 }
 
 
-void renderExplorationLayer(Tilemap *tilemap, Object *objects[MAX_OBJECTS], Layer *layers[LAYER_COUNT], Texture2D renderedLayers[LAYER_COUNT], int showCollisions, int layer) {
+void renderExplorationLayer(Tilemap *tilemap, Object *objects[MAX_OBJECTS], Layer *layers[LAYER_COUNT],
+                            Texture2D renderedLayers[LAYER_COUNT], int showCollisions, int layer) {
     Vector2d sz = tilemap->size;
     int width = SCREEN_WIDTH / sz.x;
     int height = SCREEN_HEIGHT / sz.y;
@@ -179,7 +180,7 @@ void renderExplorationLayer(Tilemap *tilemap, Object *objects[MAX_OBJECTS], Laye
                     &renderedLayer,
                     tilemap->source,
                     rect,
-                    (Rectangle) { pos.x, pos.y, (float) sz.x, (float) sz.y },
+                    (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
                     WHITE
             );
             if (showCollisions) {
@@ -322,19 +323,19 @@ int atExit(Exploration *e, Player *p) {
 void evaluateMovement(Exploration *e, Player *p) {
     Vector2 pos = p->mob->position;
     addDebug(e->log, "exploration -- evaluate movement -- %f, %f", pos.x, pos.y);
-    if (p->moving.up && !isBlocked(e, p, (Vector2){pos.x, pos.y - 1})) {
+    if (p->moving.up && !isBlocked(e, p, (Vector2) {pos.x, pos.y - 1})) {
         p->mob->position.y -= 1;
         p->engageable = NULL;
     }
-    if (p->moving.down && !isBlocked(e, p, (Vector2){pos.x, pos.y + 1})) {
+    if (p->moving.down && !isBlocked(e, p, (Vector2) {pos.x, pos.y + 1})) {
         p->mob->position.y += 1;
         p->engageable = NULL;
     }
-    if (p->moving.left && !isBlocked(e, p, (Vector2){pos.x - 1, pos.y})) {
+    if (p->moving.left && !isBlocked(e, p, (Vector2) {pos.x - 1, pos.y})) {
         p->mob->position.x -= 1;
         p->engageable = NULL;
     }
-    if (p->moving.right && !isBlocked(e, p, (Vector2){pos.x + 1, pos.y})) {
+    if (p->moving.right && !isBlocked(e, p, (Vector2) {pos.x + 1, pos.y})) {
         p->mob->position.x += 1;
         p->engageable = NULL;
     }

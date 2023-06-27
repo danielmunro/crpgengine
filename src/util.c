@@ -29,7 +29,7 @@ int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
 }
 
 int mapCondition(char *when) {
-    int count = sizeof(conditions) / sizeof(char*);
+    int count = sizeof(conditions) / sizeof(char *);
     for (int i = 0; i < count; i++) {
         if (strcmp(conditions[i], when) == 0) {
             return i;
@@ -39,7 +39,7 @@ int mapCondition(char *when) {
 }
 
 int mapOutcome(char *then) {
-    int count = sizeof(outcomes) / sizeof(char*);
+    int count = sizeof(outcomes) / sizeof(char *);
     for (int i = 0; i < count; i++) {
         if (strcmp(outcomes[i], then) == 0) {
             return i;

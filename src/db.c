@@ -56,9 +56,9 @@ void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, co
                                                                                      data->beasts[i]);
                 scene->encounters->beastEncountersCount++;
                 addDebug(scene->log, "scene %s encounter -- %s, max %d",
-                       scene->name,
-                       scene->encounters->beastEncounters[i]->beast->id,
-                       scene->encounters->beastEncounters[i]->max);
+                         scene->name,
+                         scene->encounters->beastEncounters[i]->beast->id,
+                         scene->encounters->beastEncounters[i]->max);
                 break;
             }
         }
@@ -67,8 +67,8 @@ void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, co
         }
     }
     addInfo(scene->log, "done loading encounters for scene %s with beast count %d",
-           scene->name,
-           scene->encounters->beastEncountersCount);
+            scene->name,
+            scene->encounters->beastEncountersCount);
 }
 
 Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sceneName, int showCollisions) {
@@ -127,7 +127,7 @@ Player *loadPlayer(Log *log, char *indexDir) {
             createMobile(
                     "player",
                     playerYaml->name,
-                    (Vector2){0, 0},
+                    (Vector2) {0, 0},
                     DOWN,
                     animations));
     return player;

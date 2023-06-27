@@ -10,7 +10,8 @@ Animation *getMobAnimation(Mobile *mob) {
     return findAnimation(mob->animations, mob->direction);
 }
 
-Mobile *createMobile(const char *id, const char *name, Vector2 position, AnimationDirection direction, Animation *animations[MAX_ANIMATIONS]) {
+Mobile *createMobile(const char *id, const char *name, Vector2 position, AnimationDirection direction,
+                     Animation *animations[MAX_ANIMATIONS]) {
     Mobile *mobile = malloc(sizeof(Mobile));
     mobile->id = &id[0];
     mobile->name = &name[0];
@@ -26,7 +27,7 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
     Mobile *mob = createMobile(
             data->id,
             data->name,
-            (Vector2){(float) data->position[0], (float) data->position[1]},
+            (Vector2) {(float) data->position[0], (float) data->position[1]},
             getDirectionFromString(data->direction),
             animations);
     return mob;

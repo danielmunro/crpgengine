@@ -19,8 +19,8 @@ typedef struct {
 } Scene;
 
 const SceneType sceneTypes[] = {
-    {SCENE_TYPE_TOWN,    "town"},
-    {SCENE_TYPE_DUNGEON, "dungeon"},
+        {SCENE_TYPE_TOWN,    "town"},
+        {SCENE_TYPE_DUNGEON, "dungeon"},
 };
 
 void setSceneTypeFromString(Scene *s, const char *sceneType) {

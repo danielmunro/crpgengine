@@ -9,7 +9,7 @@ ConfigData *loadAppConfigYaml(const char *indexDir) {
     char filePath[255];
     sprintf(filePath, "%s/config.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
-                                      &appConfigTopSchema, (cyaml_data_t **)&appConfig, NULL);
+                                      &appConfigTopSchema, (cyaml_data_t **) &appConfig, NULL);
     if (err != CYAML_OK) {
         fprintf(stderr, "error parsing app config yaml\n");
     }
@@ -21,7 +21,7 @@ MusicData *loadMusicYaml(const char *indexDir) {
     char filePath[255];
     sprintf(filePath, "%s/music.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
-                                      &musicTopSchema, (cyaml_data_t **)&music, NULL);
+                                      &musicTopSchema, (cyaml_data_t **) &music, NULL);
     if (err != CYAML_OK) {
         fprintf(stderr, "error parsing music yaml: %s\n", cyaml_strerror(err));
     }
@@ -33,7 +33,7 @@ SoundData *loadSoundYaml(const char *indexDir) {
     char filePath[255];
     sprintf(filePath, "%s/sound.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
-                                      &musicTopSchema, (cyaml_data_t **)&sound, NULL);
+                                      &musicTopSchema, (cyaml_data_t **) &sound, NULL);
     if (err != CYAML_OK) {
         fprintf(stderr, "error parsing music yaml: %s\n", cyaml_strerror(err));
     }
@@ -45,7 +45,7 @@ PlayerData *loadPlayerYaml(Log *log, const char *indexDir) {
     char filePath[255];
     sprintf(filePath, "%s/player.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
-                                      &playerTopSchema, (cyaml_data_t **)&player, NULL);
+                                      &playerTopSchema, (cyaml_data_t **) &player, NULL);
     if (err != CYAML_OK) {
         addError(log, "error parsing player config file: %s", cyaml_strerror(err));
     }
@@ -55,7 +55,7 @@ PlayerData *loadPlayerYaml(Log *log, const char *indexDir) {
 AnimationData *loadAnimationYaml(const char *filePath) {
     AnimationData *animation = malloc(sizeof(AnimationData));
     cyaml_err_t err = cyaml_load_file(filePath, &config,
-                                      &animationTopSchema, (cyaml_data_t **)&animation, NULL);
+                                      &animationTopSchema, (cyaml_data_t **) &animation, NULL);
     if (err != CYAML_OK) {
         fprintf(stderr, "error parsing animation yaml: %s\n", cyaml_strerror(err));
     }
@@ -67,7 +67,7 @@ SceneData *loadSceneYaml(const char *indexDir) {
     char filePath[255];
     sprintf(filePath, "%s/scene.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
-                                      &sceneTopSchema, (cyaml_data_t **)&scene, NULL);
+                                      &sceneTopSchema, (cyaml_data_t **) &scene, NULL);
     if (err != CYAML_OK) {
         fprintf(stderr, "error parsing scene yaml\n");
     }
@@ -77,7 +77,7 @@ SceneData *loadSceneYaml(const char *indexDir) {
 MobileData *loadMobYaml(const char *filePath) {
     MobileData *mob = malloc(sizeof(MobileData));
     cyaml_err_t err = cyaml_load_file(filePath, &config,
-                                      &mobileTopSchema, (cyaml_data_t **)&mob, NULL);
+                                      &mobileTopSchema, (cyaml_data_t **) &mob, NULL);
     if (err != CYAML_OK) {
         fprintf(stderr, "error parsing mob yaml\n");
     }
@@ -87,7 +87,7 @@ MobileData *loadMobYaml(const char *filePath) {
 BeastiaryData *loadBeastiaryYaml(const char *filePath) {
     BeastiaryData *beastiary = malloc(sizeof(BeastiaryData));
     cyaml_err_t err = cyaml_load_file(filePath, &config,
-                                      &beastiaryTopSchema, (cyaml_data_t **)&beastiary, NULL);
+                                      &beastiaryTopSchema, (cyaml_data_t **) &beastiary, NULL);
     if (err != CYAML_OK) {
         fprintf(stderr, "error parsing beast yaml\n");
     }
@@ -97,7 +97,7 @@ BeastiaryData *loadBeastiaryYaml(const char *filePath) {
 StorylinesData *loadStorylinesYaml(const char *filePath) {
     StorylinesData *storylines = malloc(sizeof(StorylinesData));
     cyaml_err_t err = cyaml_load_file(filePath, &config,
-                                      &storylinesTopSchema, (cyaml_data_t **)&storylines, NULL);
+                                      &storylinesTopSchema, (cyaml_data_t **) &storylines, NULL);
     if (err != CYAML_OK) {
         fprintf(stderr, "%s\n", cyaml_strerror(err));
         return NULL;

@@ -100,7 +100,7 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
     return c;
 }
 
-void loadScenes(Game *g, RuntimeArgs  *r, char *scenes[MAX_SCENES]) {
+void loadScenes(Game *g, RuntimeArgs *r, char *scenes[MAX_SCENES]) {
     for (int i = 0; i < g->sceneCount; i++) {
         g->scenes[i] = loadScene(g->log, g->beastiary, r->indexDir, scenes[i], r->showCollisions);
         addDebug(g->log, "scene %s (%d) loaded", g->scenes[i]->name, i);
@@ -148,7 +148,8 @@ void evaluateExits(Game *g) {
             if (strcmp(sceneName, g->scenes[i]->name) == 0) {
                 Entrance *entrance = findEntrance(g->scenes[i]->exploration, entranceName);
                 if (entrance != NULL) {
-                    addDebug(g->log, "entrance %s found at %f, %f, %f, %f", entranceName, entrance->area.x, entrance->area.y, entrance->area.width, entrance->area.height);
+                    addDebug(g->log, "entrance %s found at %f, %f, %f, %f", entranceName, entrance->area.x,
+                             entrance->area.y, entrance->area.width, entrance->area.height);
                     g->player->mob->position = (Vector2) {
                             entrance->area.x,
                             entrance->area.y
@@ -162,7 +163,7 @@ void evaluateExits(Game *g) {
     }
 }
 
-void drawMenuView(Exploration  *exploration, Player *player) {
+void drawMenuView(Exploration *exploration, Player *player) {
     BeginDrawing();
     ClearBackground(BLACK);
     drawInGameMenuBox();

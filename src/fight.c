@@ -89,7 +89,7 @@ void drawFightBeasts(Fight *fight) {
 void drawFightPlayer(Player *player) {
     drawAnimation(
             findAnimation(player->mob->animations, LEFT),
-            (Vector2) {SCREEN_WIDTH * .8, 100 });
+            (Vector2) {SCREEN_WIDTH * .8, 100});
 }
 
 void drawFightView(Encounters *encounters, Fight *fight, Player *player) {

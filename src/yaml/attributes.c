@@ -8,14 +8,14 @@ typedef struct {
 
 static const cyaml_schema_field_t attributesFieldSchema[] = {
         CYAML_FIELD_INT(
-                "str", CYAML_FLAG_OPTIONAL, AttributesData , strength),
+                "str", CYAML_FLAG_OPTIONAL, AttributesData, strength),
         CYAML_FIELD_INT(
-                "dex", CYAML_FLAG_OPTIONAL, AttributesData , dexterity),
+                "dex", CYAML_FLAG_OPTIONAL, AttributesData, dexterity),
         CYAML_FIELD_INT(
-                "int", CYAML_FLAG_OPTIONAL, AttributesData , intelligence),
+                "int", CYAML_FLAG_OPTIONAL, AttributesData, intelligence),
         CYAML_FIELD_INT(
-                "wis", CYAML_FLAG_OPTIONAL, AttributesData , wisdom),
+                "wis", CYAML_FLAG_OPTIONAL, AttributesData, wisdom),
         CYAML_FIELD_INT(
-                "con", CYAML_FLAG_OPTIONAL, AttributesData , constitution),
+                "con", CYAML_FLAG_OPTIONAL, AttributesData, constitution),
         CYAML_FIELD_END
 };

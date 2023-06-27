@@ -25,7 +25,13 @@ SpriteSheet *createSpriteSheet(char *filename, int width, int height) {
     return sp;
 }
 
-Animation *createAnimation(SpriteSheet *spriteSheet, int type, int firstFrame, int lastFrame, int frameRate, int repeat) {
+Animation *createAnimation(
+        SpriteSheet *spriteSheet,
+        int type,
+        int firstFrame,
+        int lastFrame,
+        int frameRate,
+        int repeat) {
     Animation *a = malloc(sizeof(Animation));
     a->type = type;
     a->spriteSheet = spriteSheet;

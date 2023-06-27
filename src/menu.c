@@ -13,8 +13,8 @@ Menu *createMenu(int type) {
 void drawPlayer(Player *player) {
     drawAnimation(
             findAnimation(player->mob->animations, DOWN),
-            (Vector2){20, 20}
-            );
+            (Vector2) {20, 20}
+    );
 }
 
 void drawAllMenus(Player *player, Menu *menu[MAX_MENUS], int menuCount) {

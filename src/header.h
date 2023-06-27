@@ -68,12 +68,12 @@ typedef enum {
 } LogLevel;
 
 const char *conditions[] = {
-    "engaged",
-    "has",
-    "not_has",
-    "at",
-    "has_story",
-    "not_has_story",
+        "engaged",
+        "has",
+        "not_has",
+        "at",
+        "has_story",
+        "not_has_story",
 };
 
 typedef enum {

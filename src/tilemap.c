@@ -14,7 +14,7 @@ Vector2d getTileFromIndex(Tilemap *t, int index) {
 
 Rectangle getRectForTile(Tilemap *t, int index) {
     Vector2d tile = getTileFromIndex(t, index);
-    return (Rectangle){
+    return (Rectangle) {
             (float) (tile.x * t->size.x),
             (float) (tile.y * t->size.y),
             (float) t->size.x,

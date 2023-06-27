@@ -29,7 +29,8 @@ void dumpGame(Game *g) {
         for (int j = 0; j < g->scenes[i]->controlBlockCount; j++) {
             printf("in control block %d\n", j);
             for (int w = 0; w < g->scenes[i]->controlBlocks[j]->whenCount; w++) {
-                printf("when - %s:%d\n", g->scenes[i]->controlBlocks[j]->when[w]->source->name, g->scenes[i]->controlBlocks[j]->when[w]->condition);
+                printf("when - %s:%d\n", g->scenes[i]->controlBlocks[j]->when[w]->source->name,
+                       g->scenes[i]->controlBlocks[j]->when[w]->condition);
             }
             for (int w = 0; w < g->scenes[i]->controlBlocks[j]->thenCount; w++) {
                 const char *target = "";
