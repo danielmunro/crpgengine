@@ -127,6 +127,7 @@ typedef enum {
 typedef enum {
     PARTY_MENU = 0,
     ITEMS_MENU,
+    QUIT_MENU,
 } MenuType;
 
 typedef enum {
@@ -171,6 +172,7 @@ char *PartyMenuItems[] = {
 #include "player.c"
 #include "menu/items_menu.c"
 #include "menu/party_menu.c"
+#include "menu/quit_menu.c"
 #include "menu.c"
 #include "object.c"
 #include "fight.c"

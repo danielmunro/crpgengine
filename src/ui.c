@@ -9,6 +9,17 @@ void drawBlueBox(Rectangle rect) {
     );
 }
 
+Rectangle drawAlertBox() {
+    float marginX = (float) SCREEN_WIDTH / 5, marginY = (float) SCREEN_HEIGHT / 5;
+    Rectangle alertBox = {
+            marginX,
+            marginY,
+            SCREEN_WIDTH - (marginX  * 2),
+            SCREEN_HEIGHT - (marginY * 2)};
+    drawBlueBox(alertBox);
+    return alertBox;
+}
+
 void drawInGameMenuBox() {
     drawBlueBox((Rectangle) {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT});
 }

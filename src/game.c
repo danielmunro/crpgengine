@@ -174,6 +174,9 @@ void menuSpaceKeyPressed(Exploration *exploration, Menu *menu) {
         if (strcmp(PartyMenuItems[menu->cursor], "Items") == 0) {
             addInfo(exploration->log, "create items menu");
             addMenu(exploration, createMenu(ITEMS_MENU));
+        } else if (strcmp(PartyMenuItems[menu->cursor], "Quit") == 0) {
+            addInfo(exploration->log, "quit game menu");
+            addMenu(exploration, createMenu(QUIT_MENU));
         }
     }
 }
