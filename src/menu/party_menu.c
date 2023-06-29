@@ -5,7 +5,7 @@ void drawPlayer(Player *player) {
     );
 }
 
-void drawPartyMenuScreen(int cursorLine, Player *player) {
+void drawPartyMenuScreen(Player *player, int cursorLine) {
     drawInGameMenuBox();
     drawPlayer(player);
     int column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;

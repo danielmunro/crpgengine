@@ -1,4 +1,4 @@
-void drawQuitMenuScreen(int cursorLine) {
+void drawQuitMenuScreen(Player *player, int cursorLine) {
     Rectangle area = drawAlertBox();
     drawText(
             "Are you sure?",

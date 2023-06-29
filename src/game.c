@@ -8,6 +8,8 @@ typedef struct {
     int animIndex;
     Beastiary *beastiary;
     Log *log;
+    Menu *menus[MAX_MENUS];
+    int menuCount;
 } Game;
 
 void addAnimation(Game *g, Animation *a) {
@@ -163,25 +165,88 @@ void evaluateExits(Game *g) {
     }
 }
 
-void drawMenuView(Exploration *exploration, Player *player) {
-    BeginDrawing();
-    drawAllMenus(player, exploration->menus, exploration->menuCount);
-    EndDrawing();
-}
-
-void menuSpaceKeyPressed(Exploration *exploration, Menu *menu) {
-    if (menu->type == PARTY_MENU) {
-        if (strcmp(PartyMenuItems[menu->cursor], "Items") == 0) {
-            addInfo(exploration->log, "create items menu");
-            addMenu(exploration, createMenu(ITEMS_MENU));
-        } else if (strcmp(PartyMenuItems[menu->cursor], "Quit") == 0) {
-            addInfo(exploration->log, "quit game menu");
-            addMenu(exploration, createMenu(QUIT_MENU));
-        }
+void loadMenus(Game *g) {
+    Menu *menus[MAX_MENUS] = {
+            createMenu(
+                    PARTY_MENU,
+                    getPartyMenuCursorLength,
+                    drawPartyMenuScreen),
+            createMenu(
+                    ITEMS_MENU,
+                    getItemsCursorLength,
+                    drawItemsMenuScreen),
+            createMenu(
+                    QUIT_MENU,
+                    getQuitCursorLength,
+                    drawQuitMenuScreen),
+    };
+    g->menuCount = sizeof(menus) / sizeof(menus[0]);
+    for (int i = 0; i < g->menuCount; i++) {
+        g->menus[i] = menus[i];
     }
 }
 
-void checkMenuInput(Exploration *exploration, Player *player) {
+void explorationMenuKeyPressed(Game *g) {
+    addMenu(g->currentScene->exploration, findMenu(g->menus, g->menuCount, PARTY_MENU));
+}
+
+void explorationSpaceKeyPressed(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
+    addInfo(exploration->log, "space key pressed");
+    if (controlBlock != NULL) {
+        addDebug(exploration->log, "active control block progress: %d", controlBlock->progress);
+    } else {
+        addDebug(exploration->log, "no active control blocks set");
+    }
+    if (player->engaged && controlBlock == NULL) {
+        player->engaged = false;
+        return;
+    }
+    if (player->engaged && controlBlock->then[controlBlock->progress]->outcome == SPEAK) {
+        if (controlBlock != NULL) {
+            controlBlock->progress++;
+            addDebug(exploration->log, "active control block progress at %d", controlBlock->progress);
+        }
+        if (controlBlock->progress >= controlBlock->thenCount
+            || controlBlock->then[controlBlock->progress]->outcome != SPEAK) {
+            addDebug(exploration->log, "unset engaged");
+            player->engaged = false;
+        }
+        if (controlBlock->progress >= controlBlock->thenCount) {
+            addDebug(exploration->log, "unsetting active control block");
+            controlBlock->progress = 0;
+            controlBlock = NULL;
+        }
+    } else if (player->blockedBy != NULL) {
+        player->engageable = player->blockedBy;
+        addInfo(exploration->log, "engaging with %s", player->engageable->name);
+        player->engaged = true;
+    }
+}
+
+void explorationCheckMoveKeys(Player *player) {
+    for (int i = 0; i < DIRECTION_COUNT; i++) {
+        checkMoveKey(player, MOVE_KEYS[i], DIRECTIONS[i]);
+    }
+}
+
+void checkExplorationInput(Game *g) {
+    addDebug(g->log, "exploration -- check player input");
+    resetMoving(g->player);
+    getMobAnimation(g->player->mob)->isPlaying = 0;
+    explorationCheckMoveKeys(g->player);
+    if (IsKeyDown(KEY_C)) {
+        explorationDebugKeyPressed(g->currentScene->exploration, g->player->mob->position);
+    }
+    if (IsKeyPressed(KEY_SPACE)) {
+        explorationSpaceKeyPressed(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);
+    }
+    if (IsKeyPressed(KEY_M)) {
+        explorationMenuKeyPressed(g);
+    }
+}
+
+void checkMenuInput(Game *game, Player *player) {
+    Exploration *exploration = game->currentScene->exploration;
     if (IsKeyPressed(KEY_ESCAPE)) {
         free(getCurrentMenu(exploration));
         exploration->menuCount--;
@@ -196,12 +261,12 @@ void checkMenuInput(Exploration *exploration, Player *player) {
         menu->cursor = max(menu->cursor - 1, 0);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        menuSpaceKeyPressed(exploration, getCurrentMenu(exploration));
+        menuSpaceKeyPressed(exploration, getCurrentMenu(exploration), game->menus, game->menuCount);
     }
 }
 
 void doExplorationLoop(Game *g) {
-    checkExplorationInput(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);
+    checkExplorationInput(g);
     drawExplorationView(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);
     processExplorationAnimations(g);
     evaluateMovement(g->currentScene->exploration, g->player);
@@ -221,8 +286,9 @@ void doFightLoop(Game *g) {
 }
 
 void doInGameMenuLoop(Game *g) {
-    drawMenuView(g->currentScene->exploration, g->player);
-    checkMenuInput(g->currentScene->exploration, g->player);
+    Exploration *exploration = g->currentScene->exploration;
+    drawAllMenus(g->player, exploration->menus, exploration->menuCount);
+    checkMenuInput(g, g->player);
     updateMusicStream(g->audioManager);
 }
 
@@ -254,6 +320,7 @@ Game *createGame(RuntimeArgs *r) {
     loadBeastiary(g, r->indexDir);
     loadScenes(g, r, scenes);
     setScene(g, g->scenes[r->sceneIndex], "start");
+    loadMenus(g);
     addDebug(g->log, "done creating game object");
     return g;
 }

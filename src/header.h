@@ -130,6 +130,20 @@ typedef enum {
     QUIT_MENU,
 } MenuType;
 
+#define PARTY_MENU_ITEMS "Items"
+#define PARTY_MENU_REARRANGE "Rearrange"
+#define PARTY_MENU_CONFIG "Config"
+#define PARTY_MENU_SAVE "Save"
+#define PARTY_MENU_QUIT "Quit"
+
+char *PartyMenuItems[] = {
+        PARTY_MENU_ITEMS,
+        PARTY_MENU_REARRANGE,
+        PARTY_MENU_CONFIG,
+        PARTY_MENU_SAVE,
+        PARTY_MENU_QUIT,
+};
+
 typedef enum {
     CONSUMABLE,
     EQUIPMENT,
@@ -139,13 +153,6 @@ typedef enum {
 int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
 int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
 int DIRECTION_COUNT = sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0]);
-char *PartyMenuItems[] = {
-        "Items",
-        "Rearrange",
-        "Config",
-        "Save",
-        "Quit",
-};
 
 #include "log.c"
 #include "util.c"

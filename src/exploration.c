@@ -84,6 +84,7 @@ Vector2d getTileCount(Exploration *e) {
 }
 
 void addMenu(Exploration *e, Menu *m) {
+    addInfo(e->log, "adding in-game menu %d", m->type);
     e->menus[e->menuCount] = m;
     e->menuCount++;
 }
@@ -98,67 +99,6 @@ Menu *getCurrentMenu(Exploration *e) {
 void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
     addDebug(e->log, "player coordinates: %f, %f", position.x, position.y);
 }
-
-void explorationSpaceKeyPressed(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
-    addInfo(exploration->log, "space key pressed");
-    if (controlBlock != NULL) {
-        addDebug(exploration->log, "active control block progress: %d", controlBlock->progress);
-    } else {
-        addDebug(exploration->log, "no active control blocks set");
-    }
-    if (player->engaged && controlBlock == NULL) {
-        player->engaged = false;
-        return;
-    }
-    if (player->engaged && controlBlock->then[controlBlock->progress]->outcome == SPEAK) {
-        if (controlBlock != NULL) {
-            controlBlock->progress++;
-            addDebug(exploration->log, "active control block progress at %d", controlBlock->progress);
-        }
-        if (controlBlock->progress >= controlBlock->thenCount
-            || controlBlock->then[controlBlock->progress]->outcome != SPEAK) {
-            addDebug(exploration->log, "unset engaged");
-            player->engaged = false;
-        }
-        if (controlBlock->progress >= controlBlock->thenCount) {
-            addDebug(exploration->log, "unsetting active control block");
-            controlBlock->progress = 0;
-            controlBlock = NULL;
-        }
-    } else if (player->blockedBy != NULL) {
-        player->engageable = player->blockedBy;
-        addInfo(exploration->log, "engaging with %s", player->engageable->name);
-        player->engaged = true;
-    }
-}
-
-void explorationCheckMoveKeys(Player *player) {
-    for (int i = 0; i < DIRECTION_COUNT; i++) {
-        checkMoveKey(player, MOVE_KEYS[i], DIRECTIONS[i]);
-    }
-}
-
-void explorationMenuKeyPressed(Exploration *exploration) {
-    addInfo(exploration->log, "create party menu");
-    addMenu(exploration, createMenu(PARTY_MENU));
-}
-
-void checkExplorationInput(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
-    addDebug(exploration->log, "exploration -- check player input");
-    resetMoving(player);
-    getMobAnimation(player->mob)->isPlaying = 0;
-    explorationCheckMoveKeys(player);
-    if (IsKeyDown(KEY_C)) {
-        explorationDebugKeyPressed(exploration, player->mob->position);
-    }
-    if (IsKeyPressed(KEY_SPACE)) {
-        explorationSpaceKeyPressed(exploration, player, controlBlock);
-    }
-    if (IsKeyPressed(KEY_M)) {
-        explorationMenuKeyPressed(exploration);
-    }
-}
-
 
 void renderExplorationLayer(Tilemap *tilemap, Object *objects[MAX_OBJECTS], Layer *layers[LAYER_COUNT],
                             Texture2D renderedLayers[LAYER_COUNT], int showCollisions, int layer) {
@@ -378,4 +318,14 @@ void renderExplorationLayers(Exploration *e) {
     renderExplorationLayer(e->tilemap, e->objects, e->layers, e->renderedLayers, e->showCollisions, MIDGROUND);
     renderExplorationLayer(e->tilemap, e->objects, e->layers, e->renderedLayers, e->showCollisions, FOREGROUND);
     addDebug(e->log, "exploration successfully rendered");
+}
+
+void menuSpaceKeyPressed(Exploration *exploration, Menu *menu, Menu *menus[MAX_MENUS], int menuCount) {
+    if (menu->type == PARTY_MENU) {
+        if (strcmp(PartyMenuItems[menu->cursor], PARTY_MENU_ITEMS) == 0) {
+            addMenu(exploration, findMenu(menus, menuCount, ITEMS_MENU));
+        } else if (strcmp(PartyMenuItems[menu->cursor], PARTY_MENU_QUIT) == 0) {
+            addMenu(exploration, findMenu(menus, menuCount, QUIT_MENU));
+        }
+    }
 }

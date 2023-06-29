@@ -1,25 +1,46 @@
 typedef struct {
     int type;
     int cursor;
+    int (*getCursorLength)(Player *p);
+    void (*draw)(Player *p, int cursor);
 } Menu;
 
-Menu *createMenu(int type) {
+Menu *createMenu(MenuType type, int (getCursorLength)(Player *), void (draw)(Player *, int)) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;
     menu->type = type;
+    menu->getCursorLength = getCursorLength;
+    menu->draw = draw;
     return menu;
 }
 
-void drawAllMenus(Player *player, Menu *menus[MAX_MENUS], int menuCount) {
+Menu *findMenu(Menu *menus[MAX_MENUS], int menuCount, MenuType type) {
     for (int i = 0; i < menuCount; i++) {
-        if (menus[i]->type == PARTY_MENU) {
-            drawPartyMenuScreen(menus[i]->cursor, player);
-        } else if (menus[i]->type == ITEMS_MENU) {
-            drawItemsMenuScreen(menus[i]->cursor, player);
-        } else if (menus[i]->type == QUIT_MENU) {
-            drawQuitMenuScreen(menus[i]->cursor);
+        if (menus[i]->type == type) {
+            return menus[i];
         }
     }
+    return NULL;
+}
+
+void drawAllMenus(Player *player, Menu *menus[MAX_MENUS], int menuCount) {
+    BeginDrawing();
+    for (int i = 0; i < menuCount; i++) {
+        menus[i]->draw(player, menus[i]->cursor);
+    }
+    EndDrawing();
+}
+
+int getPartyMenuCursorLength(Player *player) {
+    return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]) - 1;
+}
+
+int getItemsCursorLength(Player *player) {
+    return player->itemCount - 1;
+}
+
+int getQuitCursorLength(Player *player) {
+    return 2;
 }
 
 int getCursorLengthForMenu(Menu *menu, Player *player) {
