@@ -6,12 +6,12 @@ void drawQuitMenuScreen(Player *player, int cursorLine) {
                     (int) area.x + UI_PADDING,
                     (int) area.y + UI_PADDING});
     drawText(
-            "Yes",
+            "No",
             (Vector2d) {
                     (int) area.x + UI_PADDING,
                     (int) area.y + UI_PADDING + line(2)});
     drawText(
-            "No",
+            "Yes",
             (Vector2d) {
                     (int) area.x + UI_PADDING,
                     (int) area.y + UI_PADDING + line(3)});

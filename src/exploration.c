@@ -319,13 +319,3 @@ void renderExplorationLayers(Exploration *e) {
     renderExplorationLayer(e->tilemap, e->objects, e->layers, e->renderedLayers, e->showCollisions, FOREGROUND);
     addDebug(e->log, "exploration successfully rendered");
 }
-
-void menuSpaceKeyPressed(Exploration *exploration, Menu *menu, Menu *menus[MAX_MENUS], int menuCount) {
-    if (menu->type == PARTY_MENU) {
-        if (strcmp(PartyMenuItems[menu->cursor], PARTY_MENU_ITEMS) == 0) {
-            addMenu(exploration, findMenu(menus, menuCount, ITEMS_MENU));
-        } else if (strcmp(PartyMenuItems[menu->cursor], PARTY_MENU_QUIT) == 0) {
-            addMenu(exploration, findMenu(menus, menuCount, QUIT_MENU));
-        }
-    }
-}

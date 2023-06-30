@@ -119,6 +119,10 @@ typedef enum {
     RIGHT
 } AnimationDirection;
 
+int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
+int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
+int DIRECTION_COUNT = sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0]);
+
 typedef enum {
     EXIT = 1,
     ENTRANCE,
@@ -144,15 +148,24 @@ char *PartyMenuItems[] = {
         PARTY_MENU_QUIT,
 };
 
+#define QUIT_MENU_YES "Yes"
+#define QUIT_MENU_NO "No"
+
+char *QuitMenuItems[] = {
+        QUIT_MENU_NO,
+        QUIT_MENU_YES,
+};
+
 typedef enum {
     CONSUMABLE,
     EQUIPMENT,
     CRAFTING_MATERIAL,
 } ItemType;
 
-int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
-int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
-int DIRECTION_COUNT = sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0]);
+typedef enum {
+    OPEN_MENU,
+    CLOSE_MENU,
+} MenuSelectResponseType;
 
 #include "log.c"
 #include "util.c"

@@ -170,17 +170,20 @@ void loadMenus(Game *g) {
             createMenu(
                     PARTY_MENU,
                     getPartyMenuCursorLength,
-                    drawPartyMenuScreen),
+                    drawPartyMenuScreen,
+                    partyMenuItemSelected),
             createMenu(
                     ITEMS_MENU,
                     getItemsCursorLength,
-                    drawItemsMenuScreen),
+                    drawItemsMenuScreen,
+                    partyMenuItemSelected),
             createMenu(
                     QUIT_MENU,
                     getQuitCursorLength,
-                    drawQuitMenuScreen),
+                    drawQuitMenuScreen,
+                    quitMenuItemSelected),
     };
-    g->menuCount = sizeof(menus) / sizeof(menus[0]);
+    g->menuCount = 3;
     for (int i = 0; i < g->menuCount; i++) {
         g->menus[i] = menus[i];
     }
@@ -248,8 +251,9 @@ void checkExplorationInput(Game *g) {
 void checkMenuInput(Game *game, Player *player) {
     Exploration *exploration = game->currentScene->exploration;
     if (IsKeyPressed(KEY_ESCAPE)) {
-        free(getCurrentMenu(exploration));
         exploration->menuCount--;
+        exploration->menus[exploration->menuCount]->cursor = 0;
+        exploration->menus[exploration->menuCount] = NULL;
     }
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *menu = getCurrentMenu(exploration);
@@ -261,7 +265,15 @@ void checkMenuInput(Game *game, Player *player) {
         menu->cursor = max(menu->cursor - 1, 0);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        menuSpaceKeyPressed(exploration, getCurrentMenu(exploration), game->menus, game->menuCount);
+        Menu *menu = getCurrentMenu(exploration);
+        MenuSelectResponse *response = menu->selected(menu->cursor);
+        if (response->type == OPEN_MENU) {
+            addMenu(exploration, findMenu(game->menus, game->menuCount, response->menuType));
+        } else if (response->type == CLOSE_MENU) {
+            exploration->menuCount--;
+            exploration->menus[exploration->menuCount]->cursor = 0;
+            exploration->menus[exploration->menuCount] = NULL;
+        }
     }
 }
 

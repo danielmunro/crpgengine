@@ -1,16 +1,34 @@
 typedef struct {
-    int type;
+    MenuSelectResponseType type;
+    MenuType menuType;
+} MenuSelectResponse;
+
+typedef struct {
+    MenuType type;
     int cursor;
     int (*getCursorLength)(Player *p);
     void (*draw)(Player *p, int cursor);
+    MenuSelectResponse *(*selected)(MenuType menuType);
 } Menu;
 
-Menu *createMenu(MenuType type, int (getCursorLength)(Player *), void (draw)(Player *, int)) {
+MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuType menuType) {
+    MenuSelectResponse *response = malloc(sizeof(MenuSelectResponse));
+    response->type = type;
+    response->menuType = menuType;
+    return response;
+}
+
+Menu *createMenu(
+        MenuType type,
+        int (getCursorLength)(Player *),
+        void (draw)(Player *, int),
+        MenuSelectResponse *(*selected)()) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;
     menu->type = type;
     menu->getCursorLength = getCursorLength;
     menu->draw = draw;
+    menu->selected = selected;
     return menu;
 }
 
@@ -51,4 +69,22 @@ int getCursorLengthForMenu(Menu *menu, Player *player) {
     } else if (menu->type == QUIT_MENU) {
         return 2;
     }
+    return 0;
+}
+
+MenuSelectResponse *partyMenuItemSelected(MenuType menuType) {
+    if (strcmp(PartyMenuItems[menuType], PARTY_MENU_ITEMS) == 0) {
+        return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
+    }
+    if (strcmp(PartyMenuItems[menuType], PARTY_MENU_QUIT) == 0) {
+        return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);
+    }
+    return NULL;
+}
+
+MenuSelectResponse *quitMenuItemSelected(MenuType menuType) {
+    if (strcmp(QuitMenuItems[menuType], QUIT_MENU_YES) == 0) {
+        exit(0);
+    }
+    return createMenuSelectResponse(CLOSE_MENU, QUIT_MENU);
 }
