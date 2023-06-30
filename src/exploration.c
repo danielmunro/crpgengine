@@ -28,6 +28,7 @@ typedef struct {
     Entrance *entrances[MAX_ENTRANCES];
     int entranceCount;
     Object *objects[MAX_OBJECTS];
+    int objectCount;
     Log *log;
     int showCollisions;
     Mobile *mobiles[MAX_MOBILES];
@@ -73,8 +74,23 @@ Exploration *createExploration(Log *log, int showCollisions) {
     exploration->entranceCount = 0;
     exploration->exitCount = 0;
     exploration->menuCount = 0;
+    exploration->objectCount = 0;
     exploration->log = log;
     return exploration;
+}
+
+Object *getObject(Exploration *e, int index) {
+    for (int i = 0; i < e->objectCount; i++) {
+        if (e->objects[i]->tile == index) {
+            return e->objects[i];
+        }
+    }
+    return NULL;
+}
+
+void addObject(Exploration *e, Object *o) {
+    e->objects[e->objectCount] = o;
+    e->objectCount++;
 }
 
 Vector2D getTileCount(Exploration *e) {
@@ -100,15 +116,34 @@ void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
     addDebug(e->log, "player coordinates: %f, %f", position.x, position.y);
 }
 
-void renderExplorationLayer(Tilemap *tilemap, Object *objects[MAX_OBJECTS], Layer *layers[LAYER_COUNT],
-                            Texture2D renderedLayers[LAYER_COUNT], int showCollisions, int layer) {
-    Vector2D sz = tilemap->size;
+void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
+    Object *o = getObject(e, index - 1);
+    if (o != NULL) {
+        Rectangle r = {
+                (float) (e->tilemap->size.x * x) + o->rect.x,
+                (float) (e->tilemap->size.y * y) + o->rect.y,
+                o->rect.width,
+                o->rect.height,
+        };
+        ImageDrawRectangle(
+                &layer,
+                (int) r.x,
+                (int) r.y,
+                (int) r.width,
+                (int) r.height,
+                PINK
+        );
+    }
+}
+
+void renderExplorationLayer(Exploration *e, int layer) {
+    Vector2D sz = e->tilemap->size;
     int width = SCREEN_WIDTH / sz.x;
     int height = SCREEN_HEIGHT / sz.y;
     Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
     for (int y = -1; y < height; y++) {
         for (int x = -1; x < width; x++) {
-            int index = (int) layers[layer]->data[y][x];
+            int index = (int) e->layers[layer]->data[y][x];
             if (index <= 0) {
                 continue;
             }
@@ -116,16 +151,17 @@ void renderExplorationLayer(Tilemap *tilemap, Object *objects[MAX_OBJECTS], Laye
                     (float) (sz.x * x),
                     (float) (sz.y * y),
             };
-            Rectangle rect = getRectForTile(tilemap, index);
+            Rectangle rect = getRectForTile(e->tilemap, index);
             ImageDraw(
                     &renderedLayer,
-                    tilemap->source,
+                    e->tilemap->source,
                     rect,
                     (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
                     WHITE
             );
-            if (showCollisions) {
-                Object *o = getObject(objects, index - 1);
+            if (e->showCollisions) {
+//                drawObjectCollision(e, renderedLayer, index - 1, x, y);
+                Object *o = getObject(e, index - 1);
                 if (o != NULL) {
                     Rectangle r = {
                             (float) (sz.x * x) + o->rect.x,
@@ -145,7 +181,7 @@ void renderExplorationLayer(Tilemap *tilemap, Object *objects[MAX_OBJECTS], Laye
             }
         }
     }
-    renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
+    e->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
 }
 
 void createMobileLayer(Mobile *mobLayer[MAX_LAYER_SIZE][MAX_MOBILES]) {
@@ -210,7 +246,7 @@ int isBlocked(Exploration *e, Player *p, Vector2 pos) {
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
                 int index = (int) e->layers[l]->data[y][x];
-                Object *o = getObject(e->objects, index - 1);
+                Object *o = getObject(e, index - 1);
                 if (o != NULL) {
                     Rectangle oRect = {
                             (float) (e->tilemap->size.x * x) + o->rect.x,
@@ -314,8 +350,8 @@ void addMobile(Exploration *exploration, Mobile *mob) {
 
 void renderExplorationLayers(Exploration *e) {
     ClearBackground(BLACK);
-    renderExplorationLayer(e->tilemap, e->objects, e->layers, e->renderedLayers, e->showCollisions, BACKGROUND);
-    renderExplorationLayer(e->tilemap, e->objects, e->layers, e->renderedLayers, e->showCollisions, MIDGROUND);
-    renderExplorationLayer(e->tilemap, e->objects, e->layers, e->renderedLayers, e->showCollisions, FOREGROUND);
+    renderExplorationLayer(e, BACKGROUND);
+    renderExplorationLayer(e, MIDGROUND);
+    renderExplorationLayer(e, FOREGROUND);
     addDebug(e->log, "exploration successfully rendered");
 }

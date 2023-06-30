@@ -36,12 +36,12 @@ static void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *i
                 getFloatAttribute(tilemapXmlReader->reader, "width"),
                 getFloatAttribute(tilemapXmlReader->reader, "height")};
         Object *o = createTileObject(lastObjectId, rect);
-        tilemapXmlReader->exploration->objects[tilemapXmlReader->objectCount] = o;
-        tilemapXmlReader->objectCount++;
+        addObject(tilemapXmlReader->exploration, o);
     }
 }
 
 void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename) {
+    addDebug(e->log, "parsing xml tilemap at %s/%s", indexDir, filename);
     Tilemap *tilemap = malloc(sizeof(Tilemap));
     e->tilemap = tilemap;
     int ret;
@@ -57,7 +57,7 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
         processTilemapNode(tilemapXmlReader, indexDir);
         ret = xmlTextReaderRead(tilemapXmlReader->reader);
     }
-    addDebug(e->log, "found %d objects", tilemapXmlReader->objectCount);
+    addDebug(e->log, "found %d objects", tilemapXmlReader->exploration->objectCount);
     xmlFreeTextReader(tilemapXmlReader->reader);
     if (ret != 0) {
         addError(e->log, "failed to parse file: %s", filename);

@@ -1,7 +1,6 @@
 typedef struct {
     xmlTextReaderPtr reader;
     Exploration *exploration;
-    int objectCount;
 } TilemapXmlReader;
 
 TilemapXmlReader *createTilemapXmlReader(Exploration *exploration, const char *sceneFile) {
@@ -9,6 +8,5 @@ TilemapXmlReader *createTilemapXmlReader(Exploration *exploration, const char *s
     TilemapXmlReader *reader = malloc(sizeof(TilemapXmlReader));
     reader->exploration = exploration;
     reader->reader = xmlReaderForFile(sceneFile, NULL, 0);
-    reader->objectCount = 0;
     return reader;
 }
