@@ -3,7 +3,23 @@
 typedef struct {
     int x;
     int y;
-} Vector2d;
+    int width;
+    int height;
+} RectangleD;
+
+typedef struct {
+    int x;
+    int y;
+} Vector2D;
+
+RectangleD fromRectangle(Rectangle rect) {
+    return (RectangleD){
+            (int) rect.x,
+            (int) rect.y,
+            (int) rect.width,
+            (int) rect.height,
+    };
+}
 
 int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
     struct dirent *de;

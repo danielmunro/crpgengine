@@ -1,23 +1,18 @@
 void drawQuitMenuScreen(Player *player, int cursorLine) {
-    Rectangle area = drawAlertBox();
-    drawText(
-            "Are you sure?",
-            (Vector2d) {
-                    (int) area.x + UI_PADDING,
-                    (int) area.y + UI_PADDING});
-    drawText(
-            "No",
-            (Vector2d) {
-                    (int) area.x + UI_PADDING,
-                    (int) area.y + UI_PADDING + line(2)});
-    drawText(
-            "Yes",
-            (Vector2d) {
-                    (int) area.x + UI_PADDING,
-                    (int) area.y + UI_PADDING + line(3)});
+    Rectangle rect = drawAlertBox();
+    rect.x += UI_PADDING;
+    rect.y += UI_PADDING;
+    TextBox *textBox = createTextBox(fromRectangle(rect));
+    drawInTextBox(textBox, "Are you sure?");
+    drawInTextBox(textBox, "");
+    for (int i = 0; i < QUIT_MENU_ITEM_COUNT; i++) {
+        drawInTextBox(textBox, QuitMenuItems[i]);
+    }
     drawText(
             ">",
-            (Vector2d) {
-                    (int) area.x,
-                    (int) area.y + UI_PADDING + line(2 + cursorLine)});
+            (Vector2D) {
+                    (int) rect.x - UI_PADDING,
+                    (int) rect.y + line(2 + cursorLine)
+            }
+        );
 }

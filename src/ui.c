@@ -1,3 +1,15 @@
+typedef struct {
+    RectangleD area;
+    int cursor;
+} TextBox;
+
+TextBox *createTextBox(RectangleD area) {
+    TextBox *textBox = malloc(sizeof(TextBox));
+    textBox->area = area;
+    textBox->cursor = 0;
+    return textBox;
+}
+
 void drawBlueBox(Rectangle rect) {
     DrawRectangleGradientH(
             (int) rect.x,
@@ -24,7 +36,7 @@ void drawInGameMenuBox() {
     drawBlueBox((Rectangle) {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT});
 }
 
-void drawText(const char *message, Vector2d position) {
+void drawText(const char *message, Vector2D position) {
     DrawText(&message[0], position.x, position.y, FONT_SIZE, WHITE);
 }
 
@@ -36,10 +48,18 @@ void drawDialogBox(const char *message) {
         char line[MAX_CHARACTERS_PER_LINE + 1];
         memcpy(line, &message[i * MAX_CHARACTERS_PER_LINE], MAX_CHARACTERS_PER_LINE);
         line[MAX_CHARACTERS_PER_LINE] = '\0';
-        drawText(&line[0], (Vector2d) {15, startY + (LINE_HEIGHT * i)});
+        drawText(&line[0], (Vector2D) {15, startY + (LINE_HEIGHT * i)});
     }
 }
 
 int line(int line) {
     return line * LINE_HEIGHT;
+}
+
+void drawInTextBox(TextBox *textBox, char *text) {
+    drawText(text, (Vector2D) {
+        textBox->area.x,
+        textBox->area.y + line(textBox->cursor)
+    });
+    textBox->cursor++;
 }

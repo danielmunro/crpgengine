@@ -156,6 +156,8 @@ char *QuitMenuItems[] = {
         QUIT_MENU_YES,
 };
 
+#define QUIT_MENU_ITEM_COUNT 2
+
 typedef enum {
     CONSUMABLE,
     EQUIPMENT,

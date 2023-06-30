@@ -17,7 +17,7 @@ static void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *i
     if (strcmp(strName, "tileset") == 0) {
         const int width = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
         const int height = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
-        tilemapXmlReader->exploration->tilemap->size = (Vector2d) {width, height};
+        tilemapXmlReader->exploration->tilemap->size = (Vector2D) {width, height};
     } else if (strcmp(strName, "image") == 0) {
         char filePath[255];
         sprintf(filePath, "%s/%s", indexDir, getStringAttribute(tilemapXmlReader->reader, "source"));

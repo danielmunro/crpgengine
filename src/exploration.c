@@ -77,10 +77,10 @@ Exploration *createExploration(Log *log, int showCollisions) {
     return exploration;
 }
 
-Vector2d getTileCount(Exploration *e) {
+Vector2D getTileCount(Exploration *e) {
     int x = SCREEN_WIDTH / e->tilemap->size.x + 1;
     int y = SCREEN_HEIGHT / e->tilemap->size.y + 2;
-    return (Vector2d) {x, y};
+    return (Vector2D) {x, y};
 }
 
 void addMenu(Exploration *e, Menu *m) {
@@ -102,7 +102,7 @@ void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
 
 void renderExplorationLayer(Tilemap *tilemap, Object *objects[MAX_OBJECTS], Layer *layers[LAYER_COUNT],
                             Texture2D renderedLayers[LAYER_COUNT], int showCollisions, int layer) {
-    Vector2d sz = tilemap->size;
+    Vector2D sz = tilemap->size;
     int width = SCREEN_WIDTH / sz.x;
     int height = SCREEN_HEIGHT / sz.y;
     Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
@@ -204,7 +204,7 @@ int isBlocked(Exploration *e, Player *p, Vector2 pos) {
             MOB_COLLISION_WIDTH,
             MOB_COLLISION_HEIGHT
     };
-    Vector2d tiles = getTileCount(e);
+    Vector2D tiles = getTileCount(e);
     addDebug(e->log, "tiles check");
     for (int l = 0; l < LAYER_COUNT - 1; l++) {
         for (int y = -1; y < tiles.y; y++) {
