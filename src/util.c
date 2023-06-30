@@ -13,7 +13,7 @@ typedef struct {
 } Vector2D;
 
 RectangleD fromRectangle(Rectangle rect) {
-    return (RectangleD){
+    return (RectangleD) {
             (int) rect.x,
             (int) rect.y,
             (int) rect.width,

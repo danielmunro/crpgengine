@@ -4,7 +4,7 @@ void drawItemsMenuScreen(Player *player, int cursorLine) {
         drawText(
                 player->items[i]->name,
                 (Vector2D) {UI_PADDING + 20, UI_PADDING + line(i)}
-                );
+        );
     }
     drawText(">", (Vector2D) {UI_PADDING, UI_PADDING + line(cursorLine)});
 }

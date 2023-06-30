@@ -6,8 +6,11 @@ typedef struct {
 typedef struct {
     MenuType type;
     int cursor;
+
     int (*getCursorLength)(Player *p);
+
     void (*draw)(Player *p, int cursor);
+
     MenuSelectResponse *(*selected)(MenuType menuType);
 } Menu;
 

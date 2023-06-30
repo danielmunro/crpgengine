@@ -18,7 +18,7 @@ void drawPartyMenuScreen(Player *player, int cursorLine) {
     sprintf(mp, "mp %d/%d", 20, 20);
     drawText(mp, (Vector2D) {column1, UI_PADDING + line(2)});
     int count = sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
-    TextBox *textBox = createTextBox((RectangleD){
+    TextBox *textBox = createTextBox((RectangleD) {
             column2,
             UI_PADDING,
             200,

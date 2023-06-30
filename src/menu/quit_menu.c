@@ -14,5 +14,5 @@ void drawQuitMenuScreen(Player *player, int cursorLine) {
                     (int) rect.x - UI_PADDING,
                     (int) rect.y + line(2 + cursorLine)
             }
-        );
+    );
 }

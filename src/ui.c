@@ -26,7 +26,7 @@ Rectangle drawAlertBox() {
     Rectangle alertBox = {
             marginX,
             marginY,
-            SCREEN_WIDTH - (marginX  * 2),
+            SCREEN_WIDTH - (marginX * 2),
             SCREEN_HEIGHT - (marginY * 2)};
     drawBlueBox(alertBox);
     return alertBox;
@@ -58,8 +58,8 @@ int line(int line) {
 
 void drawInTextBox(TextBox *textBox, char *text) {
     drawText(text, (Vector2D) {
-        textBox->area.x,
-        textBox->area.y + line(textBox->cursor)
+            textBox->area.x,
+            textBox->area.y + line(textBox->cursor)
     });
     textBox->cursor++;
 }
