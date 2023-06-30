@@ -32,8 +32,10 @@ Rectangle drawAlertBox() {
     return alertBox;
 }
 
-void drawInGameMenuBox() {
-    drawBlueBox((Rectangle) {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT});
+Rectangle drawInGameMenuBox() {
+    Rectangle rect = (Rectangle) {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    drawBlueBox(rect);
+    return rect;
 }
 
 void drawText(const char *message, Vector2D position) {
@@ -56,7 +58,7 @@ int line(int line) {
     return line * LINE_HEIGHT;
 }
 
-void drawInTextBox(TextBox *textBox, char *text) {
+void drawInTextBox(TextBox *textBox, const char *text) {
     drawText(text, (Vector2D) {
             textBox->area.x,
             textBox->area.y + line(textBox->cursor)

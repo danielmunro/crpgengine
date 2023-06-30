@@ -1,10 +1,10 @@
 void drawItemsMenuScreen(Player *player, int cursorLine) {
-    drawInGameMenuBox();
+    Rectangle rect = drawInGameMenuBox();
+    rect.x += UI_PADDING;
+    rect.y += UI_PADDING;
+    TextBox *textBox = createTextBox(fromRectangle(rect));
     for (int i = 0; i < player->itemCount; i++) {
-        drawText(
-                player->items[i]->name,
-                (Vector2D) {UI_PADDING + 20, UI_PADDING + line(i)}
-        );
+        drawInTextBox(textBox, player->items[i]->name);
     }
     drawText(">", (Vector2D) {UI_PADDING, UI_PADDING + line(cursorLine)});
 }
