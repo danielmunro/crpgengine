@@ -189,6 +189,12 @@ void loadMenus(Game *g) {
     }
 }
 
+void removeMenu(Exploration *exploration) {
+    exploration->menuCount--;
+    exploration->menus[exploration->menuCount]->cursor = 0;
+    exploration->menus[exploration->menuCount] = NULL;
+}
+
 void explorationMenuKeyPressed(Game *g) {
     addMenu(g->currentScene->exploration, findMenu(g->menus, g->menuCount, PARTY_MENU));
 }
@@ -248,32 +254,33 @@ void checkExplorationInput(Game *g) {
     }
 }
 
-void checkMenuInput(Game *game, Player *player) {
-    Exploration *exploration = game->currentScene->exploration;
+void menuItemSelected(Game *g) {
+    Exploration *exploration = g->currentScene->exploration;
+    Menu *menu = getCurrentMenu(exploration);
+    MenuSelectResponse *response = menu->selected(menu->cursor);
+    if (response->type == OPEN_MENU) {
+        addMenu(exploration, findMenu(g->menus, g->menuCount, response->menuType));
+    } else if (response->type == CLOSE_MENU) {
+        removeMenu(exploration);
+    }
+}
+
+void checkMenuInput(Game *g) {
+    Exploration *exploration = g->currentScene->exploration;
     if (IsKeyPressed(KEY_ESCAPE)) {
-        exploration->menuCount--;
-        exploration->menus[exploration->menuCount]->cursor = 0;
-        exploration->menus[exploration->menuCount] = NULL;
+        removeMenu(exploration);
     }
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *menu = getCurrentMenu(exploration);
         menu->cursor = min(menu->cursor + 1,
-                           getCursorLengthForMenu(menu, player));
+                           getCursorLengthForMenu(menu, g->player));
     }
     if (IsKeyPressed(KEY_UP)) {
         Menu *menu = getCurrentMenu(exploration);
         menu->cursor = max(menu->cursor - 1, 0);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        Menu *menu = getCurrentMenu(exploration);
-        MenuSelectResponse *response = menu->selected(menu->cursor);
-        if (response->type == OPEN_MENU) {
-            addMenu(exploration, findMenu(game->menus, game->menuCount, response->menuType));
-        } else if (response->type == CLOSE_MENU) {
-            exploration->menuCount--;
-            exploration->menus[exploration->menuCount]->cursor = 0;
-            exploration->menus[exploration->menuCount] = NULL;
-        }
+        menuItemSelected(g);
     }
 }
 
@@ -300,7 +307,7 @@ void doFightLoop(Game *g) {
 void doInGameMenuLoop(Game *g) {
     Exploration *exploration = g->currentScene->exploration;
     drawAllMenus(g->player, exploration->menus, exploration->menuCount);
-    checkMenuInput(g, g->player);
+    checkMenuInput(g);
     updateMusicStream(g->audioManager);
 }
 
