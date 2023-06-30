@@ -122,14 +122,21 @@ Player *loadPlayer(Log *log, char *indexDir) {
     char filePath[255];
     sprintf(filePath, "%s/%s", indexDir, playerYaml->animations);
     loadAnimations(log, filePath, indexDir, animations);
-    Player *player = createPlayer(
-            log,
+    Mobile *mobiles[MAX_PARTY_SIZE] = {
             createMobile(
                     "player",
                     playerYaml->name,
                     (Vector2) {0, 0},
                     DOWN,
-                    animations));
+                    animations),
+                NULL,
+                NULL,
+                NULL,
+    };
+    Player *player = createPlayer(
+            log,
+            mobiles
+    );
     return player;
 }
 

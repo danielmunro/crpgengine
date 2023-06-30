@@ -140,7 +140,7 @@ void checkFights(Scene *s, Player *p) {
     int chance = rand() % 100 + 1;
     if (chance == 1) {
         s->fight = createFightFromEncounters(s->log, s->encounters);
-        Animation *animation = findAnimation(p->mob->animations, LEFT);
+        Animation *animation = findAnimation(getPartyLeader(p)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;
     }
 }

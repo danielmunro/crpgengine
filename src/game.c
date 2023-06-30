@@ -35,11 +35,12 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     addDebug(g->log, "setting scene to '%s'", scene->name);
     g->currentScene = scene;
     clearAnimations(g);
-    addAllAnimations(g, g->player->mob->animations);
+    Mobile *mob = getPartyLeader(g->player);
+    addAllAnimations(g, mob->animations);
     Entrance *entrance = findEntrance(scene->exploration, entranceName);
-    g->player->mob->position.x = entrance->area.x + (entrance->area.width / 2);
-    g->player->mob->position.y = entrance->area.y + (entrance->area.height / 2);
-    g->player->mob->direction = entrance->direction;
+    mob->position.x = entrance->area.x + (entrance->area.width / 2);
+    mob->position.y = entrance->area.y + (entrance->area.height / 2);
+    mob->direction = entrance->direction;
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
     addDebug(g->log, "finished setting scene to '%s'", g->currentScene->name);
@@ -63,6 +64,7 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
     c->thenCount = storyline->then_count;
     addDebug(g->log, "processing storyline with %d when and %d then clauses",
              storyline->when_count, storyline->then_count);
+    Mobile *mob = getPartyLeader(g->player);
     for (int i = 0; i < storyline->when_count; i++) {
         WhenData wd = storyline->when[i];
         Mobile *trigger = NULL;
@@ -71,7 +73,7 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
             addDebug(g->log, "mobile trigger is '%s'", trigger->name);
         }
         When *w = createWhen(
-                g->player->mob,
+                mob,
                 trigger,
                 mapCondition(wd.condition),
                 wd.story);
@@ -86,7 +88,7 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
         ThenData td = storyline->then[i];
         Mobile *target;
         if (td.player) {
-            target = g->player->mob;
+            target = mob;
         } else {
             target = findMobById(g, td.mob);
         }
@@ -152,7 +154,7 @@ void evaluateExits(Game *g) {
                 if (entrance != NULL) {
                     addDebug(g->log, "entrance %s found at %f, %f, %f, %f", entranceName, entrance->area.x,
                              entrance->area.y, entrance->area.width, entrance->area.height);
-                    g->player->mob->position = (Vector2) {
+                    getPartyLeader(g->player)->position = (Vector2) {
                             entrance->area.x,
                             entrance->area.y
                     };
@@ -241,10 +243,11 @@ void explorationCheckMoveKeys(Player *player) {
 void checkExplorationInput(Game *g) {
     addDebug(g->log, "exploration -- check player input");
     resetMoving(g->player);
-    getMobAnimation(g->player->mob)->isPlaying = 0;
+    Mobile *mob = getPartyLeader(g->player);
+    getMobAnimation(mob)->isPlaying = 0;
     explorationCheckMoveKeys(g->player);
     if (IsKeyDown(KEY_C)) {
-        explorationDebugKeyPressed(g->currentScene->exploration, g->player->mob->position);
+        explorationDebugKeyPressed(g->currentScene->exploration, mob->position);
     }
     if (IsKeyPressed(KEY_SPACE)) {
         explorationSpaceKeyPressed(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);

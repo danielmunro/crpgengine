@@ -6,7 +6,7 @@ typedef struct {
 } Moving;
 
 typedef struct {
-    Mobile *mob;
+    Mobile *mobs[MAX_PARTY_SIZE];
     Moving moving;
     struct timeval lastMovement;
     Mobile *blockedBy;
@@ -24,7 +24,7 @@ void addItem(Player *player, Item *item) {
     player->itemCount++;
 }
 
-Player *createPlayer(Log *log, Mobile *mob) {
+Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE]) {
     Player *player = malloc(sizeof(Player));
     player->moving.down = 0;
     player->moving.up = 0;
@@ -35,11 +35,14 @@ Player *createPlayer(Log *log, Mobile *mob) {
     player->engageable = NULL;
     player->engaged = false;
     player->storyCount = 0;
-    player->mob = mob;
     player->log = log;
     ConsumeAffect *affect = malloc(sizeof(ConsumeAffect));
     affect->hp = 20;
     player->itemCount = 0;
+    for (int i = 0; i < MAX_PARTY_SIZE; i++) {
+        printf("assign mob: %d\n", i);
+        player->mobs[i] = mobs[i];
+    }
     addItem(player, createItem(
             CONSUMABLE,
             "id",
@@ -47,6 +50,10 @@ Player *createPlayer(Log *log, Mobile *mob) {
             NULL,
             affect));
     return player;
+}
+
+Mobile *getPartyLeader(Player *p) {
+    return p->mobs[0];
 }
 
 void addStory(Player *p, const char *story) {
@@ -86,8 +93,9 @@ void checkMoveKey(Player *p, int key, int direction) {
         if (direction == RIGHT) {
             p->moving.right = 1;
         }
-        p->mob->direction = direction;
-        getMobAnimation(p->mob)->isPlaying = 1;
+        Mobile *mob = getPartyLeader(p);
+        mob->direction = direction;
+        getMobAnimation(mob)->isPlaying = 1;
     }
 }
 

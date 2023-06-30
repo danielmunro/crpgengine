@@ -192,7 +192,7 @@ void createMobileLayer(Mobile *mobLayer[MAX_LAYER_SIZE][MAX_MOBILES]) {
     }
 }
 
-void drawExplorationMobiles(int mobileCount, Mobile *mobiles[255], Player *p, Vector2 offset) {
+void drawExplorationMobiles(int mobileCount, Mobile *mobiles[MAX_MOBILES], Player *p, Vector2 offset) {
     /**
      * Start by putting mobs on a layer. This is necessary for drawing them in
      * the right order.
@@ -212,8 +212,9 @@ void drawExplorationMobiles(int mobileCount, Mobile *mobiles[255], Player *p, Ve
     /**
      * The player goes on the layer too.
      */
-    int playerY = (int) p->mob->position.y;
-    mobLayer[playerY][count[playerY]] = p->mob;
+    Mobile *mob = getPartyLeader(p);
+    int playerY = (int) mob->position.y;
+    mobLayer[playerY][count[playerY]] = mob;
 
     /**
      * Now go through the layer and draw mobs in order.
@@ -282,10 +283,11 @@ int isBlocked(Exploration *e, Player *p, Vector2 pos) {
 }
 
 int atExit(Exploration *e, Player *p) {
+    Mobile *mob = getPartyLeader(p);
     for (int i = 0; i < e->exitCount; i++) {
         Rectangle pRect = {
-                p->mob->position.x,
-                p->mob->position.y + 12,
+                mob->position.x,
+                mob->position.y + 12,
                 16,
                 12,
         };
@@ -298,22 +300,23 @@ int atExit(Exploration *e, Player *p) {
 }
 
 void evaluateMovement(Exploration *e, Player *p) {
-    Vector2 pos = p->mob->position;
+    Mobile *mob = getPartyLeader(p);
+    Vector2 pos = mob->position;
     addDebug(e->log, "exploration -- evaluate movement -- %f, %f", pos.x, pos.y);
     if (p->moving.up && !isBlocked(e, p, (Vector2) {pos.x, pos.y - 1})) {
-        p->mob->position.y -= 1;
+        mob->position.y -= 1;
         p->engageable = NULL;
     }
     if (p->moving.down && !isBlocked(e, p, (Vector2) {pos.x, pos.y + 1})) {
-        p->mob->position.y += 1;
+        mob->position.y += 1;
         p->engageable = NULL;
     }
     if (p->moving.left && !isBlocked(e, p, (Vector2) {pos.x - 1, pos.y})) {
-        p->mob->position.x -= 1;
+        mob->position.x -= 1;
         p->engageable = NULL;
     }
     if (p->moving.right && !isBlocked(e, p, (Vector2) {pos.x + 1, pos.y})) {
-        p->mob->position.x += 1;
+        mob->position.x += 1;
         p->engageable = NULL;
     }
 }
@@ -329,11 +332,12 @@ void drawExplorationControls(Player *player, ControlBlock *cb) {
 
 void drawExplorationView(Exploration *e, Player *p, ControlBlock *c) {
     addDebug(e->log, "exploration -- draw");
+    Mobile *mob = getPartyLeader(p);
     BeginDrawing();
     ClearBackground(BLACK);
     Vector2 offset = {
-            ((float) SCREEN_WIDTH / 2) - p->mob->position.x,
-            ((float) SCREEN_HEIGHT / 2) - p->mob->position.y
+            ((float) SCREEN_WIDTH / 2) - mob->position.x,
+            ((float) SCREEN_HEIGHT / 2) - mob->position.y
     };
     DrawTextureEx(e->renderedLayers[BACKGROUND], offset, 0, SCALE, WHITE);
     DrawTextureEx(e->renderedLayers[MIDGROUND], offset, 0, SCALE, WHITE);

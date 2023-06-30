@@ -1,6 +1,6 @@
 void drawPlayer(Player *player) {
     drawAnimation(
-            findAnimation(player->mob->animations, DOWN),
+            findAnimation(getPartyLeader(player)->animations, DOWN),
             (Vector2) {20, 20}
     );
 }
@@ -10,7 +10,7 @@ void drawPartyMenuScreen(Player *player, int cursorLine) {
     drawPlayer(player);
     int column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;
     int column2 = SCREEN_WIDTH - 200;
-    drawText(player->mob->name, (Vector2D) {column1, UI_PADDING});
+    drawText(getPartyLeader(player)->name, (Vector2D) {column1, UI_PADDING});
     char hp[64];
     sprintf(hp, "hp %d/%d", 20, 20);
     drawText(hp, (Vector2D) {column1, UI_PADDING + line(1)});
