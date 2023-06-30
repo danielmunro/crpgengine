@@ -272,12 +272,13 @@ void checkMenuInput(Game *g) {
     }
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *menu = getCurrentMenu(exploration);
-        menu->cursor = min(menu->cursor + 1,
-                           getCursorLengthForMenu(menu, g->player));
+        menu->cursor++;
+        normalizeMenuCursor(menu, g->player);
     }
     if (IsKeyPressed(KEY_UP)) {
         Menu *menu = getCurrentMenu(exploration);
-        menu->cursor = max(menu->cursor - 1, 0);
+        menu->cursor--;
+        normalizeMenuCursor(menu, g->player);
     }
     if (IsKeyPressed(KEY_SPACE)) {
         menuItemSelected(g);

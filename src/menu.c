@@ -66,13 +66,23 @@ int getQuitCursorLength(Player *player) {
 
 int getCursorLengthForMenu(Menu *menu, Player *player) {
     if (menu->type == PARTY_MENU) {
-        return min(menu->cursor + 1, sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]) - 1);
+        return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]) - 1;
     } else if (menu->type == ITEMS_MENU) {
         return player->itemCount - 1;
     } else if (menu->type == QUIT_MENU) {
         return 2;
     }
     return 0;
+}
+
+void normalizeMenuCursor(Menu *menu, Player *player) {
+    if (menu->cursor > getCursorLengthForMenu(menu, player)) {
+        menu->cursor = 0;
+    }
+
+    if (menu->cursor < 0) {
+        menu->cursor = getCursorLengthForMenu(menu, player);
+    }
 }
 
 MenuSelectResponse *partyMenuItemSelected(MenuType menuType) {
