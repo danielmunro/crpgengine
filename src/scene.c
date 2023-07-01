@@ -48,15 +48,15 @@ Scene *createScene(Log *log, int showCollisions) {
     return scene;
 }
 
-int isExploring(Scene *s) {
+bool isExploring(Scene *s) {
     return s->fight == NULL && !getCurrentMenu(s->exploration);
 }
 
-int isFighting(Scene *s) {
+bool isFighting(Scene *s) {
     return s->fight != NULL;
 }
 
-int isDungeon(Scene *s) {
+bool isDungeon(Scene *s) {
     return s->type == SCENE_TYPE_DUNGEON;
 }
 
@@ -83,14 +83,7 @@ void controlWhenCheck(Scene *s, Player *p) {
     }
     for (int i = 0; i < s->controlBlockCount; i++) {
         ControlBlock *cb = s->controlBlocks[i];
-        bool activated = false;
-        for (int c = 0; c < cb->whenCount; c++) {
-            activated = isActivated(p, cb->when[c]);
-            if (!activated) {
-                break;
-            }
-        }
-        if (activated) {
+        if (areConditionsMet(cb, p)) {
             s->activeControlBlock = cb;
             addDebug(s->log, "set active control block %d, progress %d", i, s->activeControlBlock->progress);
             return;
@@ -99,7 +92,7 @@ void controlWhenCheck(Scene *s, Player *p) {
     addDebug(s->log, "done control check");
 }
 
-int canTriggerFight(Scene *s, Player *p) {
+bool canTriggerFight(Scene *s, Player *p) {
     if (!isDungeon(s) || isFighting(s) || !isMoving(p)) {
         return false;
     }
