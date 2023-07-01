@@ -117,7 +117,7 @@ void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
 }
 
 void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
-    Object *o = getObject(e, index - 1);
+    Object *o = getObject(e, index);
     if (o != NULL) {
         Rectangle r = {
                 (float) (e->tilemap->size.x * x) + o->rect.x,
@@ -160,24 +160,7 @@ void renderExplorationLayer(Exploration *e, int layer) {
                     WHITE
             );
             if (e->showCollisions) {
-//                drawObjectCollision(e, renderedLayer, index - 1, x, y);
-                Object *o = getObject(e, index - 1);
-                if (o != NULL) {
-                    Rectangle r = {
-                            (float) (sz.x * x) + o->rect.x,
-                            (float) (sz.y * y) + o->rect.y,
-                            o->rect.width,
-                            o->rect.height,
-                    };
-                    ImageDrawRectangle(
-                            &renderedLayer,
-                            (int) r.x,
-                            (int) r.y,
-                            (int) r.width,
-                            (int) r.height,
-                            PINK
-                    );
-                }
+                drawObjectCollision(e, renderedLayer, index - 1, x, y);
             }
         }
     }
