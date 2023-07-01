@@ -2,8 +2,6 @@ typedef struct {
     Rectangle area;
     char *to;
     char *scene;
-    int x;
-    int y;
 } Exit;
 
 typedef struct {
@@ -40,8 +38,8 @@ typedef struct {
 Exit *createExit() {
     Exit *e = malloc(sizeof(Exit));
     e->to = "";
-    e->x = 0;
-    e->y = 0;
+    e->scene = "";
+    e->area = (Rectangle){0, 0, 0, 0};
     return e;
 }
 

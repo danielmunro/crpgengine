@@ -144,7 +144,7 @@ void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) 
                     getFloatAttribute(tilemapXmlReader->reader, "width"),
                     getFloatAttribute(tilemapXmlReader->reader, "height")
             };
-            e->exitCount += 1;
+            e->exitCount++;
             objectType = EXIT;
         }
     } else if (strcmp(strName, "property") == 0) {
