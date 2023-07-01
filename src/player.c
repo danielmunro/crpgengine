@@ -1,8 +1,8 @@
 typedef struct {
-    int up;
-    int down;
-    int left;
-    int right;
+    bool up;
+    bool down;
+    bool left;
+    bool right;
 } Moving;
 
 typedef struct {
@@ -26,10 +26,10 @@ void addItem(Player *player, Item *item) {
 
 Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE]) {
     Player *player = malloc(sizeof(Player));
-    player->moving.down = 0;
-    player->moving.up = 0;
-    player->moving.left = 0;
-    player->moving.right = 0;
+    player->moving.down = false;
+    player->moving.up = false;
+    player->moving.left = false;
+    player->moving.right = false;
     gettimeofday(&player->lastMovement, NULL);
     player->blockedBy = NULL;
     player->engageable = NULL;
@@ -40,7 +40,6 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE]) {
     affect->hp = 20;
     player->itemCount = 0;
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
-        printf("assign mob: %d\n", i);
         player->mobs[i] = mobs[i];
     }
     addItem(player, createItem(
@@ -61,7 +60,7 @@ void addStory(Player *p, const char *story) {
     addInfo(p->log, "add story to player: %s", p->stories[0]);
 }
 
-int hasStory(Player *p, const char *story) {
+bool hasStory(Player *p, const char *story) {
     for (int j = 0; j < p->storyCount; j++) {
         if (strcmp(story, p->stories[j]) == 0) {
             addDebug(p->log, "player has story: %s", story);
@@ -73,37 +72,37 @@ int hasStory(Player *p, const char *story) {
 }
 
 void resetMoving(Player *p) {
-    p->moving.up = 0;
-    p->moving.down = 0;
-    p->moving.left = 0;
-    p->moving.right = 0;
+    p->moving.up = false;
+    p->moving.down = false;
+    p->moving.left = false;
+    p->moving.right = false;
 }
 
-void checkMoveKey(Player *p, int key, int direction) {
+void checkMoveKey(Player *p, int key, AnimationDirection direction) {
     if (IsKeyDown(key) && !p->engaged) {
         if (direction == UP) {
-            p->moving.up = 1;
+            p->moving.up = true;
         }
         if (direction == DOWN) {
-            p->moving.down = 1;
+            p->moving.down = true;
         }
         if (direction == LEFT) {
-            p->moving.left = 1;
+            p->moving.left = true;
         }
         if (direction == RIGHT) {
-            p->moving.right = 1;
+            p->moving.right = true;
         }
         Mobile *mob = getPartyLeader(p);
         mob->direction = direction;
-        getMobAnimation(mob)->isPlaying = 1;
+        getMobAnimation(mob)->isPlaying = true;
     }
 }
 
-int isSpeakingTo(Player *p, Mobile *target) {
+bool isSpeakingTo(Player *p, Mobile *target) {
     return p->engaged && target == p->engageable;
 }
 
-int isMoving(Player *p) {
+bool isMoving(Player *p) {
     return p->moving.down
            || p->moving.up
            || p->moving.left

@@ -13,7 +13,7 @@ typedef struct {
     int repeat;
     int frameRate;
     int frameRateCount;
-    int isPlaying;
+    bool isPlaying;
 } Animation;
 
 SpriteSheet *createSpriteSheet(char *filename, int width, int height) {
