@@ -140,15 +140,12 @@ void processExplorationAnimations(Game *g) {
 void evaluateExits(Game *g) {
     addDebug(g->log, "exploration -- evaluate exits");
     Exploration *e = g->currentScene->exploration;
-    addDebug(g->log, "sanity check");
     int exit = atExit(e, g->player);
-    addDebug(g->log, "exit check: %d", exit);
     if (exit > -1) {
         addDebug(g->log, "player at exit");
         char *sceneName = e->exits[exit]->scene;
         char *entranceName = e->exits[exit]->to;
         for (int i = 0; i < g->sceneCount; i++) {
-            addDebug(g->log, "scene %d", i);
             if (strcmp(sceneName, g->scenes[i]->name) == 0) {
                 Entrance *entrance = findEntrance(g->scenes[i]->exploration, entranceName);
                 if (entrance != NULL) {
