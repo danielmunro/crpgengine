@@ -6,5 +6,19 @@ void drawItemsMenuScreen(Player *player, int cursorLine) {
     for (int i = 0; i < player->itemCount; i++) {
         drawInTextBox(textBox, player->items[i]->name);
     }
-    drawText(">", (Vector2D) {UI_PADDING, UI_PADDING + line(cursorLine)});
+    drawText(">", (Vector2D) {0, UI_PADDING + line(cursorLine)});
+}
+
+MenuSelectResponse *partyMenuItemSelected(MenuType menuType) {
+    if (strcmp(PartyMenuItems[menuType], PARTY_MENU_ITEMS) == 0) {
+        return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
+    }
+    if (strcmp(PartyMenuItems[menuType], PARTY_MENU_QUIT) == 0) {
+        return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);
+    }
+    return NULL;
+}
+
+int getItemsCursorLength(Player *player) {
+    return player->itemCount - 1;
 }

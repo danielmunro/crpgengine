@@ -129,9 +129,9 @@ Player *loadPlayer(Log *log, char *indexDir) {
                     (Vector2) {0, 0},
                     DOWN,
                     animations),
-                NULL,
-                NULL,
-                NULL,
+            NULL,
+            NULL,
+            NULL,
     };
     Player *player = createPlayer(
             log,

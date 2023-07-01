@@ -29,3 +29,7 @@ void drawPartyMenuScreen(Player *player, int cursorLine) {
     }
     drawText(">", (Vector2D) {column2 - 20, UI_PADDING + line(cursorLine)});
 }
+
+int getPartyMenuCursorLength(Player *player) {
+    return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]) - 1;
+}

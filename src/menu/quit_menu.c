@@ -16,3 +16,14 @@ void drawQuitMenuScreen(Player *player, int cursorLine) {
             }
     );
 }
+
+MenuSelectResponse *quitMenuItemSelected(MenuType menuType) {
+    if (strcmp(QuitMenuItems[menuType], QUIT_MENU_YES) == 0) {
+        exit(0);
+    }
+    return createMenuSelectResponse(CLOSE_MENU, QUIT_MENU);
+}
+
+int getQuitCursorLength(Player *player) {
+    return 2;
+}

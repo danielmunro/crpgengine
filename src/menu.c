@@ -6,11 +6,8 @@ typedef struct {
 typedef struct {
     MenuType type;
     int cursor;
-
     int (*getCursorLength)(Player *p);
-
     void (*draw)(Player *p, int cursor);
-
     MenuSelectResponse *(*selected)(MenuType menuType);
 } Menu;
 
@@ -52,52 +49,12 @@ void drawAllMenus(Player *player, Menu *menus[MAX_MENUS], int menuCount) {
     EndDrawing();
 }
 
-int getPartyMenuCursorLength(Player *player) {
-    return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]) - 1;
-}
-
-int getItemsCursorLength(Player *player) {
-    return player->itemCount - 1;
-}
-
-int getQuitCursorLength(Player *player) {
-    return 2;
-}
-
-int getCursorLengthForMenu(Menu *menu, Player *player) {
-    if (menu->type == PARTY_MENU) {
-        return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]) - 1;
-    } else if (menu->type == ITEMS_MENU) {
-        return player->itemCount - 1;
-    } else if (menu->type == QUIT_MENU) {
-        return 2;
-    }
-    return 0;
-}
-
 void normalizeMenuCursor(Menu *menu, Player *player) {
-    if (menu->cursor > getCursorLengthForMenu(menu, player)) {
+    if (menu->cursor > menu->getCursorLength(player)) {
         menu->cursor = 0;
     }
 
     if (menu->cursor < 0) {
-        menu->cursor = getCursorLengthForMenu(menu, player);
+        menu->cursor = menu->getCursorLength(player);
     }
-}
-
-MenuSelectResponse *partyMenuItemSelected(MenuType menuType) {
-    if (strcmp(PartyMenuItems[menuType], PARTY_MENU_ITEMS) == 0) {
-        return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
-    }
-    if (strcmp(PartyMenuItems[menuType], PARTY_MENU_QUIT) == 0) {
-        return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);
-    }
-    return NULL;
-}
-
-MenuSelectResponse *quitMenuItemSelected(MenuType menuType) {
-    if (strcmp(QuitMenuItems[menuType], QUIT_MENU_YES) == 0) {
-        exit(0);
-    }
-    return createMenuSelectResponse(CLOSE_MENU, QUIT_MENU);
 }
