@@ -101,8 +101,6 @@ void controlWhenCheck(Scene *s, Player *p) {
                 || needsStoryAndMissing(cb->when[c]->condition, p, cb->when[c]->story)
                 || needsNotHaveStoryAndPresent(cb->when[c]->condition, p, cb->when[c]->story)) {
                 matched = false;
-            }
-            if (!matched) {
                 break;
             }
         }
