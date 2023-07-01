@@ -2,7 +2,7 @@ typedef struct {
     Animation *animations[MAX_ANIMATIONS];
     const char *id;
     const char *name;
-    int direction;
+    AnimationDirection direction;
     Vector2 position;
 } Mobile;
 
