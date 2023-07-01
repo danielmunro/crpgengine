@@ -46,6 +46,24 @@ Then *createThen(Mobile *target, const char *message, const char *story, const O
     return then;
 }
 
-int needsToRemoveActiveControlBlock(ControlBlock *control) {
+int needsEngaged(int condition, Player *p, Mobile *mobileTrigger) {
+    return condition == ENGAGED && isSpeakingTo(p, mobileTrigger);
+}
+
+int needsStory(int condition, Player *p, const char *story) {
+    return condition == HAS_STORY && hasStory(p, story);
+}
+
+int needsNotHaveStory(int condition, Player *p, const char *story) {
+    return condition == NOT_HAS_STORY && !hasStory(p, story);
+}
+
+bool isActivated(Player *p, When *when) {
+    return needsEngaged(when->condition, p, when->trigger)
+           || needsStory(when->condition, p, when->story)
+           || needsNotHaveStory(when->condition, p, when->story);
+}
+
+bool needsToRemoveActiveControlBlock(ControlBlock *control) {
     return control != NULL && control->progress >= control->thenCount;
 }
