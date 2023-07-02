@@ -25,3 +25,14 @@ Attributes *cloneAttributes(Attributes *original) {
     a->constitution = original->constitution;
     return a;
 }
+
+Attributes *createEmptyAttributes() {
+    Attributes *a = malloc(sizeof(Attributes));
+    a->strength = 0;
+    a->intelligence = 0;
+    a->wisdom = 0;
+    a->dexterity = 0;
+    a->constitution = 0;
+
+    return a;
+}

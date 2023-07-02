@@ -21,6 +21,17 @@ Encounters *createEncounters() {
     return e;
 }
 
+BeastEncounter *createBeastEncounter(Beast *beast, int max) {
+    BeastEncounter *b = malloc(sizeof(BeastEncounter));
+    b->beast = beast;
+    b->max = max;
+    return b;
+}
+
+BeastEncounter *createBeastEncounterFromData(Beast *beast, BeastEncounterData data) {
+    return createBeastEncounter(beast, data.max);
+}
+
 Fight *createFight(Log *log, int count, Beast *beasts[MAX_BEASTS_IN_FIGHT]) {
     Fight *fight = malloc(sizeof(Fight));
     fight->beastCount = count;
@@ -52,13 +63,6 @@ Fight *createFightFromEncounters(Log *log, Encounters *encounters) {
     fight->beastCount = created;
     addDebug(log, "fight encountered with %d opponents", fight->beastCount);
     return fight;
-}
-
-BeastEncounter *createBeastEncounterFromData(Beast *beast, BeastEncounterData data) {
-    BeastEncounter *beastEncounter = malloc(sizeof(BeastEncounter));
-    beastEncounter->beast = beast;
-    beastEncounter->max = data.max;
-    return beastEncounter;
 }
 
 void cancelFight(Fight *fight) {
