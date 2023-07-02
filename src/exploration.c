@@ -132,6 +132,9 @@ void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
 }
 
 void drawTile(Exploration *e, Image layer, int index, int x, int y) {
+    if (index <= 0) {
+        return;
+    }
     Vector2D sz = e->tilemap->size;
     Vector2 pos = {
             (float) (sz.x * x),
@@ -218,16 +221,8 @@ void drawExplorationMobiles(int mobileCount, Mobile *mobiles[MAX_MOBILES], Playe
     }
 }
 
-bool isBlocked(Exploration *e, Player *p, Vector2 pos) {
-    addDebug(e->log, "check blocked by");
-    Rectangle pRect = {
-            pos.x,
-            pos.y + MOB_COLLISION_HEIGHT_OFFSET,
-            MOB_COLLISION_WIDTH,
-            MOB_COLLISION_HEIGHT
-    };
+bool isBlockedByMapObject(Exploration *e, Rectangle playerRect) {
     Vector2D tiles = getTileCount(e);
-    addDebug(e->log, "tiles check");
     for (int l = 0; l < LAYER_COUNT - 1; l++) {
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
@@ -240,15 +235,18 @@ bool isBlocked(Exploration *e, Player *p, Vector2 pos) {
                             o->rect.width,
                             o->rect.height,
                     };
-                    Rectangle c = GetCollisionRec(pRect, oRect);
+                    Rectangle c = GetCollisionRec(playerRect, oRect);
                     if (c.height > 0 || c.width > 0) {
-                        return 1;
+                        return true;
                     }
                 }
             }
         }
     }
-    addDebug(e->log, "mob check");
+    return false;
+}
+
+Mobile *getBlockingMob(Exploration *e, Rectangle playerRect) {
     for (int i = 0; i < e->mobileCount; i++) {
         Rectangle mRect = {
                 e->mobiles[i]->position.x,
@@ -256,15 +254,31 @@ bool isBlocked(Exploration *e, Player *p, Vector2 pos) {
                 MOB_COLLISION_WIDTH,
                 MOB_COLLISION_HEIGHT,
         };
-        Rectangle c = GetCollisionRec(pRect, mRect);
+        Rectangle c = GetCollisionRec(playerRect, mRect);
         if (c.height > 0 || c.width > 0) {
-            p->blockedBy = e->mobiles[i];
-            return 1;
+            return e->mobiles[i];
         }
     }
-    addDebug(e->log, "not blocked");
+    return NULL;
+}
+
+bool isBlocked(Exploration *e, Player *p, Vector2 pos) {
+    Rectangle playerRect = {
+            pos.x,
+            pos.y + MOB_COLLISION_HEIGHT_OFFSET,
+            MOB_COLLISION_WIDTH,
+            MOB_COLLISION_HEIGHT
+    };
     p->blockedBy = NULL;
-    return 0;
+    if (isBlockedByMapObject(e, playerRect)) {
+        return true;
+    }
+    Mobile *mob = getBlockingMob(e, playerRect);
+    if (mob != NULL) {
+        p->blockedBy = mob;
+        return true;
+    }
+    return false;
 }
 
 int atExit(Exploration *e, Player *p) {

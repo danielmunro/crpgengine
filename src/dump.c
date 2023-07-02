@@ -10,10 +10,7 @@ void dumpGame(Game *g) {
     }
     for (int i = 0; i < g->sceneCount; i++) {
         printf("\nscene %s objects\n===============\n", g->scenes[i]->name);
-        for (int o = 0; o < MAX_OBJECTS; o++) {
-            if (g->scenes[i]->exploration->objects[o] == NULL) {
-                break;
-            }
+        for (int o = 0; o < g->scenes[i]->exploration->objectCount; o++) {
             printf("%d\n",
                    g->scenes[i]->exploration->objects[o]->tile
             );
