@@ -137,6 +137,23 @@ void processExplorationAnimations(Game *g) {
     }
 }
 
+void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
+    if (entrance != NULL) {
+        addDebug(game->log, "entrance %s found at %f, %f, %f, %f",
+                entrance->name,
+                entrance->area.x,
+                entrance->area.y,
+                entrance->area.width,
+                entrance->area.height
+        );
+        getPartyLeader(game->player)->position = (Vector2) {
+                entrance->area.x,
+                entrance->area.y
+        };
+        setScene(game, scene, entrance->name);
+    }
+}
+
 void evaluateExits(Game *g) {
     addDebug(g->log, "exploration -- evaluate exits");
     Exploration *e = g->currentScene->exploration;
@@ -147,16 +164,11 @@ void evaluateExits(Game *g) {
         char *entranceName = e->exits[exit]->to;
         for (int i = 0; i < g->sceneCount; i++) {
             if (strcmp(sceneName, g->scenes[i]->name) == 0) {
-                Entrance *entrance = findEntrance(g->scenes[i]->exploration, entranceName);
-                if (entrance != NULL) {
-                    addDebug(g->log, "entrance %s found at %f, %f, %f, %f", entranceName, entrance->area.x,
-                             entrance->area.y, entrance->area.width, entrance->area.height);
-                    getPartyLeader(g->player)->position = (Vector2) {
-                            entrance->area.x,
-                            entrance->area.y
-                    };
-                    setScene(g, g->scenes[i], entranceName);
-                }
+                attemptToUseExit(
+                        g,
+                        g->scenes[i],
+                        findEntrance(g->scenes[i]->exploration, entranceName)
+                );
                 return;
             }
         }
