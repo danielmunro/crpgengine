@@ -11,9 +11,9 @@ typedef struct {
 } Entrance;
 
 typedef struct {
-    int type;
+    LayerType type;
     char data[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
-    int showCollisions;
+    bool showCollisions;
 } Layer;
 
 typedef struct {
@@ -28,7 +28,7 @@ typedef struct {
     Object *objects[MAX_OBJECTS];
     int objectCount;
     Log *log;
-    int showCollisions;
+    bool showCollisions;
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
     Menu *menus[MAX_MENUS];
@@ -65,9 +65,6 @@ Exploration *createExploration(Log *log, int showCollisions) {
     Exploration *exploration = malloc(sizeof(Exploration));
     exploration->layerCount = 0;
     exploration->showCollisions = showCollisions;
-    for (int i = 0; i < MAX_OBJECTS; i++) {
-        exploration->objects[i] = NULL;
-    }
     exploration->mobileCount = 0;
     exploration->entranceCount = 0;
     exploration->exitCount = 0;
@@ -134,6 +131,25 @@ void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
     }
 }
 
+void drawTile(Exploration *e, Image layer, int index, int x, int y) {
+    Vector2D sz = e->tilemap->size;
+    Vector2 pos = {
+            (float) (sz.x * x),
+            (float) (sz.y * y),
+    };
+    Rectangle rect = getRectForTile(e->tilemap, index);
+    ImageDraw(
+            &layer,
+            e->tilemap->source,
+            rect,
+            (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
+            WHITE
+    );
+    if (e->showCollisions) {
+        drawObjectCollision(e, layer, index - 1, x, y);
+    }
+}
+
 void renderExplorationLayer(Exploration *e, int layer) {
     Vector2D sz = e->tilemap->size;
     int width = SCREEN_WIDTH / sz.x;
@@ -141,25 +157,13 @@ void renderExplorationLayer(Exploration *e, int layer) {
     Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
     for (int y = -1; y < height; y++) {
         for (int x = -1; x < width; x++) {
-            int index = (int) e->layers[layer]->data[y][x];
-            if (index <= 0) {
-                continue;
-            }
-            Vector2 pos = {
-                    (float) (sz.x * x),
-                    (float) (sz.y * y),
-            };
-            Rectangle rect = getRectForTile(e->tilemap, index);
-            ImageDraw(
-                    &renderedLayer,
-                    e->tilemap->source,
-                    rect,
-                    (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
-                    WHITE
+            drawTile(
+                    e,
+                    renderedLayer,
+                    (int) e->layers[layer]->data[y][x],
+                    x,
+                    y
             );
-            if (e->showCollisions) {
-                drawObjectCollision(e, renderedLayer, index - 1, x, y);
-            }
         }
     }
     e->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
@@ -214,7 +218,7 @@ void drawExplorationMobiles(int mobileCount, Mobile *mobiles[MAX_MOBILES], Playe
     }
 }
 
-int isBlocked(Exploration *e, Player *p, Vector2 pos) {
+bool isBlocked(Exploration *e, Player *p, Vector2 pos) {
     addDebug(e->log, "check blocked by");
     Rectangle pRect = {
             pos.x,
@@ -268,9 +272,9 @@ int atExit(Exploration *e, Player *p) {
     for (int i = 0; i < e->exitCount; i++) {
         Rectangle pRect = {
                 mob->position.x,
-                mob->position.y + 12,
-                16,
-                12,
+                mob->position.y + MOB_COLLISION_HEIGHT,
+                MOB_COLLISION_WIDTH,
+                MOB_COLLISION_HEIGHT,
         };
         Rectangle c = GetCollisionRec(e->exits[i]->area, pRect);
         if (c.height > 0 || c.width > 0) {
