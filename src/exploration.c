@@ -340,3 +340,42 @@ void renderExplorationLayers(Exploration *e) {
     renderExplorationLayer(e, FOREGROUND);
     addDebug(e->log, "exploration successfully rendered");
 }
+
+void removeMenu(Exploration *exploration) {
+    exploration->menuCount--;
+    exploration->menus[exploration->menuCount]->cursor = 0;
+    exploration->menus[exploration->menuCount] = NULL;
+}
+
+void explorationSpaceKeyPressed(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
+    addInfo(exploration->log, "space key pressed");
+    if (controlBlock != NULL) {
+        addDebug(exploration->log, "active control block progress: %d", controlBlock->progress);
+    } else {
+        addDebug(exploration->log, "no active control blocks set");
+    }
+    if (player->engaged && controlBlock == NULL) {
+        player->engaged = false;
+        return;
+    }
+    if (player->engaged && controlBlock->then[controlBlock->progress]->outcome == SPEAK) {
+        if (controlBlock != NULL) {
+            controlBlock->progress++;
+            addDebug(exploration->log, "active control block progress at %d", controlBlock->progress);
+        }
+        if (controlBlock->progress >= controlBlock->thenCount
+            || controlBlock->then[controlBlock->progress]->outcome != SPEAK) {
+            addDebug(exploration->log, "unset engaged");
+            player->engaged = false;
+        }
+        if (controlBlock->progress >= controlBlock->thenCount) {
+            addDebug(exploration->log, "unsetting active control block");
+            controlBlock->progress = 0;
+            controlBlock = NULL;
+        }
+    } else if (player->blockedBy != NULL) {
+        player->engageable = player->blockedBy;
+        addInfo(exploration->log, "engaging with %s", player->engageable->name);
+        player->engaged = true;
+    }
+}

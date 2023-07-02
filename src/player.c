@@ -98,6 +98,12 @@ void checkMoveKey(Player *p, int key, AnimationDirection direction) {
     }
 }
 
+void explorationCheckMoveKeys(Player *player) {
+    for (int i = 0; i < DIRECTION_COUNT; i++) {
+        checkMoveKey(player, MOVE_KEYS[i], DIRECTIONS[i]);
+    }
+}
+
 bool isSpeakingTo(Player *p, Mobile *target) {
     return p->engaged && target == p->engageable;
 }
