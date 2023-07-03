@@ -96,3 +96,9 @@ bool isMoving(Player *p) {
            || p->moving[LEFT]
            || p->moving[RIGHT];
 }
+
+void engageWithMobile(Player *p) {
+    p->engageable = p->blockedBy;
+    addInfo(p->log, "engaging with %s", p->engageable->name);
+    p->engaged = true;
+}

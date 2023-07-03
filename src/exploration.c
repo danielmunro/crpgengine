@@ -344,35 +344,28 @@ void removeMenu(Exploration *exploration) {
     exploration->menus[exploration->menuCount] = NULL;
 }
 
-void explorationSpaceKeyPressed(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
-    addInfo(exploration->log, "space key pressed");
+void dialogEngaged(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
     if (controlBlock != NULL) {
-        addDebug(exploration->log, "active control block progress: %d", controlBlock->progress);
-    } else {
-        addDebug(exploration->log, "no active control blocks set");
+        controlBlock->progress++;
+        addDebug(exploration->log, "active control block progress at %d", controlBlock->progress);
     }
-    if (player->engaged && controlBlock == NULL) {
+    if (controlBlock->progress >= controlBlock->thenCount
+        || controlBlock->then[controlBlock->progress]->outcome != SPEAK) {
+        addDebug(exploration->log, "unset engaged");
         player->engaged = false;
-        return;
     }
+    if (controlBlock->progress >= controlBlock->thenCount) {
+        addDebug(exploration->log, "unsetting active control block");
+        controlBlock->progress = 0;
+        controlBlock = NULL;
+    }
+}
+
+void explorationSpaceKeyPressed(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
+    addInfo(exploration->log, "exploration space key pressed");
     if (player->engaged && controlBlock->then[controlBlock->progress]->outcome == SPEAK) {
-        if (controlBlock != NULL) {
-            controlBlock->progress++;
-            addDebug(exploration->log, "active control block progress at %d", controlBlock->progress);
-        }
-        if (controlBlock->progress >= controlBlock->thenCount
-            || controlBlock->then[controlBlock->progress]->outcome != SPEAK) {
-            addDebug(exploration->log, "unset engaged");
-            player->engaged = false;
-        }
-        if (controlBlock->progress >= controlBlock->thenCount) {
-            addDebug(exploration->log, "unsetting active control block");
-            controlBlock->progress = 0;
-            controlBlock = NULL;
-        }
+        dialogEngaged(exploration, player, controlBlock);
     } else if (player->blockedBy != NULL) {
-        player->engageable = player->blockedBy;
-        addInfo(exploration->log, "engaging with %s", player->engageable->name);
-        player->engaged = true;
+        engageWithMobile(player);
     }
 }
