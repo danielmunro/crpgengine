@@ -1,13 +1,6 @@
 typedef struct {
-    bool up;
-    bool down;
-    bool left;
-    bool right;
-} Moving;
-
-typedef struct {
     Mobile *mobs[MAX_PARTY_SIZE];
-    Moving moving;
+    bool moving[DIRECTION_COUNT];
     struct timeval lastMovement;
     Mobile *blockedBy;
     Mobile *engageable;
@@ -26,10 +19,10 @@ void addItem(Player *player, Item *item) {
 
 Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE]) {
     Player *player = malloc(sizeof(Player));
-    player->moving.down = false;
-    player->moving.up = false;
-    player->moving.left = false;
-    player->moving.right = false;
+    player->moving[UP] = false;
+    player->moving[DOWN] = false;
+    player->moving[LEFT] = false;
+    player->moving[RIGHT] = false;
     gettimeofday(&player->lastMovement, NULL);
     player->blockedBy = NULL;
     player->engageable = NULL;
@@ -72,26 +65,15 @@ bool hasStory(Player *p, const char *story) {
 }
 
 void resetMoving(Player *p) {
-    p->moving.up = false;
-    p->moving.down = false;
-    p->moving.left = false;
-    p->moving.right = false;
+    p->moving[UP] = false;
+    p->moving[DOWN] = false;
+    p->moving[LEFT] = false;
+    p->moving[RIGHT] = false;
 }
 
 void checkMoveKey(Player *p, int key, AnimationDirection direction) {
     if (IsKeyDown(key) && !p->engaged) {
-        if (direction == UP) {
-            p->moving.up = true;
-        }
-        if (direction == DOWN) {
-            p->moving.down = true;
-        }
-        if (direction == LEFT) {
-            p->moving.left = true;
-        }
-        if (direction == RIGHT) {
-            p->moving.right = true;
-        }
+        p->moving[direction] = true;
         Mobile *mob = getPartyLeader(p);
         mob->direction = direction;
         getMobAnimation(mob)->isPlaying = true;
@@ -109,8 +91,8 @@ bool isSpeakingTo(Player *p, Mobile *target) {
 }
 
 bool isMoving(Player *p) {
-    return p->moving.down
-           || p->moving.up
-           || p->moving.left
-           || p->moving.right;
+    return p->moving[DOWN]
+           || p->moving[UP]
+           || p->moving[LEFT]
+           || p->moving[RIGHT];
 }

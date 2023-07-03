@@ -114,15 +114,15 @@ typedef enum {
 } LayerType;
 
 typedef enum {
-    UP = 1,
+    UP,
     DOWN,
     LEFT,
     RIGHT
 } AnimationDirection;
 
-int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
-int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
-int DIRECTION_COUNT = sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0]);
+const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
+const int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
+const int DIRECTION_COUNT = sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0]);
 
 typedef enum {
     EXIT = 1,

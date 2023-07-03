@@ -33,11 +33,24 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
     return mob;
 }
 
-Rectangle getMobRectangle(Mobile *mob) {
+Rectangle getMobileRectangle(Mobile *mob) {
     return (Rectangle) {
             mob->position.x,
-            mob->position.y + MOB_COLLISION_HEIGHT,
+            mob->position.y + MOB_COLLISION_HEIGHT_OFFSET,
             MOB_COLLISION_WIDTH,
             MOB_COLLISION_HEIGHT,
     };
+}
+
+Vector2 getMoveFor(Mobile *mob, AnimationDirection direction) {
+    if (direction == UP) {
+        return (Vector2) {mob->position.x, mob->position.y - 1};
+    } else if (direction == DOWN) {
+        return (Vector2) {mob->position.x, mob->position.y + 1};
+    } if (direction == LEFT) {
+        return (Vector2) {mob->position.x - 1, mob->position.y};
+    } if (direction == RIGHT) {
+        return (Vector2) {mob->position.x + 1, mob->position.y};
+    }
+    return mob->position;
 }

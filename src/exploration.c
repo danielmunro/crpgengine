@@ -248,13 +248,7 @@ bool isBlockedByMapObject(Exploration *e, Rectangle playerRect) {
 
 Mobile *getBlockingMob(Exploration *e, Rectangle playerRect) {
     for (int i = 0; i < e->mobileCount; i++) {
-        Rectangle mRect = {
-                e->mobiles[i]->position.x,
-                e->mobiles[i]->position.y + MOB_COLLISION_HEIGHT_OFFSET,
-                MOB_COLLISION_WIDTH,
-                MOB_COLLISION_HEIGHT,
-        };
-        Rectangle c = GetCollisionRec(playerRect, mRect);
+        Rectangle c = GetCollisionRec(playerRect, getMobileRectangle(e->mobiles[i]));
         if (c.height > 0 || c.width > 0) {
             return e->mobiles[i];
         }
@@ -262,28 +256,9 @@ Mobile *getBlockingMob(Exploration *e, Rectangle playerRect) {
     return NULL;
 }
 
-bool isBlocked(Exploration *e, Player *p, Vector2 pos) {
-    Rectangle playerRect = {
-            pos.x,
-            pos.y + MOB_COLLISION_HEIGHT_OFFSET,
-            MOB_COLLISION_WIDTH,
-            MOB_COLLISION_HEIGHT
-    };
-    p->blockedBy = NULL;
-    if (isBlockedByMapObject(e, playerRect)) {
-        return true;
-    }
-    Mobile *mob = getBlockingMob(e, playerRect);
-    if (mob != NULL) {
-        p->blockedBy = mob;
-        return true;
-    }
-    return false;
-}
-
 int atExit(Exploration *e, Player *p) {
     Mobile *mob = getPartyLeader(p);
-    Rectangle rect = getMobRectangle(mob);
+    Rectangle rect = getMobileRectangle(mob);
     for (int i = 0; i < e->exitCount; i++) {
         Rectangle c = GetCollisionRec(e->exits[i]->area, rect);
         if (c.height > 0 || c.width > 0) {
@@ -294,7 +269,17 @@ int atExit(Exploration *e, Player *p) {
 }
 
 void tryToMove(Exploration *e, Player *p, AnimationDirection direction, Vector2 pos) {
-    if (direction && !isBlocked(e, p, (Vector2) {pos.x, pos.y - 1})) {
+    Rectangle rect = {
+            pos.x,
+            pos.y + MOB_COLLISION_HEIGHT,
+            MOB_COLLISION_WIDTH,
+            MOB_COLLISION_HEIGHT,
+    };
+    if (p->moving[direction] && !isBlockedByMapObject(e, rect)) {
+        p->blockedBy = getBlockingMob(e, rect);
+        if (p->blockedBy != NULL) {
+            return;
+        }
         getPartyLeader(p)->position = pos;
         p->engageable = NULL;
     }
@@ -305,10 +290,9 @@ void evaluateMovement(Exploration *e, Player *p) {
     addDebug(e->log, "exploration -- evaluate movement -- %f, %f",
              mob->position.x,
              mob->position.y);
-    tryToMove(e, p, p->moving.up, (Vector2) {mob->position.x, mob->position.y - 1});
-    tryToMove(e, p, p->moving.down, (Vector2) {mob->position.x, mob->position.y + 1});
-    tryToMove(e, p, p->moving.left, (Vector2) {mob->position.x - 1, mob->position.y});
-    tryToMove(e, p, p->moving.right, (Vector2) {mob->position.x + 1, mob->position.y});
+    for (int i = 0; i < DIRECTION_COUNT; i++) {
+        tryToMove(e, p, DIRECTIONS[i], getMoveFor(mob, DIRECTIONS[i]));
+    }
 }
 
 void drawExplorationControls(Player *player, ControlBlock *cb) {
