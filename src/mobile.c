@@ -32,3 +32,12 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
             animations);
     return mob;
 }
+
+Rectangle getMobRectangle(Mobile *mob) {
+    return (Rectangle) {
+            mob->position.x,
+            mob->position.y + MOB_COLLISION_HEIGHT,
+            MOB_COLLISION_WIDTH,
+            MOB_COLLISION_HEIGHT,
+    };
+}

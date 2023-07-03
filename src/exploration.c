@@ -283,14 +283,9 @@ bool isBlocked(Exploration *e, Player *p, Vector2 pos) {
 
 int atExit(Exploration *e, Player *p) {
     Mobile *mob = getPartyLeader(p);
+    Rectangle rect = getMobRectangle(mob);
     for (int i = 0; i < e->exitCount; i++) {
-        Rectangle pRect = {
-                mob->position.x,
-                mob->position.y + MOB_COLLISION_HEIGHT,
-                MOB_COLLISION_WIDTH,
-                MOB_COLLISION_HEIGHT,
-        };
-        Rectangle c = GetCollisionRec(e->exits[i]->area, pRect);
+        Rectangle c = GetCollisionRec(e->exits[i]->area, rect);
         if (c.height > 0 || c.width > 0) {
             return i;
         }
@@ -298,26 +293,22 @@ int atExit(Exploration *e, Player *p) {
     return -1;
 }
 
+void tryToMove(Exploration *e, Player *p, AnimationDirection direction, Vector2 pos) {
+    if (direction && !isBlocked(e, p, (Vector2) {pos.x, pos.y - 1})) {
+        getPartyLeader(p)->position = pos;
+        p->engageable = NULL;
+    }
+}
+
 void evaluateMovement(Exploration *e, Player *p) {
     Mobile *mob = getPartyLeader(p);
-    Vector2 pos = mob->position;
-    addDebug(e->log, "exploration -- evaluate movement -- %f, %f", pos.x, pos.y);
-    if (p->moving.up && !isBlocked(e, p, (Vector2) {pos.x, pos.y - 1})) {
-        mob->position.y -= 1;
-        p->engageable = NULL;
-    }
-    if (p->moving.down && !isBlocked(e, p, (Vector2) {pos.x, pos.y + 1})) {
-        mob->position.y += 1;
-        p->engageable = NULL;
-    }
-    if (p->moving.left && !isBlocked(e, p, (Vector2) {pos.x - 1, pos.y})) {
-        mob->position.x -= 1;
-        p->engageable = NULL;
-    }
-    if (p->moving.right && !isBlocked(e, p, (Vector2) {pos.x + 1, pos.y})) {
-        mob->position.x += 1;
-        p->engageable = NULL;
-    }
+    addDebug(e->log, "exploration -- evaluate movement -- %f, %f",
+             mob->position.x,
+             mob->position.y);
+    tryToMove(e, p, p->moving.up, (Vector2) {mob->position.x, mob->position.y - 1});
+    tryToMove(e, p, p->moving.down, (Vector2) {mob->position.x, mob->position.y + 1});
+    tryToMove(e, p, p->moving.left, (Vector2) {mob->position.x - 1, mob->position.y});
+    tryToMove(e, p, p->moving.right, (Vector2) {mob->position.x + 1, mob->position.y});
 }
 
 void drawExplorationControls(Player *player, ControlBlock *cb) {
