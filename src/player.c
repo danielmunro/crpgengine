@@ -11,7 +11,7 @@ typedef struct {
     struct timeval lastMovement;
     Mobile *blockedBy;
     Mobile *engageable;
-    int engaged;
+    bool engaged;
     Log *log;
 } Player;
 
