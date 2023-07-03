@@ -275,7 +275,11 @@ void tryToMove(Exploration *e, Player *p, AnimationDirection direction, Vector2 
             MOB_COLLISION_WIDTH,
             MOB_COLLISION_HEIGHT,
     };
-    if (p->moving[direction] && !isBlockedByMapObject(e, rect)) {
+    if (p->moving[direction]) {
+        if (isBlockedByMapObject(e, rect)) {
+            p->blockedBy = NULL;
+            return;
+        }
         p->blockedBy = getBlockingMob(e, rect);
         if (p->blockedBy != NULL) {
             return;
