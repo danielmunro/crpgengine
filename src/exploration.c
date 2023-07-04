@@ -12,7 +12,7 @@ typedef struct {
 
 typedef struct {
     LayerType type;
-    char data[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
+    char data[MAX_LAYERS][MAX_LAYERS];
     bool showCollisions;
 } Layer;
 
@@ -172,11 +172,19 @@ void renderExplorationLayer(Exploration *e, int layer) {
     e->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
 }
 
-void createMobileLayer(Mobile *mobLayer[MAX_LAYER_SIZE][MAX_MOBILES]) {
-    for (int y = 0; y < MAX_LAYER_SIZE; y++) {
+void createMobileLayer(Mobile *mobiles[MAX_MOBILES], Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES], int mobileCount, int mobsByYPosition[MAX_LAYERS]) {
+    for (int y = 0; y < MAX_LAYERS; y++) {
         for (int i = 0; i < MAX_MOBILES; i++) {
             mobLayer[y][i] = NULL;
         }
+    }
+    for (int i = 0; i < MAX_LAYERS; i++) {
+        mobsByYPosition[i] = 0;
+    }
+    for (int i = 0; i < mobileCount; i++) {
+        int y = (int) mobiles[i]->position.y;
+        mobLayer[y][mobsByYPosition[y]] = mobiles[i];
+        mobsByYPosition[y]++;
     }
 }
 
@@ -185,43 +193,46 @@ void drawExplorationMobiles(int mobileCount, Mobile *mobiles[MAX_MOBILES], Playe
      * Start by putting mobs on a layer. This is necessary for drawing them in
      * the right order.
      */
-    Mobile *mobLayer[MAX_LAYER_SIZE][MAX_MOBILES];
-    createMobileLayer(mobLayer);
-    int count[MAX_LAYER_SIZE];
-    for (int i = 0; i < MAX_LAYER_SIZE; i++) {
-        count[i] = 0;
-    }
-    for (int i = 0; i < mobileCount; i++) {
-        int y = (int) mobiles[i]->position.y;
-        mobLayer[y][count[y]] = mobiles[i];
-        count[y]++;
-    }
+    Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES];
+    int mobsByYPosition[MAX_LAYERS];
+    createMobileLayer(mobiles, mobLayer, mobileCount, mobsByYPosition);
 
     /**
      * The player goes on the layer too.
      */
     Mobile *mob = getPartyLeader(p);
     int playerY = (int) mob->position.y;
-    mobLayer[playerY][count[playerY]] = mob;
+    mobLayer[playerY][mobsByYPosition[playerY]] = mob;
 
     /**
      * Now go through the layer and draw mobs in order.
      */
-    for (int y = 0; y < MAX_LAYER_SIZE; y++) {
+    for (int y = 0; y < MAX_LAYERS; y++) {
         for (int m = 0; m < MAX_MOBILES; m++) {
             if (mobLayer[y][m] == NULL) {
                 break;
             }
-            Vector2 position = {
-                    mobLayer[y][m]->position.x + offset.x,
-                    mobLayer[y][m]->position.y + offset.y,
-            };
-            drawAnimation(getMobAnimation(mobLayer[y][m]), position);
+            drawAnimation(
+                    getMobAnimation(mobLayer[y][m]),
+                    (Vector2) {
+                            mobLayer[y][m]->position.x + offset.x,
+                            mobLayer[y][m]->position.y + offset.y,
+                    }
+            );
         }
     }
 }
 
-bool isBlockedByMapObject(Exploration *e, Rectangle playerRect) {
+Rectangle getObjectSize(Exploration *e, Object *o, int x, int y) {
+    return (Rectangle) {
+            (float) (e->tilemap->size.x * x) + o->rect.x,
+            (float) (e->tilemap->size.y * y) + o->rect.y,
+            o->rect.width,
+            o->rect.height,
+    };
+}
+
+bool isBlockedByMapObject(Exploration *e, Rectangle player) {
     Vector2D tiles = getTileCount(e);
     for (int l = 0; l < LAYER_COUNT - 1; l++) {
         for (int y = -1; y < tiles.y; y++) {
@@ -229,13 +240,7 @@ bool isBlockedByMapObject(Exploration *e, Rectangle playerRect) {
                 int index = (int) e->layers[l]->data[y][x];
                 Object *o = getObject(e, index - 1);
                 if (o != NULL) {
-                    Rectangle oRect = {
-                            (float) (e->tilemap->size.x * x) + o->rect.x,
-                            (float) (e->tilemap->size.y * y) + o->rect.y,
-                            o->rect.width,
-                            o->rect.height,
-                    };
-                    Rectangle c = GetCollisionRec(playerRect, oRect);
+                    Rectangle c = GetCollisionRec(player, getObjectSize(e, o, x, y));
                     if (c.height > 0 || c.width > 0) {
                         return true;
                     }

@@ -14,8 +14,6 @@
 #define SCREEN_HEIGHT 450
 #define SCALE (float) 1.0
 
-#define LAYER_COUNT 3
-
 #define TARGET_FRAMERATE 60
 
 #define MOB_COLLISION_WIDTH 16
@@ -33,7 +31,7 @@
 
 #define MAX_OBJECTS 255
 #define MAX_SCENES    256
-#define MAX_LAYER_SIZE 1024
+#define MAX_LAYERS 1024
 #define MAX_ANIMATIONS 25
 #define MAX_ANIMATIONS_IN_GAME 1440
 #define MAX_EXITS 64
@@ -113,6 +111,14 @@ typedef enum {
     MIDGROUND,
     FOREGROUND,
 } LayerType;
+
+LayerType LAYERS[] = {
+    BACKGROUND,
+    MIDGROUND,
+    FOREGROUND,
+};
+
+#define LAYER_COUNT sizeof(LAYERS) / sizeof(LAYERS[0])
 
 typedef enum {
     UP,
