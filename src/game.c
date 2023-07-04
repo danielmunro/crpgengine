@@ -108,7 +108,6 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
         c->then[i] = mapThen(g, storyline->then[i]);
     }
     addDebug(g->log, "done processing when/then clauses");
-//    exit(1);
     return c;
 }
 
