@@ -123,7 +123,7 @@ typedef enum {
 
 const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
 const int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
-#define DIRECTION_COUNT 4
+#define DIRECTION_COUNT sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0])
 
 typedef enum {
     EXIT = 1,
