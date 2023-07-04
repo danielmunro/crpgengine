@@ -22,7 +22,7 @@ Beast *createBeastFromData(const char *indexDir, BeastData *data) {
     beast->hp = data->hp;
     beast->mana = data->mana;
     beast->level = data->level;
-    char filePath[255];
+    char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/images/%s", indexDir, data->image);
     beast->image = LoadTextureFromImage(LoadImage(filePath));
     beast->attributes = createAttributesFromData(data->attributes);

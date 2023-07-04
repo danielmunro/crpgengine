@@ -1,7 +1,7 @@
 void loadAnimations(Log *log, const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
     addInfo(log, "load animations file: %s", file);
     AnimationData *animation = loadAnimationYaml(file);
-    char filePath[255];
+    char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/animations/%s", indexDir, animation->sprite->file);
     SpriteSheet *sp = createSpriteSheet(
             filePath,
@@ -22,7 +22,7 @@ void loadAnimations(Log *log, const char *file, const char *indexDir, Animation 
 }
 
 void loadMobiles(Scene *scene, const char *indexDir) {
-    char directory[255];
+    char directory[MAX_FS_PATH_LENGTH];
     sprintf(directory, "%s/scenes/%s/mobiles", indexDir, scene->name);
     addInfo(scene->log, "load mobiles from %s", directory);
     if (!FileExists(directory)) {
@@ -32,11 +32,11 @@ void loadMobiles(Scene *scene, const char *indexDir) {
     char *mobFiles[MAX_MOBILES];
     int files = getFilesInDirectory(directory, mobFiles);
     for (int i = 0; i < files; i++) {
-        char filePath[255];
+        char filePath[MAX_FS_PATH_LENGTH];
         sprintf(filePath, "%s/%s", directory, mobFiles[i]);
         MobileData *mobData = loadMobYaml(filePath);
         Animation *animations[MAX_ANIMATIONS];
-        char animationFilePath[255];
+        char animationFilePath[MAX_FS_PATH_LENGTH];
         sprintf(animationFilePath, "%s/%s", indexDir, mobData->animations);
         loadAnimations(scene->log, animationFilePath, indexDir, animations);
         Mobile *mob = createMobileFromData(mobData, animations);
@@ -45,7 +45,7 @@ void loadMobiles(Scene *scene, const char *indexDir) {
 }
 
 void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, const char *indexDir) {
-    char filePath[255];
+    char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/images/%s", indexDir, data->background);
     scene->encounters->background = LoadTextureFromImage(LoadImage(filePath));
     addDebug(scene->log, "beast count: %d, beastiary count: %d", data->beasts_count, beastiary->beastCount);
@@ -73,7 +73,7 @@ void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, co
 
 Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sceneName, int showCollisions) {
     addInfo(log, "create scene '%s'", sceneName);
-    char sceneFilePath[255];
+    char sceneFilePath[MAX_FS_PATH_LENGTH];
     sprintf(sceneFilePath, "%s/scenes/%s", indexDir, sceneName);
     SceneData *sceneData = loadSceneYaml(sceneFilePath);
     Scene *scene = createScene(log, showCollisions);
@@ -84,7 +84,7 @@ Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sce
     scene->music = &sceneData->music[0];
 
     // storylines
-    char storylinesFilePath[255];
+    char storylinesFilePath[MAX_FS_PATH_LENGTH];
     sprintf(storylinesFilePath, "%s/scenes/%s/storylines.yaml", indexDir, sceneName);
     StorylinesData *storylines = loadStorylinesYaml(storylinesFilePath);
     if (storylines != NULL) {
@@ -94,9 +94,9 @@ Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sce
     }
 
     // create scene reader for reading tiled xml
-    char sceneDir[255];
+    char sceneDir[MAX_FS_PATH_LENGTH];
     sprintf(sceneDir, "%s/scenes/%s/map", indexDir, sceneName);
-    char tilemapFilePath[255];
+    char tilemapFilePath[MAX_FS_PATH_LENGTH];
     sprintf(tilemapFilePath, "%s/tilemap.tmx", sceneDir);
     TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(scene->exploration, tilemapFilePath);
     addDebug(scene->log, "create scene '%s' tilemap", sceneName);
@@ -119,7 +119,7 @@ Player *loadPlayer(Log *log, char *indexDir) {
     addInfo(log, "loading player from dir %s", indexDir);
     PlayerData *playerYaml = loadPlayerYaml(log, indexDir);
     Animation *animations[MAX_ANIMATIONS];
-    char filePath[255];
+    char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/%s", indexDir, playerYaml->animations);
     loadAnimations(log, filePath, indexDir, animations);
     Mobile *mobiles[MAX_PARTY_SIZE] = {

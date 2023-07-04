@@ -6,7 +6,7 @@ static const cyaml_config_t config = {
 
 ConfigData *loadAppConfigYaml(const char *indexDir) {
     ConfigData *appConfig = malloc(sizeof(ConfigData));
-    char filePath[255];
+    char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/config.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &appConfigTopSchema, (cyaml_data_t **) &appConfig, NULL);
@@ -18,7 +18,7 @@ ConfigData *loadAppConfigYaml(const char *indexDir) {
 
 MusicData *loadMusicYaml(const char *indexDir) {
     MusicData *music = malloc(sizeof(MusicData));
-    char filePath[255];
+    char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/music.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &musicTopSchema, (cyaml_data_t **) &music, NULL);
@@ -30,7 +30,7 @@ MusicData *loadMusicYaml(const char *indexDir) {
 
 SoundData *loadSoundYaml(const char *indexDir) {
     SoundData *sound = malloc(sizeof(SoundData));
-    char filePath[255];
+    char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/sound.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &musicTopSchema, (cyaml_data_t **) &sound, NULL);
@@ -42,7 +42,7 @@ SoundData *loadSoundYaml(const char *indexDir) {
 
 PlayerData *loadPlayerYaml(Log *log, const char *indexDir) {
     PlayerData *player = malloc(sizeof(PlayerData));
-    char filePath[255];
+    char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/player.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &playerTopSchema, (cyaml_data_t **) &player, NULL);
@@ -64,7 +64,7 @@ AnimationData *loadAnimationYaml(const char *filePath) {
 
 SceneData *loadSceneYaml(const char *indexDir) {
     SceneData *scene = malloc(sizeof(SceneData));
-    char filePath[255];
+    char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/scene.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &sceneTopSchema, (cyaml_data_t **) &scene, NULL);

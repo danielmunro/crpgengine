@@ -9,7 +9,6 @@ Beast *createTestBeast() {
     beast->hp = 20;
     beast->mana = 100;
     beast->level = 100;
-    char filePath[255];
     beast->attributes = createEmptyAttributes();
     return beast;
 }
@@ -25,7 +24,7 @@ void createFightInSceneTest() {
     e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
     for (int i = 0; i < 100; i++) {
         Fight *f = createFightFromEncounters(log, e);
-        char message[255];
+        char message[MAX_LOG_LINE_LENGTH];
         sprintf(message, "beast count is not within expected range: %d", f->beastCount);
         ok(0 < f->beastCount && f->beastCount <= 9, message);
     }

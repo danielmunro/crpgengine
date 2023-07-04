@@ -125,7 +125,7 @@ void loadScenes(Game *g, RuntimeArgs *r, char *scenes[MAX_SCENES]) {
 }
 
 void loadBeastiary(Game *g, const char *indexDir) {
-    char filePath[255];
+    char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/beastiary.yaml", indexDir);
     BeastiaryData *data = loadBeastiaryYaml(filePath);
     for (int i = 0; i < data->beasts_count; i++) {
@@ -278,7 +278,7 @@ void run(Game *g) {
 
 void loadScenesFromFiles(Game *g, RuntimeArgs *r) {
     char *scenes[MAX_SCENES];
-    char sceneDir[255];
+    char sceneDir[MAX_FS_PATH_LENGTH];
     sprintf(sceneDir, "%s/scenes", r->indexDir);
     g->sceneCount = getFilesInDirectory(sceneDir, scenes);
     loadScenes(g, r, scenes);

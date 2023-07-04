@@ -53,6 +53,7 @@
 #define MAX_ITEMS 255
 #define MAX_PARTY_SIZE 4
 #define MAX_TEAM_SIZE 255
+#define MAX_FS_PATH_LENGTH 255
 
 const char *logLevels[] = {
         "error",

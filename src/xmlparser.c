@@ -19,7 +19,7 @@ static void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *i
         const int height = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
         tilemapXmlReader->exploration->tilemap->size = (Vector2D) {width, height};
     } else if (strcmp(strName, "image") == 0) {
-        char filePath[255];
+        char filePath[MAX_FS_PATH_LENGTH];
         sprintf(filePath, "%s/%s", indexDir, getStringAttribute(tilemapXmlReader->reader, "source"));
         tilemapXmlReader->exploration->tilemap->source = LoadImage(filePath);
     } else if (strcmp(strName, "tile") == 0) {
@@ -45,7 +45,7 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
     Tilemap *tilemap = malloc(sizeof(Tilemap));
     e->tilemap = tilemap;
     int ret;
-    char filePath[255];
+    char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/%s", indexDir, filename);
     TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(e, filePath);
     if (tilemapXmlReader->reader == NULL) {
