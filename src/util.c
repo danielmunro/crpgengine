@@ -44,7 +44,7 @@ int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
     return i;
 }
 
-int mapCondition(char *when) {
+Condition mapCondition(char *when) {
     int count = sizeof(conditions) / sizeof(char *);
     for (int i = 0; i < count; i++) {
         if (strcmp(conditions[i], when) == 0) {

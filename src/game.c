@@ -58,49 +58,57 @@ Mobile *findMobById(Game *g, char *id) {
     return NULL;
 }
 
+When *mapWhen(Game *g, WhenData wd) {
+    Mobile *trigger = NULL;
+    Mobile *mob = getPartyLeader(g->player);
+    if (wd.mob != NULL) {
+        trigger = findMobById(g, wd.mob);
+        addDebug(g->log, "mobile trigger is '%s'", trigger->name);
+    }
+    When *w = createWhen(
+            mob,
+            trigger,
+            mapCondition(wd.condition),
+            wd.story);
+    addDebug(g->log, "condition: %s, mapped to: %d, story: %s",
+             wd.condition,
+             w->condition,
+             wd.story);
+    return w;
+}
+
+Then *mapThen(Game *g, ThenData td) {
+    Mobile *target;
+    Mobile *mob = getPartyLeader(g->player);
+    if (td.player) {
+        target = mob;
+    } else {
+        target = findMobById(g, td.mob);
+    }
+    Then *t = createThen(
+            target,
+            &td.message[0],
+            &td.story[0],
+            mapOutcome(td.action));
+    addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
+             t->story, t->outcome, t->message);
+    return t;
+}
+
 ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
     ControlBlock *c = createControlBlock();
     c->whenCount = storyline->when_count;
     c->thenCount = storyline->then_count;
     addDebug(g->log, "processing storyline with %d when and %d then clauses",
              storyline->when_count, storyline->then_count);
-    Mobile *mob = getPartyLeader(g->player);
     for (int i = 0; i < storyline->when_count; i++) {
-        WhenData wd = storyline->when[i];
-        Mobile *trigger = NULL;
-        if (wd.mob != NULL) {
-            trigger = findMobById(g, wd.mob);
-            addDebug(g->log, "mobile trigger is '%s'", trigger->name);
-        }
-        When *w = createWhen(
-                mob,
-                trigger,
-                mapCondition(wd.condition),
-                wd.story);
-        addDebug(g->log, "condition: %s, mapped to: %d, story: %s",
-                 wd.condition,
-                 w->condition,
-                 wd.story);
-        c->when[i] = w;
+        c->when[i] = mapWhen(g, storyline->when[i]);
     }
-    addDebug(g->log, "done processing when conditions");
     for (int i = 0; i < storyline->then_count; i++) {
-        ThenData td = storyline->then[i];
-        Mobile *target;
-        if (td.player) {
-            target = mob;
-        } else {
-            target = findMobById(g, td.mob);
-        }
-        Then *t = createThen(
-                target,
-                &td.message[0],
-                &td.story[0],
-                mapOutcome(td.action));
-        addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
-                 t->story, t->outcome, t->message);
-        c->then[i] = t;
+        c->then[i] = mapThen(g, storyline->then[i]);
     }
+    addDebug(g->log, "done processing when/then clauses");
+//    exit(1);
     return c;
 }
 
@@ -173,30 +181,6 @@ void evaluateExits(Game *g) {
             }
         }
         addError(g->log, "warp to '%s' not found", sceneName);
-    }
-}
-
-void loadMenus(Game *g) {
-    Menu *menus[MAX_MENUS] = {
-            createMenu(
-                    PARTY_MENU,
-                    getPartyMenuCursorLength,
-                    drawPartyMenuScreen,
-                    partyMenuItemSelected),
-            createMenu(
-                    ITEMS_MENU,
-                    getItemsCursorLength,
-                    drawItemsMenuScreen,
-                    partyMenuItemSelected),
-            createMenu(
-                    QUIT_MENU,
-                    getQuitCursorLength,
-                    drawQuitMenuScreen,
-                    quitMenuItemSelected),
-    };
-    g->menuCount = 3;
-    for (int i = 0; i < g->menuCount; i++) {
-        g->menus[i] = menus[i];
     }
 }
 
@@ -291,23 +275,35 @@ void run(Game *g) {
     }
 }
 
-Game *createGame(RuntimeArgs *r) {
-    Game *g = malloc(sizeof(Game));
-    g->animIndex = 0;
-    g->currentScene = NULL;
-    g->log = createLog(r->logLevel);
-    g->audioManager = loadAudioManager(g->log, r->indexDir);
-    g->player = loadPlayer(g->log, r->indexDir);
-    addInfo(g->log, "log level set to %s", getLogLevelString(g->log->level));
-    g->beastiary = createBeastiary();
+void loadScenesFromFiles(Game *g, RuntimeArgs *r) {
     char *scenes[MAX_SCENES];
     char sceneDir[255];
     sprintf(sceneDir, "%s/scenes", r->indexDir);
     g->sceneCount = getFilesInDirectory(sceneDir, scenes);
-    loadBeastiary(g, r->indexDir);
     loadScenes(g, r, scenes);
-    setScene(g, g->scenes[r->sceneIndex], "start");
-    loadMenus(g);
+}
+
+void initializeLog(Game *g, LogLevel logLevel) {
+    g->log = createLog(logLevel);
+    addInfo(g->log, "log level set to %s", getLogLevelString(g->log->level));
+}
+
+void initializeBeasts(Game *g, const char *indexDir) {
+    g->beastiary = createBeastiary();
+    loadBeastiary(g, indexDir);
+}
+
+Game *createGame(RuntimeArgs *r) {
+    Game *g = malloc(sizeof(Game));
+    g->animIndex = 0;
+    g->currentScene = NULL;
+    initializeLog(g, r->logLevel);
+    g->audioManager = loadAudioManager(g->log, r->indexDir);
+    g->player = loadPlayer(g->log, r->indexDir);
+    initializeBeasts(g, r->indexDir);
+    loadScenesFromFiles(g, r);
+    setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);
+    g->menuCount = getMenuList(g->menus);
     addDebug(g->log, "done creating game object");
     return g;
 }

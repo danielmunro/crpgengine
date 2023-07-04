@@ -23,6 +23,8 @@
 #define SCENE_TYPE_TOWN 1
 #define SCENE_TYPE_DUNGEON 2
 
+#define START_ENTRANCE "start"
+
 #define FONT_SIZE 20
 #define LINE_HEIGHT 30
 #define UI_PADDING 20
@@ -204,6 +206,7 @@ typedef enum {
 #include "menu/items_menu.c"
 #include "menu/party_menu.c"
 #include "menu/quit_menu.c"
+#include "menu_list.c"
 #include "object.c"
 #include "fight.c"
 #include "tilemap.c"
