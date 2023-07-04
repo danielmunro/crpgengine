@@ -145,20 +145,22 @@ void processExplorationAnimations(Game *g) {
 }
 
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
-    if (entrance != NULL) {
-        addDebug(game->log, "entrance %s found at %f, %f, %f, %f",
-                entrance->name,
-                entrance->area.x,
-                entrance->area.y,
-                entrance->area.width,
-                entrance->area.height
-        );
-        getPartyLeader(game->player)->position = (Vector2) {
-                entrance->area.x,
-                entrance->area.y
-        };
-        setScene(game, scene, entrance->name);
+    if (entrance == NULL) {
+        addWarning(game->log, "no entrance found for '%s' scene", scene->name);
+        return;
     }
+    addDebug(game->log, "entrance %s found at %f, %f, %f, %f",
+            entrance->name,
+            entrance->area.x,
+            entrance->area.y,
+            entrance->area.width,
+            entrance->area.height
+    );
+    getPartyLeader(game->player)->position = (Vector2) {
+            entrance->area.x,
+            entrance->area.y
+    };
+    setScene(game, scene, entrance->name);
 }
 
 void evaluateExits(Game *g) {
