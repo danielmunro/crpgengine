@@ -19,7 +19,7 @@ ConfigData *loadAppConfigYaml(const char *indexDir) {
 MusicData *loadMusicYaml(const char *indexDir) {
     MusicData *music = malloc(sizeof(MusicData));
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/music.yaml", indexDir);
+    sprintf(filePath, "%s/audio/music.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &musicTopSchema, (cyaml_data_t **) &music, NULL);
     if (err != CYAML_OK) {
@@ -31,7 +31,7 @@ MusicData *loadMusicYaml(const char *indexDir) {
 SoundData *loadSoundYaml(const char *indexDir) {
     SoundData *sound = malloc(sizeof(SoundData));
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/sound.yaml", indexDir);
+    sprintf(filePath, "%s/audio/sound.yaml", indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &musicTopSchema, (cyaml_data_t **) &sound, NULL);
     if (err != CYAML_OK) {
