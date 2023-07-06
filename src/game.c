@@ -195,7 +195,7 @@ void checkExplorationInput(Game *g) {
     Mobile *mob = getPartyLeader(g->player);
     getMobAnimation(mob)->isPlaying = 0;
     explorationCheckMoveKeys(g->player);
-    if (IsKeyDown(KEY_C)) {
+    if (IsKeyPressed(KEY_C)) {
         explorationDebugKeyPressed(g->currentScene->exploration, mob->position);
     }
     if (IsKeyPressed(KEY_SPACE)) {
