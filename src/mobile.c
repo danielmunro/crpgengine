@@ -3,6 +3,7 @@ typedef struct {
     const char *id;
     const char *name;
     Direction direction;
+    Direction previousDirection;
     Vector2 position;
 } Mobile;
 
@@ -53,4 +54,9 @@ Vector2 getMoveFor(Mobile *mob, Direction direction) {
         return (Vector2) {mob->position.x + 1, mob->position.y};
     }
     return mob->position;
+}
+
+void updateDirection(Mobile *mob, Direction direction) {
+    mob->previousDirection = mob->direction;
+    mob->direction = direction;
 }

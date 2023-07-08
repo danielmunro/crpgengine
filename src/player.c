@@ -107,7 +107,12 @@ bool isMoving(Player *p) {
 
 void engageWithMobile(Player *p) {
     p->engageable = p->blockedBy;
-    p->blockedBy->direction = ;
+    updateDirection(p->blockedBy, getOppositeDirection(getPartyLeader(p)->direction));
     addInfo(p->log, "engaging with %s", p->engageable->name);
     p->engaged = true;
+}
+
+void disengageWithMobile(Player *p) {
+    p->engaged = false;
+    updateDirection(p->blockedBy, p->blockedBy->previousDirection);
 }

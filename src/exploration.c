@@ -354,15 +354,11 @@ void dialogEngaged(Exploration *exploration, Player *player, ControlBlock *contr
         controlBlock->progress++;
         addDebug(exploration->log, "active control block progress at %d", controlBlock->progress);
     }
-    if (controlBlock->progress >= controlBlock->thenCount
-        || controlBlock->then[controlBlock->progress]->outcome != SPEAK) {
-        addDebug(exploration->log, "unset engaged");
-        player->engaged = false;
-    }
     if (controlBlock->progress >= controlBlock->thenCount) {
         addDebug(exploration->log, "unsetting active control block");
         controlBlock->progress = 0;
         controlBlock = NULL;
+        disengageWithMobile(player);
     }
 }
 
