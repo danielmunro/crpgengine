@@ -1,4 +1,9 @@
 typedef struct {
+    Mobile *mob;
+    Vector2 destination;
+} MobileMovement;
+
+typedef struct {
     Rectangle area;
     char *to;
     char *scene;
@@ -33,6 +38,7 @@ typedef struct {
     int mobileCount;
     Menu *menus[MAX_MENUS];
     int menuCount;
+    MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
 } Exploration;
 
 Exit *createExit() {
@@ -71,7 +77,25 @@ Exploration *createExploration(Log *log, int showCollisions) {
     exploration->menuCount = 0;
     exploration->objectCount = 0;
     exploration->log = log;
+    for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
+        exploration->mobMovements[i] = NULL;
+    }
     return exploration;
+}
+
+MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
+    MobileMovement *mobMovement = malloc(sizeof(MobileMovement));
+    mobMovement->mob = mob;
+    mobMovement->destination = destination;
+    return mobMovement;
+}
+
+void addMobileMovement(Exploration *e, MobileMovement *mobMovement) {
+    for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
+        if (e->mobMovements[i] == NULL) {
+            e->mobMovements[i] = mobMovement;
+        }
+    }
 }
 
 Object *getObject(Exploration *e, int index) {
@@ -108,7 +132,7 @@ Menu *getCurrentMenu(Exploration *e) {
 }
 
 void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
-    addDebug(e->log, "player coordinates: %f, %f", position.x, position.y);
+    addInfo(e->log, "player coordinates: %f, %f", position.x, position.y);
 }
 
 void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
@@ -273,7 +297,7 @@ int atExit(Exploration *e, Player *p) {
     return -1;
 }
 
-void tryToMove(Exploration *e, Player *p, AnimationDirection direction, Vector2 pos) {
+void tryToMovePlayer(Exploration *e, Player *p, AnimationDirection direction, Vector2 pos) {
     Rectangle rect = {
             pos.x,
             pos.y + MOB_COLLISION_HEIGHT,
@@ -300,7 +324,7 @@ void evaluateMovement(Exploration *e, Player *p) {
              mob->position.x,
              mob->position.y);
     for (int i = 0; i < DIRECTION_COUNT; i++) {
-        tryToMove(e, p, DIRECTIONS[i], getMoveFor(mob, DIRECTIONS[i]));
+        tryToMovePlayer(e, p, DIRECTIONS[i], getMoveFor(mob, DIRECTIONS[i]));
     }
 }
 
@@ -350,6 +374,7 @@ void removeMenu(Exploration *exploration) {
 }
 
 void dialogEngaged(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
+    addInfo(exploration->log, "speaking with '%s' mob", player->engageable->name);
     if (controlBlock != NULL) {
         controlBlock->progress++;
         addDebug(exploration->log, "active control block progress at %d", controlBlock->progress);
@@ -372,5 +397,34 @@ void explorationSpaceKeyPressed(Exploration *exploration, Player *player, Contro
         dialogEngaged(exploration, player, controlBlock);
     } else if (player->blockedBy != NULL) {
         engageWithMobile(player);
+    }
+}
+
+void doMobileMovementUpdates(Exploration *exploration) {
+    for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
+        if (exploration->mobMovements[i] == NULL) {
+            continue;
+        }
+        Vector2 pos = exploration->mobMovements[i]->mob->position;
+        Vector2 destination = exploration->mobMovements[i]->destination;
+        bool moved = false;
+        if (pos.x > destination.x) {
+            pos.x--;
+            moved = true;
+        } else if (pos.x < destination.x) {
+            pos.x++;
+            moved = true;
+        }
+        if (pos.y > destination.y) {
+            pos.y--;
+            moved = true;
+        } else if (pos.y < destination.y) {
+            pos.y++;
+            moved = true;
+        }
+        addDebug(exploration->log, "change position by %f, %f, destination: %f, %f", pos.x, pos.y, destination.x, destination.y);
+        exploration->mobMovements[i]->mob->position = pos;
+        Animation *animation = getMobAnimation(exploration->mobMovements[i]->mob);
+        animation->isPlaying = moved;
     }
 }

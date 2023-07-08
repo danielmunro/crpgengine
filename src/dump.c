@@ -16,10 +16,7 @@ void dumpGame(Game *g) {
             );
         }
         printf("\nmobiles\n===============\n");
-        for (int j = 0; j < MAX_MOBILES; j++) {
-            if (g->scenes[i]->exploration->mobiles[j] == NULL) {
-                break;
-            }
+        for (int j = 0; j < g->scenes[i]->exploration->mobileCount; j++) {
             printf("%s\n", g->scenes[i]->exploration->mobiles[j]->name);
         }
         printf("\ncontrols\n==============\n");

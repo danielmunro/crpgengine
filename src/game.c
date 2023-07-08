@@ -85,11 +85,21 @@ Then *mapThen(Game *g, ThenData td) {
     } else {
         target = findMobById(g, td.mob);
     }
+    Vector2 pos;
+    if (td.position != NULL) {
+        printf("hi\n");
+        pos = (Vector2) {(float) td.position[0], (float) td.position[1]};
+        printf("sanity\n");
+    } else {
+        pos = (Vector2){0,0};
+    }
     Then *t = createThen(
             target,
             &td.message[0],
             &td.story[0],
-            mapOutcome(td.action));
+            mapOutcome(td.action),
+            pos
+    );
     addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
              t->story, t->outcome, t->message);
     return t;
@@ -112,11 +122,14 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
 }
 
 void loadScenes(Game *g, RuntimeArgs *r, char *scenes[MAX_SCENES]) {
+    addDebug(g->log, "attempting to load scenes");
     for (int i = 0; i < g->sceneCount; i++) {
         g->scenes[i] = loadScene(g->log, g->beastiary, r->indexDir, scenes[i], r->showCollisions);
-        addDebug(g->log, "scene %s (%d) loaded", g->scenes[i]->name, i);
+        addDebug(g->log, "scene loaded :: %s (%d)", g->scenes[i]->name, i);
     }
     for (int i = 0; i < g->sceneCount; i++) {
+        addDebug(g->log, "scene storyline count :: %s -- %d",
+                 g->scenes[i]->name, g->scenes[i]->storylineCount);
         for (int c = 0; c < g->scenes[i]->storylineCount; c++) {
             g->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(g, g->scenes[i]->storylines[c]);
             g->scenes[i]->controlBlockCount++;
@@ -142,6 +155,7 @@ void processExplorationAnimations(Game *g) {
             incrementAnimFrame(g->animations[i]);
         }
     }
+    doMobileMovementUpdates(g->currentScene->exploration);
 }
 
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
@@ -302,6 +316,7 @@ Game *createGame(RuntimeArgs *r) {
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     g->player = loadPlayer(g->log, r->indexDir);
     initializeBeasts(g, r->indexDir);
+    printf("meow\n");
     loadScenesFromFiles(g, r);
     setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);
     g->menuCount = getMenuList(g->menus);

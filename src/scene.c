@@ -71,21 +71,35 @@ void controlThenCheck(Scene *s, Player *p) {
     }
     ControlBlock *cb = s->activeControlBlock;
     if (cb->then[cb->progress]->outcome == ADD_STORY) {
-        addDebug(s->log, "add storyline '%s' for player", cb->then[cb->progress]->story);
+        addInfo(s->log, "add storyline '%s' for player", cb->then[cb->progress]->story);
         addStory(p, cb->then[cb->progress]->story);
         cb->progress++;
+    } else if (cb->then[cb->progress]->outcome == MOVE_TO) {
+        Mobile *target = cb->then[cb->progress]->target;
+        Vector2 destination = cb->then[cb->progress]->position;
+        addInfo(s->log, "add mob movement, %s target to %f, %f",
+                target->name, destination.x, destination.y);
+        addMobileMovement(
+                s->exploration,
+                createMobileMovement(
+                        target,
+                        destination
+                )
+        );
     }
 }
 
 void controlWhenCheck(Scene *s, Player *p) {
     if (s->activeControlBlock != NULL) {
+        addDebug(s->log, "no control when check, active already set");
         return;
     }
     for (int i = 0; i < s->controlBlockCount; i++) {
         ControlBlock *cb = s->controlBlocks[i];
         if (areConditionsMet(cb, p)) {
             s->activeControlBlock = cb;
-            addDebug(s->log, "set active control block %d, progress %d", i, s->activeControlBlock->progress);
+            addInfo(s->log, "set active control block %d, progress %d",
+                    i, s->activeControlBlock->progress);
             return;
         }
     }
@@ -100,7 +114,7 @@ bool canTriggerFight(Scene *s, Player *p) {
 }
 
 void checkControls(Scene *s, Player *p) {
-    addDebug(s->log, "exploration -- check control blocks");
+    addDebug(s->log, "exploration -- check %d control blocks", s->controlBlockCount);
     controlWhenCheck(s, p);
     controlThenCheck(s, p);
     if (needsToRemoveActiveControlBlock(s->activeControlBlock)) {
