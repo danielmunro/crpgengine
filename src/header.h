@@ -226,7 +226,7 @@ typedef enum {
 #include "exploration.c"
 #include "scene.c"
 #include "runtime_args.c"
-#include "tilemap_xml_reader.c"
+#include "tilemap_xmlreader.c"
 #include "xmlparser.c"
 #include "db.c"
 #include "game.c"
