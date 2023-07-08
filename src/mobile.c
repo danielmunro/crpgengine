@@ -2,7 +2,7 @@ typedef struct {
     Animation *animations[MAX_ANIMATIONS];
     const char *id;
     const char *name;
-    AnimationDirection direction;
+    Direction direction;
     Vector2 position;
 } Mobile;
 
@@ -10,7 +10,7 @@ Animation *getMobAnimation(Mobile *mob) {
     return findAnimation(mob->animations, mob->direction);
 }
 
-Mobile *createMobile(const char *id, const char *name, Vector2 position, AnimationDirection direction,
+Mobile *createMobile(const char *id, const char *name, Vector2 position, Direction direction,
                      Animation *animations[MAX_ANIMATIONS]) {
     Mobile *mobile = malloc(sizeof(Mobile));
     mobile->id = &id[0];
@@ -42,7 +42,7 @@ Rectangle getMobileRectangle(Mobile *mob) {
     };
 }
 
-Vector2 getMoveFor(Mobile *mob, AnimationDirection direction) {
+Vector2 getMoveFor(Mobile *mob, Direction direction) {
     if (direction == UP) {
         return (Vector2) {mob->position.x, mob->position.y - 1};
     } else if (direction == DOWN) {

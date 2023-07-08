@@ -128,7 +128,9 @@ typedef enum {
     DOWN,
     LEFT,
     RIGHT
-} AnimationDirection;
+} Direction;
+
+
 
 const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
 const int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
