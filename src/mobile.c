@@ -5,6 +5,8 @@ typedef struct {
     Direction direction;
     Direction previousDirection;
     Vector2 position;
+    bool moving[DIRECTION_COUNT];
+    struct timeval lastMovement;
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {
@@ -18,6 +20,11 @@ Mobile *createMobile(const char *id, const char *name, Vector2 position, Directi
     mobile->name = &name[0];
     mobile->direction = direction;
     mobile->position = position;
+    mobile->moving[UP] = false;
+    mobile->moving[DOWN] = false;
+    mobile->moving[LEFT] = false;
+    mobile->moving[RIGHT] = false;
+    gettimeofday(&mobile->lastMovement, NULL);
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         mobile->animations[i] = animations[i];
     }
@@ -32,6 +39,20 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
             getDirectionFromString(data->direction),
             animations);
     return mob;
+}
+
+void resetMoving(Mobile *mob) {
+    mob->moving[UP] = false;
+    mob->moving[DOWN] = false;
+    mob->moving[LEFT] = false;
+    mob->moving[RIGHT] = false;
+}
+
+bool isMoving(Mobile *mob) {
+    return mob->moving[DOWN]
+           || mob->moving[UP]
+           || mob->moving[LEFT]
+           || mob->moving[RIGHT];
 }
 
 Rectangle getMobileRectangle(Mobile *mob) {

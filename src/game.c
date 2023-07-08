@@ -95,6 +95,7 @@ Then *mapThen(Game *g, ThenData td) {
             target,
             &td.message[0],
             &td.story[0],
+            td.direction,
             mapOutcome(td.action),
             pos
     );
@@ -202,8 +203,8 @@ void explorationMenuKeyPressed(Game *g) {
 
 void checkExplorationInput(Game *g) {
     addDebug(g->log, "exploration -- check player input");
-    resetMoving(g->player);
     Mobile *mob = getPartyLeader(g->player);
+    resetMoving(mob);
     getMobAnimation(mob)->isPlaying = 0;
     explorationCheckMoveKeys(g->player);
     if (IsKeyPressed(KEY_C)) {

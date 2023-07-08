@@ -9,6 +9,7 @@ typedef struct {
     Mobile *target;
     const char *message;
     const char *story;
+    const char *direction;
     int outcome;
     Vector2 position;
 } Then;
@@ -38,10 +39,11 @@ When *createWhen(Mobile *source, Mobile *trigger, int condition, const char *sto
     return when;
 }
 
-Then *createThen(Mobile *target, const char *message, const char *story, const Outcome outcome, Vector2 position) {
+Then *createThen(Mobile *target, const char *message, const char *story, const char *direction, const Outcome outcome, Vector2 position) {
     Then *then = malloc(sizeof(Then));
     then->target = target;
     then->message = message;
+    then->direction = direction;
     then->story = story;
     then->outcome = outcome;
     then->position = position;

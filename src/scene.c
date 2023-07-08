@@ -66,15 +66,21 @@ void addStoryline(Scene *scene, StorylineData *storyline) {
 }
 
 void controlThenCheck(Scene *s, Player *p) {
-    if (s->activeControlBlock == NULL || s->activeControlBlock->progress > s->activeControlBlock->thenCount) {
+    if (s->activeControlBlock == NULL) {
         return;
     }
     ControlBlock *cb = s->activeControlBlock;
+    if (cb->then[cb->progress]->outcome == MOVE_TO && vectorsEqual(cb->then[cb->progress]->target->position, cb->then[cb->progress]->position)) {
+        cb->progress++;
+    }
+    if(s->activeControlBlock->progress > s->activeControlBlock->thenCount) {
+        return;
+    }
     if (cb->then[cb->progress]->outcome == ADD_STORY) {
         addInfo(s->log, "add storyline '%s' for player", cb->then[cb->progress]->story);
         addStory(p, cb->then[cb->progress]->story);
         cb->progress++;
-    } else if (cb->then[cb->progress]->outcome == MOVE_TO) {
+    } else if (cb->then[cb->progress]->outcome == MOVE_TO && !isMoving(cb->then[cb->progress]->target)) {
         Mobile *target = cb->then[cb->progress]->target;
         Vector2 destination = cb->then[cb->progress]->position;
         addMobileMovement(
@@ -84,6 +90,9 @@ void controlThenCheck(Scene *s, Player *p) {
                         destination
                 )
         );
+        p->engaged = false;
+    } else if (cb->then[cb->progress]->outcome == DIRECTION) {
+        cb->then[cb->progress]->target->direction = getDirectionFromString(cb->then[cb->progress]->direction);
         cb->progress++;
     }
 }
@@ -106,7 +115,7 @@ void controlWhenCheck(Scene *s, Player *p) {
 }
 
 bool canTriggerFight(Scene *s, Player *p) {
-    if (!isDungeon(s) || isFighting(s) || !isMoving(p)) {
+    if (!isDungeon(s) || isFighting(s) || !isMoving(getPartyLeader(p))) {
         return false;
     }
     return true;

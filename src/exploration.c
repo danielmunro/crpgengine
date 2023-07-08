@@ -307,7 +307,8 @@ void tryToMove(Exploration *e, Player *p, Direction direction, Vector2 pos) {
             MOB_COLLISION_WIDTH,
             MOB_COLLISION_HEIGHT,
     };
-    if (p->moving[direction]) {
+    Mobile *mob = getPartyLeader(p);
+    if (mob->moving[direction]) {
         if (isBlockedByMapObject(e, rect)) {
             p->blockedBy = NULL;
             return;
@@ -316,7 +317,7 @@ void tryToMove(Exploration *e, Player *p, Direction direction, Vector2 pos) {
         if (p->blockedBy != NULL) {
             return;
         }
-        getPartyLeader(p)->position = pos;
+        mob->position = pos;
         p->engageable = NULL;
     }
 }
@@ -327,7 +328,7 @@ void evaluateMovement(Exploration *e, Player *p) {
              mob->position.x,
              mob->position.y);
     for (int i = 0; i < DIRECTION_COUNT; i++) {
-        tryToMovePlayer(e, p, DIRECTIONS[i], getMoveFor(mob, DIRECTIONS[i]));
+        tryToMove(e, p, DIRECTIONS[i], getMoveFor(mob, DIRECTIONS[i]));
     }
 }
 
@@ -407,6 +408,7 @@ void doMobileMovementUpdates(Exploration *exploration) {
         Vector2 pos = exploration->mobMovements[i]->mob->position;
         Vector2 destination = exploration->mobMovements[i]->destination;
         bool moved = false;
+        resetMoving(exploration->mobMovements[i]->mob);
         if (pos.x > destination.x) {
             pos.x--;
             moved = true;
@@ -421,11 +423,15 @@ void doMobileMovementUpdates(Exploration *exploration) {
             pos.y++;
             moved = true;
         }
-        addInfo(exploration->log, "change position by %f, %f, destination: %f, %f", pos.x, pos.y, destination.x, destination.y);
-        exploration->mobMovements[i]->mob->position = pos;
-        Animation *animation = getMobAnimation(exploration->mobMovements[i]->mob);
+        Mobile *mob = exploration->mobMovements[i]->mob;
+        mob->position = pos;
+        Animation *animation = getMobAnimation(mob);
         animation->isPlaying = moved;
-        if (!moved) {
+        incrementAnimFrame(animation);
+        if (moved) {
+            printf("mob direction: %d\n", mob->direction);
+            mob->moving[mob->direction] = true;
+        } else {
             addInfo(exploration->log, "mob done moving -- %s", exploration->mobMovements[i]->mob->name);
             exploration->mobMovements[i] = NULL;
         }
