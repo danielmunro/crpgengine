@@ -12,7 +12,15 @@ storylines:
         message: "You look trustworthy. Please keep my amulet safe, adventurer. In return, it will help you in a time of need."
       - mob: vill1
         action: move_to
-        position: [320,242]
+        position: 320,242
       - player: true
         action: add_story
         story: from_the_past
+  - when:
+      - player: true
+        condition: has_story
+        story: from_the_past
+    then:
+      - mob: vill1
+        action: speak
+        message: "Please take good care of the amulet."

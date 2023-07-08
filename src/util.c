@@ -109,3 +109,10 @@ int max(int a, int b) {
     }
     return b;
 }
+
+Vector2 getPositionFromString(char *position) {
+    return (Vector2){
+        strToInt(strtok(position, ",")),
+        strToInt(strtok(NULL, ",")),
+    };
+}

@@ -77,8 +77,6 @@ void controlThenCheck(Scene *s, Player *p) {
     } else if (cb->then[cb->progress]->outcome == MOVE_TO) {
         Mobile *target = cb->then[cb->progress]->target;
         Vector2 destination = cb->then[cb->progress]->position;
-        addInfo(s->log, "add mob movement, %s target to %f, %f",
-                target->name, destination.x, destination.y);
         addMobileMovement(
                 s->exploration,
                 createMobileMovement(
@@ -86,6 +84,7 @@ void controlThenCheck(Scene *s, Player *p) {
                         destination
                 )
         );
+        cb->progress++;
     }
 }
 

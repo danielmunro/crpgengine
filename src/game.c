@@ -87,9 +87,7 @@ Then *mapThen(Game *g, ThenData td) {
     }
     Vector2 pos;
     if (td.position != NULL) {
-        printf("hi\n");
-        pos = (Vector2) {(float) td.position[0], (float) td.position[1]};
-        printf("sanity\n");
+        pos = getPositionFromString(td.position);
     } else {
         pos = (Vector2){0,0};
     }
@@ -155,7 +153,6 @@ void processExplorationAnimations(Game *g) {
             incrementAnimFrame(g->animations[i]);
         }
     }
-    doMobileMovementUpdates(g->currentScene->exploration);
 }
 
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
@@ -254,6 +251,7 @@ void checkMenuInput(Game *g) {
 void doExplorationLoop(Game *g) {
     checkExplorationInput(g);
     drawExplorationView(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);
+    doMobileMovementUpdates(g->currentScene->exploration);
     processExplorationAnimations(g);
     evaluateMovement(g->currentScene->exploration, g->player);
     evaluateExits(g);

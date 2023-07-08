@@ -91,9 +91,12 @@ MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
 }
 
 void addMobileMovement(Exploration *e, MobileMovement *mobMovement) {
+    addInfo(e->log, "add mob movement, %s target to %f, %f",
+            mobMovement->mob->name, mobMovement->destination.x, mobMovement->destination.y);
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         if (e->mobMovements[i] == NULL) {
             e->mobMovements[i] = mobMovement;
+            return;
         }
     }
 }
@@ -422,9 +425,13 @@ void doMobileMovementUpdates(Exploration *exploration) {
             pos.y++;
             moved = true;
         }
-        addDebug(exploration->log, "change position by %f, %f, destination: %f, %f", pos.x, pos.y, destination.x, destination.y);
+        addInfo(exploration->log, "change position by %f, %f, destination: %f, %f", pos.x, pos.y, destination.x, destination.y);
         exploration->mobMovements[i]->mob->position = pos;
         Animation *animation = getMobAnimation(exploration->mobMovements[i]->mob);
         animation->isPlaying = moved;
+        if (!moved) {
+            addInfo(exploration->log, "mob done moving -- %s", exploration->mobMovements[i]->mob->name);
+            exploration->mobMovements[i] = NULL;
+        }
     }
 }
