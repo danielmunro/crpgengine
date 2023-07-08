@@ -129,11 +129,23 @@ typedef enum {
     DOWN,
     LEFT,
     RIGHT
-} AnimationDirection;
-
+} Direction;
 const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
 const int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
 #define DIRECTION_COUNT sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0])
+
+Direction getOppositeDirection(Direction direction) {
+    if (direction == UP) {
+        return DOWN;
+    } else if (direction == DOWN) {
+        return UP;
+    } else if (direction == LEFT) {
+        return RIGHT;
+    } else if (direction == RIGHT) {
+        return LEFT;
+    }
+    return DOWN;
+}
 
 typedef enum {
     EXIT = 1,
@@ -215,7 +227,7 @@ typedef enum {
 #include "exploration.c"
 #include "scene.c"
 #include "runtime_args.c"
-#include "tilemap_xml_reader.c"
+#include "tilemap_xmlreader.c"
 #include "xmlparser.c"
 #include "db.c"
 #include "game.c"

@@ -12,7 +12,7 @@ typedef struct {
 typedef struct {
     char *name;
     Rectangle area;
-    AnimationDirection direction;
+    Direction direction;
 } Entrance;
 
 typedef struct {
@@ -300,7 +300,7 @@ int atExit(Exploration *e, Player *p) {
     return -1;
 }
 
-void tryToMovePlayer(Exploration *e, Player *p, AnimationDirection direction, Vector2 pos) {
+void tryToMove(Exploration *e, Player *p, Direction direction, Vector2 pos) {
     Rectangle rect = {
             pos.x,
             pos.y + MOB_COLLISION_HEIGHT,
@@ -382,15 +382,11 @@ void dialogEngaged(Exploration *exploration, Player *player, ControlBlock *contr
         controlBlock->progress++;
         addDebug(exploration->log, "active control block progress at %d", controlBlock->progress);
     }
-    if (controlBlock->progress >= controlBlock->thenCount
-        || controlBlock->then[controlBlock->progress]->outcome != SPEAK) {
-        addDebug(exploration->log, "unset engaged");
-        player->engaged = false;
-    }
     if (controlBlock->progress >= controlBlock->thenCount) {
         addDebug(exploration->log, "unsetting active control block");
         controlBlock->progress = 0;
         controlBlock = NULL;
+        disengageWithMobile(player);
     }
 }
 

@@ -79,7 +79,7 @@ void resetMoving(Player *p) {
     p->moving[RIGHT] = false;
 }
 
-void checkMoveKey(Player *p, int key, AnimationDirection direction) {
+void checkMoveKey(Player *p, int key, Direction direction) {
     if (IsKeyDown(key) && !p->engaged) {
         p->moving[direction] = true;
         Mobile *mob = getPartyLeader(p);
@@ -107,6 +107,12 @@ bool isMoving(Player *p) {
 
 void engageWithMobile(Player *p) {
     p->engageable = p->blockedBy;
+    updateDirection(p->blockedBy, getOppositeDirection(getPartyLeader(p)->direction));
     addInfo(p->log, "engaging with %s", p->engageable->name);
     p->engaged = true;
+}
+
+void disengageWithMobile(Player *p) {
+    p->engaged = false;
+    updateDirection(p->blockedBy, p->blockedBy->previousDirection);
 }
