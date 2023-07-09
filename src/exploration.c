@@ -406,21 +406,12 @@ void doMobileMovementUpdates(Exploration *exploration) {
             continue;
         }
         Mobile *mob = exploration->mobMovements[i]->mob;
-        Vector2 pos = mob->position;
-        Vector2 destination = exploration->mobMovements[i]->destination;
-        resetMoving(mob);
-        Animation *animation = getMobAnimation(mob);
-        float x = normalize(pos.x, destination.x);
-        float y = normalize(pos.y, destination.y);
-        mob->position.x += x;
-        mob->position.y += y;
-        bool moved = x != 0 || y != 0;
-        animation->isPlaying = moved;
-        incrementAnimFrame(animation);
+        bool moved = moveMob(mob, exploration->mobMovements[i]->destination);
         if (moved) {
             mob->moving[mob->direction] = true;
         } else {
-            addInfo(exploration->log, "mob done moving -- %s", exploration->mobMovements[i]->mob->name);
+            addInfo(exploration->log, "mob done moving -- %s",
+                    exploration->mobMovements[i]->mob->name);
             exploration->mobMovements[i] = NULL;
         }
     }

@@ -1,7 +1,12 @@
+#include <unistd.h>
+
 void loadAnimations(Log *log, const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
     addInfo(log, "load animations file: %s", file);
     AnimationData *animation = loadAnimationYaml(file);
-    char filePath[MAX_FS_PATH_LENGTH];
+    char cwd[PATH_MAX] = "";
+    getcwd(cwd, sizeof(cwd));
+    printf("%s\n", cwd);
+    char filePath[MAX_FS_PATH_LENGTH] = "";
     sprintf(filePath, "%s/animations/%s", indexDir, animation->sprite->file);
     SpriteSheet *sp = createSpriteSheet(
             filePath,

@@ -81,3 +81,20 @@ void updateDirection(Mobile *mob, Direction direction) {
     mob->previousDirection = mob->direction;
     mob->direction = direction;
 }
+
+bool moveMob(Mobile *mob, Vector2 destination) {
+    resetMoving(mob);
+    float x = normalize(mob->position.x, destination.x);
+    float y = normalize(mob->position.y, destination.y);
+    mob->position.x += x;
+    mob->position.y += y;
+    bool moved = x != 0 || y != 0;
+    Animation *animation = getMobAnimation(mob);
+    animation->isPlaying = moved;
+    if (x > 0) mob->direction = RIGHT;
+    else if (x < 0) mob->direction = LEFT;
+    else if (y > 0) mob->direction = DOWN;
+    else mob->direction = UP;
+    incrementAnimFrame(animation);
+    return moved;
+}

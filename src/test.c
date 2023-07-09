@@ -25,14 +25,49 @@ void createFightInSceneTest() {
     for (int i = 0; i < 100; i++) {
         Fight *f = createFightFromEncounters(log, e);
         char message[MAX_LOG_LINE_LENGTH];
-        sprintf(message, "beast count is not within expected range: %d", f->beastCount);
+        sprintf(message, "beast count is within expected range: %d", f->beastCount);
         ok(0 < f->beastCount && f->beastCount <= 9, message);
     }
 }
 
+void canMoveMobTest() {
+    // given
+    float startX = 100, startY = 100;
+    Vector2 start = (Vector2){startX, startY};
+    Animation *animations[MAX_ANIMATIONS];
+    loadAnimations(createLog(ERROR), "./fixtures/animations/fireas.yaml", "./fixtures", animations);
+    Mobile *mob = createMobile("test", "test", start, DOWN, animations);
+
+    // when
+    moveMob(mob, (Vector2){startX + 5, startY + 5});
+
+    // then
+    ok(mob->position.x > startX && mob->position.y > startY, "mob moved as expected");
+    ok(mob->direction == RIGHT, "mob is facing right");
+}
+
+void canMobStopMovingTest() {
+    // given
+    float startX = 100, startY = 100;
+    Vector2 start = (Vector2){startX, startY};
+    Animation *animations[MAX_ANIMATIONS];
+    loadAnimations(createLog(ERROR), "./fixtures/animations/fireas.yaml", "./fixtures", animations);
+    Mobile *mob = createMobile("test", "test", start, DOWN, animations);
+
+    // when
+    moveMob(mob, start);
+
+    // then
+    ok(mob->position.x == startX && mob->position.y == startY, "mob moved as expected");
+    ok(!isMoving(mob), "mob is not moving");
+}
+
 int main() {
-    plan(101);
+    initWindow("./fixtures");
+    plan(105);
     strToIntTest();
     createFightInSceneTest();
+    canMoveMobTest();
+    canMobStopMovingTest();
     done_testing();
 }

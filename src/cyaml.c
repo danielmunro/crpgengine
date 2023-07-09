@@ -57,7 +57,7 @@ AnimationData *loadAnimationYaml(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &animationTopSchema, (cyaml_data_t **) &animation, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing animation yaml: %s\n", cyaml_strerror(err));
+        fprintf(stderr, "error parsing animation yaml at %s :: %s\n", filePath, cyaml_strerror(err));
     }
     return animation;
 }
