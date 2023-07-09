@@ -103,6 +103,10 @@ bool isFaceDirectionOutcome(Then *then) {
     return then->outcome == DIRECTION;
 }
 
+bool isSpeakOutcome(Then *then) {
+    return then->outcome == SPEAK;
+}
+
 bool needsToStartMoving(Then *then) {
     return then->outcome == MOVE_TO && !isMoving(then->target);
 }

@@ -393,7 +393,7 @@ void dialogEngaged(Exploration *exploration, Player *player, ControlBlock *contr
 
 void explorationSpaceKeyPressed(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
     addInfo(exploration->log, "exploration space key pressed");
-    if (player->engaged && controlBlock->then[controlBlock->progress]->outcome == SPEAK) {
+    if (player->engaged && isSpeakOutcome(controlBlock->then[controlBlock->progress])) {
         dialogEngaged(exploration, player, controlBlock);
     } else if (player->blockedBy != NULL) {
         engageWithMobile(player);
