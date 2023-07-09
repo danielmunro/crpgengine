@@ -405,10 +405,10 @@ void doMobileMovementUpdates(Exploration *exploration) {
         if (exploration->mobMovements[i] == NULL) {
             continue;
         }
-        Vector2 pos = exploration->mobMovements[i]->mob->position;
-        Vector2 destination = exploration->mobMovements[i]->destination;
         Mobile *mob = exploration->mobMovements[i]->mob;
-        resetMoving(exploration->mobMovements[i]->mob);
+        Vector2 pos = mob->position;
+        Vector2 destination = exploration->mobMovements[i]->destination;
+        resetMoving(mob);
         Animation *animation = getMobAnimation(mob);
         float x = normalize(pos.x, destination.x);
         float y = normalize(pos.y, destination.y);
