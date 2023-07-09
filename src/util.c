@@ -120,3 +120,9 @@ Vector2 getPositionFromString(char *position) {
 bool vectorsEqual(Vector2 v1, Vector2 v2) {
     return v1.x == v2.x && v1.y == v2.y;
 }
+
+float normalize(float a, float b) {
+    if (a > b) return -1;
+    if (a < b) return 1;
+    return 0;
+}

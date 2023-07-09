@@ -407,25 +407,14 @@ void doMobileMovementUpdates(Exploration *exploration) {
         }
         Vector2 pos = exploration->mobMovements[i]->mob->position;
         Vector2 destination = exploration->mobMovements[i]->destination;
-        bool moved = false;
-        resetMoving(exploration->mobMovements[i]->mob);
-        if (pos.x > destination.x) {
-            pos.x--;
-            moved = true;
-        } else if (pos.x < destination.x) {
-            pos.x++;
-            moved = true;
-        }
-        if (pos.y > destination.y) {
-            pos.y--;
-            moved = true;
-        } else if (pos.y < destination.y) {
-            pos.y++;
-            moved = true;
-        }
         Mobile *mob = exploration->mobMovements[i]->mob;
-        mob->position = pos;
+        resetMoving(exploration->mobMovements[i]->mob);
         Animation *animation = getMobAnimation(mob);
+        float x = normalize(pos.x, destination.x);
+        float y = normalize(pos.y, destination.y);
+        mob->position.x += x;
+        mob->position.y += y;
+        bool moved = x != 0 || y != 0;
         animation->isPlaying = moved;
         incrementAnimFrame(animation);
         if (moved) {
