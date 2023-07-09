@@ -66,26 +66,46 @@ void addStoryline(Scene *scene, StorylineData *storyline) {
 }
 
 void controlThenCheck(Scene *s, Player *p) {
-    if (s->activeControlBlock == NULL || s->activeControlBlock->progress > s->activeControlBlock->thenCount) {
+    if (s->activeControlBlock == NULL) {
         return;
     }
     ControlBlock *cb = s->activeControlBlock;
-    if (cb->then[cb->progress]->outcome == ADD_STORY) {
-        addDebug(s->log, "add storyline '%s' for player", cb->then[cb->progress]->story);
+    if (isMovingAndAtDestination(cb)) {
+        cb->progress++;
+    }
+    if(isControlBlockDone(cb)) {
+        return;
+    }
+    if (isAddStoryOutcome(cb->then[cb->progress])) {
         addStory(p, cb->then[cb->progress]->story);
+        cb->progress++;
+    } else if (needsToStartMoving(cb->then[cb->progress])) {
+        addMobileMovement(
+                s->exploration,
+                createMobileMovement(
+                        cb->then[cb->progress]->target,
+                        cb->then[cb->progress]->position
+                )
+        );
+        p->engaged = false;
+    } else if (isFaceDirectionOutcome(cb->then[cb->progress])) {
+        cb->then[cb->progress]->target->direction =
+                getDirectionFromString(cb->then[cb->progress]->direction);
         cb->progress++;
     }
 }
 
 void controlWhenCheck(Scene *s, Player *p) {
     if (s->activeControlBlock != NULL) {
+        addDebug(s->log, "no control when check, active already set");
         return;
     }
     for (int i = 0; i < s->controlBlockCount; i++) {
         ControlBlock *cb = s->controlBlocks[i];
         if (areConditionsMet(cb, p)) {
             s->activeControlBlock = cb;
-            addDebug(s->log, "set active control block %d, progress %d", i, s->activeControlBlock->progress);
+            addInfo(s->log, "set active control block %d, progress %d",
+                    i, s->activeControlBlock->progress);
             return;
         }
     }
@@ -93,14 +113,14 @@ void controlWhenCheck(Scene *s, Player *p) {
 }
 
 bool canTriggerFight(Scene *s, Player *p) {
-    if (!isDungeon(s) || isFighting(s) || !isMoving(p)) {
+    if (!isDungeon(s) || isFighting(s) || !isMoving(getPartyLeader(p))) {
         return false;
     }
     return true;
 }
 
 void checkControls(Scene *s, Player *p) {
-    addDebug(s->log, "exploration -- check control blocks");
+    addDebug(s->log, "exploration -- check %d control blocks", s->controlBlockCount);
     controlWhenCheck(s, p);
     controlThenCheck(s, p);
     if (needsToRemoveActiveControlBlock(s->activeControlBlock)) {

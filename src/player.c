@@ -7,8 +7,6 @@ typedef struct {
     int storyCount;
     Item *items[MAX_ITEMS];
     int itemCount;
-    bool moving[DIRECTION_COUNT];
-    struct timeval lastMovement;
     Mobile *blockedBy;
     Mobile *engageable;
     bool engaged;
@@ -22,11 +20,6 @@ void addItem(Player *player, Item *item) {
 
 Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE]) {
     Player *player = malloc(sizeof(Player));
-    player->moving[UP] = false;
-    player->moving[DOWN] = false;
-    player->moving[LEFT] = false;
-    player->moving[RIGHT] = false;
-    gettimeofday(&player->lastMovement, NULL);
     player->blockedBy = NULL;
     player->engageable = NULL;
     player->engaged = false;
@@ -58,7 +51,7 @@ Mobile *getPartyLeader(Player *p) {
 
 void addStory(Player *p, const char *story) {
     p->stories[p->storyCount++] = story;
-    addInfo(p->log, "add story to player: %s", p->stories[0]);
+    addInfo(p->log, "add story to player :: %s", story);
 }
 
 bool hasStory(Player *p, const char *story) {
@@ -72,16 +65,9 @@ bool hasStory(Player *p, const char *story) {
     return false;
 }
 
-void resetMoving(Player *p) {
-    p->moving[UP] = false;
-    p->moving[DOWN] = false;
-    p->moving[LEFT] = false;
-    p->moving[RIGHT] = false;
-}
-
 void checkMoveKey(Player *p, int key, Direction direction) {
     if (IsKeyDown(key) && !p->engaged) {
-        p->moving[direction] = true;
+        getPartyLeader(p)->moving[direction] = true;
         Mobile *mob = getPartyLeader(p);
         mob->direction = direction;
         getMobAnimation(mob)->isPlaying = true;
@@ -98,15 +84,9 @@ bool isSpeakingTo(Player *p, Mobile *target) {
     return p->engaged && target == p->engageable;
 }
 
-bool isMoving(Player *p) {
-    return p->moving[DOWN]
-           || p->moving[UP]
-           || p->moving[LEFT]
-           || p->moving[RIGHT];
-}
-
 void engageWithMobile(Player *p) {
     p->engageable = p->blockedBy;
+    addInfo(p->log, "updating mob direction to: %d", getOppositeDirection(getPartyLeader(p)->direction));
     updateDirection(p->blockedBy, getOppositeDirection(getPartyLeader(p)->direction));
     addInfo(p->log, "engaging with %s", p->engageable->name);
     p->engaged = true;

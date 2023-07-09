@@ -85,11 +85,20 @@ Then *mapThen(Game *g, ThenData td) {
     } else {
         target = findMobById(g, td.mob);
     }
+    Vector2 pos;
+    if (td.position != NULL) {
+        pos = getPositionFromString(td.position);
+    } else {
+        pos = (Vector2){0,0};
+    }
     Then *t = createThen(
             target,
             &td.message[0],
             &td.story[0],
-            mapOutcome(td.action));
+            td.direction,
+            mapOutcome(td.action),
+            pos
+    );
     addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
              t->story, t->outcome, t->message);
     return t;
@@ -112,11 +121,14 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
 }
 
 void loadScenes(Game *g, RuntimeArgs *r, char *scenes[MAX_SCENES]) {
+    addDebug(g->log, "attempting to load scenes");
     for (int i = 0; i < g->sceneCount; i++) {
         g->scenes[i] = loadScene(g->log, g->beastiary, r->indexDir, scenes[i], r->showCollisions);
-        addDebug(g->log, "scene %s (%d) loaded", g->scenes[i]->name, i);
+        addDebug(g->log, "scene loaded :: %s (%d)", g->scenes[i]->name, i);
     }
     for (int i = 0; i < g->sceneCount; i++) {
+        addDebug(g->log, "scene storyline count :: %s -- %d",
+                 g->scenes[i]->name, g->scenes[i]->storylineCount);
         for (int c = 0; c < g->scenes[i]->storylineCount; c++) {
             g->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(g, g->scenes[i]->storylines[c]);
             g->scenes[i]->controlBlockCount++;
@@ -191,8 +203,8 @@ void explorationMenuKeyPressed(Game *g) {
 
 void checkExplorationInput(Game *g) {
     addDebug(g->log, "exploration -- check player input");
-    resetMoving(g->player);
     Mobile *mob = getPartyLeader(g->player);
+    resetMoving(mob);
     getMobAnimation(mob)->isPlaying = 0;
     explorationCheckMoveKeys(g->player);
     if (IsKeyPressed(KEY_C)) {
@@ -240,6 +252,7 @@ void checkMenuInput(Game *g) {
 void doExplorationLoop(Game *g) {
     checkExplorationInput(g);
     drawExplorationView(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);
+    doMobileMovementUpdates(g->currentScene->exploration);
     processExplorationAnimations(g);
     evaluateMovement(g->currentScene->exploration, g->player);
     evaluateExits(g);
@@ -302,6 +315,7 @@ Game *createGame(RuntimeArgs *r) {
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     g->player = loadPlayer(g->log, r->indexDir);
     initializeBeasts(g, r->indexDir);
+    printf("meow\n");
     loadScenesFromFiles(g, r);
     setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);
     g->menuCount = getMenuList(g->menus);

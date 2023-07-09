@@ -74,7 +74,7 @@ int getLogLevelFromString(char *value) {
     return -1;
 }
 
-int getDirectionFromString(char *value) {
+int getDirectionFromString(const char *value) {
     if (strcmp(value, "up") == 0) {
         return UP;
     } else if (strcmp(value, "down") == 0) {
@@ -108,4 +108,15 @@ int max(int a, int b) {
         return a;
     }
     return b;
+}
+
+Vector2 getPositionFromString(char *position) {
+    return (Vector2){
+        strToInt(strtok(position, ",")),
+        strToInt(strtok(NULL, ",")),
+    };
+}
+
+bool vectorsEqual(Vector2 v1, Vector2 v2) {
+    return v1.x == v2.x && v1.y == v2.y;
 }

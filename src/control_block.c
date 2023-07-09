@@ -9,7 +9,9 @@ typedef struct {
     Mobile *target;
     const char *message;
     const char *story;
+    const char *direction;
     int outcome;
+    Vector2 position;
 } Then;
 
 typedef struct {
@@ -37,12 +39,14 @@ When *createWhen(Mobile *source, Mobile *trigger, int condition, const char *sto
     return when;
 }
 
-Then *createThen(Mobile *target, const char *message, const char *story, const Outcome outcome) {
+Then *createThen(Mobile *target, const char *message, const char *story, const char *direction, const Outcome outcome, Vector2 position) {
     Then *then = malloc(sizeof(Then));
     then->target = target;
     then->message = message;
+    then->direction = direction;
     then->story = story;
     then->outcome = outcome;
+    then->position = position;
     return then;
 }
 
@@ -67,12 +71,38 @@ bool isWhenActivated(Player *p, When *when) {
 bool areConditionsMet(ControlBlock *cb, Player *p) {
     for (int c = 0; c < cb->whenCount; c++) {
         if (!isWhenActivated(p, cb->when[c])) {
+            addDebug(p->log, "conditions not met");
             return false;
         }
     }
+    addDebug(p->log, "conditions met");
     return true;
 }
 
 bool needsToRemoveActiveControlBlock(ControlBlock *control) {
     return control != NULL && control->progress >= control->thenCount;
+}
+
+bool isMovingAndAtDestination(ControlBlock *cb) {
+    return cb->then[cb->progress]->outcome == MOVE_TO &&
+            vectorsEqual(
+                    cb->then[cb->progress]->target->position,
+                    cb->then[cb->progress]->position
+            );
+}
+
+bool isControlBlockDone(ControlBlock *cb) {
+    return cb->progress > cb->thenCount;
+}
+
+bool isAddStoryOutcome(Then *then) {
+    return then->outcome == ADD_STORY;
+}
+
+bool isFaceDirectionOutcome(Then *then) {
+    return then->outcome == DIRECTION;
+}
+
+bool needsToStartMoving(Then *then) {
+    return then->outcome == MOVE_TO && !isMoving(then->target);
 }

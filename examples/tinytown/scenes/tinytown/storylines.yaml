@@ -1,25 +1,25 @@
 storylines:
   - when:
       - player: true
-        condition: engaged
-        mob: vill1
-      - player: true
         condition: not_has_story
         story: from_the_past
     then:
       - mob: vill1
         action: speak
-        message: "She always said not to live in the past. That one day I'll need to give this away to someone who needs it."
+        message: "She always said not to live in the past. That one day I'll need to give my amulet away to someone who needs it."
       - mob: vill1
         action: speak
-        message: "You look like a trustworthy person. Please keep this safe, adventurer. In return, it will help you in a time of need."
+        message: "You look trustworthy. Please keep my amulet safe, adventurer. In return, it will help you in a time of need."
+      - mob: vill1
+        action: move_to
+        position: 320,242
       - player: true
         action: add_story
         story: from_the_past
+      - mob: vill1
+        action: direction
+        direction: down
   - when:
-      - player: true
-        condition: engaged
-        mob: vill1
       - player: true
         condition: has_story
         story: from_the_past
