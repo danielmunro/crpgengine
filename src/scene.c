@@ -70,29 +70,27 @@ void controlThenCheck(Scene *s, Player *p) {
         return;
     }
     ControlBlock *cb = s->activeControlBlock;
-    if (cb->then[cb->progress]->outcome == MOVE_TO && vectorsEqual(cb->then[cb->progress]->target->position, cb->then[cb->progress]->position)) {
+    if (isMovingAndAtDestination(cb)) {
         cb->progress++;
     }
-    if(s->activeControlBlock->progress > s->activeControlBlock->thenCount) {
+    if(isControlBlockDone(cb)) {
         return;
     }
-    if (cb->then[cb->progress]->outcome == ADD_STORY) {
-        addInfo(s->log, "add storyline '%s' for player", cb->then[cb->progress]->story);
+    if (isAddStoryOutcome(cb->then[cb->progress])) {
         addStory(p, cb->then[cb->progress]->story);
         cb->progress++;
-    } else if (cb->then[cb->progress]->outcome == MOVE_TO && !isMoving(cb->then[cb->progress]->target)) {
-        Mobile *target = cb->then[cb->progress]->target;
-        Vector2 destination = cb->then[cb->progress]->position;
+    } else if (needsToStartMoving(cb->then[cb->progress])) {
         addMobileMovement(
                 s->exploration,
                 createMobileMovement(
-                        target,
-                        destination
+                        cb->then[cb->progress]->target,
+                        cb->then[cb->progress]->position
                 )
         );
         p->engaged = false;
-    } else if (cb->then[cb->progress]->outcome == DIRECTION) {
-        cb->then[cb->progress]->target->direction = getDirectionFromString(cb->then[cb->progress]->direction);
+    } else if (isFaceDirectionOutcome(cb->then[cb->progress])) {
+        cb->then[cb->progress]->target->direction =
+                getDirectionFromString(cb->then[cb->progress]->direction);
         cb->progress++;
     }
 }

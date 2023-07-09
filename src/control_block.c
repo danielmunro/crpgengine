@@ -82,3 +82,27 @@ bool areConditionsMet(ControlBlock *cb, Player *p) {
 bool needsToRemoveActiveControlBlock(ControlBlock *control) {
     return control != NULL && control->progress >= control->thenCount;
 }
+
+bool isMovingAndAtDestination(ControlBlock *cb) {
+    return cb->then[cb->progress]->outcome == MOVE_TO &&
+            vectorsEqual(
+                    cb->then[cb->progress]->target->position,
+                    cb->then[cb->progress]->position
+            );
+}
+
+bool isControlBlockDone(ControlBlock *cb) {
+    return cb->progress > cb->thenCount;
+}
+
+bool isAddStoryOutcome(Then *then) {
+    return then->outcome == ADD_STORY;
+}
+
+bool isFaceDirectionOutcome(Then *then) {
+    return then->outcome == DIRECTION;
+}
+
+bool needsToStartMoving(Then *then) {
+    return then->outcome == MOVE_TO && !isMoving(then->target);
+}

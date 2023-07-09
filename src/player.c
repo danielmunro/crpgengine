@@ -51,7 +51,7 @@ Mobile *getPartyLeader(Player *p) {
 
 void addStory(Player *p, const char *story) {
     p->stories[p->storyCount++] = story;
-    addInfo(p->log, "add story to player: %s", p->stories[0]);
+    addInfo(p->log, "add story to player :: %s", story);
 }
 
 bool hasStory(Player *p, const char *story) {
