@@ -418,7 +418,6 @@ void doMobileMovementUpdates(Exploration *exploration) {
         animation->isPlaying = moved;
         incrementAnimFrame(animation);
         if (moved) {
-            printf("mob direction: %d\n", mob->direction);
             mob->moving[mob->direction] = true;
         } else {
             addInfo(exploration->log, "mob done moving -- %s", exploration->mobMovements[i]->mob->name);
