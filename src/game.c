@@ -97,7 +97,8 @@ Then *mapThen(Game *g, ThenData td) {
             &td.story[0],
             td.direction,
             mapOutcome(td.action),
-            pos
+            pos,
+            td.parallel
     );
     addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
              t->story, t->outcome, t->message);
