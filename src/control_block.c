@@ -85,9 +85,9 @@ bool needsToRemoveActiveControlBlock(ControlBlock *control) {
 
 bool isMovingAndAtDestination(ControlBlock *cb) {
     return cb->then[cb->progress]->outcome == MOVE_TO &&
-            vectorsIntEqual(
-                    cb->then[cb->progress]->target->position,
-                    cb->then[cb->progress]->position
+            vector2DEquals(
+                    vector2DFromVect(cb->then[cb->progress]->target->position),
+                    vector2DFromVect(cb->then[cb->progress]->position)
             );
 }
 

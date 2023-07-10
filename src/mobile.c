@@ -95,6 +95,9 @@ bool moveMob(Mobile *mob, Vector2 destination) {
     else if (x < 0) mob->direction = LEFT;
     else if (y > 0) mob->direction = DOWN;
     else mob->direction = UP;
+    if (moved) {
+        mob->moving[mob->direction] = true;
+    }
     incrementAnimFrame(animation);
     return moved;
 }

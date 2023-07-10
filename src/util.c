@@ -117,8 +117,15 @@ Vector2 getPositionFromString(char *position) {
     };
 }
 
-bool vectorsIntEqual(Vector2 v1, Vector2 v2) {
-    return (int) v1.x == (int) v2.x && (int) v1.y == (int) v2.y;
+Vector2D vector2DFromVect(Vector2 vect) {
+    return (Vector2D) {
+            (int) vect.x,
+            (int) vect.y
+    };
+}
+
+bool vector2DEquals(Vector2D a, Vector2D b) {
+    return a.x == b.x && a.y == b.y;
 }
 
 float normalize(float a, float b) {

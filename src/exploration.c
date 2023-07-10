@@ -407,9 +407,7 @@ void doMobileMovementUpdates(Exploration *exploration) {
         }
         Mobile *mob = exploration->mobMovements[i]->mob;
         bool moved = moveMob(mob, exploration->mobMovements[i]->destination);
-        if (moved) {
-            mob->moving[mob->direction] = true;
-        } else {
+        if (!moved) {
             addInfo(exploration->log, "mob done moving -- %s",
                     exploration->mobMovements[i]->mob->name);
             exploration->mobMovements[i] = NULL;

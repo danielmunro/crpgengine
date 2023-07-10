@@ -71,6 +71,7 @@ void controlThenCheck(Scene *s, Player *p) {
     }
     ControlBlock *cb = s->activeControlBlock;
     if (isMovingAndAtDestination(cb)) {
+        addInfo(s->log, "mob at destination, control block proceeding");
         cb->progress++;
     }
     if(isControlBlockDone(cb)) {
@@ -80,6 +81,7 @@ void controlThenCheck(Scene *s, Player *p) {
         addStory(p, cb->then[cb->progress]->story);
         cb->progress++;
     } else if (needsToStartMoving(cb->then[cb->progress])) {
+        addInfo(s->log, "mob needs to start moving");
         addMobileMovement(
                 s->exploration,
                 createMobileMovement(
@@ -134,8 +136,7 @@ void checkFights(Scene *s, Player *p) {
     if (!canTriggerFight(s, p)) {
         return;
     }
-    int chance = rand() % 100 + 1;
-    if (chance == 1) {
+    if (rand() % 100 + 1 == 1) {
         s->fight = createFightFromEncounters(s->log, s->encounters);
         Animation *animation = findAnimation(getPartyLeader(p)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;
