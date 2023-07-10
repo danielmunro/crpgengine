@@ -315,7 +315,6 @@ Game *createGame(RuntimeArgs *r) {
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     g->player = loadPlayer(g->log, r->indexDir);
     initializeBeasts(g, r->indexDir);
-    printf("meow\n");
     loadScenesFromFiles(g, r);
     setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);
     g->menuCount = getMenuList(g->menus);
