@@ -1,12 +1,13 @@
 typedef struct {
-    char *player;
+    bool player;
     char *mob;
     char *condition;
     char *story;
 } WhenData;
 
 typedef struct {
-    int player;
+    bool player;
+    bool parallel;
     char *mob;
     char *action;
     char *message;
@@ -28,8 +29,8 @@ typedef struct {
 } StorylinesData;
 
 static const cyaml_schema_field_t whenFieldSchema[] = {
-        CYAML_FIELD_STRING_PTR(
-                "player", CYAML_FLAG_POINTER, WhenData, player, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_BOOL(
+                "player", CYAML_FLAG_OPTIONAL, WhenData, player),
         CYAML_FIELD_STRING_PTR(
                 "condition", CYAML_FLAG_POINTER, WhenData, condition, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
@@ -46,8 +47,10 @@ static const cyaml_schema_value_t whenSchema = {
 static const cyaml_schema_field_t thenFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
                 "mob", CYAML_FLAG_OPTIONAL, ThenData, mob, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_STRING_PTR(
-                "player", CYAML_FLAG_OPTIONAL, ThenData, player, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_BOOL(
+                "player", CYAML_FLAG_OPTIONAL, ThenData, player),
+        CYAML_FIELD_BOOL(
+                "parallel", CYAML_FLAG_OPTIONAL, ThenData, parallel),
         CYAML_FIELD_STRING_PTR(
                 "action", CYAML_FLAG_POINTER, ThenData, action, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
