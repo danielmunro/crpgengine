@@ -72,12 +72,9 @@ bool hasActiveControls(Scene *s) {
 }
 
 void addActiveControl(Scene *s, ControlBlock *cb) {
-    addDebug(s->log, "test");
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
-        addDebug(s->log, "test");
         if (s->activeControlBlocks[i] == NULL) {
             s->activeControlBlocks[i] = cb;
-            addDebug(s->log, "test");
             return;
         }
     }
