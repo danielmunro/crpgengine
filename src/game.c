@@ -211,7 +211,7 @@ void checkExplorationInput(Game *g) {
         explorationDebugKeyPressed(g->currentScene->exploration, mob->position);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        explorationSpaceKeyPressed(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);
+        explorationSpaceKeyPressed(g->currentScene->exploration, g->player, g->currentScene->activeControlBlocks);
     }
     if (IsKeyPressed(KEY_M)) {
         explorationMenuKeyPressed(g);
@@ -251,7 +251,7 @@ void checkMenuInput(Game *g) {
 
 void doExplorationLoop(Game *g) {
     checkExplorationInput(g);
-    drawExplorationView(g->currentScene->exploration, g->player, g->currentScene->activeControlBlock);
+    drawExplorationView(g->currentScene->exploration, g->player, g->currentScene->activeControlBlocks);
     doMobileMovementUpdates(g->currentScene->exploration);
     processExplorationAnimations(g);
     evaluateMovement(g->currentScene->exploration, g->player);

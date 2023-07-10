@@ -11,7 +11,7 @@ typedef struct {
     int storylineCount;
     ControlBlock *controlBlocks[MAX_CONTROLS];
     int controlBlockCount;
-    ControlBlock *activeControlBlock;
+    ControlBlock *activeControlBlocks[MAX_ACTIVE_CONTROLS];
     Encounters *encounters;
     Fight *fight;
     Exploration *exploration;
@@ -39,12 +39,14 @@ void setSceneTypeFromString(Scene *s, const char *sceneType) {
 Scene *createScene(Log *log, int showCollisions) {
     Scene *scene = malloc(sizeof(Scene));
     scene->storylineCount = 0;
-    scene->activeControlBlock = NULL;
     scene->fight = NULL;
     scene->encounters = createEncounters();
     scene->log = log;
     scene->exploration = createExploration(log, showCollisions);
     scene->controlBlockCount = 0;
+    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
+        scene->activeControlBlocks[i] = NULL;
+    }
     return scene;
 }
 
@@ -60,16 +62,34 @@ bool isDungeon(Scene *s) {
     return s->type == SCENE_TYPE_DUNGEON;
 }
 
+bool hasActiveControls(Scene *s) {
+    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
+        if (s->activeControlBlocks[i] != NULL) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void addActiveControl(Scene *s, ControlBlock *cb) {
+    addDebug(s->log, "test");
+    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
+        addDebug(s->log, "test");
+        if (s->activeControlBlocks[i] == NULL) {
+            s->activeControlBlocks[i] = cb;
+            addDebug(s->log, "test");
+            return;
+        }
+    }
+    addError(s->log, "too many active control blocks, cannot add new one");
+}
+
 void addStoryline(Scene *scene, StorylineData *storyline) {
     scene->storylines[scene->storylineCount] = storyline;
     scene->storylineCount++;
 }
 
-void controlThenCheck(Scene *s, Player *p) {
-    if (s->activeControlBlock == NULL) {
-        return;
-    }
-    ControlBlock *cb = s->activeControlBlock;
+void thenCheck(Scene *s, Player *p, ControlBlock *cb) {
     if (isMovingAndAtDestination(cb)) {
         addInfo(s->log, "mob at destination, control block proceeding");
         cb->progress++;
@@ -97,17 +117,30 @@ void controlThenCheck(Scene *s, Player *p) {
     }
 }
 
-void controlWhenCheck(Scene *s, Player *p) {
-    if (s->activeControlBlock != NULL) {
-        addDebug(s->log, "no control when check, active already set");
-        return;
+void controlThenCheckAllActive(Scene *s, Player *p) {
+    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
+        if (s->activeControlBlocks[i] != NULL) {
+            thenCheck(s, p, s->activeControlBlocks[i]);
+        }
     }
+}
+
+bool isAlreadyAdded(ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS], ControlBlock *controlBlock) {
+    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
+        if (controlBlocks[i] != NULL && areConditionsEqual(controlBlocks[i]->when, controlBlock->when)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void controlWhenCheck(Scene *s, Player *p) {
     for (int i = 0; i < s->controlBlockCount; i++) {
         ControlBlock *cb = s->controlBlocks[i];
-        if (areConditionsMet(cb, p)) {
-            s->activeControlBlock = cb;
-            addInfo(s->log, "set active control block %d, progress %d",
-                    i, s->activeControlBlock->progress);
+        if (areConditionsMet(cb, p) && !isAlreadyAdded(s->activeControlBlocks, cb)) {
+            addDebug(s->log, "ready to set");
+            addActiveControl(s, cb);
+            addInfo(s->log, "set active control block %d", i);
             return;
         }
     }
@@ -124,10 +157,13 @@ bool canTriggerFight(Scene *s, Player *p) {
 void checkControls(Scene *s, Player *p) {
     addDebug(s->log, "exploration -- check %d control blocks", s->controlBlockCount);
     controlWhenCheck(s, p);
-    controlThenCheck(s, p);
-    if (needsToRemoveActiveControlBlock(s->activeControlBlock)) {
-        s->activeControlBlock->progress = 0;
-        s->activeControlBlock = NULL;
+    controlThenCheckAllActive(s, p);
+    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
+        if (s->activeControlBlocks[i] != NULL &&
+                needsToRemoveActiveControlBlock(s->activeControlBlocks[i])) {
+            s->activeControlBlocks[i]->progress = 0;
+            s->activeControlBlocks[i] = NULL;
+        }
     }
 }
 

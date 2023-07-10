@@ -332,16 +332,18 @@ void evaluateMovement(Exploration *e, Player *p) {
     }
 }
 
-void drawExplorationControls(Player *player, ControlBlock *cb) {
-    if (cb != NULL && cb->progress < cb->thenCount) {
-        int p = cb->progress;
-        if (cb->then[p]->outcome == SPEAK && isSpeakingTo(player, cb->then[p]->target)) {
-            drawDialogBox(cb->then[p]->message);
+void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROLS]) {
+    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
+        if (cb[i] != NULL && cb[i]->progress < cb[i]->thenCount) {
+            int p = cb[i]->progress;
+            if (cb[i]->then[p]->outcome == SPEAK && isSpeakingTo(player, cb[i]->then[p]->target)) {
+                drawDialogBox(cb[i]->then[p]->message);
+            }
         }
     }
 }
 
-void drawExplorationView(Exploration *e, Player *p, ControlBlock *c) {
+void drawExplorationView(Exploration *e, Player *p, ControlBlock *c[MAX_ACTIVE_CONTROLS]) {
     addDebug(e->log, "exploration -- draw");
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();
@@ -391,11 +393,17 @@ void dialogEngaged(Exploration *exploration, Player *player, ControlBlock *contr
     }
 }
 
-void explorationSpaceKeyPressed(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
+void explorationSpaceKeyPressed(Exploration *exploration, Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
     addInfo(exploration->log, "exploration space key pressed");
-    if (player->engaged && isSpeakOutcome(controlBlock->then[controlBlock->progress])) {
-        dialogEngaged(exploration, player, controlBlock);
-    } else if (player->blockedBy != NULL) {
+    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
+        if (controlBlocks[i] != NULL
+                && player->engaged
+                && isSpeakOutcome(controlBlocks[i]->then[controlBlocks[i]->progress])) {
+            dialogEngaged(exploration, player, controlBlocks[i]);
+            return;
+        }
+    }
+    if (player->blockedBy != NULL) {
         engageWithMobile(player);
     }
 }
