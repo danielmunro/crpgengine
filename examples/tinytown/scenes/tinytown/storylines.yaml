@@ -13,6 +13,7 @@ storylines:
       - mob: vill1
         action: move_to
         position: 320,242
+        parallel: true
       - player: true
         action: move_to
         position: 287, 292

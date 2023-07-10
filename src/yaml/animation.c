@@ -9,7 +9,7 @@ typedef struct {
     char *frames;
     int frames_count;
     int rate;
-    int repeat;
+    bool repeat;
 } SliceData;
 
 typedef struct {
@@ -41,7 +41,7 @@ static const cyaml_schema_field_t slicesFieldSchema[] = {
                 "frames", CYAML_FLAG_POINTER, SliceData, frames, &framesEntry, 0, CYAML_UNLIMITED),
         CYAML_FIELD_INT(
                 "rate", CYAML_FLAG_OPTIONAL, SliceData, rate),
-        CYAML_FIELD_INT(
+        CYAML_FIELD_BOOL(
                 "repeat", CYAML_FLAG_OPTIONAL, SliceData, repeat),
         CYAML_FIELD_END
 };
