@@ -5,7 +5,6 @@ void loadAnimations(Log *log, const char *file, const char *indexDir, Animation 
     AnimationData *animation = loadAnimationYaml(file);
     char cwd[PATH_MAX] = "";
     getcwd(cwd, sizeof(cwd));
-    printf("%s\n", cwd);
     char filePath[MAX_FS_PATH_LENGTH] = "";
     sprintf(filePath, "%s/animations/%s", indexDir, animation->sprite->file);
     SpriteSheet *sp = createSpriteSheet(
