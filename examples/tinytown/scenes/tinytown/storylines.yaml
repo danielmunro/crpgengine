@@ -3,6 +3,9 @@ storylines:
       - player: true
         condition: not_has_story
         story: from_the_past
+      - player: true
+        condition: engaged
+        mob: vill1
     then:
       - mob: vill1
         action: speak
@@ -27,6 +30,9 @@ storylines:
       - player: true
         condition: has_story
         story: from_the_past
+      - player: true
+        condition: engaged
+        mob: vill1
     then:
       - mob: vill1
         action: speak
