@@ -62,15 +62,6 @@ bool isDungeon(Scene *s) {
     return s->type == SCENE_TYPE_DUNGEON;
 }
 
-bool hasActiveControls(Scene *s) {
-    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
-        if (s->activeControlBlocks[i] != NULL) {
-            return true;
-        }
-    }
-    return false;
-}
-
 void addActiveControl(Scene *s, ControlBlock *cb) {
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (s->activeControlBlocks[i] == NULL) {
