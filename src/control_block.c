@@ -21,6 +21,7 @@ typedef struct {
     int whenCount;
     int thenCount;
     int progress;
+    bool thensComplete[MAX_INSTRUCTIONS];
 } ControlBlock;
 
 ControlBlock *createControlBlock() {
@@ -28,6 +29,9 @@ ControlBlock *createControlBlock() {
     cb->whenCount = 0;
     cb->thenCount = 0;
     cb->progress = 0;
+    for (int i = 0; i < MAX_INSTRUCTIONS; i++) {
+        cb->thensComplete[i] = false;
+    }
     return cb;
 }
 
@@ -112,7 +116,7 @@ bool isMovingAndAtDestination(ControlBlock *cb) {
 }
 
 bool isControlBlockDone(ControlBlock *cb) {
-    return cb->progress > cb->thenCount;
+    return cb->thensComplete[cb->thenCount - 1];
 }
 
 bool isAddStoryOutcome(Then *then) {
