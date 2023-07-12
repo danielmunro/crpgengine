@@ -82,9 +82,6 @@ void thenCheck(Scene *s, Player *p, ControlBlock *cb) {
         addInfo(s->log, "mob at destination, control block proceeding");
         cb->progress++;
     }
-    if(isControlBlockDone(cb)) {
-        return;
-    }
     if (isAddStoryOutcome(cb->then[cb->progress])) {
         addStory(p, cb->then[cb->progress]->story);
         cb->progress++;
@@ -115,7 +112,7 @@ void controlThenCheckAllActive(Scene *s, Player *p) {
 
 bool isAlreadyAdded(ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS], ControlBlock *controlBlock) {
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
-        if (controlBlocks[i] != NULL && areConditionsEqual(controlBlocks[i]->when, controlBlock->when)) {
+        if (controlBlocks[i] == controlBlock) {
             return true;
         }
     }

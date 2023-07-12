@@ -13,19 +13,29 @@ storylines:
       - mob: vill1
         action: speak
         message: "You look trustworthy. Please keep my amulet safe, adventurer. In return, it will help you in a time of need."
+      - player: true
+        action: add_story
+        story: from_the_past
       - mob: vill1
         action: move_to
         position: 320,242
-        parallel: true
+      - mob: vill1
+        action: direction
+        direction: down
+  - when:
+      - player: true
+        condition: has_story
+        story: from_the_past
+      - player: true
+        condition: not_has_story
+        story: from_the_past:moved_1
+    then:
       - player: true
         action: move_to
         position: 287, 292
       - player: true
         action: add_story
-        story: from_the_past
-      - mob: vill1
-        action: direction
-        direction: down
+        story: from_the_past:moved_1
   - when:
       - player: true
         condition: has_story
