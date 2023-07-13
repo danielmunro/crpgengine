@@ -75,6 +75,33 @@ void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, co
             scene->encounters->beastEncountersCount);
 }
 
+void loadStorylines(Scene *s, const char *indexDir) {
+    char storylinesDirectory[MAX_FS_PATH_LENGTH];
+    sprintf(storylinesDirectory, "%s/scenes/%s/storylines", indexDir, s->name);
+    addDebug(s->log, "storylines directory :: %s", storylinesDirectory);
+    char *storylineFiles[MAX_MOBILES];
+    if (access(storylinesDirectory, F_OK) != 0) {
+        addInfo(s->log, "scene has no storylines :: %s", s->name);
+        return;
+    }
+    int fileCount = getFilesInDirectory(storylinesDirectory, storylineFiles);
+    addDebug(s->log, "storyline files found :: %d", fileCount);
+    int count = 0;
+    for (int i = 0; i < fileCount; i++) {
+        char storylinesFilePath[MAX_FS_PATH_LENGTH];
+        sprintf(storylinesFilePath, "%s/scenes/%s/storylines/%s", indexDir, s->name, storylineFiles[i]);
+        addDebug(s->log, "storyline file path :: %s", storylinesFilePath);
+        StorylinesData *storylines = loadStorylinesYaml(storylinesFilePath);
+        if (storylines != NULL) {
+            for (int j = 0; j < storylines->storylines_count; j++) {
+                addStoryline(s, &storylines->storylines[j]);
+                count++;
+            }
+        }
+    }
+    addInfo(s->log, "added storylines to game :: %d", count);
+}
+
 Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sceneName, int showCollisions) {
     addInfo(log, "create scene '%s'", sceneName);
     char sceneFilePath[MAX_FS_PATH_LENGTH];
@@ -88,14 +115,7 @@ Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sce
     scene->music = &sceneData->music[0];
 
     // storylines
-    char storylinesFilePath[MAX_FS_PATH_LENGTH];
-    sprintf(storylinesFilePath, "%s/scenes/%s/storylines.yaml", indexDir, sceneName);
-    StorylinesData *storylines = loadStorylinesYaml(storylinesFilePath);
-    if (storylines != NULL) {
-        for (int i = 0; i < storylines->storylines_count; i++) {
-            addStoryline(scene, &storylines->storylines[i]);
-        }
-    }
+    loadStorylines(scene, indexDir);
 
     // create scene reader for reading tiled xml
     char sceneDir[MAX_FS_PATH_LENGTH];
