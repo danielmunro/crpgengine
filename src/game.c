@@ -124,6 +124,7 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
 void loadScenes(Game *g, RuntimeArgs *r, char *scenes[MAX_SCENES]) {
     addDebug(g->log, "attempting to load scenes");
     for (int i = 0; i < g->sceneCount; i++) {
+        addDebug(g->log, "starting to load scene :: %s", scenes[i]);
         g->scenes[i] = loadScene(g->log, g->beastiary, r->indexDir, scenes[i], r->showCollisions);
         addDebug(g->log, "scene loaded :: %s (%d)", g->scenes[i]->name, i);
     }
@@ -294,7 +295,18 @@ void loadScenesFromFiles(Game *g, RuntimeArgs *r) {
     char *scenes[MAX_SCENES];
     char sceneDir[MAX_FS_PATH_LENGTH];
     sprintf(sceneDir, "%s/scenes", r->indexDir);
-    g->sceneCount = getFilesInDirectory(sceneDir, scenes);
+    addDebug(g->log, "get scene directories :: %s", sceneDir);
+    int topLevelCount = getFilesInDirectory(sceneDir, scenes);
+    int subCount = 0;
+    for (int i = 0; i < topLevelCount; i++) {
+        char subSceneDir[MAX_FS_PATH_LENGTH];
+        sprintf(subSceneDir, "%s/%s/scenes", sceneDir, scenes[i]);
+        if (access(subSceneDir, F_OK) == 0) {
+            addDebug(g->log, "get files in subscene :: %s", subSceneDir);
+            subCount += getFilesInDirectory(subSceneDir, scenes);
+        }
+    }
+    g->sceneCount = topLevelCount + subCount;
     loadScenes(g, r, scenes);
 }
 

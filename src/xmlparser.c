@@ -40,13 +40,13 @@ static void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *i
     }
 }
 
-void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename) {
-    addDebug(e->log, "parsing xml tilemap at %s/%s", indexDir, filename);
+void parseTilemapXml(Exploration *e, const char *sceneDir, const char *filename) {
+    addDebug(e->log, "parsing xml tilemap at %s/%s", sceneDir, filename);
     Tilemap *tilemap = malloc(sizeof(Tilemap));
     e->tilemap = tilemap;
     int ret;
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/%s", indexDir, filename);
+    sprintf(filePath, "%s/%s", sceneDir, filename);
     TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(e, filePath);
     if (tilemapXmlReader->reader == NULL) {
         addError(e->log, "unable to open file: %s", filename);
@@ -54,7 +54,7 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
     }
     ret = xmlTextReaderRead(tilemapXmlReader->reader);
     while (ret == 1) {
-        processTilemapNode(tilemapXmlReader, indexDir);
+        processTilemapNode(tilemapXmlReader, sceneDir);
         ret = xmlTextReaderRead(tilemapXmlReader->reader);
     }
     addDebug(e->log, "found %d objects", tilemapXmlReader->exploration->objectCount);
@@ -87,7 +87,7 @@ void parseSceneLayer(Exploration *e, char *rawData) {
     }
 }
 
-void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
+void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *mapDir) {
     const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
     static int dataOpen = 0, exitOpen = 0, layerOpen = 0, objectType;
     char *strName = (char *) name;
@@ -95,7 +95,7 @@ void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) 
     addDebug(log, "process scene node -- %s", strName);
     if (strcmp(strName, "tileset") == 0) {
         char *source = getStringAttribute(tilemapXmlReader->reader, "source");
-        parseTilemapXml(tilemapXmlReader->exploration, indexDir, source);
+        parseTilemapXml(tilemapXmlReader->exploration, mapDir, source);
     } else if (strcmp(strName, "layer") == 0) {
         if (layerOpen == 1) {
             layerOpen = 0;
@@ -165,7 +165,7 @@ void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) 
     }
 }
 
-void parseSceneXml(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
+void parseSceneXml(TilemapXmlReader *tilemapXmlReader, const char *mapDir) {
     int ret;
     if (tilemapXmlReader->reader == NULL) {
         addError(tilemapXmlReader->exploration->log, "unable to find file for scene");
@@ -173,7 +173,7 @@ void parseSceneXml(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
     }
     ret = xmlTextReaderRead(tilemapXmlReader->reader);
     while (ret == 1) {
-        processSceneNode(tilemapXmlReader, indexDir);
+        processSceneNode(tilemapXmlReader, mapDir);
         ret = xmlTextReaderRead(tilemapXmlReader->reader);
     }
     xmlFreeTextReader(tilemapXmlReader->reader);

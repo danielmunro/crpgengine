@@ -69,7 +69,7 @@ SceneData *loadSceneYaml(const char *indexDir) {
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &sceneTopSchema, (cyaml_data_t **) &scene, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing scene yaml\n");
+        fprintf(stderr, "error parsing scene yaml :: %s\n", filePath);
     }
     return scene;
 }
@@ -79,7 +79,7 @@ MobileData *loadMobYaml(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &mobileTopSchema, (cyaml_data_t **) &mob, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing mob yaml\n");
+        fprintf(stderr, "error parsing mob yaml :: %s\n", filePath);
     }
     return mob;
 }

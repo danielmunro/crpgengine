@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <sys/stat.h>
 
 void loadAnimations(Log *log, const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
     addInfo(log, "load animations file: %s", file);
@@ -25,9 +26,9 @@ void loadAnimations(Log *log, const char *file, const char *indexDir, Animation 
     addDebug(log, "%d animations loaded", animation->slices_count);
 }
 
-void loadMobiles(Scene *scene, const char *indexDir) {
+void loadMobiles(Scene *scene, const char *indexDir, const char *sceneDir) {
     char directory[MAX_FS_PATH_LENGTH];
-    sprintf(directory, "%s/scenes/%s/mobiles", indexDir, scene->name);
+    sprintf(directory, "%s/mobiles", sceneDir);
     addInfo(scene->log, "load mobiles from %s", directory);
     if (!FileExists(directory)) {
         addInfo(scene->log, "mobiles directory does not exist, skipping -- %s", directory);
@@ -36,9 +37,9 @@ void loadMobiles(Scene *scene, const char *indexDir) {
     char *mobFiles[MAX_MOBILES];
     int files = getFilesInDirectory(directory, mobFiles);
     for (int i = 0; i < files; i++) {
-        char filePath[MAX_FS_PATH_LENGTH];
-        sprintf(filePath, "%s/%s", directory, mobFiles[i]);
-        MobileData *mobData = loadMobYaml(filePath);
+//        char filePath[MAX_FS_PATH_LENGTH];
+//        sprintf(filePath, "%s/%s", directory, mobFiles[i]);
+        MobileData *mobData = loadMobYaml(mobFiles[i]);
         Animation *animations[MAX_ANIMATIONS];
         char animationFilePath[MAX_FS_PATH_LENGTH];
         sprintf(animationFilePath, "%s/%s", indexDir, mobData->animations);
@@ -75,23 +76,17 @@ void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, co
             scene->encounters->beastEncountersCount);
 }
 
-void loadStorylines(Scene *s, const char *indexDir) {
+void loadStorylines(Scene *s, const char *sceneDir) {
     char storylinesDirectory[MAX_FS_PATH_LENGTH];
-    sprintf(storylinesDirectory, "%s/scenes/%s/storylines", indexDir, s->name);
-    addDebug(s->log, "storylines directory :: %s", storylinesDirectory);
+    sprintf(storylinesDirectory, "%s/storylines", sceneDir);
+    addInfo(s->log, "storylines directory :: %s", storylinesDirectory);
     char *storylineFiles[MAX_MOBILES];
-    if (access(storylinesDirectory, F_OK) != 0) {
-        addInfo(s->log, "scene has no storylines :: %s", s->name);
-        return;
-    }
     int fileCount = getFilesInDirectory(storylinesDirectory, storylineFiles);
     addDebug(s->log, "storyline files found :: %d", fileCount);
     int count = 0;
     for (int i = 0; i < fileCount; i++) {
-        char storylinesFilePath[MAX_FS_PATH_LENGTH];
-        sprintf(storylinesFilePath, "%s/scenes/%s/storylines/%s", indexDir, s->name, storylineFiles[i]);
-        addDebug(s->log, "storyline file path :: %s", storylinesFilePath);
-        StorylinesData *storylines = loadStorylinesYaml(storylinesFilePath);
+        addDebug(s->log, "storyline file path :: %s", storylineFiles[i]);
+        StorylinesData *storylines = loadStorylinesYaml(storylineFiles[i]);
         if (storylines != NULL) {
             for (int j = 0; j < storylines->storylines_count; j++) {
                 addStoryline(s, &storylines->storylines[j]);
@@ -102,39 +97,38 @@ void loadStorylines(Scene *s, const char *indexDir) {
     addInfo(s->log, "added storylines to game :: %d", count);
 }
 
-Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sceneName, int showCollisions) {
-    addInfo(log, "create scene '%s'", sceneName);
-    char sceneFilePath[MAX_FS_PATH_LENGTH];
-    sprintf(sceneFilePath, "%s/scenes/%s", indexDir, sceneName);
-    SceneData *sceneData = loadSceneYaml(sceneFilePath);
+Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sceneDir, int showCollisions) {
+    addInfo(log, "load scene :: %s, %s", indexDir, sceneDir);
+    SceneData *sceneData = loadSceneYaml(sceneDir);
     Scene *scene = createScene(log, showCollisions);
 
     // scene properties
-    scene->name = &sceneName[0];
+    scene->name = sceneDir;
     setSceneTypeFromString(scene, sceneData->type);
     scene->music = &sceneData->music[0];
 
     // storylines
-    loadStorylines(scene, indexDir);
+    loadStorylines(scene, sceneDir);
 
     // create scene reader for reading tiled xml
-    char sceneDir[MAX_FS_PATH_LENGTH];
-    sprintf(sceneDir, "%s/scenes/%s/map", indexDir, sceneName);
+    char mapDir[MAX_FS_PATH_LENGTH];
+    sprintf(mapDir, "%s/map", sceneDir);
     char tilemapFilePath[MAX_FS_PATH_LENGTH];
-    sprintf(tilemapFilePath, "%s/tilemap.tmx", sceneDir);
+    sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDir);
+    addInfo(log, "map dir :: %s", mapDir);
     TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(scene->exploration, tilemapFilePath);
-    addDebug(scene->log, "create scene '%s' tilemap", sceneName);
-    parseSceneXml(tilemapXmlReader, sceneDir);
+    addDebug(scene->log, "create scene '%s' tilemap", sceneDir);
+    parseSceneXml(tilemapXmlReader, mapDir);
 
     // load mobiles
-    loadMobiles(scene, indexDir);
+    loadMobiles(scene, indexDir, sceneDir);
 
     if (sceneData->encounters != NULL) {
         loadEncounters(beastiary, scene, sceneData->encounters, indexDir);
     }
 
     free(tilemapXmlReader);
-    addDebug(scene->log, "done parsing scene %s", sceneName);
+    addDebug(scene->log, "done parsing scene %s", sceneDir);
 
     return scene;
 }

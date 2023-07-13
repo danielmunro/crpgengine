@@ -25,7 +25,8 @@ int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
     struct dirent *de;
     DIR *dr = opendir(dir);
     if (dr == NULL) {
-        fprintf(stderr, "Could not open scene index directory");
+        fprintf(stderr, "Could not open dir :: %s\n", dir);
+        return 0;
     }
     int i = 0;
     while (true) {
@@ -36,8 +37,8 @@ int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
         if (strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0) {
             continue;
         }
-        scenes[i] = (char *) malloc(strlen(de->d_name));
-        strcpy(scenes[i], de->d_name);
+        scenes[i] = (char *) malloc(strlen(dir) + de->d_namlen);
+        sprintf(scenes[i], "%s/%s", dir, de->d_name);
         i++;
     }
     closedir(dr);
