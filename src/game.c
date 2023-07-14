@@ -3,40 +3,20 @@ typedef struct {
     int sceneCount;
     Scene *currentScene;
     Player *player;
-    Animation *animations[MAX_ANIMATIONS_IN_GAME];
+    AnimationManager *animationManager;
     AudioManager *audioManager;
-    int animIndex;
     Beastiary *beastiary;
     Log *log;
     Menu *menus[MAX_MENUS];
     int menuCount;
 } Game;
 
-void addAnimation(Game *g, Animation *a) {
-    g->animations[g->animIndex] = a;
-    g->animIndex++;
-}
-
-void addAllAnimations(Game *g, Animation *animations[MAX_ANIMATIONS]) {
-    for (int i = 0; i < MAX_ANIMATIONS; i++) {
-        if (animations[i] == NULL) {
-            break;
-        }
-        addAnimation(g, animations[i]);
-    }
-}
-
-void clearAnimations(Game *g) {
-    memset(g->animations, 0, sizeof(g->animations));
-    g->animIndex = 0;
-}
-
 void setScene(Game *g, Scene *scene, char *entranceName) {
     addDebug(g->log, "setting scene to '%s'", scene->name);
     g->currentScene = scene;
-    clearAnimations(g);
+    clearAnimations(g->animationManager);
     Mobile *mob = getPartyLeader(g->player);
-    addAllAnimations(g, mob->animations);
+    addAllAnimations(g->animationManager, mob->animations);
     Entrance *entrance = findEntrance(scene->exploration, entranceName);
     mob->position.x = entrance->area.x + (entrance->area.width / 2);
     mob->position.y = entrance->area.y + (entrance->area.height / 2);
@@ -148,15 +128,6 @@ void loadBeastiary(Game *g, const char *indexDir) {
     }
 }
 
-void processExplorationAnimations(Game *g) {
-    addDebug(g->log, "exploration -- process animations");
-    for (int i = 0; i < g->animIndex; i++) {
-        if (g->animations[i] != NULL && g->animations[i]->isPlaying) {
-            incrementAnimFrame(g->animations[i]);
-        }
-    }
-}
-
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
     if (entrance == NULL) {
         addWarning(game->log, "no entrance found for '%s' scene", scene->name);
@@ -254,7 +225,7 @@ void doExplorationLoop(Game *g) {
     checkExplorationInput(g);
     drawExplorationView(g->currentScene->exploration, g->player, g->currentScene->activeControlBlocks);
     doMobileMovementUpdates(g->currentScene->exploration);
-    processExplorationAnimations(g);
+    processExplorationAnimations(g->animationManager);
     evaluateMovement(g->currentScene->exploration, g->player);
     evaluateExits(g);
     checkControls(g->currentScene, g->player);
@@ -310,9 +281,9 @@ void initializeBeasts(Game *g, const char *indexDir) {
 
 Game *createGame(RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
-    g->animIndex = 0;
     g->currentScene = NULL;
     initializeLog(g, r->logLevel);
+    g->animationManager = createAnimationManager(g->log);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     g->player = loadPlayer(g->log, r->indexDir);
     initializeBeasts(g, r->indexDir);
@@ -320,5 +291,8 @@ Game *createGame(RuntimeArgs *r) {
     setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);
     g->menuCount = getMenuList(g->menus);
     addDebug(g->log, "done creating game object");
+    if (r->exit) {
+        exit(0);
+    }
     return g;
 }

@@ -217,7 +217,7 @@ typedef enum {
 #include "window.c"
 #include "ui.c"
 #include "audio.c"
-#include "sprite.c"
+#include "animation.c"
 #include "attributes.c"
 #include "item.c"
 #include "beastiary.c"

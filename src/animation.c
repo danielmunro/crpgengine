@@ -16,7 +16,62 @@ typedef struct {
     bool isPlaying;
 } Animation;
 
-SpriteSheet *createSpriteSheet(char *filename, int width, int height) {
+typedef struct {
+    Animation *library[MAX_ANIMATIONS_IN_GAME];
+    int libraryCount;
+    Animation *animations[MAX_ANIMATIONS];
+    int animationCount;
+    Log *log;
+} AnimationManager;
+
+AnimationManager *createAnimationManager(Log *log) {
+    AnimationManager *animationManager = malloc(sizeof(AnimationManager));
+    animationManager->animationCount = 0;
+    animationManager->log = log;
+    return animationManager;
+}
+
+void incrementAnimationFrame(Animation *a) {
+    a->frameRateCount++;
+    if (a->frameRateCount >= (TARGET_FRAMERATE / a->frameRate)) {
+        a->frameRateCount = 0;
+        a->currentFrame++;
+        if (a->currentFrame > a->lastFrame) {
+            a->currentFrame = a->firstFrame;
+        }
+    }
+}
+
+void processExplorationAnimations(AnimationManager *am) {
+    addDebug(am->log, "process animations");
+    for (int i = 0; i < am->animationCount; i++) {
+        if (am->animations[i]->isPlaying) {
+            incrementAnimationFrame(am->animations[i]);
+        }
+    }
+}
+
+
+void addAnimation(AnimationManager *am, Animation *a) {
+    am->animations[am->animationCount] = a;
+    am->animationCount++;
+}
+
+void addAllAnimations(AnimationManager *am, Animation *animations[MAX_ANIMATIONS]) {
+    for (int i = 0; i < MAX_ANIMATIONS; i++) {
+        if (animations[i] == NULL) {
+            break;
+        }
+        addAnimation(am, animations[i]);
+    }
+}
+
+void clearAnimations(AnimationManager *am) {
+    memset(am->animations, 0, sizeof(am->animations));
+    am->animationCount = 0;
+}
+
+SpriteSheet *createSpriteSheet(const char *filename, int width, int height) {
     Texture2D tex = LoadTexture(filename);
     SpriteSheet *sp = malloc(sizeof(SpriteSheet));
     sp->source = tex;
@@ -61,17 +116,6 @@ void drawAnimation(Animation *a, Vector2 position) {
             position,
             WHITE
     );
-}
-
-void incrementAnimFrame(Animation *a) {
-    a->frameRateCount++;
-    if (a->frameRateCount >= (TARGET_FRAMERATE / a->frameRate)) {
-        a->frameRateCount = 0;
-        a->currentFrame++;
-        if (a->currentFrame > a->lastFrame) {
-            a->currentFrame = a->firstFrame;
-        }
-    }
 }
 
 Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], int direction) {

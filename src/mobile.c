@@ -98,6 +98,6 @@ bool moveMob(Mobile *mob, Vector2 destination) {
         else mob->direction = UP;
         mob->moving[mob->direction] = true;
     }
-    incrementAnimFrame(animation);
+    incrementAnimationFrame(animation);
     return moved;
 }

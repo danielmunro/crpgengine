@@ -1,12 +1,12 @@
 void dumpGame(Game *g) {
     printf("\nanimations\n==============\n");
-    for (int i = 0; i < g->animIndex; i++) {
+    for (int i = 0; i < g->animationManager->libraryCount; i++) {
         printf("%d %d %d %d %d\n",
-               g->animations[i]->type,
-               g->animations[i]->isPlaying,
-               g->animations[i]->currentFrame,
-               g->animations[i]->frameRate,
-               g->animations[i]->frameRateCount);
+               g->animationManager->library[i]->type,
+               g->animationManager->library[i]->isPlaying,
+               g->animationManager->library[i]->currentFrame,
+               g->animationManager->library[i]->frameRate,
+               g->animationManager->library[i]->frameRateCount);
     }
     for (int i = 0; i < g->sceneCount; i++) {
         printf("\nscene %s objects\n===============\n", g->scenes[i]->name);
