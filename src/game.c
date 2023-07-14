@@ -225,7 +225,7 @@ void doExplorationLoop(Game *g) {
     checkExplorationInput(g);
     drawExplorationView(g->currentScene->exploration, g->player, g->currentScene->activeControlBlocks);
     doMobileMovementUpdates(g->currentScene->exploration);
-    processExplorationAnimations(g->animationManager);
+    processAnimations(g->animationManager);
     evaluateMovement(g->currentScene->exploration, g->player);
     evaluateExits(g);
     checkControls(g->currentScene, g->player);

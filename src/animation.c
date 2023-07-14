@@ -42,7 +42,7 @@ void incrementAnimationFrame(Animation *a) {
     }
 }
 
-void processExplorationAnimations(AnimationManager *am) {
+void processAnimations(AnimationManager *am) {
     addDebug(am->log, "process animations");
     for (int i = 0; i < am->animationCount; i++) {
         if (am->animations[i]->isPlaying) {
