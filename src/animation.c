@@ -51,7 +51,6 @@ void processExplorationAnimations(AnimationManager *am) {
     }
 }
 
-
 void addAnimation(AnimationManager *am, Animation *a) {
     am->animations[am->animationCount] = a;
     am->animationCount++;
