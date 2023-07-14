@@ -97,7 +97,7 @@ void loadStorylines(Scene *s, const char *sceneDir) {
     addInfo(s->log, "added storylines to game :: %d", count);
 }
 
-Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sceneDir, int showCollisions) {
+Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, const char *sceneDir, int showCollisions) {
     addInfo(log, "load scene :: %s, %s", indexDir, sceneDir);
     SceneData *sceneData = loadSceneYaml(sceneDir);
     Scene *scene = createScene(log, showCollisions);
@@ -106,7 +106,7 @@ Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sce
     scene->name = sceneDir;
     setSceneTypeFromString(scene, sceneData->type);
     scene->music = &sceneData->music[0];
-
+    
     // storylines
     loadStorylines(scene, sceneDir);
 

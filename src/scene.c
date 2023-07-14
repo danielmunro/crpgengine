@@ -5,7 +5,7 @@ typedef struct {
 
 typedef struct {
     int type;
-    char *name;
+    const char *name;
     char *music;
     StorylineData *storylines[MAX_STORIES];
     int storylineCount;

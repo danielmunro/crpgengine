@@ -62,12 +62,17 @@ AnimationData *loadAnimationYaml(const char *filePath) {
     return animation;
 }
 
-SceneData *loadSceneYaml(const char *indexDir) {
+SceneData *loadSceneYaml(const char *sceneDir) {
+    printf("index 1: %s\n", sceneDir);
     SceneData *scene = malloc(sizeof(SceneData));
+    printf("index 2: %s\n", sceneDir);
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/scene.yaml", indexDir);
+    printf("index 3: %s\n", sceneDir);
+    sprintf(filePath, "%s/scene.yaml", sceneDir);
+    printf("index 4: %s\n", sceneDir);
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &sceneTopSchema, (cyaml_data_t **) &scene, NULL);
+    printf("index 5: %s\n", sceneDir);
     if (err != CYAML_OK) {
         fprintf(stderr, "error parsing scene yaml :: %s\n", filePath);
     }

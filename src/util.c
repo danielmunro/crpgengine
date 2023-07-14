@@ -39,6 +39,7 @@ int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
         }
         scenes[i] = (char *) malloc(strlen(dir) + de->d_namlen);
         sprintf(scenes[i], "%s/%s", dir, de->d_name);
+        printf("debug scene name :: %s\n", scenes[i]);
         i++;
     }
     closedir(dr);

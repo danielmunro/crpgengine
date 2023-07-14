@@ -7,7 +7,10 @@ void validateExits(Game *g) {
             int found = false;
             Exit *exit = g->scenes[i]->exploration->exits[j];
             if (strcmp(exit->to, "") == 0) {
-                addWarning(g->log, "exit defined without destination in '%s' scene", g->scenes[i]->name);
+                addWarning(
+                        g->log,
+                        "exit defined without destination in scene :: %s",
+                        g->scenes[i]->name);
                 continue;
             }
             for (int q = 0; q < g->sceneCount; q++) {

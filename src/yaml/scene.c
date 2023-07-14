@@ -39,6 +39,13 @@ typedef struct {
     EncountersData *encounters;
 } SceneData;
 
+SceneData *createSceneData() {
+    SceneData *sceneData = malloc(sizeof(SceneData));
+    sceneData->type = "";
+    sceneData->music = "";
+    return sceneData;
+}
+
 //static const cyaml_schema_field_t whenFieldSchema[] = {
 //        CYAML_FIELD_STRING_PTR(
 //                "player", CYAML_FLAG_POINTER, WhenData, player, 0, CYAML_UNLIMITED),
