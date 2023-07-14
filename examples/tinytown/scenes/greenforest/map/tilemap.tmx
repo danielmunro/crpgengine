@@ -36,7 +36,7 @@
 </data>
  </layer>
  <objectgroup id="3" name="warps">
-  <object id="1" name="from_tinytown" type="entrance" x="304.43" y="317.304" width="159.788" height="52.2529">
+  <object id="1" name="from_tinytown" type="entrance" x="304.43" y="299.129" width="159.788" height="52.2529">
    <properties>
     <property name="direction" value="up"/>
    </properties>
