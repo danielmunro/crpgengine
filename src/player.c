@@ -65,7 +65,7 @@ bool hasStory(Player *p, const char *story) {
     return false;
 }
 
-void checkMoveKey(Player *p, int key, Direction direction) {
+void checkMoveKey(Player *p, int key, AnimationType direction) {
     if (IsKeyDown(key) && !p->engaged) {
         getPartyLeader(p)->moving[direction] = true;
         Mobile *mob = getPartyLeader(p);

@@ -15,7 +15,7 @@ void loadAnimations(Log *log, const char *file, const char *indexDir, Animation 
         SliceData *s = &animation->slices[i];
         animations[i] = createAnimation(
                 sp,
-                getAnimIdFromName(s->name),
+                getAnimationTypeFromName(s->name),
                 s->frames[0],
                 s->frames[1],
                 s->rate,

@@ -130,12 +130,11 @@ typedef enum {
     DOWN,
     LEFT,
     RIGHT
-} Direction;
-const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_RIGHT, KEY_LEFT};
-const int DIRECTIONS[] = {UP, DOWN, RIGHT, LEFT};
+} AnimationType;
+const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT};
+const AnimationType DIRECTIONS[] = {UP, DOWN, LEFT, RIGHT};
 #define DIRECTION_COUNT sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0])
-
-Direction getOppositeDirection(Direction direction) {
+AnimationType getOppositeDirection(AnimationType direction) {
     if (direction == UP) {
         return DOWN;
     } else if (direction == DOWN) {
@@ -147,6 +146,14 @@ Direction getOppositeDirection(Direction direction) {
     }
     return DOWN;
 }
+const AnimationType ANIMATION_TYPES[] = {UP, DOWN, LEFT, RIGHT};
+const char *AnimationTypeStrings[] = {
+        "up",
+        "down",
+        "left",
+        "right",
+};
+#define ANIMATION_TYPE_COUNT sizeof(AnimationTypeStrings) / sizeof(AnimationTypeStrings[0])
 
 typedef enum {
     EXIT = 1,

@@ -86,17 +86,12 @@ Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], int direction) {
     return NULL;
 }
 
-int getAnimIdFromName(char *name) {
-    if (strcmp(name, "up") == 0) {
-        return UP;
-    } else if (strcmp(name, "down") == 0) {
-        return DOWN;
-    } else if (strcmp(name, "left") == 0) {
-        return LEFT;
-    } else if (strcmp(name, "right") == 0) {
-        return RIGHT;
-    } else {
-        printf("no animation id for name: %s\n", name);
-        exit(1);
+AnimationType getAnimationTypeFromName(const char *name) {
+    for (int i = 0; i < ANIMATION_TYPE_COUNT; i++) {
+        if (strcmp(AnimationTypeStrings[i], name) == 0) {
+            return ANIMATION_TYPES[i];
+        }
     }
+    printf("no animation id for name: %s\n", name);
+    exit(1);
 }

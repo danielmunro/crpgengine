@@ -12,7 +12,7 @@ typedef struct {
 typedef struct {
     char *name;
     Rectangle area;
-    Direction direction;
+    AnimationType direction;
 } Entrance;
 
 typedef struct {
@@ -300,7 +300,7 @@ int atExit(Exploration *e, Player *p) {
     return -1;
 }
 
-void tryToMove(Exploration *e, Player *p, Direction direction, Vector2 pos) {
+void tryToMove(Exploration *e, Player *p, AnimationType direction, Vector2 pos) {
     Rectangle rect = {
             pos.x,
             pos.y + MOB_COLLISION_HEIGHT,
