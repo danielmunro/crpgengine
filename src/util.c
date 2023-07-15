@@ -21,7 +21,7 @@ RectangleD fromRectangle(Rectangle rect) {
     };
 }
 
-int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
+int getFilesInDirectory(const char *dir, char *files[MAX_FILES]) {
     struct dirent *de;
     DIR *dr = opendir(dir);
     if (dr == NULL) {
@@ -36,8 +36,8 @@ int getFilesInDirectory(const char *dir, char *scenes[MAX_SCENES]) {
         if (strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0) {
             continue;
         }
-        scenes[i] = (char *) malloc(strlen(de->d_name));
-        strcpy(scenes[i], de->d_name);
+        files[i] = (char *) malloc(strlen(de->d_name));
+        strcpy(files[i], de->d_name);
         i++;
     }
     closedir(dr);
@@ -132,4 +132,10 @@ float normalize(float a, float b) {
     if ((int) a > (int) b) return -1;
     if ((int) a < (int) b) return 1;
     return 0;
+}
+
+const char *getFilenameExt(const char *filename) {
+    const char *dot = strrchr(filename, '.');
+    if(!dot || dot == filename) return "";
+    return dot + 1;
 }

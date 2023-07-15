@@ -5,8 +5,9 @@ typedef struct {
 } SpriteSheet;
 
 typedef struct {
+    const char *name;
+    AnimationType type;
     SpriteSheet *spriteSheet;
-    int type;
     int firstFrame;
     int lastFrame;
     int currentFrame;
@@ -80,13 +81,15 @@ SpriteSheet *createSpriteSheet(const char *filename, int width, int height) {
 }
 
 Animation *createAnimation(
+        const char *name,
+        AnimationType type,
         SpriteSheet *spriteSheet,
-        int type,
         int firstFrame,
         int lastFrame,
         int frameRate,
         int repeat) {
     Animation *a = malloc(sizeof(Animation));
+    a->name = name;
     a->type = type;
     a->spriteSheet = spriteSheet;
     a->firstFrame = firstFrame;

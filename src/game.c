@@ -269,6 +269,20 @@ void loadScenesFromFiles(Game *g, RuntimeArgs *r) {
     loadScenes(g, r, scenes);
 }
 
+void loadAllAnimations(AnimationManager *am, const char *indexDir) {
+    char animationsDir[MAX_FS_PATH_LENGTH / 2];
+    sprintf(animationsDir, "%s/animations", indexDir);
+    char *files[MAX_FILES];
+    int count = getFilesInDirectory(animationsDir, files);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(getFilenameExt(files[i]), "yaml") == 0) {
+            char animationFile[MAX_FS_PATH_LENGTH];
+            sprintf(animationFile, "%s/%s", animationsDir, files[i]);
+            loadAnimations(am, animationFile, indexDir);
+        }
+    }
+}
+
 void initializeLog(Game *g, LogLevel logLevel) {
     g->log = createLog(logLevel);
     addInfo(g->log, "log level set to %s", getLogLevelString(g->log->level));
@@ -284,6 +298,7 @@ Game *createGame(RuntimeArgs *r) {
     g->currentScene = NULL;
     initializeLog(g, r->logLevel);
     g->animationManager = createAnimationManager(g->log);
+    loadAllAnimations(g->animationManager, r->indexDir);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     g->player = loadPlayer(g->log, r->indexDir);
     initializeBeasts(g, r->indexDir);

@@ -1,7 +1,7 @@
 #include <unistd.h>
 
-void loadAnimations(Log *log, const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
-    addInfo(log, "load animations file: %s", file);
+void loadAnimations(AnimationManager *am, const char *file, const char *indexDir) {
+    addInfo(am->log, "load animations file: %s", file);
     AnimationData *animation = loadAnimationYaml(file);
     char cwd[PATH_MAX] = "";
     getcwd(cwd, sizeof(cwd));
@@ -13,16 +13,18 @@ void loadAnimations(Log *log, const char *file, const char *indexDir, Animation 
             animation->sprite->size[1]);
     for (int i = 0; i < animation->slices_count; i++) {
         SliceData *s = &animation->slices[i];
-        animations[i] = createAnimation(
-                sp,
+        am->library[i] = createAnimation(
+                animation->name,
                 getAnimationTypeFromName(s->name),
+                sp,
                 s->frames[0],
                 s->frames[1],
                 s->rate,
                 s->repeat
         );
     }
-    addDebug(log, "%d animations loaded", animation->slices_count);
+    am->libraryCount = animation->slices_count;
+    addDebug(am->log, "%d animations loaded", animation->slices_count);
 }
 
 void loadMobiles(Scene *scene, const char *indexDir) {
@@ -42,7 +44,7 @@ void loadMobiles(Scene *scene, const char *indexDir) {
         Animation *animations[MAX_ANIMATIONS];
         char animationFilePath[MAX_FS_PATH_LENGTH];
         sprintf(animationFilePath, "%s/%s", indexDir, mobData->animations);
-        loadAnimations(scene->log, animationFilePath, indexDir, animations);
+//        loadAnimations(scene->log, animationFilePath, indexDir, animations);
         Mobile *mob = createMobileFromData(mobData, animations);
         addMobile(scene->exploration, mob);
     }
@@ -145,7 +147,7 @@ Player *loadPlayer(Log *log, char *indexDir) {
     Animation *animations[MAX_ANIMATIONS];
     char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/%s", indexDir, playerYaml->animations);
-    loadAnimations(log, filePath, indexDir, animations);
+//    loadAnimations(log, filePath, indexDir, animations);
     Mobile *mobiles[MAX_PARTY_SIZE] = {
             createMobile(
                     "player",
