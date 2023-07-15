@@ -104,7 +104,13 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
 void loadScenes(Game *g, RuntimeArgs *r, char *scenes[MAX_SCENES]) {
     addDebug(g->log, "attempting to load scenes");
     for (int i = 0; i < g->sceneCount; i++) {
-        g->scenes[i] = loadScene(g->log, g->beastiary, r->indexDir, scenes[i], r->showCollisions);
+        g->scenes[i] = loadScene(
+                g->log,
+                g->animationManager,
+                g->beastiary,
+                r->indexDir,
+                scenes[i],
+                r->showCollisions);
         addDebug(g->log, "scene loaded :: %s (%d)", g->scenes[i]->name, i);
     }
     for (int i = 0; i < g->sceneCount; i++) {
@@ -269,6 +275,20 @@ void loadScenesFromFiles(Game *g, RuntimeArgs *r) {
     loadScenes(g, r, scenes);
 }
 
+void loadAllAnimations(AnimationManager *am, const char *indexDir) {
+    char animationsDir[MAX_FS_PATH_LENGTH / 2];
+    sprintf(animationsDir, "%s/animations", indexDir);
+    char *files[MAX_FILES];
+    int count = getFilesInDirectory(animationsDir, files);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(getFilenameExt(files[i]), "yaml") == 0) {
+            char animationFile[MAX_FS_PATH_LENGTH];
+            sprintf(animationFile, "%s/%s", animationsDir, files[i]);
+            loadAnimations(am, animationFile, indexDir);
+        }
+    }
+}
+
 void initializeLog(Game *g, LogLevel logLevel) {
     g->log = createLog(logLevel);
     addInfo(g->log, "log level set to %s", getLogLevelString(g->log->level));
@@ -284,8 +304,9 @@ Game *createGame(RuntimeArgs *r) {
     g->currentScene = NULL;
     initializeLog(g, r->logLevel);
     g->animationManager = createAnimationManager(g->log);
+    loadAllAnimations(g->animationManager, r->indexDir);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
-    g->player = loadPlayer(g->log, r->indexDir);
+    g->player = loadPlayer(g->log, g->animationManager, r->indexDir);
     initializeBeasts(g, r->indexDir);
     loadScenesFromFiles(g, r);
     setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);

@@ -13,6 +13,7 @@ typedef struct {
 } SliceData;
 
 typedef struct {
+    char *name;
     SpriteData *sprite;
     SliceData *slices;
     int slices_count;
@@ -52,6 +53,8 @@ static const cyaml_schema_value_t slicesSchema = {
 };
 
 static const cyaml_schema_field_t animationTopMappingField[] = {
+        CYAML_FIELD_STRING_PTR(
+                "name", CYAML_FLAG_POINTER, AnimationData, name, 0, CYAML_UNLIMITED),
         CYAML_FIELD_MAPPING_PTR(
                 "sprite", CYAML_FLAG_POINTER, AnimationData, sprite, spriteSchema),
         CYAML_FIELD_SEQUENCE(

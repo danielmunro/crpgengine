@@ -1,7 +1,7 @@
 #include <unistd.h>
 
-void loadAnimations(Log *log, const char *file, const char *indexDir, Animation *animations[MAX_ANIMATIONS]) {
-    addInfo(log, "load animations file: %s", file);
+void loadAnimations(AnimationManager *am, const char *file, const char *indexDir) {
+    addInfo(am->log, "load animations file: %s", file);
     AnimationData *animation = loadAnimationYaml(file);
     char cwd[PATH_MAX] = "";
     getcwd(cwd, sizeof(cwd));
@@ -13,19 +13,21 @@ void loadAnimations(Log *log, const char *file, const char *indexDir, Animation 
             animation->sprite->size[1]);
     for (int i = 0; i < animation->slices_count; i++) {
         SliceData *s = &animation->slices[i];
-        animations[i] = createAnimation(
-                sp,
+        am->library[i] = createAnimation(
+                animation->name,
                 getAnimationTypeFromName(s->name),
+                sp,
                 s->frames[0],
                 s->frames[1],
                 s->rate,
                 s->repeat
         );
     }
-    addDebug(log, "%d animations loaded", animation->slices_count);
+    am->libraryCount = animation->slices_count;
+    addDebug(am->log, "%d animations loaded", animation->slices_count);
 }
 
-void loadMobiles(Scene *scene, const char *indexDir) {
+void loadMobiles(AnimationManager *am, Scene *scene, const char *indexDir) {
     char directory[MAX_FS_PATH_LENGTH];
     sprintf(directory, "%s/scenes/%s/mobiles", indexDir, scene->name);
     addInfo(scene->log, "load mobiles from %s", directory);
@@ -40,9 +42,7 @@ void loadMobiles(Scene *scene, const char *indexDir) {
         sprintf(filePath, "%s/%s", directory, mobFiles[i]);
         MobileData *mobData = loadMobYaml(filePath);
         Animation *animations[MAX_ANIMATIONS];
-        char animationFilePath[MAX_FS_PATH_LENGTH];
-        sprintf(animationFilePath, "%s/%s", indexDir, mobData->animations);
-        loadAnimations(scene->log, animationFilePath, indexDir, animations);
+        loadAnimationsByName(am, mobData->animations, animations);
         Mobile *mob = createMobileFromData(mobData, animations);
         addMobile(scene->exploration, mob);
     }
@@ -102,7 +102,13 @@ void loadStorylines(Scene *s, const char *indexDir) {
     addInfo(s->log, "added storylines to game :: %d", count);
 }
 
-Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sceneName, int showCollisions) {
+Scene *loadScene(
+        Log *log,
+        AnimationManager *am,
+        Beastiary *beastiary,
+        const char *indexDir,
+        char *sceneName,
+        bool showCollisions) {
     addInfo(log, "create scene '%s'", sceneName);
     char sceneFilePath[MAX_FS_PATH_LENGTH];
     sprintf(sceneFilePath, "%s/scenes/%s", indexDir, sceneName);
@@ -127,7 +133,7 @@ Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sce
     parseSceneXml(tilemapXmlReader, sceneDir);
 
     // load mobiles
-    loadMobiles(scene, indexDir);
+    loadMobiles(am, scene, indexDir);
 
     if (sceneData->encounters != NULL) {
         loadEncounters(beastiary, scene, sceneData->encounters, indexDir);
@@ -139,13 +145,14 @@ Scene *loadScene(Log *log, Beastiary *beastiary, const char *indexDir, char *sce
     return scene;
 }
 
-Player *loadPlayer(Log *log, char *indexDir) {
+Player *loadPlayer(Log *log, AnimationManager *am, char *indexDir) {
     addInfo(log, "loading player from dir %s", indexDir);
     PlayerData *playerYaml = loadPlayerYaml(log, indexDir);
     Animation *animations[MAX_ANIMATIONS];
     char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/%s", indexDir, playerYaml->animations);
-    loadAnimations(log, filePath, indexDir, animations);
+    int count = loadAnimationsByName(am, playerYaml->animations, animations);
+    addInfo(am->log, "found animations for player :: %d animations", count);
     Mobile *mobiles[MAX_PARTY_SIZE] = {
             createMobile(
                     "player",

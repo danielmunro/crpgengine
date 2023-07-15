@@ -1,5 +1,5 @@
 id: vill1
 name: Kessamina
-animations: ./animations/fireas.yaml
+animations: fireas
 position: [271,242]
 direction: up

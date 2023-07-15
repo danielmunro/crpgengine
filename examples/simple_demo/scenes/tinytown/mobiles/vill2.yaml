@@ -1,5 +1,5 @@
 id: vill2
 name: Bobarian
-animations: ./animations/fireas.yaml
+animations: fireas
 position: [340,300]
 direction: down

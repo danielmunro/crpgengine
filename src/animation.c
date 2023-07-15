@@ -5,8 +5,9 @@ typedef struct {
 } SpriteSheet;
 
 typedef struct {
+    const char *name;
+    AnimationType type;
     SpriteSheet *spriteSheet;
-    int type;
     int firstFrame;
     int lastFrame;
     int currentFrame;
@@ -80,13 +81,15 @@ SpriteSheet *createSpriteSheet(const char *filename, int width, int height) {
 }
 
 Animation *createAnimation(
+        const char *name,
+        AnimationType type,
         SpriteSheet *spriteSheet,
-        int type,
         int firstFrame,
         int lastFrame,
         int frameRate,
         int repeat) {
     Animation *a = malloc(sizeof(Animation));
+    a->name = name;
     a->type = type;
     a->spriteSheet = spriteSheet;
     a->firstFrame = firstFrame;
@@ -97,6 +100,28 @@ Animation *createAnimation(
     a->frameRateCount = 0;
     a->isPlaying = 0;
     return a;
+}
+
+Animation *cloneAnimation(Animation *a) {
+    return createAnimation(
+            a->name,
+            a->type,
+            a->spriteSheet,
+            a->firstFrame,
+            a->lastFrame,
+            a->frameRate,
+            a->repeat);
+}
+
+int loadAnimationsByName(AnimationManager *am, char *name, Animation *animations[25]) {
+    int count = 0;
+    for (int i = 0; i < am->libraryCount; i++) {
+        if (strcmp(am->library[i]->name, name) == 0) {
+            animations[count] = cloneAnimation(am->library[i]);
+            count++;
+        }
+    }
+    return count;
 }
 
 void drawAnimation(Animation *a, Vector2 position) {
@@ -117,12 +142,12 @@ void drawAnimation(Animation *a, Vector2 position) {
     );
 }
 
-Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], int direction) {
+Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], AnimationType type) {
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         if (animation[i] == NULL) {
             break;
         }
-        if (animation[i]->type == direction) {
+        if (animation[i]->type == type) {
             return animation[i];
         }
     }
