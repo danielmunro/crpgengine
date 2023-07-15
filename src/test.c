@@ -34,8 +34,10 @@ void canMoveMobTest() {
     // given
     float startX = 100, startY = 100;
     Vector2 start = (Vector2){startX, startY};
+    AnimationManager *am = createAnimationManager(createLog(INFO));
     Animation *animations[MAX_ANIMATIONS];
-//    loadAnimations(createLog(ERROR), "./fixtures/animations/fireas.yaml", "./fixtures", animations);
+    loadAllAnimations(am, "./fixtures");
+    loadAnimationsByName(am, "fireas", animations);
     Mobile *mob = createMobile("test", "test", start, DOWN, animations);
 
     // when
@@ -50,8 +52,10 @@ void canMobStopMovingTest() {
     // given
     float startX = 100, startY = 100;
     Vector2 start = (Vector2){startX, startY};
+    AnimationManager *am = createAnimationManager(createLog(INFO));
     Animation *animations[MAX_ANIMATIONS];
-//    loadAnimations(createLog(ERROR), "./fixtures/animations/fireas.yaml", "./fixtures", animations);
+    loadAllAnimations(am, "./fixtures");
+    loadAnimationsByName(am, "fireas", animations);
     Mobile *mob = createMobile("test", "test", start, DOWN, animations);
 
     // when
