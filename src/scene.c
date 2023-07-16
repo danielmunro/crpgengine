@@ -95,6 +95,7 @@ void thenCheck(Scene *s, Player *p, ControlBlock *cb) {
                 )
         );
         p->engaged = false;
+        getPartyLeader(p)->isBeingMoved = true;
     } else if (isFaceDirectionOutcome(cb->then[cb->progress])) {
         addInfo(s->log, "set direction for mob :: %s, %s", cb->then[cb->progress]->target->name, cb->then[cb->progress]->direction);
         cb->then[cb->progress]->target->direction =

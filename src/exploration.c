@@ -324,6 +324,9 @@ void tryToMove(Exploration *e, Player *p, AnimationType direction, Vector2 pos) 
 
 void evaluateMovement(Exploration *e, Player *p) {
     Mobile *mob = getPartyLeader(p);
+    if (mob->isBeingMoved) {
+        return;
+    }
     addDebug(e->log, "exploration -- evaluate movement -- %f, %f",
              mob->position.x,
              mob->position.y);
@@ -419,6 +422,7 @@ void doMobileMovementUpdates(Exploration *exploration) {
             addInfo(exploration->log, "mob done moving -- %s",
                     exploration->mobMovements[i]->mob->name);
             exploration->mobMovements[i] = NULL;
+            mob->isBeingMoved = false;
         }
     }
 }

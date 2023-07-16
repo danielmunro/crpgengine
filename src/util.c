@@ -129,8 +129,10 @@ bool vector2DEquals(Vector2D a, Vector2D b) {
 }
 
 float normalize(float a, float b) {
-    if ((int) a > (int) b) return -1;
-    if ((int) a < (int) b) return 1;
+    int a1 = (int) a;
+    int b1 = (int) b;
+    if (a1 > b1) return -1;
+    if (a1 < b1) return 1;
     return 0;
 }
 

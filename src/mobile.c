@@ -7,6 +7,7 @@ typedef struct {
     Vector2 position;
     bool moving[DIRECTION_COUNT];
     struct timeval lastMovement;
+    bool isBeingMoved;
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {
@@ -28,6 +29,7 @@ Mobile *createMobile(const char *id, const char *name, Vector2 position, Animati
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         mobile->animations[i] = animations[i];
     }
+    mobile->isBeingMoved = false;
     return mobile;
 }
 
