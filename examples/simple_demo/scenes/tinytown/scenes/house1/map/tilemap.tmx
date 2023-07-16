@@ -79,7 +79,7 @@
     <property name="direction" value="up"/>
    </properties>
   </object>
-  <object id="3" name="start" type="entrance" x="272.624" y="129.497" width="14.5399" height="14.5399">
+  <object id="3" name="start" type="entrance" x="272.17" y="128.134" width="14.5399" height="14.5399">
    <properties>
     <property name="direction" value="up"/>
    </properties>
