@@ -19,8 +19,8 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     addAllAnimations(g->animationManager, mob->animations);
     Entrance *entrance = findEntrance(scene->exploration, entranceName);
     addDebug(g->log, "entrance found :: %s", entrance->name);
-    mob->position.x = entrance->area.x + (entrance->area.width / 2);
-    mob->position.y = entrance->area.y + (entrance->area.height / 2);
+    mob->position.x = entrance->area.x + (entrance->area.width / 2) - (MOB_COLLISION_WIDTH / 2);
+    mob->position.y = entrance->area.y + (entrance->area.height / 2) - (MOB_COLLISION_HEIGHT / 2);
     mob->direction = entrance->direction;
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
