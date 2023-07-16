@@ -18,6 +18,7 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     Mobile *mob = getPartyLeader(g->player);
     addAllAnimations(g->animationManager, mob->animations);
     Entrance *entrance = findEntrance(scene->exploration, entranceName);
+    addDebug(g->log, "entrance found :: %s", entrance->name);
     mob->position.x = entrance->area.x + (entrance->area.width / 2);
     mob->position.y = entrance->area.y + (entrance->area.height / 2);
     mob->direction = entrance->direction;
@@ -101,7 +102,7 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
     return c;
 }
 
-void loadScenes(Game *g, RuntimeArgs *r, char *scenes[MAX_SCENES]) {
+void loadScenes(Game *g, RuntimeArgs *r, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SCENES]) {
     addDebug(g->log, "attempting to load scenes");
     for (int i = 0; i < g->sceneCount; i++) {
         g->scenes[i] = loadScene(
@@ -110,6 +111,7 @@ void loadScenes(Game *g, RuntimeArgs *r, char *scenes[MAX_SCENES]) {
                 g->beastiary,
                 r->indexDir,
                 scenes[i],
+                sceneDirectories[i],
                 r->showCollisions);
         addDebug(g->log, "scene loaded :: %s (%d)", g->scenes[i]->name, i);
     }
@@ -271,8 +273,37 @@ void loadScenesFromFiles(Game *g, RuntimeArgs *r) {
     char *scenes[MAX_SCENES];
     char sceneDir[MAX_FS_PATH_LENGTH];
     sprintf(sceneDir, "%s/scenes", r->indexDir);
-    g->sceneCount = getFilesInDirectory(sceneDir, scenes);
-    loadScenes(g, r, scenes);
+    addDebug(g->log, "get scene directories :: %s", sceneDir);
+    int totalCount = getFilesInDirectory(sceneDir, scenes);
+    addDebug(g->log, "top level count :: %d", totalCount);
+    char *sceneFiles[MAX_SCENES];
+    for (int i = 0; i < totalCount; i++) {
+        char sceneFile[MAX_FS_PATH_LENGTH];
+        sprintf(sceneFile, "%s/%s", sceneDir, scenes[i]);
+        sceneFiles[i] = (char *)malloc(strlen(sceneFile));
+        strcpy(sceneFiles[i], sceneFile);
+    }
+    for (int i = 0; i < totalCount; i++) {
+        char subSceneDir[MAX_FS_PATH_LENGTH];
+        sprintf(subSceneDir, "%s/%s/scenes", sceneDir, scenes[i]);
+        if (access(subSceneDir, F_OK) == 0) {
+            char *subScenes[MAX_SCENES];
+            int subCount = getFilesInDirectory(subSceneDir, subScenes);
+            for (int j = 0; j < subCount; j++) {
+                scenes[totalCount] = subScenes[j];
+                char subSceneFile[MAX_FS_PATH_LENGTH];
+                sprintf(subSceneFile, "%s/%s", subSceneDir, subScenes[j]);
+                sceneFiles[totalCount] = (char *)malloc(strlen(subSceneFile));
+                strcpy(sceneFiles[totalCount], subSceneFile);
+                totalCount++;
+            }
+        }
+    }
+    g->sceneCount = totalCount;
+    for (int i = 0; i < g->sceneCount; i++) {
+        addInfo(g->log, "scene: %s, %s", scenes[i], sceneFiles[i]);
+    }
+    loadScenes(g, r, scenes, sceneFiles);
 }
 
 void loadAllAnimations(AnimationManager *am, const char *indexDir) {

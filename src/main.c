@@ -1,6 +1,7 @@
 #include "header.h"
 
 int main(int argc, char *argv[]) {
+    SetTraceLogLevel(LOG_WARNING);
     srand(time(NULL));
     RuntimeArgs *r = createRuntimeArgs(argc, argv);
     if (r->indexDir == NULL) {
