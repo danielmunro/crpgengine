@@ -238,7 +238,6 @@ void doExplorationLoop(Game *g) {
     evaluateExits(g);
     checkControls(g->currentScene, g->player);
     checkFights(g->currentScene, g->player);
-    updateMusicStream(g->audioManager);
 }
 
 void doFightLoop(Game *g) {
@@ -247,14 +246,12 @@ void doFightLoop(Game *g) {
     processFightAnimations();
     checkControls(g->currentScene, g->player);
     checkRemoveFight(g->currentScene);
-    updateMusicStream(g->audioManager);
 }
 
 void doInGameMenuLoop(Game *g) {
     Exploration *exploration = g->currentScene->exploration;
     drawAllMenus(g->player, exploration->menus, exploration->menuCount);
     checkMenuInput(g);
-    updateMusicStream(g->audioManager);
 }
 
 void run(Game *g) {
@@ -266,6 +263,7 @@ void run(Game *g) {
         } else if (isExploring(g->currentScene)) {
             doExplorationLoop(g);
         }
+        updateMusicStream(g->audioManager);
     }
 }
 
