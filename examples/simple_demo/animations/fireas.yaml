@@ -1,7 +1,6 @@
 name: fireas
 sprite:
-  file: ./fireas.png
-  size: [16, 24]
+  name: fireas
 slices:
   - name: down
     frames: [0, 3]

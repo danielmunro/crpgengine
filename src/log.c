@@ -57,3 +57,11 @@ void addError(Log *log, char *message, ...) {
     addLogWithLevel(log, ERROR, message, args);
     va_end(args);
 }
+
+void addFatal(Log *log, char *message, ...) {
+    va_list args;
+    va_start(args, message);
+    addLogWithLevel(log, ERROR, message, args);
+    va_end(args);
+    exit(EXIT_MISSING_SPRITESHEET);
+}

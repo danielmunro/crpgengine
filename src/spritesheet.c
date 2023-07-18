@@ -1,4 +1,5 @@
 typedef struct {
+    const char *name;
     const char *filename;
     Texture2D source;
     int frameWidth;
@@ -10,9 +11,10 @@ typedef struct {
     int spritesCount;
 } SpritesheetManager;
 
-Spritesheet *createSpriteSheet(const char *filename, int width, int height) {
+Spritesheet *createSpriteSheet(const char *name, const char *filename, int width, int height) {
     Texture2D tex = LoadTexture(filename);
     Spritesheet *sp = malloc(sizeof(Spritesheet));
+    sp->name = name;
     sp->filename = filename;
     sp->source = tex;
     sp->frameWidth = width;
@@ -29,9 +31,10 @@ SpritesheetManager *createSpriteSheetManager(Spritesheet *spritesheets[MAX_SPRIT
     return sm;
 }
 
-Spritesheet *findSpritesheetByFilename(SpritesheetManager *sm, const char *filename) {
+Spritesheet *findSpritesheetByName(SpritesheetManager *sm, const char *name) {
     for (int i = 0; i < sm->spritesCount; i++) {
-        if (strcmp(sm->spritesheets[i]->filename, filename) == 0) {
+        printf("sp compare :: %s %s\n", sm->spritesheets[i]->name, name);
+        if (strcmp(sm->spritesheets[i]->name, name) == 0) {
             return sm->spritesheets[i];
         }
 

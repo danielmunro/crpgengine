@@ -4,8 +4,9 @@ typedef struct {
 } FrameData;
 
 typedef struct {
+    char *name;
+    char *filename;
     FrameData *frame;
-    char *spritesheet;
 } SpritesheetData;
 
 static const cyaml_schema_field_t frameFieldSchema[] = {
@@ -18,7 +19,9 @@ static const cyaml_schema_field_t frameFieldSchema[] = {
 
 static const cyaml_schema_field_t spritesheetTopMappingField[] = {
         CYAML_FIELD_STRING_PTR(
-                "spritesheet", CYAML_FLAG_POINTER, SpritesheetData, spritesheet, 0, CYAML_UNLIMITED),
+                "name", CYAML_FLAG_POINTER, SpritesheetData, name, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "filename", CYAML_FLAG_POINTER, SpritesheetData, filename, 0, CYAML_UNLIMITED),
         CYAML_FIELD_MAPPING_PTR(
                 "frame", CYAML_FLAG_POINTER, SpritesheetData, frame, frameFieldSchema),
         CYAML_FIELD_END

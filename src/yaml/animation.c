@@ -1,7 +1,5 @@
 typedef struct {
-    char *file;
-    int *size;
-    int size_count;
+    char *name;
 } SpriteData;
 
 typedef struct {
@@ -19,15 +17,9 @@ typedef struct {
     int slices_count;
 } AnimationData;
 
-static const cyaml_schema_value_t sizeEntry = {
-        CYAML_VALUE_INT(CYAML_FLAG_DEFAULT, int),
-};
-
 static const cyaml_schema_field_t spriteSchema[] = {
         CYAML_FIELD_STRING_PTR(
-                "file", CYAML_FLAG_POINTER, SpriteData, file, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_SEQUENCE(
-                "size", CYAML_FLAG_POINTER, SpriteData, size, &sizeEntry, 0, CYAML_UNLIMITED),
+                "name", CYAML_FLAG_POINTER, SpriteData, name, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 

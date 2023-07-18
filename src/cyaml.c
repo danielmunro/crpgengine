@@ -79,7 +79,7 @@ SpritesheetData *loadSpritesheetYaml(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &spritesheetTopSchema, (cyaml_data_t **) &scene, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing scene yaml\n");
+        fprintf(stderr, "error parsing spritesheet yaml\n");
     }
     return scene;
 }

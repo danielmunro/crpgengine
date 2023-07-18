@@ -35,8 +35,7 @@ void canMoveMobTest() {
     float startX = 100, startY = 100;
     Vector2 start = (Vector2){startX, startY};
     AnimationManager *am = createAnimationManager(createLog(INFO));
-    Spritesheet *spritesheets[MAX_SPRITES];
-    SpritesheetManager *sm = createSpriteSheetManager(spritesheets, 0);
+    SpritesheetManager *sm = loadSpritesheetManager(am->log, "./fixtures");
     Animation *animations[MAX_ANIMATIONS];
     loadAllAnimations(am, sm, "./fixtures");
     loadAnimationsByName(am, "fireas", animations);
@@ -55,8 +54,7 @@ void canMobStopMovingTest() {
     float startX = 100, startY = 100;
     Vector2 start = (Vector2){startX, startY};
     AnimationManager *am = createAnimationManager(createLog(INFO));
-    Spritesheet *spritesheets[MAX_SPRITES];
-    SpritesheetManager *sm = createSpriteSheetManager(spritesheets, 0);
+    SpritesheetManager *sm = loadSpritesheetManager(am->log, "./fixtures");
     Animation *animations[MAX_ANIMATIONS];
     loadAllAnimations(am, sm, "./fixtures");
     loadAnimationsByName(am, "fireas", animations);

@@ -3,15 +3,10 @@
 void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *file, const char *indexDir) {
     addInfo(am->log, "load animations file: %s", file);
     AnimationData *animation = loadAnimationYaml(file);
-    char cwd[PATH_MAX] = "";
-    getcwd(cwd, sizeof(cwd));
-    char filePath[MAX_FS_PATH_LENGTH] = "";
-    sprintf(filePath, "%s/animations/%s", indexDir, animation->sprite->file);
-//    Spritesheet *sp = findSpritesheetByFilename(sm, filePath);
-    Spritesheet *sp = createSpriteSheet(
-            filePath,
-            animation->sprite->size[0],
-            animation->sprite->size[1]);
+    Spritesheet *sp = findSpritesheetByName(sm, animation->sprite->name);
+    if (sp == NULL) {
+        addFatal(am->log, "spritesheet not found: %s", animation->sprite->name);
+    }
     for (int i = 0; i < animation->slices_count; i++) {
         SliceData *s = &animation->slices[i];
         am->library[i] = createAnimation(
@@ -189,10 +184,13 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
     int count = 0;
     for (int i = 0; i < filesInDirectory; i++) {
         if (strcmp(getFilenameExt(files[i]), "yaml") == 0) {
-            char fullPath[MAX_FS_PATH_LENGTH];
-            sprintf(fullPath, "%s/%s", directory, files[i]);
-            SpritesheetData *data = loadSpritesheetYaml(fullPath);
-            spritesheets[count] = createSpriteSheet(data->spritesheet, data->frame->width, data->frame->height);
+            char dataFilePath[MAX_FS_PATH_LENGTH];
+            sprintf(dataFilePath, "%s/%s", directory, files[i]);
+            SpritesheetData *data = loadSpritesheetYaml(dataFilePath);
+            char imageFilePath[MAX_FS_PATH_LENGTH];
+            sprintf(imageFilePath, "%s/%s", directory, data->filename);
+            addInfo(log, "spritesheet :: %s, %s", data->name, imageFilePath);
+            spritesheets[count] = createSpriteSheet(data->name, imageFilePath, data->frame->width, data->frame->height);
             count++;
         }
     }
