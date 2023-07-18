@@ -1,13 +1,7 @@
 typedef struct {
-    Texture2D source;
-    int frameWidth;
-    int frameHeight;
-} SpriteSheet;
-
-typedef struct {
     const char *name;
     AnimationType type;
-    SpriteSheet *spriteSheet;
+    Spritesheet *spriteSheet;
     int firstFrame;
     int lastFrame;
     int currentFrame;
@@ -71,19 +65,10 @@ void clearAnimations(AnimationManager *am) {
     am->animationCount = 0;
 }
 
-SpriteSheet *createSpriteSheet(const char *filename, int width, int height) {
-    Texture2D tex = LoadTexture(filename);
-    SpriteSheet *sp = malloc(sizeof(SpriteSheet));
-    sp->source = tex;
-    sp->frameWidth = width;
-    sp->frameHeight = height;
-    return sp;
-}
-
 Animation *createAnimation(
         const char *name,
         AnimationType type,
-        SpriteSheet *spriteSheet,
+        Spritesheet *spriteSheet,
         int firstFrame,
         int lastFrame,
         int frameRate,

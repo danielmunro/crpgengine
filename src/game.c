@@ -5,6 +5,7 @@ typedef struct {
     Player *player;
     AnimationManager *animationManager;
     AudioManager *audioManager;
+    SpritesheetManager *spritesheetManager;
     Beastiary *beastiary;
     Log *log;
     Menu *menus[MAX_MENUS];
@@ -304,7 +305,7 @@ void loadScenesFromFiles(Game *g, RuntimeArgs *r) {
     loadScenes(g, r, scenes, sceneFiles);
 }
 
-void loadAllAnimations(AnimationManager *am, const char *indexDir) {
+void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char *indexDir) {
     char animationsDir[MAX_FS_PATH_LENGTH / 2];
     sprintf(animationsDir, "%s/animations", indexDir);
     char *files[MAX_FILES];
@@ -313,7 +314,7 @@ void loadAllAnimations(AnimationManager *am, const char *indexDir) {
         if (strcmp(getFilenameExt(files[i]), "yaml") == 0) {
             char animationFile[MAX_FS_PATH_LENGTH];
             sprintf(animationFile, "%s/%s", animationsDir, files[i]);
-            loadAnimations(am, animationFile, indexDir);
+            loadAnimations(am, sm,  animationFile, indexDir);
         }
     }
 }
@@ -332,8 +333,10 @@ Game *createGame(RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
     g->currentScene = NULL;
     initializeLog(g, r->logLevel);
+    g->spritesheetManager = loadSpritesheetManager(g->log, r->indexDir);
     g->animationManager = createAnimationManager(g->log);
-    loadAllAnimations(g->animationManager, r->indexDir);
+    addInfo(g->log, "spritesheet manager :: %d", g->spritesheetManager->spritesCount);
+    loadAllAnimations(g->animationManager, g->spritesheetManager, r->indexDir);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     g->player = loadPlayer(g->log, g->animationManager, r->indexDir);
     initializeBeasts(g, r->indexDir);

@@ -74,6 +74,16 @@ SceneData *loadSceneYaml(const char *indexDir) {
     return scene;
 }
 
+SpritesheetData *loadSpritesheetYaml(const char *filePath) {
+    SpritesheetData *scene = malloc(sizeof(SpritesheetData));
+    cyaml_err_t err = cyaml_load_file(filePath, &config,
+                                      &spritesheetTopSchema, (cyaml_data_t **) &scene, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error parsing scene yaml\n");
+    }
+    return scene;
+}
+
 MobileData *loadMobYaml(const char *filePath) {
     MobileData *mob = malloc(sizeof(MobileData));
     cyaml_err_t err = cyaml_load_file(filePath, &config,

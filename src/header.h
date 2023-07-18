@@ -57,6 +57,7 @@
 #define MAX_TEAM_SIZE 255
 #define MAX_FS_PATH_LENGTH 255
 #define MAX_MOBILE_MOVEMENTS 64
+#define MAX_SPRITES 1024
 
 const char *logLevels[] = {
         "error",
@@ -204,6 +205,7 @@ typedef enum {
 
 #include "log.c"
 #include "util.c"
+#include "yaml/spritesheet.c"
 #include "yaml/animation.c"
 #include "yaml/config.c"
 #include "yaml/music.c"
@@ -218,6 +220,7 @@ typedef enum {
 #include "window.c"
 #include "ui.c"
 #include "audio.c"
+#include "spritesheet.c"
 #include "animation.c"
 #include "attributes.c"
 #include "item.c"

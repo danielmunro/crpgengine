@@ -1,13 +1,14 @@
 #include <unistd.h>
 
-void loadAnimations(AnimationManager *am, const char *file, const char *indexDir) {
+void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *file, const char *indexDir) {
     addInfo(am->log, "load animations file: %s", file);
     AnimationData *animation = loadAnimationYaml(file);
     char cwd[PATH_MAX] = "";
     getcwd(cwd, sizeof(cwd));
     char filePath[MAX_FS_PATH_LENGTH] = "";
     sprintf(filePath, "%s/animations/%s", indexDir, animation->sprite->file);
-    SpriteSheet *sp = createSpriteSheet(
+//    Spritesheet *sp = findSpritesheetByFilename(sm, filePath);
+    Spritesheet *sp = createSpriteSheet(
             filePath,
             animation->sprite->size[0],
             animation->sprite->size[1]);
@@ -170,11 +171,30 @@ Player *loadPlayer(Log *log, AnimationManager *am, char *indexDir) {
     return player;
 }
 
-AudioManager *loadAudioManager(Log *log, char *indexDir) {
+AudioManager *loadAudioManager(Log *log, const char *indexDir) {
     addInfo(log, "load audio manager from dir '%s'", indexDir);
     AudioManager *am = createAudioManager(log);
     assignAudioManagerValues(am, indexDir);
     addInfo(log, "audio manager loaded %d songs", am->musicCount);
     return am;
+}
 
+SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
+    addInfo(log, "load spritesheet manager :: %s", indexDir);
+    Spritesheet *spritesheets[MAX_SPRITES];
+    char directory[MAX_FS_PATH_LENGTH];
+    sprintf(directory, "%s/spritesheets", indexDir);
+    char *files[MAX_FILES];
+    int filesInDirectory = getFilesInDirectory(directory, files);
+    int count = 0;
+    for (int i = 0; i < filesInDirectory; i++) {
+        if (strcmp(getFilenameExt(files[i]), "yaml") == 0) {
+            char fullPath[MAX_FS_PATH_LENGTH];
+            sprintf(fullPath, "%s/%s", directory, files[i]);
+            SpritesheetData *data = loadSpritesheetYaml(fullPath);
+            spritesheets[count] = createSpriteSheet(data->spritesheet, data->frame->width, data->frame->height);
+            count++;
+        }
+    }
+    return createSpriteSheetManager(spritesheets, count);
 }

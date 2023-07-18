@@ -34,7 +34,7 @@ void updateMusicStream(AudioManager *am) {
     UpdateMusicStream(am->music[am->musicIndex]->music);
 }
 
-void playMusic(AudioManager *am, char *name) {
+void playMusic(AudioManager *am, const char *name) {
     for (int i = 0; i < am->musicCount; i++) {
         if (strcmp(am->music[i]->name, name) == 0) {
             if (am->musicIndex == i) {
@@ -53,7 +53,7 @@ void playMusic(AudioManager *am, char *name) {
     fprintf(stderr, "music not found\n");
 }
 
-void playSound(AudioManager *s, char *name) {
+void playSound(AudioManager *s, const char *name) {
     for (int i = 0; i < s->soundCount; i++) {
         if (strcmp(s->sounds[i]->name, name) == 0) {
             PlaySoundMulti(s->sounds[i]->sound);
@@ -74,7 +74,7 @@ void assignMusicValues(AudioManager *am, const char *indexDir) {
     am->musicCount++;
 }
 
-void assignSoundValues(AudioManager *am, char *indexDir) {
+void assignSoundValues(AudioManager *am, const char *indexDir) {
     SoundData *sound = loadSoundYaml(indexDir);
 
 //    Sound_ *s = malloc(sizeof(Sound_));
@@ -84,7 +84,7 @@ void assignSoundValues(AudioManager *am, char *indexDir) {
 //    am->soundCount++;
 }
 
-void assignAudioManagerValues(AudioManager *am, char *indexDir) {
+void assignAudioManagerValues(AudioManager *am, const char *indexDir) {
     assignMusicValues(am, indexDir);
     assignSoundValues(am, indexDir);
 }
