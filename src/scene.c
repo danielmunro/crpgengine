@@ -191,19 +191,15 @@ int addSubsceneFiles(SceneLoader *sl) {
     for (int i = 0; i < sl->count; i++) {
         char subSceneDir[MAX_FS_PATH_LENGTH];
         sprintf(subSceneDir, "%s/%s/scenes", sl->sceneDirectory, sl->scenes[i]);
-        printf("subscenedir :: %s\n", subSceneDir);
         if (access(subSceneDir, F_OK) == 0) {
-            printf("found, loading\n");
             char *subScenes[MAX_SCENES];
             int subCount = getFilesInDirectory(subSceneDir, subScenes);
-            printf("found sub scenes :: %d\n", subCount);
             for (int j = 0; j < subCount; j++) {
                 sl->scenes[sl->count] = subScenes[j];
                 char subSceneFile[MAX_FS_PATH_LENGTH];
                 sprintf(subSceneFile, "%s/%s", subSceneDir, subScenes[j]);
                 sl->sceneFiles[sl->count] = (char *)malloc(strlen(subSceneFile));
                 strcpy(sl->sceneFiles[sl->count], subSceneFile);
-                printf("sceneFiles :: %s\n", sl->sceneFiles[sl->count]);
                 sl->count++;
             }
         }

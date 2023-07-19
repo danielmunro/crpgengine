@@ -277,7 +277,7 @@ void loadScenesFromFiles(Game *g) {
     buildSceneFilesList(sl);
     g->sceneCount = addSubsceneFiles(sl);
     for (int i = 0; i < g->sceneCount; i++) {
-        addInfo(g->log, "scene: %s, %s", sl->scenes[i], sl->sceneFiles[i]);
+        addInfo(g->log, "found scene: %s, %s", sl->scenes[i], sl->sceneFiles[i]);
     }
     loadScenes(g, sl->scenes, sl->sceneFiles);
 }
