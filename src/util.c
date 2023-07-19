@@ -142,39 +142,3 @@ const char *getFilenameExt(const char *filename) {
     if(!dot || dot == filename) return "";
     return dot + 1;
 }
-
-int addSubsceneFiles(char *scenes[MAX_SCENES], char *sceneFiles[MAX_SCENES], const char *sceneDir, int totalCount) {
-    int count = totalCount;
-    for (int i = 0; i < totalCount; i++) {
-        char subSceneDir[MAX_FS_PATH_LENGTH];
-        sprintf(subSceneDir, "%s/%s/scenes", sceneDir, scenes[i]);
-        printf("subscenedir :: %s\n", subSceneDir);
-        if (access(subSceneDir, F_OK) == 0) {
-            printf("found, loading\n");
-            char *subScenes[MAX_SCENES];
-            int subCount = getFilesInDirectory(subSceneDir, subScenes);
-            printf("found sub scenes :: %d\n", subCount);
-            for (int j = 0; j < subCount; j++) {
-                scenes[totalCount] = subScenes[j];
-                char subSceneFile[MAX_FS_PATH_LENGTH];
-                sprintf(subSceneFile, "%s/%s", subSceneDir, subScenes[j]);
-                sceneFiles[totalCount] = (char *)malloc(strlen(subSceneFile));
-                strcpy(sceneFiles[totalCount], subSceneFile);
-                printf("sceneFiles :: %s\n", sceneFiles[totalCount]);
-                count++;
-            }
-        }
-    }
-    return count;
-}
-
-void buildSceneFilesList(char *scenes[MAX_SCENES], char *sceneFiles[MAX_SCENES], char *sceneDir, int totalCount) {
-    printf("debug :: %s\n", sceneDir);
-    for (int i = 0; i < totalCount; i++) {
-        printf("scene :: %s\n", scenes[i]);
-        char sceneFile[MAX_FS_PATH_LENGTH];
-        sprintf(sceneFile, "%s/%s", sceneDir, scenes[i]);
-        sceneFiles[i] = (char *)malloc(strlen(sceneFile));
-        strcpy(sceneFiles[i], sceneFile);
-    }
-}
