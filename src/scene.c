@@ -18,6 +18,13 @@ typedef struct {
     Log *log;
 } Scene;
 
+typedef struct {
+    char *scenes[MAX_SCENES];
+    char *sceneFiles[MAX_SCENES];
+    char *sceneDirectory;
+    int count;
+} SceneLoader;
+
 const SceneType sceneTypes[] = {
         {SCENE_TYPE_TOWN,    "town"},
         {SCENE_TYPE_DUNGEON, "dungeon"},
@@ -48,6 +55,13 @@ Scene *createScene(Log *log, int showCollisions) {
         scene->activeControlBlocks[i] = NULL;
     }
     return scene;
+}
+
+SceneLoader *createSceneLoader(const char *indexDir) {
+    SceneLoader *sceneLoader = malloc(sizeof(SceneLoader));
+    sceneLoader->sceneDirectory = (char *)malloc(strlen(indexDir) + 7);
+    sprintf(sceneLoader->sceneDirectory, "%s/scenes", indexDir);
+    return sceneLoader;
 }
 
 bool isExploring(Scene *s) {

@@ -270,19 +270,16 @@ void run(Game *g) {
 }
 
 void loadScenesFromFiles(Game *g) {
-    char *scenes[MAX_SCENES];
-    char sceneDir[MAX_FS_PATH_LENGTH];
-    sprintf(sceneDir, "%s/scenes", g->runtimeArgs->indexDir);
-    addDebug(g->log, "get scene directories :: %s", sceneDir);
-    int totalCount = getFilesInDirectory(sceneDir, scenes);
-    addDebug(g->log, "top level count :: %d", totalCount);
-    char *sceneFiles[MAX_SCENES];
-    buildSceneFilesList(scenes, sceneFiles, sceneDir, totalCount);
-    g->sceneCount = addSubsceneFiles(scenes, sceneFiles, sceneDir, totalCount);
+    SceneLoader *sl = createSceneLoader(g->runtimeArgs->indexDir);
+    addDebug(g->log, "get scene directories :: %s", sl->sceneDirectory);
+    sl->count = getFilesInDirectory(sl->sceneDirectory, sl->scenes);
+    addDebug(g->log, "top level count :: %d", sl->count);
+    buildSceneFilesList(sl->scenes, sl->sceneFiles, sl->sceneDirectory, sl->count);
+    g->sceneCount = addSubsceneFiles(sl->scenes, sl->sceneFiles, sl->sceneDirectory, sl->count);
     for (int i = 0; i < g->sceneCount; i++) {
-        addInfo(g->log, "scene: %s, %s", scenes[i], sceneFiles[i]);
+        addInfo(g->log, "scene: %s, %s", sl->scenes[i], sl->sceneFiles[i]);
     }
-    loadScenes(g, scenes, sceneFiles);
+    loadScenes(g, sl->scenes, sl->sceneFiles);
 }
 
 void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char *indexDir) {

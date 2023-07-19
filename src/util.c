@@ -169,7 +169,9 @@ int addSubsceneFiles(char *scenes[MAX_SCENES], char *sceneFiles[MAX_SCENES], con
 }
 
 void buildSceneFilesList(char *scenes[MAX_SCENES], char *sceneFiles[MAX_SCENES], char *sceneDir, int totalCount) {
+    printf("debug :: %s\n", sceneDir);
     for (int i = 0; i < totalCount; i++) {
+        printf("scene :: %s\n", scenes[i]);
         char sceneFile[MAX_FS_PATH_LENGTH];
         sprintf(sceneFile, "%s/%s", sceneDir, scenes[i]);
         sceneFiles[i] = (char *)malloc(strlen(sceneFile));
