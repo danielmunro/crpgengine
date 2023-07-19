@@ -278,8 +278,7 @@ void loadScenesFromFiles(Game *g) {
     addDebug(g->log, "top level count :: %d", totalCount);
     char *sceneFiles[MAX_SCENES];
     buildSceneFilesList(scenes, sceneFiles, sceneDir, totalCount);
-    totalCount = addSubsceneFiles(scenes, sceneFiles, sceneDir, totalCount);
-    g->sceneCount = totalCount;
+    g->sceneCount = addSubsceneFiles(scenes, sceneFiles, sceneDir, totalCount);
     for (int i = 0; i < g->sceneCount; i++) {
         addInfo(g->log, "scene: %s, %s", scenes[i], sceneFiles[i]);
     }
