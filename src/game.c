@@ -277,28 +277,8 @@ void loadScenesFromFiles(Game *g) {
     int totalCount = getFilesInDirectory(sceneDir, scenes);
     addDebug(g->log, "top level count :: %d", totalCount);
     char *sceneFiles[MAX_SCENES];
-    for (int i = 0; i < totalCount; i++) {
-        char sceneFile[MAX_FS_PATH_LENGTH];
-        sprintf(sceneFile, "%s/%s", sceneDir, scenes[i]);
-        sceneFiles[i] = (char *)malloc(strlen(sceneFile));
-        strcpy(sceneFiles[i], sceneFile);
-    }
-    for (int i = 0; i < totalCount; i++) {
-        char subSceneDir[MAX_FS_PATH_LENGTH];
-        sprintf(subSceneDir, "%s/%s/scenes", sceneDir, scenes[i]);
-        if (access(subSceneDir, F_OK) == 0) {
-            char *subScenes[MAX_SCENES];
-            int subCount = getFilesInDirectory(subSceneDir, subScenes);
-            for (int j = 0; j < subCount; j++) {
-                scenes[totalCount] = subScenes[j];
-                char subSceneFile[MAX_FS_PATH_LENGTH];
-                sprintf(subSceneFile, "%s/%s", subSceneDir, subScenes[j]);
-                sceneFiles[totalCount] = (char *)malloc(strlen(subSceneFile));
-                strcpy(sceneFiles[totalCount], subSceneFile);
-                totalCount++;
-            }
-        }
-    }
+    buildSceneFilesList(scenes, sceneFiles, sceneDir, totalCount);
+    totalCount = addSubsceneFiles(scenes, sceneFiles, sceneDir, totalCount);
     g->sceneCount = totalCount;
     for (int i = 0; i < g->sceneCount; i++) {
         addInfo(g->log, "scene: %s, %s", scenes[i], sceneFiles[i]);
