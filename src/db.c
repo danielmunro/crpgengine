@@ -194,5 +194,6 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
             count++;
         }
     }
+    addInfo(log, "spritesheet count :: %d", count);
     return createSpriteSheetManager(spritesheets, count);
 }

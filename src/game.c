@@ -1,4 +1,5 @@
 typedef struct {
+    RuntimeArgs *runtimeArgs;
     Scene *scenes[MAX_SCENES];
     int sceneCount;
     Scene *currentScene;
@@ -103,17 +104,17 @@ ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
     return c;
 }
 
-void loadScenes(Game *g, RuntimeArgs *r, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SCENES]) {
+void loadScenes(Game *g, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SCENES]) {
     addDebug(g->log, "attempting to load scenes");
     for (int i = 0; i < g->sceneCount; i++) {
         g->scenes[i] = loadScene(
                 g->log,
                 g->animationManager,
                 g->beastiary,
-                r->indexDir,
+                g->runtimeArgs->indexDir,
                 scenes[i],
                 sceneDirectories[i],
-                r->showCollisions);
+                g->runtimeArgs->showCollisions);
         addDebug(g->log, "scene loaded :: %s (%d)", g->scenes[i]->name, i);
     }
     for (int i = 0; i < g->sceneCount; i++) {
@@ -126,12 +127,12 @@ void loadScenes(Game *g, RuntimeArgs *r, char *scenes[MAX_SCENES], char *sceneDi
     }
 }
 
-void loadBeastiary(Game *g, const char *indexDir) {
+void loadBeastiary(Game *g) {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/beastiary.yaml", indexDir);
+    sprintf(filePath, "%s/beastiary.yaml", g->runtimeArgs->indexDir);
     BeastiaryData *data = loadBeastiaryYaml(filePath);
     for (int i = 0; i < data->beasts_count; i++) {
-        g->beastiary->beasts[i] = createBeastFromData(indexDir, &data->beasts[i]);
+        g->beastiary->beasts[i] = createBeastFromData(g->runtimeArgs->indexDir, &data->beasts[i]);
         addDebug(g->log, "beast '%s' created", g->beastiary->beasts[i]->id);
         g->beastiary->beastCount++;
     }
@@ -268,10 +269,10 @@ void run(Game *g) {
     }
 }
 
-void loadScenesFromFiles(Game *g, RuntimeArgs *r) {
+void loadScenesFromFiles(Game *g) {
     char *scenes[MAX_SCENES];
     char sceneDir[MAX_FS_PATH_LENGTH];
-    sprintf(sceneDir, "%s/scenes", r->indexDir);
+    sprintf(sceneDir, "%s/scenes", g->runtimeArgs->indexDir);
     addDebug(g->log, "get scene directories :: %s", sceneDir);
     int totalCount = getFilesInDirectory(sceneDir, scenes);
     addDebug(g->log, "top level count :: %d", totalCount);
@@ -302,7 +303,7 @@ void loadScenesFromFiles(Game *g, RuntimeArgs *r) {
     for (int i = 0; i < g->sceneCount; i++) {
         addInfo(g->log, "scene: %s, %s", scenes[i], sceneFiles[i]);
     }
-    loadScenes(g, r, scenes, sceneFiles);
+    loadScenes(g, scenes, sceneFiles);
 }
 
 void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char *indexDir) {
@@ -319,28 +320,28 @@ void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char 
     }
 }
 
-void initializeLog(Game *g, LogLevel logLevel) {
-    g->log = createLog(logLevel);
+void initializeLog(Game *g) {
+    g->log = createLog(g->runtimeArgs->logLevel);
     addInfo(g->log, "log level set to %s", getLogLevelString(g->log->level));
 }
 
-void initializeBeasts(Game *g, const char *indexDir) {
+void initializeBeasts(Game *g) {
     g->beastiary = createBeastiary();
-    loadBeastiary(g, indexDir);
+    loadBeastiary(g);
 }
 
 Game *createGame(RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
+    g->runtimeArgs = r;
     g->currentScene = NULL;
-    initializeLog(g, r->logLevel);
+    initializeLog(g);
     g->spritesheetManager = loadSpritesheetManager(g->log, r->indexDir);
     g->animationManager = createAnimationManager(g->log);
-    addInfo(g->log, "spritesheet manager :: %d", g->spritesheetManager->spritesCount);
     loadAllAnimations(g->animationManager, g->spritesheetManager, r->indexDir);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     g->player = loadPlayer(g->log, g->animationManager, r->indexDir);
-    initializeBeasts(g, r->indexDir);
-    loadScenesFromFiles(g, r);
+    initializeBeasts(g);
+    loadScenesFromFiles(g);
     setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);
     g->menuCount = getMenuList(g->menus);
     addDebug(g->log, "done creating game object");
