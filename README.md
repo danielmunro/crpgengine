@@ -24,21 +24,23 @@ make
 Run the provided example game:
 
 ```
-./build/cjrpgengine -i examples/tinytown
+./build/cjrpgengine -i examples/simple_demo
 ```
 
 ## Runtime Arguments
 
 Required:
 
-`-i` -- index directory to load game from. Example game argument is `examples/tinytown`.
+`-i` -- index directory to load game from. Example game argument is `examples/simple_demo`.
 
 Debug arguments:
 
-`-c` -- show collisions on map.
+`-c` -- show collisions. Comma separated list, containing: 'player', 'objects', and/or 'warps'. For example, to show all three: '-c player,objects,warps'
 
 `-d` -- dump the state of the loaded game and quit.
 
 `-l` -- specify the log level, one of [debug, info, warn, error]. Default is `info`.
 
 `-s` -- override the game config and start at specified scene index.
+
+`-e` -- exit after loading the game. Useful for debugging startup problems.
