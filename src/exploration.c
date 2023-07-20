@@ -17,7 +17,9 @@ typedef struct {
 
 typedef struct {
     LayerType type;
-    char data[MAX_LAYERS][MAX_LAYERS];
+    char data[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
+    int width;
+    int height;
     bool showCollisions;
 } Layer;
 
@@ -100,6 +102,14 @@ void addMobileMovement(Exploration *e, MobileMovement *mobMovement) {
             return;
         }
     }
+}
+
+Layer *createLayer() {
+    Layer *layer = malloc(sizeof(Layer));
+    layer->type = -1;
+    layer->width = 0;
+    layer->height = 0;
+    return layer;
 }
 
 Object *getObject(Exploration *e, int index) {
@@ -209,6 +219,9 @@ void renderExplorationLayer(Exploration *e, LayerType layer) {
     Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
     for (int y = -1; y < height; y++) {
         for (int x = -1; x < width; x++) {
+            if (x >= e->layers[layer]->width || y >= e->layers[layer]->height) {
+                continue;
+            }
             drawTile(
                     e,
                     renderedLayer,

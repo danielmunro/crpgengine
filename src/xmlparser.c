@@ -85,6 +85,8 @@ void parseSceneLayer(Exploration *e, char *rawData) {
         }
         y++;
     }
+    e->layers[e->layerCount - 1]->width = x;
+    e->layers[e->layerCount - 1]->height = y;
 }
 
 void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
@@ -102,8 +104,7 @@ void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) 
             return;
         }
         layerOpen = 1;
-        Layer *layer = malloc(sizeof(Layer));
-        layer->type = -1;
+        Layer *layer = createLayer();
         char *layerName = getStringAttribute(tilemapXmlReader->reader, "name");
         if (strcmp(layerName, "background") == 0) layer->type = BACKGROUND;
         else if (strcmp(layerName, "midground") == 0) layer->type = MIDGROUND;
