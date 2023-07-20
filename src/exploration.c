@@ -302,7 +302,7 @@ int atExit(Exploration *e, Player *p) {
 
 void tryToMove(Exploration *e, Player *p, AnimationType direction, Vector2 pos) {
     Rectangle rect = {
-            pos.x,
+            pos.x + MOB_COLLISION_WIDTH_OFFSET,
             pos.y + MOB_COLLISION_HEIGHT,
             MOB_COLLISION_WIDTH,
             MOB_COLLISION_HEIGHT,
