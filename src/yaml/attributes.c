@@ -4,6 +4,8 @@ typedef struct {
     int constitution;
     int intelligence;
     int wisdom;
+    int hp;
+    int mana;
 } AttributesData;
 
 static const cyaml_schema_field_t attributesFieldSchema[] = {
@@ -17,5 +19,9 @@ static const cyaml_schema_field_t attributesFieldSchema[] = {
                 "wis", CYAML_FLAG_OPTIONAL, AttributesData, wisdom),
         CYAML_FIELD_INT(
                 "con", CYAML_FLAG_OPTIONAL, AttributesData, constitution),
+        CYAML_FIELD_INT(
+                "hp", CYAML_FLAG_OPTIONAL, AttributesData, hp),
+        CYAML_FIELD_INT(
+                "mana", CYAML_FLAG_OPTIONAL, AttributesData, mana),
         CYAML_FIELD_END
 };

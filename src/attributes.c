@@ -4,6 +4,8 @@ typedef struct {
     int intelligence;
     int wisdom;
     int constitution;
+    int hp;
+    int mana;
 } Attributes;
 
 Attributes *createAttributesFromData(AttributesData *data) {
