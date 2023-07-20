@@ -44,3 +44,8 @@ Debug arguments:
 `-s` -- override the game config and start at specified scene index.
 
 `-e` -- exit after loading the game. Useful for debugging startup problems.
+
+## Todos
+
+* Finish fight implementation
+* Save/load
