@@ -198,6 +198,9 @@ void checkExplorationInput(Game *g) {
     if (IsKeyPressed(KEY_M)) {
         explorationMenuKeyPressed(g);
     }
+    if (IsKeyPressed(KEY_T)) {
+        addInfo(g->log, "player play time :: %ds", g->player->secondsPlayed);
+    }
 }
 
 void menuItemSelected(Game *g) {
@@ -257,7 +260,10 @@ void doInGameMenuLoop(Game *g) {
 }
 
 void run(Game *g) {
+    struct timeval t1, t2;
+    double elapsedTime, timeInterval;
     while (!WindowShouldClose()) {
+        gettimeofday(&t1, NULL);
         if (isFighting(g->currentScene)) {
             doFightLoop(g);
         } else if (getCurrentMenu(g->currentScene->exploration) != NULL) {
@@ -266,6 +272,14 @@ void run(Game *g) {
             doExplorationLoop(g);
         }
         updateMusicStream(g->audioManager);
+        gettimeofday(&t2, NULL);
+        timeInterval = (double) (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+        timeInterval += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
+        elapsedTime += timeInterval;
+        if (elapsedTime > 1000.0) {
+            elapsedTime -= 1000.0;
+            g->player->secondsPlayed += 1;
+        }
     }
 }
 

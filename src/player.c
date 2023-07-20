@@ -8,6 +8,7 @@ typedef struct {
     Item *items[MAX_ITEMS];
     int itemCount;
     int coins;
+    int secondsPlayed;
     Mobile *blockedBy;
     Mobile *engageable;
     bool engaged;
@@ -32,6 +33,7 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE]) {
     player->itemCount = 0;
     player->partyCount = 0;
     player->coins = 0;
+    player->secondsPlayed;
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         player->party[i] = mobs[i];
         if (mobs[i] == NULL && player->partyCount == 0) {
