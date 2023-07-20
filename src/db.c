@@ -105,10 +105,10 @@ Scene *loadScene(
         const char *indexDir,
         char *sceneName,
         const char *sceneDirectory,
-        bool showCollisions) {
+        RuntimeArgs *runtimeArgs) {
     addInfo(log, "create scene '%s'", sceneName);
     SceneData *sceneData = loadSceneYaml(sceneDirectory);
-    Scene *scene = createScene(log, showCollisions);
+    Scene *scene = createScene(log, runtimeArgs);
 
     // scene properties
     scene->name = &sceneName[0];

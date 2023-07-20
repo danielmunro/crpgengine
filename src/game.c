@@ -114,7 +114,7 @@ void loadScenes(Game *g, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SC
                 g->runtimeArgs->indexDir,
                 scenes[i],
                 sceneDirectories[i],
-                g->runtimeArgs->showCollisions);
+                g->runtimeArgs);
         addDebug(g->log, "scene loaded :: %s (%d)", g->scenes[i]->name, i);
     }
     for (int i = 0; i < g->sceneCount; i++) {

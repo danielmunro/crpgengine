@@ -39,6 +39,7 @@ typedef struct {
     Menu *menus[MAX_MENUS];
     int menuCount;
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
+    RuntimeArgs *runtimeArgs;
 } Exploration;
 
 Exit *createExit() {
@@ -67,16 +68,16 @@ Entrance *findEntrance(Exploration *e, char *name) {
     return NULL;
 }
 
-Exploration *createExploration(Log *log, int showCollisions) {
+Exploration *createExploration(Log *log, RuntimeArgs *runtimeArgs) {
     Exploration *exploration = malloc(sizeof(Exploration));
     exploration->layerCount = 0;
-    exploration->showCollisions = showCollisions;
     exploration->mobileCount = 0;
     exploration->entranceCount = 0;
     exploration->exitCount = 0;
     exploration->menuCount = 0;
     exploration->objectCount = 0;
     exploration->log = log;
+    exploration->runtimeArgs = runtimeArgs;
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         exploration->mobMovements[i] = NULL;
     }
@@ -175,7 +176,7 @@ void drawTile(Exploration *e, Image layer, int index, int x, int y) {
             (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
             WHITE
     );
-    if (e->showCollisions) {
+    if (e->runtimeArgs->showCollisions) {
         drawObjectCollision(e, layer, index - 1, x, y);
     }
 }
@@ -215,14 +216,14 @@ void createMobileLayer(Mobile *mobiles[MAX_MOBILES], Mobile *mobLayer[MAX_LAYERS
     }
 }
 
-void drawExplorationMobiles(int mobileCount, Mobile *mobiles[MAX_MOBILES], Player *p, Vector2 offset) {
+void drawExplorationMobiles(Exploration *e, Player *p, Vector2 offset) {
     /**
      * Start by putting mobs on a layer. This is necessary for drawing them in
      * the right order.
      */
     Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES];
     int mobsByYPosition[MAX_LAYERS];
-    createMobileLayer(mobiles, mobLayer, mobileCount, mobsByYPosition);
+    createMobileLayer(e->mobiles, mobLayer, e->mobileCount, mobsByYPosition);
 
     /**
      * The player goes on the layer too.
@@ -247,6 +248,15 @@ void drawExplorationMobiles(int mobileCount, Mobile *mobiles[MAX_MOBILES], Playe
                     }
             );
         }
+    }
+
+    if (e->runtimeArgs->showPlayerCollision) {
+        DrawRectangle(
+                (int) (mob->position.x + offset.x + MOB_COLLISION_WIDTH_OFFSET),
+                (int) (mob->position.y + offset.y + MOB_COLLISION_HEIGHT_OFFSET),
+                MOB_COLLISION_WIDTH,
+                MOB_COLLISION_HEIGHT,
+                GREEN);
     }
 }
 
@@ -357,7 +367,7 @@ void drawExplorationView(Exploration *e, Player *p, ControlBlock *c[MAX_ACTIVE_C
     };
     DrawTextureEx(e->renderedLayers[BACKGROUND], offset, 0, SCALE, WHITE);
     DrawTextureEx(e->renderedLayers[MIDGROUND], offset, 0, SCALE, WHITE);
-    drawExplorationMobiles(e->mobileCount, e->mobiles, p, offset);
+    drawExplorationMobiles(e, p, offset);
     DrawTextureEx(e->renderedLayers[FOREGROUND], offset, 0, SCALE, WHITE);
     drawExplorationControls(p, c);
     EndDrawing();

@@ -81,7 +81,7 @@
   </object>
   <object id="2" name="to_building3" type="exit" x="320.953" y="208.98" width="13.3038" height="14.4124"/>
   <object id="3" name="to_building2" type="exit" x="192.35" y="289.911" width="13.8581" height="13.3038"/>
-  <object id="4" name="to_house1" type="exit" x="560.647" y="322.253" width="13.8581" height="13.8581">
+  <object id="4" name="to_house1" type="exit" x="560.647" y="304.835" width="13.8581" height="13.8581">
    <properties>
     <property name="scene" value="house1"/>
     <property name="to" value="from_tinytown"/>
@@ -99,7 +99,7 @@
   </object>
   <object id="12" name="from_building3" type="entrance" x="321.09" y="226.429" width="13.6312" height="20.4468"/>
   <object id="13" name="from_building2" type="entrance" x="192.351" y="308.217" width="14.3885" height="15.9031"/>
-  <object id="14" name="from_house1" type="entrance" x="543.597" y="320.12" width="15.9031" height="17.4176"/>
+  <object id="14" name="from_house1" type="entrance" x="560.257" y="321.635" width="15.9031" height="13.6312"/>
  </objectgroup>
  <objectgroup id="5" name="npcs"/>
  <layer id="6" name="foreground" width="50" height="30">

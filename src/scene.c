@@ -43,13 +43,13 @@ void setSceneTypeFromString(Scene *s, const char *sceneType) {
     s->type = SCENE_TYPE_TOWN;
 }
 
-Scene *createScene(Log *log, int showCollisions) {
+Scene *createScene(Log *log, RuntimeArgs *runtimeArgs) {
     Scene *scene = malloc(sizeof(Scene));
     scene->storylineCount = 0;
     scene->fight = NULL;
     scene->encounters = createEncounters();
     scene->log = log;
-    scene->exploration = createExploration(log, showCollisions);
+    scene->exploration = createExploration(log, runtimeArgs);
     scene->controlBlockCount = 0;
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         scene->activeControlBlocks[i] = NULL;
@@ -58,9 +58,10 @@ Scene *createScene(Log *log, int showCollisions) {
 }
 
 SceneLoader *createSceneLoader(const char *indexDir) {
+    const char *dir = "/scenes";
     SceneLoader *sceneLoader = malloc(sizeof(SceneLoader));
-    sceneLoader->sceneDirectory = (char *)malloc(strlen(indexDir) + 7);
-    sprintf(sceneLoader->sceneDirectory, "%s/scenes", indexDir);
+    sceneLoader->sceneDirectory = (char *)malloc(strlen(indexDir) + strlen(dir));
+    sprintf(sceneLoader->sceneDirectory, "%s%s", indexDir, dir);
     return sceneLoader;
 }
 

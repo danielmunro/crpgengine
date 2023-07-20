@@ -1,9 +1,10 @@
 typedef struct {
     int sceneIndex;
     bool showCollisions;
+    bool showPlayerCollision;
     bool dump;
     bool exit;
-    int logLevel;
+    LogLevel logLevel;
     char *indexDir;
 } RuntimeArgs;
 
@@ -11,6 +12,7 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
     RuntimeArgs *r = malloc(sizeof(RuntimeArgs));
     r->sceneIndex = 0;
     r->showCollisions = false;
+    r->showPlayerCollision = false;
     r->dump = false;
     r->exit = false;
     r->logLevel = INFO;
@@ -19,6 +21,8 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
         if (argv[i][0] == '-') {
             if (argv[i][1] == 'c') {
                 r->showCollisions = true;
+            } else if (argv[i][1] == 'p') {
+                r->showPlayerCollision = true;
             } else if (argv[i][1] == 's') {
                 r->sceneIndex = strToInt(argv[i + 1]);
             } else if (argv[i][1] == 'd') {

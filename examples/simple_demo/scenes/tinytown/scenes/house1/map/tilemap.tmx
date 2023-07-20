@@ -74,17 +74,17 @@
 </data>
  </layer>
  <objectgroup id="4" name="warps">
-  <object id="1" name="from_tinytown" type="entrance" x="256.267" y="119.5" width="47.7092" height="31.8061">
+  <object id="1" name="from_tinytown" type="entrance" x="271.716" y="161.302" width="16.8118" height="14.0855">
    <properties>
     <property name="direction" value="up"/>
    </properties>
   </object>
-  <object id="3" name="start" type="entrance" x="272.17" y="128.134" width="14.5399" height="14.5399">
+  <object id="3" name="start" type="entrance" x="272.17" y="127.134" width="14.5399" height="14.5399">
    <properties>
     <property name="direction" value="up"/>
    </properties>
   </object>
-  <object id="4" name="to_tinytown" type="exit" x="272.17" y="177.206" width="15.4487" height="14.9943">
+  <object id="4" name="to_tinytown" type="exit" x="272.17" y="192.2" width="15.4487" height="14.9943">
    <properties>
     <property name="scene" value="tinytown"/>
     <property name="to" value="from_house1"/>
