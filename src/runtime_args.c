@@ -1,7 +1,8 @@
 typedef struct {
     int sceneIndex;
-    bool showCollisions;
+    bool showObjectCollisions;
     bool showPlayerCollision;
+    bool showWarpCollisions;
     bool dump;
     bool exit;
     LogLevel logLevel;
@@ -11,8 +12,9 @@ typedef struct {
 RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
     RuntimeArgs *r = malloc(sizeof(RuntimeArgs));
     r->sceneIndex = 0;
-    r->showCollisions = false;
+    r->showObjectCollisions = false;
     r->showPlayerCollision = false;
+    r->showWarpCollisions = false;
     r->dump = false;
     r->exit = false;
     r->logLevel = INFO;
@@ -20,9 +22,19 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
             if (argv[i][1] == 'c') {
-                r->showCollisions = true;
-            } else if (argv[i][1] == 'p') {
-                r->showPlayerCollision = true;
+                char *collider = strtok(argv[i + 1], ",");
+                while (collider != NULL) {
+                    for (int j = 0; j < COLLIDE_TYPE_COUNT; j++) {
+                        if (strcmp(collider, COLLIDE_TYPE_OBJECTS) == 0) {
+                            r->showObjectCollisions = true;
+                        } else if (strcmp(collider, COLLIDE_TYPE_PLAYER) == 0) {
+                            r->showPlayerCollision = true;
+                        } else if (strcmp(collider, COLLIDE_TYPE_WARPS) == 0) {
+                            r->showWarpCollisions = true;
+                        }
+                    }
+                    collider = strtok(NULL, ",");
+                }
             } else if (argv[i][1] == 's') {
                 r->sceneIndex = strToInt(argv[i + 1]);
             } else if (argv[i][1] == 'd') {

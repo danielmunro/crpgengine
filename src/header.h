@@ -205,6 +205,11 @@ typedef enum {
     CLOSE_MENU,
 } MenuSelectResponseType;
 
+#define COLLIDE_TYPE_OBJECTS "objects"
+#define COLLIDE_TYPE_PLAYER "player"
+#define COLLIDE_TYPE_WARPS "warps"
+#define COLLIDE_TYPE_COUNT 3
+
 #include "log.c"
 #include "util.c"
 #include "yaml/spritesheet.c"

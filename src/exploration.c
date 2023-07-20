@@ -176,12 +176,33 @@ void drawTile(Exploration *e, Image layer, int index, int x, int y) {
             (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
             WHITE
     );
-    if (e->runtimeArgs->showCollisions) {
+    if (e->runtimeArgs->showObjectCollisions) {
         drawObjectCollision(e, layer, index - 1, x, y);
     }
 }
 
-void renderExplorationLayer(Exploration *e, int layer) {
+void drawWarpCollisions(Exploration *e, Image *image) {
+    for (int i = 0; i < e->exitCount; i++) {
+        ImageDrawRectangle(
+                image,
+                (int) (e->exits[i]->area.x),
+                (int) (e->exits[i]->area.y),
+                (int) (e->exits[i]->area.width),
+                (int) (e->exits[i]->area.height),
+                WHITE);
+    }
+    for (int i = 0; i < e->entranceCount; i++) {
+        ImageDrawRectangle(
+                image,
+                (int) (e->entrances[i]->area.x),
+                (int) (e->entrances[i]->area.y),
+                (int) (e->entrances[i]->area.width),
+                (int) (e->entrances[i]->area.height),
+                BLACK);
+    }
+}
+
+void renderExplorationLayer(Exploration *e, LayerType layer) {
     Vector2D sz = e->tilemap->size;
     int width = SCREEN_WIDTH / sz.x;
     int height = SCREEN_HEIGHT / sz.y;
@@ -196,6 +217,9 @@ void renderExplorationLayer(Exploration *e, int layer) {
                     y
             );
         }
+    }
+    if (e->runtimeArgs->showWarpCollisions) {
+        drawWarpCollisions(e, &renderedLayer);
     }
     e->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
 }
