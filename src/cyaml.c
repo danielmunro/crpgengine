@@ -125,3 +125,11 @@ SaveData *loadSaveData(const char *filePath) {
     }
     return save;
 }
+
+void saveSaveData(SaveData *saveData, const char *filePath) {
+    cyaml_err_t err = cyaml_save_file(filePath, &config,
+                    &saveTopSchema, saveData, 0);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "%s\n", cyaml_strerror(err));
+    }
+}
