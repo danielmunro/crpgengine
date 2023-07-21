@@ -38,6 +38,11 @@ static const cyaml_schema_field_t mobGroupFieldSchema[] = {
         CYAML_FIELD_END
 };
 
+static const cyaml_schema_value_t partySchema = {
+        CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT,
+                            MobGroupData, mobGroupFieldSchema),
+};
+
 static const cyaml_schema_value_t saveStorylinesEntry = {
         CYAML_VALUE_STRING(CYAML_FLAG_DEFAULT, char *, 0, 255),
 };
@@ -68,8 +73,14 @@ static const cyaml_schema_field_t saveTopMappingField[] = {
                 "storylines", CYAML_FLAG_POINTER, SaveData, storylines, &saveStorylinesEntry, 0, CYAML_UNLIMITED),
         CYAML_FIELD_SEQUENCE(
                 "items", CYAML_FLAG_POINTER, SaveData, storylines, &saveItemsSchema, 0, CYAML_UNLIMITED),
-//        CYAML_FIELD_SEQUENCE(
-//                "party", CYAML_FLAG_POINTER, SaveData, storylines, &saveStorylinesEntry, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_SEQUENCE(
+                "party", CYAML_FLAG_POINTER,
+                SaveData, party,
+                &partySchema, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_SEQUENCE(
+                "onDeck", CYAML_FLAG_POINTER,
+                SaveData, onDeck,
+                &partySchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 
