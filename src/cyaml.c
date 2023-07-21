@@ -114,3 +114,14 @@ StorylinesData *loadStorylinesYaml(const char *filePath) {
     }
     return storylines;
 }
+
+SaveData *loadSaveData(const char *filePath) {
+    SaveData *save = malloc(sizeof(SaveData));
+    cyaml_err_t err = cyaml_load_file(filePath, &config,
+                                      &saveTopSchema, (cyaml_data_t **) &save, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "%s\n", cyaml_strerror(err));
+        return NULL;
+    }
+    return save;
+}

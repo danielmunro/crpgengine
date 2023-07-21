@@ -219,6 +219,7 @@ typedef enum {
 #include "yaml/music.c"
 #include "yaml/attributes.c"
 #include "yaml/player.c"
+#include "yaml/save.c"
 #include "yaml/storyline.c"
 #include "yaml/scene.c"
 #include "yaml/sound.c"

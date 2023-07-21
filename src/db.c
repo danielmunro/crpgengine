@@ -197,3 +197,7 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
     addInfo(log, "spritesheet count :: %d", count);
     return createSpriteSheetManager(spritesheets, count);
 }
+
+void saveGame() {
+
+}

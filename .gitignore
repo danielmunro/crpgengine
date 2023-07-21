@@ -5,6 +5,7 @@ CMakeFiles/
 Testing/
 build/
 _deps/
+_saves/
 CMakeCache.txt
 .DS_Store
 Project.cbp
