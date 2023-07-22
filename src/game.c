@@ -305,7 +305,7 @@ void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char 
         if (strcmp(getFilenameExt(files[i]), "yaml") == 0) {
             char animationFile[MAX_FS_PATH_LENGTH];
             sprintf(animationFile, "%s/%s", animationsDir, files[i]);
-            loadAnimations(am, sm, animationFile, indexDir);
+            loadAnimations(am, sm, animationFile);
         }
     }
 }

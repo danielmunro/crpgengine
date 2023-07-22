@@ -1,6 +1,6 @@
 #include <unistd.h>
 
-void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *file, const char *indexDir) {
+void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *file) {
     addInfo(am->log, "load animations file: %s", file);
     AnimationData *animation = loadAnimationYaml(file);
     Spritesheet *sp = findSpritesheetByName(sm, animation->sprite->name);
