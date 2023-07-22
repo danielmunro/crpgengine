@@ -1,11 +1,12 @@
 typedef struct {
     Mobile *party[MAX_PARTY_SIZE];
     int partyCount;
-    Mobile *team[MAX_TEAM_SIZE];
-    int teamCount;
+    Mobile *onDeck[MAX_TEAM_SIZE];
+    int onDeckCount;
     const char *stories[MAX_STORIES];
     int storyCount;
     Item *items[MAX_ITEMS];
+    int itemQuantities[MAX_ITEMS];
     int itemCount;
     int coins;
     int secondsPlayed;
@@ -16,7 +17,14 @@ typedef struct {
 } Player;
 
 void addItem(Player *player, Item *item) {
+    for (int i = 0; i < player->itemCount; i++) {
+        if (player->items[i]->name == item->name) {
+            player->itemQuantities[i]++;
+            return;
+        }
+    }
     player->items[player->itemCount] = item;
+    player->itemQuantities[player->itemCount] = 1;
     player->itemCount++;
 }
 
@@ -26,20 +34,20 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE]) {
     player->engageable = NULL;
     player->engaged = false;
     player->storyCount = 0;
-    player->teamCount = 1;
+    player->onDeckCount = 0;
     player->log = log;
-    ConsumeAffect *affect = malloc(sizeof(ConsumeAffect));
-    affect->hp = 20;
     player->itemCount = 0;
     player->partyCount = 0;
     player->coins = 0;
-    player->secondsPlayed;
+    player->secondsPlayed = 0;
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         player->party[i] = mobs[i];
         if (mobs[i] == NULL && player->partyCount == 0) {
             player->partyCount = i;
         }
     }
+    ConsumeAffect *affect = malloc(sizeof(ConsumeAffect));
+    affect->hp = 20;
     addItem(player, createItem(
             CONSUMABLE,
             "id",

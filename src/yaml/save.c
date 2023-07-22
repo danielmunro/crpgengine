@@ -1,11 +1,11 @@
 typedef struct {
-    char *name;
-    char *animation;
+    const char *name;
+    const char *animation;
     AttributesData *attributes;
 } MobGroupData;
 
 typedef struct {
-    char *type;
+    const char *name;
     int quantity;
 } SaveItemData;
 
@@ -28,33 +28,6 @@ typedef struct {
     int onDeck_count;
 } SaveData;
 
-SaveData *createSaveData(
-        char *scene,
-        Vector2 position,
-        int coins,
-        int secondsPlayed,
-        SaveItemData *saveItemData,
-        int itemsCount,
-        MobGroupData *party,
-        int partyCount,
-        MobGroupData *onDeck,
-        int onDeckCount) {
-    SaveData *save = malloc(sizeof(SaveData));
-    save->scene = scene;
-    char pos[255];
-    sprintf(pos, "%f, %f", position.x, position.y);
-    save->position = &pos[0];
-    save->coins = coins;
-    save->secondsPlayed = secondsPlayed;
-    save->items = saveItemData;
-    save->items_count = itemsCount;
-    save->party = party;
-    save->party_count = partyCount;
-    save->onDeck = onDeck;
-    save->onDeck_count = onDeckCount;
-    return save;
-}
-
 static const cyaml_schema_field_t mobGroupFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
                 "name", CYAML_FLAG_POINTER, MobGroupData, name, 0, CYAML_UNLIMITED),
@@ -76,7 +49,7 @@ static const cyaml_schema_value_t saveStorylinesEntry = {
 
 static const cyaml_schema_field_t saveItemsFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
-                "type", CYAML_FLAG_POINTER, SaveItemData , type, 0, CYAML_UNLIMITED),
+                "name", CYAML_FLAG_POINTER, SaveItemData , name, 0, CYAML_UNLIMITED),
         CYAML_FIELD_INT(
                 "quantity", CYAML_FLAG_OPTIONAL, SaveItemData , quantity),
         CYAML_FIELD_END

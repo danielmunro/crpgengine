@@ -15,6 +15,8 @@ Attributes *createAttributesFromData(AttributesData *data) {
     a->intelligence = data->intelligence;
     a->wisdom = data->wisdom;
     a->constitution = data->constitution;
+    a->hp = data->hp;
+    a->mana = data->mana;
     return a;
 }
 
@@ -25,6 +27,8 @@ Attributes *cloneAttributes(Attributes *original) {
     a->wisdom = original->wisdom;
     a->dexterity = original->dexterity;
     a->constitution = original->constitution;
+    a->hp = original->hp;
+    a->mana = original->mana;
     return a;
 }
 
@@ -35,6 +39,7 @@ Attributes *createEmptyAttributes() {
     a->wisdom = 0;
     a->dexterity = 0;
     a->constitution = 0;
-
+    a->hp = 0;
+    a->mana = 0;
     return a;
 }

@@ -197,3 +197,53 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
     addInfo(log, "spritesheet count :: %d", count);
     return createSpriteSheetManager(spritesheets, count);
 }
+
+AttributesData *createAttributesData(Attributes *a) {
+    AttributesData *data = malloc(sizeof(AttributesData));
+    data->strength = a->strength;
+    data->intelligence = a->intelligence;
+    data->wisdom = a->wisdom;
+    data->dexterity = a->dexterity;
+    data->constitution = a->constitution;
+    data->hp = a->hp;
+    data->mana = a->mana;
+    return data;
+}
+
+SaveData *createSaveData(char *scene, Player *player) {
+    Mobile *mob = getPartyLeader(player);
+    SaveData *save = malloc(sizeof(SaveData));
+    save->scene = scene;
+    char pos[255];
+    sprintf(pos, "%.1f, %.1f", mob->position.x, mob->position.y);
+    save->position = pos;
+    save->coins = player->coins;
+    save->secondsPlayed = player->secondsPlayed;
+    save->items = (SaveItemData *) malloc(sizeof(player->items));
+    for (int i = 0; i < player->itemCount; i++) {
+        save->items[i] = (SaveItemData) {
+            player->items[i]->name,
+            player->itemQuantities[i]
+        };
+    }
+    save->items_count = player->itemCount;
+    save->party = malloc(sizeof(MobGroupData));
+    for (int i = 0; i < player->partyCount; i++) {
+        save->party[i] = (MobGroupData) {
+            player->party[i]->name,
+            player->party[i]->animations[0]->name,
+            createAttributesData(player->party[i]->attributes),
+        };
+    }
+    save->party_count = player->partyCount;
+    save->onDeck = malloc(sizeof(MobGroupData));
+    for (int i = 0; i < player->onDeckCount; i++) {
+        save->onDeck[i] = (MobGroupData) {
+                player->onDeck[i]->name,
+                player->onDeck[i]->animations[0]->name,
+                createAttributesData(player->onDeck[i]->attributes),
+        };
+    }
+    save->onDeck_count = player->onDeckCount;
+    return save;
+}

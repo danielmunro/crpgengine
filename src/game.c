@@ -201,6 +201,12 @@ void checkExplorationInput(Game *g) {
     if (IsKeyPressed(KEY_T)) {
         addInfo(g->log, "player play time :: %ds", g->player->secondsPlayed);
     }
+    if (IsKeyPressed(KEY_S)) {
+        char filePath[MAX_FS_PATH_LENGTH];
+        sprintf(filePath, "%s/%s/%s", g->runtimeArgs->indexDir, "_saves", "foo.yaml");
+        saveSaveData(createSaveData(g->currentScene->name, g->player), filePath);
+        addInfo(g->log, "game progress saved");
+    }
 }
 
 void menuItemSelected(Game *g) {
