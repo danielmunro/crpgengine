@@ -97,19 +97,14 @@ static const cyaml_schema_field_t saveTopMappingField[] = {
         CYAML_FIELD_INT(
                 "secondsPlayed", CYAML_FLAG_SCALAR_PLAIN, SaveData, secondsPlayed),
         CYAML_FIELD_SEQUENCE(
-                "storylines", CYAML_FLAG_POINTER, SaveData, storylines,
+                "storylines", CYAML_FLAG_POINTER_NULL, SaveData, storylines,
                 &saveStorylinesEntry, 0, CYAML_UNLIMITED),
         CYAML_FIELD_SEQUENCE(
-                "items", CYAML_SEQUENCE, SaveData, items,
-                &saveItemsSchema, 0, CYAML_UNLIMITED),
+                "items", CYAML_FLAG_POINTER_NULL, SaveData, items, &saveItemsSchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_SEQUENCE(
-                "party", CYAML_SEQUENCE,
-                SaveData, party,
-                &partySchema, 0, CYAML_UNLIMITED),
+                "party", CYAML_FLAG_POINTER_NULL, SaveData, party, &partySchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_SEQUENCE(
-                "onDeck", CYAML_SEQUENCE,
-                SaveData, onDeck,
-                &partySchema, 0, CYAML_UNLIMITED),
+                "onDeck", CYAML_FLAG_POINTER_NULL, SaveData, onDeck, &partySchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 

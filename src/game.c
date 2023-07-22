@@ -336,31 +336,6 @@ Game *createGame(RuntimeArgs *r) {
     g->menuCount = getMenuList(g->menus);
     addDebug(g->log, "done creating game object");
     if (r->exit) {
-//        Mobile *mob = getPartyLeader(g->player);
-//        SaveItemData saveItemData[] = {};
-//        MobGroupData party[] = {};
-//        MobGroupData onDeck[] = {};
-//        SaveData *save = createSaveData(
-//                g->currentScene->name,
-//                mob->position,
-//                g->player->coins,
-//                g->player->secondsPlayed,
-//                saveItemData,
-//                0,
-//                party,
-//                0,
-//                onDeck,
-//                0);
-
-        char saveDir[MAX_FS_PATH_LENGTH];
-        sprintf(saveDir, "%s/_saves/start.yaml", r->indexDir);
-        printf("save dir: %s\n", saveDir);
-        SaveData *save = loadSaveData(saveDir);
-        printf("%s %d\n", save->items[0].type, save->items[0].quantity);
-
-        char savePath[MAX_FS_PATH_LENGTH];
-        sprintf(savePath, "%s/_saves/%s", r->indexDir, "test-save.yaml");
-        saveSaveData(save, savePath);
         exit(0);
     }
     return g;
