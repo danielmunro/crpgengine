@@ -1,4 +1,10 @@
 typedef struct {
+    struct timeval start;
+    double elapsedTime;
+    double timeInterval;
+} Timing;
+
+typedef struct {
     RuntimeArgs *runtimeArgs;
     Scene *scenes[MAX_SCENES];
     int sceneCount;
@@ -11,6 +17,7 @@ typedef struct {
     Log *log;
     Menu *menus[MAX_MENUS];
     int menuCount;
+    Timing *timing;
 } Game;
 
 void setScene(Game *g, Scene *scene, char *entranceName) {
@@ -269,11 +276,25 @@ void doInGameMenuLoop(Game *g) {
     checkMenuInput(g);
 }
 
+void startTiming(Timing *t) {
+    gettimeofday(&t->start, NULL);
+}
+
+int stopTiming(Timing *t, Player *p) {
+    struct timeval end;
+    gettimeofday(&end, NULL);
+    double timeInterval = (double) (end.tv_sec - t->start.tv_sec) * 1000.0;      // sec to ms
+    timeInterval += (end.tv_usec - t->start.tv_usec) / 1000.0;   // us to ms
+    t->elapsedTime += timeInterval;
+    if (t->elapsedTime > 1000.0) {
+        t->elapsedTime -= 1000.0;
+        p->secondsPlayed += 1;
+    }
+}
+
 void run(Game *g) {
-    struct timeval t1, t2;
-    double elapsedTime, timeInterval;
     while (!WindowShouldClose()) {
-        gettimeofday(&t1, NULL);
+        startTiming(g->timing);
         if (isFighting(g->currentScene)) {
             doFightLoop(g);
         } else if (getCurrentMenu(g->currentScene->exploration) != NULL) {
@@ -282,14 +303,7 @@ void run(Game *g) {
             doExplorationLoop(g);
         }
         updateMusicStream(g->audioManager);
-        gettimeofday(&t2, NULL);
-        timeInterval = (double) (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
-        timeInterval += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
-        elapsedTime += timeInterval;
-        if (elapsedTime > 1000.0) {
-            elapsedTime -= 1000.0;
-            g->player->secondsPlayed += 1;
-        }
+        stopTiming(g->timing, g->player);
     }
 }
 
@@ -344,6 +358,7 @@ Game *createGame(RuntimeArgs *r) {
     g->runtimeArgs = r;
     g->currentScene = NULL;
     initializeLog(g);
+    g->timing = malloc(sizeof(Timing));
     g->spritesheetManager = loadSpritesheetManager(g->log, r->indexDir);
     g->animationManager = createAnimationManager(g->log);
     loadAllAnimations(g->animationManager, g->spritesheetManager, r->indexDir);
