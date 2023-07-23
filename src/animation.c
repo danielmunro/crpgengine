@@ -98,7 +98,7 @@ Animation *cloneAnimation(Animation *a) {
             a->repeat);
 }
 
-int loadAnimationsByName(AnimationManager *am, char *name, Animation *animations[25]) {
+int loadAnimationsByName(AnimationManager *am, const char *name, Animation *animations[25]) {
     int count = 0;
     for (int i = 0; i < am->libraryCount; i++) {
         if (strcmp(am->library[i]->name, name) == 0) {
@@ -146,5 +146,17 @@ AnimationType getAnimationTypeFromName(const char *name) {
         }
     }
     printf("no animation id for name: %s\n", name);
+    exit(1);
+}
+
+void getAnimationStringFromType(AnimationType type, char *animationName) {
+    for (int i = 0; i < ANIMATION_TYPE_COUNT; i++) {
+        printf("compare -- %d : %d\n", ANIMATION_TYPES[i], type);
+        if (ANIMATION_TYPES[i] == type) {
+            sprintf(animationName, "%s", AnimationTypeStrings[i]);
+            return;
+        }
+    }
+    printf("no animation name for type: %d\n", type);
     exit(1);
 }

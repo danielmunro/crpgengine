@@ -227,23 +227,52 @@ SaveData *createSaveData(char *scene, Player *player) {
         };
     }
     save->items_count = player->itemCount;
-    save->party = malloc(sizeof(MobGroupData));
+    save->party = malloc(sizeof(MobileData));
+    printf("test -- %d\n", player->partyCount);
     for (int i = 0; i < player->partyCount; i++) {
-        save->party[i] = (MobGroupData) {
+        float *mob_pos;
+        getPositionArray(player->party[i]->position, mob_pos);
+        printf("test 2\n");
+        char *dir;
+        printf("get anim string a %d\n", player->party[i]->direction);
+        getAnimationStringFromType(player->party[i]->direction,dir);
+        save->party[i] = (MobileData) {
+            "",
             player->party[i]->name,
             player->party[i]->animations[0]->name,
+            mob_pos,
+            2,
+            dir,
             createAttributesData(player->party[i]->attributes),
         };
     }
     save->party_count = player->partyCount;
-    save->onDeck = malloc(sizeof(MobGroupData));
+    save->onDeck = malloc(sizeof(MobileData));
     for (int i = 0; i < player->onDeckCount; i++) {
-        save->onDeck[i] = (MobGroupData) {
+        float *p;
+        char a[255];
+        getPositionArray(player->onDeck[i]->position, p);
+        printf("gen anim string b\n");
+        getAnimationStringFromType(player->onDeck[i]->direction, a);
+        save->onDeck[i] = (MobileData) {
+                "",
                 player->onDeck[i]->name,
                 player->onDeck[i]->animations[0]->name,
-                createAttributesData(player->onDeck[i]->attributes),
+                p,
+                2,
+                a,
+                createAttributesData(player->party[i]->attributes),
         };
     }
     save->onDeck_count = player->onDeckCount;
     return save;
+}
+
+Player *createPlayerFromSaveData(SaveData save) {
+    Player *p = malloc(sizeof(Player));
+    p->coins = save.coins;
+    p->secondsPlayed = save.secondsPlayed;
+    for (int i = 0; i < save.party_count; i++) {
+//        p->party[i] = createM save.party[i];
+    }
 }

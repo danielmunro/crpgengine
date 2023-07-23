@@ -1,11 +1,5 @@
 typedef struct {
     const char *name;
-    const char *animation;
-    AttributesData *attributes;
-} MobGroupData;
-
-typedef struct {
-    const char *name;
     int quantity;
 } SaveItemData;
 
@@ -22,25 +16,14 @@ typedef struct {
     int storylines_count;
     SaveItemData *items;
     int items_count;
-    MobGroupData *party;
+    MobileData *party;
     int party_count;
-    MobGroupData *onDeck;
+    MobileData *onDeck;
     int onDeck_count;
 } SaveData;
 
-static const cyaml_schema_field_t mobGroupFieldSchema[] = {
-        CYAML_FIELD_STRING_PTR(
-                "name", CYAML_FLAG_POINTER, MobGroupData, name, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_STRING_PTR(
-                "animation", CYAML_FLAG_POINTER, MobGroupData, animation, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_MAPPING_PTR(
-                "attributes", CYAML_FLAG_POINTER, MobGroupData, attributes, attributesFieldSchema),
-        CYAML_FIELD_END
-};
-
 static const cyaml_schema_value_t partySchema = {
-        CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT,
-                            MobGroupData, mobGroupFieldSchema),
+        CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT, MobileData, mobileTopMappingField),
 };
 
 static const cyaml_schema_value_t saveStorylinesEntry = {

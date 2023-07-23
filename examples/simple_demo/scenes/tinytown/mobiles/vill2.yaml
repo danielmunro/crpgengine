@@ -3,3 +3,11 @@ name: Bobarian
 animations: fireas
 position: [340,300]
 direction: down
+attributes:
+  str: 0
+  dex: 0
+  int: 0
+  wis: 0
+  con: 0
+  hp: 0
+  mana: 0

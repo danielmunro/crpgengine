@@ -187,8 +187,11 @@ void checkExplorationInput(Game *g) {
     addDebug(g->log, "exploration -- check player input");
     Mobile *mob = getPartyLeader(g->player);
     resetMoving(mob);
+    printf("1\n");
     getMobAnimation(mob)->isPlaying = 0;
+    printf("1\n");
     explorationCheckMoveKeys(g->player);
+    printf("1\n");
     if (IsKeyPressed(KEY_C)) {
         explorationDebugKeyPressed(g->currentScene->exploration, mob->position);
     }
@@ -207,6 +210,7 @@ void checkExplorationInput(Game *g) {
         saveSaveData(createSaveData(g->currentScene->name, g->player), filePath);
         addInfo(g->log, "game progress saved");
     }
+    printf("1\n");
 }
 
 void menuItemSelected(Game *g) {
@@ -326,6 +330,15 @@ void initializeBeasts(Game *g) {
     loadBeastiary(g);
 }
 
+Scene *findScene(Game *g, const char *name) {
+    for (int i = 0; i < g->sceneCount; i++) {
+        if (strcmp(g->scenes[i]->name, name) == 0) {
+            return g->scenes[i];
+        }
+    }
+    return NULL;
+}
+
 Game *createGame(RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
     g->runtimeArgs = r;
@@ -335,9 +348,31 @@ Game *createGame(RuntimeArgs *r) {
     g->animationManager = createAnimationManager(g->log);
     loadAllAnimations(g->animationManager, g->spritesheetManager, r->indexDir);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
+
     g->player = loadPlayer(g->log, g->animationManager, r->indexDir);
+
+//    char filePath[MAX_FS_PATH_LENGTH];
+//    sprintf(filePath, "%s/_saves/%s", r->indexDir, "foo.yaml");
+//    SaveData *save = loadSaveData(filePath);
+//
+//    Mobile *mobs[MAX_PARTY_SIZE];
+//    addDebug(g->log, "party count :: %d", save->party_count);
+//    for (int i = 0; i < save->party_count; i++) {
+//        Animation *animations[MAX_ANIMATIONS];
+//        addDebug(g->log, "mob animation :: %s", animations);
+//        loadAnimationsByName(g->animationManager, save->party[i].animations, animations);
+//        mobs[i] = createMobile(
+//                save->party[i].id,
+//                save->party[i].name,
+//                (Vector2) { save->party[i].position[0], save->party[i].position[1] },
+//                getDirectionFromString(save->party[i].direction),
+//                animations);
+//    }
+//    g->player = createPlayer(g->log, mobs);
+
     initializeBeasts(g);
     loadScenesFromFiles(g);
+//    setScene(g, findScene(g, save->scene), START_ENTRANCE);
     setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);
     g->menuCount = getMenuList(g->menus);
     addDebug(g->log, "done creating game object");

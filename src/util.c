@@ -118,6 +118,11 @@ Vector2 getPositionFromString(char *position) {
     };
 }
 
+void getPositionArray(Vector2 v_pos, float *i_pos) {
+    i_pos[0] = v_pos.x;
+    i_pos[1] = v_pos.y;
+}
+
 Vector2D vector2DFromVect(Vector2 vect) {
     return (Vector2D) {
             (int) vect.x,
