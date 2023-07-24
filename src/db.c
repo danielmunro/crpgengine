@@ -222,14 +222,14 @@ SaveData *createSaveData(const char *scene, Player *player) {
     save->storylines_count = 0;
     save->items_count = 0;
 
-//    save->items = (SaveItemData *) malloc(sizeof(player->items));
-//    for (int i = 0; i < player->itemCount; i++) {
-//        save->items[i] = (SaveItemData) {
-//            player->items[i]->name,
-//            player->itemQuantities[i]
-//        };
-//    }
-//    save->items_count = player->itemCount;
+    save->items = (SaveItemData *) malloc(sizeof(player->items));
+    for (int i = 0; i < player->itemCount; i++) {
+        save->items[i] = (SaveItemData) {
+            player->items[i]->name,
+            player->itemQuantities[i]
+        };
+    }
+    save->items_count = player->itemCount;
 //    save->party = malloc(sizeof(MobileData));
 //    printf("test -- %d\n", player->partyCount);
 //    for (int i = 0; i < player->partyCount; i++) {
