@@ -275,4 +275,5 @@ Player *createPlayerFromSaveData(SaveData save) {
     for (int i = 0; i < save.party_count; i++) {
 //        p->party[i] = createM save.party[i];
     }
+    return p;
 }
