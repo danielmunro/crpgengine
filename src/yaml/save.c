@@ -45,13 +45,13 @@ static const cyaml_schema_value_t saveItemsSchema = {
 
 static const cyaml_schema_field_t saveTopMappingField[] = {
         CYAML_FIELD_INT(
-                "coins", CYAML_FLAG_SCALAR_PLAIN, SaveData, coins),
+                "coins", CYAML_FLAG_DEFAULT, SaveData, coins),
         CYAML_FIELD_STRING(
-                "scene", CYAML_FLAG_POINTER, SaveData, scene, 0),
+                "scene", CYAML_FLAG_DEFAULT, SaveData, scene, 0),
         CYAML_FIELD_STRING(
-                "position", CYAML_FLAG_POINTER, SaveData, position, 0),
+                "position", CYAML_FLAG_DEFAULT, SaveData, position, 0),
         CYAML_FIELD_INT(
-                "secondsPlayed", CYAML_FLAG_SCALAR_PLAIN, SaveData, secondsPlayed),
+                "secondsPlayed", CYAML_FLAG_DEFAULT, SaveData, secondsPlayed),
         CYAML_FIELD_SEQUENCE(
                 "storylines", CYAML_FLAG_POINTER_NULL, SaveData, storylines,
                 &saveStorylinesEntry, 0, CYAML_UNLIMITED),
