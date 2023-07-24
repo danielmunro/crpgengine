@@ -229,26 +229,22 @@ SaveData *createSaveData(const char *scene, Player *player) {
     }
     save->items_count = player->itemCount;
 
-//    save->party = malloc(sizeof(MobileData));
-//    printf("test -- %d\n", player->partyCount);
-//    for (int i = 0; i < player->partyCount; i++) {
-//        float *mob_pos;
-//        getPositionArray(player->party[i]->position, mob_pos);
-//        printf("test 2\n");
-//        char *dir;
-//        printf("get anim string a %d\n", player->party[i]->direction);
-//        getAnimationStringFromType(player->party[i]->direction,dir);
-//        save->party[i] = (MobileData) {
-//            "",
-//            player->party[i]->name,
-//            player->party[i]->animations[0]->name,
-//            mob_pos,
-//            2,
-//            dir,
-//            createAttributesData(player->party[i]->attributes),
-//        };
-//    }
-//    save->party_count = player->partyCount;
+    save->party = malloc(sizeof(MobileData));
+    save->party_count = 0;
+    printf("test -- %d\n", player->partyCount);
+    for (int i = 0; i < player->partyCount; i++) {
+        printf("1\n");
+        save->party[i] = (MobileData) {
+            "",
+            player->party[i]->name,
+            player->party[i]->animations[0]->name,
+            getPositionAsString(player->party[i]->position),
+            getAnimationStringFromType(player->party[i]->direction),
+            createAttributesData(player->party[i]->attributes),
+        };
+        printf("1\n");
+    }
+    save->party_count = player->partyCount;
 //    save->onDeck = malloc(sizeof(MobileData));
 //    for (int i = 0; i < player->onDeckCount; i++) {
 //        float *p;

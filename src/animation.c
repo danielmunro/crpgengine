@@ -149,12 +149,13 @@ AnimationType getAnimationTypeFromName(const char *name) {
     exit(1);
 }
 
-void getAnimationStringFromType(AnimationType type, char *animationName) {
+char *getAnimationStringFromType(AnimationType type) {
     for (int i = 0; i < ANIMATION_TYPE_COUNT; i++) {
         printf("compare -- %d : %d\n", ANIMATION_TYPES[i], type);
         if (ANIMATION_TYPES[i] == type) {
+            char *animationName = malloc(strlen(AnimationTypeStrings[i]));
             sprintf(animationName, "%s", AnimationTypeStrings[i]);
-            return;
+            return animationName;
         }
     }
     printf("no animation name for type: %d\n", type);

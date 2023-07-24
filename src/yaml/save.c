@@ -12,8 +12,8 @@ typedef struct {
     int storylines_count;
     SaveItemData *items;
     int items_count;
-//    MobileData *party;
-//    int party_count;
+    MobileData *party;
+    int party_count;
 //    MobileData *onDeck;
 //    int onDeck_count;
 } SaveData;
@@ -54,8 +54,9 @@ static const cyaml_schema_field_t saveTopMappingField[] = {
         CYAML_FIELD_SEQUENCE(
                 "items", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, SaveData, items,
                 &saveItemsSchema, 0, CYAML_UNLIMITED),
-//        CYAML_FIELD_SEQUENCE(
-//                "party", CYAML_FLAG_POINTER_NULL, SaveData, party, &partySchema, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_SEQUENCE(
+                "party", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, SaveData, party,
+                &partySchema, 0, CYAML_UNLIMITED),
 //        CYAML_FIELD_SEQUENCE(
 //                "onDeck", CYAML_FLAG_POINTER_NULL, SaveData, onDeck, &partySchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
