@@ -220,6 +220,7 @@ SaveData *createSaveData(const char *scene, Player *player) {
     sprintf(pos, "%.1f, %.1f", mob->position.x, mob->position.y);
     save->position = &pos[0];
     save->storylines_count = 0;
+    save->items_count = 0;
 
 //    save->items = (SaveItemData *) malloc(sizeof(player->items));
 //    for (int i = 0; i < player->itemCount; i++) {
