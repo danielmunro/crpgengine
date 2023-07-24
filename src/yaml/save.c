@@ -8,7 +8,7 @@ typedef struct {
 } SaveStorylineData;
 
 typedef struct {
-    char scene[255];
+    const char *scene;
     int coins;
     int secondsPlayed;
     char position[255];
