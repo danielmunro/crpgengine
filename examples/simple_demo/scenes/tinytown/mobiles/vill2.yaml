@@ -1,7 +1,7 @@
 id: vill2
 name: Bobarian
 animations: fireas
-position: [340,300]
+position: 340,300
 direction: down
 attributes:
   str: 0

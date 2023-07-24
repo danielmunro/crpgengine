@@ -111,16 +111,13 @@ int max(int a, int b) {
     return b;
 }
 
-Vector2 getPositionFromString(char *position) {
+Vector2 getPositionFromString(const char *position) {
+    char pos[255];
+    strcpy(pos, position);
     return (Vector2){
-        strToInt(strtok(position, ",")),
+        strToInt(strtok(pos, ",")),
         strToInt(strtok(NULL, ",")),
     };
-}
-
-void getPositionArray(Vector2 v_pos, float *i_pos) {
-    i_pos[0] = v_pos.x;
-    i_pos[1] = v_pos.y;
 }
 
 Vector2D vector2DFromVect(Vector2 vect) {

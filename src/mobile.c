@@ -39,7 +39,7 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
     Mobile *mob = createMobile(
             data->id,
             data->name,
-            (Vector2) {(float) data->position[0], (float) data->position[1]},
+            getPositionFromString(data->position),
             getDirectionFromString(data->direction),
             animations);
     return mob;
