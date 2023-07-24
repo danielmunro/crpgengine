@@ -212,13 +212,13 @@ AttributesData *createAttributesData(Attributes *a) {
 
 SaveData *createSaveData(const char *scene, Player *player) {
     SaveData *save = malloc(sizeof(SaveData));
-    strcpy(save->scene, &scene[0]);
+    save->scene = &scene[0];
     save->coins = player->coins;
     save->secondsPlayed = player->secondsPlayed;
     Mobile *mob = getPartyLeader(player);
     char pos[255];
     sprintf(pos, "%.1f, %.1f", mob->position.x, mob->position.y);
-    strcpy(save->position, pos);
+    save->position = &pos[0];
 
 //    save->items = (SaveItemData *) malloc(sizeof(player->items));
 //    for (int i = 0; i < player->itemCount; i++) {
