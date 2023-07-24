@@ -396,7 +396,6 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
 void drawExplorationView(Exploration *e, Player *p, ControlBlock *c[MAX_ACTIVE_CONTROLS]) {
     addDebug(e->log, "exploration -- draw");
     Mobile *mob = getPartyLeader(p);
-    printf("2\n");
     BeginDrawing();
     ClearBackground(BLACK);
     Vector2 offset = {
@@ -405,13 +404,10 @@ void drawExplorationView(Exploration *e, Player *p, ControlBlock *c[MAX_ACTIVE_C
     };
     DrawTextureEx(e->renderedLayers[BACKGROUND], offset, 0, SCALE, WHITE);
     DrawTextureEx(e->renderedLayers[MIDGROUND], offset, 0, SCALE, WHITE);
-    printf("2\n");
     drawExplorationMobiles(e, p, offset);
-    printf("2\n");
     DrawTextureEx(e->renderedLayers[FOREGROUND], offset, 0, SCALE, WHITE);
     drawExplorationControls(p, c);
     EndDrawing();
-    printf("2\n");
 }
 
 void addMobile(Exploration *exploration, Mobile *mob) {
