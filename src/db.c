@@ -216,9 +216,7 @@ SaveData *createSaveData(const char *scene, Player *player) {
     save->coins = player->coins;
     save->secondsPlayed = player->secondsPlayed;
     Mobile *mob = getPartyLeader(player);
-    char pos[255];
-    sprintf(pos, "%.1f, %.1f", mob->position.x, mob->position.y);
-    save->position = &pos[0];
+    save->position = getPositionAsString(mob->position);
     save->storylines_count = 0;
     save->items_count = 0;
 
@@ -230,6 +228,7 @@ SaveData *createSaveData(const char *scene, Player *player) {
         };
     }
     save->items_count = player->itemCount;
+
 //    save->party = malloc(sizeof(MobileData));
 //    printf("test -- %d\n", player->partyCount);
 //    for (int i = 0; i < player->partyCount; i++) {

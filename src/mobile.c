@@ -105,3 +105,9 @@ bool moveMob(Mobile *mob, Vector2 destination) {
     incrementAnimationFrame(animation);
     return moved;
 }
+
+char *getPositionAsString(Vector2 position) {
+    char *value = malloc(255);
+    sprintf(value, "%.1f, %.1f", position.x, position.y);
+    return value;
+}
