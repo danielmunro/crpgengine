@@ -8,18 +8,18 @@ typedef struct {
 } SaveStorylineData;
 
 typedef struct {
-    int coins;
     char scene[255];
-    char position[255];
+    int coins;
     int secondsPlayed;
-    SaveStorylineData *storylines;
-    int storylines_count;
-    SaveItemData *items;
-    int items_count;
-    MobileData *party;
-    int party_count;
-    MobileData *onDeck;
-    int onDeck_count;
+    char position[255];
+//    SaveStorylineData *storylines;
+//    int storylines_count;
+//    SaveItemData *items;
+//    int items_count;
+//    MobileData *party;
+//    int party_count;
+//    MobileData *onDeck;
+//    int onDeck_count;
 } SaveData;
 
 static const cyaml_schema_value_t partySchema = {
@@ -44,23 +44,23 @@ static const cyaml_schema_value_t saveItemsSchema = {
 };
 
 static const cyaml_schema_field_t saveTopMappingField[] = {
-        CYAML_FIELD_INT(
-                "coins", CYAML_FLAG_DEFAULT, SaveData, coins),
         CYAML_FIELD_STRING(
                 "scene", CYAML_FLAG_DEFAULT, SaveData, scene, 0),
-        CYAML_FIELD_STRING(
-                "position", CYAML_FLAG_DEFAULT, SaveData, position, 0),
+        CYAML_FIELD_INT(
+                "coins", CYAML_FLAG_DEFAULT, SaveData, coins),
         CYAML_FIELD_INT(
                 "secondsPlayed", CYAML_FLAG_DEFAULT, SaveData, secondsPlayed),
-        CYAML_FIELD_SEQUENCE(
-                "storylines", CYAML_FLAG_POINTER_NULL, SaveData, storylines,
-                &saveStorylinesEntry, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_SEQUENCE(
-                "items", CYAML_FLAG_POINTER_NULL, SaveData, items, &saveItemsSchema, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_SEQUENCE(
-                "party", CYAML_FLAG_POINTER_NULL, SaveData, party, &partySchema, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_SEQUENCE(
-                "onDeck", CYAML_FLAG_POINTER_NULL, SaveData, onDeck, &partySchema, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING(
+                "position", CYAML_FLAG_DEFAULT, SaveData, position, 0),
+//        CYAML_FIELD_SEQUENCE(
+//                "storylines", CYAML_FLAG_POINTER_NULL, SaveData, storylines,
+//                &saveStorylinesEntry, 0, CYAML_UNLIMITED),
+//        CYAML_FIELD_SEQUENCE(
+//                "items", CYAML_FLAG_POINTER_NULL, SaveData, items, &saveItemsSchema, 0, CYAML_UNLIMITED),
+//        CYAML_FIELD_SEQUENCE(
+//                "party", CYAML_FLAG_POINTER_NULL, SaveData, party, &partySchema, 0, CYAML_UNLIMITED),
+//        CYAML_FIELD_SEQUENCE(
+//                "onDeck", CYAML_FLAG_POINTER_NULL, SaveData, onDeck, &partySchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 

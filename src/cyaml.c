@@ -133,4 +133,5 @@ void saveSaveData(SaveData *saveData, const char *filePath) {
     if (err != CYAML_OK) {
         fprintf(stderr, "%s\n", cyaml_strerror(err));
     }
+    printf("done\n");
 }
