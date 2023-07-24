@@ -210,7 +210,7 @@ void checkExplorationInput(Game *g) {
     }
     if (IsKeyPressed(KEY_S)) {
         char filePath[MAX_FS_PATH_LENGTH];
-        sprintf(filePath, "%s/%s/%s", g->runtimeArgs->indexDir, "_saves", "foo.yaml");
+        sprintf(filePath, "%s/%s/%s", g->runtimeArgs->indexDir, "_saves", "autosave.yaml");
         SaveData *save = createSaveData(g->currentScene->name, g->player);
         saveSaveData(save, filePath);
         free(save);

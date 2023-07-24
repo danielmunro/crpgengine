@@ -127,11 +127,9 @@ SaveData *loadSaveData(const char *filePath) {
 }
 
 void saveSaveData(SaveData *saveData, const char *filePath) {
-    printf("saving game data\n");
     cyaml_err_t err = cyaml_save_file(filePath, &config,
                     &saveTopSchema, saveData, 0);
     if (err != CYAML_OK) {
         fprintf(stderr, "%s\n", cyaml_strerror(err));
     }
-    printf("done\n");
 }

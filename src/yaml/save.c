@@ -14,8 +14,8 @@ typedef struct {
     int items_count;
     MobileData *party;
     int party_count;
-//    MobileData *onDeck;
-//    int onDeck_count;
+    MobileData *onDeck;
+    int onDeck_count;
 } SaveData;
 
 static const cyaml_schema_value_t partySchema = {
@@ -57,8 +57,9 @@ static const cyaml_schema_field_t saveTopMappingField[] = {
         CYAML_FIELD_SEQUENCE(
                 "party", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, SaveData, party,
                 &partySchema, 0, CYAML_UNLIMITED),
-//        CYAML_FIELD_SEQUENCE(
-//                "onDeck", CYAML_FLAG_POINTER_NULL, SaveData, onDeck, &partySchema, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_SEQUENCE(
+                "onDeck", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, SaveData, onDeck,
+                &partySchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 

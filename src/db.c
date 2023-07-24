@@ -210,6 +210,17 @@ AttributesData *createAttributesData(Attributes *a) {
     return data;
 }
 
+MobileData createMobDataFromMob(Mobile *mob) {
+    return (MobileData) {
+            mob->id,
+            mob->name,
+            mob->animations[0]->name,
+            getPositionAsString(mob->position),
+            getAnimationStringFromType(mob->direction),
+            createAttributesData(mob->attributes),
+    };
+}
+
 SaveData *createSaveData(const char *scene, Player *player) {
     SaveData *save = malloc(sizeof(SaveData));
     save->scene = &scene[0];
@@ -230,48 +241,15 @@ SaveData *createSaveData(const char *scene, Player *player) {
     save->items_count = player->itemCount;
 
     save->party = malloc(sizeof(MobileData));
-    save->party_count = 0;
-    printf("test -- %d\n", player->partyCount);
     for (int i = 0; i < player->partyCount; i++) {
-        printf("1\n");
-        save->party[i] = (MobileData) {
-            "",
-            player->party[i]->name,
-            player->party[i]->animations[0]->name,
-            getPositionAsString(player->party[i]->position),
-            getAnimationStringFromType(player->party[i]->direction),
-            createAttributesData(player->party[i]->attributes),
-        };
-        printf("1\n");
+        save->party[i] = createMobDataFromMob(player->party[i]);
     }
     save->party_count = player->partyCount;
-//    save->onDeck = malloc(sizeof(MobileData));
-//    for (int i = 0; i < player->onDeckCount; i++) {
-//        float *p;
-//        char a[255];
-//        getPositionArray(player->onDeck[i]->position, p);
-//        printf("gen anim string b\n");
-//        getAnimationStringFromType(player->onDeck[i]->direction, a);
-//        save->onDeck[i] = (MobileData) {
-//                "",
-//                player->onDeck[i]->name,
-//                player->onDeck[i]->animations[0]->name,
-//                p,
-//                2,
-//                a,
-//                createAttributesData(player->party[i]->attributes),
-//        };
-//    }
-//    save->onDeck_count = player->onDeckCount;
-    return save;
-}
 
-Player *createPlayerFromSaveData(SaveData save) {
-    Player *p = malloc(sizeof(Player));
-//    p->coins = save.coins;
-//    p->secondsPlayed = save.secondsPlayed;
-//    for (int i = 0; i < save.party_count; i++) {
-//        p->party[i] = createM save.party[i];
-//    }
-    return p;
+    save->onDeck = malloc(sizeof(MobileData));
+    for (int i = 0; i < player->onDeckCount; i++) {
+        save->onDeck[i] = createMobDataFromMob(player->onDeck[i]);
+    }
+    save->onDeck_count = player->onDeckCount;
+    return save;
 }
