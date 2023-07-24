@@ -4,10 +4,6 @@ typedef struct {
 } SaveItemData;
 
 typedef struct {
-    char *storyline;
-} SaveStorylineData;
-
-typedef struct {
     const char *scene;
     int coins;
     int secondsPlayed;
