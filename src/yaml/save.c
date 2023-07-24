@@ -14,8 +14,6 @@ typedef struct {
     const char *position;
     const char **storylines;
     int storylines_count;
-//    SaveStorylineData *storylines;
-//    int storylines_count;
 //    SaveItemData *items;
 //    int items_count;
 //    MobileData *party;
@@ -34,9 +32,9 @@ static const cyaml_schema_value_t saveStorylinesEntry = {
 
 static const cyaml_schema_field_t saveItemsFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
-                "name", CYAML_FLAG_POINTER, SaveItemData , name, 0, CYAML_UNLIMITED),
+                "name", CYAML_FLAG_POINTER, SaveItemData, name, 0, CYAML_UNLIMITED),
         CYAML_FIELD_INT(
-                "quantity", CYAML_FLAG_OPTIONAL, SaveItemData , quantity),
+                "quantity", CYAML_FLAG_OPTIONAL, SaveItemData, quantity),
         CYAML_FIELD_END
 };
 
@@ -58,7 +56,7 @@ static const cyaml_schema_field_t saveTopMappingField[] = {
                 "storylines", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, SaveData, storylines,
                 storylines_count, &saveStorylinesEntry, 0, MAX_STORIES),
 //        CYAML_FIELD_SEQUENCE(
-//                "items", CYAML_FLAG_POINTER_NULL, SaveData, items, &saveItemsSchema, 0, CYAML_UNLIMITED),
+//                "items", CYAML_FLAG_POINTER, SaveData, items, &saveItemsSchema, 0, CYAML_UNLIMITED),
 //        CYAML_FIELD_SEQUENCE(
 //                "party", CYAML_FLAG_POINTER_NULL, SaveData, party, &partySchema, 0, CYAML_UNLIMITED),
 //        CYAML_FIELD_SEQUENCE(
