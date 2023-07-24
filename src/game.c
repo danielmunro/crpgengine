@@ -194,11 +194,8 @@ void checkExplorationInput(Game *g) {
     addDebug(g->log, "exploration -- check player input");
     Mobile *mob = getPartyLeader(g->player);
     resetMoving(mob);
-    printf("1\n");
     getMobAnimation(mob)->isPlaying = 0;
-    printf("1\n");
     explorationCheckMoveKeys(g->player);
-    printf("1\n");
     if (IsKeyPressed(KEY_C)) {
         explorationDebugKeyPressed(g->currentScene->exploration, mob->position);
     }
@@ -217,7 +214,6 @@ void checkExplorationInput(Game *g) {
         saveSaveData(createSaveData(g->currentScene->name, g->player), filePath);
         addInfo(g->log, "game progress saved");
     }
-    printf("1\n");
 }
 
 void menuItemSelected(Game *g) {
@@ -280,7 +276,7 @@ void startTiming(Timing *t) {
     gettimeofday(&t->start, NULL);
 }
 
-int stopTiming(Timing *t, Player *p) {
+void stopTiming(Timing *t, Player *p) {
     struct timeval end;
     gettimeofday(&end, NULL);
     double timeInterval = (double) (end.tv_sec - t->start.tv_sec) * 1000.0;      // sec to ms
