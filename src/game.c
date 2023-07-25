@@ -392,9 +392,9 @@ SaveData *initializePlayer(Game *g) {
 void setSceneBasedOnSave(Game *g, SaveData *save) {
     if (save != NULL && g->runtimeArgs->sceneIndex == -1) {
         setScene(g, findScene(g, save->scene), NULL);
-    } else {
-        setScene(g, g->scenes[g->runtimeArgs->sceneIndex], START_ENTRANCE);
+        return;
     }
+    setScene(g, g->scenes[g->runtimeArgs->sceneIndex], START_ENTRANCE);
 }
 
 Game *createGame(RuntimeArgs *r) {
