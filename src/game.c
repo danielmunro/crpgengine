@@ -360,31 +360,35 @@ const char *getAutosaveFile(const char *indexDir) {
     return autosaveFilePath;
 }
 
+void mapSaveDataToPlayer(Game *g, SaveData *save) {
+    Mobile *mobs[MAX_PARTY_SIZE];
+    addInfo(g->log, "save file party count :: %d", save->party_count);
+    for (int i = 0; i < save->party_count; i++) {
+        Animation *animations[MAX_ANIMATIONS];
+        loadAnimationsByName(g->animationManager, save->party[i].animations, animations);
+        mobs[i] = createMobile(
+                save->party[i].id,
+                save->party[i].name,
+                getPositionFromString(save->party[i].position),
+                getDirectionFromString(save->party[i].direction),
+                animations);
+    }
+    for (int i = save->party_count; i < MAX_PARTY_SIZE; i++) {
+        mobs[i] = NULL;
+    }
+    g->player = createPlayer(g->log, mobs);
+    g->player->secondsPlayed = save->secondsPlayed;
+    g->player->coins = save->coins;
+}
+
 SaveData *initializePlayer(Game *g) {
     const char *autosaveFilePath = getAutosaveFile(g->runtimeArgs->indexDir);
     SaveData *save = NULL;
     if (FileExists(autosaveFilePath)) {
         save = loadSaveData(autosaveFilePath);
-        Mobile *mobs[MAX_PARTY_SIZE];
-        addInfo(g->log, "party count :: %d", save->party_count);
-        for (int i = 0; i < save->party_count; i++) {
-            Animation *animations[MAX_ANIMATIONS];
-            loadAnimationsByName(g->animationManager, save->party[i].animations, animations);
-            mobs[i] = createMobile(
-                    save->party[i].id,
-                    save->party[i].name,
-                    getPositionFromString(save->party[i].position),
-                    getDirectionFromString(save->party[i].direction),
-                    animations);
-        }
-        for (int i = save->party_count; i < MAX_PARTY_SIZE; i++) {
-            mobs[i] = NULL;
-        }
-        g->player = createPlayer(g->log, mobs);
-        g->player->secondsPlayed = save->secondsPlayed;
-        g->player->coins = save->coins;
+        mapSaveDataToPlayer(g, save);
     } else {
-        g->player = loadPlayer(g->log, g->animationManager, g->runtimeArgs->indexDir);
+        g->player = createNewPlayer(g->log, g->animationManager, g->runtimeArgs->indexDir);
     }
     free((char *)autosaveFilePath);
     return save;

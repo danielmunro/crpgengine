@@ -140,7 +140,7 @@ Scene *loadScene(
     return scene;
 }
 
-Player *loadPlayer(Log *log, AnimationManager *am, char *indexDir) {
+Player *createNewPlayer(Log *log, AnimationManager *am, char *indexDir) {
     addInfo(log, "loading player from dir %s", indexDir);
     PlayerData *playerYaml = loadPlayerYaml(log, indexDir);
     Animation *animations[MAX_ANIMATIONS];
