@@ -47,6 +47,8 @@ void processAnimations(AnimationManager *am) {
 }
 
 void addAnimation(AnimationManager *am, Animation *a) {
+    addInfo(am->log, "add animation to manager :: %s, %s, %d\n",
+            a->name, a->spriteSheet->name, am->animationCount);
     am->animations[am->animationCount] = a;
     am->animationCount++;
 }
@@ -98,13 +100,16 @@ Animation *cloneAnimation(Animation *a) {
             a->repeat);
 }
 
-int loadAnimationsByName(AnimationManager *am, const char *name, Animation *animations[25]) {
+int loadAnimationsByName(AnimationManager *am, const char *name, Animation *animations[MAX_ANIMATIONS]) {
     int count = 0;
     for (int i = 0; i < am->libraryCount; i++) {
         if (strcmp(am->library[i]->name, name) == 0) {
             animations[count] = cloneAnimation(am->library[i]);
             count++;
         }
+    }
+    for (int i = count; i < MAX_ANIMATIONS; i++) {
+        animations[i] = NULL;
     }
     return count;
 }

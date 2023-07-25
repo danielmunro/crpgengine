@@ -33,7 +33,6 @@ SpritesheetManager *createSpriteSheetManager(Spritesheet *spritesheets[MAX_SPRIT
 
 Spritesheet *findSpritesheetByName(SpritesheetManager *sm, const char *name) {
     for (int i = 0; i < sm->spritesCount; i++) {
-        printf("sp compare :: %s %s\n", sm->spritesheets[i]->name, name);
         if (strcmp(sm->spritesheets[i]->name, name) == 0) {
             return sm->spritesheets[i];
         }
