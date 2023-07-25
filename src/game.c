@@ -33,6 +33,7 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
         mob->position.y = entrance->area.y + (entrance->area.height / 2) - (int) (MOB_COLLISION_HEIGHT / 2);
         mob->direction = entrance->direction;
     }
+    addInfo(g->log, "player position :: %f %f", mob->position.x, mob->position.y);
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
     addInfo(g->log, "finished setting scene to '%s'", g->currentScene->name);
@@ -377,14 +378,13 @@ Game *createGame(RuntimeArgs *r) {
         addInfo(g->log, "party count :: %d", save->party_count);
 
         for (int i = 0; i < save->party_count; i++) {
-            addInfo(g->log, "add party member :: %d", i);
+            addDebug(g->log, "add party member :: %d", i);
             Animation *animations[MAX_ANIMATIONS];
-            addDebug(g->log, "mob animation :: %s", animations);
             loadAnimationsByName(g->animationManager, save->party[i].animations, animations);
             mobs[i] = createMobile(
                     save->party[i].id,
                     save->party[i].name,
-                    (Vector2) {save->party[i].position[0], save->party[i].position[1]},
+                    getPositionFromString(save->party[i].position),
                     getDirectionFromString(save->party[i].direction),
                     animations);
         }
