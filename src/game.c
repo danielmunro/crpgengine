@@ -364,8 +364,9 @@ Game *createGame(RuntimeArgs *r) {
     g->animationManager = createAnimationManager(g->log);
     loadAllAnimations(g->animationManager, g->spritesheetManager, r->indexDir);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
+    initializeBeasts(g);
 
-    char autosaveFilePath[255];
+    char autosaveFilePath[MAX_FS_PATH_LENGTH];
     sprintf(autosaveFilePath, "%s/_saves/autosave.yaml", r->indexDir);
     bool useAutosave = FileExists(autosaveFilePath);
     const char *scene;
@@ -395,8 +396,6 @@ Game *createGame(RuntimeArgs *r) {
     } else {
         g->player = loadPlayer(g->log, g->animationManager, r->indexDir);
     }
-
-    initializeBeasts(g);
     loadScenesFromFiles(g);
     if (useAutosave) {
         setScene(g, findScene(g, scene), NULL);
