@@ -368,7 +368,6 @@ SaveData *initializePlayer(Game *g) {
         save = loadSaveData(autosaveFilePath);
         Mobile *mobs[MAX_PARTY_SIZE];
         addInfo(g->log, "party count :: %d", save->party_count);
-
         for (int i = 0; i < save->party_count; i++) {
             Animation *animations[MAX_ANIMATIONS];
             loadAnimationsByName(g->animationManager, save->party[i].animations, animations);
@@ -390,6 +389,14 @@ SaveData *initializePlayer(Game *g) {
     return save;
 }
 
+void setSceneBasedOnSave(Game *g, SaveData *save) {
+    if (save != NULL && g->runtimeArgs->sceneIndex == -1) {
+        setScene(g, findScene(g, save->scene), NULL);
+    } else {
+        setScene(g, g->scenes[g->runtimeArgs->sceneIndex], START_ENTRANCE);
+    }
+}
+
 Game *createGame(RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
     g->runtimeArgs = r;
@@ -403,11 +410,7 @@ Game *createGame(RuntimeArgs *r) {
     initializeBeasts(g);
     SaveData *save = initializePlayer(g);
     loadScenesFromFiles(g);
-    if (save != NULL) {
-        setScene(g, findScene(g, save->scene), NULL);
-    } else {
-        setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);
-    }
+    setSceneBasedOnSave(g, save);
     g->menuCount = getMenuList(g->menus);
     addDebug(g->log, "done creating game object");
     if (r->exit) {
