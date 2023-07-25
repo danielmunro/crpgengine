@@ -21,7 +21,7 @@ typedef struct {
 } Game;
 
 void setScene(Game *g, Scene *scene, char *entranceName) {
-    addDebug(g->log, "setting scene to '%s'", scene->name);
+    addInfo(g->log, "setting scene to '%s'", scene->name);
     g->currentScene = scene;
     clearAnimations(g->animationManager);
     Mobile *mob = getPartyLeader(g->player);
@@ -33,7 +33,7 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     mob->direction = entrance->direction;
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
-    addDebug(g->log, "finished setting scene to '%s'", g->currentScene->name);
+    addInfo(g->log, "finished setting scene to '%s'", g->currentScene->name);
 }
 
 Mobile *findMobById(Game *g, char *id) {
