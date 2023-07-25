@@ -354,19 +354,22 @@ Scene *findScene(Game *g, const char *name) {
     return NULL;
 }
 
-SaveData *initializePlayer(Game *g) {
+const char *getAutosaveFile(const char *indexDir) {
     const char *autosaveFilePath = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *)autosaveFilePath, "%s/_saves/autosave.yaml", g->runtimeArgs->indexDir);
-    bool useAutosave = FileExists(autosaveFilePath);
-    SaveData *save = NULL;
+    sprintf((char *)autosaveFilePath, "%s/_saves/autosave.yaml", indexDir);
+    return autosaveFilePath;
 
-    if (useAutosave) {
+}
+
+SaveData *initializePlayer(Game *g) {
+    const char *autosaveFilePath = getAutosaveFile(g->runtimeArgs->indexDir);
+    SaveData *save = NULL;
+    if (FileExists(autosaveFilePath)) {
         save = loadSaveData(autosaveFilePath);
         Mobile *mobs[MAX_PARTY_SIZE];
         addInfo(g->log, "party count :: %d", save->party_count);
 
         for (int i = 0; i < save->party_count; i++) {
-            addDebug(g->log, "add party member :: %d, %s", i, save->party[i].animations);
             Animation *animations[MAX_ANIMATIONS];
             loadAnimationsByName(g->animationManager, save->party[i].animations, animations);
             mobs[i] = createMobile(
