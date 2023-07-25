@@ -26,11 +26,13 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     clearAnimations(g->animationManager);
     Mobile *mob = getPartyLeader(g->player);
     addAllAnimations(g->animationManager, mob->animations);
-    Entrance *entrance = findEntrance(scene->exploration, entranceName);
-    addDebug(g->log, "entrance found :: %s", entrance->name);
-    mob->position.x = entrance->area.x + (entrance->area.width / 2) - (int) (MOB_COLLISION_WIDTH / 2);
-    mob->position.y = entrance->area.y + (entrance->area.height / 2) - (int) (MOB_COLLISION_HEIGHT / 2);
-    mob->direction = entrance->direction;
+    if (entranceName != NULL) {
+        Entrance *entrance = findEntrance(scene->exploration, entranceName);
+        addDebug(g->log, "entrance found :: %s", entrance->name);
+        mob->position.x = entrance->area.x + (entrance->area.width / 2) - (int) (MOB_COLLISION_WIDTH / 2);
+        mob->position.y = entrance->area.y + (entrance->area.height / 2) - (int) (MOB_COLLISION_HEIGHT / 2);
+        mob->direction = entrance->direction;
+    }
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
     addInfo(g->log, "finished setting scene to '%s'", g->currentScene->name);
@@ -362,31 +364,45 @@ Game *createGame(RuntimeArgs *r) {
     loadAllAnimations(g->animationManager, g->spritesheetManager, r->indexDir);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
 
-    g->player = loadPlayer(g->log, g->animationManager, r->indexDir);
+    char autosaveFilePath[255];
+    sprintf(autosaveFilePath, "%s/_saves/autosave.yaml", r->indexDir);
+    bool useAutosave = FileExists(autosaveFilePath);
+    const char *scene;
 
-//    char filePath[MAX_FS_PATH_LENGTH];
-//    sprintf(filePath, "%s/_saves/%s", r->indexDir, "foo.yaml");
-//    SaveData *save = loadSaveData(filePath);
-//
-//    Mobile *mobs[MAX_PARTY_SIZE];
-//    addDebug(g->log, "party count :: %d", save->party_count);
-//    for (int i = 0; i < save->party_count; i++) {
-//        Animation *animations[MAX_ANIMATIONS];
-//        addDebug(g->log, "mob animation :: %s", animations);
-//        loadAnimationsByName(g->animationManager, save->party[i].animations, animations);
-//        mobs[i] = createMobile(
-//                save->party[i].id,
-//                save->party[i].name,
-//                (Vector2) { save->party[i].position[0], save->party[i].position[1] },
-//                getDirectionFromString(save->party[i].direction),
-//                animations);
-//    }
-//    g->player = createPlayer(g->log, mobs);
+    if (useAutosave) {
+        SaveData *save = loadSaveData(autosaveFilePath);
+        scene = malloc(strlen(save->scene));
+        scene = save->scene;
+        Mobile *mobs[MAX_PARTY_SIZE];
+        addInfo(g->log, "party count :: %d", save->party_count);
+
+        for (int i = 0; i < save->party_count; i++) {
+            addInfo(g->log, "add party member :: %d", i);
+            Animation *animations[MAX_ANIMATIONS];
+            addDebug(g->log, "mob animation :: %s", animations);
+            loadAnimationsByName(g->animationManager, save->party[i].animations, animations);
+            mobs[i] = createMobile(
+                    save->party[i].id,
+                    save->party[i].name,
+                    (Vector2) {save->party[i].position[0], save->party[i].position[1]},
+                    getDirectionFromString(save->party[i].direction),
+                    animations);
+        }
+        for (int i = save->party_count; i < MAX_PARTY_SIZE; i++) {
+            mobs[i] = NULL;
+        }
+        g->player = createPlayer(g->log, mobs);
+    } else {
+        g->player = loadPlayer(g->log, g->animationManager, r->indexDir);
+    }
 
     initializeBeasts(g);
     loadScenesFromFiles(g);
-//    setScene(g, findScene(g, save->scene), START_ENTRANCE);
-    setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);
+    if (useAutosave) {
+        setScene(g, findScene(g, scene), NULL);
+    } else {
+        setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);
+    }
     g->menuCount = getMenuList(g->menus);
     addDebug(g->log, "done creating game object");
     if (r->exit) {
