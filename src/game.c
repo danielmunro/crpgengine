@@ -360,7 +360,7 @@ const char *getAutosaveFile(const char *indexDir) {
     return autosaveFilePath;
 }
 
-void mapSaveDataToPlayer(Game *g, SaveData *save) {
+Player *mapSaveDataToPlayer(Game *g, SaveData *save) {
     Mobile *mobs[MAX_PARTY_SIZE];
     addInfo(g->log, "save file party count :: %d", save->party_count);
     for (int i = 0; i < save->party_count; i++) {
@@ -376,9 +376,10 @@ void mapSaveDataToPlayer(Game *g, SaveData *save) {
     for (int i = save->party_count; i < MAX_PARTY_SIZE; i++) {
         mobs[i] = NULL;
     }
-    g->player = createPlayer(g->log, mobs);
-    g->player->secondsPlayed = save->secondsPlayed;
-    g->player->coins = save->coins;
+    Player *player = createPlayer(g->log, mobs);
+    player->secondsPlayed = save->secondsPlayed;
+    player->coins = save->coins;
+    return player;
 }
 
 SaveData *initializePlayer(Game *g) {
@@ -386,7 +387,7 @@ SaveData *initializePlayer(Game *g) {
     SaveData *save = NULL;
     if (FileExists(autosaveFilePath)) {
         save = loadSaveData(autosaveFilePath);
-        mapSaveDataToPlayer(g, save);
+        g->player = mapSaveDataToPlayer(g, save);
     } else {
         g->player = createNewPlayer(g->log, g->animationManager, g->runtimeArgs->indexDir);
     }
