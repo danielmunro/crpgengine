@@ -358,7 +358,6 @@ const char *getAutosaveFile(const char *indexDir) {
     const char *autosaveFilePath = malloc(MAX_FS_PATH_LENGTH);
     sprintf((char *)autosaveFilePath, "%s/_saves/autosave.yaml", indexDir);
     return autosaveFilePath;
-
 }
 
 SaveData *initializePlayer(Game *g) {
