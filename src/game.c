@@ -381,6 +381,8 @@ SaveData *initializePlayer(Game *g) {
             mobs[i] = NULL;
         }
         g->player = createPlayer(g->log, mobs);
+        g->player->secondsPlayed = save->secondsPlayed;
+        g->player->coins = save->coins;
     } else {
         g->player = loadPlayer(g->log, g->animationManager, g->runtimeArgs->indexDir);
     }
