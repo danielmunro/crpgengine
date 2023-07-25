@@ -36,7 +36,6 @@ Spritesheet *findSpritesheetByName(SpritesheetManager *sm, const char *name) {
         if (strcmp(sm->spritesheets[i]->name, name) == 0) {
             return sm->spritesheets[i];
         }
-
     }
     return NULL;
 }
