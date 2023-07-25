@@ -366,8 +366,8 @@ Game *createGame(RuntimeArgs *r) {
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     initializeBeasts(g);
 
-    char autosaveFilePath[MAX_FS_PATH_LENGTH];
-    sprintf(autosaveFilePath, "%s/_saves/autosave.yaml", r->indexDir);
+    const char *autosaveFilePath = malloc(MAX_FS_PATH_LENGTH);
+    sprintf((char *)autosaveFilePath, "%s/_saves/autosave.yaml", r->indexDir);
     bool useAutosave = FileExists(autosaveFilePath);
     const char *scene;
 
@@ -393,6 +393,7 @@ Game *createGame(RuntimeArgs *r) {
             mobs[i] = NULL;
         }
         g->player = createPlayer(g->log, mobs);
+        free(save);
     } else {
         g->player = loadPlayer(g->log, g->animationManager, r->indexDir);
     }
@@ -403,6 +404,8 @@ Game *createGame(RuntimeArgs *r) {
         setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);
     }
     g->menuCount = getMenuList(g->menus);
+    free((char *)autosaveFilePath);
+    free((char *)scene);
     addDebug(g->log, "done creating game object");
     if (r->exit) {
         exit(0);
