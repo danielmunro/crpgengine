@@ -140,7 +140,7 @@ Scene *loadScene(
     return scene;
 }
 
-Player *loadPlayer(Log *log, AnimationManager *am, char *indexDir) {
+Player *createNewPlayer(Log *log, AnimationManager *am, char *indexDir) {
     addInfo(log, "loading player from dir %s", indexDir);
     PlayerData *playerYaml = loadPlayerYaml(log, indexDir);
     Animation *animations[MAX_ANIMATIONS];
@@ -210,15 +210,27 @@ AttributesData *createAttributesData(Attributes *a) {
     return data;
 }
 
-SaveData *createSaveData(char *scene, Player *player) {
-    Mobile *mob = getPartyLeader(player);
+MobileData createMobDataFromMob(Mobile *mob) {
+    return (MobileData) {
+            mob->id,
+            mob->name,
+            mob->animations[0]->name,
+            getPositionAsString(mob->position),
+            getAnimationStringFromType(mob->direction),
+            createAttributesData(mob->attributes),
+    };
+}
+
+SaveData *createSaveData(const char *scene, Player *player) {
     SaveData *save = malloc(sizeof(SaveData));
-    save->scene = scene;
-    char pos[255];
-    sprintf(pos, "%.1f, %.1f", mob->position.x, mob->position.y);
-    save->position = pos;
+    save->scene = &scene[0];
     save->coins = player->coins;
     save->secondsPlayed = player->secondsPlayed;
+    Mobile *mob = getPartyLeader(player);
+    save->position = getPositionAsString(mob->position);
+    save->storylines_count = 0;
+    save->items_count = 0;
+
     save->items = (SaveItemData *) malloc(sizeof(player->items));
     for (int i = 0; i < player->itemCount; i++) {
         save->items[i] = (SaveItemData) {
@@ -227,22 +239,16 @@ SaveData *createSaveData(char *scene, Player *player) {
         };
     }
     save->items_count = player->itemCount;
-    save->party = malloc(sizeof(MobGroupData));
+
+    save->party = malloc(sizeof(MobileData));
     for (int i = 0; i < player->partyCount; i++) {
-        save->party[i] = (MobGroupData) {
-            player->party[i]->name,
-            player->party[i]->animations[0]->name,
-            createAttributesData(player->party[i]->attributes),
-        };
+        save->party[i] = createMobDataFromMob(player->party[i]);
     }
     save->party_count = player->partyCount;
-    save->onDeck = malloc(sizeof(MobGroupData));
+
+    save->onDeck = malloc(sizeof(MobileData));
     for (int i = 0; i < player->onDeckCount; i++) {
-        save->onDeck[i] = (MobGroupData) {
-                player->onDeck[i]->name,
-                player->onDeck[i]->animations[0]->name,
-                createAttributesData(player->onDeck[i]->attributes),
-        };
+        save->onDeck[i] = createMobDataFromMob(player->onDeck[i]);
     }
     save->onDeck_count = player->onDeckCount;
     return save;

@@ -39,7 +39,7 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
     Mobile *mob = createMobile(
             data->id,
             data->name,
-            (Vector2) {(float) data->position[0], (float) data->position[1]},
+            getPositionFromString(data->position),
             getDirectionFromString(data->direction),
             animations);
     return mob;
@@ -104,4 +104,10 @@ bool moveMob(Mobile *mob, Vector2 destination) {
     }
     incrementAnimationFrame(animation);
     return moved;
+}
+
+char *getPositionAsString(Vector2 position) {
+    char *value = malloc(255);
+    sprintf(value, "%.1f, %.1f", position.x, position.y);
+    return value;
 }

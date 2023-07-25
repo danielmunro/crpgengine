@@ -21,19 +21,22 @@ typedef struct {
 } Game;
 
 void setScene(Game *g, Scene *scene, char *entranceName) {
-    addDebug(g->log, "setting scene to '%s'", scene->name);
+    addInfo(g->log, "setting scene to '%s'", scene->name);
     g->currentScene = scene;
     clearAnimations(g->animationManager);
     Mobile *mob = getPartyLeader(g->player);
     addAllAnimations(g->animationManager, mob->animations);
-    Entrance *entrance = findEntrance(scene->exploration, entranceName);
-    addDebug(g->log, "entrance found :: %s", entrance->name);
-    mob->position.x = entrance->area.x + (entrance->area.width / 2) - (int) (MOB_COLLISION_WIDTH / 2);
-    mob->position.y = entrance->area.y + (entrance->area.height / 2) - (int) (MOB_COLLISION_HEIGHT / 2);
-    mob->direction = entrance->direction;
+    if (entranceName != NULL) {
+        Entrance *entrance = findEntrance(scene->exploration, entranceName);
+        addDebug(g->log, "entrance found :: %s", entrance->name);
+        mob->position.x = entrance->area.x + (entrance->area.width / 2) - (int) (MOB_COLLISION_WIDTH / 2);
+        mob->position.y = entrance->area.y + (entrance->area.height / 2) - (int) (MOB_COLLISION_HEIGHT / 2);
+        mob->direction = entrance->direction;
+    }
+    addInfo(g->log, "player position :: %f %f", mob->position.x, mob->position.y);
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
-    addDebug(g->log, "finished setting scene to '%s'", g->currentScene->name);
+    addInfo(g->log, "finished setting scene to '%s'", g->currentScene->name);
 }
 
 Mobile *findMobById(Game *g, char *id) {
@@ -210,8 +213,10 @@ void checkExplorationInput(Game *g) {
     }
     if (IsKeyPressed(KEY_S)) {
         char filePath[MAX_FS_PATH_LENGTH];
-        sprintf(filePath, "%s/%s/%s", g->runtimeArgs->indexDir, "_saves", "foo.yaml");
-        saveSaveData(createSaveData(g->currentScene->name, g->player), filePath);
+        sprintf(filePath, "%s/%s/%s", g->runtimeArgs->indexDir, "_saves", "autosave.yaml");
+        SaveData *save = createSaveData(g->currentScene->name, g->player);
+        saveSaveData(save, filePath);
+        free(save);
         addInfo(g->log, "game progress saved");
     }
 }
@@ -276,7 +281,7 @@ void startTiming(Timing *t) {
     gettimeofday(&t->start, NULL);
 }
 
-int stopTiming(Timing *t, Player *p) {
+void stopTiming(Timing *t, Player *p) {
     struct timeval end;
     gettimeofday(&end, NULL);
     double timeInterval = (double) (end.tv_sec - t->start.tv_sec) * 1000.0;      // sec to ms
@@ -340,6 +345,64 @@ void initializeBeasts(Game *g) {
     loadBeastiary(g);
 }
 
+Scene *findScene(Game *g, const char *name) {
+    for (int i = 0; i < g->sceneCount; i++) {
+        if (strcmp(g->scenes[i]->name, name) == 0) {
+            return g->scenes[i];
+        }
+    }
+    return NULL;
+}
+
+const char *getAutosaveFile(const char *indexDir) {
+    const char *autosaveFilePath = malloc(MAX_FS_PATH_LENGTH);
+    sprintf((char *)autosaveFilePath, "%s/_saves/autosave.yaml", indexDir);
+    return autosaveFilePath;
+}
+
+Player *mapSaveDataToPlayer(Game *g, SaveData *save) {
+    Mobile *mobs[MAX_PARTY_SIZE];
+    addInfo(g->log, "save file party count :: %d", save->party_count);
+    for (int i = 0; i < save->party_count; i++) {
+        Animation *animations[MAX_ANIMATIONS];
+        loadAnimationsByName(g->animationManager, save->party[i].animations, animations);
+        mobs[i] = createMobile(
+                save->party[i].id,
+                save->party[i].name,
+                getPositionFromString(save->party[i].position),
+                getDirectionFromString(save->party[i].direction),
+                animations);
+    }
+    for (int i = save->party_count; i < MAX_PARTY_SIZE; i++) {
+        mobs[i] = NULL;
+    }
+    Player *player = createPlayer(g->log, mobs);
+    player->secondsPlayed = save->secondsPlayed;
+    player->coins = save->coins;
+    return player;
+}
+
+SaveData *initializePlayer(Game *g) {
+    const char *autosaveFilePath = getAutosaveFile(g->runtimeArgs->indexDir);
+    SaveData *save = NULL;
+    if (FileExists(autosaveFilePath)) {
+        save = loadSaveData(autosaveFilePath);
+        g->player = mapSaveDataToPlayer(g, save);
+    } else {
+        g->player = createNewPlayer(g->log, g->animationManager, g->runtimeArgs->indexDir);
+    }
+    free((char *)autosaveFilePath);
+    return save;
+}
+
+void setSceneBasedOnSave(Game *g, SaveData *save) {
+    if (save != NULL && g->runtimeArgs->sceneIndex == -1) {
+        setScene(g, findScene(g, save->scene), NULL);
+        return;
+    }
+    setScene(g, g->scenes[g->runtimeArgs->sceneIndex], START_ENTRANCE);
+}
+
 Game *createGame(RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
     g->runtimeArgs = r;
@@ -350,14 +413,15 @@ Game *createGame(RuntimeArgs *r) {
     g->animationManager = createAnimationManager(g->log);
     loadAllAnimations(g->animationManager, g->spritesheetManager, r->indexDir);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
-    g->player = loadPlayer(g->log, g->animationManager, r->indexDir);
     initializeBeasts(g);
+    SaveData *save = initializePlayer(g);
     loadScenesFromFiles(g);
-    setScene(g, g->scenes[r->sceneIndex], START_ENTRANCE);
+    setSceneBasedOnSave(g, save);
     g->menuCount = getMenuList(g->menus);
     addDebug(g->log, "done creating game object");
     if (r->exit) {
         exit(0);
     }
+    free(save);
     return g;
 }
