@@ -1,5 +1,6 @@
 typedef struct {
     const char *scene;
+    unsigned long time;
     PlayerData *player;
 } SaveData;
 
@@ -8,6 +9,8 @@ static const cyaml_schema_field_t saveTopMappingField[] = {
                 "scene", CYAML_FLAG_POINTER, SaveData, scene, 0, CYAML_UNLIMITED),
         CYAML_FIELD_MAPPING_PTR(
                 "player", CYAML_FLAG_POINTER, SaveData, player, playerTopMappingField),
+        CYAML_FIELD_INT(
+                "time", CYAML_FLAG_DEFAULT, SaveData, time),
         CYAML_FIELD_END
 };
 

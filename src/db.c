@@ -238,6 +238,7 @@ SaveData *createSaveData(const char *scene, Player *player) {
     pd->items_count = 0;
     save->player = pd;
     save->scene = &scene[0];
+    save->time = (unsigned long)time(NULL);
 
     pd->items = (SaveItemData *) malloc(sizeof(player->items));
     for (int i = 0; i < player->itemCount; i++) {

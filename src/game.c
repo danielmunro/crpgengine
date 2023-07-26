@@ -193,6 +193,18 @@ void explorationMenuKeyPressed(Game *g) {
     addMenu(g->currentScene->exploration, findMenu(g->menus, g->menuCount, PARTY_MENU));
 }
 
+void save(Game *g) {
+    SaveData *save = createSaveData(g->currentScene->name, g->player);
+    char filePathAuto[MAX_FS_PATH_LENGTH];
+    sprintf(filePathAuto, "%s/%s/%s", g->runtimeArgs->indexDir, "_saves", "autosave.yaml");
+    saveSaveData(save, filePathAuto);
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/%s/save-%lu.yaml", g->runtimeArgs->indexDir, "_saves", (unsigned long)time(NULL));
+    saveSaveData(save, filePath);
+    free(save);
+    addInfo(g->log, "game progress saved");
+}
+
 void checkExplorationInput(Game *g) {
     addDebug(g->log, "exploration -- check player input");
     Mobile *mob = getPartyLeader(g->player);
@@ -212,12 +224,7 @@ void checkExplorationInput(Game *g) {
         addInfo(g->log, "player play time :: %ds", g->player->secondsPlayed);
     }
     if (IsKeyPressed(KEY_S)) {
-        char filePath[MAX_FS_PATH_LENGTH];
-        sprintf(filePath, "%s/%s/%s", g->runtimeArgs->indexDir, "_saves", "autosave.yaml");
-        SaveData *save = createSaveData(g->currentScene->name, g->player);
-        saveSaveData(save, filePath);
-        free(save);
-        addInfo(g->log, "game progress saved");
+        save(g);
     }
 }
 
