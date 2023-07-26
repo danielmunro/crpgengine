@@ -217,6 +217,7 @@ MobileData createMobDataFromMob(Mobile *mob) {
             mob->animations[0]->name,
             getPositionAsString(mob->position),
             getAnimationStringFromType(mob->direction),
+            createAttributesData(mob->attributes),
     };
 }
 
