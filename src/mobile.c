@@ -8,7 +8,6 @@ typedef struct {
     bool moving[DIRECTION_COUNT];
     struct timeval lastMovement;
     bool isBeingMoved;
-    Attributes *attributes;
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {
@@ -26,7 +25,6 @@ Mobile *createMobile(const char *id, const char *name, Vector2 position, Animati
     mobile->moving[DOWN] = false;
     mobile->moving[LEFT] = false;
     mobile->moving[RIGHT] = false;
-    mobile->attributes = createEmptyAttributes();
     gettimeofday(&mobile->lastMovement, NULL);
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         mobile->animations[i] = animations[i];
