@@ -7,6 +7,7 @@ typedef struct {
     int hp;
     int mana;
     int gp;
+    int attackGauge;
 } Beast;
 
 typedef struct {
@@ -22,6 +23,7 @@ Beast *createBeastFromData(const char *indexDir, BeastData *data) {
     beast->hp = data->hp;
     beast->mana = data->mana;
     beast->level = data->level;
+    beast->attackGauge = 0;
     char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/images/%s", indexDir, data->image);
     beast->image = LoadTextureFromImage(LoadImage(filePath));
@@ -39,6 +41,7 @@ Beast *cloneBeast(Beast *original) {
     new->hp = original->hp;
     new->mana = original->mana;
     new->gp = original->gp;
+    new->attackGauge = original->attackGauge;
     return new;
 }
 
