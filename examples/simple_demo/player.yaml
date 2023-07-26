@@ -1,2 +1,6 @@
 name: Fireas
 animations: fireas
+coins: 0
+secondsPlayed: 0
+experience: 0
+level: 0
