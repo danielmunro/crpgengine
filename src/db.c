@@ -235,29 +235,29 @@ SaveData *createSaveData(const char *scene, Player *player) {
     pd->level = player->level;
     pd->position = getPositionAsString(mob->position);
     pd->storylines_count = player->storylineCount;
+    pd->items_count = 0;
     save->player = pd;
     save->scene = &scene[0];
-    save->items_count = 0;
 
-    save->items = (SaveItemData *) malloc(sizeof(player->items));
+    pd->items = (SaveItemData *) malloc(sizeof(player->items));
     for (int i = 0; i < player->itemCount; i++) {
-        save->items[i] = (SaveItemData) {
+        pd->items[i] = (SaveItemData) {
             player->items[i]->name,
             player->itemQuantities[i]
         };
     }
-    save->items_count = player->itemCount;
+    pd->items_count = player->itemCount;
 
-    save->party = malloc(sizeof(MobileData));
+    pd->party = malloc(sizeof(MobileData));
     for (int i = 0; i < player->partyCount; i++) {
-        save->party[i] = createMobDataFromMob(player->party[i]);
+        pd->party[i] = createMobDataFromMob(player->party[i]);
     }
-    save->party_count = player->partyCount;
+    pd->party_count = player->partyCount;
 
-    save->onDeck = malloc(sizeof(MobileData));
+    pd->onDeck = malloc(sizeof(MobileData));
     for (int i = 0; i < player->onDeckCount; i++) {
-        save->onDeck[i] = createMobDataFromMob(player->onDeck[i]);
+        pd->onDeck[i] = createMobDataFromMob(player->onDeck[i]);
     }
-    save->onDeck_count = player->onDeckCount;
+    pd->onDeck_count = player->onDeckCount;
     return save;
 }

@@ -362,18 +362,18 @@ const char *getAutosaveFile(const char *indexDir) {
 
 Player *mapSaveDataToPlayer(Game *g, SaveData *save) {
     Mobile *mobs[MAX_PARTY_SIZE];
-    addInfo(g->log, "save file party count :: %d", save->party_count);
-    for (int i = 0; i < save->party_count; i++) {
+    addInfo(g->log, "save file party count :: %d", save->player->party_count);
+    for (int i = 0; i < save->player->party_count; i++) {
         Animation *animations[MAX_ANIMATIONS];
-        loadAnimationsByName(g->animationManager, save->party[i].animations, animations);
+        loadAnimationsByName(g->animationManager, save->player->party[i].animations, animations);
         mobs[i] = createMobile(
-                save->party[i].id,
-                save->party[i].name,
-                getPositionFromString(save->party[i].position),
-                getDirectionFromString(save->party[i].direction),
+                save->player->party[i].id,
+                save->player->party[i].name,
+                getPositionFromString(save->player->party[i].position),
+                getDirectionFromString(save->player->party[i].direction),
                 animations);
     }
-    for (int i = save->party_count; i < MAX_PARTY_SIZE; i++) {
+    for (int i = save->player->party_count; i < MAX_PARTY_SIZE; i++) {
         mobs[i] = NULL;
     }
     return createPlayer(
