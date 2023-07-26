@@ -3,8 +3,8 @@ typedef struct {
     int partyCount;
     Mobile *onDeck[MAX_TEAM_SIZE];
     int onDeckCount;
-    const char *stories[MAX_STORIES];
-    int storyCount;
+    const char *storylines[MAX_STORIES];
+    int storylineCount;
     Item *items[MAX_ITEMS];
     int itemQuantities[MAX_ITEMS];
     int itemCount;
@@ -36,7 +36,7 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
     player->blockedBy = NULL;
     player->engageable = NULL;
     player->engaged = false;
-    player->storyCount = 0;
+    player->storylineCount = 0;
     player->onDeckCount = 0;
     player->log = log;
     player->itemCount = 0;
@@ -79,13 +79,13 @@ int getExperienceToLevel(int level) {
 }
 
 void addStory(Player *p, const char *story) {
-    p->stories[p->storyCount++] = story;
+    p->storylines[p->storylineCount++] = story;
     addInfo(p->log, "add story to player :: %s", story);
 }
 
 bool hasStory(Player *p, const char *story) {
-    for (int j = 0; j < p->storyCount; j++) {
-        if (strcmp(story, p->stories[j]) == 0) {
+    for (int j = 0; j < p->storylineCount; j++) {
+        if (strcmp(story, p->storylines[j]) == 0) {
             addDebug(p->log, "player has story: %s", story);
             return true;
         }

@@ -5,10 +5,7 @@ typedef struct {
 
 typedef struct {
     const char *scene;
-    const char *position;
-    const char **storylines;
     PlayerData *player;
-    int storylines_count;
     SaveItemData *items;
     int items_count;
     MobileData *party;
@@ -19,10 +16,6 @@ typedef struct {
 
 static const cyaml_schema_value_t partySchema = {
         CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT, MobileData, mobileTopMappingField),
-};
-
-static const cyaml_schema_value_t saveStorylinesEntry = {
-        CYAML_VALUE_STRING(CYAML_FLAG_DEFAULT, char *, 0, 255),
 };
 
 static const cyaml_schema_field_t saveItemsFieldSchema[] = {
@@ -41,13 +34,8 @@ static const cyaml_schema_value_t saveItemsSchema = {
 static const cyaml_schema_field_t saveTopMappingField[] = {
         CYAML_FIELD_STRING_PTR(
                 "scene", CYAML_FLAG_POINTER, SaveData, scene, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_STRING_PTR(
-                "position", CYAML_FLAG_POINTER, SaveData, position, 0, CYAML_UNLIMITED),
         CYAML_FIELD_MAPPING_PTR(
                 "player", CYAML_FLAG_POINTER, SaveData, player, playerTopMappingField),
-        CYAML_FIELD_SEQUENCE_COUNT(
-                "storylines", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, SaveData, storylines,
-                storylines_count, &saveStorylinesEntry, 0, MAX_STORIES),
         CYAML_FIELD_SEQUENCE(
                 "items", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, SaveData, items,
                 &saveItemsSchema, 0, CYAML_UNLIMITED),

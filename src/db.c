@@ -233,10 +233,10 @@ SaveData *createSaveData(const char *scene, Player *player) {
     pd->secondsPlayed = player->secondsPlayed;
     pd->experience = player->experience;
     pd->level = player->level;
+    pd->position = getPositionAsString(mob->position);
+    pd->storylines_count = player->storylineCount;
     save->player = pd;
     save->scene = &scene[0];
-    save->position = getPositionAsString(mob->position);
-    save->storylines_count = 0;
     save->items_count = 0;
 
     save->items = (SaveItemData *) malloc(sizeof(player->items));
