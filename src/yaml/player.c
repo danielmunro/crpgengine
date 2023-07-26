@@ -1,6 +1,6 @@
 typedef struct {
-    char *name;
-    char *animations;
+    const char *name;
+    const char *animations;
 } PlayerData;
 
 static const cyaml_schema_field_t playerTopMappingField[] = {
