@@ -225,13 +225,16 @@ MobileData createMobDataFromMob(Mobile *mob) {
 
 SaveData *createSaveData(const char *scene, Player *player) {
     SaveData *save = malloc(sizeof(SaveData));
-    save->player = createPlayerData(player);
-    save->scene = &scene[0];
-    save->coins = player->coins;
-    save->secondsPlayed = player->secondsPlayed;
-    save->experience = player->experience;
-    save->level = player->level;
+    PlayerData *pd = createPlayerData(player);
     Mobile *mob = getPartyLeader(player);
+    pd->name = mob->name;
+    pd->animations = mob->animations[0]->name;
+    pd->coins = player->coins;
+    pd->secondsPlayed = player->secondsPlayed;
+    pd->experience = player->experience;
+    pd->level = player->level;
+    save->player = pd;
+    save->scene = &scene[0];
     save->position = getPositionAsString(mob->position);
     save->storylines_count = 0;
     save->items_count = 0;

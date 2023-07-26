@@ -379,10 +379,10 @@ Player *mapSaveDataToPlayer(Game *g, SaveData *save) {
     return createPlayer(
             g->log,
             mobs,
-            save->coins,
-            save->experience,
-            save->level,
-            save->secondsPlayed);
+            save->player->coins,
+            save->player->experience,
+            save->player->level,
+            save->player->secondsPlayed);
 }
 
 SaveData *initializePlayer(Game *g) {
