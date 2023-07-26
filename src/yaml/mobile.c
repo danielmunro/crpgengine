@@ -19,7 +19,8 @@ static const cyaml_schema_field_t mobileTopMappingField[] = {
         CYAML_FIELD_STRING_PTR(
                 "direction", CYAML_FLAG_POINTER, MobileData, direction, 0, CYAML_UNLIMITED),
         CYAML_FIELD_MAPPING_PTR(
-                "attributes", CYAML_FLAG_POINTER_NULL, MobileData, attributes, attributesFieldSchema),
+                "attributes", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
+                MobileData, attributes, attributesFieldSchema),
         CYAML_FIELD_END
 };
 
