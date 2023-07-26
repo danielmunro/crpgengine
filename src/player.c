@@ -1,4 +1,11 @@
 typedef struct {
+    Mobile *mob;
+    Attributes *attributes;
+    int attackGauge;
+    Item equipment[MAX_EQUIPMENT];
+} PlayerMob;
+
+typedef struct {
     Mobile *party[MAX_PARTY_SIZE];
     int partyCount;
     Mobile *onDeck[MAX_TEAM_SIZE];

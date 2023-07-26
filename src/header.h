@@ -56,6 +56,7 @@
 #define MAX_DATA_SIZE 2048
 #define MAX_MENUS 255
 #define MAX_ITEMS 255
+#define MAX_EQUIPMENT 4
 #define MAX_PARTY_SIZE 4
 #define MAX_TEAM_SIZE 255
 #define MAX_FS_PATH_LENGTH 255
