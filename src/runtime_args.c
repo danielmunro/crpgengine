@@ -11,7 +11,7 @@ typedef struct {
 
 RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
     RuntimeArgs *r = malloc(sizeof(RuntimeArgs));
-    r->sceneIndex = -1;
+    r->sceneIndex = 0;
     r->showObjectCollisions = false;
     r->showPlayerCollision = false;
     r->showWarpCollisions = false;
