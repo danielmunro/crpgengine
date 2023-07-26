@@ -73,7 +73,7 @@ void experienceToLevel1Test() {
     int experience = getExperienceToLevel(1);
 
     // then
-    ok(experience == 1000, "experience value was unexpected :: %d", experience);
+    ok(experience == 1000, "experience value was expected :: %d", experience);
 }
 
 void experienceToLevel51Test() {
@@ -81,7 +81,7 @@ void experienceToLevel51Test() {
     int experience = getExperienceToLevel(51);
 
     // then
-    ok(experience == 133650, "experience value was unexpected :: %d", experience);
+    ok(experience == 133650, "experience value was expected :: %d", experience);
 }
 
 int main() {
