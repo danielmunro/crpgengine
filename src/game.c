@@ -400,7 +400,7 @@ void setSceneBasedOnSave(Game *g, SaveData *save) {
         setScene(g, findScene(g, save->scene), NULL);
         return;
     }
-    setScene(g, g->scenes[g->runtimeArgs->sceneIndex], START_ENTRANCE);
+    setScene(g, g->scenes[START_SCENE], START_ENTRANCE);
 }
 
 Game *createGame(RuntimeArgs *r) {

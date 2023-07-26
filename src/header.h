@@ -33,6 +33,8 @@
 #define EXIT_NO_INDEX_DIR 1
 #define EXIT_MISSING_SPRITESHEET 2
 
+#define START_SCENE 0
+
 #define MAX_OBJECTS 255
 #define MAX_SCENES    256
 #define MAX_FILES 256
