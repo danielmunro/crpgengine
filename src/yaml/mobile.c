@@ -3,7 +3,7 @@ typedef struct {
     const char *name;
     const char *animations;
     const char *position;
-    char *direction;
+    const char *direction;
     AttributesData *attributes;
 } MobileData;
 
