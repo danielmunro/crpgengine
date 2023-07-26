@@ -10,6 +10,8 @@ typedef struct {
     int itemCount;
     int coins;
     int secondsPlayed;
+    int experience;
+    int level;
     Mobile *blockedBy;
     Mobile *engageable;
     bool engaged;
@@ -28,7 +30,8 @@ void addItem(Player *player, Item *item) {
     player->itemCount++;
 }
 
-Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE]) {
+Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
+                     int coins, int experience, int level, int secondsPlayed) {
     Player *player = malloc(sizeof(Player));
     player->blockedBy = NULL;
     player->engageable = NULL;
@@ -38,8 +41,10 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE]) {
     player->log = log;
     player->itemCount = 0;
     player->partyCount = 0;
-    player->coins = 0;
-    player->secondsPlayed = 0;
+    player->coins = coins;
+    player->experience = experience;
+    player->level = level;
+    player->secondsPlayed = secondsPlayed;
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         player->party[i] = mobs[i];
         if (mobs[i] == NULL && player->partyCount == 0) {
@@ -59,6 +64,10 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE]) {
 
 Mobile *getPartyLeader(Player *p) {
     return p->party[0];
+}
+
+int getExperienceToLevel(int level) {
+    return (int) pow((double) level, 3.0) + 999;
 }
 
 void addStory(Player *p, const char *story) {

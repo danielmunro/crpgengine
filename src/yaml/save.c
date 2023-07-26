@@ -7,6 +7,8 @@ typedef struct {
     const char *scene;
     int coins;
     int secondsPlayed;
+    int experience;
+    int level;
     const char *position;
     const char **storylines;
     int storylines_count;
@@ -46,6 +48,10 @@ static const cyaml_schema_field_t saveTopMappingField[] = {
                 "coins", CYAML_FLAG_DEFAULT, SaveData, coins),
         CYAML_FIELD_INT(
                 "secondsPlayed", CYAML_FLAG_DEFAULT, SaveData, secondsPlayed),
+        CYAML_FIELD_INT(
+                "experience", CYAML_FLAG_DEFAULT, SaveData, experience),
+        CYAML_FIELD_INT(
+                "level", CYAML_FLAG_DEFAULT, SaveData, level),
         CYAML_FIELD_STRING_PTR(
                 "position", CYAML_FLAG_POINTER, SaveData, position, 0, CYAML_UNLIMITED),
         CYAML_FIELD_SEQUENCE_COUNT(

@@ -68,12 +68,30 @@ void canMobStopMovingTest() {
     ok(!isMoving(mob), "mob is not moving");
 }
 
+void experienceToLevel1Test() {
+    // when
+    int experience = getExperienceToLevel(1);
+
+    // then
+    ok(experience == 1000, "experience value was unexpected :: %d", experience);
+}
+
+void experienceToLevel51Test() {
+    // when
+    int experience = getExperienceToLevel(51);
+
+    // then
+    ok(experience == 133650, "experience value was unexpected :: %d", experience);
+}
+
 int main() {
     initWindow("./fixtures");
-    plan(105);
+    plan(107);
     strToIntTest();
     createFightInSceneTest();
     canMoveMobTest();
     canMobStopMovingTest();
+    experienceToLevel1Test();
+    experienceToLevel51Test();
     done_testing();
 }

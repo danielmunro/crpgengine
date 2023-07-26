@@ -159,11 +159,13 @@ Player *createNewPlayer(Log *log, AnimationManager *am, char *indexDir) {
             NULL,
             NULL,
     };
-    Player *player = createPlayer(
+    return createPlayer(
             log,
-            mobiles
-    );
-    return player;
+            mobiles,
+            0,
+            getExperienceToLevel(1),
+            1,
+            0);
 }
 
 AudioManager *loadAudioManager(Log *log, const char *indexDir) {
@@ -226,6 +228,8 @@ SaveData *createSaveData(const char *scene, Player *player) {
     save->scene = &scene[0];
     save->coins = player->coins;
     save->secondsPlayed = player->secondsPlayed;
+    save->experience = player->experience;
+    save->level = player->level;
     Mobile *mob = getPartyLeader(player);
     save->position = getPositionAsString(mob->position);
     save->storylines_count = 0;

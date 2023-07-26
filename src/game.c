@@ -376,10 +376,13 @@ Player *mapSaveDataToPlayer(Game *g, SaveData *save) {
     for (int i = save->party_count; i < MAX_PARTY_SIZE; i++) {
         mobs[i] = NULL;
     }
-    Player *player = createPlayer(g->log, mobs);
-    player->secondsPlayed = save->secondsPlayed;
-    player->coins = save->coins;
-    return player;
+    return createPlayer(
+            g->log,
+            mobs,
+            save->coins,
+            save->experience,
+            save->level,
+            save->secondsPlayed);
 }
 
 SaveData *initializePlayer(Game *g) {
