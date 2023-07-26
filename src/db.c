@@ -225,6 +225,7 @@ MobileData createMobDataFromMob(Mobile *mob) {
 
 SaveData *createSaveData(const char *scene, Player *player) {
     SaveData *save = malloc(sizeof(SaveData));
+    save->player = createPlayerData(player);
     save->scene = &scene[0];
     save->coins = player->coins;
     save->secondsPlayed = player->secondsPlayed;

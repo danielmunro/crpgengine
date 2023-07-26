@@ -66,6 +66,14 @@ Mobile *getPartyLeader(Player *p) {
     return p->party[0];
 }
 
+PlayerData *createPlayerData(Player *p) {
+    PlayerData *pd = malloc(sizeof(PlayerData));
+    Mobile *mob = getPartyLeader(p);
+    pd->name = mob->name;
+    pd->animations = mob->animations[0]->name;
+    return pd;
+}
+
 int getExperienceToLevel(int level) {
     return (int) pow((double) level, 3.0) + 999;
 }

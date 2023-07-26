@@ -11,6 +11,7 @@ typedef struct {
     int level;
     const char *position;
     const char **storylines;
+    PlayerData *player;
     int storylines_count;
     SaveItemData *items;
     int items_count;
@@ -54,6 +55,8 @@ static const cyaml_schema_field_t saveTopMappingField[] = {
                 "level", CYAML_FLAG_DEFAULT, SaveData, level),
         CYAML_FIELD_STRING_PTR(
                 "position", CYAML_FLAG_POINTER, SaveData, position, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_MAPPING_PTR(
+                "player", CYAML_FLAG_POINTER, SaveData, player, playerTopMappingField),
         CYAML_FIELD_SEQUENCE_COUNT(
                 "storylines", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, SaveData, storylines,
                 storylines_count, &saveStorylinesEntry, 0, MAX_STORIES),
