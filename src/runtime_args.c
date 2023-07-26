@@ -6,7 +6,8 @@ typedef struct {
     bool dump;
     bool exit;
     LogLevel logLevel;
-    char *indexDir;
+    const char *indexDir;
+    const char *saveFile;
 } RuntimeArgs;
 
 RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
@@ -19,6 +20,7 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
     r->exit = false;
     r->logLevel = INFO;
     r->indexDir = NULL;
+    r->saveFile = NULL;
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
             if (argv[i][1] == 'c') {
@@ -49,6 +51,8 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
                     fprintf(stderr, "log level must be one of [debug, info, warn, error], setting to info\n");
                     r->logLevel = INFO;
                 }
+            } else if (argv[i][1] == 'v') {
+                r->saveFile = &argv[i + 1][0];
             }
         }
     }

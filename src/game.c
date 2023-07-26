@@ -393,15 +393,19 @@ Player *mapSaveDataToPlayer(Game *g, SaveData *save) {
 }
 
 SaveData *initializePlayer(Game *g) {
-    const char *autosaveFilePath = getAutosaveFile(g->runtimeArgs->indexDir);
+    char saveFilePath[MAX_FS_PATH_LENGTH];
+    if (g->runtimeArgs->saveFile != NULL) {
+        sprintf((char *)saveFilePath, "%s/_saves/%s", g->runtimeArgs->indexDir, g->runtimeArgs->saveFile);
+    } else {
+        strcpy(saveFilePath, getAutosaveFile(g->runtimeArgs->indexDir));
+    }
     SaveData *save = NULL;
-    if (FileExists(autosaveFilePath)) {
-        save = loadSaveData(autosaveFilePath);
+    if (FileExists(saveFilePath)) {
+        save = loadSaveData(saveFilePath);
         g->player = mapSaveDataToPlayer(g, save);
     } else {
         g->player = createNewPlayer(g->log, g->animationManager, g->runtimeArgs->indexDir);
     }
-    free((char *)autosaveFilePath);
     return save;
 }
 
