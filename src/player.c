@@ -66,11 +66,57 @@ Mobile *getPartyLeader(Player *p) {
     return p->party[0];
 }
 
+AttributesData *createAttributesData(Attributes *a) {
+    AttributesData *data = malloc(sizeof(AttributesData));
+    data->strength = a->strength;
+    data->intelligence = a->intelligence;
+    data->wisdom = a->wisdom;
+    data->dexterity = a->dexterity;
+    data->constitution = a->constitution;
+    data->hp = a->hp;
+    data->mana = a->mana;
+    return data;
+}
+
+MobileData createMobDataFromMob(Mobile *mob) {
+    return (MobileData) {
+            mob->id,
+            mob->name,
+            mob->animations[0]->name,
+            getPositionAsString(mob->position),
+            getAnimationStringFromType(mob->direction),
+            createAttributesData(mob->attributes),
+    };
+}
+
 PlayerData *createPlayerData(Player *p) {
     PlayerData *pd = malloc(sizeof(PlayerData));
-    Mobile *mob = getPartyLeader(p);
-    pd->name = mob->name;
-    pd->animations = mob->animations[0]->name;
+    pd->coins = p->coins;
+    pd->secondsPlayed = p->secondsPlayed;
+    pd->experience = p->experience;
+    pd->level = p->level;
+    pd->storylines_count = p->storylineCount;
+    pd->items_count = 0;
+    pd->items = (SaveItemData *) malloc(sizeof(p->items));
+    for (int i = 0; i < p->itemCount; i++) {
+        pd->items[i] = (SaveItemData) {
+                p->items[i]->name,
+                p->itemQuantities[i]
+        };
+    }
+    pd->items_count = p->itemCount;
+
+    pd->party = malloc(sizeof(MobileData));
+    for (int i = 0; i < p->partyCount; i++) {
+        pd->party[i] = createMobDataFromMob(p->party[i]);
+    }
+    pd->party_count = p->partyCount;
+
+    pd->onDeck = malloc(sizeof(MobileData));
+    for (int i = 0; i < p->onDeckCount; i++) {
+        pd->onDeck[i] = createMobDataFromMob(p->onDeck[i]);
+    }
+    pd->onDeck_count = p->onDeckCount;
     return pd;
 }
 

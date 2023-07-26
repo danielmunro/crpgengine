@@ -142,17 +142,13 @@ Scene *loadScene(
 
 Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
     addInfo(log, "loading player from dir %s", indexDir);
-    PlayerData *playerYaml = loadPlayerYaml(log, indexDir);
     Animation *animations[MAX_ANIMATIONS];
-    char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/%s", indexDir, playerYaml->animations);
-    int count = loadAnimationsByName(am, playerYaml->animations, animations);
-    addInfo(am->log, "found animations for player :: %d animations", count);
+    loadAnimationsByName(am, "fireas", animations);
     Mobile *mobiles[MAX_PARTY_SIZE] = {
             createMobile(
                     "player",
-                    playerYaml->name,
-                    (Vector2) {0, 0},
+                    "Fireas",
+                    (Vector2) {429, 252},
                     DOWN,
                     animations),
             NULL,
@@ -200,65 +196,10 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
     return createSpriteSheetManager(spritesheets, count);
 }
 
-AttributesData *createAttributesData(Attributes *a) {
-    AttributesData *data = malloc(sizeof(AttributesData));
-    data->strength = a->strength;
-    data->intelligence = a->intelligence;
-    data->wisdom = a->wisdom;
-    data->dexterity = a->dexterity;
-    data->constitution = a->constitution;
-    data->hp = a->hp;
-    data->mana = a->mana;
-    return data;
-}
-
-MobileData createMobDataFromMob(Mobile *mob) {
-    return (MobileData) {
-            mob->id,
-            mob->name,
-            mob->animations[0]->name,
-            getPositionAsString(mob->position),
-            getAnimationStringFromType(mob->direction),
-            createAttributesData(mob->attributes),
-    };
-}
-
 SaveData *createSaveData(const char *scene, Player *player) {
     SaveData *save = malloc(sizeof(SaveData));
-    PlayerData *pd = createPlayerData(player);
-    Mobile *mob = getPartyLeader(player);
-    pd->name = mob->name;
-    pd->animations = mob->animations[0]->name;
-    pd->coins = player->coins;
-    pd->secondsPlayed = player->secondsPlayed;
-    pd->experience = player->experience;
-    pd->level = player->level;
-    pd->position = getPositionAsString(mob->position);
-    pd->storylines_count = player->storylineCount;
-    pd->items_count = 0;
-    save->player = pd;
+    save->player = createPlayerData(player);
     save->scene = &scene[0];
     save->time = (unsigned long)time(NULL);
-
-    pd->items = (SaveItemData *) malloc(sizeof(player->items));
-    for (int i = 0; i < player->itemCount; i++) {
-        pd->items[i] = (SaveItemData) {
-            player->items[i]->name,
-            player->itemQuantities[i]
-        };
-    }
-    pd->items_count = player->itemCount;
-
-    pd->party = malloc(sizeof(MobileData));
-    for (int i = 0; i < player->partyCount; i++) {
-        pd->party[i] = createMobDataFromMob(player->party[i]);
-    }
-    pd->party_count = player->partyCount;
-
-    pd->onDeck = malloc(sizeof(MobileData));
-    for (int i = 0; i < player->onDeckCount; i++) {
-        pd->onDeck[i] = createMobDataFromMob(player->onDeck[i]);
-    }
-    pd->onDeck_count = player->onDeckCount;
     return save;
 }
