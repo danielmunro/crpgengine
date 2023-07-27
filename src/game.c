@@ -433,9 +433,6 @@ Game *createGame(RuntimeArgs *r) {
     setSceneBasedOnSave(g, save);
     g->menuCount = getMenuList(g->menus);
     addDebug(g->log, "done creating game object");
-    if (r->exit) {
-        exit(0);
-    }
     free(save);
     return g;
 }
