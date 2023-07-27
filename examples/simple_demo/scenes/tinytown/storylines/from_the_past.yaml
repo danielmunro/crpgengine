@@ -20,7 +20,7 @@ storylines:
         action: move_to
         position: 320,242
       - mob: vill1
-        action: direction
+        action: set_direction
         direction: down
   - when:
       - player: true
@@ -47,3 +47,16 @@ storylines:
       - mob: vill1
         action: speak
         message: "Please take good care of the amulet."
+  - when:
+      - player: true
+        condition: has_story
+        story: from_the_past:moved_1
+      - condition: scene_loaded
+        scene: tinytown
+    then:
+      - mob: vill1
+        action: set_position
+        position: 320, 242
+      - mob: vill1
+        action: set_direction
+        direction: down

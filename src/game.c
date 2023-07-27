@@ -36,6 +36,7 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     addInfo(g->log, "player position :: %f %f", mob->position.x, mob->position.y);
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
+    controlWhenCheck(scene, g->player, EVENT_SCENE_LOADED);
     addInfo(g->log, "finished setting scene to '%s'", g->currentScene->name);
 }
 

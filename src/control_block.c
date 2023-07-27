@@ -1,6 +1,6 @@
 typedef struct {
     Mobile *source;
-    int condition;
+    Condition condition;
     Mobile *trigger;
     const char *story;
 } When;
@@ -72,15 +72,20 @@ bool hasConditionNoStory(Player *p, int condition, const char *story) {
     return condition == NOT_HAS_STORY && !hasStory(p, story);
 }
 
-bool isWhenActivated(Player *p, When *when) {
-    return hasConditionEngaged(p, when->condition, when->trigger)
-           || hasConditionStory(p, when->condition, when->story)
-           || hasConditionNoStory(p, when->condition, when->story);
+bool isSceneLoaded(Condition condition, EventType eventType) {
+    return condition == SCENE_LOADED && eventType == EVENT_SCENE_LOADED;
 }
 
-bool areConditionsMet(ControlBlock *cb, Player *p) {
+bool isWhenActivated(Player *p, When *when, EventType eventType) {
+    return hasConditionEngaged(p, when->condition, when->trigger)
+           || hasConditionStory(p, when->condition, when->story)
+           || hasConditionNoStory(p, when->condition, when->story)
+           || isSceneLoaded(when->condition, eventType);
+}
+
+bool areConditionsMet(ControlBlock *cb, Player *p, EventType eventType) {
     for (int c = 0; c < cb->whenCount; c++) {
-        if (!isWhenActivated(p, cb->when[c])) {
+        if (!isWhenActivated(p, cb->when[c], eventType)) {
             addDebug(p->log, "conditions not met");
             return false;
         }
@@ -106,11 +111,15 @@ bool isAddStoryOutcome(Then *then) {
 }
 
 bool isFaceDirectionOutcome(Then *then) {
-    return then->outcome == DIRECTION;
+    return then->outcome == SET_DIRECTION;
 }
 
 bool isSpeakOutcome(Then *then) {
     return then->outcome == SPEAK;
+}
+
+bool needsToChangePosition(Then *then) {
+    return then->outcome == SET_POSITION;
 }
 
 bool needsToStartMoving(Then *then) {

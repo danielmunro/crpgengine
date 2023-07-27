@@ -3,6 +3,7 @@ typedef struct {
     char *mob;
     char *condition;
     char *story;
+    const char *scene;
 } WhenData;
 
 typedef struct {
@@ -37,6 +38,8 @@ static const cyaml_schema_field_t whenFieldSchema[] = {
                 "mob", CYAML_FLAG_OPTIONAL, WhenData, mob, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "story", CYAML_FLAG_OPTIONAL, WhenData, story, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "scene", CYAML_FLAG_OPTIONAL, WhenData, scene, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 

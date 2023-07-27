@@ -96,8 +96,7 @@ void thenCheck(Scene *s, Player *p, ControlBlock *cb) {
     if (isMovingAndAtDestination(cb)) {
         addInfo(s->log, "mob at destination, control block proceeding :: %s", cb->then[cb->progress]->target->name);
         cb->progress++;
-    }
-    if (isAddStoryOutcome(cb->then[cb->progress])) {
+    } else if (isAddStoryOutcome(cb->then[cb->progress])) {
         addStory(p, cb->then[cb->progress]->story);
         cb->progress++;
     } else if (needsToStartMoving(cb->then[cb->progress])) {
@@ -115,6 +114,12 @@ void thenCheck(Scene *s, Player *p, ControlBlock *cb) {
         addInfo(s->log, "set direction for mob :: %s, %s", cb->then[cb->progress]->target->name, cb->then[cb->progress]->direction);
         cb->then[cb->progress]->target->direction =
                 getDirectionFromString(cb->then[cb->progress]->direction);
+        cb->progress++;
+    } else if (needsToChangePosition(cb->then[cb->progress])) {
+        Mobile *target = cb->then[cb->progress]->target;
+        target->position = cb->then[cb->progress]->position;
+        addInfo(s->log, "change position for mob :: %s, %f, %f",
+                target->name, target->position.x, target->position.y);
         cb->progress++;
     }
 }
@@ -136,17 +141,17 @@ bool isAlreadyAdded(ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS], ControlBlo
     return false;
 }
 
-void controlWhenCheck(Scene *s, Player *p) {
+void controlWhenCheck(Scene *s, Player *p, EventType eventType) {
+    addDebug(s->log, "control when check");
     for (int i = 0; i < s->controlBlockCount; i++) {
         ControlBlock *cb = s->controlBlocks[i];
-        if (areConditionsMet(cb, p) && !isAlreadyAdded(s->activeControlBlocks, cb)) {
+        if (areConditionsMet(cb, p, eventType) && !isAlreadyAdded(s->activeControlBlocks, cb)) {
             addDebug(s->log, "ready to set");
             addActiveControl(s, cb);
             addInfo(s->log, "set active control block %d", i);
             return;
         }
     }
-    addDebug(s->log, "done control check");
 }
 
 bool canTriggerFight(Scene *s, Player *p) {
@@ -158,7 +163,7 @@ bool canTriggerFight(Scene *s, Player *p) {
 
 void checkControls(Scene *s, Player *p) {
     addDebug(s->log, "exploration -- check %d control blocks", s->controlBlockCount);
-    controlWhenCheck(s, p);
+    controlWhenCheck(s, p, EVENT_GAME_LOOP);
     controlThenCheckAllActive(s, p);
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (s->activeControlBlocks[i] != NULL &&

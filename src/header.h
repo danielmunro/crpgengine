@@ -64,6 +64,12 @@
 #define MAX_FS_PATH_LENGTH 255
 #define MAX_MOBILE_MOVEMENTS 64
 #define MAX_SPRITES 1024
+#define MAX_EVENTS 64
+
+#define COLLIDE_TYPE_OBJECTS "objects"
+#define COLLIDE_TYPE_PLAYER "player"
+#define COLLIDE_TYPE_WARPS "warps"
+#define COLLIDE_TYPE_COUNT 3
 
 const char *logLevels[] = {
         "error",
@@ -86,6 +92,7 @@ const char *conditions[] = {
         "at",
         "has_story",
         "not_has_story",
+        "scene_loaded",
 };
 
 typedef enum {
@@ -95,28 +102,31 @@ typedef enum {
     AT,
     HAS_STORY,
     NOT_HAS_STORY,
+    SCENE_LOADED,
 } Condition;
 
 const char *outcomes[] = {
         "speak",
         "move_to",
-        "direction",
+        "set_direction",
         "sprite",
         "wait",
         "give_item",
         "take",
         "add_story",
+        "set_position",
 };
 
 typedef enum {
     SPEAK = 0,
     MOVE_TO,
-    DIRECTION,
+    SET_DIRECTION,
     SPRITE,
     WAIT,
     GIVE_ITEM,
     TAKE,
     ADD_STORY,
+    SET_POSITION,
 } Outcome;
 
 typedef enum {
@@ -209,10 +219,15 @@ typedef enum {
     CLOSE_MENU,
 } MenuSelectResponseType;
 
-#define COLLIDE_TYPE_OBJECTS "objects"
-#define COLLIDE_TYPE_PLAYER "player"
-#define COLLIDE_TYPE_WARPS "warps"
-#define COLLIDE_TYPE_COUNT 3
+typedef enum {
+    EVENT_GAME_LOOP,
+    EVENT_SCENE_LOADED,
+} EventType;
+
+const char *Events[MAX_EVENTS] = {
+        "game_loop",
+        "scene_loaded",
+};
 
 #include "log.c"
 #include "util.c"
