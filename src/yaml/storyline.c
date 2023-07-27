@@ -1,19 +1,19 @@
 typedef struct {
     bool player;
-    char *mob;
-    char *condition;
-    char *story;
+    const char *mob;
+    const char *condition;
+    const char *story;
     const char *scene;
 } WhenData;
 
 typedef struct {
     bool player;
     bool parallel;
-    char *mob;
-    char *action;
-    char *message;
-    char *story;
-    char *position;
+    const char *mob;
+    const char *action;
+    const char *message;
+    const char *story;
+    const char *position;
     const char *direction;
 } ThenData;
 

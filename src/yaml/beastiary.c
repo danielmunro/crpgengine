@@ -1,7 +1,7 @@
 typedef struct {
-    char *id;
-    char *name;
-    char *image;
+    const char *id;
+    const char *name;
+    const char *image;
     AttributesData *attributes;
     int attributes_count;
     int level;

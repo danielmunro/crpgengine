@@ -1,17 +1,17 @@
 typedef struct {
-    char *name;
+    const char *name;
 } SpriteData;
 
 typedef struct {
-    char *name;
-    char *frames;
+    const char *name;
+    const char *frames;
     int frames_count;
     int rate;
     bool repeat;
 } SliceData;
 
 typedef struct {
-    char *name;
+    const char *name;
     SpriteData *sprite;
     SliceData *slices;
     int slices_count;

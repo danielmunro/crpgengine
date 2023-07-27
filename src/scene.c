@@ -5,8 +5,8 @@ typedef struct {
 
 typedef struct {
     int type;
-    char *name;
-    char *music;
+    const char *name;
+    const char *music;
     StorylineData *storylines[MAX_STORIES];
     int storylineCount;
     ControlBlock *controlBlocks[MAX_CONTROLS];

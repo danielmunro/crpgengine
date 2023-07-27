@@ -45,7 +45,7 @@ int getFilesInDirectory(const char *dir, char *files[MAX_FILES]) {
     return i;
 }
 
-Condition mapCondition(char *when) {
+Condition mapCondition(const char *when) {
     int count = sizeof(conditions) / sizeof(char *);
     for (int i = 0; i < count; i++) {
         if (strcmp(conditions[i], when) == 0) {
@@ -55,7 +55,7 @@ Condition mapCondition(char *when) {
     return -1;
 }
 
-int mapOutcome(char *then) {
+int mapOutcome(const char *then) {
     int count = sizeof(outcomes) / sizeof(char *);
     for (int i = 0; i < count; i++) {
         if (strcmp(outcomes[i], then) == 0) {

@@ -1,5 +1,5 @@
 typedef struct {
-    char *title;
+    const char *title;
 } ConfigData;
 
 static const cyaml_schema_field_t appConfigTopMappingField[] = {

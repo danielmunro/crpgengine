@@ -40,7 +40,7 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     addInfo(g->log, "finished setting scene to '%s'", g->currentScene->name);
 }
 
-Mobile *findMobById(Game *g, char *id) {
+Mobile *findMobById(Game *g, const char *id) {
     for (int s = 0; s < g->sceneCount; s++) {
         for (int m = 0; m < g->scenes[s]->exploration->mobileCount; m++) {
             if (strcmp(g->scenes[s]->exploration->mobiles[m]->id, id) == 0) {

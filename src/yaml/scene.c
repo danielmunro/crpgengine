@@ -1,17 +1,17 @@
 typedef struct {
-    char *id;
+    const char *id;
     int max;
 } BeastEncounterData;
 
 typedef struct {
     BeastEncounterData *beasts;
     int beasts_count;
-    char *background;
+    const char *background;
 } EncountersData;
 
 typedef struct {
-    char *type;
-    char *music;
+    const char *type;
+    const char *music;
     EncountersData *encounters;
 } SceneData;
 

@@ -4,8 +4,8 @@ typedef struct {
 } FrameData;
 
 typedef struct {
-    char *name;
-    char *filename;
+    const char *name;
+    const char *filename;
     FrameData *frame;
 } SpritesheetData;
 

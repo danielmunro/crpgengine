@@ -1,6 +1,6 @@
 typedef struct {
-    char *id;
-    char *name;
+    const char *id;
+    const char *name;
     Texture2D image;
     Attributes *attributes;
     int level;

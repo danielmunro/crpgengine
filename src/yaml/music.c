@@ -1,5 +1,5 @@
 typedef struct {
-    char *town;
+    const char *town;
 } MusicData;
 
 static const cyaml_schema_field_t musicTopMappingField[] = {
