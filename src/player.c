@@ -96,6 +96,12 @@ PlayerData *createPlayerData(Player *p) {
     pd->experience = p->experience;
     pd->level = p->level;
     pd->storylines_count = p->storylineCount;
+    addInfo(p->log, "storylines count :: %d", p->storylineCount);
+    pd->storylines = malloc(sizeof(char **));
+    for (int i = 0; i < p->storylineCount; i++) {
+        addInfo(p->log, "storyline :: %s", p->storylines[i]);
+        pd->storylines[i] = &p->storylines[i][0];
+    }
     pd->items_count = 0;
     pd->items = (SaveItemData *) malloc(sizeof(p->items));
     for (int i = 0; i < p->itemCount; i++) {

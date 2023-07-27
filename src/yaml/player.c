@@ -14,7 +14,7 @@ typedef struct {
 } PlayerData;
 
 static const cyaml_schema_value_t playerStorylinesEntry = {
-        CYAML_VALUE_STRING(CYAML_FLAG_DEFAULT, char *, 0, 255),
+        CYAML_VALUE_STRING(CYAML_FLAG_POINTER, char, 0, 255),
 };
 
 static const cyaml_schema_value_t partySchema = {
