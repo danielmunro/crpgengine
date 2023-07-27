@@ -155,12 +155,15 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
             NULL,
             NULL,
     };
+    const char **storylines = malloc(sizeof(char **));
     return createPlayer(
             log,
             mobiles,
             0,
             getExperienceToLevel(1),
             1,
+            0,
+            storylines,
             0);
 }
 

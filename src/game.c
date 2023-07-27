@@ -389,7 +389,9 @@ Player *mapSaveDataToPlayer(Game *g, SaveData *save) {
             save->player->coins,
             save->player->experience,
             save->player->level,
-            save->player->secondsPlayed);
+            save->player->secondsPlayed,
+            save->player->storylines,
+            save->player->storylines_count);
 }
 
 SaveData *initializePlayer(Game *g) {

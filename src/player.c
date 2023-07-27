@@ -3,7 +3,7 @@ typedef struct {
     int partyCount;
     Mobile *onDeck[MAX_TEAM_SIZE];
     int onDeckCount;
-    const char *storylines[MAX_STORIES];
+    const char **storylines;
     int storylineCount;
     Item *items[MAX_ITEMS];
     int itemQuantities[MAX_ITEMS];
@@ -31,12 +31,13 @@ void addItem(Player *player, Item *item) {
 }
 
 Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
-                     int coins, int experience, int level, int secondsPlayed) {
+                     int coins, int experience, int level, int secondsPlayed,
+                     const char **storylines, int storylineCount) {
     Player *player = malloc(sizeof(Player));
     player->blockedBy = NULL;
     player->engageable = NULL;
     player->engaged = false;
-    player->storylineCount = 0;
+    player->storylineCount = storylineCount;
     player->onDeckCount = 0;
     player->log = log;
     player->itemCount = 0;
@@ -45,6 +46,8 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
     player->experience = experience;
     player->level = level;
     player->secondsPlayed = secondsPlayed;
+    player->storylines = malloc(sizeof(char **));
+    player->storylines = storylines;
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         player->party[i] = mobs[i];
         if (mobs[i] == NULL && player->partyCount == 0) {
