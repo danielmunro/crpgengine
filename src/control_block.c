@@ -35,7 +35,11 @@ ControlBlock *createControlBlock() {
     return cb;
 }
 
-When *createWhen(Mobile *source, Mobile *trigger, int condition, const char *story) {
+When *createWhen(
+        Mobile *source,
+        Mobile *trigger,
+        int condition,
+        const char *story) {
     When *when = malloc(sizeof(When));
     when->source = source;
     when->trigger = trigger;
@@ -85,24 +89,6 @@ bool areConditionsMet(ControlBlock *cb, Player *p) {
     return true;
 }
 
-bool areConditionsEqual(When *a[MAX_INSTRUCTIONS], When *b[MAX_INSTRUCTIONS]) {
-    for (int i = 0; i < MAX_INSTRUCTIONS; i++) {
-        if (a[i] == NULL && b[i] == NULL) {
-            return true;
-        }
-        if (a[i] == NULL || b[i] == NULL) {
-            return false;
-        }
-        if (a[i]->condition != b[i]->condition
-            || (a[i]->story != NULL && b[i]->story != NULL && strcmp(a[i]->story, b[i]->story) != 0)
-            || a[i]->trigger != b[i]->trigger
-            || a[i]->source != b[i]->source) {
-            return false;
-        }
-    }
-    return true;
-}
-
 bool needsToRemoveActiveControlBlock(ControlBlock *control) {
     return control != NULL && control->progress >= control->thenCount;
 }
@@ -113,10 +99,6 @@ bool isMovingAndAtDestination(ControlBlock *cb) {
                     vector2DFromVect(cb->then[cb->progress]->target->position),
                     vector2DFromVect(cb->then[cb->progress]->position)
             );
-}
-
-bool isControlBlockDone(ControlBlock *cb) {
-    return cb->thensComplete[cb->thenCount - 1];
 }
 
 bool isAddStoryOutcome(Then *then) {
