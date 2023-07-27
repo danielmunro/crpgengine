@@ -140,30 +140,28 @@ Scene *loadScene(
     return scene;
 }
 
-Player *createNewPlayer(Log *log, AnimationManager *am, char *indexDir) {
+Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
     addInfo(log, "loading player from dir %s", indexDir);
-    PlayerData *playerYaml = loadPlayerYaml(log, indexDir);
     Animation *animations[MAX_ANIMATIONS];
-    char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/%s", indexDir, playerYaml->animations);
-    int count = loadAnimationsByName(am, playerYaml->animations, animations);
-    addInfo(am->log, "found animations for player :: %d animations", count);
+    loadAnimationsByName(am, "fireas", animations);
     Mobile *mobiles[MAX_PARTY_SIZE] = {
             createMobile(
                     "player",
-                    playerYaml->name,
-                    (Vector2) {0, 0},
+                    "Fireas",
+                    (Vector2) {429, 252},
                     DOWN,
                     animations),
             NULL,
             NULL,
             NULL,
     };
-    Player *player = createPlayer(
+    return createPlayer(
             log,
-            mobiles
-    );
-    return player;
+            mobiles,
+            0,
+            getExperienceToLevel(1),
+            1,
+            0);
 }
 
 AudioManager *loadAudioManager(Log *log, const char *indexDir) {
@@ -198,58 +196,10 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
     return createSpriteSheetManager(spritesheets, count);
 }
 
-AttributesData *createAttributesData(Attributes *a) {
-    AttributesData *data = malloc(sizeof(AttributesData));
-    data->strength = a->strength;
-    data->intelligence = a->intelligence;
-    data->wisdom = a->wisdom;
-    data->dexterity = a->dexterity;
-    data->constitution = a->constitution;
-    data->hp = a->hp;
-    data->mana = a->mana;
-    return data;
-}
-
-MobileData createMobDataFromMob(Mobile *mob) {
-    return (MobileData) {
-            mob->id,
-            mob->name,
-            mob->animations[0]->name,
-            getPositionAsString(mob->position),
-            getAnimationStringFromType(mob->direction),
-            createAttributesData(mob->attributes),
-    };
-}
-
 SaveData *createSaveData(const char *scene, Player *player) {
     SaveData *save = malloc(sizeof(SaveData));
+    save->player = createPlayerData(player);
     save->scene = &scene[0];
-    save->coins = player->coins;
-    save->secondsPlayed = player->secondsPlayed;
-    Mobile *mob = getPartyLeader(player);
-    save->position = getPositionAsString(mob->position);
-    save->storylines_count = 0;
-    save->items_count = 0;
-
-    save->items = (SaveItemData *) malloc(sizeof(player->items));
-    for (int i = 0; i < player->itemCount; i++) {
-        save->items[i] = (SaveItemData) {
-            player->items[i]->name,
-            player->itemQuantities[i]
-        };
-    }
-    save->items_count = player->itemCount;
-
-    save->party = malloc(sizeof(MobileData));
-    for (int i = 0; i < player->partyCount; i++) {
-        save->party[i] = createMobDataFromMob(player->party[i]);
-    }
-    save->party_count = player->partyCount;
-
-    save->onDeck = malloc(sizeof(MobileData));
-    for (int i = 0; i < player->onDeckCount; i++) {
-        save->onDeck[i] = createMobDataFromMob(player->onDeck[i]);
-    }
-    save->onDeck_count = player->onDeckCount;
+    save->time = (unsigned long)time(NULL);
     return save;
 }

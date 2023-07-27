@@ -193,6 +193,18 @@ void explorationMenuKeyPressed(Game *g) {
     addMenu(g->currentScene->exploration, findMenu(g->menus, g->menuCount, PARTY_MENU));
 }
 
+void save(Game *g) {
+    SaveData *save = createSaveData(g->currentScene->name, g->player);
+    char filePathAuto[MAX_FS_PATH_LENGTH];
+    sprintf(filePathAuto, "%s/%s/%s", g->runtimeArgs->indexDir, "_saves", "autosave.yaml");
+    saveSaveData(save, filePathAuto);
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/%s/save-%lu.yaml", g->runtimeArgs->indexDir, "_saves", (unsigned long)time(NULL));
+    saveSaveData(save, filePath);
+    free(save);
+    addInfo(g->log, "game progress saved");
+}
+
 void checkExplorationInput(Game *g) {
     addDebug(g->log, "exploration -- check player input");
     Mobile *mob = getPartyLeader(g->player);
@@ -212,12 +224,7 @@ void checkExplorationInput(Game *g) {
         addInfo(g->log, "player play time :: %ds", g->player->secondsPlayed);
     }
     if (IsKeyPressed(KEY_S)) {
-        char filePath[MAX_FS_PATH_LENGTH];
-        sprintf(filePath, "%s/%s/%s", g->runtimeArgs->indexDir, "_saves", "autosave.yaml");
-        SaveData *save = createSaveData(g->currentScene->name, g->player);
-        saveSaveData(save, filePath);
-        free(save);
-        addInfo(g->log, "game progress saved");
+        save(g);
     }
 }
 
@@ -362,36 +369,43 @@ const char *getAutosaveFile(const char *indexDir) {
 
 Player *mapSaveDataToPlayer(Game *g, SaveData *save) {
     Mobile *mobs[MAX_PARTY_SIZE];
-    addInfo(g->log, "save file party count :: %d", save->party_count);
-    for (int i = 0; i < save->party_count; i++) {
+    addInfo(g->log, "save file party count :: %d", save->player->party_count);
+    for (int i = 0; i < save->player->party_count; i++) {
         Animation *animations[MAX_ANIMATIONS];
-        loadAnimationsByName(g->animationManager, save->party[i].animations, animations);
+        loadAnimationsByName(g->animationManager, save->player->party[i].animations, animations);
         mobs[i] = createMobile(
-                save->party[i].id,
-                save->party[i].name,
-                getPositionFromString(save->party[i].position),
-                getDirectionFromString(save->party[i].direction),
+                save->player->party[i].id,
+                save->player->party[i].name,
+                getPositionFromString(save->player->party[i].position),
+                getDirectionFromString(save->player->party[i].direction),
                 animations);
     }
-    for (int i = save->party_count; i < MAX_PARTY_SIZE; i++) {
+    for (int i = save->player->party_count; i < MAX_PARTY_SIZE; i++) {
         mobs[i] = NULL;
     }
-    Player *player = createPlayer(g->log, mobs);
-    player->secondsPlayed = save->secondsPlayed;
-    player->coins = save->coins;
-    return player;
+    return createPlayer(
+            g->log,
+            mobs,
+            save->player->coins,
+            save->player->experience,
+            save->player->level,
+            save->player->secondsPlayed);
 }
 
 SaveData *initializePlayer(Game *g) {
-    const char *autosaveFilePath = getAutosaveFile(g->runtimeArgs->indexDir);
+    char saveFilePath[MAX_FS_PATH_LENGTH];
+    if (g->runtimeArgs->saveFile != NULL) {
+        sprintf((char *)saveFilePath, "%s/_saves/%s", g->runtimeArgs->indexDir, g->runtimeArgs->saveFile);
+    } else {
+        strcpy(saveFilePath, getAutosaveFile(g->runtimeArgs->indexDir));
+    }
     SaveData *save = NULL;
-    if (FileExists(autosaveFilePath)) {
-        save = loadSaveData(autosaveFilePath);
+    if (FileExists(saveFilePath)) {
+        save = loadSaveData(saveFilePath);
         g->player = mapSaveDataToPlayer(g, save);
     } else {
         g->player = createNewPlayer(g->log, g->animationManager, g->runtimeArgs->indexDir);
     }
-    free((char *)autosaveFilePath);
     return save;
 }
 

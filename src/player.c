@@ -3,13 +3,15 @@ typedef struct {
     int partyCount;
     Mobile *onDeck[MAX_TEAM_SIZE];
     int onDeckCount;
-    const char *stories[MAX_STORIES];
-    int storyCount;
+    const char *storylines[MAX_STORIES];
+    int storylineCount;
     Item *items[MAX_ITEMS];
     int itemQuantities[MAX_ITEMS];
     int itemCount;
     int coins;
     int secondsPlayed;
+    int experience;
+    int level;
     Mobile *blockedBy;
     Mobile *engageable;
     bool engaged;
@@ -28,18 +30,21 @@ void addItem(Player *player, Item *item) {
     player->itemCount++;
 }
 
-Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE]) {
+Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
+                     int coins, int experience, int level, int secondsPlayed) {
     Player *player = malloc(sizeof(Player));
     player->blockedBy = NULL;
     player->engageable = NULL;
     player->engaged = false;
-    player->storyCount = 0;
+    player->storylineCount = 0;
     player->onDeckCount = 0;
     player->log = log;
     player->itemCount = 0;
     player->partyCount = 0;
-    player->coins = 0;
-    player->secondsPlayed = 0;
+    player->coins = coins;
+    player->experience = experience;
+    player->level = level;
+    player->secondsPlayed = secondsPlayed;
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         player->party[i] = mobs[i];
         if (mobs[i] == NULL && player->partyCount == 0) {
@@ -61,14 +66,72 @@ Mobile *getPartyLeader(Player *p) {
     return p->party[0];
 }
 
+AttributesData *createAttributesData(Attributes *a) {
+    AttributesData *data = malloc(sizeof(AttributesData));
+    data->strength = a->strength;
+    data->intelligence = a->intelligence;
+    data->wisdom = a->wisdom;
+    data->dexterity = a->dexterity;
+    data->constitution = a->constitution;
+    data->hp = a->hp;
+    data->mana = a->mana;
+    return data;
+}
+
+MobileData createMobDataFromMob(Mobile *mob) {
+    return (MobileData) {
+            mob->id,
+            mob->name,
+            mob->animations[0]->name,
+            getPositionAsString(mob->position),
+            getAnimationStringFromType(mob->direction),
+            createAttributesData(mob->attributes),
+    };
+}
+
+PlayerData *createPlayerData(Player *p) {
+    PlayerData *pd = malloc(sizeof(PlayerData));
+    pd->coins = p->coins;
+    pd->secondsPlayed = p->secondsPlayed;
+    pd->experience = p->experience;
+    pd->level = p->level;
+    pd->storylines_count = p->storylineCount;
+    pd->items_count = 0;
+    pd->items = (SaveItemData *) malloc(sizeof(p->items));
+    for (int i = 0; i < p->itemCount; i++) {
+        pd->items[i] = (SaveItemData) {
+                p->items[i]->name,
+                p->itemQuantities[i]
+        };
+    }
+    pd->items_count = p->itemCount;
+
+    pd->party = malloc(sizeof(MobileData));
+    for (int i = 0; i < p->partyCount; i++) {
+        pd->party[i] = createMobDataFromMob(p->party[i]);
+    }
+    pd->party_count = p->partyCount;
+
+    pd->onDeck = malloc(sizeof(MobileData));
+    for (int i = 0; i < p->onDeckCount; i++) {
+        pd->onDeck[i] = createMobDataFromMob(p->onDeck[i]);
+    }
+    pd->onDeck_count = p->onDeckCount;
+    return pd;
+}
+
+int getExperienceToLevel(int level) {
+    return (int) pow((double) level, 3.0) + 999;
+}
+
 void addStory(Player *p, const char *story) {
-    p->stories[p->storyCount++] = story;
+    p->storylines[p->storylineCount++] = story;
     addInfo(p->log, "add story to player :: %s", story);
 }
 
 bool hasStory(Player *p, const char *story) {
-    for (int j = 0; j < p->storyCount; j++) {
-        if (strcmp(story, p->stories[j]) == 0) {
+    for (int j = 0; j < p->storylineCount; j++) {
+        if (strcmp(story, p->storylines[j]) == 0) {
             addDebug(p->log, "player has story: %s", story);
             return true;
         }
