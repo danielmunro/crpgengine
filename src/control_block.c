@@ -60,15 +60,15 @@ Then *createThen(Mobile *target, const char *message, const char *story, const c
     return then;
 }
 
-bool hasConditionEngaged(Player *p, int condition, Mobile *mobileTrigger) {
+bool hasConditionEngaged(Player *p, Condition condition, Mobile *mobileTrigger) {
     return condition == ENGAGED && isSpeakingTo(p, mobileTrigger);
 }
 
-bool hasConditionStory(Player *p, int condition, const char *story) {
+bool hasConditionStory(Player *p, Condition condition, const char *story) {
     return condition == HAS_STORY && hasStory(p, story);
 }
 
-bool hasConditionNoStory(Player *p, int condition, const char *story) {
+bool hasConditionNoStory(Player *p, Condition condition, const char *story) {
     return condition == NOT_HAS_STORY && !hasStory(p, story);
 }
 
