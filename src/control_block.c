@@ -92,13 +92,10 @@ bool isSceneLoaded(Condition condition, EventType eventType) {
 }
 
 bool hasArrivedAt(Player *p, Condition condition, ArriveAt *arriveAt) {
-    bool defined = arriveAt != NULL;
-    if (defined) {
-        printf("is defined? %d\n", defined);
-        exit(1);
+    if (arriveAt != NULL) {
+        Rectangle c = GetCollisionRec(getMobileRectangle(getPartyLeader(p)), arriveAt->rect);
+        return condition == ARRIVE_AT && (c.height > 0 || c.width > 0);
     }
-//    Rectangle c = GetCollisionRec(getMobileRectangle(getPartyLeader(p)), arriveAt->rect);
-//    return condition == ARRIVE_AT && (c.height > 0 || c.width > 0);
     return false;
 }
 
