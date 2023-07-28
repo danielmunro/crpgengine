@@ -1,8 +1,14 @@
 typedef struct {
+    const char *name;
+    Rectangle rect;
+} ArriveAt;
+
+typedef struct {
     Mobile *source;
     Condition condition;
     Mobile *trigger;
     const char *story;
+    ArriveAt *arriveAt;
 } When;
 
 typedef struct {
@@ -39,12 +45,14 @@ When *createWhen(
         Mobile *source,
         Mobile *trigger,
         int condition,
-        const char *story) {
+        const char *story,
+        ArriveAt *arriveAt) {
     When *when = malloc(sizeof(When));
     when->source = source;
     when->trigger = trigger;
     when->condition = condition;
     when->story = story;
+    when->arriveAt = arriveAt;
     return when;
 }
 
@@ -58,6 +66,13 @@ Then *createThen(Mobile *target, const char *message, const char *story, const c
     then->position = position;
     then->parallel = parallel;
     return then;
+}
+
+ArriveAt *createArriveAt(const char *name, Rectangle rect) {
+    ArriveAt *a = malloc(sizeof(ArriveAt));
+    a->name = name;
+    a->rect = rect;
+    return a;
 }
 
 bool hasConditionEngaged(Player *p, Condition condition, Mobile *mobileTrigger) {
@@ -76,11 +91,23 @@ bool isSceneLoaded(Condition condition, EventType eventType) {
     return condition == SCENE_LOADED && eventType == EVENT_SCENE_LOADED;
 }
 
+bool hasArrivedAt(Player *p, Condition condition, ArriveAt *arriveAt) {
+    bool defined = arriveAt != NULL;
+    if (defined) {
+        printf("is defined? %d\n", defined);
+        exit(1);
+    }
+//    Rectangle c = GetCollisionRec(getMobileRectangle(getPartyLeader(p)), arriveAt->rect);
+//    return condition == ARRIVE_AT && (c.height > 0 || c.width > 0);
+    return false;
+}
+
 bool isWhenActivated(Player *p, When *when, EventType eventType) {
     return hasConditionEngaged(p, when->condition, when->trigger)
            || hasConditionStory(p, when->condition, when->story)
            || hasConditionNoStory(p, when->condition, when->story)
-           || isSceneLoaded(when->condition, eventType);
+           || isSceneLoaded(when->condition, eventType)
+           || hasArrivedAt(p, when->condition, when->arriveAt);
 }
 
 bool areConditionsMet(ControlBlock *cb, Player *p, EventType eventType) {

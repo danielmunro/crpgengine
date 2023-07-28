@@ -1,0 +1,9 @@
+storylines:
+  - when:
+      - player: true
+        condition: arrive_at
+        arrive_at: demo_wait
+    then:
+      - player: true
+        action: direction
+        direction: down

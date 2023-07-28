@@ -4,6 +4,7 @@ typedef struct {
     const char *condition;
     const char *story;
     const char *scene;
+    const char *arriveAt;
 } WhenData;
 
 typedef struct {
@@ -40,6 +41,8 @@ static const cyaml_schema_field_t whenFieldSchema[] = {
                 "story", CYAML_FLAG_OPTIONAL, WhenData, story, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "scene", CYAML_FLAG_OPTIONAL, WhenData, scene, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "arrive_at", CYAML_FLAG_OPTIONAL, WhenData, arriveAt, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 
