@@ -164,6 +164,14 @@ bool needsToWait(Then *then) {
     return then->outcome == WAIT;
 }
 
+bool needsToLock(Then *then) {
+    return then->outcome == LOCK;
+}
+
+bool needsToUnlock(Then *then) {
+    return then->outcome == UNLOCK;
+}
+
 bool hasAmountProperty(ThenData thenData) {
     return strcmp(thenData.action, outcomes[WAIT]) == 0;
 }

@@ -223,10 +223,13 @@ void save(Game *g) {
 }
 
 void checkExplorationInput(Game *g) {
+    if (g->player->locked) {
+        addDebug(g->log, "exploration -- player is locked, skipping input check");
+        return;
+    }
     addDebug(g->log, "exploration -- check player input");
     Mobile *mob = getPartyLeader(g->player);
     resetMoving(mob);
-    getMobAnimation(mob)->isPlaying = 0;
     explorationCheckMoveKeys(g->player);
     if (IsKeyPressed(KEY_C)) {
         explorationDebugKeyPressed(g->currentScene->exploration, mob->position);

@@ -112,6 +112,8 @@ const char *outcomes[] = {
         "take",
         "add_story",
         "set_position",
+        "lock",
+        "unlock",
 };
 
 typedef enum {
@@ -124,6 +126,8 @@ typedef enum {
     TAKE,
     ADD_STORY,
     SET_POSITION,
+    LOCK,
+    UNLOCK,
 } Outcome;
 
 typedef enum {

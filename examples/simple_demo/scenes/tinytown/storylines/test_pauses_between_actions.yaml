@@ -8,6 +8,8 @@ storylines:
         story: silly_action
     then:
       - player: true
+        action: lock
+      - player: true
         action: direction
         direction: down
       - player: true
@@ -19,3 +21,5 @@ storylines:
       - player: true
         action: add_story
         story: silly_action
+      - player: true
+        action: unlock

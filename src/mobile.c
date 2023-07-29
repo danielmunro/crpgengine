@@ -56,6 +56,7 @@ void resetMoving(Mobile *mob) {
     mob->moving[DOWN] = false;
     mob->moving[LEFT] = false;
     mob->moving[RIGHT] = false;
+    getMobAnimation(mob)->isPlaying = 0;
 }
 
 bool isMoving(Mobile *mob) {
