@@ -14,10 +14,13 @@ storylines:
         direction: down
       - player: true
         action: wait
-        amount: 3
+        amount: 2
       - player: true
         action: set_direction
         direction: right
+      - player: true
+        action: wait
+        amount: 1
       - player: true
         action: add_story
         story: silly_action
