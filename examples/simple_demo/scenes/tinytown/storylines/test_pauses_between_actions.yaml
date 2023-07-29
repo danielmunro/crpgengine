@@ -3,7 +3,19 @@ storylines:
       - player: true
         condition: arrive_at
         arrive_at: demo_wait
+      - player: true
+        condition: not_has_story
+        story: silly_action
     then:
       - player: true
         action: direction
         direction: down
+      - player: true
+        action: wait
+        amount: 3
+      - player: true
+        action: direction
+        direction: right
+      - player: true
+        action: add_story
+        story: silly_action

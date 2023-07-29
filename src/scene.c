@@ -121,6 +121,23 @@ void thenCheck(Scene *s, Player *p, ControlBlock *cb) {
         addInfo(s->log, "change position for mob :: %s, %f, %f",
                 target->name, target->position.x, target->position.y);
         cb->progress++;
+    } else if (needsToWait(cb->then[cb->progress])) {
+        Mobile *target = cb->then[cb->progress]->target;
+        if (target->waitTimer == -1) {
+            addInfo(s->log, "setting initial wait timer");
+            target->waitTimer = cb->then[cb->progress]->amount;
+        }
+        struct timeval update;
+        gettimeofday(&update, NULL);
+        if (update.tv_sec > target->lastTimerUpdate.tv_sec) {
+            target->lastTimerUpdate = update;
+            target->waitTimer--;
+            if (target->waitTimer == 0) {
+                addInfo(s->log, "timer done");
+                target->waitTimer = -1;
+                cb->progress++;
+            }
+        }
     }
 }
 

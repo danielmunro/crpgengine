@@ -95,6 +95,11 @@ Then *mapThen(Game *g, ThenData td) {
     } else {
         pos = (Vector2){0,0};
     }
+    addInfo(g->log, "outcome -- %s", td.action);
+    int amount = 0;
+    if (hasAmountProperty(td)) {
+        amount = td.amount;
+    }
     Then *t = createThen(
             target,
             &td.message[0],
@@ -102,7 +107,8 @@ Then *mapThen(Game *g, ThenData td) {
             td.direction,
             mapOutcome(td.action),
             pos,
-            td.parallel
+            td.parallel,
+            amount
     );
     addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
              t->story, t->outcome, t->message);

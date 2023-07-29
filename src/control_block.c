@@ -16,7 +16,8 @@ typedef struct {
     const char *message;
     const char *story;
     const char *direction;
-    int outcome;
+    Outcome outcome;
+    int amount;
     Vector2 position;
     bool parallel;
 } Then;
@@ -56,7 +57,15 @@ When *createWhen(
     return when;
 }
 
-Then *createThen(Mobile *target, const char *message, const char *story, const char *direction, const Outcome outcome, Vector2 position, bool parallel) {
+Then *createThen(
+        Mobile *target,
+        const char *message,
+        const char *story,
+        const char *direction,
+        const Outcome outcome,
+        Vector2 position,
+        bool parallel,
+        int amount) {
     Then *then = malloc(sizeof(Then));
     then->target = target;
     then->message = message;
@@ -65,6 +74,7 @@ Then *createThen(Mobile *target, const char *message, const char *story, const c
     then->outcome = outcome;
     then->position = position;
     then->parallel = parallel;
+    then->amount = amount;
     return then;
 }
 
@@ -148,4 +158,12 @@ bool needsToChangePosition(Then *then) {
 
 bool needsToStartMoving(Then *then) {
     return then->outcome == MOVE_TO && !isMoving(then->target);
+}
+
+bool needsToWait(Then *then) {
+    return then->outcome == WAIT;
+}
+
+bool hasAmountProperty(ThenData thenData) {
+    return strcmp(thenData.action, outcomes[WAIT]) == 0;
 }
