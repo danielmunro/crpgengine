@@ -5,6 +5,7 @@ typedef struct {
     bool showWarpCollisions;
     bool dump;
     bool exit;
+    bool forceNewGame;
     LogLevel logLevel;
     const char *indexDir;
     const char *saveFile;
@@ -21,6 +22,7 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
     r->logLevel = INFO;
     r->indexDir = NULL;
     r->saveFile = NULL;
+    r->forceNewGame = false;
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
             if (argv[i][1] == 'c') {
@@ -53,6 +55,8 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
                 }
             } else if (argv[i][1] == 'v') {
                 r->saveFile = &argv[i + 1][0];
+            } else if (argv[i][1] == 'n') {
+                r->forceNewGame = true;
             }
         }
     }

@@ -58,5 +58,5 @@ storylines:
         action: set_position
         position: 320, 242
       - mob: vill1
-        action: direction
+        action: set_direction
         direction: down
