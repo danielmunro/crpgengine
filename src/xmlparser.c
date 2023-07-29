@@ -147,6 +147,17 @@ void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) 
             };
             e->exitCount++;
             objectType = EXIT;
+        } else if (strcmp(type, "arrive_at") == 0) {
+            Exploration *e = tilemapXmlReader->exploration;
+            e->arriveAt[e->arriveAtCount] = createArriveAt(
+                    getStringAttribute(tilemapXmlReader->reader, "name"),
+                    (Rectangle) {
+                            getFloatAttribute(tilemapXmlReader->reader, "x"),
+                            getFloatAttribute(tilemapXmlReader->reader, "y"),
+                            getFloatAttribute(tilemapXmlReader->reader, "width"),
+                            getFloatAttribute(tilemapXmlReader->reader, "height")
+                    });
+            e->arriveAtCount++;
         }
     } else if (strcmp(strName, "property") == 0) {
         Exploration *e = tilemapXmlReader->exploration;

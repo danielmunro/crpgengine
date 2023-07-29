@@ -109,8 +109,8 @@ StorylinesData *loadStorylinesYaml(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &storylinesTopSchema, (cyaml_data_t **) &storylines, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "%s\n", cyaml_strerror(err));
-        return NULL;
+        fprintf(stderr, "error loading file, filename and error :: %s - %s\n", filePath, cyaml_strerror(err));
+        exit(1);
     }
     return storylines;
 }

@@ -37,7 +37,7 @@ int getFilesInDirectory(const char *dir, char *files[MAX_FILES]) {
         if (strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0) {
             continue;
         }
-        files[i] = (char *) malloc(strlen(de->d_name));
+        files[i] = malloc(MAX_FS_PATH_LENGTH);
         strcpy(files[i], de->d_name);
         i++;
     }

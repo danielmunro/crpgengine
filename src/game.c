@@ -52,18 +52,28 @@ Mobile *findMobById(Game *g, const char *id) {
     return NULL;
 }
 
-When *mapWhen(Game *g, WhenData wd) {
+When *mapWhen(Game *g, Scene *s, WhenData wd) {
     Mobile *trigger = NULL;
     Mobile *mob = getPartyLeader(g->player);
+    ArriveAt *arriveAt = NULL;
     if (wd.mob != NULL) {
         trigger = findMobById(g, wd.mob);
         addDebug(g->log, "mobile trigger is '%s'", trigger->name);
+    }
+    if (wd.arriveAt != NULL) {
+        Exploration *e = s->exploration;
+        for (int i = 0; i < e->arriveAtCount; i++) {
+            if (strcmp(e->arriveAt[i]->name, wd.arriveAt) == 0) {
+                arriveAt = e->arriveAt[i];
+            }
+        }
     }
     When *w = createWhen(
             mob,
             trigger,
             mapCondition(wd.condition),
-            wd.story);
+            wd.story,
+            arriveAt);
     addDebug(g->log, "condition: %s, mapped to: %d, story: %s",
              wd.condition,
              w->condition,
@@ -85,6 +95,10 @@ Then *mapThen(Game *g, ThenData td) {
     } else {
         pos = (Vector2){0,0};
     }
+    int amount = 0;
+    if (hasAmountProperty(td)) {
+        amount = td.amount;
+    }
     Then *t = createThen(
             target,
             &td.message[0],
@@ -92,21 +106,22 @@ Then *mapThen(Game *g, ThenData td) {
             td.direction,
             mapOutcome(td.action),
             pos,
-            td.parallel
+            td.parallel,
+            amount
     );
     addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
              t->story, t->outcome, t->message);
     return t;
 }
 
-ControlBlock *mapStorylineToControlBlock(Game *g, StorylineData *storyline) {
+ControlBlock *mapStorylineToControlBlock(Game *g, Scene *scene, StorylineData *storyline) {
     ControlBlock *c = createControlBlock();
     c->whenCount = storyline->when_count;
     c->thenCount = storyline->then_count;
     addDebug(g->log, "processing storyline with %d when and %d then clauses",
              storyline->when_count, storyline->then_count);
     for (int i = 0; i < storyline->when_count; i++) {
-        c->when[i] = mapWhen(g, storyline->when[i]);
+        c->when[i] = mapWhen(g, scene, storyline->when[i]);
     }
     for (int i = 0; i < storyline->then_count; i++) {
         c->then[i] = mapThen(g, storyline->then[i]);
@@ -132,7 +147,7 @@ void loadScenes(Game *g, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SC
         addDebug(g->log, "scene storyline count :: %s -- %d",
                  g->scenes[i]->name, g->scenes[i]->storylineCount);
         for (int c = 0; c < g->scenes[i]->storylineCount; c++) {
-            g->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(g, g->scenes[i]->storylines[c]);
+            g->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(g, g->scenes[i], g->scenes[i]->storylines[c]);
             g->scenes[i]->controlBlockCount++;
         }
     }
@@ -207,10 +222,13 @@ void save(Game *g) {
 }
 
 void checkExplorationInput(Game *g) {
+    if (g->player->locked) {
+        addDebug(g->log, "exploration -- player is locked, skipping input check");
+        return;
+    }
     addDebug(g->log, "exploration -- check player input");
     Mobile *mob = getPartyLeader(g->player);
     resetMoving(mob);
-    getMobAnimation(mob)->isPlaying = 0;
     explorationCheckMoveKeys(g->player);
     if (IsKeyPressed(KEY_C)) {
         explorationDebugKeyPressed(g->currentScene->exploration, mob->position);

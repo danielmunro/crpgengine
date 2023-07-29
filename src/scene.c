@@ -93,33 +93,58 @@ void addStoryline(Scene *scene, StorylineData *storyline) {
 }
 
 void thenCheck(Scene *s, Player *p, ControlBlock *cb) {
+    Then *then = cb->then[cb->progress];
     if (isMovingAndAtDestination(cb)) {
-        addInfo(s->log, "mob at destination, control block proceeding :: %s", cb->then[cb->progress]->target->name);
+        addInfo(s->log, "mob at destination, control block proceeding :: %s", then->target->name);
         cb->progress++;
-    } else if (isAddStoryOutcome(cb->then[cb->progress])) {
-        addStory(p, cb->then[cb->progress]->story);
+    } else if (isAddStoryOutcome(then)) {
+        addStory(p, then->story);
         cb->progress++;
-    } else if (needsToStartMoving(cb->then[cb->progress])) {
+    } else if (needsToStartMoving(then)) {
         addInfo(s->log, "mob needs to start moving");
         addMobileMovement(
                 s->exploration,
                 createMobileMovement(
-                        cb->then[cb->progress]->target,
-                        cb->then[cb->progress]->position
+                        then->target,
+                        then->position
                 )
         );
         p->engaged = false;
         getPartyLeader(p)->isBeingMoved = true;
-    } else if (isFaceDirectionOutcome(cb->then[cb->progress])) {
-        addInfo(s->log, "set direction for mob :: %s, %s", cb->then[cb->progress]->target->name, cb->then[cb->progress]->direction);
-        cb->then[cb->progress]->target->direction =
-                getDirectionFromString(cb->then[cb->progress]->direction);
+    } else if (isFaceDirectionOutcome(then)) {
+        addInfo(s->log, "set direction for mob :: %s, %s", then->target->name, then->direction);
+        then->target->direction =
+                getDirectionFromString(then->direction);
         cb->progress++;
-    } else if (needsToChangePosition(cb->then[cb->progress])) {
-        Mobile *target = cb->then[cb->progress]->target;
-        target->position = cb->then[cb->progress]->position;
+    } else if (needsToChangePosition(then)) {
+        Mobile *target = then->target;
+        target->position = then->position;
         addInfo(s->log, "change position for mob :: %s, %f, %f",
                 target->name, target->position.x, target->position.y);
+        cb->progress++;
+    } else if (needsToWait(then)) {
+        Mobile *target = then->target;
+        if (target->waitTimer == -1) {
+            addInfo(s->log, "setting initial wait timer");
+            target->waitTimer = then->amount;
+        }
+        struct timeval update;
+        gettimeofday(&update, NULL);
+        if (update.tv_sec > target->lastTimerUpdate.tv_sec) {
+            target->lastTimerUpdate = update;
+            target->waitTimer--;
+            if (target->waitTimer == 0) {
+                addInfo(s->log, "timer done");
+                target->waitTimer = -1;
+                cb->progress++;
+            }
+        }
+    } else if (needsToLock(then)) {
+        p->locked = true;
+        resetMoving(getPartyLeader(p));
+        cb->progress++;
+    } else if (needsToUnlock(then)) {
+        p->locked = false;
         cb->progress++;
     }
 }

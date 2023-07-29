@@ -28,6 +28,8 @@ typedef struct {
     Layer *layers[LAYER_COUNT];
     int layerCount;
     Texture2D renderedLayers[LAYER_COUNT];
+    ArriveAt *arriveAt[MAX_ARRIVE_AT];
+    int arriveAtCount;
     Exit *exits[MAX_EXITS];
     int exitCount;
     Entrance *entrances[MAX_ENTRANCES];
@@ -78,6 +80,7 @@ Exploration *createExploration(Log *log, RuntimeArgs *runtimeArgs) {
     exploration->exitCount = 0;
     exploration->menuCount = 0;
     exploration->objectCount = 0;
+    exploration->arriveAtCount = 0;
     exploration->log = log;
     exploration->runtimeArgs = runtimeArgs;
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {

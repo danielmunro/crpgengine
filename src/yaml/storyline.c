@@ -4,6 +4,7 @@ typedef struct {
     const char *condition;
     const char *story;
     const char *scene;
+    const char *arriveAt;
 } WhenData;
 
 typedef struct {
@@ -15,6 +16,7 @@ typedef struct {
     const char *story;
     const char *position;
     const char *direction;
+    int amount;
 } ThenData;
 
 typedef struct {
@@ -40,6 +42,8 @@ static const cyaml_schema_field_t whenFieldSchema[] = {
                 "story", CYAML_FLAG_OPTIONAL, WhenData, story, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "scene", CYAML_FLAG_OPTIONAL, WhenData, scene, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "arrive_at", CYAML_FLAG_OPTIONAL, WhenData, arriveAt, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 
@@ -64,6 +68,8 @@ static const cyaml_schema_field_t thenFieldSchema[] = {
                 "position", CYAML_FLAG_OPTIONAL, ThenData, position, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "direction", CYAML_FLAG_OPTIONAL, ThenData , direction, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_INT(
+                "amount", CYAML_FLAG_OPTIONAL, ThenData, amount),
         CYAML_FIELD_END
 };
 

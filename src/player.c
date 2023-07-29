@@ -15,6 +15,7 @@ typedef struct {
     Mobile *blockedBy;
     Mobile *engageable;
     bool engaged;
+    bool locked;
     Log *log;
 } Player;
 
@@ -48,6 +49,7 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
     player->secondsPlayed = secondsPlayed;
     player->storylines = malloc(sizeof(char **));
     player->storylines = storylines;
+    player->locked = false;
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         player->party[i] = mobs[i];
         if (mobs[i] == NULL && player->partyCount == 0) {

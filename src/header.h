@@ -65,6 +65,7 @@
 #define MAX_MOBILE_MOVEMENTS 64
 #define MAX_SPRITES 1024
 #define MAX_EVENTS 64
+#define MAX_ARRIVE_AT 64
 
 #define COLLIDE_TYPE_OBJECTS "objects"
 #define COLLIDE_TYPE_PLAYER "player"
@@ -87,34 +88,32 @@ typedef enum {
 
 const char *conditions[] = {
         "engaged",
-        "has",
-        "not_has",
-        "at",
         "has_story",
         "not_has_story",
         "scene_loaded",
+        "arrive_at",
 };
 
 typedef enum {
     ENGAGED = 0,
-    HAS,
-    NOT_HAS,
-    AT,
     HAS_STORY,
     NOT_HAS_STORY,
     SCENE_LOADED,
+    ARRIVE_AT,
 } Condition;
 
 const char *outcomes[] = {
         "speak",
         "move_to",
-        "set_direction",
+        "direction",
         "sprite",
         "wait",
         "give_item",
         "take",
         "add_story",
         "set_position",
+        "lock",
+        "unlock",
 };
 
 typedef enum {
@@ -127,6 +126,8 @@ typedef enum {
     TAKE,
     ADD_STORY,
     SET_POSITION,
+    LOCK,
+    UNLOCK,
 } Outcome;
 
 typedef enum {
