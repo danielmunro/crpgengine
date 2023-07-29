@@ -95,7 +95,6 @@ Then *mapThen(Game *g, ThenData td) {
     } else {
         pos = (Vector2){0,0};
     }
-    addInfo(g->log, "outcome -- %s", td.action);
     int amount = 0;
     if (hasAmountProperty(td)) {
         amount = td.amount;
