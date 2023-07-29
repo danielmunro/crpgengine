@@ -209,18 +209,6 @@ void explorationMenuKeyPressed(Game *g) {
     addMenu(g->currentScene->exploration, findMenu(g->menus, g->menuCount, PARTY_MENU));
 }
 
-void save(Game *g) {
-    SaveData *save = createSaveData(g->currentScene->name, g->player);
-    char filePathAuto[MAX_FS_PATH_LENGTH];
-    sprintf(filePathAuto, "%s/%s/%s", g->runtimeArgs->indexDir, "_saves", "autosave.yaml");
-    saveSaveData(save, filePathAuto);
-    char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/%s/save-%lu.yaml", g->runtimeArgs->indexDir, "_saves", (unsigned long)time(NULL));
-    saveSaveData(save, filePath);
-    free(save);
-    addInfo(g->log, "game progress saved");
-}
-
 void checkExplorationInput(Game *g) {
     if (g->player->locked) {
         addDebug(g->log, "exploration -- player is locked, skipping input check");
@@ -243,7 +231,7 @@ void checkExplorationInput(Game *g) {
         addInfo(g->log, "player play time :: %ds", g->player->secondsPlayed);
     }
     if (IsKeyPressed(KEY_S)) {
-        save(g);
+        save(g->player, g->currentScene->name, g->runtimeArgs->indexDir);
     }
 }
 
@@ -321,6 +309,7 @@ void stopTiming(Timing *t, Player *p) {
 
 void run(Game *g) {
     while (!WindowShouldClose()) {
+        int storylineCount = g->player->storylineCount;
         startTiming(g->timing);
         if (isFighting(g->currentScene)) {
             doFightLoop(g);
@@ -328,6 +317,9 @@ void run(Game *g) {
             doInGameMenuLoop(g);
         } else if (isExploring(g->currentScene)) {
             doExplorationLoop(g);
+        }
+        if (g->player->storylineCount > storylineCount) {
+            save(g->player, g->currentScene->name, g->runtimeArgs->indexDir);
         }
         updateMusicStream(g->audioManager);
         stopTiming(g->timing, g->player);

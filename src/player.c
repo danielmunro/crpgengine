@@ -135,22 +135,6 @@ int getExperienceToLevel(int level) {
     return (int) pow((double) level, 3.0) + 999;
 }
 
-void addStory(Player *p, const char *story) {
-    p->storylines[p->storylineCount++] = story;
-    addInfo(p->log, "add story to player :: %s", story);
-}
-
-bool hasStory(Player *p, const char *story) {
-    for (int j = 0; j < p->storylineCount; j++) {
-        if (strcmp(story, p->storylines[j]) == 0) {
-            addDebug(p->log, "player has story: %s", story);
-            return true;
-        }
-    }
-    addDebug(p->log, "player does not have story: %s", story);
-    return false;
-}
-
 void checkMoveKey(Player *p, int key, AnimationType direction) {
     if (IsKeyDown(key) && !p->engaged) {
         getPartyLeader(p)->moving[direction] = true;
@@ -181,4 +165,40 @@ void engageWithMobile(Player *p) {
 void disengageWithMobile(Player *p) {
     p->engaged = false;
     updateDirection(p->blockedBy, p->blockedBy->previousDirection);
+}
+
+SaveData *createSaveData(Player *player, const char *scene) {
+    SaveData *save = malloc(sizeof(SaveData));
+    save->player = createPlayerData(player);
+    save->scene = &scene[0];
+    save->time = (unsigned long)time(NULL);
+    return save;
+}
+
+void save(Player *player, const char *sceneName, const char *indexDir) {
+    SaveData *save = createSaveData(player, sceneName);
+    char filePathAuto[MAX_FS_PATH_LENGTH];
+    sprintf(filePathAuto, "%s/%s/%s", indexDir, "_saves", "autosave.yaml");
+    saveSaveData(save, filePathAuto);
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/%s/save-%lu.yaml", indexDir, "_saves", (unsigned long)time(NULL));
+    saveSaveData(save, filePath);
+    free(save);
+    addInfo(player->log, "game progress saved");
+}
+
+void addStory(Player *p, const char *story) {
+    p->storylines[p->storylineCount++] = story;
+    addInfo(p->log, "add story to player :: %s", story);
+}
+
+bool hasStory(Player *p, const char *story) {
+    for (int j = 0; j < p->storylineCount; j++) {
+        if (strcmp(story, p->storylines[j]) == 0) {
+            addDebug(p->log, "player has story: %s", story);
+            return true;
+        }
+    }
+    addDebug(p->log, "player does not have story: %s", story);
+    return false;
 }
