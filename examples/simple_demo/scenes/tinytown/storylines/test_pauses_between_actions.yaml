@@ -10,13 +10,13 @@ storylines:
       - player: true
         action: lock
       - player: true
-        action: direction
+        action: set_direction
         direction: down
       - player: true
         action: wait
         amount: 3
       - player: true
-        action: direction
+        action: set_direction
         direction: right
       - player: true
         action: add_story

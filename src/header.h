@@ -105,7 +105,7 @@ typedef enum {
 const char *outcomes[] = {
         "speak",
         "move_to",
-        "direction",
+        "set_direction",
         "sprite",
         "wait",
         "give_item",

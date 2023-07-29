@@ -421,7 +421,7 @@ SaveData *initializePlayer(Game *g) {
         strcpy(saveFilePath, getAutosaveFile(g->runtimeArgs->indexDir));
     }
     SaveData *save = NULL;
-    if (FileExists(saveFilePath)) {
+    if (FileExists(saveFilePath) && !g->runtimeArgs->forceNewGame) {
         save = loadSaveData(saveFilePath);
         g->player = mapSaveDataToPlayer(g, save);
     } else {
