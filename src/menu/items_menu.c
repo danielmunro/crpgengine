@@ -20,5 +20,5 @@ MenuSelectResponse *partyMenuItemSelected(MenuType menuType) {
 }
 
 int getItemsCursorLength(Player *player) {
-    return player->itemCount - 1;
+    return player->itemCount;
 }

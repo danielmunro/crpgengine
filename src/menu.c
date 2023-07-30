@@ -50,11 +50,11 @@ void drawAllMenus(Player *player, Menu *menus[MAX_MENUS], int menuCount) {
 }
 
 void normalizeMenuCursor(Menu *menu, Player *player) {
-    if (menu->cursor > menu->getCursorLength(player)) {
+    if (menu->cursor >= menu->getCursorLength(player)) {
         menu->cursor = 0;
     }
 
     if (menu->cursor < 0) {
-        menu->cursor = menu->getCursorLength(player);
+        menu->cursor = menu->getCursorLength(player) - 1;
     }
 }

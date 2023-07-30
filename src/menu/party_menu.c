@@ -31,5 +31,5 @@ void drawPartyMenuScreen(Player *player, int cursorLine) {
 }
 
 int getPartyMenuCursorLength(Player *player) {
-    return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]) - 1;
+    return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
 }
