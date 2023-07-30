@@ -108,8 +108,8 @@ PlayerData *createPlayerData(Player *p) {
     pd->items = (SaveItemData *) malloc(p->itemCount * sizeof(SaveItemData));
     pd->party = (MobileData *) malloc(p->partyCount * sizeof(MobileData));
     pd->onDeck = (MobileData *) malloc(p->onDeckCount * sizeof(MobileData));
-    pd->storylines = malloc(sizeof(char **));
     addInfo(p->log, "storylines count :: %d", p->storylineCount);
+    pd->storylines = calloc(p->storylineCount, sizeof(char *));
     for (int i = 0; i < p->storylineCount; i++) {
         addInfo(p->log, "storyline :: %s", p->storylines[i]);
         pd->storylines[i] = &p->storylines[i][0];
