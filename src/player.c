@@ -95,39 +95,41 @@ MobileData createMobDataFromMob(Mobile *mob) {
 }
 
 PlayerData *createPlayerData(Player *p) {
+    addInfo(p->log, "inside create player data");
     PlayerData *pd = malloc(sizeof(PlayerData));
     pd->coins = p->coins;
     pd->secondsPlayed = p->secondsPlayed;
     pd->experience = p->experience;
     pd->level = p->level;
     pd->storylines_count = p->storylineCount;
-    addInfo(p->log, "storylines count :: %d", p->storylineCount);
+    pd->party_count = p->partyCount;
+    pd->items_count = p->itemCount;
+    pd->onDeck_count = p->onDeckCount;
+    pd->items = (SaveItemData *) malloc(p->itemCount * sizeof(SaveItemData));
+    pd->party = (MobileData *) malloc(p->partyCount * sizeof(MobileData));
+    pd->onDeck = (MobileData *) malloc(p->onDeckCount * sizeof(MobileData));
     pd->storylines = malloc(sizeof(char **));
+    addInfo(p->log, "storylines count :: %d", p->storylineCount);
     for (int i = 0; i < p->storylineCount; i++) {
         addInfo(p->log, "storyline :: %s", p->storylines[i]);
         pd->storylines[i] = &p->storylines[i][0];
     }
-    pd->items_count = 0;
-    pd->items = (SaveItemData *) malloc(sizeof(p->items));
+    addInfo(p->log, "items count :: %d", p->itemCount);
     for (int i = 0; i < p->itemCount; i++) {
         pd->items[i] = (SaveItemData) {
                 p->items[i]->name,
                 p->itemQuantities[i]
         };
     }
-    pd->items_count = p->itemCount;
-
-    pd->party = malloc(sizeof(MobileData));
+    addInfo(p->log, "party count :: %d", p->partyCount);
     for (int i = 0; i < p->partyCount; i++) {
         pd->party[i] = createMobDataFromMob(p->party[i]);
     }
-    pd->party_count = p->partyCount;
-
-    pd->onDeck = malloc(sizeof(MobileData));
+    addInfo(p->log, "onDeck count :: %d", p->onDeckCount);
     for (int i = 0; i < p->onDeckCount; i++) {
         pd->onDeck[i] = createMobDataFromMob(p->onDeck[i]);
     }
-    pd->onDeck_count = p->onDeckCount;
+    addInfo(p->log, "done creating player data object");
     return pd;
 }
 
@@ -172,6 +174,7 @@ SaveData *createSaveData(Player *player, const char *scene) {
     save->player = createPlayerData(player);
     save->scene = &scene[0];
     save->time = (unsigned long)time(NULL);
+    addInfo(player->log, "done creating save data");
     return save;
 }
 
@@ -179,11 +182,13 @@ void save(Player *player, const char *sceneName, const char *indexDir) {
     SaveData *save = createSaveData(player, sceneName);
     char filePathAuto[MAX_FS_PATH_LENGTH];
     sprintf(filePathAuto, "%s/%s/%s", indexDir, "_saves", "autosave.yaml");
+    addInfo(player->log, "player save file :: %s", filePathAuto);
     saveSaveData(save, filePathAuto);
     char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/%s/save-%lu.yaml", indexDir, "_saves", (unsigned long)time(NULL));
+    addInfo(player->log, "player save file point in time :: %s", filePath);
     saveSaveData(save, filePath);
-    free(save);
+//    free(save);
     addInfo(player->log, "game progress saved");
 }
 
