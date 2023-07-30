@@ -95,60 +95,46 @@ MobileData createMobDataFromMob(Mobile *mob) {
 }
 
 PlayerData *createPlayerData(Player *p) {
+    addInfo(p->log, "inside create player data");
     PlayerData *pd = malloc(sizeof(PlayerData));
     pd->coins = p->coins;
     pd->secondsPlayed = p->secondsPlayed;
     pd->experience = p->experience;
     pd->level = p->level;
     pd->storylines_count = p->storylineCount;
+    pd->party_count = p->partyCount;
+    pd->items_count = p->itemCount;
+    pd->onDeck_count = p->onDeckCount;
+    pd->items = (SaveItemData *) malloc(p->itemCount * sizeof(SaveItemData));
+    pd->party = (MobileData *) malloc(p->partyCount * sizeof(MobileData));
+    pd->onDeck = (MobileData *) malloc(p->onDeckCount * sizeof(MobileData));
     addInfo(p->log, "storylines count :: %d", p->storylineCount);
-    pd->storylines = malloc(sizeof(char **));
+    pd->storylines = calloc(p->storylineCount, sizeof(char *));
     for (int i = 0; i < p->storylineCount; i++) {
         addInfo(p->log, "storyline :: %s", p->storylines[i]);
         pd->storylines[i] = &p->storylines[i][0];
     }
-    pd->items_count = 0;
-    pd->items = (SaveItemData *) malloc(sizeof(p->items));
+    addInfo(p->log, "items count :: %d", p->itemCount);
     for (int i = 0; i < p->itemCount; i++) {
         pd->items[i] = (SaveItemData) {
                 p->items[i]->name,
                 p->itemQuantities[i]
         };
     }
-    pd->items_count = p->itemCount;
-
-    pd->party = malloc(sizeof(MobileData));
+    addInfo(p->log, "party count :: %d", p->partyCount);
     for (int i = 0; i < p->partyCount; i++) {
         pd->party[i] = createMobDataFromMob(p->party[i]);
     }
-    pd->party_count = p->partyCount;
-
-    pd->onDeck = malloc(sizeof(MobileData));
+    addInfo(p->log, "onDeck count :: %d", p->onDeckCount);
     for (int i = 0; i < p->onDeckCount; i++) {
         pd->onDeck[i] = createMobDataFromMob(p->onDeck[i]);
     }
-    pd->onDeck_count = p->onDeckCount;
+    addInfo(p->log, "done creating player data object");
     return pd;
 }
 
 int getExperienceToLevel(int level) {
     return (int) pow((double) level, 3.0) + 999;
-}
-
-void addStory(Player *p, const char *story) {
-    p->storylines[p->storylineCount++] = story;
-    addInfo(p->log, "add story to player :: %s", story);
-}
-
-bool hasStory(Player *p, const char *story) {
-    for (int j = 0; j < p->storylineCount; j++) {
-        if (strcmp(story, p->storylines[j]) == 0) {
-            addDebug(p->log, "player has story: %s", story);
-            return true;
-        }
-    }
-    addDebug(p->log, "player does not have story: %s", story);
-    return false;
 }
 
 void checkMoveKey(Player *p, int key, AnimationType direction) {
@@ -181,4 +167,43 @@ void engageWithMobile(Player *p) {
 void disengageWithMobile(Player *p) {
     p->engaged = false;
     updateDirection(p->blockedBy, p->blockedBy->previousDirection);
+}
+
+SaveData *createSaveData(Player *player, const char *scene) {
+    SaveData *save = malloc(sizeof(SaveData));
+    save->player = createPlayerData(player);
+    save->scene = &scene[0];
+    save->time = (unsigned long)time(NULL);
+    addInfo(player->log, "done creating save data");
+    return save;
+}
+
+void save(Player *player, const char *sceneName, const char *indexDir) {
+    SaveData *save = createSaveData(player, sceneName);
+    char filePathAuto[MAX_FS_PATH_LENGTH];
+    sprintf(filePathAuto, "%s/%s/%s", indexDir, "_saves", "autosave.yaml");
+    addInfo(player->log, "player save file :: %s", filePathAuto);
+    saveSaveData(save, filePathAuto);
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/%s/save-%lu.yaml", indexDir, "_saves", (unsigned long)time(NULL));
+    addInfo(player->log, "player save file point in time :: %s", filePath);
+    saveSaveData(save, filePath);
+//    free(save);
+    addInfo(player->log, "game progress saved");
+}
+
+void addStory(Player *p, const char *story) {
+    p->storylines[p->storylineCount++] = story;
+    addInfo(p->log, "add story to player :: %s", story);
+}
+
+bool hasStory(Player *p, const char *story) {
+    for (int j = 0; j < p->storylineCount; j++) {
+        if (strcmp(story, p->storylines[j]) == 0) {
+            addDebug(p->log, "player has story: %s", story);
+            return true;
+        }
+    }
+    addDebug(p->log, "player does not have story: %s", story);
+    return false;
 }

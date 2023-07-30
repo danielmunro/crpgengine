@@ -198,11 +198,3 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
     addInfo(log, "spritesheet count :: %d", count);
     return createSpriteSheetManager(spritesheets, count);
 }
-
-SaveData *createSaveData(const char *scene, Player *player) {
-    SaveData *save = malloc(sizeof(SaveData));
-    save->player = createPlayerData(player);
-    save->scene = &scene[0];
-    save->time = (unsigned long)time(NULL);
-    return save;
-}

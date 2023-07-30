@@ -186,7 +186,7 @@ bool canTriggerFight(Scene *s, Player *p) {
     return true;
 }
 
-void checkControls(Scene *s, Player *p) {
+void checkControls(Scene *s, Player *p, const char *indexDir) {
     addDebug(s->log, "exploration -- check %d control blocks", s->controlBlockCount);
     controlWhenCheck(s, p, EVENT_GAME_LOOP);
     controlThenCheckAllActive(s, p);
@@ -195,6 +195,7 @@ void checkControls(Scene *s, Player *p) {
                 needsToRemoveActiveControlBlock(s->activeControlBlocks[i])) {
             s->activeControlBlocks[i]->progress = 0;
             s->activeControlBlocks[i] = NULL;
+            save(p, s->name, indexDir);
         }
     }
 }

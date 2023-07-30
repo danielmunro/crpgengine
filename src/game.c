@@ -209,18 +209,6 @@ void explorationMenuKeyPressed(Game *g) {
     addMenu(g->currentScene->exploration, findMenu(g->menus, g->menuCount, PARTY_MENU));
 }
 
-void save(Game *g) {
-    SaveData *save = createSaveData(g->currentScene->name, g->player);
-    char filePathAuto[MAX_FS_PATH_LENGTH];
-    sprintf(filePathAuto, "%s/%s/%s", g->runtimeArgs->indexDir, "_saves", "autosave.yaml");
-    saveSaveData(save, filePathAuto);
-    char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/%s/save-%lu.yaml", g->runtimeArgs->indexDir, "_saves", (unsigned long)time(NULL));
-    saveSaveData(save, filePath);
-    free(save);
-    addInfo(g->log, "game progress saved");
-}
-
 void checkExplorationInput(Game *g) {
     if (g->player->locked) {
         addDebug(g->log, "exploration -- player is locked, skipping input check");
@@ -243,7 +231,7 @@ void checkExplorationInput(Game *g) {
         addInfo(g->log, "player play time :: %ds", g->player->secondsPlayed);
     }
     if (IsKeyPressed(KEY_S)) {
-        save(g);
+        save(g->player, g->currentScene->name, g->runtimeArgs->indexDir);
     }
 }
 
@@ -285,7 +273,7 @@ void doExplorationLoop(Game *g) {
     processAnimations(g->animationManager);
     evaluateMovement(g->currentScene->exploration, g->player);
     evaluateExits(g);
-    checkControls(g->currentScene, g->player);
+    checkControls(g->currentScene, g->player, g->runtimeArgs->indexDir);
     checkFights(g->currentScene, g->player);
 }
 
@@ -293,7 +281,7 @@ void doFightLoop(Game *g) {
     checkFightInput(g->currentScene->fight, g->player);
     drawFightView(g->currentScene->encounters, g->currentScene->fight, g->player);
     processFightAnimations();
-    checkControls(g->currentScene, g->player);
+    checkControls(g->currentScene, g->player, g->runtimeArgs->indexDir);
     checkRemoveFight(g->currentScene);
 }
 
