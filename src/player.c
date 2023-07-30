@@ -95,7 +95,7 @@ MobileData createMobDataFromMob(Mobile *mob) {
 }
 
 PlayerData *createPlayerData(Player *p) {
-    addInfo(p->log, "inside create player data");
+    addDebug(p->log, "create player data");
     PlayerData *pd = malloc(sizeof(PlayerData));
     pd->coins = p->coins;
     pd->secondsPlayed = p->secondsPlayed;
@@ -108,28 +108,22 @@ PlayerData *createPlayerData(Player *p) {
     pd->items = (SaveItemData *) malloc(p->itemCount * sizeof(SaveItemData));
     pd->party = (MobileData *) malloc(p->partyCount * sizeof(MobileData));
     pd->onDeck = (MobileData *) malloc(p->onDeckCount * sizeof(MobileData));
-    addInfo(p->log, "storylines count :: %d", p->storylineCount);
     pd->storylines = calloc(p->storylineCount, sizeof(char *));
     for (int i = 0; i < p->storylineCount; i++) {
-        addInfo(p->log, "storyline :: %s", p->storylines[i]);
         pd->storylines[i] = &p->storylines[i][0];
     }
-    addInfo(p->log, "items count :: %d", p->itemCount);
     for (int i = 0; i < p->itemCount; i++) {
         pd->items[i] = (SaveItemData) {
                 p->items[i]->name,
                 p->itemQuantities[i]
         };
     }
-    addInfo(p->log, "party count :: %d", p->partyCount);
     for (int i = 0; i < p->partyCount; i++) {
         pd->party[i] = createMobDataFromMob(p->party[i]);
     }
-    addInfo(p->log, "onDeck count :: %d", p->onDeckCount);
     for (int i = 0; i < p->onDeckCount; i++) {
         pd->onDeck[i] = createMobDataFromMob(p->onDeck[i]);
     }
-    addInfo(p->log, "done creating player data object");
     return pd;
 }
 
@@ -170,26 +164,34 @@ void disengageWithMobile(Player *p) {
 }
 
 SaveData *createSaveData(Player *player, const char *scene) {
+    addDebug(player->log, "create save data");
     SaveData *save = malloc(sizeof(SaveData));
     save->player = createPlayerData(player);
     save->scene = &scene[0];
     save->time = (unsigned long)time(NULL);
-    addInfo(player->log, "done creating save data");
     return save;
 }
 
-void save(Player *player, const char *sceneName, const char *indexDir) {
-    SaveData *save = createSaveData(player, sceneName);
+void saveFile(Log *log, SaveData *save, const char *indexDir, const char *filename) {
     char filePathAuto[MAX_FS_PATH_LENGTH];
-    sprintf(filePathAuto, "%s/%s/%s", indexDir, "_saves", "autosave.yaml");
-    addInfo(player->log, "player save file :: %s", filePathAuto);
+    sprintf(filePathAuto, "%s/%s/%s", indexDir, "_saves", filename);
+    addInfo(log, "player save file :: %s", filePathAuto);
     saveSaveData(save, filePathAuto);
-    char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/%s/save-%lu.yaml", indexDir, "_saves", (unsigned long)time(NULL));
-    addInfo(player->log, "player save file point in time :: %s", filePath);
-    saveSaveData(save, filePath);
-//    free(save);
-    addInfo(player->log, "game progress saved");
+}
+
+void save(Player *player, const char *sceneName, const char *indexDir) {
+    addInfo(player->log, "save player progress");
+    SaveData *save = createSaveData(player, sceneName);
+
+    // auto save
+    saveFile(player->log, save, indexDir, "autosave.yaml");
+    char filename[MAX_FS_PATH_LENGTH];
+
+    // point-in-time save
+    sprintf(filename, "save-%lu.yaml", (unsigned long)time(NULL));
+    saveFile(player->log, save, indexDir, filename);
+
+    free(save);
 }
 
 void addStory(Player *p, const char *story) {
