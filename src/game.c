@@ -273,7 +273,7 @@ void doExplorationLoop(Game *g) {
     processAnimations(g->animationManager);
     evaluateMovement(g->currentScene->exploration, g->player);
     evaluateExits(g);
-    checkControls(g->currentScene, g->player);
+    checkControls(g->currentScene, g->player, g->runtimeArgs->indexDir);
     checkFights(g->currentScene, g->player);
 }
 
@@ -281,7 +281,7 @@ void doFightLoop(Game *g) {
     checkFightInput(g->currentScene->fight, g->player);
     drawFightView(g->currentScene->encounters, g->currentScene->fight, g->player);
     processFightAnimations();
-    checkControls(g->currentScene, g->player);
+    checkControls(g->currentScene, g->player, g->runtimeArgs->indexDir);
     checkRemoveFight(g->currentScene);
 }
 
@@ -309,7 +309,6 @@ void stopTiming(Timing *t, Player *p) {
 
 void run(Game *g) {
     while (!WindowShouldClose()) {
-        int storylineCount = g->player->storylineCount;
         startTiming(g->timing);
         if (isFighting(g->currentScene)) {
             doFightLoop(g);
@@ -317,9 +316,6 @@ void run(Game *g) {
             doInGameMenuLoop(g);
         } else if (isExploring(g->currentScene)) {
             doExplorationLoop(g);
-        }
-        if (g->player->storylineCount > storylineCount) {
-            save(g->player, g->currentScene->name, g->runtimeArgs->indexDir);
         }
         updateMusicStream(g->audioManager);
         stopTiming(g->timing, g->player);
