@@ -66,6 +66,7 @@
 #define MAX_SPRITES 1024
 #define MAX_EVENTS 64
 #define MAX_ARRIVE_AT 64
+#define MAX_SAVE_FILES 255
 
 #define COLLIDE_TYPE_OBJECTS "objects"
 #define COLLIDE_TYPE_PLAYER "player"
@@ -182,6 +183,7 @@ typedef enum {
 typedef enum {
     PARTY_MENU = 0,
     ITEMS_MENU,
+    SAVES_MENU,
     QUIT_MENU,
 } MenuType;
 
@@ -260,6 +262,7 @@ const char *Events[MAX_EVENTS] = {
 #include "menu/items_menu.c"
 #include "menu/party_menu.c"
 #include "menu/quit_menu.c"
+#include "menu/save_menu.c"
 #include "menu_list.c"
 #include "object.c"
 #include "fight.c"

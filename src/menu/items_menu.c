@@ -1,12 +1,12 @@
-void drawItemsMenuScreen(Player *player, int cursorLine) {
+void drawItemsMenuScreen(MenuContext *menuContext) {
     Rectangle rect = drawInGameMenuBox();
     rect.x += UI_PADDING;
     rect.y += UI_PADDING;
     TextBox *textBox = createTextBox(fromRectangle(rect));
-    for (int i = 0; i < player->itemCount; i++) {
-        drawInTextBox(textBox, player->items[i]->name);
+    for (int i = 0; i < menuContext->player->itemCount; i++) {
+        drawInTextBox(textBox, menuContext->player->items[i]->name);
     }
-    drawText(">", (Vector2D) {0, UI_PADDING + line(cursorLine)});
+    drawText(">", (Vector2D) {0, UI_PADDING + line(menuContext->cursorLine)});
 }
 
 MenuSelectResponse *partyMenuItemSelected(MenuType menuType) {
@@ -19,6 +19,6 @@ MenuSelectResponse *partyMenuItemSelected(MenuType menuType) {
     return NULL;
 }
 
-int getItemsCursorLength(Player *player) {
-    return player->itemCount;
+int getItemsCursorLength(MenuContext *menuContext) {
+    return menuContext->player->itemCount;
 }

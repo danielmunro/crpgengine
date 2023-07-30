@@ -254,12 +254,14 @@ void checkMenuInput(Game *g) {
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *menu = getCurrentMenu(exploration);
         menu->cursor++;
-        normalizeMenuCursor(menu, g->player);
+        MenuContext *c = createMenuContext(g->player, g->runtimeArgs->indexDir, menu->cursor);
+        normalizeMenuCursor(menu, c);
     }
     if (IsKeyPressed(KEY_UP)) {
         Menu *menu = getCurrentMenu(exploration);
         menu->cursor--;
-        normalizeMenuCursor(menu, g->player);
+        MenuContext *c = createMenuContext(g->player, g->runtimeArgs->indexDir, menu->cursor);
+        normalizeMenuCursor(menu, c);
     }
     if (IsKeyPressed(KEY_SPACE)) {
         menuItemSelected(g);
@@ -287,7 +289,7 @@ void doFightLoop(Game *g) {
 
 void doInGameMenuLoop(Game *g) {
     Exploration *exploration = g->currentScene->exploration;
-    drawAllMenus(g->player, exploration->menus, exploration->menuCount);
+    drawAllMenus(g->player, exploration->menus, exploration->menuCount, g->runtimeArgs->indexDir);
     checkMenuInput(g);
 }
 

@@ -1,4 +1,10 @@
 typedef struct {
+    const char *indexDir;
+    Player *player;
+    int cursorLine;
+} MenuContext;
+
+typedef struct {
     MenuSelectResponseType type;
     MenuType menuType;
 } MenuSelectResponse;
@@ -6,8 +12,8 @@ typedef struct {
 typedef struct {
     MenuType type;
     int cursor;
-    int (*getCursorLength)(Player *p);
-    void (*draw)(Player *p, int cursor);
+    int (*getCursorLength)(MenuContext *);
+    void (*draw)(MenuContext *);
     MenuSelectResponse *(*selected)(MenuType menuType);
 } Menu;
 
@@ -20,8 +26,8 @@ MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuTy
 
 Menu *createMenu(
         MenuType type,
-        int (getCursorLength)(Player *),
-        void (draw)(Player *, int),
+        int (getCursorLength)(MenuContext *),
+        void (draw)(MenuContext *),
         MenuSelectResponse *(*selected)()) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;
@@ -30,6 +36,14 @@ Menu *createMenu(
     menu->draw = draw;
     menu->selected = selected;
     return menu;
+}
+
+MenuContext *createMenuContext(Player *player, const char *indexDir, int cursorLine) {
+    MenuContext *context = malloc(sizeof(MenuContext));
+    context->player = player;
+    context->indexDir = indexDir;
+    context->cursorLine = cursorLine;
+    return context;
 }
 
 Menu *findMenu(Menu *menus[MAX_MENUS], int menuCount, MenuType type) {
@@ -41,20 +55,21 @@ Menu *findMenu(Menu *menus[MAX_MENUS], int menuCount, MenuType type) {
     return NULL;
 }
 
-void drawAllMenus(Player *player, Menu *menus[MAX_MENUS], int menuCount) {
+void drawAllMenus(Player *player, Menu *menus[MAX_MENUS], int menuCount, const char *indexDir) {
     BeginDrawing();
     for (int i = 0; i < menuCount; i++) {
-        menus[i]->draw(player, menus[i]->cursor);
+        MenuContext *c = createMenuContext(player, indexDir, menus[i]->cursor);
+        menus[i]->draw(c);
     }
     EndDrawing();
 }
 
-void normalizeMenuCursor(Menu *menu, Player *player) {
-    if (menu->cursor >= menu->getCursorLength(player)) {
+void normalizeMenuCursor(Menu *menu, MenuContext *menuContext) {
+    if (menu->cursor >= menu->getCursorLength(menuContext)) {
         menu->cursor = 0;
     }
 
     if (menu->cursor < 0) {
-        menu->cursor = menu->getCursorLength(player) - 1;
+        menu->cursor = menu->getCursorLength(menuContext) - 1;
     }
 }
