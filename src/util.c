@@ -4,13 +4,6 @@
 typedef struct {
     int x;
     int y;
-    int width;
-    int height;
-} RectangleD;
-
-typedef struct {
-    int x;
-    int y;
 } Vector2D;
 
 int getFilesInDirectory(const char *dir, char *files[MAX_FILES]) {
