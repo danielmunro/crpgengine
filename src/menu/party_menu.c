@@ -18,9 +18,9 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
     sprintf(mp, "mp %d/%d", 20, 20);
     drawText(mp, (Vector2D) {column1, UI_PADDING + line(2)});
     int count = sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
-    TextBox *textBox = createTextBox((RectangleD) {
-            column2,
-            UI_PADDING,
+    TextBox *textBox = createTextBox((Rectangle) {
+            (float) column2,
+            0,
             200,
             SCREEN_HEIGHT - (UI_PADDING * 2)
     });
@@ -32,4 +32,17 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
 
 int getPartyMenuCursorLength(MenuContext *menuContext) {
     return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
+}
+
+
+MenuSelectResponse *partyMenuItemSelected(MenuType menuType) {
+    if (strcmp(PartyMenuItems[menuType], PARTY_MENU_ITEMS) == 0) {
+        return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
+    } else if (strcmp(PartyMenuItems[menuType], PARTY_MENU_SAVE) == 0) {
+        return createMenuSelectResponse(OPEN_MENU, SAVES_MENU);
+    } else if (strcmp(PartyMenuItems[menuType], PARTY_MENU_QUIT) == 0) {
+        return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);
+    }
+    fprintf(stderr, "menu type not found :: %d", menuType);
+    exit(EXIT_MENU_NOT_DEFINED);
 }

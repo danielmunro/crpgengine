@@ -1,16 +1,12 @@
-int getSaveFiles(const char *indexDir, char *saveFiles[MAX_SAVE_FILES]) {
-    char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
-    sprintf(savesDirectory, "%s/_saves", indexDir);
-    return getFilesInDirectory(savesDirectory, saveFiles);
-}
-
 int getSaveCursorLength(MenuContext *menuContext) {
-    return sizeof(QuitMenuItems) / sizeof(QuitMenuItems[0]);
+    return menuContext->fileCount;
 }
 
 void drawSaveMenuScreen(MenuContext *menuContext) {
-//    char *saveFiles[MAX_SAVE_FILES];
-//    int files = getSaveFiles();
+    TextBox *b = createTextBox(drawSaveBox());
+    for (int i = 0; i < menuContext->fileCount; i++) {
+        drawInTextBox(b, menuContext->files[i]);
+    }
 }
 
 MenuSelectResponse *saveMenuItemSelected(MenuType menuType) {

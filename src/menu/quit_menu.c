@@ -4,9 +4,7 @@ int getQuitCursorLength(MenuContext *menuContext) {
 
 void drawQuitMenuScreen(MenuContext *menuContext) {
     Rectangle rect = drawAlertBox();
-    rect.x += UI_PADDING;
-    rect.y += UI_PADDING;
-    TextBox *textBox = createTextBox(fromRectangle(rect));
+    TextBox *textBox = createTextBox(rect);
     drawInTextBox(textBox, "Are you sure?");
     drawInTextBox(textBox, "");
     int cursorLength = getQuitCursorLength(menuContext);
@@ -16,8 +14,8 @@ void drawQuitMenuScreen(MenuContext *menuContext) {
     drawText(
             ">",
             (Vector2D) {
-                    (int) rect.x - UI_PADDING,
-                    (int) rect.y + line(cursorLength + menuContext->cursorLine)
+                    (int) rect.x,
+                    (int) rect.y + line(cursorLength + menuContext->cursorLine) + UI_PADDING
             }
     );
 }

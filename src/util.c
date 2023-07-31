@@ -13,15 +13,6 @@ typedef struct {
     int y;
 } Vector2D;
 
-RectangleD fromRectangle(Rectangle rect) {
-    return (RectangleD) {
-            (int) rect.x,
-            (int) rect.y,
-            (int) rect.width,
-            (int) rect.height,
-    };
-}
-
 int getFilesInDirectory(const char *dir, char *files[MAX_FILES]) {
     struct dirent *de;
     DIR *dr = opendir(dir);
@@ -143,4 +134,10 @@ const char *getFilenameExt(const char *filename) {
     const char *dot = strrchr(filename, '.');
     if(!dot || dot == filename) return "";
     return dot + 1;
+}
+
+int getSaveFiles(const char *indexDir, char *saveFiles[MAX_SAVE_FILES]) {
+    char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
+    sprintf(savesDirectory, "%s/_saves", indexDir);
+    return getFilesInDirectory(savesDirectory, saveFiles);
 }

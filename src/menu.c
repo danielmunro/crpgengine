@@ -2,6 +2,8 @@ typedef struct {
     const char *indexDir;
     Player *player;
     int cursorLine;
+    char *files[MAX_SAVE_FILES];
+    int fileCount;
 } MenuContext;
 
 typedef struct {
@@ -38,11 +40,15 @@ Menu *createMenu(
     return menu;
 }
 
-MenuContext *createMenuContext(Player *player, const char *indexDir, int cursorLine) {
+MenuContext *createMenuContext(
+        Player *player,
+        const char *indexDir,
+        int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
     context->player = player;
     context->indexDir = indexDir;
     context->cursorLine = cursorLine;
+    context->fileCount = getSaveFiles(indexDir, context->files);
     return context;
 }
 

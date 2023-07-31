@@ -1,9 +1,9 @@
 typedef struct {
-    RectangleD area;
+    Rectangle area;
     int cursor;
 } TextBox;
 
-TextBox *createTextBox(RectangleD area) {
+TextBox *createTextBox(Rectangle area) {
     TextBox *textBox = malloc(sizeof(TextBox));
     textBox->area = area;
     textBox->cursor = 0;
@@ -22,12 +22,12 @@ void drawBlueBox(Rectangle rect) {
 }
 
 Rectangle drawSaveBox() {
-    float marginX = (float) SCREEN_WIDTH / 3, marginY = (float) SCREEN_HEIGHT / 3;
+    float marginX = (float) SCREEN_WIDTH / 8, marginY = (float) SCREEN_HEIGHT / 8;
     Rectangle alertBox = {
             marginX,
             marginY,
-            SCREEN_WIDTH - marginX,
-            SCREEN_HEIGHT - marginY};
+            SCREEN_WIDTH - (marginX * 2),
+            SCREEN_HEIGHT - (marginY * 2)};
     drawBlueBox(alertBox);
     return alertBox;
 }
@@ -71,8 +71,8 @@ int line(int line) {
 
 void drawInTextBox(TextBox *textBox, const char *text) {
     drawText(text, (Vector2D) {
-            textBox->area.x,
-            textBox->area.y + line(textBox->cursor)
+            (int) textBox->area.x + UI_PADDING,
+            (int) textBox->area.y + line(textBox->cursor) + UI_PADDING
     });
     textBox->cursor++;
 }
