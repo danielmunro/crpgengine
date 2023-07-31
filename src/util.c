@@ -25,7 +25,9 @@ int getFilesInDirectory(const char *dir, char *files[MAX_FILES]) {
         if (de == NULL) {
             break;
         }
-        if (strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0) {
+        if (strcmp(de->d_name, ".") == 0
+                || strcmp(de->d_name, "..") == 0
+                || strcmp(de->d_name, ".keep") == 0) {
             continue;
         }
         files[i] = malloc(MAX_FS_PATH_LENGTH);
@@ -136,8 +138,18 @@ const char *getFilenameExt(const char *filename) {
     return dot + 1;
 }
 
-int getSaveFiles(const char *indexDir, char *saveFiles[MAX_SAVE_FILES]) {
+int getSaveFiles(const char *indexDir, char *files[MAX_SAVE_FILES]) {
     char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
     sprintf(savesDirectory, "%s/_saves", indexDir);
-    return getFilesInDirectory(savesDirectory, saveFiles);
+    int count = getFilesInDirectory(savesDirectory, files);
+    for (int i = 0; i < count; i++) {
+        for (int j = 0; j < count; j++) {
+            if (strcmp(files[i], files[j]) < 0) {
+                char *s = files[i];
+                files[i] = files[j];
+                files[j] = s;
+            }
+        }
+    }
+    return count;
 }
