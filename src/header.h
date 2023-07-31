@@ -68,6 +68,8 @@
 #define MAX_EVENTS 64
 #define MAX_ARRIVE_AT 64
 #define MAX_SAVE_FILES 255
+#define MAX_SAVE_NAME 255
+#define MAX_DATETIME_LENGTH 255
 
 #define COLLIDE_TYPE_OBJECTS "objects"
 #define COLLIDE_TYPE_PLAYER "player"

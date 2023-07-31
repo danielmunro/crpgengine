@@ -163,9 +163,10 @@ void disengageWithMobile(Player *p) {
     updateDirection(p->blockedBy, p->blockedBy->previousDirection);
 }
 
-SaveData *createSaveData(Player *player, const char *scene) {
+SaveData *createSaveData(Player *player, const char *scene, const char *saveName) {
     addDebug(player->log, "create save data");
     SaveData *save = malloc(sizeof(SaveData));
+    save->name = saveName;
     save->player = createPlayerData(player);
     save->scene = &scene[0];
     save->time = (unsigned long)time(NULL);
@@ -181,7 +182,16 @@ void saveFile(Log *log, SaveData *save, const char *indexDir, const char *filena
 
 void save(Player *player, const char *sceneName, const char *indexDir) {
     addInfo(player->log, "save player progress");
-    SaveData *save = createSaveData(player, sceneName);
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    char *date = malloc(MAX_DATETIME_LENGTH);
+    sprintf(date, "%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    char *name = malloc(MAX_SAVE_NAME);
+    sprintf(name, "%s - %s - %s", date, getPartyLeader(player)->name, sceneName);
+    SaveData *save = createSaveData(
+            player,
+            sceneName,
+            name);
 
     // auto save
     saveFile(player->log, save, indexDir, "autosave.yaml");
