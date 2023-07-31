@@ -1,11 +1,11 @@
 int getSaveCursorLength(MenuContext *menuContext) {
-    return menuContext->fileCount;
+    return menuContext->saveFiles->count;
 }
 
 void drawSaveMenuScreen(MenuContext *menuContext) {
     TextBox *b = createTextBox(drawSaveBox());
-    for (int i = 0; i < menuContext->fileCount; i++) {
-        drawInTextBox(b, menuContext->files[i]);
+    for (int i = 0; i < menuContext->saveFiles->count; i++) {
+        drawInTextBox(b, menuContext->saveFiles->saveNames[i]);
     }
 }
 

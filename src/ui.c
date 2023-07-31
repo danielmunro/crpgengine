@@ -22,7 +22,7 @@ void drawBlueBox(Rectangle rect) {
 }
 
 Rectangle drawSaveBox() {
-    float marginX = (float) SCREEN_WIDTH / 8, marginY = (float) SCREEN_HEIGHT / 8;
+    float marginX = (float) SCREEN_WIDTH / 10, marginY = (float) SCREEN_HEIGHT / 10;
     Rectangle alertBox = {
             marginX,
             marginY,

@@ -6,6 +6,12 @@ typedef struct {
     int y;
 } Vector2D;
 
+typedef struct {
+    int count;
+    const char **filenames;
+    const char **saveNames;
+} SaveFiles;
+
 int getFilesInDirectory(const char *dir, char *files[MAX_FILES]) {
     struct dirent *de;
     DIR *dr = opendir(dir);
@@ -129,20 +135,4 @@ const char *getFilenameExt(const char *filename) {
     const char *dot = strrchr(filename, '.');
     if(!dot || dot == filename) return "";
     return dot + 1;
-}
-
-int getSaveFiles(const char *indexDir, char *files[MAX_SAVE_FILES]) {
-    char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
-    sprintf(savesDirectory, "%s/_saves", indexDir);
-    int count = getFilesInDirectory(savesDirectory, files);
-    for (int i = 0; i < count; i++) {
-        for (int j = 0; j < count; j++) {
-            if (strcmp(files[i], files[j]) < 0) {
-                char *s = files[i];
-                files[i] = files[j];
-                files[j] = s;
-            }
-        }
-    }
-    return count;
 }
