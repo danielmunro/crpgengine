@@ -39,7 +39,8 @@ MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext, MenuType men
     if (strcmp(PartyMenuItems[menuType], PARTY_MENU_ITEMS) == 0) {
         return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
     } else if (strcmp(PartyMenuItems[menuType], PARTY_MENU_SAVE) == 0) {
-        return createMenuSelectResponse(OPEN_MENU, SAVE_MENU);
+        save(menuContext->player, menuContext->scene, menuContext->indexDir);
+        return createMenuSelectResponse(OPEN_MENU, ACKNOWLEDGE_MENU);
     } else if (strcmp(PartyMenuItems[menuType], PARTY_MENU_QUIT) == 0) {
         return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);
     }
