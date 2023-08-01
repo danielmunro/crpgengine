@@ -271,7 +271,6 @@ const char *Events[MAX_EVENTS] = {
 #include "menu/party_menu.c"
 #include "menu/quit_menu.c"
 #include "menu/load_menu.c"
-#include "menu/save_menu.c"
 #include "menu/acknowledge_menu.c"
 #include "menu_list.c"
 #include "exploration.c"
