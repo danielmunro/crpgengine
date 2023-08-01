@@ -196,6 +196,7 @@ typedef enum {
 #define PARTY_MENU_REARRANGE "Rearrange"
 #define PARTY_MENU_CONFIG "Config"
 #define PARTY_MENU_SAVE "Save"
+#define PARTY_MENU_LOAD "Load"
 #define PARTY_MENU_QUIT "Quit"
 
 char *PartyMenuItems[] = {
@@ -203,6 +204,7 @@ char *PartyMenuItems[] = {
         PARTY_MENU_REARRANGE,
         PARTY_MENU_CONFIG,
         PARTY_MENU_SAVE,
+        PARTY_MENU_LOAD,
         PARTY_MENU_QUIT,
 };
 

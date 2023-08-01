@@ -3,15 +3,15 @@ int getLoadCursorLength(MenuContext *menuContext) {
 }
 
 void drawLoadMenuScreen(MenuContext *menuContext) {
-    TextBox *b = createTextBox(drawSaveBox());
+    Rectangle rect = drawSaveBox();
+    TextBox *b = createTextBox(rect);
     for (int i = 0; i < menuContext->saveFiles->count; i++) {
         drawInTextBox(b, menuContext->saveFiles->saveNames[i]);
     }
+    drawText(">", (Vector2D) {(int) rect.x, (int) rect.y + UI_PADDING + line(menuContext->cursorLine)});
 }
 
 MenuSelectResponse *loadMenuItemSelected(MenuContext *menuContext, MenuType menuType) {
-    if (strcmp(QuitMenuItems[menuType], QUIT_MENU_YES) == 0) {
-        exit(0);
-    }
-    return createMenuSelectResponse(CLOSE_MENU, QUIT_MENU);
+    printf("SELECTED: %d, %d\n", menuType, menuContext->cursorLine);
+    return createMenuSelectResponse(CLOSE_MENU, LOAD_MENU);
 }

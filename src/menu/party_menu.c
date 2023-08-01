@@ -43,6 +43,8 @@ MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext, MenuType men
         return createMenuSelectResponse(OPEN_MENU, ACKNOWLEDGE_MENU);
     } else if (strcmp(PartyMenuItems[menuType], PARTY_MENU_QUIT) == 0) {
         return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);
+    }  else if (strcmp(PartyMenuItems[menuType], PARTY_MENU_LOAD) == 0) {
+        return createMenuSelectResponse(OPEN_MENU, LOAD_MENU);
     }
     fprintf(stderr, "menu type not found :: %d", menuType);
     exit(EXIT_MENU_NOT_DEFINED);
