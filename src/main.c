@@ -1,8 +1,7 @@
 #include "header.h"
 
 int main(int argc, char *argv[]) {
-    SetTraceLogLevel(LOG_WARNING);
-    srand(time(NULL));
+    setupApp();
     RuntimeArgs *r = createRuntimeArgs(argc, argv);
     initWindow(r->indexDir);
     Game *g = createGame(r);

@@ -136,3 +136,8 @@ const char *getFilenameExt(const char *filename) {
     if(!dot || dot == filename) return "";
     return dot + 1;
 }
+
+void setupApp() {
+    SetTraceLogLevel(LOG_WARNING);
+    srand(time(NULL));
+}
