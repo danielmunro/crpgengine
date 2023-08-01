@@ -18,6 +18,7 @@ void drawQuitMenuScreen(MenuContext *menuContext) {
                     (int) rect.y + line(cursorLength + menuContext->cursorLine) + UI_PADDING
             }
     );
+    free(textBox);
 }
 
 MenuSelectResponse *quitMenuItemSelected(MenuContext *menuContext) {

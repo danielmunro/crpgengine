@@ -17,6 +17,7 @@ void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
                     (int) rect.y + line(4 + menuContext->cursorLine) + UI_PADDING
             }
     );
+    free(b);
 }
 
 MenuSelectResponse *acknowledgeMenuItemSelected(MenuContext *menuContext) {

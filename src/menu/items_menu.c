@@ -4,6 +4,7 @@ void drawItemsMenuScreen(MenuContext *menuContext) {
         drawInTextBox(textBox, menuContext->player->items[i]->name);
     }
     drawText(">", (Vector2D) {0, line(menuContext->cursorLine) + UI_PADDING});
+    free(textBox);
 }
 
 int getItemsCursorLength(MenuContext *menuContext) {

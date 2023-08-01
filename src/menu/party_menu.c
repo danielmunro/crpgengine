@@ -28,6 +28,7 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
         drawInTextBox(textBox, PartyMenuItems[i]);
     }
     drawText(">", (Vector2D) {column2 - 20, UI_PADDING + line(menuContext->cursorLine)});
+    free(textBox);
 }
 
 int getPartyMenuCursorLength(MenuContext *menuContext) {

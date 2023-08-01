@@ -9,6 +9,7 @@ void drawLoadMenuScreen(MenuContext *menuContext) {
         drawInTextBox(b, menuContext->saveFiles->saveNames[i]);
     }
     drawText(">", (Vector2D) {(int) rect.x, (int) rect.y + UI_PADDING + line(menuContext->cursorLine)});
+    free(b);
 }
 
 MenuSelectResponse *loadMenuItemSelected(MenuContext *menuContext) {
