@@ -20,8 +20,8 @@ void drawQuitMenuScreen(MenuContext *menuContext) {
     );
 }
 
-MenuSelectResponse *quitMenuItemSelected(MenuContext *menuContext, int cursorLine) {
-    if (strcmp(QuitMenuItems[cursorLine], QUIT_MENU_YES) == 0) {
+MenuSelectResponse *quitMenuItemSelected(MenuContext *menuContext) {
+    if (strcmp(QuitMenuItems[menuContext->cursorLine], QUIT_MENU_YES) == 0) {
         exit(0);
     }
     return createMenuSelectResponse(CLOSE_MENU, QUIT_MENU);

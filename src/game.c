@@ -242,8 +242,8 @@ void menuItemSelected(Game *g) {
             g->player,
             g->currentScene->name,
             g->runtimeArgs->indexDir,
-            0);
-    MenuSelectResponse *response = menu->selected(context, menu->cursor);
+            menu->cursor);
+    MenuSelectResponse *response = menu->selected(context);
     if (response->type == OPEN_MENU) {
         addMenu(exploration, findMenu(g->menus, g->menuCount, response->menuType));
     } else if (response->type == CLOSE_MENU) {

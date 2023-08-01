@@ -16,7 +16,7 @@ typedef struct {
     int cursor;
     int (*getCursorLength)(MenuContext *);
     void (*draw)(MenuContext *);
-    MenuSelectResponse *(*selected)(MenuContext *menuContext, int cursorLine);
+    MenuSelectResponse *(*selected)(MenuContext *menuContext);
 } Menu;
 
 MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuType menuType) {

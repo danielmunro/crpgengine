@@ -35,17 +35,18 @@ int getPartyMenuCursorLength(MenuContext *menuContext) {
 }
 
 
-MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext, int cursorLine) {
-    if (strcmp(PartyMenuItems[cursorLine], PARTY_MENU_ITEMS) == 0) {
+MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext) {
+    int c = menuContext->cursorLine;
+    if (strcmp(PartyMenuItems[c], PARTY_MENU_ITEMS) == 0) {
         return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
-    } else if (strcmp(PartyMenuItems[cursorLine], PARTY_MENU_SAVE) == 0) {
+    } else if (strcmp(PartyMenuItems[c], PARTY_MENU_SAVE) == 0) {
         save(menuContext->player, menuContext->scene, menuContext->indexDir);
         return createMenuSelectResponse(OPEN_MENU, ACKNOWLEDGE_MENU);
-    } else if (strcmp(PartyMenuItems[cursorLine], PARTY_MENU_QUIT) == 0) {
+    } else if (strcmp(PartyMenuItems[c], PARTY_MENU_QUIT) == 0) {
         return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);
-    }  else if (strcmp(PartyMenuItems[cursorLine], PARTY_MENU_LOAD) == 0) {
+    }  else if (strcmp(PartyMenuItems[c], PARTY_MENU_LOAD) == 0) {
         return createMenuSelectResponse(OPEN_MENU, LOAD_MENU);
     }
-    fprintf(stderr, "menu type not found :: %d", cursorLine);
+    fprintf(stderr, "menu type not found :: %d", c);
     exit(EXIT_MENU_NOT_DEFINED);
 }
