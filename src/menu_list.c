@@ -9,7 +9,7 @@ int getMenuList(Menu *menuList[MAX_MENUS]) {
                 ITEMS_MENU,
                 getItemsCursorLength,
                 drawItemsMenuScreen,
-                partyMenuItemSelected),
+                itemMenuItemSelected),
         createMenu(
                 LOAD_MENU,
                 getLoadCursorLength,

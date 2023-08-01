@@ -9,3 +9,7 @@ void drawItemsMenuScreen(MenuContext *menuContext) {
 int getItemsCursorLength(MenuContext *menuContext) {
     return menuContext->player->itemCount;
 }
+
+MenuSelectResponse *itemMenuItemSelected(MenuType menuType) {
+    return createMenuSelectResponse(CLOSE_MENU, ITEMS_MENU);
+}
