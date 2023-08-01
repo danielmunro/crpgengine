@@ -186,7 +186,8 @@ typedef enum {
 typedef enum {
     PARTY_MENU = 0,
     ITEMS_MENU,
-    SAVES_MENU,
+    LOAD_MENU,
+    SAVE_MENU,
     QUIT_MENU,
 } MenuType;
 
@@ -265,6 +266,7 @@ const char *Events[MAX_EVENTS] = {
 #include "menu/items_menu.c"
 #include "menu/party_menu.c"
 #include "menu/quit_menu.c"
+#include "menu/load_menu.c"
 #include "menu/save_menu.c"
 #include "menu_list.c"
 #include "object.c"

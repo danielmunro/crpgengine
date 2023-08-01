@@ -39,7 +39,7 @@ MenuSelectResponse *partyMenuItemSelected(MenuType menuType) {
     if (strcmp(PartyMenuItems[menuType], PARTY_MENU_ITEMS) == 0) {
         return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
     } else if (strcmp(PartyMenuItems[menuType], PARTY_MENU_SAVE) == 0) {
-        return createMenuSelectResponse(OPEN_MENU, SAVES_MENU);
+        return createMenuSelectResponse(OPEN_MENU, SAVE_MENU);
     } else if (strcmp(PartyMenuItems[menuType], PARTY_MENU_QUIT) == 0) {
         return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);
     }

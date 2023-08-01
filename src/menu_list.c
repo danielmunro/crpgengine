@@ -11,7 +11,12 @@ int getMenuList(Menu *menuList[MAX_MENUS]) {
                 drawItemsMenuScreen,
                 partyMenuItemSelected),
         createMenu(
-                SAVES_MENU,
+                LOAD_MENU,
+                getLoadCursorLength,
+                drawLoadMenuScreen,
+                loadMenuItemSelected),
+        createMenu(
+                SAVE_MENU,
                 getSaveCursorLength,
                 drawSaveMenuScreen,
                 saveMenuItemSelected),
