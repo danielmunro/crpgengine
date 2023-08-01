@@ -238,7 +238,11 @@ void checkExplorationInput(Game *g) {
 void menuItemSelected(Game *g) {
     Exploration *exploration = g->currentScene->exploration;
     Menu *menu = getCurrentMenu(exploration);
-    MenuContext *context = createMenuContext(g->player, g->currentScene->name, g->runtimeArgs->indexDir, 0);
+    MenuContext *context = createMenuContext(
+            g->player,
+            g->currentScene->name,
+            g->runtimeArgs->indexDir,
+            0);
     MenuSelectResponse *response = menu->selected(context, menu->cursor);
     if (response->type == OPEN_MENU) {
         addMenu(exploration, findMenu(g->menus, g->menuCount, response->menuType));

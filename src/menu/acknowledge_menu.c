@@ -19,6 +19,6 @@ void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
     );
 }
 
-MenuSelectResponse *acknowledgeMenuItemSelected(MenuContext *menuContext, MenuType menuType) {
+MenuSelectResponse *acknowledgeMenuItemSelected(MenuContext *menuContext, int cursorLine) {
     return createMenuSelectResponse(CLOSE_MENU, SAVE_MENU);
 }

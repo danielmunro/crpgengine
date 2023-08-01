@@ -11,7 +11,7 @@ void drawLoadMenuScreen(MenuContext *menuContext) {
     drawText(">", (Vector2D) {(int) rect.x, (int) rect.y + UI_PADDING + line(menuContext->cursorLine)});
 }
 
-MenuSelectResponse *loadMenuItemSelected(MenuContext *menuContext, MenuType menuType) {
-    printf("SELECTED: %d, %d\n", menuType, menuContext->cursorLine);
+MenuSelectResponse *loadMenuItemSelected(MenuContext *menuContext, int cursorLine) {
+    printf("SELECTED: %d, %d\n", cursorLine, menuContext->cursorLine);
     return createMenuSelectResponse(CLOSE_MENU, LOAD_MENU);
 }
