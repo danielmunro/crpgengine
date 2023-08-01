@@ -25,6 +25,11 @@ int getMenuList(Menu *menuList[MAX_MENUS]) {
                 getQuitCursorLength,
                 drawQuitMenuScreen,
                 quitMenuItemSelected),
+        createMenu(
+                ACKNOWLEDGE_MENU,
+                getAcknowledgeCursorLength,
+                drawAcknowledgeMenuScreen,
+                acknowledgeMenuItemSelected),
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {

@@ -1,8 +1,9 @@
 typedef struct {
-    const char *indexDir;
+    const char *scene;
     Player *player;
-    int cursorLine;
     SaveFiles *saveFiles;
+    const char *indexDir;
+    int cursorLine;
 } MenuContext;
 
 typedef struct {
@@ -15,7 +16,7 @@ typedef struct {
     int cursor;
     int (*getCursorLength)(MenuContext *);
     void (*draw)(MenuContext *);
-    MenuSelectResponse *(*selected)(MenuType menuType);
+    MenuSelectResponse *(*selected)(MenuContext *menuContext, MenuType menuType);
 } Menu;
 
 MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuType menuType) {
@@ -84,10 +85,12 @@ SaveFiles *getSaveFiles(const char *indexDir) {
 
 MenuContext *createMenuContext(
         Player *player,
+        const char *scene,
         const char *indexDir,
         int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
     context->player = player;
+    context->scene = scene;
     context->indexDir = indexDir;
     context->cursorLine = cursorLine;
     context->saveFiles = getSaveFiles(indexDir);
@@ -103,10 +106,15 @@ Menu *findMenu(Menu *menus[MAX_MENUS], int menuCount, MenuType type) {
     return NULL;
 }
 
-void drawAllMenus(Player *player, Menu *menus[MAX_MENUS], int menuCount, const char *indexDir) {
+void drawAllMenus(
+        Player *player,
+        Menu *menus[MAX_MENUS],
+        int menuCount,
+        const char *scene,
+        const char *indexDir) {
     BeginDrawing();
     for (int i = 0; i < menuCount; i++) {
-        MenuContext *c = createMenuContext(player, indexDir, menus[i]->cursor);
+        MenuContext *c = createMenuContext(player, scene, indexDir, menus[i]->cursor);
         menus[i]->draw(c);
     }
     EndDrawing();

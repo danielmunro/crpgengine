@@ -35,7 +35,7 @@ int getPartyMenuCursorLength(MenuContext *menuContext) {
 }
 
 
-MenuSelectResponse *partyMenuItemSelected(MenuType menuType) {
+MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext, MenuType menuType) {
     if (strcmp(PartyMenuItems[menuType], PARTY_MENU_ITEMS) == 0) {
         return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
     } else if (strcmp(PartyMenuItems[menuType], PARTY_MENU_SAVE) == 0) {

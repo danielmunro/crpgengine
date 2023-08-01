@@ -10,6 +10,6 @@ int getItemsCursorLength(MenuContext *menuContext) {
     return menuContext->player->itemCount;
 }
 
-MenuSelectResponse *itemMenuItemSelected(MenuType menuType) {
+MenuSelectResponse *itemMenuItemSelected(MenuContext *menuContext, MenuType menuType) {
     return createMenuSelectResponse(CLOSE_MENU, ITEMS_MENU);
 }

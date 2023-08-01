@@ -184,11 +184,12 @@ typedef enum {
 } ObjectType;
 
 typedef enum {
-    PARTY_MENU = 0,
+    PARTY_MENU,
     ITEMS_MENU,
     LOAD_MENU,
     SAVE_MENU,
     QUIT_MENU,
+    ACKNOWLEDGE_MENU,
 } MenuType;
 
 #define PARTY_MENU_ITEMS "Items"
@@ -262,16 +263,17 @@ const char *Events[MAX_EVENTS] = {
 #include "mobile.c"
 #include "player.c"
 #include "control_block.c"
+#include "object.c"
+#include "fight.c"
+#include "tilemap.c"
 #include "menu.c"
 #include "menu/items_menu.c"
 #include "menu/party_menu.c"
 #include "menu/quit_menu.c"
 #include "menu/load_menu.c"
 #include "menu/save_menu.c"
+#include "menu/acknowledge_menu.c"
 #include "menu_list.c"
-#include "object.c"
-#include "fight.c"
-#include "tilemap.c"
 #include "exploration.c"
 #include "scene.c"
 #include "tilemap_xmlreader.c"

@@ -9,7 +9,7 @@ void drawLoadMenuScreen(MenuContext *menuContext) {
     }
 }
 
-MenuSelectResponse *loadMenuItemSelected(MenuType menuType) {
+MenuSelectResponse *loadMenuItemSelected(MenuContext *menuContext, MenuType menuType) {
     if (strcmp(QuitMenuItems[menuType], QUIT_MENU_YES) == 0) {
         exit(0);
     }

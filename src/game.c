@@ -238,7 +238,8 @@ void checkExplorationInput(Game *g) {
 void menuItemSelected(Game *g) {
     Exploration *exploration = g->currentScene->exploration;
     Menu *menu = getCurrentMenu(exploration);
-    MenuSelectResponse *response = menu->selected(menu->cursor);
+    MenuContext *context = createMenuContext(g->player, g->currentScene->name, g->runtimeArgs->indexDir, 0);
+    MenuSelectResponse *response = menu->selected(context, menu->cursor);
     if (response->type == OPEN_MENU) {
         addMenu(exploration, findMenu(g->menus, g->menuCount, response->menuType));
     } else if (response->type == CLOSE_MENU) {
@@ -254,13 +255,13 @@ void checkMenuInput(Game *g) {
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *menu = getCurrentMenu(exploration);
         menu->cursor++;
-        MenuContext *c = createMenuContext(g->player, g->runtimeArgs->indexDir, menu->cursor);
+        MenuContext *c = createMenuContext(g->player, g->currentScene->name, g->runtimeArgs->indexDir, menu->cursor);
         normalizeMenuCursor(menu, c);
     }
     if (IsKeyPressed(KEY_UP)) {
         Menu *menu = getCurrentMenu(exploration);
         menu->cursor--;
-        MenuContext *c = createMenuContext(g->player, g->runtimeArgs->indexDir, menu->cursor);
+        MenuContext *c = createMenuContext(g->player, g->currentScene->name, g->runtimeArgs->indexDir, menu->cursor);
         normalizeMenuCursor(menu, c);
     }
     if (IsKeyPressed(KEY_SPACE)) {
@@ -289,7 +290,11 @@ void doFightLoop(Game *g) {
 
 void doInGameMenuLoop(Game *g) {
     Exploration *exploration = g->currentScene->exploration;
-    drawAllMenus(g->player, exploration->menus, exploration->menuCount, g->runtimeArgs->indexDir);
+    drawAllMenus(
+            g->player,
+            exploration->menus, exploration->menuCount,
+            g->currentScene->name,
+            g->runtimeArgs->indexDir);
     checkMenuInput(g);
 }
 

@@ -17,10 +17,13 @@ void drawSaveMenuScreen(MenuContext *menuContext) {
     );
 }
 
-MenuSelectResponse *saveMenuItemSelected(MenuType menuType) {
+MenuSelectResponse *saveMenuItemSelected(MenuContext *menuContext, MenuType menuType) {
     if (strcmp(QuitMenuItems[menuType], QUIT_MENU_YES) == 0) {
-//        save(g->player, g->currentScene->name, g->runtimeArgs->indexDir);
-        printf("SAVE!\n");
+        save(
+                menuContext->player,
+                menuContext->scene,
+                menuContext->indexDir);
+        return createMenuSelectResponse(OPEN_MENU, ACKNOWLEDGE_MENU);
     }
     return createMenuSelectResponse(CLOSE_MENU, SAVE_MENU);
 }
