@@ -46,40 +46,44 @@ SaveFiles *getSaveFiles(const char *indexDir) {
     char *files[MAX_SAVE_FILES];
     const char **names = calloc(MAX_SAVE_FILES, MAX_FS_PATH_LENGTH);
     unsigned long created[MAX_SAVE_FILES];
-    int count = getFilesInDirectory(savesDirectory, files);
-    for (int i = 0; i < count; i++) {
-        char *filePath = malloc(MAX_FS_PATH_LENGTH);
-        sprintf(filePath, "%s/%s", savesDirectory, files[i]);
-        SaveData *s = loadSaveData(filePath);
-        if (strcmp(files[i], "autosave.yaml") == 0) {
-            char *name = malloc(MAX_SAVE_NAME);
-            sprintf(name, "(autosave) %s", s->name);
-            names[i] = name;
-            created[i] = s->time + 1;
-        } else {
-            names[i] = s->name;
-            created[i] = s->time;
-        }
-    }
-    for (int i = 0; i < count; i++) {
-        for (int j = 0; j < count; j++) {
-            if (created[i] > created[j]) {
-                char *s = &files[i][0];
-                files[i] = files[j];
-                files[j] = &s[0];
-                unsigned long c = created[i];
-                created[i] = created[j];
-                created[j] = c;
-                const char *n = &names[i][0];
-                names[i] = names[j];
-                names[j] = n;
-            }
-        }
-    }
+//    int count = getFilesInDirectory(savesDirectory, files);
+//    for (int i = 0; i < count; i++) {
+//        char *filePath = malloc(MAX_FS_PATH_LENGTH);
+//        sprintf(filePath, "%s/%s", savesDirectory, files[i]);
+//        SaveData *s = loadSaveData(filePath);
+//        if (strcmp(files[i], "autosave.yaml") == 0) {
+//            char *name = malloc(MAX_SAVE_NAME);
+//            sprintf(name, "(autosave) %s", s->name);
+//            names[i] = name;
+//            created[i] = s->time + 1;
+//        } else {
+//            names[i] = s->name;
+//            created[i] = s->time;
+//        }
+//        free(s);
+//    }
+//    for (int i = 0; i < count; i++) {
+//        for (int j = 0; j < count; j++) {
+//            if (created[i] > created[j]) {
+//                char *s = &files[i][0];
+//                files[i] = files[j];
+//                files[j] = &s[0];
+//                unsigned long c = created[i];
+//                created[i] = created[j];
+//                created[j] = c;
+//                const char *n = &names[i][0];
+//                names[i] = names[j];
+//                names[j] = n;
+//            }
+//        }
+//    }
     SaveFiles *sf = malloc(sizeof(SaveFiles));
-    sf->count = count;
+//    sf->count = count;
+    sf->count = 0;
     sf->filenames = (const char **)files;
     sf->saveNames = names;
+    free(names);
+    free((char *)savesDirectory);
     return sf;
 }
 
@@ -113,10 +117,12 @@ void drawAllMenus(
         const char *scene,
         const char *indexDir) {
     BeginDrawing();
+    MenuContext *c = createMenuContext(player, scene, indexDir, 0);
     for (int i = 0; i < menuCount; i++) {
-        MenuContext *c = createMenuContext(player, scene, indexDir, menus[i]->cursor);
-        menus[i]->draw(c);
+        c->cursorLine = menus[i]->cursor;
+//        menus[i]->draw(c);
     }
+    free(c);
     EndDrawing();
 }
 

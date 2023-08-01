@@ -7,28 +7,28 @@ void drawPlayer(Player *player) {
 
 void drawPartyMenuScreen(MenuContext *menuContext) {
     drawInGameMenuBox();
-    drawPlayer(menuContext->player);
-    int column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;
-    int column2 = SCREEN_WIDTH - 200;
-    drawText(getPartyLeader(menuContext->player)->name, (Vector2D) {column1, UI_PADDING});
-    char hp[64];
-    sprintf(hp, "hp %d/%d", 20, 20);
-    drawText(hp, (Vector2D) {column1, UI_PADDING + line(1)});
-    char mp[64];
-    sprintf(mp, "mp %d/%d", 20, 20);
-    drawText(mp, (Vector2D) {column1, UI_PADDING + line(2)});
-    int count = sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
-    TextBox *textBox = createTextBox((Rectangle) {
-            (float) column2,
-            0,
-            200,
-            SCREEN_HEIGHT - (UI_PADDING * 2)
-    });
-    for (int i = 0; i < count; i++) {
-        drawInTextBox(textBox, PartyMenuItems[i]);
-    }
-    drawText(">", (Vector2D) {column2 - 20, UI_PADDING + line(menuContext->cursorLine)});
-    free(textBox);
+//    drawPlayer(menuContext->player);
+//    int column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;
+//    int column2 = SCREEN_WIDTH - 200;
+//    drawText(getPartyLeader(menuContext->player)->name, (Vector2D) {column1, UI_PADDING});
+//    char hp[64];
+//    sprintf(hp, "hp %d/%d", 20, 20);
+//    drawText(hp, (Vector2D) {column1, UI_PADDING + line(1)});
+//    char mp[64];
+//    sprintf(mp, "mp %d/%d", 20, 20);
+//    drawText(mp, (Vector2D) {column1, UI_PADDING + line(2)});
+//    int count = sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
+//    TextBox *textBox = createTextBox((Rectangle) {
+//            (float) column2,
+//            0,
+//            200,
+//            SCREEN_HEIGHT - (UI_PADDING * 2)
+//    });
+//    for (int i = 0; i < count; i++) {
+//        drawInTextBox(textBox, PartyMenuItems[i]);
+//    }
+//    drawText(">", (Vector2D) {column2 - 20, UI_PADDING + line(menuContext->cursorLine)});
+//    free(textBox);
 }
 
 int getPartyMenuCursorLength(MenuContext *menuContext) {

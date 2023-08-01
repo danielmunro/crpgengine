@@ -252,25 +252,25 @@ void menuItemSelected(Game *g) {
 }
 
 void checkMenuInput(Game *g) {
-    Exploration *exploration = g->currentScene->exploration;
-    if (IsKeyPressed(KEY_ESCAPE)) {
-        removeMenu(exploration);
-    }
-    if (IsKeyPressed(KEY_DOWN)) {
-        Menu *menu = getCurrentMenu(exploration);
-        menu->cursor++;
-        MenuContext *c = createMenuContext(g->player, g->currentScene->name, g->runtimeArgs->indexDir, menu->cursor);
-        normalizeMenuCursor(menu, c);
-    }
-    if (IsKeyPressed(KEY_UP)) {
-        Menu *menu = getCurrentMenu(exploration);
-        menu->cursor--;
-        MenuContext *c = createMenuContext(g->player, g->currentScene->name, g->runtimeArgs->indexDir, menu->cursor);
-        normalizeMenuCursor(menu, c);
-    }
-    if (IsKeyPressed(KEY_SPACE)) {
-        menuItemSelected(g);
-    }
+//    Exploration *exploration = g->currentScene->exploration;
+//    if (IsKeyPressed(KEY_ESCAPE)) {
+//        removeMenu(exploration);
+//    }
+//    if (IsKeyPressed(KEY_DOWN)) {
+//        Menu *menu = getCurrentMenu(exploration);
+//        menu->cursor++;
+//        MenuContext *c = createMenuContext(g->player, g->currentScene->name, g->runtimeArgs->indexDir, menu->cursor);
+//        normalizeMenuCursor(menu, c);
+//    }
+//    if (IsKeyPressed(KEY_UP)) {
+//        Menu *menu = getCurrentMenu(exploration);
+//        menu->cursor--;
+//        MenuContext *c = createMenuContext(g->player, g->currentScene->name, g->runtimeArgs->indexDir, menu->cursor);
+//        normalizeMenuCursor(menu, c);
+//    }
+//    if (IsKeyPressed(KEY_SPACE)) {
+//        menuItemSelected(g);
+//    }
 }
 
 void doExplorationLoop(Game *g) {
@@ -296,7 +296,8 @@ void doInGameMenuLoop(Game *g) {
     Exploration *exploration = g->currentScene->exploration;
     drawAllMenus(
             g->player,
-            exploration->menus, exploration->menuCount,
+            exploration->menus,
+            exploration->menuCount,
             g->currentScene->name,
             g->runtimeArgs->indexDir);
     checkMenuInput(g);
@@ -315,6 +316,11 @@ void stopTiming(Timing *t, Player *p) {
     if (t->elapsedTime > 1000.0) {
         t->elapsedTime -= 1000.0;
         p->secondsPlayed += 1;
+        int who = RUSAGE_SELF;
+        struct rusage usage;
+        int ret;
+        ret = getrusage(who, &usage);
+        printf("memory: %d ret, %ld\n", ret, usage.ru_maxrss);
     }
 }
 
