@@ -12,6 +12,7 @@ typedef struct {
     int turnCounter;
     int waitTimer;
     struct timeval lastTimerUpdate;
+    bool locked;
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {
@@ -32,6 +33,7 @@ Mobile *createMobile(const char *id, const char *name, Vector2 position, Animati
     mobile->attributes = createEmptyAttributes();
     mobile->turnCounter = 0;
     mobile->waitTimer = -1;
+    mobile->locked = false;
     gettimeofday(&mobile->lastTimerUpdate, NULL);
     gettimeofday(&mobile->lastMovement, NULL);
     for (int i = 0; i < MAX_ANIMATIONS; i++) {

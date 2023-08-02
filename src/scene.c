@@ -140,11 +140,14 @@ void thenCheck(Scene *s, Player *p, ControlBlock *cb) {
             }
         }
     } else if (needsToLock(then)) {
-        p->locked = true;
-        resetMoving(getPartyLeader(p));
+        Mobile *mob = getPartyLeader(p);
+        mob->locked = true;
+        resetMoving(mob);
         cb->progress++;
     } else if (needsToUnlock(then)) {
-        p->locked = false;
+        Mobile *mob = getPartyLeader(p);
+        mob->locked = false;
+        resetMoving(mob);
         cb->progress++;
     }
 }

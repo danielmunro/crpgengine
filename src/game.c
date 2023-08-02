@@ -210,12 +210,12 @@ void explorationMenuKeyPressed(Game *g) {
 }
 
 void checkExplorationInput(Game *g) {
-    if (g->player->locked) {
-        addDebug(g->log, "exploration -- player is locked, skipping input check");
+    Mobile *mob = getPartyLeader(g->player);
+    if (mob->locked) {
+        addDebug(g->log, "exploration -- player mob is locked, skipping input check");
         return;
     }
     addDebug(g->log, "exploration -- check player input");
-    Mobile *mob = getPartyLeader(g->player);
     resetMoving(mob);
     explorationCheckMoveKeys(g->player);
     if (IsKeyPressed(KEY_C)) {
