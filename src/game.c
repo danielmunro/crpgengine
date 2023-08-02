@@ -306,15 +306,23 @@ void startTiming(Timing *t) {
     gettimeofday(&t->start, NULL);
 }
 
-void stopTiming(Timing *t, Player *p) {
+void stopTiming(Game *g) {
     struct timeval end;
     gettimeofday(&end, NULL);
-    double timeInterval = (double) (end.tv_sec - t->start.tv_sec) * 1000.0;      // sec to ms
-    timeInterval += (end.tv_usec - t->start.tv_usec) / 1000.0;   // us to ms
-    t->elapsedTime += timeInterval;
-    if (t->elapsedTime > 1000.0) {
-        t->elapsedTime -= 1000.0;
-        p->secondsPlayed += 1;
+    double timeInterval = (double) (end.tv_sec - g->timing->start.tv_sec) * 1000.0;
+    timeInterval += (end.tv_usec - g->timing->start.tv_usec) / 1000.0;
+    g->timing->elapsedTime += timeInterval;
+    if (g->timing->elapsedTime > 1000.0) {
+        g->timing->elapsedTime -= 1000.0;
+        g->player->secondsPlayed += 1;
+        if (g->runtimeArgs->logMemory) {
+            int who = RUSAGE_SELF;
+            struct rusage usage;
+            getrusage(who, &usage);
+            double memoryInMb = (double) usage.ru_maxrss / 1000000;
+//            double memoryInMb = 72.11203212;
+            addInfo(g->log, "max memory: %f\n", memoryInMb);
+        }
     }
 }
 
@@ -329,7 +337,7 @@ void run(Game *g) {
             doExplorationLoop(g);
         }
         updateMusicStream(g->audioManager);
-        stopTiming(g->timing, g->player);
+        stopTiming(g);
     }
 }
 

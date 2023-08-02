@@ -6,6 +6,7 @@ typedef struct {
     bool dump;
     bool exit;
     bool forceNewGame;
+    bool logMemory;
     LogLevel logLevel;
     const char *indexDir;
     const char *saveFile;
@@ -23,6 +24,7 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
     r->indexDir = NULL;
     r->saveFile = NULL;
     r->forceNewGame = false;
+    r->logMemory = false;
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
             if (argv[i][1] == 'c') {
@@ -57,6 +59,8 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
                 r->saveFile = &argv[i + 1][0];
             } else if (argv[i][1] == 'n') {
                 r->forceNewGame = true;
+            } else if (argv[i][1] == 'm') {
+                r->logMemory = true;
             }
         }
     }
