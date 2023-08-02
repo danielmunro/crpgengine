@@ -320,7 +320,6 @@ void stopTiming(Game *g) {
             struct rusage usage;
             getrusage(who, &usage);
             double memoryInMb = (double) usage.ru_maxrss / 1000000;
-//            double memoryInMb = 72.11203212;
             addInfo(g->log, "max memory: %f\n", memoryInMb);
         }
     }
