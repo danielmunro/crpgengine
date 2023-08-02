@@ -22,6 +22,11 @@ typedef struct {
 
 void setScene(Game *g, Scene *scene, char *entranceName) {
     addInfo(g->log, "setting scene to '%s'", scene->name);
+    if (g->currentScene != NULL) {
+        for (int i = 0; i < g->currentScene->exploration->layerCount; i++) {
+            UnloadTexture(g->currentScene->exploration->renderedLayers[i]);
+        }
+    }
     g->currentScene = scene;
     clearAnimations(g->animationManager);
     Mobile *mob = getPartyLeader(g->player);
@@ -34,9 +39,7 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
         mob->direction = entrance->direction;
     }
     addInfo(g->log, "player position :: %f %f", mob->position.x, mob->position.y);
-    if (!g->currentScene->exploration->layersRendered) {
-        renderExplorationLayers(g->currentScene->exploration);
-    }
+    renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
     controlWhenCheck(scene, g->player, EVENT_SCENE_LOADED);
     addInfo(g->log, "finished setting scene to '%s'", g->currentScene->name);

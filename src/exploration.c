@@ -28,7 +28,6 @@ typedef struct {
     Layer *layers[LAYER_COUNT];
     int layerCount;
     Texture2D renderedLayers[LAYER_COUNT];
-    bool layersRendered;
     ArriveAt *arriveAt[MAX_ARRIVE_AT];
     int arriveAtCount;
     Exit *exits[MAX_EXITS];
@@ -84,7 +83,6 @@ Exploration *createExploration(Log *log, RuntimeArgs *runtimeArgs) {
     exploration->arriveAtCount = 0;
     exploration->log = log;
     exploration->runtimeArgs = runtimeArgs;
-    exploration->layersRendered = false;
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         exploration->mobMovements[i] = NULL;
     }
@@ -240,6 +238,7 @@ void renderExplorationLayer(Exploration *e, LayerType layer) {
         drawWarpCollisions(e, &renderedLayer);
     }
     e->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
+    UnloadImage(renderedLayer);
 }
 
 void createMobileLayer(Mobile *mobiles[MAX_MOBILES], Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES], int mobileCount, int mobsByYPosition[MAX_LAYERS]) {
@@ -425,7 +424,6 @@ void renderExplorationLayers(Exploration *e) {
     renderExplorationLayer(e, BACKGROUND);
     renderExplorationLayer(e, MIDGROUND);
     renderExplorationLayer(e, FOREGROUND);
-    e->layersRendered = true;
     addDebug(e->log, "exploration successfully rendered");
 }
 
