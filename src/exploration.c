@@ -4,18 +4,6 @@ typedef struct {
 } MobileMovement;
 
 typedef struct {
-    Rectangle area;
-    char *to;
-    char *scene;
-} Exit;
-
-typedef struct {
-    char *name;
-    Rectangle area;
-    AnimationType direction;
-} Entrance;
-
-typedef struct {
     LayerType type;
     char data[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
     int width;
@@ -239,6 +227,12 @@ void renderExplorationLayer(Exploration *e, LayerType layer) {
     }
     e->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
     UnloadImage(renderedLayer);
+}
+
+void unloadLayers(Exploration *e) {
+    for (int i = 0; i < e->layerCount; i++) {
+        UnloadTexture(e->renderedLayers[i]);
+    }
 }
 
 void createMobileLayer(Mobile *mobiles[MAX_MOBILES], Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES], int mobileCount, int mobsByYPosition[MAX_LAYERS]) {

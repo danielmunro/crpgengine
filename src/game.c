@@ -23,9 +23,7 @@ typedef struct {
 void setScene(Game *g, Scene *scene, char *entranceName) {
     addInfo(g->log, "setting scene to '%s'", scene->name);
     if (g->currentScene != NULL) {
-        for (int i = 0; i < g->currentScene->exploration->layerCount; i++) {
-            UnloadTexture(g->currentScene->exploration->renderedLayers[i]);
-        }
+        unloadLayers(g->currentScene->exploration);
     }
     g->currentScene = scene;
     clearAnimations(g->animationManager);
@@ -33,16 +31,14 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     addAllAnimations(g->animationManager, mob->animations);
     if (entranceName != NULL) {
         Entrance *entrance = findEntrance(scene->exploration, entranceName);
-        addDebug(g->log, "entrance found :: %s", entrance->name);
-        mob->position.x = entrance->area.x + (entrance->area.width / 2) - (int) (MOB_COLLISION_WIDTH / 2);
-        mob->position.y = entrance->area.y + (entrance->area.height / 2) - (int) (MOB_COLLISION_HEIGHT / 2);
-        mob->direction = entrance->direction;
+        addDebug(g->log, "set position from scene entrance :: %s", entrance->name);
+        useEntrance(mob, entrance);
     }
-    addInfo(g->log, "player position :: %f %f", mob->position.x, mob->position.y);
+    addDebug(g->log, "player position :: %f %f", mob->position.x, mob->position.y);
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
     controlWhenCheck(scene, g->player, EVENT_SCENE_LOADED);
-    addInfo(g->log, "finished setting scene to '%s'", g->currentScene->name);
+    addDebug(g->log, "finished setting scene to '%s'", g->currentScene->name);
 }
 
 Mobile *findMobById(Game *g, const char *id) {
@@ -54,7 +50,7 @@ Mobile *findMobById(Game *g, const char *id) {
         }
     }
     addError(g->log, "mob not found: %s", id);
-    return NULL;
+    exit(EXIT_MOBILE_NOT_FOUND);
 }
 
 When *mapWhen(Game *g, Scene *s, WhenData wd) {

@@ -33,6 +33,7 @@
 #define EXIT_NO_INDEX_DIR 1
 #define EXIT_MISSING_SPRITESHEET 2
 #define EXIT_MENU_NOT_DEFINED 3
+#define EXIT_MOBILE_NOT_FOUND 4
 
 #define START_SCENE 0
 
@@ -262,6 +263,7 @@ const char *Events[MAX_EVENTS] = {
 #include "attributes.c"
 #include "item.c"
 #include "beastiary.c"
+#include "warp.c"
 #include "mobile.c"
 #include "player.c"
 #include "control_block.c"

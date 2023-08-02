@@ -120,3 +120,9 @@ char *getPositionAsString(Vector2 position) {
     sprintf(value, "%.1f, %.1f", position.x, position.y);
     return value;
 }
+
+void useEntrance(Mobile *mob, Entrance *e) {
+    mob->position.x = e->area.x + (e->area.width / 2) - (int) (MOB_COLLISION_WIDTH / 2);
+    mob->position.y = e->area.y + (e->area.height / 2) - (int) (MOB_COLLISION_HEIGHT / 2);
+    mob->direction = e->direction;
+}
