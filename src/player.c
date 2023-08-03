@@ -12,6 +12,7 @@ typedef struct {
     int secondsPlayed;
     int experience;
     int level;
+    SaveFiles *saveFiles;
     Mobile *blockedBy;
     Mobile *engageable;
     bool engaged;
@@ -178,6 +179,56 @@ void saveFile(Log *log, SaveData *save, const char *indexDir, const char *filena
     saveSaveData(save, filePathAuto);
 }
 
+//void freeSaveFiles(SaveFiles *files) {
+//    free(files->saveNames);
+//    free(files->filenames);
+//}
+
+SaveFiles *getSaveFiles(const char *indexDir) {
+    const char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
+    sprintf((char *)savesDirectory, "%s/_saves", indexDir);
+    char *files[MAX_SAVE_FILES];
+    const char **names = calloc(MAX_SAVE_FILES, MAX_FS_PATH_LENGTH);
+    unsigned long created[MAX_SAVE_FILES];
+    int count = getFilesInDirectory(savesDirectory, files);
+    for (int i = 0; i < count; i++) {
+        char *filePath = malloc(MAX_FS_PATH_LENGTH);
+        sprintf(filePath, "%s/%s", savesDirectory, files[i]);
+        SaveData *s = loadSaveData(filePath);
+        if (strcmp(files[i], "autosave.yaml") == 0) {
+            char *name = malloc(MAX_SAVE_NAME);
+            sprintf(name, "(autosave) %s", s->name);
+            names[i] = name;
+            created[i] = s->time + 1;
+        } else {
+            names[i] = s->name;
+            created[i] = s->time;
+        }
+    }
+    free((char *)savesDirectory);
+    for (int i = 0; i < count; i++) {
+        for (int j = 0; j < count; j++) {
+            if (created[i] > created[j]) {
+                char *s = &files[i][0];
+                files[i] = files[j];
+                files[j] = &s[0];
+                unsigned long c = created[i];
+                created[i] = created[j];
+                created[j] = c;
+                const char *n = &names[i][0];
+                names[i] = names[j];
+                names[j] = n;
+            }
+        }
+    }
+    SaveFiles *sf = malloc(sizeof(SaveFiles));
+    sf->count = count;
+    sf->filenames = (const char **)files;
+    sf->saveNames = names;
+    free(names);
+    return sf;
+}
+
 void save(Player *player, const char *sceneName, const char *indexDir) {
     addInfo(player->log, "save player progress");
     time_t t = time(NULL);
@@ -200,6 +251,9 @@ void save(Player *player, const char *sceneName, const char *indexDir) {
     saveFile(player->log, save, indexDir, filename);
 
     free(save);
+
+    free(player->saveFiles);
+    player->saveFiles = getSaveFiles(indexDir);
 }
 
 void addStory(Player *p, const char *story) {

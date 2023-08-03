@@ -261,14 +261,22 @@ void checkMenuInput(Game *g) {
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *menu = getCurrentMenu(exploration);
         menu->cursor++;
-        MenuContext *c = createMenuContext(g->player, g->currentScene->name, g->runtimeArgs->indexDir, menu->cursor);
+        MenuContext *c = createMenuContext(
+                g->player,
+                g->currentScene->name,
+                g->runtimeArgs->indexDir,
+                menu->cursor);
         normalizeMenuCursor(menu, c);
         free(c);
     }
     if (IsKeyPressed(KEY_UP)) {
         Menu *menu = getCurrentMenu(exploration);
         menu->cursor--;
-        MenuContext *c = createMenuContext(g->player, g->currentScene->name, g->runtimeArgs->indexDir, menu->cursor);
+        MenuContext *c = createMenuContext(
+                g->player,
+                g->currentScene->name,
+                g->runtimeArgs->indexDir,
+                menu->cursor);
         normalizeMenuCursor(menu, c);
         free(c);
     }
@@ -438,6 +446,7 @@ SaveData *initializePlayer(Game *g) {
     } else {
         g->player = createNewPlayer(g->log, g->animationManager, g->runtimeArgs->indexDir);
     }
+    g->player->saveFiles = getSaveFiles(g->runtimeArgs->indexDir);
     return save;
 }
 
