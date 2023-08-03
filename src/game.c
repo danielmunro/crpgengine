@@ -66,6 +66,7 @@ When *mapWhen(Game *g, Scene *s, WhenData wd) {
         for (int i = 0; i < e->arriveAtCount; i++) {
             if (strcmp(e->arriveAt[i]->name, wd.arriveAt) == 0) {
                 arriveAt = e->arriveAt[i];
+                break;
             }
         }
     }
