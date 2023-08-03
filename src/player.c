@@ -179,11 +179,6 @@ void saveFile(Log *log, SaveData *save, const char *indexDir, const char *filena
     saveSaveData(save, filePathAuto);
 }
 
-//void freeSaveFiles(SaveFiles *files) {
-//    free(files->saveNames);
-//    free(files->filenames);
-//}
-
 SaveFiles *getSaveFiles(const char *indexDir) {
     const char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
     sprintf((char *)savesDirectory, "%s/_saves", indexDir);
@@ -250,8 +245,9 @@ void save(Player *player, const char *sceneName, const char *indexDir) {
     sprintf(filename, "save-%lu.yaml", (unsigned long)time(NULL));
     saveFile(player->log, save, indexDir, filename);
 
+    free(date);
+    free(name);
     free(save);
-
     free(player->saveFiles);
     player->saveFiles = getSaveFiles(indexDir);
 }
