@@ -101,19 +101,19 @@ Then *mapThen(Game *g, ThenData td) {
     if (hasAmountProperty(td)) {
         amount = td.amount;
     }
-    Then *t = createThen(
+    Outcome o = mapOutcome(td.action);
+    addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
+             td.story, o, td.message);
+    return createThen(
             target,
             &td.message[0],
             &td.story[0],
             td.direction,
-            mapOutcome(td.action),
+            o,
             pos,
             td.parallel,
             amount
     );
-    addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
-             t->story, t->outcome, t->message);
-    return t;
 }
 
 ControlBlock *mapStorylineToControlBlock(Game *g, Scene *scene, StorylineData *storyline) {
