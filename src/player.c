@@ -199,6 +199,8 @@ SaveFiles *getSaveFiles(const char *indexDir) {
             names[i] = s->name;
             created[i] = s->time;
         }
+        free(filePath);
+        free(s);
     }
     free((char *)savesDirectory);
     for (int i = 0; i < count; i++) {
