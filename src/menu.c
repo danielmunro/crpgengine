@@ -114,8 +114,8 @@ void drawAllMenus(
         const char *indexDir) {
     BeginDrawing();
     for (int i = 0; i < menuCount; i++) {
-        MenuContext *c = createMenuContext(player, scene, indexDir, menus[i]->cursor);
-        menus[i]->draw(c);
+        menus[i]->draw(
+                createMenuContext(player, scene, indexDir, menus[i]->cursor));
     }
     EndDrawing();
 }
