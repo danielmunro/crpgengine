@@ -298,7 +298,8 @@ void doInGameMenuLoop(Game *g) {
     Exploration *exploration = g->currentScene->exploration;
     drawAllMenus(
             g->player,
-            exploration->menus, exploration->menuCount,
+            exploration->menus,
+            exploration->menuCount,
             g->currentScene->name,
             g->runtimeArgs->indexDir);
     checkMenuInput(g);
