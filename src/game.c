@@ -263,12 +263,14 @@ void checkMenuInput(Game *g) {
         menu->cursor++;
         MenuContext *c = createMenuContext(g->player, g->currentScene->name, g->runtimeArgs->indexDir, menu->cursor);
         normalizeMenuCursor(menu, c);
+        free(c);
     }
     if (IsKeyPressed(KEY_UP)) {
         Menu *menu = getCurrentMenu(exploration);
         menu->cursor--;
         MenuContext *c = createMenuContext(g->player, g->currentScene->name, g->runtimeArgs->indexDir, menu->cursor);
         normalizeMenuCursor(menu, c);
+        free(c);
     }
     if (IsKeyPressed(KEY_SPACE)) {
         menuItemSelected(g);

@@ -40,6 +40,12 @@ Menu *createMenu(
     return menu;
 }
 
+void freeSaveFiles(SaveFiles *files[MAX_FILES], int count) {
+    for (int i = 0; i < count; i++) {
+        free(files[i]);
+    }
+}
+
 SaveFiles *getSaveFiles(const char *indexDir) {
     const char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
     sprintf((char *)savesDirectory, "%s/_saves", indexDir);
@@ -61,6 +67,7 @@ SaveFiles *getSaveFiles(const char *indexDir) {
             created[i] = s->time;
         }
     }
+    free((char *)savesDirectory);
     for (int i = 0; i < count; i++) {
         for (int j = 0; j < count; j++) {
             if (created[i] > created[j]) {
@@ -80,6 +87,7 @@ SaveFiles *getSaveFiles(const char *indexDir) {
     sf->count = count;
     sf->filenames = (const char **)files;
     sf->saveNames = names;
+    free(names);
     return sf;
 }
 
@@ -114,8 +122,9 @@ void drawAllMenus(
         const char *indexDir) {
     BeginDrawing();
     for (int i = 0; i < menuCount; i++) {
-        menus[i]->draw(
-                createMenuContext(player, scene, indexDir, menus[i]->cursor));
+        MenuContext *c = createMenuContext(player, scene, indexDir, menus[i]->cursor);
+        menus[i]->draw(c);
+        free(c);
     }
     EndDrawing();
 }

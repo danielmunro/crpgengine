@@ -34,6 +34,7 @@ int getFilesInDirectory(const char *dir, char *files[MAX_FILES]) {
         i++;
     }
     closedir(dr);
+    free(de);
     return i;
 }
 
