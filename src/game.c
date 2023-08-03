@@ -70,17 +70,17 @@ When *mapWhen(Game *g, Scene *s, WhenData wd) {
             }
         }
     }
-    When *w = createWhen(
-            mob,
-            trigger,
-            mapCondition(wd.condition),
-            wd.story,
-            arriveAt);
+    Condition c = mapCondition(wd.condition);
     addDebug(g->log, "condition: %s, mapped to: %d, story: %s",
              wd.condition,
-             w->condition,
+             c,
              wd.story);
-    return w;
+    return createWhen(
+            mob,
+            trigger,
+            c,
+            wd.story,
+            arriveAt);
 }
 
 Then *mapThen(Game *g, ThenData td) {
