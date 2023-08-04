@@ -126,3 +126,7 @@ void useEntrance(Mobile *mob, Entrance *e) {
     mob->position.y = e->area.y + (e->area.height / 2) - (int) (MOB_COLLISION_HEIGHT / 2);
     mob->direction = e->direction;
 }
+
+bool canPlayerMove(Mobile *mob) {
+    return !mob->isBeingMoved && !mob->locked && mob->waitTimer < 0;
+}
