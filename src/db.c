@@ -37,11 +37,12 @@ void loadMobiles(AnimationManager *am, Scene *scene, const char *sceneDirectory)
         char *filePath = malloc(1 + strlen(directory) + strlen(&mobFiles[i][0]));
         sprintf(filePath, "%s/%s", directory, &mobFiles[i][0]);
         MobileData *mobData = loadMobYaml(filePath);
-        free(filePath);
         Animation *animations[MAX_ANIMATIONS];
         loadAnimationsByName(am, mobData->animations, animations);
         Mobile *mob = createMobileFromData(mobData, animations);
         addMobile(scene->exploration, mob);
+        free(filePath);
+        free(mobData);
     }
     free(mobFiles);
 }
@@ -182,8 +183,8 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
     Spritesheet *spritesheets[MAX_SPRITES];
     char directory[MAX_FS_PATH_LENGTH];
     sprintf(directory, "%s/spritesheets", indexDir);
-    char *files[MAX_FILES];
-    int filesInDirectory = getFilesInDirectory(directory, files);
+    char **files = calloc(MAX_FILES, sizeof(char *));
+    int filesInDirectory = getFilesInDirectory2(directory, files);
     int count = 0;
     for (int i = 0; i < filesInDirectory; i++) {
         if (strcmp(getFilenameExt(files[i]), "yaml") == 0) {
@@ -195,8 +196,10 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
             addInfo(log, "spritesheet :: %s, %s", data->name, imageFilePath);
             spritesheets[count] = createSpriteSheet(data->name, imageFilePath, data->frame->width, data->frame->height);
             count++;
+            free(data);
         }
     }
+    free(files);
     addInfo(log, "spritesheet count :: %d", count);
     return createSpriteSheetManager(spritesheets, count);
 }
