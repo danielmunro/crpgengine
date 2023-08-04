@@ -182,10 +182,10 @@ void saveFile(Log *log, SaveData *save, const char *indexDir, const char *filena
 SaveFiles *getSaveFiles(const char *indexDir) {
     const char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
     sprintf((char *)savesDirectory, "%s/_saves", indexDir);
-    char *files[MAX_SAVE_FILES];
-    const char **names = calloc(MAX_SAVE_FILES, MAX_FS_PATH_LENGTH);
+    char **files = calloc(MAX_SAVE_FILES, sizeof(char *));
+    const char **names = calloc(MAX_SAVE_FILES, sizeof (char *));
     unsigned long created[MAX_SAVE_FILES];
-    int count = getFilesInDirectory(savesDirectory, files);
+    int count = getFilesInDirectory2(savesDirectory, files);
     for (int i = 0; i < count; i++) {
         char *filePath = malloc(MAX_FS_PATH_LENGTH);
         sprintf(filePath, "%s/%s", savesDirectory, files[i]);
@@ -195,6 +195,7 @@ SaveFiles *getSaveFiles(const char *indexDir) {
             sprintf(name, "(autosave) %s", s->name);
             names[i] = name;
             created[i] = s->time + 1;
+            free(name);
         } else {
             names[i] = s->name;
             created[i] = s->time;
@@ -202,7 +203,6 @@ SaveFiles *getSaveFiles(const char *indexDir) {
         free(filePath);
         free(s);
     }
-    free((char *)savesDirectory);
     for (int i = 0; i < count; i++) {
         for (int j = 0; j < count; j++) {
             if (created[i] > created[j]) {
@@ -223,6 +223,8 @@ SaveFiles *getSaveFiles(const char *indexDir) {
     sf->filenames = (const char **)files;
     sf->saveNames = names;
     free(names);
+    free(files);
+    free((char *)savesDirectory);
     return sf;
 }
 
