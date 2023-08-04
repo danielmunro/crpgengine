@@ -153,5 +153,7 @@ void purgeSaves(const char *indexDir) {
         char *filepath = malloc(MAX_FS_PATH_LENGTH);
         sprintf(filepath, "%s/%s", saveDirectory, files[i]);
         remove(filepath);
+        free(filepath);
     }
+    free(files);
 }
