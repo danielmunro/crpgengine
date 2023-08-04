@@ -41,6 +41,7 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
                     }
                     collider = strtok(NULL, ",");
                 }
+                free(collider);
             } else if (argv[i][1] == 's') {
                 r->sceneIndex = strToInt(argv[i + 1]);
             } else if (argv[i][1] == 'd') {
