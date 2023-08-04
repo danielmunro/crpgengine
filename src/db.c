@@ -78,11 +78,11 @@ void loadStorylines(Scene *s, const char *sceneDirectory) {
     char storylinesDirectory[MAX_FS_PATH_LENGTH];
     sprintf(storylinesDirectory, "%s/storylines", sceneDirectory);
     addDebug(s->log, "storylines directory :: %s", storylinesDirectory);
-    char *storylineFiles[MAX_FILES];
     if (access(storylinesDirectory, F_OK) != 0) {
         addInfo(s->log, "scene has no storylines :: %s", s->name);
         return;
     }
+    char **storylineFiles = calloc(MAX_FILES, sizeof(char *));
     int fileCount = getFilesInDirectory(storylinesDirectory, storylineFiles);
     addDebug(s->log, "storyline files found :: %d", fileCount);
     int count = 0;
@@ -96,8 +96,10 @@ void loadStorylines(Scene *s, const char *sceneDirectory) {
                 addStoryline(s, &storylines->storylines[j]);
                 count++;
             }
+            free(storylines);
         }
     }
+    free(storylineFiles);
     addInfo(s->log, "added storylines to game :: %d", count);
 }
 
