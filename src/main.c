@@ -6,11 +6,11 @@ int main(int argc, char *argv[]) {
     initWindow(r->indexDir);
     Game *g = createGame(r);
     validateGameData(g);
-    if (r->dump) {
+    if (r->purgeSaves) {
+        purgeSaves(r->indexDir);
+    } else if (r->dump) {
         dumpGame(g);
-        return 0;
-    }
-    if (!r->exit) {
+    } else if (!r->exit) {
         run(g);
     }
     return 0;
