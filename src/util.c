@@ -38,6 +38,32 @@ int getFilesInDirectory(const char *dir, char *files[MAX_FILES]) {
     return i;
 }
 
+int getFilesInDirectory2(const char *dir, char **files) {
+    struct dirent *de;
+    DIR *dr = opendir(dir);
+    if (dr == NULL) {
+        fprintf(stderr, "Could not open scene index directory");
+    }
+    int i = 0;
+    while (true) {
+        de = readdir(dr);
+        if (de == NULL) {
+            break;
+        }
+        if (strcmp(de->d_name, ".") == 0
+            || strcmp(de->d_name, "..") == 0
+            || strcmp(de->d_name, ".keep") == 0) {
+            continue;
+        }
+        files[i] = malloc(MAX_FS_PATH_LENGTH);
+        strcpy(files[i], &de->d_name[0]);
+        i++;
+    }
+    closedir(dr);
+    free(de);
+    return i;
+}
+
 Condition mapCondition(const char *when) {
     int count = sizeof(conditions) / sizeof(char *);
     for (int i = 0; i < count; i++) {
