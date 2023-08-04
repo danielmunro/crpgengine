@@ -230,7 +230,7 @@ int addSubsceneFiles(SceneLoader *sl) {
         sprintf(subSceneDir, "%s/%s/scenes", sl->sceneDirectory, sl->scenes[i]);
         if (access(subSceneDir, F_OK) == 0) {
             char **subScenes = calloc(MAX_SCENES, sizeof(char *));
-            int subCount = getFilesInDirectory2(subSceneDir, subScenes);
+            int subCount = getFilesInDirectory(subSceneDir, subScenes);
             for (int j = 0; j < subCount; j++) {
                 sl->scenes[sl->count] = subScenes[j];
                 char subSceneFile[MAX_FS_PATH_LENGTH];

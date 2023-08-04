@@ -356,7 +356,7 @@ void run(Game *g) {
 void loadScenesFromFiles(Game *g) {
     SceneLoader *sl = createSceneLoader(g->runtimeArgs->indexDir);
     addDebug(g->log, "get scene directories :: %s", sl->sceneDirectory);
-    sl->count = getFilesInDirectory2(sl->sceneDirectory, sl->scenes);
+    sl->count = getFilesInDirectory(sl->sceneDirectory, sl->scenes);
     addDebug(g->log, "top level count :: %d", sl->count);
     buildSceneFilesList(sl);
     g->sceneCount = addSubsceneFiles(sl);
@@ -371,7 +371,7 @@ void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char 
     char animationsDir[MAX_FS_PATH_LENGTH / 2];
     sprintf(animationsDir, "%s/animations", indexDir);
     char **files = calloc(MAX_FILES, sizeof(char *));
-    int count = getFilesInDirectory2(animationsDir, files);
+    int count = getFilesInDirectory(animationsDir, files);
     for (int i = 0; i < count; i++) {
         if (strcmp(getFilenameExt(files[i]), "yaml") == 0) {
             char animationFile[MAX_FS_PATH_LENGTH];

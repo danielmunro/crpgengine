@@ -185,7 +185,7 @@ SaveFiles *getSaveFiles(const char *indexDir) {
     char **files = calloc(MAX_SAVE_FILES, sizeof(char *));
     const char **names = calloc(MAX_SAVE_FILES, sizeof (char *));
     unsigned long created[MAX_SAVE_FILES];
-    int count = getFilesInDirectory2(savesDirectory, files);
+    int count = getFilesInDirectory(savesDirectory, files);
     for (int i = 0; i < count; i++) {
         char *filePath = malloc(MAX_FS_PATH_LENGTH);
         sprintf(filePath, "%s/%s", savesDirectory, files[i]);

@@ -33,7 +33,7 @@ void loadMobiles(AnimationManager *am, Scene *scene, const char *sceneDirectory)
         return;
     }
     char **mobFiles = calloc(MAX_FILES, sizeof(char *));
-    int files = getFilesInDirectory2(directory, mobFiles);
+    int files = getFilesInDirectory(directory, mobFiles);
     for (int i = 0; i < files; i++) {
         char *filePath = malloc(1 + strlen(directory) + strlen(&mobFiles[i][0]));
         sprintf(filePath, "%s/%s", directory, &mobFiles[i][0]);
@@ -84,7 +84,7 @@ void loadStorylines(Scene *s, const char *sceneDirectory) {
         return;
     }
     char **storylineFiles = calloc(MAX_FILES, sizeof(char *));
-    int fileCount = getFilesInDirectory2(storylinesDirectory, storylineFiles);
+    int fileCount = getFilesInDirectory(storylinesDirectory, storylineFiles);
     addDebug(s->log, "storyline files found :: %d", fileCount);
     int count = 0;
     for (int i = 0; i < fileCount; i++) {
@@ -187,7 +187,7 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
     char directory[MAX_FS_PATH_LENGTH];
     sprintf(directory, "%s/spritesheets", indexDir);
     char **files = calloc(MAX_FILES, sizeof(char *));
-    int filesInDirectory = getFilesInDirectory2(directory, files);
+    int filesInDirectory = getFilesInDirectory(directory, files);
     int count = 0;
     for (int i = 0; i < filesInDirectory; i++) {
         if (strcmp(getFilenameExt(&files[i][0]), "yaml") == 0) {
