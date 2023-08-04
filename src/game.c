@@ -164,6 +164,7 @@ void loadBeastiary(Game *g) {
         addDebug(g->log, "beast '%s' created", g->beastiary->beasts[i]->id);
         g->beastiary->beastCount++;
     }
+    free(data);
 }
 
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {

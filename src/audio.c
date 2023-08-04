@@ -72,6 +72,7 @@ void assignMusicValues(AudioManager *am, const char *indexDir) {
 
     am->music[am->musicCount] = m;
     am->musicCount++;
+    free(music);
 }
 
 void assignSoundValues(AudioManager *am, const char *indexDir) {
@@ -82,6 +83,7 @@ void assignSoundValues(AudioManager *am, const char *indexDir) {
 //    s->sound = LoadMusicStream(sound->foo);
 //    am->sounds[am->soundCount] = s;
 //    am->soundCount++;
+    free(sound);
 }
 
 void assignAudioManagerValues(AudioManager *am, const char *indexDir) {
