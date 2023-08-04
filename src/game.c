@@ -356,7 +356,7 @@ void run(Game *g) {
 void loadScenesFromFiles(Game *g) {
     SceneLoader *sl = createSceneLoader(g->runtimeArgs->indexDir);
     addDebug(g->log, "get scene directories :: %s", sl->sceneDirectory);
-    sl->count = getFilesInDirectory(sl->sceneDirectory, sl->scenes);
+    sl->count = getFilesInDirectory2(sl->sceneDirectory, sl->scenes);
     addDebug(g->log, "top level count :: %d", sl->count);
     buildSceneFilesList(sl);
     g->sceneCount = addSubsceneFiles(sl);
@@ -364,6 +364,7 @@ void loadScenesFromFiles(Game *g) {
         addInfo(g->log, "found scene: %s, %s", sl->scenes[i], sl->sceneFiles[i]);
     }
     loadScenes(g, sl->scenes, sl->sceneFiles);
+    free(sl);
 }
 
 void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char *indexDir) {

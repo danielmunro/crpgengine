@@ -19,8 +19,8 @@ typedef struct {
 } Scene;
 
 typedef struct {
-    char *scenes[MAX_SCENES];
-    char *sceneFiles[MAX_SCENES];
+    char **scenes;
+    char **sceneFiles;
     char *sceneDirectory;
     int count;
 } SceneLoader;
@@ -62,6 +62,8 @@ SceneLoader *createSceneLoader(const char *indexDir) {
     SceneLoader *sceneLoader = malloc(sizeof(SceneLoader));
     sceneLoader->sceneDirectory = (char *)malloc(strlen(indexDir) + strlen(dir));
     sprintf(sceneLoader->sceneDirectory, "%s%s", indexDir, dir);
+    sceneLoader->scenes = calloc(MAX_SCENES, sizeof(char *));
+    sceneLoader->sceneFiles = calloc(MAX_SCENES, sizeof(char *));
     return sceneLoader;
 }
 
@@ -244,9 +246,8 @@ int addSubsceneFiles(SceneLoader *sl) {
 
 void buildSceneFilesList(SceneLoader *sl) {
     for (int i = 0; i < sl->count; i++) {
-        char sceneFile[MAX_FS_PATH_LENGTH];
+        char *sceneFile = malloc(MAX_FS_PATH_LENGTH);
         sprintf(sceneFile, "%s/%s", sl->sceneDirectory, sl->scenes[i]);
-        sl->sceneFiles[i] = (char *)malloc(strlen(sceneFile));
-        strcpy(sl->sceneFiles[i], sceneFile);
+        sl->sceneFiles[i] = &sceneFile[0];
     }
 }
