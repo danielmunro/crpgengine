@@ -4,8 +4,8 @@ typedef struct {
 
 typedef struct {
     const char *name;
-    const char *frames;
-    int frames_count;
+    int frameStart;
+    int frameEnd;
     int rate;
     bool repeat;
 } SliceData;
@@ -23,15 +23,13 @@ static const cyaml_schema_field_t spriteSchema[] = {
         CYAML_FIELD_END
 };
 
-static const cyaml_schema_value_t framesEntry = {
-        CYAML_VALUE_INT(CYAML_FLAG_DEFAULT, int),
-};
-
 static const cyaml_schema_field_t slicesFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
                 "name", CYAML_FLAG_POINTER, SliceData, name, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_SEQUENCE(
-                "frames", CYAML_FLAG_POINTER, SliceData, frames, &framesEntry, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_INT(
+                "frameStart", CYAML_FLAG_DEFAULT, SliceData, frameStart),
+        CYAML_FIELD_INT(
+                "frameEnd", CYAML_FLAG_DEFAULT, SliceData, frameEnd),
         CYAML_FIELD_INT(
                 "rate", CYAML_FLAG_OPTIONAL, SliceData, rate),
         CYAML_FIELD_BOOL(

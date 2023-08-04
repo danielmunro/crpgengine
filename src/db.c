@@ -13,14 +13,15 @@ void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *fi
                 animation->name,
                 getAnimationTypeFromName(s->name),
                 sp,
-                s->frames[0],
-                s->frames[1],
+                s->frameStart,
+                s->frameEnd,
                 s->rate,
                 s->repeat
         );
     }
     am->libraryCount = animation->slices_count;
     addDebug(am->log, "%d animations loaded", animation->slices_count);
+    free(animation);
 }
 
 void loadMobiles(AnimationManager *am, Scene *scene, const char *sceneDirectory) {
@@ -83,7 +84,7 @@ void loadStorylines(Scene *s, const char *sceneDirectory) {
         return;
     }
     char **storylineFiles = calloc(MAX_FILES, sizeof(char *));
-    int fileCount = getFilesInDirectory(storylinesDirectory, storylineFiles);
+    int fileCount = getFilesInDirectory2(storylinesDirectory, storylineFiles);
     addDebug(s->log, "storyline files found :: %d", fileCount);
     int count = 0;
     for (int i = 0; i < fileCount; i++) {
@@ -189,7 +190,7 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
     int filesInDirectory = getFilesInDirectory2(directory, files);
     int count = 0;
     for (int i = 0; i < filesInDirectory; i++) {
-        if (strcmp(getFilenameExt(files[i]), "yaml") == 0) {
+        if (strcmp(getFilenameExt(&files[i][0]), "yaml") == 0) {
             char dataFilePath[MAX_FS_PATH_LENGTH];
             sprintf(dataFilePath, "%s/%s", directory, files[i]);
             SpritesheetData *data = loadSpritesheetYaml(dataFilePath);

@@ -369,8 +369,8 @@ void loadScenesFromFiles(Game *g) {
 void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char *indexDir) {
     char animationsDir[MAX_FS_PATH_LENGTH / 2];
     sprintf(animationsDir, "%s/animations", indexDir);
-    char *files[MAX_FILES];
-    int count = getFilesInDirectory(animationsDir, files);
+    char **files = calloc(MAX_FILES, sizeof(char *));
+    int count = getFilesInDirectory2(animationsDir, files);
     for (int i = 0; i < count; i++) {
         if (strcmp(getFilenameExt(files[i]), "yaml") == 0) {
             char animationFile[MAX_FS_PATH_LENGTH];
@@ -378,6 +378,7 @@ void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char 
             loadAnimations(am, sm, animationFile);
         }
     }
+    free(files);
 }
 
 void initializeLog(Game *g) {
