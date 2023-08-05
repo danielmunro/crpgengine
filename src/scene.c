@@ -208,7 +208,6 @@ void checkControls(Scene *s, Player *p, const char *indexDir) {
                 needsToRemoveActiveControlBlock(s->activeControlBlocks[i])) {
             s->activeControlBlocks[i]->progress = 0;
             s->activeControlBlocks[i] = NULL;
-//            save(p, s->name, indexDir);
         }
     }
 }
