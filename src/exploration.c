@@ -245,7 +245,7 @@ void createMobileLayer(Mobile *mobiles[MAX_MOBILES], Mobile *mobLayer[MAX_LAYERS
         mobsByYPosition[i] = 0;
     }
     for (int i = 0; i < mobileCount; i++) {
-        int y = (int) mobiles[i]->position.y;
+        int y = (int) roundf(mobiles[i]->position.y);
         mobLayer[y][mobsByYPosition[y]] = mobiles[i];
         mobsByYPosition[y]++;
     }
@@ -264,7 +264,7 @@ void drawExplorationMobiles(Exploration *e, Player *p, Vector2 offset) {
      * The player goes on the layer too.
      */
     Mobile *mob = getPartyLeader(p);
-    int playerY = (int) mob->position.y;
+    int playerY = (int) roundf(mob->position.y);
     mobLayer[playerY][mobsByYPosition[playerY]] = mob;
 
     /**
@@ -279,7 +279,7 @@ void drawExplorationMobiles(Exploration *e, Player *p, Vector2 offset) {
                     getMobAnimation(mobLayer[y][m]),
                     (Vector2) {
                             mobLayer[y][m]->position.x + offset.x,
-                            mobLayer[y][m]->position.y + offset.y,
+                            floorf(mobLayer[y][m]->position.y + offset.y),
                     }
             );
         }
