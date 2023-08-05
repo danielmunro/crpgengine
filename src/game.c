@@ -38,7 +38,12 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
     controlWhenCheck(scene, g->player, EVENT_SCENE_LOADED);
-    addDebug(g->log, "finished setting scene to '%s'", g->currentScene->name);
+    bool isMakingProgress = true;
+    while (isMakingProgress) {
+        isMakingProgress = controlThenCheckAllActive(scene, g->player) > 0;
+        checkControls(scene, g->player, g->runtimeArgs->indexDir);
+    }
+    addInfo(g->log, "finished setting scene to '%s'", g->currentScene->name);
 }
 
 Mobile *findMobById(Game *g, const char *id) {

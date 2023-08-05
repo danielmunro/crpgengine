@@ -94,14 +94,15 @@ void addStoryline(Scene *scene, StorylineData *storyline) {
     scene->storylineCount++;
 }
 
-void thenCheck(Scene *s, Player *p, ControlBlock *cb) {
+int thenCheck(Scene *s, Player *p, ControlBlock *cb) {
     Then *then = cb->then[cb->progress];
+    int progress = 0;
     if (isMovingAndAtDestination(cb)) {
         addInfo(s->log, "mob at destination, control block proceeding :: %s", then->target->name);
-        cb->progress++;
+        progress++;
     } else if (isAddStoryOutcome(then)) {
         addStory(p, then->story);
-        cb->progress++;
+        progress++;
     } else if (needsToStartMoving(then)) {
         addInfo(s->log, "mob needs to start moving");
         addMobileMovement(
@@ -117,13 +118,13 @@ void thenCheck(Scene *s, Player *p, ControlBlock *cb) {
         addInfo(s->log, "set direction for mob :: %s, %s", then->target->name, then->direction);
         then->target->direction =
                 getDirectionFromString(then->direction);
-        cb->progress++;
+        progress++;
     } else if (needsToChangePosition(then)) {
         Mobile *target = then->target;
         target->position = then->position;
         addInfo(s->log, "change position for mob :: %s, %f, %f",
                 target->name, target->position.x, target->position.y);
-        cb->progress++;
+        progress++;
     } else if (needsToWait(then)) {
         Mobile *target = then->target;
         if (target->waitTimer == -1) {
@@ -138,28 +139,32 @@ void thenCheck(Scene *s, Player *p, ControlBlock *cb) {
             if (target->waitTimer == 0) {
                 addInfo(s->log, "timer done");
                 target->waitTimer = -1;
-                cb->progress++;
+                progress++;
             }
         }
     } else if (needsToLock(then)) {
         Mobile *mob = getPartyLeader(p);
         mob->locked = true;
         resetMoving(mob);
-        cb->progress++;
+        progress++;
     } else if (needsToUnlock(then)) {
         Mobile *mob = getPartyLeader(p);
         mob->locked = false;
         resetMoving(mob);
-        cb->progress++;
+        progress++;
     }
+    cb->progress += progress;
+    return progress;
 }
 
-void controlThenCheckAllActive(Scene *s, Player *p) {
+int controlThenCheckAllActive(Scene *s, Player *p) {
+    int progress = 0;
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (s->activeControlBlocks[i] != NULL) {
-            thenCheck(s, p, s->activeControlBlocks[i]);
+            progress += thenCheck(s, p, s->activeControlBlocks[i]);
         }
     }
+    return progress;
 }
 
 bool isAlreadyAdded(ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS], ControlBlock *controlBlock) {
