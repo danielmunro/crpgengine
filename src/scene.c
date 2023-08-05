@@ -94,7 +94,7 @@ void addStoryline(Scene *scene, StorylineData *storyline) {
     scene->storylineCount++;
 }
 
-int thenCheck(Scene *s, Player *p, ControlBlock *cb) {
+int thenCheck(Scene *s, Player *p, ControlBlock *cb, const char *indexDir) {
     Then *then = cb->then[cb->progress];
     int progress = 0;
     if (isMovingAndAtDestination(cb)) {
@@ -152,16 +152,19 @@ int thenCheck(Scene *s, Player *p, ControlBlock *cb) {
         mob->locked = false;
         resetMoving(mob);
         progress++;
+    } else if (needsToSave(then)) {
+        save(p, s->name, indexDir);
+        progress++;
     }
     cb->progress += progress;
     return progress;
 }
 
-int controlThenCheckAllActive(Scene *s, Player *p) {
+int controlThenCheckAllActive(Scene *s, Player *p, const char *indexDir) {
     int progress = 0;
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (s->activeControlBlocks[i] != NULL) {
-            progress += thenCheck(s, p, s->activeControlBlocks[i]);
+            progress += thenCheck(s, p, s->activeControlBlocks[i], indexDir);
         }
     }
     return progress;
@@ -199,13 +202,13 @@ bool canTriggerFight(Scene *s, Player *p) {
 void checkControls(Scene *s, Player *p, const char *indexDir) {
     addDebug(s->log, "exploration -- check %d control blocks", s->controlBlockCount);
     controlWhenCheck(s, p, EVENT_GAME_LOOP);
-    controlThenCheckAllActive(s, p);
+    controlThenCheckAllActive(s, p, indexDir);
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (s->activeControlBlocks[i] != NULL &&
                 needsToRemoveActiveControlBlock(s->activeControlBlocks[i])) {
             s->activeControlBlocks[i]->progress = 0;
             s->activeControlBlocks[i] = NULL;
-            save(p, s->name, indexDir);
+//            save(p, s->name, indexDir);
         }
     }
 }

@@ -40,7 +40,7 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     controlWhenCheck(scene, g->player, EVENT_SCENE_LOADED);
     bool isMakingProgress = true;
     while (isMakingProgress) {
-        isMakingProgress = controlThenCheckAllActive(scene, g->player) > 0;
+        isMakingProgress = controlThenCheckAllActive(scene, g->player, g->runtimeArgs->indexDir) > 0;
         checkControls(scene, g->player, g->runtimeArgs->indexDir);
     }
     addInfo(g->log, "finished setting scene to '%s'", g->currentScene->name);

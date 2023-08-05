@@ -36,6 +36,8 @@ storylines:
       - player: true
         action: add_story
         story: from_the_past:moved_1
+      - player: true
+        action: save
   - when:
       - player: true
         condition: has_story

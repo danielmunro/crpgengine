@@ -175,3 +175,7 @@ bool needsToUnlock(Then *then) {
 bool hasAmountProperty(ThenData thenData) {
     return strcmp(thenData.action, outcomes[WAIT]) == 0;
 }
+
+bool needsToSave(Then *then) {
+    return then->outcome == SAVE;
+}
