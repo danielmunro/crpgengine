@@ -1,4 +1,17 @@
 typedef struct {
+    int bash;
+    int slash;
+    int pierce;
+    int fire;
+    int water;
+    int electricity;
+    int dark;
+    int light;
+    int corrosive;
+    int energy;
+} ArmorClass;
+
+typedef struct {
     int strength;
     int dexterity;
     int intelligence;
@@ -6,6 +19,7 @@ typedef struct {
     int constitution;
     int hp;
     int mana;
+    ArmorClass *ac;
 } Attributes;
 
 Attributes *createAttributesFromData(AttributesData *data) {
@@ -17,6 +31,21 @@ Attributes *createAttributesFromData(AttributesData *data) {
     a->constitution = data->constitution;
     a->hp = data->hp;
     a->mana = data->mana;
+    a->ac = NULL;
+    if (data->ac != NULL) {
+        ArmorClass *ac = malloc(sizeof(ArmorClass));
+        ac->bash = data->ac->bash;
+        ac->slash = data->ac->slash;
+        ac->pierce = data->ac->pierce;
+        ac->fire = data->ac->fire;
+        ac->water = data->ac->water;
+        ac->electricity = data->ac->electricity;
+        ac->dark = data->ac->dark;
+        ac->light = data->ac->light;
+        ac->corrosive = data->ac->corrosive;
+        ac->energy = data->ac->energy;
+        a->ac = ac;
+    }
     return a;
 }
 
@@ -29,6 +58,18 @@ Attributes *cloneAttributes(Attributes *original) {
     a->constitution = original->constitution;
     a->hp = original->hp;
     a->mana = original->mana;
+    ArmorClass *ac = malloc(sizeof(ArmorClass));
+    ac->bash = original->ac->bash;
+    ac->slash = original->ac->slash;
+    ac->pierce = original->ac->pierce;
+    ac->fire = original->ac->fire;
+    ac->water = original->ac->water;
+    ac->electricity = original->ac->electricity;
+    ac->dark = original->ac->dark;
+    ac->light = original->ac->light;
+    ac->corrosive = original->ac->corrosive;
+    ac->energy = original->ac->energy;
+    a->ac = ac;
     return a;
 }
 
@@ -41,5 +82,17 @@ Attributes *createEmptyAttributes() {
     a->constitution = 0;
     a->hp = 0;
     a->mana = 0;
+    ArmorClass *ac = malloc(sizeof(ArmorClass));
+    ac->bash = 0;
+    ac->slash = 0;
+    ac->pierce = 0;
+    ac->fire = 0;
+    ac->water = 0;
+    ac->electricity = 0;
+    ac->dark = 0;
+    ac->light = 0;
+    ac->corrosive = 0;
+    ac->energy = 0;
+    a->ac = ac;
     return a;
 }

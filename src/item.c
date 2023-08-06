@@ -16,32 +16,6 @@ typedef struct {
     Item **items;
     int count;
 } ItemManager;
-//
-//Item *createConsumable(
-//        const char *name,
-//        ConsumeAffect *consumeAffect,
-//        int worth) {
-//    Item *item = malloc(sizeof(Item));
-//    item->type = CONSUMABLE;
-//    item->name = &name[0];
-//    item->consumeAffect = consumeAffect;
-//    item->worth = worth;
-//    return item;
-//}
-//
-//Item *createEquipment(
-//        const char *name,
-//        EquipmentPosition position,
-//        Attributes *attributes,
-//        int worth) {
-//    Item *item = malloc(sizeof(Item));
-//    item->type = EQUIPMENT;
-//    item->name = &name[0];
-//    item->position = position;
-//    item->attributes = attributes;
-//    item->worth = worth;
-//    return item;
-//}
 
 ItemManager *createItemManager() {
     ItemManager *itemManager = malloc(sizeof(ItemManager));
@@ -49,19 +23,34 @@ ItemManager *createItemManager() {
             {
                 .name = "potion",
                 .type = CONSUMABLE,
-                .attributes = &(Attributes) { .hp = 20 }
+                .attributes = &(Attributes) { .hp = 20 },
+                .worth = 30,
             },
             {
                 .name = "an iron sword",
                 .type = EQUIPMENT,
                 .position = WEAPON,
-                .attributes = &(Attributes) { .strength = 1 }
+                .attributes = &(Attributes) { .strength = 1 },
+                .worth = 300,
             },
             {
                 .name = "leather armor",
                 .type = EQUIPMENT,
                 .position = TORSO,
-                .attributes = &(Attributes) { .constitution = 1 }
+                .attributes = &(Attributes) {
+                    .constitution = 1,
+                    .ac = &(ArmorClass) {
+                        .bash = 1,
+                        .slash = 1,
+                        .pierce = 1,
+                        .fire = 1,
+                        .water = 1,
+                        .electricity = 2,
+                        .corrosive = 1,
+                        .energy = 1,
+                    }
+                },
+                .worth = 250,
             }
     };
     itemManager->count = sizeof(items) / sizeof(Item);
