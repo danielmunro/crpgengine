@@ -226,6 +226,13 @@ typedef enum {
 } ItemType;
 
 typedef enum {
+    WEAPON,
+    TORSO,
+    WRIST,
+    ACCESSORY,
+} EquipmentPosition;
+
+typedef enum {
     OPEN_MENU,
     CLOSE_MENU,
 } MenuSelectResponseType;
