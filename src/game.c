@@ -14,6 +14,7 @@ typedef struct {
     AudioManager *audioManager;
     SpritesheetManager *spritesheetManager;
     Beastiary *beastiary;
+    ItemManager *itemManager;
     Log *log;
     Menu *menus[MAX_MENUS];
     int menuCount;
@@ -476,6 +477,7 @@ Game *createGame(RuntimeArgs *r) {
     loadAllAnimations(g->animationManager, g->spritesheetManager, r->indexDir);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     initializeBeasts(g);
+    g->itemManager = createItemManager();
     SaveData *save = initializePlayer(g);
     loadScenesFromFiles(g);
     setSceneBasedOnSave(g, save);

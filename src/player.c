@@ -57,9 +57,9 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
     }
     ConsumeAffect *affect = malloc(sizeof(ConsumeAffect));
     affect->hp = 20;
-    addItem(player, createConsumable(
-            "potion",
-            affect));
+//    addItem(player, createConsumable(
+//            "potion",
+//            affect));
     return player;
 }
 
