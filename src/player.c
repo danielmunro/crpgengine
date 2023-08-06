@@ -59,7 +59,6 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
     affect->hp = 20;
     addItem(player, createItem(
             CONSUMABLE,
-            "id",
             "potion",
             NULL,
             affect));
@@ -104,7 +103,7 @@ PlayerData *createPlayerData(Player *p) {
     pd->party_count = p->partyCount;
     pd->items_count = p->itemCount;
     pd->onDeck_count = p->onDeckCount;
-    pd->items = (SaveItemData *) malloc(p->itemCount * sizeof(SaveItemData));
+    pd->items = (ItemData *) malloc(p->itemCount * sizeof(ItemData));
     pd->party = (MobileData *) malloc(p->partyCount * sizeof(MobileData));
     pd->onDeck = (MobileData *) malloc(p->onDeckCount * sizeof(MobileData));
     pd->storylines = calloc(p->storylineCount, sizeof(char *));
@@ -112,7 +111,7 @@ PlayerData *createPlayerData(Player *p) {
         pd->storylines[i] = &p->storylines[i][0];
     }
     for (int i = 0; i < p->itemCount; i++) {
-        pd->items[i] = (SaveItemData) {
+        pd->items[i] = (ItemData) {
                 p->items[i]->name,
                 p->itemQuantities[i]
         };
