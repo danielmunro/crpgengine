@@ -1,7 +1,7 @@
 typedef struct {
     const char **storylines;
     int storylines_count;
-    ItemData *items;
+    PlayerItemData *items;
     int items_count;
     MobileData *party;
     int party_count;

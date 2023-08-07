@@ -101,7 +101,7 @@ PlayerData *createPlayerData(Player *p) {
     pd->party_count = p->partyCount;
     pd->items_count = p->itemCount;
     pd->onDeck_count = p->onDeckCount;
-    pd->items = (ItemData *) malloc(p->itemCount * sizeof(ItemData));
+    pd->items = (PlayerItemData *) malloc(p->itemCount * sizeof(PlayerItemData));
     pd->party = (MobileData *) malloc(p->partyCount * sizeof(MobileData));
     pd->onDeck = (MobileData *) malloc(p->onDeckCount * sizeof(MobileData));
     pd->storylines = calloc(p->storylineCount, sizeof(char *));
@@ -109,7 +109,7 @@ PlayerData *createPlayerData(Player *p) {
         pd->storylines[i] = &p->storylines[i][0];
     }
     for (int i = 0; i < p->itemCount; i++) {
-        pd->items[i] = (ItemData) {
+        pd->items[i] = (PlayerItemData) {
                 p->items[i]->name,
                 p->itemQuantities[i]
         };

@@ -255,7 +255,7 @@ const char *Events[MAX_EVENTS] = {
 #include "yaml/music.c"
 #include "yaml/attributes.c"
 #include "yaml/storyline.c"
-#include "yaml/item.c"
+#include "yaml/player_item.c"
 #include "yaml/scene.c"
 #include "yaml/sound.c"
 #include "yaml/beastiary.c"
