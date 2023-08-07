@@ -35,7 +35,7 @@ static const cyaml_schema_field_t playerTopMappingField[] = {
                 "level", CYAML_FLAG_DEFAULT, PlayerData, level),
         CYAML_FIELD_SEQUENCE(
                 "items", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, PlayerData, items,
-                &saveItemsSchema, 0, CYAML_UNLIMITED),
+                &savePlayerItemsSchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_SEQUENCE(
                 "party", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, PlayerData, party,
                 &partySchema, 0, CYAML_UNLIMITED),

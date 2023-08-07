@@ -40,18 +40,6 @@ SoundData *loadSoundYaml(const char *indexDir) {
     return sound;
 }
 
-PlayerData *loadPlayerYaml(Log *log, const char *indexDir) {
-    PlayerData *player = malloc(sizeof(PlayerData));
-    char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/player.yaml", indexDir);
-    cyaml_err_t err = cyaml_load_file(filePath, &config,
-                                      &playerTopSchema, (cyaml_data_t **) &player, NULL);
-    if (err != CYAML_OK) {
-        addError(log, "error parsing player config file: %s", cyaml_strerror(err));
-    }
-    return player;
-}
-
 AnimationData *loadAnimationYaml(const char *filePath) {
     AnimationData *animation = malloc(sizeof(AnimationData));
     cyaml_err_t err = cyaml_load_file(filePath, &config,
@@ -92,6 +80,16 @@ MobileData *loadMobYaml(const char *filePath) {
         fprintf(stderr, "error parsing mob yaml\n");
     }
     return mob;
+}
+
+ItemData **loadItemYaml(const char *filePath) {
+    ItemData **items = malloc(sizeof(ItemData));
+    cyaml_err_t err = cyaml_load_file(filePath, &config,
+                                      &itemsSchema, (cyaml_data_t **) &items, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error parsing item yaml\n");
+    }
+    return items;
 }
 
 BeastiaryData *loadBeastiaryYaml(const char *filePath) {

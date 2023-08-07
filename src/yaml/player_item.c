@@ -3,7 +3,7 @@ typedef struct {
     int quantity;
 } PlayerItemData;
 
-static const cyaml_schema_field_t saveItemsFieldSchema[] = {
+static const cyaml_schema_field_t savePlayerItemsFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
                 "name", CYAML_FLAG_POINTER, PlayerItemData, name, 0, CYAML_UNLIMITED),
         CYAML_FIELD_INT(
@@ -11,7 +11,7 @@ static const cyaml_schema_field_t saveItemsFieldSchema[] = {
         CYAML_FIELD_END
 };
 
-static const cyaml_schema_value_t saveItemsSchema = {
+static const cyaml_schema_value_t savePlayerItemsSchema = {
         CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT,
-                            PlayerItemData, saveItemsFieldSchema),
+                            PlayerItemData, savePlayerItemsFieldSchema),
 };
