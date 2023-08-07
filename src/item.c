@@ -1,9 +1,4 @@
 typedef struct {
-    int hp;
-    int mp;
-} ConsumeAffect;
-
-typedef struct {
     const char *name;
     int quantity;
 } Item;

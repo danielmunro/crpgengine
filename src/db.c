@@ -162,7 +162,8 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
             NULL,
     };
     const char **storylines = malloc(sizeof(char **));
-    return createPlayer(
+    PlayerItemData *items = calloc(MAX_ITEMS, sizeof(PlayerItemData));
+    Player *p = createPlayer(
             log,
             mobiles,
             0,
@@ -170,7 +171,12 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
             1,
             0,
             storylines,
+            0,
+            items,
             0);
+//    free(items);
+//    free(storylines);
+    return p;
 }
 
 AudioManager *loadAudioManager(Log *log, const char *indexDir) {

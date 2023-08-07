@@ -441,7 +441,7 @@ Player *mapSaveDataToPlayer(Game *g, SaveData *save) {
     for (int i = save->player->party_count; i < MAX_PARTY_SIZE; i++) {
         mobs[i] = NULL;
     }
-    return createPlayer(
+    Player *p = createPlayer(
             g->log,
             mobs,
             save->player->coins,
@@ -449,7 +449,10 @@ Player *mapSaveDataToPlayer(Game *g, SaveData *save) {
             save->player->level,
             save->player->secondsPlayed,
             save->player->storylines,
-            save->player->storylines_count);
+            save->player->storylines_count,
+            save->player->items,
+            save->player->items_count);
+    return p;
 }
 
 SaveData *initializePlayer(Game *g) {
@@ -465,6 +468,7 @@ SaveData *initializePlayer(Game *g) {
         g->player = mapSaveDataToPlayer(g, save);
     } else {
         g->player = createNewPlayer(g->log, g->animationManager, g->runtimeArgs->indexDir);
+        addItem(g->player, g->itemManager->items[0]);
     }
     g->player->saveFiles = getSaveFiles(g->runtimeArgs->indexDir);
     return save;

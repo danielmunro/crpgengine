@@ -5,8 +5,7 @@ typedef struct {
     int onDeckCount;
     const char **storylines;
     int storylineCount;
-    Item **items;
-    int itemQuantities[MAX_ITEMS];
+    PlayerItemData **items;
     int itemCount;
     int coins;
     int secondsPlayed;
@@ -19,21 +18,24 @@ typedef struct {
     Log *log;
 } Player;
 
-void addItem(Player *player, Item *item) {
+void addItem(Player *player, ItemData *item) {
     for (int i = 0; i < player->itemCount; i++) {
-        if (player->items[i]->name == item->name) {
+        if (strcmp(player->items[i]->name, item->name) == 0) {
             player->items[i]->quantity++;
             return;
         }
     }
-    player->items[player->itemCount] = item;
-    player->items[player->itemCount]->quantity = 1;
+    PlayerItemData *it = malloc(sizeof(PlayerItemData));
+    it->name = item->name;
+    it->quantity = 1;
+    player->items[player->itemCount] = it;
     player->itemCount++;
 }
 
 Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
                      int coins, int experience, int level, int secondsPlayed,
-                     const char **storylines, int storylineCount) {
+                     const char **storylines, int storylineCount,
+                     PlayerItemData *items, int itemCount) {
     Player *player = malloc(sizeof(Player));
     player->blockedBy = NULL;
     player->engageable = NULL;
@@ -41,7 +43,6 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
     player->storylineCount = storylineCount;
     player->onDeckCount = 0;
     player->log = log;
-    player->itemCount = 0;
     player->partyCount = 0;
     player->coins = coins;
     player->experience = experience;
@@ -55,11 +56,14 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
             player->partyCount = i;
         }
     }
-    ConsumeAffect *affect = malloc(sizeof(ConsumeAffect));
-    affect->hp = 20;
-//    addItem(player, createConsumable(
-//            "potion",
-//            affect));
+    player->itemCount = itemCount;
+    player->items = calloc(MAX_ITEMS, sizeof(PlayerItemData));
+    for (int i = 0; i < itemCount; i++) {
+        player->items[i] = &(PlayerItemData) {
+            .name = items[i].name,
+            .quantity = items[i].quantity,
+        };
+    }
     return player;
 }
 
