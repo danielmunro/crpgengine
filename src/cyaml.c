@@ -82,8 +82,8 @@ MobileData *loadMobYaml(const char *filePath) {
     return mob;
 }
 
-ItemData **loadItemYaml(const char *filePath) {
-    ItemData **items = malloc(sizeof(ItemData));
+ItemsData *loadItemYaml(const char *filePath) {
+    ItemsData *items = malloc(sizeof(ItemsData));
     cyaml_err_t err = cyaml_load_file(filePath, &config,
                                       &itemsSchema, (cyaml_data_t **) &items, NULL);
     if (err != CYAML_OK) {

@@ -5,7 +5,7 @@ typedef struct {
     int onDeckCount;
     const char **storylines;
     int storylineCount;
-    Item *items[MAX_ITEMS];
+    Item **items;
     int itemQuantities[MAX_ITEMS];
     int itemCount;
     int coins;
@@ -22,12 +22,12 @@ typedef struct {
 void addItem(Player *player, Item *item) {
     for (int i = 0; i < player->itemCount; i++) {
         if (player->items[i]->name == item->name) {
-            player->itemQuantities[i]++;
+            player->items[i]->quantity++;
             return;
         }
     }
     player->items[player->itemCount] = item;
-    player->itemQuantities[player->itemCount] = 1;
+    player->items[player->itemCount]->quantity = 1;
     player->itemCount++;
 }
 
@@ -111,7 +111,7 @@ PlayerData *createPlayerData(Player *p) {
     for (int i = 0; i < p->itemCount; i++) {
         pd->items[i] = (PlayerItemData) {
                 p->items[i]->name,
-                p->itemQuantities[i]
+                p->items[i]->quantity,
         };
     }
     for (int i = 0; i < p->partyCount; i++) {

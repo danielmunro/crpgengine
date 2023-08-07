@@ -391,18 +391,13 @@ void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char 
 void loadAllItems(ItemManager *itemManager, const char *indexDir) {
     const char *itemsFile = malloc(MAX_FS_PATH_LENGTH);
     sprintf((char *)itemsFile, "%s/items.yaml", indexDir);
-    ItemData **itemsData = loadItemYaml(itemsFile);
-//    int i = 0;
-//    while (true) {
-//        ItemData *itemData = itemsData[i];
-//        Item *item = createItemFromData(itemData);
-//
-//    }
-//    itemManager->count = sizeof(itemData) / sizeof(ItemData);
-//    itemManager->items = calloc(itemManager->count, sizeof(Item));
-//    for (int i = 0; i < itemManager->count; i++) {
-////        itemManager->items[i] = &items[i];
-//    }
+    ItemsData *itemsData = loadItemYaml(itemsFile);
+    itemManager->items = calloc(itemsData->items_count, sizeof(ItemData));
+    for (int i = 0; i < itemsData->items_count; i++) {
+        itemManager->items[i] = &itemsData->items[i];
+    }
+    itemManager->count = itemsData->items_count;
+    free((char *)itemsFile);
 }
 
 void initializeLog(Game *g) {
@@ -494,7 +489,7 @@ Game *createGame(RuntimeArgs *r) {
     loadAllAnimations(g->animationManager, g->spritesheetManager, r->indexDir);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
     initializeBeasts(g);
-    g->itemManager = createItemManager(r->indexDir);
+    g->itemManager = createItemManager();
     loadAllItems(g->itemManager, r->indexDir);
     SaveData *save = initializePlayer(g);
     loadScenesFromFiles(g);
