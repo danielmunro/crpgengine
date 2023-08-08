@@ -80,6 +80,18 @@ AttributesData *createAttributesData(Attributes *a) {
     data->constitution = a->constitution;
     data->hp = a->hp;
     data->mana = a->mana;
+    ArmorClassData *ac = malloc(sizeof(ArmorClassData));
+    ac->slash = a->ac->slash;
+    ac->bash = a->ac->bash;
+    ac->pierce = a->ac->pierce;
+    ac->corrosive = a->ac->corrosive;
+    ac->electricity = a->ac->electricity;
+    ac->energy = a->ac->energy;
+    ac->dark = a->ac->dark;
+    ac->fire = a->ac->fire;
+    ac->light = a->ac->light;
+    ac->water = a->ac->water;
+    data->ac = ac;
     return data;
 }
 
