@@ -21,6 +21,15 @@ typedef struct {
     Timing *timing;
 } Game;
 
+void proceedControlsUntilDone(Game *g) {
+    controlWhenCheck(g->currentScene, g->player, EVENT_SCENE_LOADED);
+    bool isMakingProgress = true;
+    while (isMakingProgress) {
+        isMakingProgress = controlThenCheckAllActive(g->currentScene, g->player, g->runtimeArgs->indexDir) > 0;
+        checkControls(g->currentScene, g->player, g->runtimeArgs->indexDir);
+    }
+}
+
 void setScene(Game *g, Scene *scene, char *entranceName) {
     addInfo(g->log, "setting scene to '%s'", scene->name);
     if (g->currentScene != NULL) {
@@ -38,12 +47,7 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     addDebug(g->log, "player position :: %f %f", mob->position.x, mob->position.y);
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
-    controlWhenCheck(scene, g->player, EVENT_SCENE_LOADED);
-    bool isMakingProgress = true;
-    while (isMakingProgress) {
-        isMakingProgress = controlThenCheckAllActive(scene, g->player, g->runtimeArgs->indexDir) > 0;
-        checkControls(scene, g->player, g->runtimeArgs->indexDir);
-    }
+    proceedControlsUntilDone(g);
     addInfo(g->log, "finished setting scene to '%s'", g->currentScene->name);
 }
 
