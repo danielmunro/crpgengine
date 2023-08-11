@@ -223,6 +223,7 @@ typedef enum {
     CONSUMABLE,
     EQUIPMENT,
     CRAFTING_MATERIAL,
+    QUEST,
 } ItemType;
 
 typedef enum {

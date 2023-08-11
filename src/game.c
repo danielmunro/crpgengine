@@ -25,8 +25,8 @@ void proceedControlsUntilDone(Game *g) {
     controlWhenCheck(g->currentScene, g->player, EVENT_SCENE_LOADED);
     bool isMakingProgress = true;
     while (isMakingProgress) {
-        isMakingProgress = controlThenCheckAllActive(g->currentScene, g->player, g->runtimeArgs->indexDir) > 0;
-        checkControls(g->currentScene, g->player, g->runtimeArgs->indexDir);
+        isMakingProgress = controlThenCheckAllActive(g->currentScene, g->player, g->itemManager, g->runtimeArgs->indexDir) > 0;
+        checkControls(g->currentScene, g->player, g->itemManager, g->runtimeArgs->indexDir);
     }
 }
 
@@ -126,7 +126,8 @@ Then *mapThen(Game *g, ThenData td) {
             target,
             &td.message[0],
             &td.story[0],
-            td.direction,
+            &td.direction[0],
+            &td.item[0],
             o,
             pos,
             td.parallel,
@@ -310,7 +311,7 @@ void doExplorationLoop(Game *g) {
     processAnimations(g->animationManager);
     evaluateMovement(g->currentScene->exploration, g->player);
     evaluateExits(g);
-    checkControls(g->currentScene, g->player, g->runtimeArgs->indexDir);
+    checkControls(g->currentScene, g->player, g->itemManager, g->runtimeArgs->indexDir);
     checkFights(g->currentScene, g->player);
 }
 
@@ -318,7 +319,7 @@ void doFightLoop(Game *g) {
     checkFightInput(g->currentScene->fight, g->player);
     drawFightView(g->currentScene->encounters, g->currentScene->fight, g->player);
     processFightAnimations();
-    checkControls(g->currentScene, g->player, g->runtimeArgs->indexDir);
+    checkControls(g->currentScene, g->player, g->itemManager, g->runtimeArgs->indexDir);
     checkRemoveFight(g->currentScene);
 }
 

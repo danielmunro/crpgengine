@@ -23,7 +23,7 @@ static const cyaml_schema_value_t partySchema = {
 
 static const cyaml_schema_field_t playerTopMappingField[] = {
         CYAML_FIELD_SEQUENCE_COUNT(
-                "storylines", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, PlayerData, storylines,
+                "storylines", CYAML_FLAG_POINTER, PlayerData, storylines,
                 storylines_count, &playerStorylinesEntry, 0, MAX_STORIES),
         CYAML_FIELD_INT(
                 "coins", CYAML_FLAG_DEFAULT, PlayerData, coins),
@@ -34,13 +34,13 @@ static const cyaml_schema_field_t playerTopMappingField[] = {
         CYAML_FIELD_INT(
                 "level", CYAML_FLAG_DEFAULT, PlayerData, level),
         CYAML_FIELD_SEQUENCE(
-                "items", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, PlayerData, items,
+                "items", CYAML_FLAG_POINTER, PlayerData, items,
                 &savePlayerItemsSchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_SEQUENCE(
-                "party", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, PlayerData, party,
+                "party", CYAML_FLAG_POINTER, PlayerData, party,
                 &partySchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_SEQUENCE(
-                "onDeck", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, PlayerData, onDeck,
+                "onDeck", CYAML_FLAG_POINTER, PlayerData, onDeck,
                 &partySchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };

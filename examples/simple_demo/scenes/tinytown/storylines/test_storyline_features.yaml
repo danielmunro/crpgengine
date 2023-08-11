@@ -14,6 +14,9 @@ storylines:
         action: speak
         message: "You look trustworthy. Please keep my amulet safe, adventurer. In return, it will help you in a time of need."
       - player: true
+        action: give_item
+        item: a blemished amulet
+      - player: true
         action: add_story
         story: from_the_past:intro
       - mob: vill1

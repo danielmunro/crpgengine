@@ -16,6 +16,7 @@ typedef struct {
     const char *message;
     const char *story;
     const char *direction;
+    const char *item;
     Outcome outcome;
     int amount;
     Vector2 position;
@@ -62,6 +63,7 @@ Then *createThen(
         const char *message,
         const char *story,
         const char *direction,
+        const char *item,
         const Outcome outcome,
         Vector2 position,
         bool parallel,
@@ -70,6 +72,7 @@ Then *createThen(
     then->target = target;
     then->message = message;
     then->direction = direction;
+    then->item = item;
     then->story = story;
     then->outcome = outcome;
     then->position = position;
@@ -178,4 +181,8 @@ bool hasAmountProperty(ThenData thenData) {
 
 bool needsToSave(Then *then) {
     return then->outcome == SAVE;
+}
+
+bool needsToReceiveItem(Then *then, Mobile *playerMob) {
+    return then->outcome == GIVE_ITEM && then->target == playerMob;
 }

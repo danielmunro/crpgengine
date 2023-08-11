@@ -21,3 +21,5 @@ items:
       fire: 2
       electricity: 2
       corrosive: 1
+- name: a blemished amulet
+  type: quest
