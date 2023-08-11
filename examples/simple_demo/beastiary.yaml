@@ -5,6 +5,9 @@ beasts:
     str: 1
     dex: 1
     con: 1
+    ac:
+      fire: -5
+      frost: 5
   level: 3
   hp: 20
   gp: 100
@@ -15,6 +18,9 @@ beasts:
     str: 4
     dex: 4
     con: 4
+    ac:
+      fire: -5
+      frost: 10
   level: 6
   hp: 30
   gp: 140
@@ -25,6 +31,9 @@ beasts:
     str: 2
     dex: 1
     con: 1
+    ac:
+      poison: 10
+      water: -10
   level: 4
   hp: 25
   gp: 185

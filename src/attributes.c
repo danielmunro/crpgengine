@@ -4,10 +4,12 @@ typedef struct {
     int pierce;
     int fire;
     int water;
+    int frost;
     int electricity;
     int dark;
     int light;
     int corrosive;
+    int poison;
     int energy;
 } ArmorClass;
 
@@ -39,10 +41,12 @@ Attributes *createAttributesFromData(AttributesData *data) {
         ac->pierce = data->ac->pierce;
         ac->fire = data->ac->fire;
         ac->water = data->ac->water;
+        ac->frost = data->ac->frost;
         ac->electricity = data->ac->electricity;
         ac->dark = data->ac->dark;
         ac->light = data->ac->light;
         ac->corrosive = data->ac->corrosive;
+        ac->poison = data->ac->poison;
         ac->energy = data->ac->energy;
         a->ac = ac;
     }
@@ -66,10 +70,12 @@ AttributesData *createDataFromAttributes(Attributes *a) {
         ac->pierce = a->ac->pierce;
         ac->fire = a->ac->fire;
         ac->water = a->ac->water;
+        ac->frost = a->ac->frost;
         ac->electricity = a->ac->electricity;
         ac->dark = a->ac->dark;
         ac->light = a->ac->light;
         ac->corrosive = a->ac->corrosive;
+        ac->poison = a->ac->poison;
         ac->energy = a->ac->energy;
         data->ac = ac;
     }
@@ -85,18 +91,23 @@ Attributes *cloneAttributes(Attributes *original) {
     a->constitution = original->constitution;
     a->hp = original->hp;
     a->mana = original->mana;
-    ArmorClass *ac = malloc(sizeof(ArmorClass));
-    ac->bash = original->ac->bash;
-    ac->slash = original->ac->slash;
-    ac->pierce = original->ac->pierce;
-    ac->fire = original->ac->fire;
-    ac->water = original->ac->water;
-    ac->electricity = original->ac->electricity;
-    ac->dark = original->ac->dark;
-    ac->light = original->ac->light;
-    ac->corrosive = original->ac->corrosive;
-    ac->energy = original->ac->energy;
-    a->ac = ac;
+    a->ac = NULL;
+    if (original->ac != NULL) {
+        ArmorClass *ac = malloc(sizeof(ArmorClass));
+        ac->bash = original->ac->bash;
+        ac->slash = original->ac->slash;
+        ac->pierce = original->ac->pierce;
+        ac->fire = original->ac->fire;
+        ac->water = original->ac->water;
+        ac->frost = original->ac->frost;
+        ac->electricity = original->ac->electricity;
+        ac->dark = original->ac->dark;
+        ac->light = original->ac->light;
+        ac->corrosive = original->ac->corrosive;
+        ac->poison = original->ac->poison;
+        ac->energy = original->ac->energy;
+        a->ac = ac;
+    }
     return a;
 }
 
@@ -115,10 +126,12 @@ Attributes *createEmptyAttributes() {
     ac->pierce = 0;
     ac->fire = 0;
     ac->water = 0;
+    ac->frost = 0;
     ac->electricity = 0;
     ac->dark = 0;
     ac->light = 0;
     ac->corrosive = 0;
+    ac->poison = 0;
     ac->energy = 0;
     a->ac = ac;
     return a;
