@@ -437,6 +437,7 @@ Player *mapSaveDataToPlayer(Game *g, SaveData *save) {
                 getPositionFromString(save->player->party[i].position),
                 getDirectionFromString(save->player->party[i].direction),
                 animations);
+        mobs[i]->attributes = createAttributesFromData(save->player->party[i].attributes);
     }
     for (int i = save->player->party_count; i < MAX_PARTY_SIZE; i++) {
         mobs[i] = NULL;

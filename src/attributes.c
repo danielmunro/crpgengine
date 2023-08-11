@@ -49,6 +49,33 @@ Attributes *createAttributesFromData(AttributesData *data) {
     return a;
 }
 
+AttributesData *createDataFromAttributes(Attributes *a) {
+    AttributesData *data = malloc(sizeof(AttributesData));
+    data->strength = a->strength;
+    data->dexterity = a->dexterity;
+    data->intelligence = a->intelligence;
+    data->wisdom = a->wisdom;
+    data->constitution = a->constitution;
+    data->hp = a->hp;
+    data->mana = a->mana;
+    data->ac = NULL;
+    if (a->ac != NULL) {
+        ArmorClassData *ac = malloc(sizeof(ArmorClass));
+        ac->bash = a->ac->bash;
+        ac->slash = a->ac->slash;
+        ac->pierce = a->ac->pierce;
+        ac->fire = a->ac->fire;
+        ac->water = a->ac->water;
+        ac->electricity = a->ac->electricity;
+        ac->dark = a->ac->dark;
+        ac->light = a->ac->light;
+        ac->corrosive = a->ac->corrosive;
+        ac->energy = a->ac->energy;
+        data->ac = ac;
+    }
+    return data;
+}
+
 Attributes *cloneAttributes(Attributes *original) {
     Attributes *a = malloc(sizeof(Attributes));
     a->strength = original->strength;

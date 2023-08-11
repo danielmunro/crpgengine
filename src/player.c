@@ -59,40 +59,13 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
     player->itemCount = itemCount;
     player->items = calloc(MAX_ITEMS, sizeof(PlayerItemData));
     for (int i = 0; i < itemCount; i++) {
-        player->items[i] = &(PlayerItemData) {
-            .name = items[i].name,
-            .quantity = items[i].quantity,
-        };
+        player->items[i] = &items[i];
     }
     return player;
 }
 
 Mobile *getPartyLeader(Player *p) {
     return p->party[0];
-}
-
-AttributesData *createAttributesData(Attributes *a) {
-    AttributesData *data = malloc(sizeof(AttributesData));
-    data->strength = a->strength;
-    data->intelligence = a->intelligence;
-    data->wisdom = a->wisdom;
-    data->dexterity = a->dexterity;
-    data->constitution = a->constitution;
-    data->hp = a->hp;
-    data->mana = a->mana;
-    ArmorClassData *ac = malloc(sizeof(ArmorClassData));
-    ac->slash = a->ac->slash;
-    ac->bash = a->ac->bash;
-    ac->pierce = a->ac->pierce;
-    ac->corrosive = a->ac->corrosive;
-    ac->electricity = a->ac->electricity;
-    ac->energy = a->ac->energy;
-    ac->dark = a->ac->dark;
-    ac->fire = a->ac->fire;
-    ac->light = a->ac->light;
-    ac->water = a->ac->water;
-    data->ac = ac;
-    return data;
 }
 
 MobileData createMobDataFromMob(Mobile *mob) {
@@ -102,7 +75,7 @@ MobileData createMobDataFromMob(Mobile *mob) {
             mob->animations[0]->name,
             getPositionAsString(mob->position),
             getAnimationStringFromType(mob->direction),
-            createAttributesData(mob->attributes),
+            createDataFromAttributes(mob->attributes),
     };
 }
 
@@ -254,6 +227,8 @@ void save(Player *player, const char *sceneName, const char *indexDir) {
             sceneName,
             name);
 
+    printf("item: %s\n", player->items[0]->name);
+    printf("quantity: %d\n", player->items[0]->quantity);
     // auto save
     saveFile(player->log, save, indexDir, "autosave.yaml");
     char filename[MAX_FS_PATH_LENGTH];
