@@ -396,7 +396,8 @@ void drawNotifications(NotificationManager *nm) {
         drawBlueBox(nm->notifications[0]->rect);
         DrawText(
                 nm->notifications[0]->message,
-                (int) nm->notifications[0]->rect.x, (int) nm->notifications[0]->rect.y,
+                (int) nm->notifications[0]->rect.x + UI_PADDING_SM,
+                (int) nm->notifications[0]->rect.y + UI_PADDING_SM,
                 FONT_SIZE, WHITE);
     }
 }

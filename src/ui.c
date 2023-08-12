@@ -68,7 +68,7 @@ void decayNotifications(NotificationManager *nm, double timeInterval) {
             }
         }
         nm->timeSinceUpdate = 1000 - nm->timeSinceUpdate;
-    } else if (nm->notifications[0] != NULL && nm->notifications[0]->decay <= 2) {
+    } else if (nm->notifications[0] != NULL && nm->notifications[0]->decay <= 1) {
         nm->notifications[0]->rect.x += (float) (nm->timeSinceUpdate / 100);
     }
 }

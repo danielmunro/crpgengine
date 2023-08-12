@@ -87,7 +87,7 @@ int thenCheck(Game *g, ControlBlock *cb) {
         addInfo(g->log, "player receiving item: %s", then->item);
         addItem(g->player, findItem(g->itemManager, then->item));
         const char *message = malloc(64);
-        sprintf((char *)message, "you received %s", then->item);
+        sprintf((char *)message, "you received:\n%s", then->item);
         addNotification(g->notificationManager, createNotification(RECEIVE_QUEST_ITEM, message));
         progress++;
     }

@@ -29,6 +29,7 @@
 #define FONT_SIZE 20
 #define LINE_HEIGHT 30
 #define UI_PADDING 20
+#define UI_PADDING_SM 5
 
 #define EXIT_NO_INDEX_DIR 1
 #define EXIT_MISSING_SPRITESHEET 2
