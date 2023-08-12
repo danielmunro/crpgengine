@@ -89,7 +89,6 @@ int thenCheck(Game *g, ControlBlock *cb) {
         const char *message = malloc(64);
         sprintf((char *)message, "you received:\n%s", then->item);
         addNotification(g->notificationManager, createNotification(RECEIVE_QUEST_ITEM, message));
-//        addNotification(g->notificationManager, createNotification(RECEIVE_QUEST_ITEM, message));
         progress++;
     }
     cb->progress += progress;

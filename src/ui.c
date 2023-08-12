@@ -14,12 +14,14 @@ typedef struct {
     Notification **notifications;
     int count;
     double timeSinceUpdate;
+    float slideDown;
 } NotificationManager;
 
 NotificationManager *createNotificationManager() {
     NotificationManager *nm = malloc(sizeof(NotificationManager));
     nm->notifications = calloc(MAX_NOTIFICATIONS, sizeof(Notification));
     nm->count = 0;
+    nm->slideDown = 0;
     return nm;
 }
 
@@ -36,9 +38,9 @@ void addNotification(NotificationManager *nm, Notification *n) {
         if (nm->notifications[i] == NULL) {
             n->rect = (Rectangle) {
                     SCREEN_WIDTH - 300 - UI_PADDING,
-                    SCREEN_HEIGHT - 200 - (100 * i),
+                    SCREEN_HEIGHT - 200 - (80 * i),
                     300,
-                    60,
+                    NOTIFICATION_HEIGHT,
             };
             nm->notifications[i] = n;
             nm->count++;
@@ -62,18 +64,29 @@ void decayNotifications(NotificationManager *nm, double timeInterval) {
             if (nm->notifications[0]->decay == 0) {
                 free(nm->notifications[0]);
                 nm->notifications[0] = NULL;
+                nm->slideDown = NOTIFICATION_HEIGHT;
                 for (int i = 1; i < nm->count + 1; i++) {
-                    if (nm->notifications[i] != NULL) {
-                        nm->notifications[i]->rect.y += 100;
-                    }
                     nm->notifications[i - 1] = nm->notifications[i];
                 }
                 nm->count--;
             }
         }
         nm->timeSinceUpdate = 1000 - nm->timeSinceUpdate;
-    } else if (nm->notifications[0] != NULL && nm->notifications[0]->decay <= 1) {
+    }
+    if (nm->notifications[0] != NULL && nm->notifications[0]->decay <= 1) {
         nm->notifications[0]->rect.x += (float) (nm->timeSinceUpdate / 100);
+    }
+    if (nm->slideDown > 0) {
+        float amount = (float) (nm->timeSinceUpdate / 100);
+        for (int i = 0; i < nm->count; i++) {
+            if (nm->notifications[i] != NULL) {
+                nm->notifications[i]->rect.y += amount;
+            }
+        }
+        nm->slideDown -= amount;
+        if (nm->slideDown < 0) {
+            nm->slideDown = 0;
+        }
     }
 }
 
