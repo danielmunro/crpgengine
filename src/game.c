@@ -1,9 +1,6 @@
 typedef struct {
     RuntimeArgs *runtimeArgs;
     SceneManager *sceneManager;
-//    Scene *scenes[MAX_SCENES];
-//    int sceneCount;
-//    Scene *currentScene;
     Player *player;
     AnimationManager *animationManager;
     AudioManager *audioManager;
