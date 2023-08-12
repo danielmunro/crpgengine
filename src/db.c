@@ -181,7 +181,6 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
     return createSpriteSheetManager(spritesheets, count);
 }
 
-
 void loadAllItems(ItemManager *itemManager, const char *indexDir) {
     const char *itemsFile = malloc(MAX_FS_PATH_LENGTH);
     sprintf((char *)itemsFile, "%s/items.yaml", indexDir);
