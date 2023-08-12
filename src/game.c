@@ -128,15 +128,6 @@ void proceedControlsUntilDone(Game *g) {
     }
 }
 
-double reportMaxMemory(Log *log) {
-    int who = RUSAGE_SELF;
-    struct rusage usage;
-    getrusage(who, &usage);
-    double memoryInMb = (double) usage.ru_maxrss / 1000000;
-    addInfo(log, "max memory: %f\n", memoryInMb);
-    return memoryInMb;
-}
-
 void setScene(Game *g, Scene *scene, char *entranceName) {
     addInfo(g->log, "setting scene to '%s'", scene->name);
     if (g->currentScene != NULL) {
@@ -270,18 +261,6 @@ void loadScenes(Game *g, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SC
             g->scenes[i]->controlBlockCount++;
         }
     }
-}
-
-void loadBeastiary(Game *g) {
-    char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/beastiary.yaml", g->runtimeArgs->indexDir);
-    BeastiaryData *data = loadBeastiaryYaml(filePath);
-    for (int i = 0; i < data->beasts_count; i++) {
-        g->beastiary->beasts[i] = createBeastFromData(g->runtimeArgs->indexDir, &data->beasts[i]);
-        addDebug(g->log, "beast '%s' created", g->beastiary->beasts[i]->id);
-        g->beastiary->beastCount++;
-    }
-    free(data);
 }
 
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
@@ -485,41 +464,14 @@ void loadScenesFromFiles(Game *g) {
     free(sl);
 }
 
-void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char *indexDir) {
-    char animationsDir[MAX_FS_PATH_LENGTH / 2];
-    sprintf(animationsDir, "%s/animations", indexDir);
-    char **files = calloc(MAX_FILES, sizeof(char *));
-    int count = getFilesInDirectory(animationsDir, files);
-    for (int i = 0; i < count; i++) {
-        if (strcmp(getFilenameExt(files[i]), "yaml") == 0) {
-            char animationFile[MAX_FS_PATH_LENGTH];
-            sprintf(animationFile, "%s/%s", animationsDir, files[i]);
-            loadAnimations(am, sm, animationFile);
-        }
-    }
-    free(files);
-}
-
-void loadAllItems(ItemManager *itemManager, const char *indexDir) {
-    const char *itemsFile = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *)itemsFile, "%s/items.yaml", indexDir);
-    ItemsData *itemsData = loadItemYaml(itemsFile);
-    itemManager->items = calloc(itemsData->items_count, sizeof(ItemData));
-    for (int i = 0; i < itemsData->items_count; i++) {
-        itemManager->items[i] = &itemsData->items[i];
-    }
-    itemManager->count = itemsData->items_count;
-    free((char *)itemsFile);
-}
-
 void initializeLog(Game *g) {
     g->log = createLog(g->runtimeArgs->logLevel);
     addInfo(g->log, "log level set to %s", getLogLevelString(g->log->level));
 }
 
 void initializeBeasts(Game *g) {
-    g->beastiary = createBeastiary();
-    loadBeastiary(g);
+    g->beastiary = createBeastiary(g->log);
+    loadBeastiary(g->beastiary, g->runtimeArgs->indexDir);
 }
 
 Scene *findScene(Game *g, const char *name) {

@@ -13,6 +13,7 @@ typedef struct {
 typedef struct {
     Beast *beasts[MAX_BEASTIARY_SIZE];
     int beastCount;
+    Log *log;
 } Beastiary;
 
 Beast *createBeastFromData(const char *indexDir, BeastData *data) {
@@ -45,8 +46,9 @@ Beast *cloneBeast(Beast *original) {
     return new;
 }
 
-Beastiary *createBeastiary() {
+Beastiary *createBeastiary(Log *log) {
     Beastiary *beastiary = malloc(sizeof(Beastiary));
     beastiary->beastCount = 0;
+    beastiary->log = log;
     return beastiary;
 }
