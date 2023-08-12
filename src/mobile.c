@@ -69,7 +69,7 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
     return mob;
 }
 
-void *addMobileToManager(MobileManager *mm, Mobile *mob) {
+void addMobileToManager(MobileManager *mm, Mobile *mob) {
     mm->mobiles[mm->count] = mob;
     mm->count++;
 }
