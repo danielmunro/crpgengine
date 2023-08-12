@@ -1,8 +1,9 @@
 typedef struct {
     RuntimeArgs *runtimeArgs;
-    Scene *scenes[MAX_SCENES];
-    int sceneCount;
-    Scene *currentScene;
+    SceneManager *sceneManager;
+//    Scene *scenes[MAX_SCENES];
+//    int sceneCount;
+//    Scene *currentScene;
     Player *player;
     AnimationManager *animationManager;
     AudioManager *audioManager;
@@ -20,10 +21,10 @@ typedef struct {
 
 void setScene(Game *g, Scene *scene, char *entranceName) {
     addInfo(g->log, "setting scene to '%s'", scene->name);
-    if (g->currentScene != NULL) {
-        unloadLayers(g->currentScene->exploration);
+    if (g->sceneManager->currentScene != NULL) {
+        unloadLayers(g->sceneManager->currentScene->exploration);
     }
-    g->currentScene = scene;
+    g->sceneManager->currentScene = scene;
     g->controlManager->scene = scene;
     clearAnimations(g->animationManager);
     Mobile *mob = getPartyLeader(g->player);
@@ -34,15 +35,15 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
         useEntrance(mob, entrance);
     }
     addDebug(g->log, "player position :: %f %f", mob->position.x, mob->position.y);
-    renderExplorationLayers(g->currentScene->exploration);
-    playMusic(g->audioManager, g->currentScene->music);
+    renderExplorationLayers(g->sceneManager->currentScene->exploration);
+    playMusic(g->audioManager, g->sceneManager->currentScene->music);
     proceedControlsUntilDone(g->controlManager);
 }
 
 void loadScenes(Game *g, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SCENES]) {
     addDebug(g->log, "attempting to load scenes");
-    for (int i = 0; i < g->sceneCount; i++) {
-        g->scenes[i] = loadScene(
+    for (int i = 0; i < g->sceneManager->count; i++) {
+        g->sceneManager->scenes[i] = loadScene(
                 g->log,
                 g->mobileManager,
                 g->beastiary,
@@ -50,15 +51,15 @@ void loadScenes(Game *g, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SC
                 scenes[i],
                 sceneDirectories[i],
                 g->runtimeArgs);
-        addDebug(g->log, "scene loaded :: %s (%d)", g->scenes[i]->name, i);
+        addDebug(g->log, "scene loaded :: %s (%d)", g->sceneManager->scenes[i]->name, i);
     }
-    for (int i = 0; i < g->sceneCount; i++) {
+    for (int i = 0; i < g->sceneManager->count; i++) {
         addDebug(g->log, "scene storyline count :: %s -- %d",
-                 g->scenes[i]->name, g->scenes[i]->storylineCount);
-        for (int c = 0; c < g->scenes[i]->storylineCount; c++) {
-            g->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(
-                    g->controlManager, g->scenes[i], g->scenes[i]->storylines[c]);
-            g->scenes[i]->controlBlockCount++;
+                 g->sceneManager->scenes[i]->name, g->sceneManager->scenes[i]->storylineCount);
+        for (int c = 0; c < g->sceneManager->scenes[i]->storylineCount; c++) {
+            g->sceneManager->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(
+                    g->controlManager, g->sceneManager->scenes[i], g->sceneManager->scenes[i]->storylines[c]);
+            g->sceneManager->scenes[i]->controlBlockCount++;
         }
     }
 }
@@ -84,18 +85,18 @@ void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
 
 void evaluateExits(Game *g) {
     addDebug(g->log, "exploration -- evaluate exits");
-    Exploration *e = g->currentScene->exploration;
+    Exploration *e = g->sceneManager->currentScene->exploration;
     int exit = atExit(e, g->player);
     if (exit > -1) {
         addDebug(g->log, "player at exit");
         char *sceneName = e->exits[exit]->scene;
         char *entranceName = e->exits[exit]->to;
-        for (int i = 0; i < g->sceneCount; i++) {
-            if (strcmp(sceneName, g->scenes[i]->name) == 0) {
+        for (int i = 0; i < g->sceneManager->count; i++) {
+            if (strcmp(sceneName, g->sceneManager->scenes[i]->name) == 0) {
                 attemptToUseExit(
                         g,
-                        g->scenes[i],
-                        findEntrance(g->scenes[i]->exploration, entranceName)
+                        g->sceneManager->scenes[i],
+                        findEntrance(g->sceneManager->scenes[i]->exploration, entranceName)
                 );
                 return;
             }
@@ -105,7 +106,7 @@ void evaluateExits(Game *g) {
 }
 
 void explorationMenuKeyPressed(Game *g) {
-    addMenu(g->currentScene->exploration, findMenu(g->menus, g->menuCount, PARTY_MENU));
+    addMenu(g->sceneManager->currentScene->exploration, findMenu(g->menus, g->menuCount, PARTY_MENU));
 }
 
 void checkExplorationInput(Game *g) {
@@ -117,10 +118,12 @@ void checkExplorationInput(Game *g) {
     }
     explorationCheckMoveKeys(g->player);
     if (IsKeyPressed(KEY_C)) {
-        explorationDebugKeyPressed(g->currentScene->exploration, mob->position);
+        explorationDebugKeyPressed(g->sceneManager->currentScene->exploration, mob->position);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        explorationSpaceKeyPressed(g->currentScene->exploration, g->player, g->currentScene->activeControlBlocks);
+        explorationSpaceKeyPressed(g->sceneManager->currentScene->exploration,
+                                   g->player,
+                                   g->sceneManager->currentScene->activeControlBlocks);
     }
     if (IsKeyPressed(KEY_M)) {
         explorationMenuKeyPressed(g);
@@ -129,16 +132,16 @@ void checkExplorationInput(Game *g) {
         addInfo(g->log, "player play time :: %ds", g->player->secondsPlayed);
     }
     if (IsKeyPressed(KEY_S)) {
-        save(g->player, g->currentScene->name, g->runtimeArgs->indexDir);
+        save(g->player, g->sceneManager->currentScene->name, g->runtimeArgs->indexDir);
     }
 }
 
 void menuItemSelected(Game *g) {
-    Exploration *exploration = g->currentScene->exploration;
+    Exploration *exploration = g->sceneManager->currentScene->exploration;
     Menu *menu = getCurrentMenu(exploration);
     MenuContext *context = createMenuContext(
             g->player,
-            g->currentScene->name,
+            g->sceneManager->currentScene->name,
             g->runtimeArgs->indexDir,
             menu->cursor);
     MenuSelectResponse *response = menu->selected(context);
@@ -150,7 +153,7 @@ void menuItemSelected(Game *g) {
 }
 
 void checkMenuInput(Game *g) {
-    Exploration *exploration = g->currentScene->exploration;
+    Exploration *exploration = g->sceneManager->currentScene->exploration;
     if (IsKeyPressed(KEY_ESCAPE)) {
         removeMenu(exploration);
     }
@@ -159,7 +162,7 @@ void checkMenuInput(Game *g) {
         menu->cursor++;
         MenuContext *c = createMenuContext(
                 g->player,
-                g->currentScene->name,
+                g->sceneManager->currentScene->name,
                 g->runtimeArgs->indexDir,
                 menu->cursor);
         normalizeMenuCursor(menu, c);
@@ -170,7 +173,7 @@ void checkMenuInput(Game *g) {
         menu->cursor--;
         MenuContext *c = createMenuContext(
                 g->player,
-                g->currentScene->name,
+                g->sceneManager->currentScene->name,
                 g->runtimeArgs->indexDir,
                 menu->cursor);
         normalizeMenuCursor(menu, c);
@@ -184,33 +187,33 @@ void checkMenuInput(Game *g) {
 void doExplorationLoop(Game *g) {
     checkExplorationInput(g);
     drawExplorationView(
-            g->currentScene->exploration,
+            g->sceneManager->currentScene->exploration,
             g->player,
             g->notificationManager,
-            g->currentScene->activeControlBlocks);
-    doMobileMovementUpdates(g->currentScene->exploration);
+            g->sceneManager->currentScene->activeControlBlocks);
+    doMobileMovementUpdates(g->sceneManager->currentScene->exploration);
     processAnimations(g->animationManager);
-    evaluateMovement(g->currentScene->exploration, g->player);
+    evaluateMovement(g->sceneManager->currentScene->exploration, g->player);
     evaluateExits(g);
     checkControls(g->controlManager);
-    checkFights(g->currentScene, g->player);
+    checkFights(g->sceneManager->currentScene, g->player);
 }
 
 void doFightLoop(Game *g) {
-    checkFightInput(g->currentScene->fight, g->player);
-    drawFightView(g->currentScene->encounters, g->currentScene->fight, g->player);
+    checkFightInput(g->sceneManager->currentScene->fight, g->player);
+    drawFightView(g->sceneManager->currentScene->encounters, g->sceneManager->currentScene->fight, g->player);
     processFightAnimations();
     checkControls(g->controlManager);
-    checkRemoveFight(g->currentScene);
+    checkRemoveFight(g->sceneManager->currentScene);
 }
 
 void doInGameMenuLoop(Game *g) {
-    Exploration *exploration = g->currentScene->exploration;
+    Exploration *exploration = g->sceneManager->currentScene->exploration;
     drawAllMenus(
             g->player,
             exploration->menus,
             exploration->menuCount,
-            g->currentScene->name,
+            g->sceneManager->currentScene->name,
             g->runtimeArgs->indexDir);
     checkMenuInput(g);
 }
@@ -218,11 +221,11 @@ void doInGameMenuLoop(Game *g) {
 void run(Game *g) {
     while (!WindowShouldClose()) {
         startTiming(g->timing);
-        if (isFighting(g->currentScene)) {
+        if (isFighting(g->sceneManager->currentScene)) {
             doFightLoop(g);
-        } else if (getCurrentMenu(g->currentScene->exploration) != NULL) {
+        } else if (getCurrentMenu(g->sceneManager->currentScene->exploration) != NULL) {
             doInGameMenuLoop(g);
-        } else if (isExploring(g->currentScene)) {
+        } else if (isExploring(g->sceneManager->currentScene)) {
             doExplorationLoop(g);
         }
         updateMusicStream(g->audioManager);
@@ -236,8 +239,8 @@ void loadScenesFromFiles(Game *g) {
     sl->count = getFilesInDirectory(sl->sceneDirectory, sl->scenes);
     addDebug(g->log, "top level count :: %d", sl->count);
     buildSceneFilesList(sl);
-    g->sceneCount = addSubsceneFiles(sl);
-    for (int i = 0; i < g->sceneCount; i++) {
+    g->sceneManager->count = addSubsceneFiles(sl);
+    for (int i = 0; i < g->sceneManager->count; i++) {
         addInfo(g->log, "found scene: %s, %s", sl->scenes[i], sl->sceneFiles[i]);
     }
     loadScenes(g, sl->scenes, sl->sceneFiles);
@@ -245,9 +248,9 @@ void loadScenesFromFiles(Game *g) {
 }
 
 Scene *findScene(Game *g, const char *name) {
-    for (int i = 0; i < g->sceneCount; i++) {
-        if (strcmp(g->scenes[i]->name, name) == 0) {
-            return g->scenes[i];
+    for (int i = 0; i < g->sceneManager->count; i++) {
+        if (strcmp(g->sceneManager->scenes[i]->name, name) == 0) {
+            return g->sceneManager->scenes[i];
         }
     }
     return NULL;
@@ -283,7 +286,7 @@ void setSceneBasedOnSave(Game *g, SaveData *save) {
         setScene(g, findScene(g, save->scene), NULL);
         return;
     }
-    setScene(g, g->scenes[START_SCENE], START_ENTRANCE);
+    setScene(g, g->sceneManager->scenes[START_SCENE], START_ENTRANCE);
 }
 
 Game *createGame(RuntimeArgs *r) {
@@ -302,9 +305,10 @@ Game *createGame(RuntimeArgs *r) {
     g->menuCount = getMenuList(g->menus);
     g->notificationManager = createNotificationManager();
     g->timing = createTiming(g->log, g->notificationManager, g->player, g->runtimeArgs->logMemory);
+    g->sceneManager = createSceneManager(g->log);
     g->controlManager = createControlManager(
             g->log,
-            g->currentScene,
+            g->sceneManager->currentScene,
             g->player,
             g->runtimeArgs,
             g->itemManager,

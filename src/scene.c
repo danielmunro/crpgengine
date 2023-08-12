@@ -19,6 +19,13 @@ typedef struct {
 } Scene;
 
 typedef struct {
+    Log *log;
+    Scene **scenes;
+    int count;
+    Scene *currentScene;
+} SceneManager;
+
+typedef struct {
     char **scenes;
     char **sceneFiles;
     char *sceneDirectory;
@@ -29,6 +36,14 @@ const SceneType sceneTypes[] = {
         {SCENE_TYPE_TOWN,    "town"},
         {SCENE_TYPE_DUNGEON, "dungeon"},
 };
+
+SceneManager *createSceneManager(Log *log) {
+    SceneManager *sceneManager = malloc(sizeof(SceneManager));
+    sceneManager->log = log;
+    sceneManager->currentScene = NULL;
+    sceneManager->scenes = calloc(MAX_SCENES, sizeof(Scene));
+    return sceneManager;
+}
 
 void setSceneTypeFromString(Scene *s, const char *sceneType) {
     int count = sizeof(sceneTypes) / sizeof(SceneType);
