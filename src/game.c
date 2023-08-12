@@ -16,29 +16,6 @@ typedef struct {
     MobileManager *mobileManager;
 } Game;
 
-void loadScenes(Game *g, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SCENES]) {
-    addDebug(g->log, "attempting to load scenes");
-    for (int i = 0; i < g->sceneManager->count; i++) {
-        g->sceneManager->scenes[i] = loadScene(
-                g->log,
-                g->mobileManager,
-                g->beastiary,
-                scenes[i],
-                sceneDirectories[i],
-                g->runtimeArgs);
-        addDebug(g->log, "scene loaded :: %s (%d)", g->sceneManager->scenes[i]->name, i);
-    }
-    for (int i = 0; i < g->sceneManager->count; i++) {
-        addDebug(g->log, "scene storyline count :: %s -- %d",
-                 g->sceneManager->scenes[i]->name, g->sceneManager->scenes[i]->storylineCount);
-        for (int c = 0; c < g->sceneManager->scenes[i]->storylineCount; c++) {
-            g->sceneManager->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(
-                    g->controlManager, g->sceneManager->scenes[i], g->sceneManager->scenes[i]->storylines[c]);
-            g->sceneManager->scenes[i]->controlBlockCount++;
-        }
-    }
-}
-
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
     if (entrance == NULL) {
         addWarning(game->log, "no entrance found for '%s' scene", scene->name);
@@ -208,20 +185,6 @@ void run(Game *g) {
     }
 }
 
-void loadScenesFromFiles(Game *g) {
-    SceneLoader *sl = createSceneLoader(g->runtimeArgs->indexDir);
-    addDebug(g->log, "get scene directories :: %s", sl->sceneDirectory);
-    sl->count = getFilesInDirectory(sl->sceneDirectory, sl->scenes);
-    addDebug(g->log, "top level count :: %d", sl->count);
-    buildSceneFilesList(sl);
-    g->sceneManager->count = addSubsceneFiles(sl);
-    for (int i = 0; i < g->sceneManager->count; i++) {
-        addInfo(g->log, "found scene: %s, %s", sl->scenes[i], sl->sceneFiles[i]);
-    }
-    loadScenes(g, sl->scenes, sl->sceneFiles);
-    free(sl);
-}
-
 SaveData *initializePlayer(Game *g) {
     char saveFilePath[MAX_FS_PATH_LENGTH];
     if (g->runtimeArgs->saveFile != NULL) {
@@ -270,8 +233,9 @@ Game *createGame(RuntimeArgs *r) {
             g->itemManager,
             g->notificationManager,
             g->mobileManager);
-    g->sceneManager = createSceneManager(g->log, g->controlManager, g->animationManager, g->audioManager);
-    loadScenesFromFiles(g);
+    g->sceneManager = createSceneManager(g->log, g->controlManager,
+                                         g->animationManager, g->audioManager);
+    loadScenesFromFiles(g->sceneManager, g->mobileManager, g->beastiary, g->runtimeArgs);
     setSceneBasedOnSave(g->sceneManager, g->player, save, g->runtimeArgs->sceneIndex);
     g->controlManager->scene = g->sceneManager->currentScene;
     addDebug(g->log, "done creating game object");

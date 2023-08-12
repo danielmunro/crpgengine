@@ -146,6 +146,54 @@ Scene *loadScene(
     return scene;
 }
 
+void loadScenes(
+        SceneManager *sm,
+        MobileManager *mm,
+        Beastiary *beastiary,
+        RuntimeArgs *runtimeArgs,
+        char *scenes[MAX_SCENES],
+        char *sceneDirectories[MAX_SCENES]) {
+    addDebug(sm->log, "attempting to load scenes");
+    for (int i = 0; i < sm->count; i++) {
+        sm->scenes[i] = loadScene(
+                sm->log,
+                mm,
+                beastiary,
+                scenes[i],
+                sceneDirectories[i],
+                runtimeArgs);
+        addDebug(sm->log, "scene loaded :: %s (%d)", sm->scenes[i]->name, i);
+    }
+    for (int i = 0; i < sm->count; i++) {
+        addDebug(sm->log, "scene storyline count :: %s -- %d",
+                 sm->scenes[i]->name, sm->scenes[i]->storylineCount);
+        for (int c = 0; c < sm->scenes[i]->storylineCount; c++) {
+            sm->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(
+                    sm->controlManager, sm->scenes[i], sm->scenes[i]->storylines[c]);
+            sm->scenes[i]->controlBlockCount++;
+        }
+    }
+}
+
+void loadScenesFromFiles(
+        SceneManager *sm,
+        MobileManager *mobileManager,
+        Beastiary *beastiary,
+        RuntimeArgs *runtimeArgs) {
+    SceneLoader *sl = createSceneLoader(runtimeArgs->indexDir);
+    addDebug(sm->log, "get scene directories :: %s", sl->sceneDirectory);
+    sl->count = getFilesInDirectory(sl->sceneDirectory, sl->scenes);
+    addDebug(sm->log, "top level count :: %d", sl->count);
+    buildSceneFilesList(sl);
+    sm->count = addSubsceneFiles(sl);
+    for (int i = 0; i < sm->count; i++) {
+        addInfo(sm->log, "found scene: %s, %s", sl->scenes[i], sl->sceneFiles[i]);
+    }
+    loadScenes(sm, mobileManager, beastiary,
+               runtimeArgs, sl->scenes, sl->sceneFiles);
+    free(sl);
+}
+
 AudioManager *loadAudioManager(Log *log, const char *indexDir) {
     addInfo(log, "load audio manager from dir '%s'", indexDir);
     AudioManager *am = createAudioManager(log);
