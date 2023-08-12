@@ -244,11 +244,6 @@ void loadScenesFromFiles(Game *g) {
     free(sl);
 }
 
-void initializeBeasts(Game *g) {
-    g->beastiary = createBeastiary(g->log);
-    loadBeastiary(g->beastiary, g->runtimeArgs->indexDir);
-}
-
 Scene *findScene(Game *g, const char *name) {
     for (int i = 0; i < g->sceneCount; i++) {
         if (strcmp(g->scenes[i]->name, name) == 0) {
@@ -299,7 +294,7 @@ Game *createGame(RuntimeArgs *r) {
     g->animationManager = createAnimationManager(g->log);
     loadAllAnimations(g->animationManager, g->spritesheetManager, r->indexDir);
     g->audioManager = loadAudioManager(g->log, r->indexDir);
-    initializeBeasts(g);
+    g->beastiary = loadBeastiary(g->log, g->runtimeArgs->indexDir);
     g->itemManager = createItemManager();
     loadAllItems(g->itemManager, r->indexDir);
     g->mobileManager = createMobileManager(g->log, g->animationManager);

@@ -53,9 +53,9 @@ void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, co
     char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/images/%s", indexDir, data->background);
     scene->encounters->background = LoadTextureFromImage(LoadImage(filePath));
-    addDebug(scene->log, "beast count: %d, beastiary count: %d", data->beasts_count, beastiary->beastCount);
+    addDebug(scene->log, "beast count: %d, beastiary count: %d", data->beasts_count, beastiary->count);
     for (int i = 0; i < data->beasts_count; i++) {
-        for (int b = 0; b < beastiary->beastCount; b++) {
+        for (int b = 0; b < beastiary->count; b++) {
             if (strcmp(data->beasts[i].id, beastiary->beasts[b]->id) == 0) {
                 scene->encounters->beastEncounters[i] = createBeastEncounterFromData(beastiary->beasts[b],
                                                                                      data->beasts[i]);
@@ -208,14 +208,17 @@ void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char 
     free(files);
 }
 
-void loadBeastiary(Beastiary *beastiary, const char *indexDir) {
+Beastiary *loadBeastiary(Log *log, const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/beastiary.yaml", indexDir);
     BeastiaryData *data = loadBeastiaryYaml(filePath);
+    Beastiary *beastiary = malloc(sizeof(Beastiary));
+    beastiary->log = log;
+    beastiary->count = data->beasts_count;
     for (int i = 0; i < data->beasts_count; i++) {
         beastiary->beasts[i] = createBeastFromData(indexDir, &data->beasts[i]);
         addDebug(beastiary->log, "beast '%s' created", beastiary->beasts[i]->id);
-        beastiary->beastCount++;
     }
     free(data);
+    return beastiary;
 }
