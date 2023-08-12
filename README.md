@@ -45,9 +45,9 @@ Debug arguments:
 
 `-e` -- exit after loading the game. Useful for debugging startup problems.
 
-`-v` -- load a specific save file.
+`-v` -- load a specific save file. Cannot be used with `-n`.
 
-`-n` -- force a new game.
+`-n` -- force a new game. Cannot be used with `-v`.
 
 `-m` -- output max memory usage each second.
 
