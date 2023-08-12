@@ -174,8 +174,6 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
             0,
             items,
             0);
-//    free(items);
-//    free(storylines);
     return p;
 }
 
