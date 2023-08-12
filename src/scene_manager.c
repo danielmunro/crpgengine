@@ -39,3 +39,20 @@ void setScene(SceneManager *sm, Scene *scene, Player *player, char *entranceName
     playMusic(sm->audioManager, sm->currentScene->music);
     proceedControlsUntilDone(sm->controlManager);
 }
+
+Scene *findScene(SceneManager *sm, const char *name) {
+    for (int i = 0; i < sm->count; i++) {
+        if (strcmp(sm->scenes[i]->name, name) == 0) {
+            return sm->scenes[i];
+        }
+    }
+    return NULL;
+}
+
+void setSceneBasedOnSave(SceneManager *sm, Player *player, SaveData *save, int sceneIndex) {
+    if (save != NULL && sceneIndex == -1) {
+        setScene(sm, findScene(sm, save->scene), player, NULL);
+        return;
+    }
+    setScene(sm, sm->scenes[START_SCENE], player, START_ENTRANCE);
+}

@@ -109,7 +109,6 @@ Scene *loadScene(
         Log *log,
         MobileManager *mm,
         Beastiary *beastiary,
-        const char *indexDir,
         char *sceneName,
         const char *sceneDirectory,
         RuntimeArgs *runtimeArgs) {
@@ -138,7 +137,7 @@ Scene *loadScene(
     loadMobiles(mm, scene, sceneDirectory);
 
     if (sceneData->encounters != NULL) {
-        loadEncounters(beastiary, scene, sceneData->encounters, indexDir);
+        loadEncounters(beastiary, scene, sceneData->encounters, runtimeArgs->indexDir);
     }
 
     free(tilemapXmlReader);

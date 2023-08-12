@@ -23,7 +23,6 @@ void loadScenes(Game *g, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SC
                 g->log,
                 g->mobileManager,
                 g->beastiary,
-                g->runtimeArgs->indexDir,
                 scenes[i],
                 sceneDirectories[i],
                 g->runtimeArgs);
@@ -223,15 +222,6 @@ void loadScenesFromFiles(Game *g) {
     free(sl);
 }
 
-Scene *findScene(Game *g, const char *name) {
-    for (int i = 0; i < g->sceneManager->count; i++) {
-        if (strcmp(g->sceneManager->scenes[i]->name, name) == 0) {
-            return g->sceneManager->scenes[i];
-        }
-    }
-    return NULL;
-}
-
 SaveData *initializePlayer(Game *g) {
     char saveFilePath[MAX_FS_PATH_LENGTH];
     if (g->runtimeArgs->saveFile != NULL) {
@@ -255,14 +245,6 @@ SaveData *initializePlayer(Game *g) {
         addMobileToManager(g->mobileManager, g->player->party[i]);
     }
     return save;
-}
-
-void setSceneBasedOnSave(Game *g, SaveData *save) {
-    if (save != NULL && g->runtimeArgs->sceneIndex == -1) {
-        setScene(g->sceneManager, findScene(g, save->scene), g->player, NULL);
-        return;
-    }
-    setScene(g->sceneManager, g->sceneManager->scenes[START_SCENE], g->player, START_ENTRANCE);
 }
 
 Game *createGame(RuntimeArgs *r) {
@@ -290,7 +272,7 @@ Game *createGame(RuntimeArgs *r) {
             g->mobileManager);
     g->sceneManager = createSceneManager(g->log, g->controlManager, g->animationManager, g->audioManager);
     loadScenesFromFiles(g);
-    setSceneBasedOnSave(g, save);
+    setSceneBasedOnSave(g->sceneManager, g->player, save, g->runtimeArgs->sceneIndex);
     g->controlManager->scene = g->sceneManager->currentScene;
     addDebug(g->log, "done creating game object");
     free(save);
