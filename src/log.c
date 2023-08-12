@@ -16,12 +16,6 @@ char *getLogLevelString(LogLevel logLevel) {
     }
 }
 
-Log *createLog(LogLevel configuredLogLevel) {
-    Log *log = malloc(sizeof(Log));
-    log->level = configuredLogLevel;
-    return log;
-}
-
 void addLogWithLevel(Log *log, LogLevel logLevel, char *message, va_list ag) {
     if (log->level >= logLevel) {
         char toLog[MAX_LOG_LINE_LENGTH];
@@ -64,4 +58,11 @@ void addFatal(Log *log, char *message, ...) {
     addLogWithLevel(log, ERROR, message, args);
     va_end(args);
     exit(EXIT_MISSING_SPRITESHEET);
+}
+
+Log *createLog(LogLevel configuredLogLevel) {
+    Log *log = malloc(sizeof(Log));
+    log->level = configuredLogLevel;
+    addInfo(log, "log level set to %s", getLogLevelString(log->level));
+    return log;
 }

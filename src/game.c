@@ -438,11 +438,6 @@ void loadScenesFromFiles(Game *g) {
     free(sl);
 }
 
-void initializeLog(Game *g) {
-    g->log = createLog(g->runtimeArgs->logLevel);
-    addInfo(g->log, "log level set to %s", getLogLevelString(g->log->level));
-}
-
 void initializeBeasts(Game *g) {
     g->beastiary = createBeastiary(g->log);
     loadBeastiary(g->beastiary, g->runtimeArgs->indexDir);
@@ -487,8 +482,7 @@ void setSceneBasedOnSave(Game *g, SaveData *save) {
 Game *createGame(RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
     g->runtimeArgs = r;
-    g->currentScene = NULL;
-    initializeLog(g);
+    g->log = createLog(g->runtimeArgs->logLevel);
     g->spritesheetManager = loadSpritesheetManager(g->log, r->indexDir);
     g->animationManager = createAnimationManager(g->log);
     loadAllAnimations(g->animationManager, g->spritesheetManager, r->indexDir);
