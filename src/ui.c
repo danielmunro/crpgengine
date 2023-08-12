@@ -60,8 +60,12 @@ void decayNotifications(NotificationManager *nm, double timeInterval) {
         if (nm->notifications[0] != NULL) {
             nm->notifications[0]->decay--;
             if (nm->notifications[0]->decay == 0) {
+                free(nm->notifications[0]);
                 nm->notifications[0] = NULL;
                 for (int i = 1; i < nm->count + 1; i++) {
+                    if (nm->notifications[i] != NULL) {
+                        nm->notifications[i]->rect.y += 100;
+                    }
                     nm->notifications[i - 1] = nm->notifications[i];
                 }
                 nm->count--;

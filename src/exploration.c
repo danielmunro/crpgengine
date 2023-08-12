@@ -392,12 +392,12 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
 }
 
 void drawNotifications(NotificationManager *nm) {
-    if (nm->notifications[0] != NULL) {
-        drawBlueBox(nm->notifications[0]->rect);
+    for (int i = 0; i < nm->count; i++) {
+        drawBlueBox(nm->notifications[i]->rect);
         DrawText(
-                nm->notifications[0]->message,
-                (int) nm->notifications[0]->rect.x + UI_PADDING_SM,
-                (int) nm->notifications[0]->rect.y + UI_PADDING_SM,
+                nm->notifications[i]->message,
+                (int) nm->notifications[i]->rect.x + UI_PADDING_SM,
+                (int) nm->notifications[i]->rect.y + UI_PADDING_SM,
                 FONT_SIZE, WHITE);
     }
 }
@@ -414,9 +414,8 @@ void drawExplorationView(Exploration *e, Player *p, NotificationManager *nm, Con
     DrawTextureEx(e->renderedLayers[BACKGROUND], offset, 0, SCALE, WHITE);
     DrawTextureEx(e->renderedLayers[MIDGROUND], offset, 0, SCALE, WHITE);
     drawExplorationMobiles(e, p, offset);
-    drawNotifications(nm);
-
     DrawTextureEx(e->renderedLayers[FOREGROUND], offset, 0, SCALE, WHITE);
+    drawNotifications(nm);
     drawExplorationControls(p, c);
     EndDrawing();
 }
