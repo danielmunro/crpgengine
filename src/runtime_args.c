@@ -73,5 +73,9 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
         fprintf(stderr, "indexDir (-i) argument is required\n");
         exit(EXIT_NO_INDEX_DIR);
     }
+    if (r->forceNewGame && r->saveFile != NULL) {
+        fprintf(stderr, "cannot specify -n and -v together\n");
+        exit(EXIT_FORCE_NEW_AND_LOAD_SAVE);
+    }
     return r;
 }

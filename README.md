@@ -45,6 +45,14 @@ Debug arguments:
 
 `-e` -- exit after loading the game. Useful for debugging startup problems.
 
+`-v` -- load a specific save file.
+
+`-n` -- force a new game.
+
+`-m` -- output max memory usage each second.
+
+`-ps` -- purge saves (careful: saves are unrecoverable).
+
 ## Todos
 
 * Finish fight implementation
