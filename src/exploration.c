@@ -391,7 +391,17 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
     }
 }
 
-void drawExplorationView(Exploration *e, Player *p, ControlBlock *c[MAX_ACTIVE_CONTROLS]) {
+void drawNotifications(NotificationManager *nm) {
+    if (nm->notifications[0] != NULL) {
+        drawBlueBox(nm->notifications[0]->rect);
+        DrawText(
+                nm->notifications[0]->message,
+                (int) nm->notifications[0]->rect.x, (int) nm->notifications[0]->rect.y,
+                FONT_SIZE, WHITE);
+    }
+}
+
+void drawExplorationView(Exploration *e, Player *p, NotificationManager *nm, ControlBlock *c[MAX_ACTIVE_CONTROLS]) {
     addDebug(e->log, "exploration -- draw");
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();
@@ -403,6 +413,8 @@ void drawExplorationView(Exploration *e, Player *p, ControlBlock *c[MAX_ACTIVE_C
     DrawTextureEx(e->renderedLayers[BACKGROUND], offset, 0, SCALE, WHITE);
     DrawTextureEx(e->renderedLayers[MIDGROUND], offset, 0, SCALE, WHITE);
     drawExplorationMobiles(e, p, offset);
+    drawNotifications(nm);
+
     DrawTextureEx(e->renderedLayers[FOREGROUND], offset, 0, SCALE, WHITE);
     drawExplorationControls(p, c);
     EndDrawing();

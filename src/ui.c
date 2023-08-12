@@ -3,11 +3,74 @@ typedef struct {
     int cursor;
 } TextBox;
 
+typedef struct {
+    NotificationType type;
+    const char *message;
+    Rectangle rect;
+    int decay;
+} Notification;
+
+typedef struct {
+    Notification **notifications;
+    int count;
+    double timeSinceUpdate;
+} NotificationManager;
+
+NotificationManager *createNotificationManager() {
+    NotificationManager *nm = malloc(sizeof(NotificationManager));
+    nm->notifications = calloc(MAX_NOTIFICATIONS, sizeof(Notification));
+    nm->count = 0;
+    return nm;
+}
+
+Notification *createNotification(NotificationType type, const char *message) {
+    Notification *notification = malloc(sizeof(Notification));
+    notification->type = type;
+    notification->message = &message[0];
+    notification->decay = NOTIFICATION_DECAY_SECONDS;
+    return notification;
+}
+
+void addNotification(NotificationManager *nm, Notification *n) {
+    for (int i = 0; i < MAX_NOTIFICATIONS; i++) {
+        if (nm->notifications[i] == NULL) {
+            n->rect = (Rectangle) {
+                    SCREEN_WIDTH - 300 - UI_PADDING,
+                    SCREEN_HEIGHT - 200 - (100 * i),
+                    300,
+                    60,
+            };
+            nm->notifications[i] = n;
+            nm->count++;
+            return;
+        }
+    }
+}
+
 TextBox *createTextBox(Rectangle area) {
     TextBox *textBox = malloc(sizeof(TextBox));
     textBox->area = area;
     textBox->cursor = 0;
     return textBox;
+}
+
+void decayNotifications(NotificationManager *nm, double timeInterval) {
+    nm->timeSinceUpdate += timeInterval;
+    if (nm->timeSinceUpdate > 1000) {
+        if (nm->notifications[0] != NULL) {
+            nm->notifications[0]->decay--;
+            if (nm->notifications[0]->decay == 0) {
+                nm->notifications[0] = NULL;
+                for (int i = 1; i < nm->count + 1; i++) {
+                    nm->notifications[i - 1] = nm->notifications[i];
+                }
+                nm->count--;
+            }
+        }
+        nm->timeSinceUpdate = 1000 - nm->timeSinceUpdate;
+    } else if (nm->notifications[0] != NULL && nm->notifications[0]->decay <= 2) {
+        nm->notifications[0]->rect.x += (float) (nm->timeSinceUpdate / 100);
+    }
 }
 
 void drawBlueBox(Rectangle rect) {

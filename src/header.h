@@ -37,6 +37,8 @@
 
 #define START_SCENE 0
 
+#define NOTIFICATION_DECAY_SECONDS 5
+
 #define MAX_OBJECTS 255
 #define MAX_SCENES    256
 #define MAX_FILES 256
@@ -71,6 +73,7 @@
 #define MAX_SAVE_FILES 255
 #define MAX_SAVE_NAME 255
 #define MAX_DATETIME_LENGTH 255
+#define MAX_NOTIFICATIONS 64
 
 #define COLLIDE_TYPE_OBJECTS "objects"
 #define COLLIDE_TYPE_PLAYER "player"
@@ -194,6 +197,14 @@ typedef enum {
     QUIT_MENU,
     ACKNOWLEDGE_MENU,
 } MenuType;
+
+typedef enum {
+    RECEIVE_QUEST_ITEM,
+    LOSE_QUEST_ITEM,
+    RECEIVE_EXPERIENCE,
+    RECEIVE_GOLD,
+    LOSE_GOLD,
+} NotificationType;
 
 #define PARTY_MENU_ITEMS "Items"
 #define PARTY_MENU_REARRANGE "Rearrange"

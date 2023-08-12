@@ -19,14 +19,112 @@ typedef struct {
     Menu *menus[MAX_MENUS];
     int menuCount;
     Timing *timing;
+    NotificationManager *notificationManager;
 } Game;
+
+int thenCheck(Game *g, ControlBlock *cb) {
+    Then *then = cb->then[cb->progress];
+    int progress = 0;
+    if (isMovingAndAtDestination(cb)) {
+        addInfo(g->log, "mob at destination, control block proceeding :: %s", then->target->name);
+        progress++;
+    } else if (isAddStoryOutcome(then)) {
+        addStory(g->player, then->story);
+        progress++;
+    } else if (needsToStartMoving(then)) {
+        addInfo(g->log, "mob needs to start moving");
+        addMobileMovement(
+                g->currentScene->exploration,
+                createMobileMovement(
+                        then->target,
+                        then->position
+                )
+        );
+        g->player->engaged = false;
+        getPartyLeader(g->player)->isBeingMoved = true;
+    } else if (isFaceDirectionOutcome(then)) {
+        addInfo(g->log, "set direction for mob :: %s, %s", then->target->name, then->direction);
+        then->target->direction =
+                getDirectionFromString(then->direction);
+        progress++;
+    } else if (needsToChangePosition(then)) {
+        Mobile *target = then->target;
+        target->position = then->position;
+        addInfo(g->log, "change position for mob :: %s, %f, %f",
+                target->name, target->position.x, target->position.y);
+        progress++;
+    } else if (needsToWait(then)) {
+        Mobile *target = then->target;
+        if (target->waitTimer == -1) {
+            addInfo(g->log, "setting initial wait timer");
+            target->waitTimer = then->amount;
+        }
+        struct timeval update;
+        gettimeofday(&update, NULL);
+        if (update.tv_sec > target->lastTimerUpdate.tv_sec) {
+            target->lastTimerUpdate = update;
+            target->waitTimer--;
+            if (target->waitTimer == 0) {
+                addInfo(g->log, "timer done");
+                target->waitTimer = -1;
+                progress++;
+            }
+        }
+    } else if (needsToLock(then)) {
+        Mobile *mob = getPartyLeader(g->player);
+        mob->locked = true;
+        resetMoving(mob);
+        progress++;
+    } else if (needsToUnlock(then)) {
+        Mobile *mob = getPartyLeader(g->player);
+        mob->locked = false;
+        resetMoving(mob);
+        progress++;
+    } else if (needsToSave(then)) {
+        save(g->player, g->currentScene->name, g->runtimeArgs->indexDir);
+        progress++;
+    } else if (needsToReceiveItem(then, getPartyLeader(g->player))) {
+        addInfo(g->log, "player receiving item: %s", then->item);
+        addItem(g->player, findItem(g->itemManager, then->item));
+        const char *message = malloc(64);
+        sprintf((char *)message, "you received %s", then->item);
+        addNotification(g->notificationManager, createNotification(RECEIVE_QUEST_ITEM, message));
+        progress++;
+    }
+    cb->progress += progress;
+    return progress;
+}
+
+int controlThenCheckAllActive(Game *g) {
+    int progress = 0;
+    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
+        if (g->currentScene->activeControlBlocks[i] != NULL) {
+            progress += thenCheck(g, g->currentScene->activeControlBlocks[i]);
+        }
+    }
+    return progress;
+}
+
+void checkControls(Game *g) {
+    addDebug(g->log, "exploration -- check %d control blocks",
+             g->currentScene->controlBlockCount);
+    controlWhenCheck(g->currentScene, g->player, EVENT_GAME_LOOP);
+    controlThenCheckAllActive(g);
+    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
+        if (g->currentScene->activeControlBlocks[i] != NULL &&
+            needsToRemoveActiveControlBlock(g->currentScene->activeControlBlocks[i])) {
+            g->currentScene->activeControlBlocks[i]->progress = 0;
+            g->currentScene->activeControlBlocks[i] = NULL;
+        }
+    }
+}
 
 void proceedControlsUntilDone(Game *g) {
     controlWhenCheck(g->currentScene, g->player, EVENT_SCENE_LOADED);
     bool isMakingProgress = true;
     while (isMakingProgress) {
-        isMakingProgress = controlThenCheckAllActive(g->currentScene, g->player, g->itemManager, g->runtimeArgs->indexDir) > 0;
-        checkControls(g->currentScene, g->player, g->itemManager, g->runtimeArgs->indexDir);
+        isMakingProgress = controlThenCheckAllActive(g) > 0;
+        checkControls(g);
     }
 }
 
@@ -306,12 +404,16 @@ void checkMenuInput(Game *g) {
 
 void doExplorationLoop(Game *g) {
     checkExplorationInput(g);
-    drawExplorationView(g->currentScene->exploration, g->player, g->currentScene->activeControlBlocks);
+    drawExplorationView(
+            g->currentScene->exploration,
+            g->player,
+            g->notificationManager,
+            g->currentScene->activeControlBlocks);
     doMobileMovementUpdates(g->currentScene->exploration);
     processAnimations(g->animationManager);
     evaluateMovement(g->currentScene->exploration, g->player);
     evaluateExits(g);
-    checkControls(g->currentScene, g->player, g->itemManager, g->runtimeArgs->indexDir);
+    checkControls(g);
     checkFights(g->currentScene, g->player);
 }
 
@@ -319,7 +421,7 @@ void doFightLoop(Game *g) {
     checkFightInput(g->currentScene->fight, g->player);
     drawFightView(g->currentScene->encounters, g->currentScene->fight, g->player);
     processFightAnimations();
-    checkControls(g->currentScene, g->player, g->itemManager, g->runtimeArgs->indexDir);
+    checkControls(g);
     checkRemoveFight(g->currentScene);
 }
 
@@ -351,6 +453,7 @@ void stopTiming(Game *g) {
             reportMaxMemory(g->log);
         }
     }
+    decayNotifications(g->notificationManager, timeInterval);
 }
 
 void run(Game *g) {
@@ -509,6 +612,7 @@ Game *createGame(RuntimeArgs *r) {
     loadScenesFromFiles(g);
     setSceneBasedOnSave(g, save);
     g->menuCount = getMenuList(g->menus);
+    g->notificationManager = createNotificationManager();
     addDebug(g->log, "done creating game object");
     free(save);
     return g;

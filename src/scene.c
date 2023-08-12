@@ -94,85 +94,6 @@ void addStoryline(Scene *scene, StorylineData *storyline) {
     scene->storylineCount++;
 }
 
-int thenCheck(Scene *s, Player *p, ControlBlock *cb, ItemManager *itemManager, const char *indexDir) {
-    Then *then = cb->then[cb->progress];
-    int progress = 0;
-    if (isMovingAndAtDestination(cb)) {
-        addInfo(s->log, "mob at destination, control block proceeding :: %s", then->target->name);
-        progress++;
-    } else if (isAddStoryOutcome(then)) {
-        addStory(p, then->story);
-        progress++;
-    } else if (needsToStartMoving(then)) {
-        addInfo(s->log, "mob needs to start moving");
-        addMobileMovement(
-                s->exploration,
-                createMobileMovement(
-                        then->target,
-                        then->position
-                )
-        );
-        p->engaged = false;
-        getPartyLeader(p)->isBeingMoved = true;
-    } else if (isFaceDirectionOutcome(then)) {
-        addInfo(s->log, "set direction for mob :: %s, %s", then->target->name, then->direction);
-        then->target->direction =
-                getDirectionFromString(then->direction);
-        progress++;
-    } else if (needsToChangePosition(then)) {
-        Mobile *target = then->target;
-        target->position = then->position;
-        addInfo(s->log, "change position for mob :: %s, %f, %f",
-                target->name, target->position.x, target->position.y);
-        progress++;
-    } else if (needsToWait(then)) {
-        Mobile *target = then->target;
-        if (target->waitTimer == -1) {
-            addInfo(s->log, "setting initial wait timer");
-            target->waitTimer = then->amount;
-        }
-        struct timeval update;
-        gettimeofday(&update, NULL);
-        if (update.tv_sec > target->lastTimerUpdate.tv_sec) {
-            target->lastTimerUpdate = update;
-            target->waitTimer--;
-            if (target->waitTimer == 0) {
-                addInfo(s->log, "timer done");
-                target->waitTimer = -1;
-                progress++;
-            }
-        }
-    } else if (needsToLock(then)) {
-        Mobile *mob = getPartyLeader(p);
-        mob->locked = true;
-        resetMoving(mob);
-        progress++;
-    } else if (needsToUnlock(then)) {
-        Mobile *mob = getPartyLeader(p);
-        mob->locked = false;
-        resetMoving(mob);
-        progress++;
-    } else if (needsToSave(then)) {
-        save(p, s->name, indexDir);
-        progress++;
-    } else if (needsToReceiveItem(then, getPartyLeader(p))) {
-        addItem(p, findItem(itemManager, then->item));
-        progress++;
-    }
-    cb->progress += progress;
-    return progress;
-}
-
-int controlThenCheckAllActive(Scene *s, Player *p, ItemManager *itemManager, const char *indexDir) {
-    int progress = 0;
-    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
-        if (s->activeControlBlocks[i] != NULL) {
-            progress += thenCheck(s, p, s->activeControlBlocks[i], itemManager, indexDir);
-        }
-    }
-    return progress;
-}
-
 bool isAlreadyAdded(ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS], ControlBlock *controlBlock) {
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (controlBlocks[i] == controlBlock) {
@@ -200,19 +121,6 @@ bool canTriggerFight(Scene *s, Player *p) {
         return false;
     }
     return true;
-}
-
-void checkControls(Scene *s, Player *p, ItemManager *itemManager, const char *indexDir) {
-    addDebug(s->log, "exploration -- check %d control blocks", s->controlBlockCount);
-    controlWhenCheck(s, p, EVENT_GAME_LOOP);
-    controlThenCheckAllActive(s, p, itemManager, indexDir);
-    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
-        if (s->activeControlBlocks[i] != NULL &&
-                needsToRemoveActiveControlBlock(s->activeControlBlocks[i])) {
-            s->activeControlBlocks[i]->progress = 0;
-            s->activeControlBlocks[i] = NULL;
-        }
-    }
 }
 
 void checkFights(Scene *s, Player *p) {
