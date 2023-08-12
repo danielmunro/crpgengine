@@ -483,43 +483,6 @@ Scene *findScene(Game *g, const char *name) {
     return NULL;
 }
 
-const char *getAutosaveFile(const char *indexDir) {
-    const char *autosaveFilePath = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *)autosaveFilePath, "%s/_saves/autosave.yaml", indexDir);
-    return autosaveFilePath;
-}
-
-Player *mapSaveDataToPlayer(Game *g, SaveData *save) {
-    Mobile *mobs[MAX_PARTY_SIZE];
-    addInfo(g->log, "save file party count :: %d", save->player->party_count);
-    for (int i = 0; i < save->player->party_count; i++) {
-        Animation *animations[MAX_ANIMATIONS];
-        loadAnimationsByName(g->animationManager, save->player->party[i].animations, animations);
-        mobs[i] = createMobile(
-                save->player->party[i].id,
-                save->player->party[i].name,
-                getPositionFromString(save->player->party[i].position),
-                getDirectionFromString(save->player->party[i].direction),
-                animations);
-        mobs[i]->attributes = createAttributesFromData(save->player->party[i].attributes);
-    }
-    for (int i = save->player->party_count; i < MAX_PARTY_SIZE; i++) {
-        mobs[i] = NULL;
-    }
-    Player *p = createPlayer(
-            g->log,
-            mobs,
-            save->player->coins,
-            save->player->experience,
-            save->player->level,
-            save->player->secondsPlayed,
-            save->player->storylines,
-            save->player->storylines_count,
-            save->player->items,
-            save->player->items_count);
-    return p;
-}
-
 SaveData *initializePlayer(Game *g) {
     char saveFilePath[MAX_FS_PATH_LENGTH];
     if (g->runtimeArgs->saveFile != NULL) {
@@ -530,7 +493,7 @@ SaveData *initializePlayer(Game *g) {
     SaveData *save = NULL;
     if (FileExists(saveFilePath) && !g->runtimeArgs->forceNewGame) {
         save = loadSaveData(saveFilePath);
-        g->player = mapSaveDataToPlayer(g, save);
+        g->player = mapSaveDataToPlayer(g->animationManager, g->log, save);
     } else {
         g->player = createNewPlayer(g->log, g->animationManager, g->runtimeArgs->indexDir);
         addItem(g->player, g->itemManager->items[0]);

@@ -146,37 +146,6 @@ Scene *loadScene(
     return scene;
 }
 
-Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
-    addInfo(log, "loading player from dir %s", indexDir);
-    Animation *animations[MAX_ANIMATIONS];
-    loadAnimationsByName(am, "fireas", animations);
-    Mobile *mobiles[MAX_PARTY_SIZE] = {
-            createMobile(
-                    "player",
-                    "Fireas",
-                    (Vector2) {429, 252},
-                    DOWN,
-                    animations),
-            NULL,
-            NULL,
-            NULL,
-    };
-    const char **storylines = malloc(sizeof(char **));
-    PlayerItemData *items = calloc(MAX_ITEMS, sizeof(PlayerItemData));
-    Player *p = createPlayer(
-            log,
-            mobiles,
-            0,
-            getExperienceToLevel(1),
-            1,
-            0,
-            storylines,
-            0,
-            items,
-            0);
-    return p;
-}
-
 AudioManager *loadAudioManager(Log *log, const char *indexDir) {
     addInfo(log, "load audio manager from dir '%s'", indexDir);
     AudioManager *am = createAudioManager(log);

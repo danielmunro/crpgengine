@@ -166,3 +166,9 @@ double reportMaxMemory(Log *log) {
     addInfo(log, "max memory: %f\n", memoryInMb);
     return memoryInMb;
 }
+
+const char *getAutosaveFile(const char *indexDir) {
+    const char *autosaveFilePath = malloc(MAX_FS_PATH_LENGTH);
+    sprintf((char *)autosaveFilePath, "%s/_saves/autosave.yaml", indexDir);
+    return autosaveFilePath;
+}

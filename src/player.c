@@ -259,3 +259,65 @@ bool hasStory(Player *p, const char *story) {
     addDebug(p->log, "player does not have story: %s", story);
     return false;
 }
+
+
+Player *mapSaveDataToPlayer(AnimationManager *am, Log *log, SaveData *save) {
+    Mobile *mobs[MAX_PARTY_SIZE];
+    addInfo(log, "save file party count :: %d", save->player->party_count);
+    for (int i = 0; i < save->player->party_count; i++) {
+        Animation *animations[MAX_ANIMATIONS];
+        loadAnimationsByName(am, save->player->party[i].animations, animations);
+        mobs[i] = createMobile(
+                save->player->party[i].id,
+                save->player->party[i].name,
+                getPositionFromString(save->player->party[i].position),
+                getDirectionFromString(save->player->party[i].direction),
+                animations);
+        mobs[i]->attributes = createAttributesFromData(save->player->party[i].attributes);
+    }
+    for (int i = save->player->party_count; i < MAX_PARTY_SIZE; i++) {
+        mobs[i] = NULL;
+    }
+    return createPlayer(
+            log,
+            mobs,
+            save->player->coins,
+            save->player->experience,
+            save->player->level,
+            save->player->secondsPlayed,
+            save->player->storylines,
+            save->player->storylines_count,
+            save->player->items,
+            save->player->items_count);
+}
+
+Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
+    addInfo(log, "loading player from dir %s", indexDir);
+    Animation *animations[MAX_ANIMATIONS];
+    loadAnimationsByName(am, "fireas", animations);
+    Mobile *mobiles[MAX_PARTY_SIZE] = {
+            createMobile(
+                    "player",
+                    "Fireas",
+                    (Vector2) {429, 252},
+                    DOWN,
+                    animations),
+            NULL,
+            NULL,
+            NULL,
+    };
+    const char **storylines = malloc(sizeof(char **));
+    PlayerItemData *items = calloc(MAX_ITEMS, sizeof(PlayerItemData));
+    Player *p = createPlayer(
+            log,
+            mobiles,
+            0,
+            getExperienceToLevel(1),
+            1,
+            0,
+            storylines,
+            0,
+            items,
+            0);
+    return p;
+}
