@@ -307,6 +307,7 @@ const char *Events[MAX_EVENTS] = {
 #include "tilemap_xmlreader.c"
 #include "xmlparser.c"
 #include "db.c"
+#include "timing.c"
 #include "game.c"
 #include "validate.c"
 #include "dump.c"

@@ -1,10 +1,4 @@
 typedef struct {
-    struct timeval start;
-    double elapsedTime;
-    double timeInterval;
-} Timing;
-
-typedef struct {
     RuntimeArgs *runtimeArgs;
     Scene *scenes[MAX_SCENES];
     int sceneCount;
@@ -415,26 +409,6 @@ void doInGameMenuLoop(Game *g) {
     checkMenuInput(g);
 }
 
-void startTiming(Timing *t) {
-    gettimeofday(&t->start, NULL);
-}
-
-void stopTiming(Game *g) {
-    struct timeval end;
-    gettimeofday(&end, NULL);
-    double timeInterval = (double) (end.tv_sec - g->timing->start.tv_sec) * 1000.0;
-    timeInterval += (end.tv_usec - g->timing->start.tv_usec) / 1000.0;
-    g->timing->elapsedTime += timeInterval;
-    if (g->timing->elapsedTime > 1000.0) {
-        g->timing->elapsedTime -= 1000.0;
-        g->player->secondsPlayed += 1;
-        if (g->runtimeArgs->logMemory) {
-            reportMaxMemory(g->log);
-        }
-    }
-    decayNotifications(g->notificationManager, timeInterval);
-}
-
 void run(Game *g) {
     while (!WindowShouldClose()) {
         startTiming(g->timing);
@@ -446,7 +420,7 @@ void run(Game *g) {
             doExplorationLoop(g);
         }
         updateMusicStream(g->audioManager);
-        stopTiming(g);
+        stopTiming(g->timing);
     }
 }
 
@@ -515,7 +489,6 @@ Game *createGame(RuntimeArgs *r) {
     g->runtimeArgs = r;
     g->currentScene = NULL;
     initializeLog(g);
-    g->timing = malloc(sizeof(Timing));
     g->spritesheetManager = loadSpritesheetManager(g->log, r->indexDir);
     g->animationManager = createAnimationManager(g->log);
     loadAllAnimations(g->animationManager, g->spritesheetManager, r->indexDir);
@@ -528,6 +501,7 @@ Game *createGame(RuntimeArgs *r) {
     setSceneBasedOnSave(g, save);
     g->menuCount = getMenuList(g->menus);
     g->notificationManager = createNotificationManager();
+    g->timing = createTiming(g->log, g->notificationManager, g->player, g->runtimeArgs->logMemory);
     addDebug(g->log, "done creating game object");
     free(save);
     return g;
