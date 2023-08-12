@@ -10,7 +10,6 @@ typedef struct {
 
 ControlManager *createControlManager(
         Log *log,
-        Scene *scene,
         Player *player,
         RuntimeArgs *runtimeArgs,
         ItemManager *itemManager,
@@ -18,12 +17,12 @@ ControlManager *createControlManager(
         MobileManager *mobileManager) {
     ControlManager *cm = malloc(sizeof(ControlManager));
     cm->log = log;
-    cm->scene = scene;
     cm->player = player;
     cm->runtimeArgs = runtimeArgs;
     cm->itemManager = itemManager;
     cm->notificationManager = notificationManager;
     cm->mobileManager = mobileManager;
+    cm->scene = NULL;
     return cm;
 }
 

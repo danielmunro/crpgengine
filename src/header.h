@@ -309,6 +309,7 @@ const char *Events[MAX_EVENTS] = {
 #include "db.c"
 #include "timing.c"
 #include "control_manager.c"
+#include "scene_manager.c"
 #include "game.c"
 #include "validate.c"
 #include "dump.c"

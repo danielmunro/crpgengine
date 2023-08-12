@@ -16,27 +16,6 @@ typedef struct {
     MobileManager *mobileManager;
 } Game;
 
-void setScene(Game *g, Scene *scene, char *entranceName) {
-    addInfo(g->log, "setting scene to '%s'", scene->name);
-    if (g->sceneManager->currentScene != NULL) {
-        unloadLayers(g->sceneManager->currentScene->exploration);
-    }
-    g->sceneManager->currentScene = scene;
-    g->controlManager->scene = scene;
-    clearAnimations(g->animationManager);
-    Mobile *mob = getPartyLeader(g->player);
-    addAllAnimations(g->animationManager, mob->animations);
-    if (entranceName != NULL) {
-        Entrance *entrance = findEntrance(scene->exploration, entranceName);
-        addDebug(g->log, "set position from scene entrance :: %s", entrance->name);
-        useEntrance(mob, entrance);
-    }
-    addDebug(g->log, "player position :: %f %f", mob->position.x, mob->position.y);
-    renderExplorationLayers(g->sceneManager->currentScene->exploration);
-    playMusic(g->audioManager, g->sceneManager->currentScene->music);
-    proceedControlsUntilDone(g->controlManager);
-}
-
 void loadScenes(Game *g, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SCENES]) {
     addDebug(g->log, "attempting to load scenes");
     for (int i = 0; i < g->sceneManager->count; i++) {
@@ -77,7 +56,7 @@ void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
             entrance->area.x,
             entrance->area.y
     };
-    setScene(game, scene, entrance->name);
+    setScene(game->sceneManager, scene, game->player, entrance->name);
 }
 
 void evaluateExits(Game *g) {
@@ -280,10 +259,10 @@ SaveData *initializePlayer(Game *g) {
 
 void setSceneBasedOnSave(Game *g, SaveData *save) {
     if (save != NULL && g->runtimeArgs->sceneIndex == -1) {
-        setScene(g, findScene(g, save->scene), NULL);
+        setScene(g->sceneManager, findScene(g, save->scene), g->player, NULL);
         return;
     }
-    setScene(g, g->sceneManager->scenes[START_SCENE], START_ENTRANCE);
+    setScene(g->sceneManager, g->sceneManager->scenes[START_SCENE], g->player, START_ENTRANCE);
 }
 
 Game *createGame(RuntimeArgs *r) {
@@ -302,17 +281,17 @@ Game *createGame(RuntimeArgs *r) {
     g->menuCount = getMenuList(g->menus);
     g->notificationManager = createNotificationManager();
     g->timing = createTiming(g->log, g->notificationManager, g->player, g->runtimeArgs->logMemory);
-    g->sceneManager = createSceneManager(g->log);
     g->controlManager = createControlManager(
             g->log,
-            g->sceneManager->currentScene,
             g->player,
             g->runtimeArgs,
             g->itemManager,
             g->notificationManager,
             g->mobileManager);
+    g->sceneManager = createSceneManager(g->log, g->controlManager, g->animationManager, g->audioManager);
     loadScenesFromFiles(g);
     setSceneBasedOnSave(g, save);
+    g->controlManager->scene = g->sceneManager->currentScene;
     addDebug(g->log, "done creating game object");
     free(save);
     return g;
