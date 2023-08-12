@@ -14,113 +14,9 @@ typedef struct {
     int menuCount;
     Timing *timing;
     NotificationManager *notificationManager;
+    ControlManager *controlManager;
+    MobileManager *mobileManager;
 } Game;
-
-int thenCheck(Game *g, ControlBlock *cb) {
-    Then *then = cb->then[cb->progress];
-    int progress = 0;
-    if (isMovingAndAtDestination(cb)) {
-        addInfo(g->log, "mob at destination, control block proceeding :: %s", then->target->name);
-        progress++;
-    } else if (isAddStoryOutcome(then)) {
-        addStory(g->player, then->story);
-        progress++;
-    } else if (needsToStartMoving(then)) {
-        addInfo(g->log, "mob needs to start moving");
-        addMobileMovement(
-                g->currentScene->exploration,
-                createMobileMovement(
-                        then->target,
-                        then->position
-                )
-        );
-        g->player->engaged = false;
-        getPartyLeader(g->player)->isBeingMoved = true;
-    } else if (isFaceDirectionOutcome(then)) {
-        addInfo(g->log, "set direction for mob :: %s, %s", then->target->name, then->direction);
-        then->target->direction =
-                getDirectionFromString(then->direction);
-        progress++;
-    } else if (needsToChangePosition(then)) {
-        Mobile *target = then->target;
-        target->position = then->position;
-        addInfo(g->log, "change position for mob :: %s, %f, %f",
-                target->name, target->position.x, target->position.y);
-        progress++;
-    } else if (needsToWait(then)) {
-        Mobile *target = then->target;
-        if (target->waitTimer == -1) {
-            addInfo(g->log, "setting initial wait timer");
-            target->waitTimer = then->amount;
-        }
-        struct timeval update;
-        gettimeofday(&update, NULL);
-        if (update.tv_sec > target->lastTimerUpdate.tv_sec) {
-            target->lastTimerUpdate = update;
-            target->waitTimer--;
-            if (target->waitTimer == 0) {
-                addInfo(g->log, "timer done");
-                target->waitTimer = -1;
-                progress++;
-            }
-        }
-    } else if (needsToLock(then)) {
-        Mobile *mob = getPartyLeader(g->player);
-        mob->locked = true;
-        resetMoving(mob);
-        progress++;
-    } else if (needsToUnlock(then)) {
-        Mobile *mob = getPartyLeader(g->player);
-        mob->locked = false;
-        resetMoving(mob);
-        progress++;
-    } else if (needsToSave(then)) {
-        save(g->player, g->currentScene->name, g->runtimeArgs->indexDir);
-        progress++;
-    } else if (needsToReceiveItem(then, getPartyLeader(g->player))) {
-        addInfo(g->log, "player receiving item: %s", then->item);
-        addItem(g->player, findItem(g->itemManager, then->item));
-        const char *message = malloc(64);
-        sprintf((char *)message, "you received:\n%s", then->item);
-        addNotification(g->notificationManager, createNotification(RECEIVE_QUEST_ITEM, message));
-        progress++;
-    }
-    cb->progress += progress;
-    return progress;
-}
-
-int controlThenCheckAllActive(Game *g) {
-    int progress = 0;
-    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
-        if (g->currentScene->activeControlBlocks[i] != NULL) {
-            progress += thenCheck(g, g->currentScene->activeControlBlocks[i]);
-        }
-    }
-    return progress;
-}
-
-void checkControls(Game *g) {
-    addDebug(g->log, "exploration -- check %d control blocks",
-             g->currentScene->controlBlockCount);
-    controlWhenCheck(g->currentScene, g->player, EVENT_GAME_LOOP);
-    controlThenCheckAllActive(g);
-    for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
-        if (g->currentScene->activeControlBlocks[i] != NULL &&
-            needsToRemoveActiveControlBlock(g->currentScene->activeControlBlocks[i])) {
-            g->currentScene->activeControlBlocks[i]->progress = 0;
-            g->currentScene->activeControlBlocks[i] = NULL;
-        }
-    }
-}
-
-void proceedControlsUntilDone(Game *g) {
-    controlWhenCheck(g->currentScene, g->player, EVENT_SCENE_LOADED);
-    bool isMakingProgress = true;
-    while (isMakingProgress) {
-        isMakingProgress = controlThenCheckAllActive(g) > 0;
-        checkControls(g);
-    }
-}
 
 void setScene(Game *g, Scene *scene, char *entranceName) {
     addInfo(g->log, "setting scene to '%s'", scene->name);
@@ -128,6 +24,7 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
         unloadLayers(g->currentScene->exploration);
     }
     g->currentScene = scene;
+    g->controlManager->scene = scene;
     clearAnimations(g->animationManager);
     Mobile *mob = getPartyLeader(g->player);
     addAllAnimations(g->animationManager, mob->animations);
@@ -139,99 +36,7 @@ void setScene(Game *g, Scene *scene, char *entranceName) {
     addDebug(g->log, "player position :: %f %f", mob->position.x, mob->position.y);
     renderExplorationLayers(g->currentScene->exploration);
     playMusic(g->audioManager, g->currentScene->music);
-    proceedControlsUntilDone(g);
-}
-
-Mobile *findMobById(Game *g, const char *id) {
-    for (int s = 0; s < g->sceneCount; s++) {
-        for (int m = 0; m < g->scenes[s]->exploration->mobileCount; m++) {
-            if (strcmp(g->scenes[s]->exploration->mobiles[m]->id, id) == 0) {
-                return g->scenes[s]->exploration->mobiles[m];
-            }
-        }
-    }
-    addError(g->log, "mob not found: %s", id);
-    exit(EXIT_MOBILE_NOT_FOUND);
-}
-
-When *mapWhen(Game *g, Scene *s, WhenData wd) {
-    Mobile *trigger = NULL;
-    Mobile *mob = getPartyLeader(g->player);
-    ArriveAt *arriveAt = NULL;
-    if (wd.mob != NULL) {
-        trigger = findMobById(g, wd.mob);
-        addDebug(g->log, "mobile trigger is '%s'", trigger->name);
-    }
-    if (wd.arriveAt != NULL) {
-        Exploration *e = s->exploration;
-        for (int i = 0; i < e->arriveAtCount; i++) {
-            if (strcmp(e->arriveAt[i]->name, wd.arriveAt) == 0) {
-                arriveAt = e->arriveAt[i];
-                break;
-            }
-        }
-    }
-    Condition c = mapCondition(wd.condition);
-    addDebug(g->log, "condition: %s, mapped to: %d, story: %s",
-             wd.condition,
-             c,
-             wd.story);
-    return createWhen(
-            mob,
-            trigger,
-            c,
-            wd.story,
-            arriveAt);
-}
-
-Then *mapThen(Game *g, ThenData td) {
-    Mobile *target;
-    Mobile *mob = getPartyLeader(g->player);
-    if (td.player) {
-        target = mob;
-    } else {
-        target = findMobById(g, td.mob);
-    }
-    Vector2 pos;
-    if (td.position != NULL) {
-        pos = getPositionFromString(td.position);
-    } else {
-        pos = (Vector2){0,0};
-    }
-    int amount = 0;
-    if (hasAmountProperty(td)) {
-        amount = td.amount;
-    }
-    Outcome o = mapOutcome(td.action);
-    addDebug(g->log, "then story is '%s', outcome: %d, message: %s",
-             td.story, o, td.message);
-    return createThen(
-            target,
-            &td.message[0],
-            &td.story[0],
-            &td.direction[0],
-            &td.item[0],
-            o,
-            pos,
-            td.parallel,
-            amount
-    );
-}
-
-ControlBlock *mapStorylineToControlBlock(Game *g, Scene *scene, StorylineData *storyline) {
-    ControlBlock *c = createControlBlock();
-    c->whenCount = storyline->when_count;
-    c->thenCount = storyline->then_count;
-    addDebug(g->log, "processing storyline with %d when and %d then clauses",
-             storyline->when_count, storyline->then_count);
-    for (int i = 0; i < storyline->when_count; i++) {
-        c->when[i] = mapWhen(g, scene, storyline->when[i]);
-    }
-    for (int i = 0; i < storyline->then_count; i++) {
-        c->then[i] = mapThen(g, storyline->then[i]);
-    }
-    addDebug(g->log, "done processing when/then clauses");
-    return c;
+    proceedControlsUntilDone(g->controlManager);
 }
 
 void loadScenes(Game *g, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SCENES]) {
@@ -239,7 +44,7 @@ void loadScenes(Game *g, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SC
     for (int i = 0; i < g->sceneCount; i++) {
         g->scenes[i] = loadScene(
                 g->log,
-                g->animationManager,
+                g->mobileManager,
                 g->beastiary,
                 g->runtimeArgs->indexDir,
                 scenes[i],
@@ -251,7 +56,8 @@ void loadScenes(Game *g, char *scenes[MAX_SCENES], char *sceneDirectories[MAX_SC
         addDebug(g->log, "scene storyline count :: %s -- %d",
                  g->scenes[i]->name, g->scenes[i]->storylineCount);
         for (int c = 0; c < g->scenes[i]->storylineCount; c++) {
-            g->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(g, g->scenes[i], g->scenes[i]->storylines[c]);
+            g->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(
+                    g->controlManager, g->scenes[i], g->scenes[i]->storylines[c]);
             g->scenes[i]->controlBlockCount++;
         }
     }
@@ -386,7 +192,7 @@ void doExplorationLoop(Game *g) {
     processAnimations(g->animationManager);
     evaluateMovement(g->currentScene->exploration, g->player);
     evaluateExits(g);
-    checkControls(g);
+    checkControls(g->controlManager);
     checkFights(g->currentScene, g->player);
 }
 
@@ -394,7 +200,7 @@ void doFightLoop(Game *g) {
     checkFightInput(g->currentScene->fight, g->player);
     drawFightView(g->currentScene->encounters, g->currentScene->fight, g->player);
     processFightAnimations();
-    checkControls(g);
+    checkControls(g->controlManager);
     checkRemoveFight(g->currentScene);
 }
 
@@ -468,6 +274,12 @@ SaveData *initializePlayer(Game *g) {
         addItem(g->player, g->itemManager->items[0]);
     }
     g->player->saveFiles = getSaveFiles(g->runtimeArgs->indexDir);
+    for (int i = 0; i < MAX_PARTY_SIZE; i++) {
+        if (g->player->party[i] == NULL) {
+            break;
+        }
+        addMobileToManager(g->mobileManager, g->player->party[i]);
+    }
     return save;
 }
 
@@ -490,12 +302,21 @@ Game *createGame(RuntimeArgs *r) {
     initializeBeasts(g);
     g->itemManager = createItemManager();
     loadAllItems(g->itemManager, r->indexDir);
+    g->mobileManager = createMobileManager(g->log, g->animationManager);
     SaveData *save = initializePlayer(g);
-    loadScenesFromFiles(g);
-    setSceneBasedOnSave(g, save);
     g->menuCount = getMenuList(g->menus);
     g->notificationManager = createNotificationManager();
     g->timing = createTiming(g->log, g->notificationManager, g->player, g->runtimeArgs->logMemory);
+    g->controlManager = createControlManager(
+            g->log,
+            g->currentScene,
+            g->player,
+            g->runtimeArgs,
+            g->itemManager,
+            g->notificationManager,
+            g->mobileManager);
+    loadScenesFromFiles(g);
+    setSceneBasedOnSave(g, save);
     addDebug(g->log, "done creating game object");
     free(save);
     return g;

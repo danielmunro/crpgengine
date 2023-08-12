@@ -24,7 +24,7 @@ void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *fi
     free(animation);
 }
 
-void loadMobiles(AnimationManager *am, Scene *scene, const char *sceneDirectory) {
+void loadMobiles(MobileManager *mm, Scene *scene, const char *sceneDirectory) {
     char directory[MAX_FS_PATH_LENGTH];
     sprintf(directory, "%s/mobiles", sceneDirectory);
     addInfo(scene->log, "load mobiles from %s", directory);
@@ -39,9 +39,10 @@ void loadMobiles(AnimationManager *am, Scene *scene, const char *sceneDirectory)
         sprintf(filePath, "%s/%s", directory, &mobFiles[i][0]);
         MobileData *mobData = loadMobYaml(filePath);
         Animation *animations[MAX_ANIMATIONS];
-        loadAnimationsByName(am, mobData->animations, animations);
+        loadAnimationsByName(mm->animationManager, mobData->animations, animations);
         Mobile *mob = createMobileFromData(mobData, animations);
-        addMobile(scene->exploration, mob);
+        addMobileToManager(mm, mob);
+        addMobileToExploration(scene->exploration, mob);
         free(filePath);
         free(mobData);
     }
@@ -106,7 +107,7 @@ void loadStorylines(Scene *s, const char *sceneDirectory) {
 
 Scene *loadScene(
         Log *log,
-        AnimationManager *am,
+        MobileManager *mm,
         Beastiary *beastiary,
         const char *indexDir,
         char *sceneName,
@@ -134,7 +135,7 @@ Scene *loadScene(
     parseSceneXml(tilemapXmlReader, mapDirectory);
 
     // load mobiles
-    loadMobiles(am, scene, sceneDirectory);
+    loadMobiles(mm, scene, sceneDirectory);
 
     if (sceneData->encounters != NULL) {
         loadEncounters(beastiary, scene, sceneData->encounters, indexDir);

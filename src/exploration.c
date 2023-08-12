@@ -420,7 +420,7 @@ void drawExplorationView(Exploration *e, Player *p, NotificationManager *nm, Con
     EndDrawing();
 }
 
-void addMobile(Exploration *exploration, Mobile *mob) {
+void addMobileToExploration(Exploration *exploration, Mobile *mob) {
     exploration->mobiles[exploration->mobileCount] = mob;
     exploration->mobileCount++;
 }

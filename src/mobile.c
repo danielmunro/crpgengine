@@ -15,6 +15,22 @@ typedef struct {
     bool locked;
 } Mobile;
 
+typedef struct {
+    Log *log;
+    AnimationManager *animationManager;
+    Mobile **mobiles;
+    int count;
+} MobileManager;
+
+MobileManager *createMobileManager(Log *log, AnimationManager *am) {
+    MobileManager *m = malloc(sizeof(MobileManager));
+    m->log = log;
+    m->animationManager = am;
+    m->mobiles = calloc(MAX_MOBILES, sizeof(Mobile));
+    m->count = 0;
+    return m;
+}
+
 Animation *getMobAnimation(Mobile *mob) {
     return findAnimation(mob->animations, mob->direction);
 }
@@ -51,6 +67,21 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
             getDirectionFromString(data->direction),
             animations);
     return mob;
+}
+
+void *addMobileToManager(MobileManager *mm, Mobile *mob) {
+    mm->mobiles[mm->count] = mob;
+    mm->count++;
+}
+
+Mobile *findMobById(MobileManager *mm, const char *id) {
+    for (int i = 0; i < mm->count; i++) {
+        if (strcmp(mm->mobiles[i]->id, id) == 0) {
+            return mm->mobiles[i];
+        }
+    }
+    addError(mm->log, "mob not found: %s", id);
+    exit(EXIT_MOBILE_NOT_FOUND);
 }
 
 void resetMoving(Mobile *mob) {
