@@ -207,6 +207,7 @@ typedef enum {
     RECEIVE_EXPERIENCE,
     RECEIVE_GOLD,
     LOSE_GOLD,
+    SAVED,
 } NotificationType;
 
 #define PARTY_MENU_ITEMS "Items"

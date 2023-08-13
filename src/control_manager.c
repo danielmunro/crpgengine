@@ -86,6 +86,9 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         progress++;
     } else if (needsToSave(then)) {
         save(cm->player, cm->scene->name, cm->runtimeArgs->indexDir);
+        addNotification(
+                cm->notificationManager,
+                createNotification(SAVED, "Your game has been saved."));
         progress++;
     } else if (needsToReceiveItem(then, getPartyLeader(cm->player))) {
         addInfo(cm->log, "player receiving item: %s", then->item);
