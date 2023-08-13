@@ -29,8 +29,8 @@
 #define FONT_SIZE 20
 #define FONT_CHARACTER_WIDTH 11
 #define LINE_HEIGHT 30
-#define UI_PADDING 20
-#define UI_PADDING_SM 5
+#define UI_PADDING 8
+#define MENU_BAR_WIDTH 4
 
 #define MAX_BUFFER 1024
 
