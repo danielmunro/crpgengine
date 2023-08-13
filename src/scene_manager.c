@@ -2,7 +2,7 @@ typedef struct {
     Log *log;
     Scene **scenes;
     int count;
-    Scene *currentScene;
+    Scene *current;
     ControlManager *controlManager;
     AnimationManager *animationManager;
     AudioManager *audioManager;
@@ -11,7 +11,7 @@ typedef struct {
 SceneManager *createSceneManager(Log *log, ControlManager *cm, AnimationManager *anManager, AudioManager *auManager) {
     SceneManager *sceneManager = malloc(sizeof(SceneManager));
     sceneManager->log = log;
-    sceneManager->currentScene = NULL;
+    sceneManager->current = NULL;
     sceneManager->scenes = calloc(MAX_SCENES, sizeof(Scene));
     sceneManager->controlManager = cm;
     sceneManager->animationManager = anManager;
@@ -21,10 +21,10 @@ SceneManager *createSceneManager(Log *log, ControlManager *cm, AnimationManager 
 
 void setScene(SceneManager *sm, Scene *scene, Player *player, char *entranceName) {
     addInfo(sm->log, "setting scene to '%s'", scene->name);
-    if (sm->currentScene != NULL) {
-        unloadLayers(sm->currentScene->exploration);
+    if (sm->current != NULL) {
+        unloadLayers(sm->current->exploration);
     }
-    sm->currentScene = scene;
+    sm->current = scene;
     sm->controlManager->scene = scene;
     clearAnimations(sm->animationManager);
     Mobile *mob = getPartyLeader(player);
@@ -35,8 +35,8 @@ void setScene(SceneManager *sm, Scene *scene, Player *player, char *entranceName
         useEntrance(mob, entrance);
     }
     addDebug(sm->log, "player position :: %f %f", mob->position.x, mob->position.y);
-    renderExplorationLayers(sm->currentScene->exploration);
-    playMusic(sm->audioManager, sm->currentScene->music);
+    renderExplorationLayers(sm->current->exploration);
+    playMusic(sm->audioManager, sm->current->music);
     proceedControlsUntilDone(sm->controlManager);
 }
 
