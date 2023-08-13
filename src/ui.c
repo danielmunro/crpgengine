@@ -3,52 +3,6 @@ typedef struct {
     int cursor;
 } TextBox;
 
-typedef struct {
-    NotificationType type;
-    const char *message;
-    Rectangle rect;
-    int decay;
-} Notification;
-
-typedef struct {
-    Notification **notifications;
-    int count;
-    double timeSinceUpdate;
-    float slideDown;
-} NotificationManager;
-
-NotificationManager *createNotificationManager() {
-    NotificationManager *nm = malloc(sizeof(NotificationManager));
-    nm->notifications = calloc(MAX_NOTIFICATIONS, sizeof(Notification));
-    nm->count = 0;
-    nm->slideDown = 0;
-    return nm;
-}
-
-Notification *createNotification(NotificationType type, const char *message) {
-    Notification *notification = malloc(sizeof(Notification));
-    notification->type = type;
-    notification->message = &message[0];
-    notification->decay = NOTIFICATION_DECAY_SECONDS;
-    return notification;
-}
-
-void addNotification(NotificationManager *nm, Notification *n) {
-    for (int i = 0; i < MAX_NOTIFICATIONS; i++) {
-        if (nm->notifications[i] == NULL) {
-            n->rect = (Rectangle) {
-                    SCREEN_WIDTH - 300 - UI_PADDING,
-                    SCREEN_HEIGHT - 200 - (80 * i),
-                    300,
-                    NOTIFICATION_HEIGHT,
-            };
-            nm->notifications[i] = n;
-            nm->count++;
-            return;
-        }
-    }
-}
-
 TextBox *createTextBox(Rectangle area) {
     TextBox *textBox = malloc(sizeof(TextBox));
     textBox->area = area;
@@ -56,41 +10,11 @@ TextBox *createTextBox(Rectangle area) {
     return textBox;
 }
 
-void decayNotifications(NotificationManager *nm, double timeInterval) {
-    nm->timeSinceUpdate += timeInterval;
-    if (nm->timeSinceUpdate > 1000) {
-        if (nm->notifications[0] != NULL) {
-            nm->notifications[0]->decay--;
-            if (nm->notifications[0]->decay == 0) {
-                free(nm->notifications[0]);
-                nm->notifications[0] = NULL;
-                nm->slideDown = NOTIFICATION_HEIGHT;
-                for (int i = 1; i < nm->count + 1; i++) {
-                    nm->notifications[i - 1] = nm->notifications[i];
-                }
-                nm->count--;
-            }
-        }
-        nm->timeSinceUpdate = 1000 - nm->timeSinceUpdate;
-    }
-    if (nm->notifications[0] != NULL && nm->notifications[0]->decay <= 1) {
-        nm->notifications[0]->rect.x += (float) (nm->timeSinceUpdate / 100);
-    }
-    if (nm->slideDown > 0) {
-        float amount = (float) (nm->timeSinceUpdate / 100);
-        for (int i = 0; i < nm->count; i++) {
-            if (nm->notifications[i] != NULL) {
-                nm->notifications[i]->rect.y += amount;
-            }
-        }
-        nm->slideDown -= amount;
-        if (nm->slideDown < 0) {
-            nm->slideDown = 0;
-        }
-    }
+void drawText(const char *message, Vector2D position) {
+    DrawText(&message[0], position.x, position.y, FONT_SIZE, WHITE);
 }
 
-void drawBlueBox(Rectangle rect) {
+void drawMenuRect(Rectangle rect) {
     DrawRectangleGradientH(
             (int) rect.x,
             (int) rect.y,
@@ -101,40 +25,37 @@ void drawBlueBox(Rectangle rect) {
     );
 }
 
-Rectangle drawSaveBox() {
+Rectangle drawSmallMenu() {
     float marginX = (float) SCREEN_WIDTH / 10, marginY = (float) SCREEN_HEIGHT / 10;
     Rectangle alertBox = {
             marginX,
             marginY,
             SCREEN_WIDTH - (marginX * 2),
             SCREEN_HEIGHT - (marginY * 2)};
-    drawBlueBox(alertBox);
+    drawMenuRect(alertBox);
     return alertBox;
 }
 
-Rectangle drawAlertBox() {
+Rectangle drawMediumMenu() {
     float marginX = (float) SCREEN_WIDTH / 5, marginY = (float) SCREEN_HEIGHT / 5;
     Rectangle alertBox = {
             marginX,
             marginY,
             SCREEN_WIDTH - (marginX * 2),
             SCREEN_HEIGHT - (marginY * 2)};
-    drawBlueBox(alertBox);
+    drawMenuRect(alertBox);
     return alertBox;
 }
 
-Rectangle drawInGameMenuBox() {
+Rectangle drawFullscreenMenu() {
     Rectangle rect = (Rectangle) {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-    drawBlueBox(rect);
+    drawMenuRect(rect);
     return rect;
 }
 
-void drawText(const char *message, Vector2D position) {
-    DrawText(&message[0], position.x, position.y, FONT_SIZE, WHITE);
-}
-
-void drawDialogBox(const char *message) {
-    drawBlueBox((Rectangle) {0, SCREEN_HEIGHT - 150, SCREEN_WIDTH, SCREEN_HEIGHT});
+Rectangle drawBottomMenu(const char *message) {
+    Rectangle rect = (Rectangle) {0, SCREEN_HEIGHT - 150, SCREEN_WIDTH, SCREEN_HEIGHT};
+    drawMenuRect(rect);
     unsigned long lines = (strlen(message) / MAX_CHARACTERS_PER_LINE) + 1;
     int startY = SCREEN_HEIGHT - 135;
     for (int i = 0; i < lines; i++) {
@@ -143,13 +64,14 @@ void drawDialogBox(const char *message) {
         line[MAX_CHARACTERS_PER_LINE] = '\0';
         drawText(&line[0], (Vector2D) {15, startY + (LINE_HEIGHT * i)});
     }
+    return rect;
 }
 
 int line(int line) {
     return line * LINE_HEIGHT;
 }
 
-void drawInTextBox(TextBox *textBox, const char *text) {
+void drawInMenu(TextBox *textBox, const char *text) {
     drawText(text, (Vector2D) {
             (int) textBox->area.x + UI_PADDING,
             (int) textBox->area.y + line(textBox->cursor) + UI_PADDING

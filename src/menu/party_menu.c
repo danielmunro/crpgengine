@@ -6,7 +6,7 @@ void drawPlayer(Player *player) {
 }
 
 void drawPartyMenuScreen(MenuContext *menuContext) {
-    drawInGameMenuBox();
+    drawFullscreenMenu();
     drawPlayer(menuContext->player);
     int column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;
     int column2 = SCREEN_WIDTH - 200;
@@ -25,7 +25,7 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
             SCREEN_HEIGHT - (UI_PADDING * 2)
     });
     for (int i = 0; i < count; i++) {
-        drawInTextBox(textBox, PartyMenuItems[i]);
+        drawInMenu(textBox, PartyMenuItems[i]);
     }
     drawText(">", (Vector2D) {column2 - 20, UI_PADDING + line(menuContext->cursorLine)});
     free(textBox);

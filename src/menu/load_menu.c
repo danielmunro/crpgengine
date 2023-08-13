@@ -3,10 +3,10 @@ int getLoadCursorLength(MenuContext *menuContext) {
 }
 
 void drawLoadMenuScreen(MenuContext *menuContext) {
-    Rectangle rect = drawSaveBox();
+    Rectangle rect = drawSmallMenu();
     TextBox *b = createTextBox(rect);
     for (int i = 0; i < menuContext->saveFiles->count; i++) {
-        drawInTextBox(b, menuContext->saveFiles->saveNames[i]);
+        drawInMenu(b, menuContext->saveFiles->saveNames[i]);
     }
     drawText(">", (Vector2D) {(int) rect.x, (int) rect.y + UI_PADDING + line(menuContext->cursorLine)});
     free(b);

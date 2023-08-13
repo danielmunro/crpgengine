@@ -385,7 +385,7 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
         if (cb[i] != NULL && cb[i]->progress < cb[i]->thenCount) {
             int p = cb[i]->progress;
             if (cb[i]->then[p]->outcome == SPEAK && isSpeakingTo(player, cb[i]->then[p]->target)) {
-                drawDialogBox(cb[i]->then[p]->message);
+                drawBottomMenu(cb[i]->then[p]->message);
             }
         }
     }
@@ -393,7 +393,7 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
 
 void drawNotifications(NotificationManager *nm) {
     for (int i = 0; i < nm->count; i++) {
-        drawBlueBox(nm->notifications[i]->rect);
+        drawMenuRect(nm->notifications[i]->rect);
         DrawText(
                 nm->notifications[i]->message,
                 (int) nm->notifications[i]->rect.x + UI_PADDING_SM,

@@ -3,13 +3,13 @@ int getQuitCursorLength(MenuContext *menuContext) {
 }
 
 void drawQuitMenuScreen(MenuContext *menuContext) {
-    Rectangle rect = drawAlertBox();
+    Rectangle rect = drawMediumMenu();
     TextBox *textBox = createTextBox(rect);
-    drawInTextBox(textBox, "Are you sure?");
-    drawInTextBox(textBox, "");
+    drawInMenu(textBox, "Are you sure?");
+    drawInMenu(textBox, "");
     int cursorLength = getQuitCursorLength(menuContext);
     for (int i = 0; i < cursorLength; i++) {
-        drawInTextBox(textBox, QuitMenuItems[i]);
+        drawInMenu(textBox, QuitMenuItems[i]);
     }
     drawText(
             ">",

@@ -96,6 +96,10 @@ void drawFightPlayer(Player *player) {
             (Vector2) {SCREEN_WIDTH * .8, 100});
 }
 
+//void drawFightMenu(Fight *fight) {
+//
+//}
+
 void drawFightView(Encounters *encounters, Fight *fight, Player *player) {
     BeginDrawing();
     ClearBackground(BLACK);

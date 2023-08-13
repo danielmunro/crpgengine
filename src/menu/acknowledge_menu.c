@@ -3,13 +3,13 @@ int getAcknowledgeCursorLength(MenuContext *menuContext) {
 }
 
 void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
-    Rectangle rect = drawAlertBox();
+    Rectangle rect = drawMediumMenu();
     TextBox *b = createTextBox(rect);
-    drawInTextBox(b, "Your game has been saved.");
-    drawInTextBox(b, "Reminder: your progress will save");
-    drawInTextBox(b, "automatically.");
-    drawInTextBox(b, "");
-    drawInTextBox(b, "ok");
+    drawInMenu(b, "Your game has been saved.");
+    drawInMenu(b, "Reminder: your progress will save");
+    drawInMenu(b, "automatically.");
+    drawInMenu(b, "");
+    drawInMenu(b, "ok");
     drawText(
             ">",
             (Vector2D) {
