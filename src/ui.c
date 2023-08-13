@@ -55,6 +55,7 @@ void drawTextInArea(const char *message, Rectangle area) {
     if (strcmp(buffer, "") != 0) {
         drawLineInArea(buffer, area, lines);
     }
+    free(word);
 }
 
 void drawMenuRect(Rectangle rect) {
