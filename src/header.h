@@ -27,6 +27,7 @@
 #define START_ENTRANCE "start"
 
 #define FONT_SIZE 20
+#define FONT_CHARACTER_WIDTH 11
 #define LINE_HEIGHT 30
 #define UI_PADDING 20
 #define UI_PADDING_SM 5

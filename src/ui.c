@@ -14,6 +14,35 @@ void drawText(const char *message, Vector2D position) {
     DrawText(&message[0], position.x, position.y, FONT_SIZE, WHITE);
 }
 
+int drawLineInArea(const char *message, Rectangle area, int lineNumber) {
+    int charactersPerLine = (int) area.width / FONT_CHARACTER_WIDTH;
+    int messageLength = (int) strlen(message);
+    int lines = (int) ceilf((float) messageLength / (float) charactersPerLine);
+    for (int i = 0; i < lines; i++) {
+        char line[charactersPerLine + 1];
+        memcpy(line, &message[i * charactersPerLine], charactersPerLine);
+        line[charactersPerLine] = '\0';
+        drawText(
+                &line[0],
+                (Vector2D) {
+                        (int) area.x + UI_PADDING,
+                        (int) area.y + UI_PADDING + (LINE_HEIGHT * (i + lineNumber))
+                });
+    }
+    return lines;
+}
+
+void drawTextInArea(const char *message, Rectangle area) {
+    char m[strlen(message)];
+    strcpy(m, message);
+    char *token = strtok(m, "\n");
+    int lines = 0;
+    while (token != NULL) {
+        lines += drawLineInArea(token, area, lines);
+        token = strtok(NULL, "\n");
+    }
+}
+
 void drawMenuRect(Rectangle rect) {
     DrawRectangleGradientH(
             (int) rect.x,
@@ -53,17 +82,9 @@ Rectangle drawFullscreenMenu() {
     return rect;
 }
 
-Rectangle drawBottomMenu(const char *message) {
+Rectangle drawBottomMenu() {
     Rectangle rect = (Rectangle) {0, SCREEN_HEIGHT - 150, SCREEN_WIDTH, SCREEN_HEIGHT};
     drawMenuRect(rect);
-    unsigned long lines = (strlen(message) / MAX_CHARACTERS_PER_LINE) + 1;
-    int startY = SCREEN_HEIGHT - 135;
-    for (int i = 0; i < lines; i++) {
-        char line[MAX_CHARACTERS_PER_LINE + 1];
-        memcpy(line, &message[i * MAX_CHARACTERS_PER_LINE], MAX_CHARACTERS_PER_LINE);
-        line[MAX_CHARACTERS_PER_LINE] = '\0';
-        drawText(&line[0], (Vector2D) {15, startY + (LINE_HEIGHT * i)});
-    }
     return rect;
 }
 
