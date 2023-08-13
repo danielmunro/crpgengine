@@ -59,13 +59,6 @@ void drawTextInArea(const char *message, Rectangle area) {
 }
 
 void drawMenuRect(Rectangle rect) {
-//    DrawRectangleGradientH(
-//            (int) rect.x,
-//            (int) rect.y,
-//            (int) rect.width,
-//            (int) rect.height,
-//            BLUE,
-//            DARKBLUE);
     DrawRectangleRounded(
             (Rectangle) { rect.x + 4, rect.y, rect.width - 8, rect.height - 4 },
             (float) 0.005,
@@ -77,34 +70,6 @@ void drawMenuRect(Rectangle rect) {
             4,
             4,
             WHITE);
-//    DrawRectangleGradientH(
-//            (int) rect.x,
-//            (int) rect.y,
-//            (int) MENU_BAR_WIDTH,
-//            (int) rect.height,
-//            WHITE,
-//            GRAY);
-//    DrawRectangleGradientH(
-//            (int) (rect.x + rect.width - MENU_BAR_WIDTH),
-//            (int) rect.y,
-//            (int) MENU_BAR_WIDTH,
-//            (int) rect.height,
-//            WHITE,
-//            GRAY);
-//    DrawRectangleGradientV(
-//            (int) rect.x,
-//            (int) rect.y,
-//            (int) rect.width,
-//            MENU_BAR_WIDTH,
-//            WHITE,
-//            GRAY);
-//    DrawRectangleGradientV(
-//            (int) rect.x,
-//            (int) (rect.y + rect.height - MENU_BAR_WIDTH),
-//            (int) rect.width,
-//            MENU_BAR_WIDTH,
-//            WHITE,
-//            GRAY);
 }
 
 Rectangle drawSmallMenu() {
