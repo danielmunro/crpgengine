@@ -33,13 +33,27 @@ int drawLineInArea(const char *message, Rectangle area, int lineNumber) {
 }
 
 void drawTextInArea(const char *message, Rectangle area) {
-    char m[strlen(message)];
+    char m[1064];
     strcpy(m, message);
-    char *token = strtok(m, "\n");
+    char *word = strtok(m, " \n");
     int lines = 0;
-    while (token != NULL) {
-        lines += drawLineInArea(token, area, lines);
-        token = strtok(NULL, "\n");
+    int charactersPerLine = (int) area.width / FONT_CHARACTER_WIDTH;
+    char buffer[charactersPerLine + 1];
+    strcpy(buffer, "");
+    while (word != NULL) {
+        if (strlen(buffer) + strlen(word) + 1 > charactersPerLine) {
+            lines += drawLineInArea(&buffer[0], area, lines);
+            strcpy(buffer, word);
+        } else {
+            if (strcmp(buffer, "") != 0) {
+                strcat(buffer, " ");
+            }
+            strcat(buffer, word);
+        }
+        word = strtok(NULL, " \n");
+    }
+    if (strcmp(buffer, "") != 0) {
+        drawLineInArea(buffer, area, lines);
     }
 }
 
