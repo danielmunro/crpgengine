@@ -240,7 +240,6 @@ Game *createGame(RuntimeArgs *r) {
                                    g->animations, g->audio);
     loadScenesFromFiles(g->scenes, g->mobiles, g->beastiary, g->runtimeArgs);
     setSceneBasedOnSave(g->scenes, g->player, save, g->runtimeArgs->sceneIndex);
-//    g->controls->scene = g->scenes->current;
     addDebug(g->log, "done creating game object");
     free(save);
     return g;
