@@ -1,0 +1,9 @@
+storylines:
+  - when:
+      - player: true
+        condition: engaged
+        mob: vill2
+    then:
+      - mob: vill2
+        action: speak
+        message: "Hello there adventurer."
