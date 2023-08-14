@@ -217,7 +217,7 @@ SaveData *initializePlayer(Game *g) {
 Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
     g->runtimeArgs = r;
-    g->ui = createUIManager(cfg->font);
+    g->ui = createUIManager(r->indexDir, cfg->font);
     g->log = createLog(g->runtimeArgs->logLevel);
     g->sprites = loadSpritesheetManager(g->log, r->indexDir);
     g->animations = createAnimationManager(g->log);
