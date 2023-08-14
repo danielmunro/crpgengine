@@ -8,8 +8,6 @@ typedef struct {
     Beastiary *beastiary;
     ItemManager *items;
     Log *log;
-    Menu *menus[MAX_MENUS];
-    int menuCount;
     Timing *timing;
     NotificationManager *notifications;
     ControlManager *controls;
@@ -59,7 +57,7 @@ void evaluateExits(Game *g) {
 }
 
 void explorationMenuKeyPressed(Game *g) {
-    addMenu(g->scenes->current->exploration, findMenu(g->menus, g->menuCount, PARTY_MENU));
+    addMenu(g->scenes->current->exploration, findMenu(g->ui, PARTY_MENU));
 }
 
 void checkExplorationInput(Game *g) {
@@ -99,7 +97,7 @@ void menuItemSelected(Game *g) {
             menu->cursor);
     MenuSelectResponse *response = menu->selected(context);
     if (response->type == OPEN_MENU) {
-        addMenu(exploration, findMenu(g->menus, g->menuCount, response->menuType));
+        addMenu(exploration, findMenu(g->ui, response->menuType));
     } else if (response->type == CLOSE_MENU) {
         removeMenu(exploration);
     }
@@ -228,7 +226,6 @@ Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
     loadAllItems(g->items, r->indexDir);
     g->mobiles = createMobileManager(g->log, g->animations);
     SaveData *save = initializePlayer(g);
-    g->menuCount = getMenuList(g->menus);
     g->notifications = createNotificationManager();
     g->timing = createTiming(g->log, g->notifications, g->player, g->runtimeArgs->logMemory);
     g->controls = createControlManager(

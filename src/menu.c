@@ -53,15 +53,6 @@ MenuContext *createMenuContext(
     return context;
 }
 
-Menu *findMenu(Menu *menus[MAX_MENUS], int menuCount, MenuType type) {
-    for (int i = 0; i < menuCount; i++) {
-        if (menus[i]->type == type) {
-            return menus[i];
-        }
-    }
-    return NULL;
-}
-
 void drawAllMenus(
         Player *player,
         Menu *menus[MAX_MENUS],
