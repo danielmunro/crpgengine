@@ -14,6 +14,7 @@ typedef struct {
     NotificationManager *notifications;
     ControlManager *controls;
     MobileManager *mobiles;
+    UIManager *ui;
 } Game;
 
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
@@ -213,9 +214,10 @@ SaveData *initializePlayer(Game *g) {
     return save;
 }
 
-Game *createGame(RuntimeArgs *r) {
+Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
     g->runtimeArgs = r;
+    g->ui = createUIManager(cfg->font);
     g->log = createLog(g->runtimeArgs->logLevel);
     g->sprites = loadSpritesheetManager(g->log, r->indexDir);
     g->animations = createAnimationManager(g->log);

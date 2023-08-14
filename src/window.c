@@ -1,7 +1,6 @@
-void initWindow(const char *indexDir) {
-    ConfigData *cfg = loadAppConfigYaml(indexDir);
+void initWindow(const char *title) {
     SetTargetFPS(TARGET_FRAMERATE);
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, cfg->title);
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, title);
     InitAudioDevice();
     if (!IsAudioDeviceReady()) {
         printf("not ready");
@@ -10,5 +9,4 @@ void initWindow(const char *indexDir) {
     HideCursor();
     SetExitKey(0);
 //    ToggleFullscreen();
-    free(cfg);
 }

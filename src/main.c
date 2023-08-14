@@ -3,8 +3,9 @@
 int main(int argc, char *argv[]) {
     setupApp();
     RuntimeArgs *r = createRuntimeArgs(argc, argv);
+    ConfigData *cfg = loadAppConfigYaml(r->indexDir);
     initWindow(r->indexDir);
-    Game *g = createGame(r);
+    Game *g = createGame(cfg, r);
     validateGameData(g);
     if (r->purgeSaves) {
         purgeSaves(r->indexDir);

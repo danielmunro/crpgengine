@@ -286,6 +286,7 @@ const char *Events[MAX_EVENTS] = {
 #include "cyaml.c"
 #include "window.c"
 #include "ui.c"
+#include "ui_manager.c"
 #include "notification.c"
 #include "audio.c"
 #include "spritesheet.c"
