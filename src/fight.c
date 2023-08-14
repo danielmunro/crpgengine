@@ -96,9 +96,17 @@ void drawFightPlayer(Player *player) {
             (Vector2) {SCREEN_WIDTH * .8, 100});
 }
 
-//void drawFightMenu(Fight *fight) {
-//
-//}
+void drawFightMenu(Fight *fight, Player *player) {
+    TextBox *left = createTextBox(drawBottomLeftMenu());
+    TextBox *right = createTextBox(drawBottomRightMenu());
+    int count = fight->beastCount > MAX_MOB_NAMES_IN_FIGHT ? MAX_MOB_NAMES_IN_FIGHT : fight->beastCount;
+    for (int i = 0; i < count; i++) {
+        drawInMenu(left, fight->beasts[i]->name);
+    }
+    for (int i = 0; i < player->partyCount; i++) {
+        drawInMenu(right, player->party[i]->name);
+    }
+}
 
 void drawFightView(Encounters *encounters, Fight *fight, Player *player) {
     BeginDrawing();
@@ -106,6 +114,7 @@ void drawFightView(Encounters *encounters, Fight *fight, Player *player) {
     drawFightBackground(encounters);
     drawFightBeasts(fight);
     drawFightPlayer(player);
+    drawFightMenu(fight, player);
     EndDrawing();
 }
 

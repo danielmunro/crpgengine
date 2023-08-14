@@ -106,6 +106,18 @@ Rectangle drawBottomMenu() {
     return rect;
 }
 
+Rectangle drawBottomLeftMenu() {
+    Rectangle rect = (Rectangle) {0, SCREEN_HEIGHT - 150, SCREEN_WIDTH - 600, 150};
+    drawMenuRect(rect);
+    return rect;
+}
+
+Rectangle drawBottomRightMenu() {
+    Rectangle rect = (Rectangle) {SCREEN_WIDTH - 600, SCREEN_HEIGHT - 150, 600, 150};
+    drawMenuRect(rect);
+    return rect;
+}
+
 int line(int line) {
     return line * LINE_HEIGHT;
 }
