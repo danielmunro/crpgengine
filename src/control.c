@@ -24,8 +24,8 @@ typedef struct {
 } Then;
 
 typedef struct {
-    When *when[MAX_INSTRUCTIONS];
-    Then *then[MAX_INSTRUCTIONS];
+    When **when;
+    Then **then;
     int whenCount;
     int thenCount;
     int progress;
@@ -37,6 +37,8 @@ ControlBlock *createControlBlock() {
     cb->whenCount = 0;
     cb->thenCount = 0;
     cb->progress = 0;
+    cb->when = calloc(MAX_INSTRUCTIONS, sizeof(When));
+    cb->then = calloc(MAX_INSTRUCTIONS, sizeof(Then));
     for (int i = 0; i < MAX_INSTRUCTIONS; i++) {
         cb->thensComplete[i] = false;
     }

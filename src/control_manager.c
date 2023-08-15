@@ -29,7 +29,10 @@ ControlManager *createControlManager(
 int thenCheck(ControlManager *cm, ControlBlock *cb) {
     Then *then = cb->then[cb->progress];
     int progress = 0;
-    if (isMovingAndAtDestination(cb)) {
+    if (isSpeakOutcome(then) && !cm->player->engaged) {
+        addInfo(cm->log, "is speak outcome");
+        progress++;
+    } else if (isMovingAndAtDestination(cb)) {
         addInfo(cm->log, "mob at destination, control block proceeding :: %s", then->target->name);
         progress++;
     } else if (isAddStoryOutcome(then)) {
