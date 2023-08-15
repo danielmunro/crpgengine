@@ -23,7 +23,7 @@ NotificationManager *createNotificationManager() {
 Notification *createNotification(NotificationType type, const char *message) {
     Notification *notification = malloc(sizeof(Notification));
     notification->type = type;
-    notification->message = &message[0];
+    notification->message = message;
     notification->decay = NOTIFICATION_DECAY_SECONDS;
     return notification;
 }

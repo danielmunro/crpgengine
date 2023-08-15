@@ -13,49 +13,44 @@ TextBox *createTextBox(Rectangle area, Font font) {
 }
 
 void drawText(const char *message, Vector2 position, Font font) {
-    DrawTextEx(font, &message[0], position, FONT_SIZE, 1, WHITE);
+    DrawTextEx(font, message, position, FONT_SIZE, 1, WHITE);
 }
 
-int drawLineInArea(const char *message, Rectangle area, int lineNumber, Font font) {
-    int charactersPerLine = (int) area.width / FONT_CHARACTER_WIDTH;
-    int messageLength = (int) strlen(message);
-    int lines = (int) ceilf((float) messageLength / (float) charactersPerLine);
-    for (int i = 0; i < lines; i++) {
-        char line[charactersPerLine + 1];
-        memcpy(line, &message[i * charactersPerLine], charactersPerLine);
-        line[charactersPerLine] = '\0';
-        drawText(
-                &line[0],
-                (Vector2) {
-                        area.x + UI_PADDING,
-                        area.y + UI_PADDING + (float) (LINE_HEIGHT * (i + lineNumber))
-                }, font);
-    }
-    return lines;
+void drawLineInArea(const char *message, Rectangle area, int lineNumber, Font font) {
+    drawText(
+            message,
+            (Vector2) {
+                    area.x + UI_PADDING,
+                    area.y + UI_PADDING + (float) (LINE_HEIGHT * lineNumber)
+            }, font);
 }
 
 void drawTextInArea(const char *message, Rectangle area, Font font) {
-    char m[MAX_BUFFER];
+    char m[MAX_MESSAGE_BUFFER];
+    char buffer[MAX_LINE_BUFFER];
     strcpy(m, message);
-    char *word = strtok(m, " \n");
-    int lines = 0;
-    int charactersPerLine = (int) area.width / FONT_CHARACTER_WIDTH;
-    char buffer[charactersPerLine + 1];
     strcpy(buffer, "");
+    char *word = strtok(m, " ");
+    int line = 0;
+    char test[MAX_LINE_BUFFER];
     while (word != NULL) {
-        if (strlen(buffer) + strlen(word) + 1 > charactersPerLine) {
-            lines += drawLineInArea(&buffer[0], area, lines, font);
+        strcpy(test, buffer);
+        if (strcmp(test, "") != 0) {
+            strcat(test, " ");
+        }
+        strcat(test, word);
+        Vector2 testArea = MeasureTextEx(font, test, FONT_SIZE, 1);
+        if (testArea.x > area.width - UI_PADDING * 2) {
+            drawLineInArea(buffer, area, line, font);
+            line++;
             strcpy(buffer, word);
         } else {
-            if (strcmp(buffer, "") != 0) {
-                strcat(buffer, " ");
-            }
-            strcat(buffer, word);
+            strcpy(buffer, test);
         }
-        word = strtok(NULL, " \n");
+        word = strtok(NULL, " ");
     }
     if (strcmp(buffer, "") != 0) {
-        drawLineInArea(buffer, area, lines, font);
+        drawLineInArea(buffer, area, line, font);
     }
     free(word);
 }
