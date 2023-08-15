@@ -145,7 +145,8 @@ void doExplorationLoop(Game *g) {
             s->exploration,
             g->player,
             g->notifications,
-            s->activeControlBlocks);
+            s->activeControlBlocks,
+            g->ui->font);
     doMobileMovementUpdates(s->exploration);
     processAnimations(g->animations);
     evaluateMovement(s->exploration, g->player);
@@ -157,7 +158,7 @@ void doExplorationLoop(Game *g) {
 void doFightLoop(Game *g) {
     Scene *s = g->scenes->current;
     checkFightInput(s->fight, g->player);
-    drawFightView(s->encounters, s->fight, g->player);
+    drawFightView(s->encounters, s->fight, g->player, g->ui->font);
     processFightAnimations();
     checkControls(g->controls);
     checkRemoveFight(s);

@@ -10,32 +10,27 @@ int getMenuList(UIManager *ui) {
                     PARTY_MENU,
                     getPartyMenuCursorLength,
                     drawPartyMenuScreen,
-                    partyMenuItemSelected,
-                    ui->font),
+                    partyMenuItemSelected),
             createMenu(
                     ITEMS_MENU,
                     getItemsCursorLength,
                     drawItemsMenuScreen,
-                    itemMenuItemSelected,
-                    ui->font),
+                    itemMenuItemSelected),
             createMenu(
                     LOAD_MENU,
                     getLoadCursorLength,
                     drawLoadMenuScreen,
-                    loadMenuItemSelected,
-                    ui->font),
+                    loadMenuItemSelected),
             createMenu(
                     QUIT_MENU,
                     getQuitCursorLength,
                     drawQuitMenuScreen,
-                    quitMenuItemSelected,
-                    ui->font),
+                    quitMenuItemSelected),
             createMenu(
                     ACKNOWLEDGE_MENU,
                     getAcknowledgeCursorLength,
                     drawAcknowledgeMenuScreen,
-                    acknowledgeMenuItemSelected,
-                    ui->font),
+                    acknowledgeMenuItemSelected),
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {

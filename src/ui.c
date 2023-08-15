@@ -1,20 +1,22 @@
 typedef struct {
     Rectangle area;
+    Font font;
     int cursor;
 } TextBox;
 
-TextBox *createTextBox(Rectangle area) {
+TextBox *createTextBox(Rectangle area, Font font) {
     TextBox *textBox = malloc(sizeof(TextBox));
     textBox->area = area;
+    textBox->font = font;
     textBox->cursor = 0;
     return textBox;
 }
 
-void drawText(const char *message, Vector2D position) {
-    DrawText(&message[0], position.x, position.y, FONT_SIZE, WHITE);
+void drawText(const char *message, Vector2 position, Font font) {
+    DrawTextEx(font, &message[0], position, FONT_SIZE, 1, WHITE);
 }
 
-int drawLineInArea(const char *message, Rectangle area, int lineNumber) {
+int drawLineInArea(const char *message, Rectangle area, int lineNumber, Font font) {
     int charactersPerLine = (int) area.width / FONT_CHARACTER_WIDTH;
     int messageLength = (int) strlen(message);
     int lines = (int) ceilf((float) messageLength / (float) charactersPerLine);
@@ -24,15 +26,15 @@ int drawLineInArea(const char *message, Rectangle area, int lineNumber) {
         line[charactersPerLine] = '\0';
         drawText(
                 &line[0],
-                (Vector2D) {
-                        (int) area.x + UI_PADDING,
-                        (int) area.y + UI_PADDING + (LINE_HEIGHT * (i + lineNumber))
-                });
+                (Vector2) {
+                        area.x + UI_PADDING,
+                        area.y + UI_PADDING + (float) (LINE_HEIGHT * (i + lineNumber))
+                }, font);
     }
     return lines;
 }
 
-void drawTextInArea(const char *message, Rectangle area) {
+void drawTextInArea(const char *message, Rectangle area, Font font) {
     char m[MAX_BUFFER];
     strcpy(m, message);
     char *word = strtok(m, " \n");
@@ -42,7 +44,7 @@ void drawTextInArea(const char *message, Rectangle area) {
     strcpy(buffer, "");
     while (word != NULL) {
         if (strlen(buffer) + strlen(word) + 1 > charactersPerLine) {
-            lines += drawLineInArea(&buffer[0], area, lines);
+            lines += drawLineInArea(&buffer[0], area, lines, font);
             strcpy(buffer, word);
         } else {
             if (strcmp(buffer, "") != 0) {
@@ -53,7 +55,7 @@ void drawTextInArea(const char *message, Rectangle area) {
         word = strtok(NULL, " \n");
     }
     if (strcmp(buffer, "") != 0) {
-        drawLineInArea(buffer, area, lines);
+        drawLineInArea(buffer, area, lines, font);
     }
     free(word);
 }
@@ -118,14 +120,14 @@ Rectangle drawBottomRightMenu() {
     return rect;
 }
 
-int line(int line) {
-    return line * LINE_HEIGHT;
+float line(int line) {
+    return (float) line * LINE_HEIGHT;
 }
 
 void drawInMenu(TextBox *textBox, const char *text) {
-    drawText(text, (Vector2D) {
-            (int) textBox->area.x + UI_PADDING,
-            (int) textBox->area.y + line(textBox->cursor) + UI_PADDING
-    });
+    drawText(text, (Vector2) {
+            textBox->area.x + UI_PADDING,
+            textBox->area.y + line(textBox->cursor) + UI_PADDING
+    }, textBox->font);
     textBox->cursor++;
 }

@@ -401,25 +401,25 @@ void evaluateMovement(Exploration *e, Player *p) {
     }
 }
 
-void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROLS]) {
+void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROLS], Font font) {
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (cb[i] != NULL && cb[i]->progress < cb[i]->thenCount) {
             int p = cb[i]->progress;
             if (cb[i]->then[p]->outcome == SPEAK && isSpeakingTo(player, cb[i]->then[p]->target)) {
-                drawTextInArea(cb[i]->then[p]->message, drawBottomMenu());
+                drawTextInArea(cb[i]->then[p]->message, drawBottomMenu(), font);
             }
         }
     }
 }
 
-void drawNotifications(NotificationManager *nm) {
+void drawNotifications(NotificationManager *nm, Font font) {
     for (int i = 0; i < nm->count; i++) {
         drawMenuRect(nm->notifications[i]->rect);
-        drawTextInArea(nm->notifications[i]->message, nm->notifications[i]->rect);
+        drawTextInArea(nm->notifications[i]->message, nm->notifications[i]->rect, font);
     }
 }
 
-void drawExplorationView(Exploration *e, Player *p, NotificationManager *nm, ControlBlock *c[MAX_ACTIVE_CONTROLS]) {
+void drawExplorationView(Exploration *e, Player *p, NotificationManager *nm, ControlBlock *c[MAX_ACTIVE_CONTROLS], Font font) {
     addDebug(e->log, "exploration -- draw");
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();
@@ -432,8 +432,8 @@ void drawExplorationView(Exploration *e, Player *p, NotificationManager *nm, Con
     DrawTextureEx(e->renderedLayers[MIDGROUND], offset, 0, SCALE, WHITE);
     drawExplorationMobiles(e, p, offset);
     DrawTextureEx(e->renderedLayers[FOREGROUND], offset, 0, SCALE, WHITE);
-    drawNotifications(nm);
-    drawExplorationControls(p, c);
+    drawNotifications(nm, font);
+    drawExplorationControls(p, c, font);
     EndDrawing();
 }
 

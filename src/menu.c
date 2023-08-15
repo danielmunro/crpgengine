@@ -32,15 +32,13 @@ Menu *createMenu(
         MenuType type,
         int (getCursorLength)(MenuContext *),
         void (draw)(MenuContext *),
-        MenuSelectResponse *(*selected)(),
-        Font font) {
+        MenuSelectResponse *(*selected)()) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;
     menu->type = type;
     menu->getCursorLength = getCursorLength;
     menu->draw = draw;
     menu->selected = selected;
-    menu->font = font;
     return menu;
 }
 
