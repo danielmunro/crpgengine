@@ -140,6 +140,27 @@ void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
     addInfo(e->log, "player coordinates: %f, %f", position.x, position.y);
 }
 
+void drawAllMenus(
+        Player *player,
+        Menu *menus[MAX_MENUS],
+        int menuCount,
+        Font font,
+        const char *scene,
+        const char *indexDir) {
+    BeginDrawing();
+    for (int i = 0; i < menuCount; i++) {
+        MenuContext *c = createMenuContext(
+                player,
+                scene,
+                indexDir,
+                font,
+                menus[i]->cursor);
+        menus[i]->draw(c);
+        free(c);
+    }
+    EndDrawing();
+}
+
 void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
     Object *o = getObject(e, index);
     if (o != NULL) {

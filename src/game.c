@@ -94,6 +94,7 @@ void menuItemSelected(Game *g) {
             g->player,
             g->scenes->current->name,
             g->runtimeArgs->indexDir,
+            g->ui->font,
             menu->cursor);
     MenuSelectResponse *response = menu->selected(context);
     if (response->type == OPEN_MENU) {
@@ -115,6 +116,7 @@ void checkMenuInput(Game *g) {
                 g->player,
                 g->scenes->current->name,
                 g->runtimeArgs->indexDir,
+                g->ui->font,
                 menu->cursor);
         normalizeMenuCursor(menu, c);
         free(c);
@@ -126,6 +128,7 @@ void checkMenuInput(Game *g) {
                 g->player,
                 g->scenes->current->name,
                 g->runtimeArgs->indexDir,
+                g->ui->font,
                 menu->cursor);
         normalizeMenuCursor(menu, c);
         free(c);
@@ -166,6 +169,7 @@ void doInGameMenuLoop(Game *g) {
             g->player,
             exploration->menus,
             exploration->menuCount,
+            g->ui->font,
             g->scenes->current->name,
             g->runtimeArgs->indexDir);
     checkMenuInput(g);

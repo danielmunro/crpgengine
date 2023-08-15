@@ -306,7 +306,6 @@ const char *Events[MAX_EVENTS] = {
 #include "menu/quit_menu.c"
 #include "menu/load_menu.c"
 #include "menu/acknowledge_menu.c"
-#include "menu_list.c"
 #include "exploration.c"
 #include "scene.c"
 #include "tilemap_xmlreader.c"
