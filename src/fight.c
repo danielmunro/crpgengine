@@ -102,8 +102,8 @@ void drawFightPlayer(Player *player) {
 void drawActionGauge(Rectangle rect, Color color) {
     DrawRectangleRounded(
             rect,
-            (float) 0.009,
-            1,
+            (float) 1,
+            4,
             color);
 }
 
