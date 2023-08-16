@@ -1,21 +1,21 @@
 typedef struct {
     Mobile *party[MAX_PARTY_SIZE];
-    int partyCount;
     Mobile *onDeck[MAX_TEAM_SIZE];
-    int onDeckCount;
     const char **storylines;
-    int storylineCount;
     PlayerItemData **items;
-    int itemCount;
+    SaveFiles *saveFiles;
+    Mobile *blockedBy;
+    Mobile *engageable;
+    Log *log;
+    bool engaged;
     int coins;
     int secondsPlayed;
     int experience;
     int level;
-    SaveFiles *saveFiles;
-    Mobile *blockedBy;
-    Mobile *engageable;
-    bool engaged;
-    Log *log;
+    int partyCount;
+    int itemCount;
+    int onDeckCount;
+    int storylineCount;
 } Player;
 
 void addItem(Player *player, ItemData *item) {
