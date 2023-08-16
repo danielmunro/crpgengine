@@ -81,11 +81,16 @@
 #define MAX_LINE_BUFFER 128
 #define MAX_MESSAGE_BUFFER 1024
 #define MAX_MOB_NAMES_IN_FIGHT 4
+#define MAX_CURSORS 4
 
 #define COLLIDE_TYPE_OBJECTS "objects"
 #define COLLIDE_TYPE_PLAYER "player"
 #define COLLIDE_TYPE_WARPS "warps"
 #define COLLIDE_TYPE_COUNT 3
+
+typedef enum {
+    ACTION,
+} FightCursors;
 
 const char *logLevels[] = {
         "error",
@@ -299,6 +304,7 @@ const char *Events[MAX_EVENTS] = {
 #include "player.c"
 #include "control.c"
 #include "object.c"
+#include "timing.c"
 #include "fight.c"
 #include "tilemap.c"
 #include "menu.c"
@@ -311,7 +317,6 @@ const char *Events[MAX_EVENTS] = {
 #include "scene.c"
 #include "tilemap_xmlreader.c"
 #include "xmlparser.c"
-#include "timing.c"
 #include "ui_manager.c"
 #include "control_manager.c"
 #include "scene_manager.c"

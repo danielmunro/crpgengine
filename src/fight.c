@@ -12,6 +12,8 @@ typedef struct {
 typedef struct {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastCount;
+    Vector2 cursors[MAX_CURSORS];
+    Timing *timing;
     Log *log;
 } Fight;
 
@@ -32,17 +34,18 @@ BeastEncounter *createBeastEncounterFromData(Beast *beast, BeastEncounterData da
     return createBeastEncounter(beast, data.max);
 }
 
-Fight *createFight(Log *log, int count, Beast *beasts[MAX_BEASTS_IN_FIGHT]) {
+Fight *createFight(Log *log, int count, Beast *beasts[MAX_BEASTS_IN_FIGHT], Timing *timing) {
     Fight *fight = malloc(sizeof(Fight));
     fight->beastCount = count;
     fight->log = log;
     for (int i = 0; i < count; i++) {
         fight->beasts[i] = beasts[i];
     }
+    fight->timing = timing;
     return fight;
 }
 
-Fight *createFightFromEncounters(Log *log, Encounters *encounters) {
+Fight *createFightFromEncounters(Log *log, Encounters *encounters, Timing *timing) {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
     addDebug(log, "creating %d beasts for fight", beastsToCreate);
@@ -59,7 +62,7 @@ Fight *createFightFromEncounters(Log *log, Encounters *encounters) {
             created++;
         }
     }
-    Fight *fight = createFight(log, created, beasts);
+    Fight *fight = createFight(log, created, beasts, timing);
     fight->beastCount = created;
     addDebug(log, "fight encountered with %d opponents", fight->beastCount);
     return fight;
@@ -135,4 +138,8 @@ int isFightDone(Fight *fight) {
 
 void processFightAnimations() {
     // stub
+}
+
+void fightUpdate(Fight *fight) {
+
 }
