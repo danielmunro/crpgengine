@@ -132,16 +132,6 @@ void drawFightMenu(Fight *fight, Player *player, Font font) {
                         10,
                 },
                 WHITE);
-//        DrawRectangleRounded(
-//                (Rectangle) {
-//                        right->area.x + 100,
-//                        right->area.y + 15 + (float) (i * LINE_HEIGHT),
-//                        (float) player->party[i]->actionGauge,
-//                        10,
-//                },
-//                (float) 0.009,
-//                1,
-//                WHITE);
     }
 }
 
