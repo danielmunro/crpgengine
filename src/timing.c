@@ -1,5 +1,5 @@
 typedef struct {
-    struct timeval start;
+    double start;
     double elapsedTime;
     double timeInterval;
     NotificationManager *notificationManager;
@@ -20,21 +20,19 @@ Timing *createTiming(Log *log, NotificationManager *nm, Player *player, bool log
 }
 
 void startTiming(Timing *t) {
-    gettimeofday(&t->start, NULL);
+    t->start = getTimeInMS();
 }
 
 void stopTiming(Timing *t) {
-    struct timeval end;
-    gettimeofday(&end, NULL);
-    double timeInterval = (double) (end.tv_sec - t->start.tv_sec) * 1000.0;
-    timeInterval += (end.tv_usec - t->start.tv_usec) / 1000.0;
-    t->elapsedTime += timeInterval;
+    double end =  getTimeInMS();
+    t->elapsedTime += end - t->start;
+    decayNotifications(t->notificationManager, t->elapsedTime);
     if (t->elapsedTime > 1000.0) {
         t->elapsedTime -= 1000.0;
+        t->start = end;
         t->player->secondsPlayed += 1;
         if (t->logMemory) {
             reportMaxMemory(t->log);
         }
     }
-    decayNotifications(t->notificationManager, timeInterval);
 }

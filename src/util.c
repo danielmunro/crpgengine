@@ -172,3 +172,11 @@ const char *getAutosaveFile(const char *indexDir) {
     sprintf((char *)autosaveFilePath, "%s/_saves/autosave.yaml", indexDir);
     return autosaveFilePath;
 }
+
+double getTimeInMS() {
+    struct timeval end;
+    gettimeofday(&end, NULL);
+    double timeInterval = (double) end.tv_sec * 1000.0;
+    timeInterval += end.tv_usec / 1000.0;
+    return timeInterval;
+}

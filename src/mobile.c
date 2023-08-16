@@ -13,6 +13,7 @@ typedef struct {
     int waitTimer;
     struct timeval lastTimerUpdate;
     bool locked;
+    int actionGauge;
 } Mobile;
 
 typedef struct {

@@ -12,7 +12,6 @@ typedef struct {
     int secondsPlayed;
     int experience;
     int level;
-    int actionGauge;
     int partyCount;
     int itemCount;
     int onDeckCount;

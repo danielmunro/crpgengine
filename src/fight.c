@@ -13,8 +13,8 @@ typedef struct {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastCount;
     Vector2 cursors[MAX_CURSORS];
-    Timing *timing;
     Log *log;
+    double time;
 } Fight;
 
 Encounters *createEncounters() {
@@ -41,7 +41,7 @@ Fight *createFight(Log *log, int count, Beast *beasts[MAX_BEASTS_IN_FIGHT], Timi
     for (int i = 0; i < count; i++) {
         fight->beasts[i] = beasts[i];
     }
-    fight->timing = timing;
+    fight->time = getTimeInMS();
     return fight;
 }
 
@@ -99,6 +99,14 @@ void drawFightPlayer(Player *player) {
             (Vector2) {SCREEN_WIDTH * .8, 100});
 }
 
+void drawActionGauge(Rectangle rect, Color color) {
+    DrawRectangleRounded(
+            rect,
+            (float) 0.009,
+            1,
+            color);
+}
+
 void drawFightMenu(Fight *fight, Player *player, Font font) {
     TextBox *left = createTextBox(drawBottomLeftMenu(), font);
     TextBox *right = createTextBox(drawBottomRightMenu(), font);
@@ -108,6 +116,32 @@ void drawFightMenu(Fight *fight, Player *player, Font font) {
     }
     for (int i = 0; i < player->partyCount; i++) {
         drawInMenu(right, player->party[i]->name);
+        drawActionGauge(
+                (Rectangle) {
+                        right->area.x + 100,
+                        right->area.y + 15 + (float) (i * LINE_HEIGHT),
+                        300,
+                        10,
+                },
+                GRAY);
+        drawActionGauge(
+                (Rectangle) {
+                        right->area.x + 100,
+                        right->area.y + 15 + (float) (i * LINE_HEIGHT),
+                        (float) player->party[i]->actionGauge,
+                        10,
+                },
+                WHITE);
+//        DrawRectangleRounded(
+//                (Rectangle) {
+//                        right->area.x + 100,
+//                        right->area.y + 15 + (float) (i * LINE_HEIGHT),
+//                        (float) player->party[i]->actionGauge,
+//                        10,
+//                },
+//                (float) 0.009,
+//                1,
+//                WHITE);
     }
 }
 
@@ -140,6 +174,19 @@ void processFightAnimations() {
     // stub
 }
 
-void fightUpdate(Fight *fight) {
-
+void fightUpdate(Fight *fight, Player *player) {
+    double end = getTimeInMS();
+    double interval = end - fight->time;
+    int amountToRaise = (int) interval / 10;
+    for (int i = 0; i < fight->beastCount; i++) {
+        if (fight->beasts[i]->actionGauge < MAX_ACTION_GAUGE) {
+            fight->beasts[i]->actionGauge += amountToRaise;
+        }
+    }
+    for (int i = 0; i < player->partyCount; i++) {
+        if (player->party[i]->actionGauge < MAX_ACTION_GAUGE) {
+            player->party[i]->actionGauge += amountToRaise;
+        }
+    }
+    fight->time = end;
 }
