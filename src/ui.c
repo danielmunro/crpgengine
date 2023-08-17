@@ -125,10 +125,14 @@ float line(int line) {
     return (float) line * LINE_HEIGHT;
 }
 
-void drawInMenu(TextBox *textBox, const char *text) {
+void drawInMenuWithStyle(TextBox *tb, FontStyle *fs, const char *text) {
     drawText(text, (Vector2) {
-            textBox->area.x + UI_PADDING,
-            textBox->area.y + line(textBox->cursor) + UI_PADDING
-    }, textBox->fontStyle);
-    textBox->cursor++;
+            tb->area.x + UI_PADDING,
+            tb->area.y + line(tb->cursor) + UI_PADDING
+    }, fs);
+    tb->cursor++;
+}
+
+void drawInMenu(TextBox *textBox, const char *text) {
+    drawInMenuWithStyle(textBox, textBox->fontStyle, text);
 }

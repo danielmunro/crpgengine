@@ -22,3 +22,11 @@ FontStyle *createDefaultFontStyle(Font font) {
             FONT_SIZE,
             1);
 }
+
+FontStyle *createDefaultDisabledFontStyle(Font font) {
+    return createFontStyle(
+            font,
+            GRAY,
+            FONT_SIZE,
+            1);
+}

@@ -152,7 +152,7 @@ void doExplorationLoop(Game *g) {
     evaluateMovement(s->exploration, g->player);
     evaluateExits(g);
     checkControls(g->controls);
-    checkFights(s, g->player, g->timing);
+    checkFights(s, g->player, g->ui->fontStyle->font);
 }
 
 void doFightLoop(Game *g) {

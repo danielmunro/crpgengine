@@ -123,7 +123,7 @@ bool canTriggerFight(Scene *s, Player *p) {
     return true;
 }
 
-void checkFights(Scene *s, Player *p, Timing *timing) {
+void checkFights(Scene *s, Player *p, Font font) {
     addDebug(s->log, "exploration -- check for fight");
     if (!canTriggerFight(s, p)) {
         return;
@@ -131,7 +131,8 @@ void checkFights(Scene *s, Player *p, Timing *timing) {
     if (rand() % 100 + 1 == 1) {
         s->fight = createFightFromEncounters(
                 s->log,
-                s->encounters);
+                s->encounters,
+                font);
         Animation *animation = findAnimation(getPartyLeader(p)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;
     }

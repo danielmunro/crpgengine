@@ -15,6 +15,8 @@ typedef struct {
     Vector2 cursors[MAX_CURSORS];
     Log *log;
     double time;
+    FontStyle *activeFont;
+    FontStyle *disabledFont;
 } Fight;
 
 Encounters *createEncounters() {
@@ -34,7 +36,11 @@ BeastEncounter *createBeastEncounterFromData(Beast *beast, BeastEncounterData da
     return createBeastEncounter(beast, data.max);
 }
 
-Fight *createFight(Log *log, int count, Beast *beasts[MAX_BEASTS_IN_FIGHT]) {
+Fight *createFight(
+        Log *log,
+        int count,
+        Beast *beasts[MAX_BEASTS_IN_FIGHT],
+        Font font) {
     Fight *fight = malloc(sizeof(Fight));
     fight->beastCount = count;
     fight->log = log;
@@ -42,10 +48,12 @@ Fight *createFight(Log *log, int count, Beast *beasts[MAX_BEASTS_IN_FIGHT]) {
         fight->beasts[i] = beasts[i];
     }
     fight->time = getTimeInMS();
+    fight->activeFont = createDefaultFontStyle(font);
+    fight->disabledFont = createDefaultDisabledFontStyle(font);
     return fight;
 }
 
-Fight *createFightFromEncounters(Log *log, Encounters *encounters) {
+Fight *createFightFromEncounters(Log *log, Encounters *encounters, Font font) {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
     addDebug(log, "creating %d beasts for fight", beastsToCreate);
@@ -62,7 +70,7 @@ Fight *createFightFromEncounters(Log *log, Encounters *encounters) {
             created++;
         }
     }
-    Fight *fight = createFight(log, created, beasts);
+    Fight *fight = createFight(log, created, beasts, font);
     fight->beastCount = created;
     addDebug(log, "fight encountered with %d opponents", fight->beastCount);
     return fight;
@@ -115,7 +123,10 @@ void drawFightMenu(Fight *fight, Player *player, FontStyle *font) {
         drawInMenu(left, fight->beasts[i]->name);
     }
     for (int i = 0; i < player->partyCount; i++) {
-        drawInMenu(right, player->party[i]->name);
+        drawInMenuWithStyle(
+                right,
+                fight->activeFont,
+                player->party[i]->name);
         drawActionGauge(
                 (Rectangle) {
                         right->area.x + 100,
