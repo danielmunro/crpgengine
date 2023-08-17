@@ -8,7 +8,7 @@ typedef struct {
     bool moving[DIRECTION_COUNT];
     struct timeval lastMovement;
     bool isBeingMoved;
-    Attributes *attributes;
+    Attributes attributes;
     int turnCounter;
     int waitTimer;
     struct timeval lastTimerUpdate;

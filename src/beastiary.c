@@ -2,7 +2,7 @@ typedef struct {
     const char *id;
     const char *name;
     Texture2D image;
-    Attributes *attributes;
+    Attributes attributes;
     int level;
     int hp;
     int mana;
