@@ -128,3 +128,29 @@ Attributes createEmptyAttributes() {
         }
     };
 }
+
+Attributes combineAttributes(const Attributes a, const Attributes b) {
+    return (Attributes) {
+            a.strength + b.strength,
+            a.dexterity + b.dexterity,
+            a.intelligence + b.intelligence,
+            a.wisdom + b.wisdom,
+            a.constitution + b.constitution,
+            a.hp + b.hp,
+            a.mana + b.mana,
+            (ArmorClass) {
+                    a.ac.bash + b.ac.bash,
+                    a.ac.slash + b.ac.slash,
+                    a.ac.pierce + b.ac.pierce,
+                    a.ac.fire + b.ac.fire,
+                    a.ac.water + b.ac.water,
+                    a.ac.frost + b.ac.frost,
+                    a.ac.electricity + b.ac.electricity,
+                    a.ac.dark + b.ac.dark,
+                    a.ac.light + b.ac.light,
+                    a.ac.corrosive + b.ac.corrosive,
+                    a.ac.poison + b.ac.poison,
+                    a.ac.energy + b.ac.energy,
+            }
+    };
+}

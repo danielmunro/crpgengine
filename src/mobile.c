@@ -14,6 +14,7 @@ typedef struct {
     struct timeval lastTimerUpdate;
     bool locked;
     int actionGauge;
+    ItemData *equipment[MAX_EQUIPMENT];
 } Mobile;
 
 typedef struct {
@@ -166,4 +167,14 @@ bool canPlayerMove(Mobile *mob) {
 
 bool isReadyForAction(Mobile *mob) {
     return mob->actionGauge >= MAX_ACTION_GAUGE;
+}
+
+Attributes calculateAttributes(Mobile *mob) {
+    Attributes calculated = mob->attributes;
+    for (int i = 0; i < MAX_EQUIPMENT; i++) {
+        if (mob->equipment[i] != NULL) {
+            calculated = combineAttributes(calculated, createAttributesFromData(mob->equipment[i]->attributes));
+        }
+    }
+    return calculated;
 }
