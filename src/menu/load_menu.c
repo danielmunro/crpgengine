@@ -4,14 +4,14 @@ int getLoadCursorLength(MenuContext *menuContext) {
 
 void drawLoadMenuScreen(MenuContext *menuContext) {
     Rectangle rect = drawSmallMenu();
-    TextBox *b = createTextBox(rect, menuContext->font);
+    TextBox *b = createTextBox(rect, menuContext->fontStyle);
     for (int i = 0; i < menuContext->saveFiles->count; i++) {
         drawInMenu(b, menuContext->saveFiles->saveNames[i]);
     }
     drawText(
             ">",
             (Vector2) {rect.x, rect.y + UI_PADDING + line(menuContext->cursorLine)},
-            menuContext->font);
+            menuContext->fontStyle);
     free(b);
 }
 

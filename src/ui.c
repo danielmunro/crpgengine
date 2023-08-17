@@ -1,22 +1,28 @@
 typedef struct {
     Rectangle area;
-    Font font;
+    FontStyle *fontStyle;
     int cursor;
 } TextBox;
 
-TextBox *createTextBox(Rectangle area, Font font) {
+TextBox *createTextBox(Rectangle area, FontStyle *fontStyle) {
     TextBox *textBox = malloc(sizeof(TextBox));
     textBox->area = area;
-    textBox->font = font;
+    textBox->fontStyle = fontStyle;
     textBox->cursor = 0;
     return textBox;
 }
 
-void drawText(const char *message, Vector2 position, Font font) {
-    DrawTextEx(font, message, position, FONT_SIZE, 1, WHITE);
+void drawText(const char *message, Vector2 position, FontStyle *fontStyle) {
+    DrawTextEx(
+            fontStyle->font,
+            message,
+            position,
+            fontStyle->size,
+            fontStyle->spacing,
+            fontStyle->color);
 }
 
-void drawLineInArea(const char *message, Rectangle area, int lineNumber, Font font) {
+void drawLineInArea(const char *message, Rectangle area, int lineNumber, FontStyle *font) {
     drawText(
             message,
             (Vector2) {
@@ -25,7 +31,7 @@ void drawLineInArea(const char *message, Rectangle area, int lineNumber, Font fo
             }, font);
 }
 
-void drawTextInArea(const char *message, Rectangle area, Font font) {
+void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
     char m[MAX_MESSAGE_BUFFER];
     char buffer[MAX_LINE_BUFFER];
     strcpy(m, message);
@@ -39,7 +45,7 @@ void drawTextInArea(const char *message, Rectangle area, Font font) {
             strcat(test, " ");
         }
         strcat(test, word);
-        Vector2 testArea = MeasureTextEx(font, test, FONT_SIZE, 1);
+        Vector2 testArea = MeasureTextEx(font->font, test, FONT_SIZE, 1);
         if (testArea.x > area.width - UI_PADDING * 2) {
             drawLineInArea(buffer, area, line, font);
             line++;
@@ -123,6 +129,6 @@ void drawInMenu(TextBox *textBox, const char *text) {
     drawText(text, (Vector2) {
             textBox->area.x + UI_PADDING,
             textBox->area.y + line(textBox->cursor) + UI_PADDING
-    }, textBox->font);
+    }, textBox->fontStyle);
     textBox->cursor++;
 }

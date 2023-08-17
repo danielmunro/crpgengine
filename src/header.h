@@ -291,6 +291,7 @@ const char *Events[MAX_EVENTS] = {
 #include "yaml/save.c"
 #include "runtime_args.c"
 #include "cyaml.c"
+#include "font.c"
 #include "window.c"
 #include "ui.c"
 #include "notification.c"

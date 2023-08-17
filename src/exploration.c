@@ -144,7 +144,7 @@ void drawAllMenus(
         Player *player,
         Menu *menus[MAX_MENUS],
         int menuCount,
-        Font font,
+        FontStyle *font,
         const char *scene,
         const char *indexDir) {
     BeginDrawing();
@@ -401,7 +401,7 @@ void evaluateMovement(Exploration *e, Player *p) {
     }
 }
 
-void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROLS], Font font) {
+void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROLS], FontStyle *font) {
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (cb[i] != NULL && cb[i]->progress < cb[i]->thenCount) {
             int p = cb[i]->progress;
@@ -412,14 +412,19 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
     }
 }
 
-void drawNotifications(NotificationManager *nm, Font font) {
+void drawNotifications(NotificationManager *nm, FontStyle *font) {
     for (int i = 0; i < nm->count; i++) {
         drawMenuRect(nm->notifications[i]->rect);
         drawTextInArea(nm->notifications[i]->message, nm->notifications[i]->rect, font);
     }
 }
 
-void drawExplorationView(Exploration *e, Player *p, NotificationManager *nm, ControlBlock *c[MAX_ACTIVE_CONTROLS], Font font) {
+void drawExplorationView(
+        Exploration *e,
+        Player *p,
+        NotificationManager *nm,
+        ControlBlock *c[MAX_ACTIVE_CONTROLS],
+        FontStyle *font) {
     addDebug(e->log, "exploration -- draw");
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();

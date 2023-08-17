@@ -107,7 +107,7 @@ void drawActionGauge(Rectangle rect, Color color) {
             color);
 }
 
-void drawFightMenu(Fight *fight, Player *player, Font font) {
+void drawFightMenu(Fight *fight, Player *player, FontStyle *font) {
     TextBox *left = createTextBox(drawBottomLeftMenu(), font);
     TextBox *right = createTextBox(drawBottomRightMenu(), font);
     int count = fight->beastCount > MAX_MOB_NAMES_IN_FIGHT ? MAX_MOB_NAMES_IN_FIGHT : fight->beastCount;
@@ -135,7 +135,7 @@ void drawFightMenu(Fight *fight, Player *player, Font font) {
     }
 }
 
-void drawFightView(Encounters *encounters, Fight *fight, Player *player, Font font) {
+void drawFightView(Encounters *encounters, Fight *fight, Player *player, FontStyle *font) {
     BeginDrawing();
     ClearBackground(BLACK);
     drawFightBackground(encounters);
