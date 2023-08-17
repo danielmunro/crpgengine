@@ -162,3 +162,7 @@ void useEntrance(Mobile *mob, Entrance *e) {
 bool canPlayerMove(Mobile *mob) {
     return !mob->isBeingMoved && !mob->locked && mob->waitTimer < 0;
 }
+
+bool isReadyForAction(Mobile *mob) {
+    return mob->actionGauge >= MAX_ACTION_GAUGE;
+}

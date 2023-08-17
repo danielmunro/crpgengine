@@ -125,7 +125,7 @@ void drawFightMenu(Fight *fight, Player *player, FontStyle *font) {
     for (int i = 0; i < player->partyCount; i++) {
         drawInMenuWithStyle(
                 right,
-                fight->activeFont,
+                isReadyForAction(player->party[i]) ? fight->activeFont : fight->disabledFont,
                 player->party[i]->name);
         drawActionGauge(
                 (Rectangle) {
