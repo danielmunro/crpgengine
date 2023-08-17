@@ -57,6 +57,7 @@ Mobile *createMobile(const char *id, const char *name, Vector2 position, Animati
         mobile->animations[i] = animations[i];
     }
     mobile->isBeingMoved = false;
+    mobile->actionGauge = 0;
     return mobile;
 }
 

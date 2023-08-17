@@ -123,18 +123,18 @@ void drawActionGauges(Fight *fight, TextBox *textBox, Player *player) {
                 player->party[i]->name);
         drawActionGauge(
                 (Rectangle) {
-                        textBox->area.x + 100,
-                        textBox->area.y + 15 + (float) (i * LINE_HEIGHT),
-                        300,
-                        10,
+                        textBox->area.x + ACTION_GAUGE_X_OFFSET,
+                        textBox->area.y + ACTION_GAUGE_Y_OFFSET + (float) (i * LINE_HEIGHT),
+                        ACTION_GAUGE_WIDTH,
+                        ACTION_GAUGE_HEIGHT,
                 },
                 GRAY);
         drawActionGauge(
                 (Rectangle) {
-                        textBox->area.x + 100,
-                        textBox->area.y + 15 + (float) (i * LINE_HEIGHT),
-                        (float) player->party[i]->actionGauge,
-                        10,
+                        textBox->area.x + ACTION_GAUGE_X_OFFSET,
+                        textBox->area.y + ACTION_GAUGE_Y_OFFSET + (float) (i * LINE_HEIGHT),
+                        ACTION_GAUGE_WIDTH * ((float) player->party[i]->actionGauge / MAX_ACTION_GAUGE),
+                        ACTION_GAUGE_HEIGHT,
                 },
                 WHITE);
     }
@@ -182,13 +182,14 @@ void processFightAnimations() {
 void fightUpdate(Fight *fight, Player *player) {
     double end = getTimeInMS();
     double interval = end - fight->time;
-    int amountToRaise = (int) interval / 10;
     for (int i = 0; i < fight->beastCount; i++) {
+        int amountToRaise = (int) interval / 10 + calcAttributesBeast(fight->beasts[i]).dexterity;
         if (fight->beasts[i]->actionGauge < MAX_ACTION_GAUGE) {
             fight->beasts[i]->actionGauge += amountToRaise;
         }
     }
     for (int i = 0; i < player->partyCount; i++) {
+        int amountToRaise = (int) (interval / 10) + calcAttributesMob(player->party[i]).dexterity;
         if (player->party[i]->actionGauge < MAX_ACTION_GAUGE) {
             player->party[i]->actionGauge += amountToRaise;
         }
