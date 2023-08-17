@@ -131,8 +131,7 @@ void checkFights(Scene *s, Player *p, Timing *timing) {
     if (rand() % 100 + 1 == 1) {
         s->fight = createFightFromEncounters(
                 s->log,
-                s->encounters,
-                timing);
+                s->encounters);
         Animation *animation = findAnimation(getPartyLeader(p)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;
     }
