@@ -148,16 +148,17 @@ void drawAllMenus(
         const char *scene,
         const char *indexDir) {
     BeginDrawing();
+    MenuContext *c = createMenuContext(
+            player,
+            scene,
+            indexDir,
+            font,
+            0);
     for (int i = 0; i < menuCount; i++) {
-        MenuContext *c = createMenuContext(
-                player,
-                scene,
-                indexDir,
-                font,
-                menus[i]->cursor);
+        c->cursorLine = menus[i]->cursor;
         menus[i]->draw(c);
-        free(c);
     }
+    free(c);
     EndDrawing();
 }
 
