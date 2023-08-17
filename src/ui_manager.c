@@ -1,5 +1,4 @@
 typedef struct {
-    Font font;
     FontStyle *fontStyle;
     Menu *menus[MAX_MENUS];
     int menuCount;
@@ -44,7 +43,6 @@ UIManager *createUIManager(const char *indexDir, const char *font) {
     UIManager *ui = malloc(sizeof(UIManager));
     char path[MAX_FS_PATH_LENGTH];
     sprintf(path, "%s/fonts/%s", indexDir, font);
-    ui->font = LoadFont(path);
     ui->fontStyle = createDefaultFontStyle(LoadFont(path));
     ui->menuCount = getMenuList(ui);
     return ui;
