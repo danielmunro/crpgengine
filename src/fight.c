@@ -115,6 +115,31 @@ void drawActionGauge(Rectangle rect, Color color) {
             color);
 }
 
+void drawActionGauges(Fight *fight, TextBox *textBox, Player *player) {
+    for (int i = 0; i < player->partyCount; i++) {
+        drawInMenuWithStyle(
+                textBox,
+                isReadyForAction(player->party[i]) ? fight->activeFont : fight->disabledFont,
+                player->party[i]->name);
+        drawActionGauge(
+                (Rectangle) {
+                        textBox->area.x + 100,
+                        textBox->area.y + 15 + (float) (i * LINE_HEIGHT),
+                        300,
+                        10,
+                },
+                GRAY);
+        drawActionGauge(
+                (Rectangle) {
+                        textBox->area.x + 100,
+                        textBox->area.y + 15 + (float) (i * LINE_HEIGHT),
+                        (float) player->party[i]->actionGauge,
+                        10,
+                },
+                WHITE);
+    }
+}
+
 void drawFightMenu(Fight *fight, Player *player, FontStyle *font) {
     TextBox *left = createTextBox(drawBottomLeftMenu(), font);
     TextBox *right = createTextBox(drawBottomRightMenu(), font);
@@ -122,28 +147,7 @@ void drawFightMenu(Fight *fight, Player *player, FontStyle *font) {
     for (int i = 0; i < count; i++) {
         drawInMenu(left, fight->beasts[i]->name);
     }
-    for (int i = 0; i < player->partyCount; i++) {
-        drawInMenuWithStyle(
-                right,
-                isReadyForAction(player->party[i]) ? fight->activeFont : fight->disabledFont,
-                player->party[i]->name);
-        drawActionGauge(
-                (Rectangle) {
-                        right->area.x + 100,
-                        right->area.y + 15 + (float) (i * LINE_HEIGHT),
-                        300,
-                        10,
-                },
-                GRAY);
-        drawActionGauge(
-                (Rectangle) {
-                        right->area.x + 100,
-                        right->area.y + 15 + (float) (i * LINE_HEIGHT),
-                        (float) player->party[i]->actionGauge,
-                        10,
-                },
-                WHITE);
-    }
+    drawActionGauges(fight, right, player);
 }
 
 void drawFightView(Encounters *encounters, Fight *fight, Player *player, FontStyle *font) {
