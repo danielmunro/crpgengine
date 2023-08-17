@@ -182,14 +182,15 @@ void processFightAnimations() {
 void fightUpdate(Fight *fight, Player *player) {
     double end = getTimeInMS();
     double interval = end - fight->time;
+    int amountToRaise = (int) interval / 10;
     for (int i = 0; i < fight->beastCount; i++) {
-        int amountToRaise = (int) interval / 10 + calcAttributesBeast(fight->beasts[i]).dexterity;
+//        int amountToRaise = (int) interval / 10 + calcAttributesBeast(fight->beasts[i]).dexterity;
         if (fight->beasts[i]->actionGauge < MAX_ACTION_GAUGE) {
             fight->beasts[i]->actionGauge += amountToRaise;
         }
     }
     for (int i = 0; i < player->partyCount; i++) {
-        int amountToRaise = (int) (interval / 10) + calcAttributesMob(player->party[i]).dexterity;
+//        int amountToRaise = (int) (interval / 10) + calcAttributesMob(player->party[i]).dexterity;
         if (player->party[i]->actionGauge < MAX_ACTION_GAUGE) {
             player->party[i]->actionGauge += amountToRaise;
         }
