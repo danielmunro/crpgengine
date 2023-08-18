@@ -49,10 +49,18 @@ Scene *findScene(SceneManager *sm, const char *name) {
     return NULL;
 }
 
-void setSceneBasedOnSave(SceneManager *sm, Player *player, SaveData *save, int sceneIndex) {
-    if (save != NULL && sceneIndex == -1) {
+void setSceneBasedOnSave(
+        SceneManager *sm,
+        Player *player,
+        SaveData *save,
+        const int sceneIndex) {
+    int sceneToUse = sceneIndex;
+    if (save != NULL && sceneToUse == -1) {
         setScene(sm, findScene(sm, save->scene), player, NULL);
         return;
     }
-    setScene(sm, sm->scenes[START_SCENE], player, START_ENTRANCE);
+    if (sceneToUse < 0) {
+        sceneToUse = 0;
+    }
+    setScene(sm, sm->scenes[sceneToUse], player, START_ENTRANCE);
 }
