@@ -132,6 +132,7 @@ void checkFights(Scene *s, Player *p, Font font) {
         s->fight = createFightFromEncounters(
                 s->log,
                 s->encounters,
+                p,
                 font);
         Animation *animation = findAnimation(getPartyLeader(p)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;

@@ -157,9 +157,9 @@ void doExplorationLoop(Game *g) {
 
 void doFightLoop(Game *g) {
     Scene *s = g->scenes->current;
-    fightUpdate(s->fight, g->player);
+    fightUpdate(s->fight);
     checkFightInput(s->fight);
-    drawFightView(s->encounters, s->fight, g->player, g->ui->fontStyle);
+    drawFightView(s->encounters, s->fight, g->ui->fontStyle);
     processFightAnimations();
     checkControls(g->controls);
     checkRemoveFight(s);

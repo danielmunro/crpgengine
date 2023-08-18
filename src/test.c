@@ -13,6 +13,13 @@ Beast *createTestBeast() {
     return beast;
 }
 
+AnimationManager *createTestAnimationManager() {
+    AnimationManager *am = createAnimationManager(createLog(INFO));
+    SpritesheetManager *sm = loadSpritesheetManager(am->log, "./fixtures");
+    loadAllAnimations(am, sm, "./fixtures");
+    return am;
+}
+
 void strToIntTest() {
     ok(strToInt("123042") == 123042, "strToInt works as expected");
 }
@@ -24,7 +31,14 @@ void createFightInSceneTest() {
     e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
     UIManager *ui = createUIManager("examples/simple_demo", "ancient-modern-tales.ttf");
     for (int i = 0; i < 100; i++) {
-        Fight *f = createFightFromEncounters(log, e, ui->fontStyle->font);
+        Fight *f = createFightFromEncounters(
+                log,
+                e,
+                createNewPlayer(
+                        log,
+                        createTestAnimationManager(),
+                        "examples/simple_demo"),
+                ui->fontStyle->font);
         char message[MAX_LOG_LINE_LENGTH];
         sprintf(message, "beast count is within expected range: %d", f->beastCount);
         ok(0 < f->beastCount && f->beastCount <= 9, message);
@@ -35,11 +49,10 @@ void canMoveMobTest() {
     // given
     float startX = 100, startY = 100;
     Vector2 start = (Vector2){startX, startY};
-    AnimationManager *am = createAnimationManager(createLog(INFO));
-    SpritesheetManager *sm = loadSpritesheetManager(am->log, "./fixtures");
+    AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
-    loadAllAnimations(am, sm, "./fixtures");
     loadAnimationsByName(am, "fireas", animations);
+
     Mobile *mob = createMobile("test", "test", start, DOWN, animations);
 
     // when
@@ -54,10 +67,8 @@ void canMobStopMovingTest() {
     // given
     float startX = 100, startY = 100;
     Vector2 start = (Vector2){startX, startY};
-    AnimationManager *am = createAnimationManager(createLog(INFO));
-    SpritesheetManager *sm = loadSpritesheetManager(am->log, "./fixtures");
+    AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
-    loadAllAnimations(am, sm, "./fixtures");
     loadAnimationsByName(am, "fireas", animations);
     Mobile *mob = createMobile("test", "test", start, DOWN, animations);
 

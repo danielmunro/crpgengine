@@ -11,6 +11,7 @@ typedef struct {
 
 typedef struct {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
+    Player *player;
     int beastCount;
     Vector2 cursors[MAX_CURSORS];
     Log *log;
@@ -38,22 +39,24 @@ BeastEncounter *createBeastEncounterFromData(Beast *beast, BeastEncounterData da
 
 Fight *createFight(
         Log *log,
-        int count,
         Beast *beasts[MAX_BEASTS_IN_FIGHT],
+        Player *player,
+        int beastCount,
         Font font) {
     Fight *fight = malloc(sizeof(Fight));
-    fight->beastCount = count;
+    fight->beastCount = beastCount;
     fight->log = log;
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < beastCount; i++) {
         fight->beasts[i] = beasts[i];
     }
+    fight->player = player;
     fight->time = getTimeInMS();
     fight->activeFont = createDefaultFontStyle(font);
     fight->disabledFont = createDefaultDisabledFontStyle(font);
     return fight;
 }
 
-Fight *createFightFromEncounters(Log *log, Encounters *encounters, Font font) {
+Fight *createFightFromEncounters(Log *log, Encounters *encounters, Player *player, Font font) {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
     addDebug(log, "creating %d beasts for fight", beastsToCreate);
@@ -70,7 +73,7 @@ Fight *createFightFromEncounters(Log *log, Encounters *encounters, Font font) {
             created++;
         }
     }
-    Fight *fight = createFight(log, created, beasts, font);
+    Fight *fight = createFight(log, beasts, player, created, font);
     fight->beastCount = created;
     addDebug(log, "fight encountered with %d opponents", fight->beastCount);
     return fight;
@@ -115,12 +118,12 @@ void drawActionGauge(Rectangle rect, Color color) {
             color);
 }
 
-void drawActionGauges(Fight *fight, TextBox *textBox, Player *player) {
-    for (int i = 0; i < player->partyCount; i++) {
+void drawActionGauges(Fight *fight, TextBox *textBox) {
+    for (int i = 0; i < fight->player->partyCount; i++) {
         drawInMenuWithStyle(
                 textBox,
-                isReadyForAction(player->party[i]) ? fight->activeFont : fight->disabledFont,
-                player->party[i]->name);
+                isReadyForAction(fight->player->party[i]) ? fight->activeFont : fight->disabledFont,
+                fight->player->party[i]->name);
         drawActionGauge(
                 (Rectangle) {
                         textBox->area.x + ACTION_GAUGE_X_OFFSET,
@@ -133,30 +136,30 @@ void drawActionGauges(Fight *fight, TextBox *textBox, Player *player) {
                 (Rectangle) {
                         textBox->area.x + ACTION_GAUGE_X_OFFSET,
                         textBox->area.y + ACTION_GAUGE_Y_OFFSET + (float) (i * LINE_HEIGHT),
-                        ACTION_GAUGE_WIDTH * ((float) player->party[i]->actionGauge / MAX_ACTION_GAUGE),
+                        ACTION_GAUGE_WIDTH * ((float) fight->player->party[i]->actionGauge / MAX_ACTION_GAUGE),
                         ACTION_GAUGE_HEIGHT,
                 },
                 WHITE);
     }
 }
 
-void drawFightMenu(Fight *fight, Player *player, FontStyle *font) {
+void drawFightMenu(Fight *fight, FontStyle *font) {
     TextBox *left = createTextBox(drawBottomLeftMenu(), font);
     TextBox *right = createTextBox(drawBottomRightMenu(), font);
     int count = fight->beastCount > MAX_MOB_NAMES_IN_FIGHT ? MAX_MOB_NAMES_IN_FIGHT : fight->beastCount;
     for (int i = 0; i < count; i++) {
         drawInMenu(left, fight->beasts[i]->name);
     }
-    drawActionGauges(fight, right, player);
+    drawActionGauges(fight, right);
 }
 
-void drawFightView(Encounters *encounters, Fight *fight, Player *player, FontStyle *font) {
+void drawFightView(Encounters *encounters, Fight *fight, FontStyle *font) {
     BeginDrawing();
     ClearBackground(BLACK);
     drawFightBackground(encounters);
     drawFightBeasts(fight);
-    drawFightPlayer(player);
-    drawFightMenu(fight, player, font);
+    drawFightPlayer(fight->player);
+    drawFightMenu(fight, font);
     EndDrawing();
 }
 
@@ -179,7 +182,7 @@ void processFightAnimations() {
     // stub
 }
 
-void fightUpdate(Fight *fight, Player *player) {
+void fightUpdate(Fight *fight) {
     double end = getTimeInMS();
     double interval = end - fight->time;
     for (int i = 0; i < fight->beastCount; i++) {
@@ -188,10 +191,11 @@ void fightUpdate(Fight *fight, Player *player) {
             fight->beasts[i]->actionGauge += amountToRaise;
         }
     }
-    for (int i = 0; i < player->partyCount; i++) {
-        int amountToRaise = (int) (interval / 10) + calculateAttributes(player->party[i]).dexterity;
-        if (player->party[i]->actionGauge < MAX_ACTION_GAUGE) {
-            player->party[i]->actionGauge += amountToRaise;
+    for (int i = 0; i < fight->player->partyCount; i++) {
+        int amountToRaise = (int) (interval / 10) +
+                calculateAttributes(fight->player->party[i]).dexterity;
+        if (fight->player->party[i]->actionGauge < MAX_ACTION_GAUGE) {
+            fight->player->party[i]->actionGauge += amountToRaise;
         }
     }
     fight->time = end;
