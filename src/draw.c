@@ -37,15 +37,15 @@ void drawActionGauge(Rectangle rect, Color color) {
             color);
 }
 
-void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox) {
+void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox, UIManager *ui) {
     for (int i = 0; i < fight->player->partyCount; i++) {
         FontStyle *fs;
         if (fight->cursors[FIGHT_CURSOR_MAIN] == i) {
-            fs = fight->highlightedFont;
+            fs = ui->highlightedFont;
         } else if(isReadyForAction(fight->player->party[i])) {
-            fs = fight->activeFont;
+            fs = ui->defaultFont;
         } else {
-            fs = fight->disabledFont;
+            fs = ui->disabledFont;
         }
         drawInMenuWithStyle(
                 textBox,
@@ -57,7 +57,7 @@ void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox) {
                     (int) textBox->area.y + (LINE_HEIGHT * (i + 1)),
                     86,
                     2,
-                    HIGHLIGHT_COLOR);
+                    ui->highlightedFont->color);
         }
         char hp[10];
         sprintf(hp, "%d", fight->player->party[i]->hp);
@@ -67,7 +67,7 @@ void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox) {
                         textBox->area.x + HP_X_OFFSET,
                         textBox->area.y + UI_PADDING + (float) (i * LINE_HEIGHT)
                 },
-                fight->activeFont);
+                ui->defaultFont);
         drawActionGauge(
                 (Rectangle) {
                         textBox->area.x + ACTION_GAUGE_X_OFFSET,
@@ -75,7 +75,7 @@ void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox) {
                         ACTION_GAUGE_WIDTH,
                         ACTION_GAUGE_HEIGHT,
                 },
-                GRAY);
+                ui->disabledFont->color);
         drawActionGauge(
                 (Rectangle) {
                         textBox->area.x + ACTION_GAUGE_X_OFFSET,
@@ -83,18 +83,18 @@ void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox) {
                         ACTION_GAUGE_WIDTH * ((float) fight->player->party[i]->actionGauge / MAX_ACTION_GAUGE),
                         ACTION_GAUGE_HEIGHT,
                 },
-                WHITE);
+                ui->defaultFont->color);
     }
 }
 
 void drawFightMenu(Fight *fight, UIManager *ui) {
-    TextBox *left = createTextBox(drawBottomLeftMenu(), ui->fontStyle);
-    TextBox *right = createTextBox(drawBottomRightMenu(), ui->fontStyle);
+    TextBox *left = createTextBox(drawBottomLeftMenu(), ui->defaultFont);
+    TextBox *right = createTextBox(drawBottomRightMenu(), ui->defaultFont);
     int count = fight->beastCount > MAX_MOB_NAMES_IN_FIGHT ? MAX_MOB_NAMES_IN_FIGHT : fight->beastCount;
     for (int i = 0; i < count; i++) {
         drawInMenu(left, fight->beasts[i]->name);
     }
-    drawPlayerFightTopLevel(fight, right);
+    drawPlayerFightTopLevel(fight, right, ui);
 }
 
 void drawFightView(Encounters *encounters, Fight *fight, UIManager *ui) {

@@ -95,7 +95,7 @@ void menuItemSelected(Game *g) {
             g->player,
             g->scenes->current->name,
             g->runtimeArgs->indexDir,
-            g->ui->fontStyle,
+            g->ui->defaultFont,
             menu->cursor);
     MenuSelectResponse *response = menu->selected(context);
     if (response->type == OPEN_MENU) {
@@ -117,7 +117,7 @@ void checkMenuInput(Game *g) {
                 g->player,
                 g->scenes->current->name,
                 g->runtimeArgs->indexDir,
-                g->ui->fontStyle,
+                g->ui->defaultFont,
                 menu->cursor);
         normalizeMenuCursor(menu, c);
         free(c);
@@ -129,7 +129,7 @@ void checkMenuInput(Game *g) {
                 g->player,
                 g->scenes->current->name,
                 g->runtimeArgs->indexDir,
-                g->ui->fontStyle,
+                g->ui->defaultFont,
                 menu->cursor);
         normalizeMenuCursor(menu, c);
         free(c);
@@ -163,8 +163,7 @@ void checkFights(Game *g, Scene *s) {
         g->fight = createFightFromEncounters(
                 g->log,
                 s->encounters,
-                g->player,
-                g->ui->fontStyle->font);
+                g->player);
         Animation *animation = findAnimation(getPartyLeader(g->player)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;
     }
@@ -185,7 +184,7 @@ void doExplorationLoop(Game *g) {
             g->player,
             g->notifications,
             s->activeControlBlocks,
-            g->ui->fontStyle);
+            g->ui->defaultFont);
     doMobileMovementUpdates(s->exploration);
     processAnimations(g->animations);
     evaluateMovement(s->exploration, g->player);
@@ -198,7 +197,7 @@ void doFightLoop(Game *g) {
     Scene *s = g->scenes->current;
     fightUpdate(g->fight);
     checkFightInput(g->fight);
-    drawFightView(s->encounters, g->fight, g->ui->fontStyle);
+    drawFightView(s->encounters, g->fight, g->ui);
     processFightAnimations();
     checkControls(g->controls);
     checkRemoveFight(g);
@@ -210,7 +209,7 @@ void doInGameMenuLoop(Game *g) {
             g->player,
             exploration->menus,
             exploration->menuCount,
-            g->ui->fontStyle,
+            g->ui->defaultFont,
             g->scenes->current->name,
             g->runtimeArgs->indexDir);
     checkMenuInput(g);

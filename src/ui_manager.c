@@ -1,7 +1,9 @@
 typedef struct {
-    FontStyle *fontStyle;
     Menu *menus[MAX_MENUS];
     int menuCount;
+    FontStyle *defaultFont;
+    FontStyle *disabledFont;
+    FontStyle *highlightedFont;
 } UIManager;
 
 int getMenuList(UIManager *ui) {
@@ -39,11 +41,14 @@ int getMenuList(UIManager *ui) {
     return count;
 }
 
-UIManager *createUIManager(const char *indexDir, const char *font) {
+UIManager *createUIManager(const char *indexDir, const char *fontName) {
     UIManager *ui = malloc(sizeof(UIManager));
     char path[MAX_FS_PATH_LENGTH];
-    sprintf(path, "%s/fonts/%s", indexDir, font);
-    ui->fontStyle = createDefaultFontStyle(LoadFont(path));
+    sprintf(path, "%s/fonts/%s", indexDir, fontName);
+    Font font = LoadFont(path);
+    ui->defaultFont = createDefaultFontStyle(font);
+    ui->disabledFont = createDefaultDisabledFontStyle(font);
+    ui->highlightedFont = createHighlightedFontStyle(font);
     ui->menuCount = getMenuList(ui);
     return ui;
 }

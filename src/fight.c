@@ -16,9 +16,6 @@ typedef struct {
     int *cursors;
     Log *log;
     double time;
-    FontStyle *activeFont;
-    FontStyle *disabledFont;
-    FontStyle *highlightedFont;
 } Fight;
 
 Encounters *createEncounters() {
@@ -42,8 +39,7 @@ Fight *createFight(
         Log *log,
         Beast **beasts,
         Player *player,
-        int beastCount,
-        Font font) {
+        int beastCount) {
     Fight *fight = malloc(sizeof(Fight));
     fight->log = log;
     fight->beastCount = beastCount;
@@ -53,9 +49,6 @@ Fight *createFight(
     }
     fight->player = player;
     fight->time = getTimeInMS();
-    fight->activeFont = createDefaultFontStyle(font);
-    fight->disabledFont = createDefaultDisabledFontStyle(font);
-    fight->highlightedFont = createHighlightedFontStyle(font);
     fight->cursors = calloc(MAX_CURSORS, sizeof(int));
     for (int i = 0; i < MAX_CURSORS; i++) {
         fight->cursors[i] = -1;
@@ -63,7 +56,7 @@ Fight *createFight(
     return fight;
 }
 
-Fight *createFightFromEncounters(Log *log, Encounters *encounters, Player *player, Font font) {
+Fight *createFightFromEncounters(Log *log, Encounters *encounters, Player *player) {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
     addDebug(log, "creating %d beasts for fight", beastsToCreate);
@@ -80,7 +73,7 @@ Fight *createFightFromEncounters(Log *log, Encounters *encounters, Player *playe
             created++;
         }
     }
-    Fight *fight = createFight(log, beasts, player, created, font);
+    Fight *fight = createFight(log, beasts, player, created);
     fight->beastCount = created;
     addDebug(log, "fight encountered with %d opponents", fight->beastCount);
     return fight;
