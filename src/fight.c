@@ -254,8 +254,7 @@ void fightUpdate(Fight *fight) {
     }
     for (int i = 0; i < fight->player->partyCount; i++) {
         Mobile *mob = fight->player->party[i];
-        int amountToRaise = (int) (interval / 10) +
-                calculateAttributes(mob).dexterity;
+        int amountToRaise = (int) (interval + calculateAttributes(mob).dexterity) / 10;
         if (!isReadyForAction(mob)) {
             mob->actionGauge += amountToRaise;
             if (isReadyForAction(mob) && fight->cursors[FIGHT_CURSOR_MAIN] == -1) {
