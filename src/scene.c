@@ -13,7 +13,6 @@ typedef struct {
     int controlBlockCount;
     ControlBlock *activeControlBlocks[MAX_ACTIVE_CONTROLS];
     Encounters *encounters;
-    Fight *fight;
     Exploration *exploration;
     Log *log;
 } Scene;
@@ -46,7 +45,6 @@ void setSceneTypeFromString(Scene *s, const char *sceneType) {
 Scene *createScene(Log *log, RuntimeArgs *runtimeArgs) {
     Scene *scene = malloc(sizeof(Scene));
     scene->storylineCount = 0;
-    scene->fight = NULL;
     scene->encounters = createEncounters();
     scene->log = log;
     scene->exploration = createExploration(log, runtimeArgs);
@@ -65,14 +63,6 @@ SceneLoader *createSceneLoader(const char *indexDir) {
     sceneLoader->scenes = calloc(MAX_SCENES, sizeof(char *));
     sceneLoader->sceneFiles = calloc(MAX_SCENES, sizeof(char *));
     return sceneLoader;
-}
-
-bool isExploring(Scene *s) {
-    return s->fight == NULL && !getCurrentMenu(s->exploration);
-}
-
-bool isFighting(Scene *s) {
-    return s->fight != NULL;
 }
 
 bool isDungeon(Scene *s) {
@@ -115,36 +105,6 @@ void controlWhenCheck(Scene *s, Player *p, EventType eventType) {
         }
     }
 }
-
-bool canTriggerFight(Scene *s, Player *p) {
-    if (!isDungeon(s) || isFighting(s) || !isMoving(getPartyLeader(p))) {
-        return false;
-    }
-    return true;
-}
-
-void checkFights(Scene *s, Player *p, Font font) {
-    addDebug(s->log, "exploration -- check for fight");
-    if (!canTriggerFight(s, p)) {
-        return;
-    }
-    if (rand() % 100 + 1 == 1) {
-        s->fight = createFightFromEncounters(
-                s->log,
-                s->encounters,
-                p,
-                font);
-        Animation *animation = findAnimation(getPartyLeader(p)->animations, LEFT);
-        animation->currentFrame = animation->firstFrame;
-    }
-}
-
-void checkRemoveFight(Scene *s) {
-    if (isFightDone(s->fight)) {
-        s->fight = NULL;
-    }
-}
-
 
 int addSubsceneFiles(SceneLoader *sl) {
     for (int i = 0; i < sl->count; i++) {

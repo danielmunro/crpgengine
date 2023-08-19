@@ -13,6 +13,7 @@ typedef struct {
     ControlManager *controls;
     MobileManager *mobiles;
     UIManager *ui;
+    Fight *fight;
 } Game;
 
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
@@ -138,6 +139,44 @@ void checkMenuInput(Game *g) {
     }
 }
 
+bool isExploring(Game *g) {
+    return g->fight == NULL && !getCurrentMenu(g->scenes->current->exploration);
+}
+
+bool isFighting(Game *g) {
+    return g->fight != NULL;
+}
+
+bool canTriggerFight(Game *g, Player *p) {
+    if (!isDungeon(g->scenes->current) || isFighting(g) || !isMoving(getPartyLeader(p))) {
+        return false;
+    }
+    return true;
+}
+
+void checkFights(Game *g, Scene *s) {
+    addDebug(s->log, "exploration -- check for fight");
+    if (!canTriggerFight(g, g->player)) {
+        return;
+    }
+    if (rand() % 100 + 1 == 1) {
+        g->fight = createFightFromEncounters(
+                g->log,
+                s->encounters,
+                g->player,
+                g->ui->fontStyle->font);
+        Animation *animation = findAnimation(getPartyLeader(g->player)->animations, LEFT);
+        animation->currentFrame = animation->firstFrame;
+    }
+}
+
+void checkRemoveFight(Game *g) {
+    if (isFightDone(g->fight)) {
+        free(g->fight);
+        g->fight = NULL;
+    }
+}
+
 void doExplorationLoop(Game *g) {
     Scene *s = g->scenes->current;
     checkExplorationInput(g);
@@ -152,17 +191,17 @@ void doExplorationLoop(Game *g) {
     evaluateMovement(s->exploration, g->player);
     evaluateExits(g);
     checkControls(g->controls);
-    checkFights(s, g->player, g->ui->fontStyle->font);
+    checkFights(g, s);
 }
 
 void doFightLoop(Game *g) {
     Scene *s = g->scenes->current;
-    fightUpdate(s->fight);
-    checkFightInput(s->fight);
-    drawFightView(s->encounters, s->fight, g->ui->fontStyle);
+    fightUpdate(g->fight);
+    checkFightInput(g->fight);
+    drawFightView(s->encounters, g->fight, g->ui->fontStyle);
     processFightAnimations();
     checkControls(g->controls);
-    checkRemoveFight(s);
+    checkRemoveFight(g);
 }
 
 void doInGameMenuLoop(Game *g) {
@@ -180,11 +219,11 @@ void doInGameMenuLoop(Game *g) {
 void run(Game *g) {
     while (!WindowShouldClose()) {
         startTiming(g->timing);
-        if (isFighting(g->scenes->current)) {
+        if (isFighting(g)) {
             doFightLoop(g);
         } else if (getCurrentMenu(g->scenes->current->exploration) != NULL) {
             doInGameMenuLoop(g);
-        } else if (isExploring(g->scenes->current)) {
+        } else if (isExploring(g)) {
             doExplorationLoop(g);
         }
         updateMusicStream(g->audio);
@@ -245,6 +284,7 @@ Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
                                    g->animations, g->audio);
     loadScenesFromFiles(g->scenes, g->mobiles, g->beastiary, g->runtimeArgs);
     setSceneBasedOnSave(g->scenes, g->player, save, g->runtimeArgs->sceneIndex);
+    g->fight = NULL;
     addDebug(g->log, "done creating game object");
     free(save);
     return g;
