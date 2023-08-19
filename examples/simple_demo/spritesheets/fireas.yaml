@@ -3,3 +3,4 @@ filename: fireas.png
 frame:
   width: 16
   height: 24
+  padding: 0

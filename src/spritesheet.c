@@ -4,6 +4,7 @@ typedef struct {
     Texture2D source;
     int frameWidth;
     int frameHeight;
+    int padding;
 } Spritesheet;
 
 typedef struct {
@@ -11,7 +12,12 @@ typedef struct {
     int spritesCount;
 } SpritesheetManager;
 
-Spritesheet *createSpriteSheet(const char *name, const char *filename, int width, int height) {
+Spritesheet *createSpriteSheet(
+        const char *name,
+        const char *filename,
+        int width,
+        int height,
+        int padding) {
     Texture2D tex = LoadTexture(filename);
     Spritesheet *sp = malloc(sizeof(Spritesheet));
     sp->name = name;
@@ -19,6 +25,7 @@ Spritesheet *createSpriteSheet(const char *name, const char *filename, int width
     sp->source = tex;
     sp->frameWidth = width;
     sp->frameHeight = height;
+    sp->padding = padding;
     return sp;
 }
 
@@ -38,4 +45,22 @@ Spritesheet *findSpritesheetByName(SpritesheetManager *sm, const char *name) {
         }
     }
     return NULL;
+}
+
+void drawImageFromSprite(Spritesheet *s, Vector2 position, int imageIndex) {
+    int columns = (int) roundf((float) s->source.width / (float)(s->frameWidth + s->padding));
+    int y = imageIndex / columns;
+    int x = imageIndex - (y * columns);
+    Rectangle rect = {
+            (float) (x * (s->frameWidth + s->padding)),
+            (float) (y * (s->frameHeight + s->padding)),
+            (float) s->frameWidth,
+            (float) s->frameHeight,
+    };
+    DrawTextureRec(
+            s->source,
+            rect,
+            position,
+            WHITE
+    );
 }

@@ -259,9 +259,9 @@ SaveData *initializePlayer(Game *g) {
 Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
     g->runtimeArgs = r;
-    g->ui = createUIManager(r->indexDir, cfg->font);
     g->log = createLog(g->runtimeArgs->logLevel);
     g->sprites = loadSpritesheetManager(g->log, r->indexDir);
+    g->ui = createUIManager(g->sprites, r->indexDir, cfg->font);
     g->animations = createAnimationManager(g->log);
     loadAllAnimations(g->animations, g->sprites, r->indexDir);
     g->audio = loadAudioManager(g->log, r->indexDir);

@@ -1,6 +1,7 @@
 typedef struct {
     int width;
     int height;
+    int padding;
 } FrameData;
 
 typedef struct {
@@ -14,6 +15,8 @@ static const cyaml_schema_field_t frameFieldSchema[] = {
                 "width", CYAML_FLAG_POINTER, FrameData, width),
         CYAML_FIELD_INT(
                 "height", CYAML_FLAG_POINTER, FrameData, height),
+        CYAML_FIELD_INT(
+                "padding", CYAML_FLAG_POINTER, FrameData, padding),
         CYAML_FIELD_END
 };
 

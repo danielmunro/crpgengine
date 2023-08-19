@@ -53,12 +53,11 @@ void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox, UIManager *ui) {
                 fs,
                 mob->name);
         if (fight->cursors[FIGHT_CURSOR_MAIN] == i) {
-            DrawRectangle(
-                    (int) textBox->area.x + UI_PADDING,
-                    (int) textBox->area.y + (LINE_HEIGHT * (i + 1)),
-                    86,
-                    2,
-                    ui->highlightedFont->color);
+            Spritesheet *spritesheet = findSpritesheetByName(ui->sprites, SPRITESHEET_NAME_UI);
+            drawImageFromSprite(spritesheet, (Vector2) {
+                    textBox->area.x + 5,
+                    textBox->area.y + (float) (LINE_HEIGHT * i) + 22,
+            }, CURSOR_INDEX);
         }
         char hp[10];
         sprintf(hp, "%d", fight->player->party[i]->hp);

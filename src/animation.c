@@ -115,21 +115,7 @@ int loadAnimationsByName(AnimationManager *am, const char *name, Animation *anim
 }
 
 void drawAnimation(Animation *a, Vector2 position) {
-    int xFrames = a->spriteSheet->source.width / a->spriteSheet->frameWidth;
-    int x = a->currentFrame % xFrames;
-    int y = a->currentFrame / xFrames;
-    Rectangle rect = {
-            (float) (x * a->spriteSheet->frameWidth),
-            (float) (y * a->spriteSheet->frameHeight),
-            (float) a->spriteSheet->frameWidth,
-            (float) a->spriteSheet->frameHeight,
-    };
-    DrawTextureRec(
-            a->spriteSheet->source,
-            rect,
-            position,
-            WHITE
-    );
+    drawImageFromSprite(a->spriteSheet, position, a->currentFrame);
 }
 
 Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], AnimationType type) {

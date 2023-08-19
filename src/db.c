@@ -218,7 +218,12 @@ SpritesheetManager *loadSpritesheetManager(Log *log, const char *indexDir) {
             char imageFilePath[MAX_FS_PATH_LENGTH];
             sprintf(imageFilePath, "%s/%s", directory, data->filename);
             addInfo(log, "spritesheet :: %s, %s", data->name, imageFilePath);
-            spritesheets[count] = createSpriteSheet(data->name, imageFilePath, data->frame->width, data->frame->height);
+            spritesheets[count] = createSpriteSheet(
+                    data->name,
+                    imageFilePath,
+                    data->frame->width,
+                    data->frame->height,
+                    data->frame->padding);
             count++;
             free(data);
         }
