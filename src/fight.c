@@ -115,7 +115,7 @@ int getNextCursorPosition(Fight *fight, FightCursor cursor) {
             return i;
         }
     }
-    return -1;
+    return fight->cursors[cursor];
 }
 
 int getPreviousCursorPosition(Fight *fight, FightCursor cursor) {
@@ -129,7 +129,7 @@ int getPreviousCursorPosition(Fight *fight, FightCursor cursor) {
             return i;
         }
     }
-    return -1;
+    return fight->cursors[cursor];
 }
 
 void checkFightInput(Fight *fight) {
