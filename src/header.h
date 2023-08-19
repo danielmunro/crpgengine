@@ -30,6 +30,7 @@
 #define FONT_SIZE 20
 #define LINE_HEIGHT 30
 #define UI_PADDING 12
+#define HIGHLIGHT_COLOR YELLOW
 
 #define HP_X_OFFSET 200
 

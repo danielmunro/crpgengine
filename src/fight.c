@@ -18,6 +18,7 @@ typedef struct {
     double time;
     FontStyle *activeFont;
     FontStyle *disabledFont;
+    FontStyle *highlightedFont;
 } Fight;
 
 Encounters *createEncounters() {
@@ -54,6 +55,7 @@ Fight *createFight(
     fight->time = getTimeInMS();
     fight->activeFont = createDefaultFontStyle(font);
     fight->disabledFont = createDefaultDisabledFontStyle(font);
+    fight->highlightedFont = createHighlightedFontStyle(font);
     fight->cursors = calloc(MAX_CURSORS, sizeof(int));
     for (int i = 0; i < MAX_CURSORS; i++) {
         fight->cursors[i] = -1;
@@ -129,9 +131,17 @@ void drawActionGauge(Rectangle rect, Color color) {
 
 void drawActionGauges(Fight *fight, TextBox *textBox) {
     for (int i = 0; i < fight->player->partyCount; i++) {
+        FontStyle *fs;
+        if (fight->cursors[FIGHT_CURSOR_MAIN] == i) {
+            fs = fight->highlightedFont;
+        } else if(isReadyForAction(fight->player->party[i])) {
+            fs = fight->activeFont;
+        } else {
+            fs = fight->disabledFont;
+        }
         drawInMenuWithStyle(
                 textBox,
-                isReadyForAction(fight->player->party[i]) ? fight->activeFont : fight->disabledFont,
+                fs,
                 fight->player->party[i]->name);
         if (fight->cursors[FIGHT_CURSOR_MAIN] == i) {
             DrawRectangle(
@@ -139,7 +149,7 @@ void drawActionGauges(Fight *fight, TextBox *textBox) {
                     (int) textBox->area.y + (LINE_HEIGHT * (i + 1)),
                     86,
                     2,
-                    WHITE);
+                    HIGHLIGHT_COLOR);
         }
         char hp[10];
         sprintf(hp, "%d", fight->player->party[i]->hp);
@@ -190,7 +200,24 @@ void drawFightView(Encounters *encounters, Fight *fight, FontStyle *font) {
 }
 
 void fightSpaceKeyPressed(Fight *fight) {
-    cancelFight(fight);
+    int c = fight->cursors[FIGHT_CURSOR_MAIN];
+    Player *p = fight->player;
+    if (c > -1) {
+        p->party[c]->actionGauge = 0;
+        for (int i = c; i < MAX_CURSORS; i++) {
+            if (isReadyForAction(p->party[i])) {
+                fight->cursors[FIGHT_CURSOR_MAIN] = i;
+                return;
+            }
+        }
+        for (int i = c; i >= 0; i--) {
+            if (isReadyForAction(p->party[i])) {
+                fight->cursors[FIGHT_CURSOR_MAIN] = i;
+                return;
+            }
+        }
+        fight->cursors[FIGHT_CURSOR_MAIN] = -1;
+    }
 }
 
 int getNextCursorPosition(Fight *fight, FightCursor cursor) {
@@ -232,6 +259,9 @@ void checkFightInput(Fight *fight) {
     if (IsKeyPressed(KEY_SPACE)) {
         fightSpaceKeyPressed(fight);
     }
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        cancelFight(fight);
+    }
 }
 
 int isFightDone(Fight *fight) {
@@ -242,19 +272,23 @@ void processFightAnimations() {
     // stub
 }
 
+int getActionGaugeRaise(double elapsedTime, int dexterity) {
+    return (int) (elapsedTime + dexterity) / 10;
+}
+
 void fightUpdate(Fight *fight) {
     double end = getTimeInMS();
     double interval = end - fight->time;
     for (int i = 0; i < fight->beastCount; i++) {
         Beast *b = fight->beasts[i];
-        int amountToRaise = (int) (interval + b->attributes.dexterity) / 10;
+        int amountToRaise = getActionGaugeRaise(interval, b->attributes.dexterity);
         if (b->actionGauge < MAX_ACTION_GAUGE) {
             b->actionGauge += amountToRaise;
         }
     }
     for (int i = 0; i < fight->player->partyCount; i++) {
         Mobile *mob = fight->player->party[i];
-        int amountToRaise = (int) (interval + calculateAttributes(mob).dexterity) / 10;
+        int amountToRaise = getActionGaugeRaise(interval, calculateAttributes(mob).dexterity);
         if (!isReadyForAction(mob)) {
             mob->actionGauge += amountToRaise;
             if (isReadyForAction(mob) && fight->cursors[FIGHT_CURSOR_MAIN] == -1) {

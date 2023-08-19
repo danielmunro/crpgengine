@@ -30,3 +30,11 @@ FontStyle *createDefaultDisabledFontStyle(Font font) {
             FONT_SIZE,
             1);
 }
+
+FontStyle *createHighlightedFontStyle(Font font) {
+    return createFontStyle(
+            font,
+            HIGHLIGHT_COLOR,
+            FONT_SIZE,
+            1);
+}
