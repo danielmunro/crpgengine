@@ -39,10 +39,11 @@ void drawActionGauge(Rectangle rect, Color color) {
 
 void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox, UIManager *ui) {
     for (int i = 0; i < fight->player->partyCount; i++) {
+        Mobile *mob = fight->player->party[i];
         FontStyle *fs;
         if (fight->cursors[FIGHT_CURSOR_MAIN] == i) {
             fs = ui->highlightedFont;
-        } else if(isReadyForAction(fight->player->party[i])) {
+        } else if(isReadyForAction(mob)) {
             fs = ui->defaultFont;
         } else {
             fs = ui->disabledFont;
@@ -50,7 +51,7 @@ void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox, UIManager *ui) {
         drawInMenuWithStyle(
                 textBox,
                 fs,
-                fight->player->party[i]->name);
+                mob->name);
         if (fight->cursors[FIGHT_CURSOR_MAIN] == i) {
             DrawRectangle(
                     (int) textBox->area.x + UI_PADDING,
@@ -61,13 +62,36 @@ void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox, UIManager *ui) {
         }
         char hp[10];
         sprintf(hp, "%d", fight->player->party[i]->hp);
+        if ((float) mob->hp / (float) calculateAttributes(mob).hp >= FONT_WARNING_THRESHOLD) {
+            fs = ui->defaultFont;
+        } else if ((float) mob->hp / (float) calculateAttributes(mob).hp >= FONT_DANGER_THRESHOLD) {
+            fs = ui->warningFont;
+        } else {
+            fs = ui->dangerFont;
+        }
         drawText(
                 hp,
                 (Vector2) {
                         textBox->area.x + HP_X_OFFSET,
                         textBox->area.y + UI_PADDING + (float) (i * LINE_HEIGHT)
                 },
-                ui->defaultFont);
+                fs);
+        char mana[10];
+        if ((float) mob->mana / (float) calculateAttributes(mob).mana >= FONT_WARNING_THRESHOLD) {
+            fs = ui->defaultFont;
+        } else if ((float) mob->mana / (float) calculateAttributes(mob).mana >= FONT_DANGER_THRESHOLD) {
+            fs = ui->warningFont;
+        } else {
+            fs = ui->dangerFont;
+        }
+        sprintf(mana, "%d", fight->player->party[i]->mana);
+        drawText(
+                mana,
+                (Vector2) {
+                        textBox->area.x + MANA_X_OFFSET,
+                        textBox->area.y + UI_PADDING + (float) (i * LINE_HEIGHT)
+                },
+                fs);
         drawActionGauge(
                 (Rectangle) {
                         textBox->area.x + ACTION_GAUGE_X_OFFSET,

@@ -38,3 +38,19 @@ FontStyle *createHighlightedFontStyle(Font font) {
             FONT_SIZE,
             1);
 }
+
+FontStyle *createWarningFontStyle(Font font) {
+    return createFontStyle(
+            font,
+            HIGHLIGHT_COLOR,
+            FONT_SIZE,
+            1);
+}
+
+FontStyle *createDangerFontStyle(Font font) {
+    return createFontStyle(
+            font,
+            DANGER_COLOR,
+            FONT_SIZE,
+            1);
+}

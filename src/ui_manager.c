@@ -4,6 +4,8 @@ typedef struct {
     FontStyle *defaultFont;
     FontStyle *disabledFont;
     FontStyle *highlightedFont;
+    FontStyle *warningFont;
+    FontStyle *dangerFont;
 } UIManager;
 
 int getMenuList(UIManager *ui) {
@@ -49,6 +51,8 @@ UIManager *createUIManager(const char *indexDir, const char *fontName) {
     ui->defaultFont = createDefaultFontStyle(font);
     ui->disabledFont = createDefaultDisabledFontStyle(font);
     ui->highlightedFont = createHighlightedFontStyle(font);
+    ui->warningFont = createWarningFontStyle(font);
+    ui->dangerFont = createDangerFontStyle(font);
     ui->menuCount = getMenuList(ui);
     return ui;
 }

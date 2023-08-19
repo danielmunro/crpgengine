@@ -88,6 +88,8 @@ void fightSpaceKeyPressed(Fight *fight) {
     Player *p = fight->player;
     if (c > -1) {
         p->party[c]->actionGauge = 0;
+        p->party[c]->hp -= 2;
+        p->party[c]->mana -= 1;
         for (int i = c; i < MAX_CURSORS; i++) {
             if (isReadyForAction(p->party[i])) {
                 fight->cursors[FIGHT_CURSOR_MAIN] = i;
