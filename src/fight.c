@@ -247,7 +247,7 @@ void fightUpdate(Fight *fight) {
     double interval = end - fight->time;
     for (int i = 0; i < fight->beastCount; i++) {
         Beast *b = fight->beasts[i];
-        int amountToRaise = (int) interval / 10 + b->attributes.dexterity;
+        int amountToRaise = (int) (interval + b->attributes.dexterity) / 10;
         if (b->actionGauge < MAX_ACTION_GAUGE) {
             b->actionGauge += amountToRaise;
         }
