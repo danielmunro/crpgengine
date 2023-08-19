@@ -1,0 +1,108 @@
+void drawFightBackground(Encounters *encounters) {
+    float scale = (float) SCREEN_WIDTH / (float) encounters->background.width;
+    DrawTextureEx(encounters->background, (Vector2) {0, 0}, 0, scale, WHITE);
+}
+
+void drawFightBeasts(Fight *fight) {
+    int width = 0;
+    int height = 0;
+    for (int i = 0; i < fight->beastCount; i++) {
+        const int x = i % 3;
+        DrawTextureEx(fight->beasts[i]->image,
+                      (Vector2) {(float) width, (float) height},
+                      0, SCALE, WHITE);
+        width += fight->beasts[i]->image.width;
+        if (x > 0 && x % 2 == 0) {
+            height += fight->beasts[i]->image.height;
+            width = 0;
+        }
+    }
+}
+
+void drawFightPlayer(Player *player) {
+    for (int i = 0; i < MAX_PARTY_SIZE; i++) {
+        if (player->party[i] != NULL) {
+            drawAnimation(
+                    findAnimation(getPartyLeader(player)->animations, LEFT),
+                    (Vector2) {SCREEN_WIDTH * .8, (float) (100 + (MOB_HEIGHT * i))});
+        }
+    }
+}
+
+void drawActionGauge(Rectangle rect, Color color) {
+    DrawRectangleRounded(
+            rect,
+            (float) 1,
+            4,
+            color);
+}
+
+void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox) {
+    for (int i = 0; i < fight->player->partyCount; i++) {
+        FontStyle *fs;
+        if (fight->cursors[FIGHT_CURSOR_MAIN] == i) {
+            fs = fight->highlightedFont;
+        } else if(isReadyForAction(fight->player->party[i])) {
+            fs = fight->activeFont;
+        } else {
+            fs = fight->disabledFont;
+        }
+        drawInMenuWithStyle(
+                textBox,
+                fs,
+                fight->player->party[i]->name);
+        if (fight->cursors[FIGHT_CURSOR_MAIN] == i) {
+            DrawRectangle(
+                    (int) textBox->area.x + UI_PADDING,
+                    (int) textBox->area.y + (LINE_HEIGHT * (i + 1)),
+                    86,
+                    2,
+                    HIGHLIGHT_COLOR);
+        }
+        char hp[10];
+        sprintf(hp, "%d", fight->player->party[i]->hp);
+        drawText(
+                hp,
+                (Vector2) {
+                        textBox->area.x + HP_X_OFFSET,
+                        textBox->area.y + UI_PADDING + (float) (i * LINE_HEIGHT)
+                },
+                fight->activeFont);
+        drawActionGauge(
+                (Rectangle) {
+                        textBox->area.x + ACTION_GAUGE_X_OFFSET,
+                        textBox->area.y + ACTION_GAUGE_Y_OFFSET + (float) (i * LINE_HEIGHT),
+                        ACTION_GAUGE_WIDTH,
+                        ACTION_GAUGE_HEIGHT,
+                },
+                GRAY);
+        drawActionGauge(
+                (Rectangle) {
+                        textBox->area.x + ACTION_GAUGE_X_OFFSET,
+                        textBox->area.y + ACTION_GAUGE_Y_OFFSET + (float) (i * LINE_HEIGHT),
+                        ACTION_GAUGE_WIDTH * ((float) fight->player->party[i]->actionGauge / MAX_ACTION_GAUGE),
+                        ACTION_GAUGE_HEIGHT,
+                },
+                WHITE);
+    }
+}
+
+void drawFightMenu(Fight *fight, UIManager *ui) {
+    TextBox *left = createTextBox(drawBottomLeftMenu(), ui->fontStyle);
+    TextBox *right = createTextBox(drawBottomRightMenu(), ui->fontStyle);
+    int count = fight->beastCount > MAX_MOB_NAMES_IN_FIGHT ? MAX_MOB_NAMES_IN_FIGHT : fight->beastCount;
+    for (int i = 0; i < count; i++) {
+        drawInMenu(left, fight->beasts[i]->name);
+    }
+    drawPlayerFightTopLevel(fight, right);
+}
+
+void drawFightView(Encounters *encounters, Fight *fight, UIManager *ui) {
+    BeginDrawing();
+    ClearBackground(BLACK);
+    drawFightBackground(encounters);
+    drawFightBeasts(fight);
+    drawFightPlayer(fight->player);
+    drawFightMenu(fight, ui);
+    EndDrawing();
+}
