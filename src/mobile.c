@@ -14,7 +14,9 @@ typedef struct {
     struct timeval lastTimerUpdate;
     bool locked;
     int actionGauge;
-    ItemData *equipment[MAX_EQUIPMENT];
+    ItemData **equipment;
+    int hp;
+    int mana;
 } Mobile;
 
 typedef struct {
@@ -37,8 +39,12 @@ Animation *getMobAnimation(Mobile *mob) {
     return findAnimation(mob->animations, mob->direction);
 }
 
-Mobile *createMobile(const char *id, const char *name, Vector2 position, AnimationType direction,
-                     Animation *animations[MAX_ANIMATIONS]) {
+Mobile *createMobile(
+        const char *id,
+        const char *name,
+        Vector2 position,
+        AnimationType direction,
+        Animation *animations[MAX_ANIMATIONS]) {
     Mobile *mobile = malloc(sizeof(Mobile));
     mobile->id = &id[0];
     mobile->name = &name[0];
@@ -59,6 +65,9 @@ Mobile *createMobile(const char *id, const char *name, Vector2 position, Animati
     }
     mobile->isBeingMoved = false;
     mobile->actionGauge = 0;
+    mobile->equipment = calloc(MAX_EQUIPMENT, sizeof(ItemData));
+    mobile->hp = 0;
+    mobile->mana = 0;
     return mobile;
 }
 

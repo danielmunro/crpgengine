@@ -1,6 +1,6 @@
 typedef struct {
-    Mobile *party[MAX_PARTY_SIZE];
-    Mobile *onDeck[MAX_TEAM_SIZE];
+    Mobile **party;
+    Mobile **onDeck;
     const char **storylines;
     PlayerItemData **items;
     SaveFiles *saveFiles;
@@ -50,17 +50,20 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
     player->secondsPlayed = secondsPlayed;
     player->storylines = malloc(sizeof(char **));
     player->storylines = storylines;
+    player->party = calloc(MAX_PARTY_SIZE, sizeof(Mobile));
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
-        player->party[i] = mobs[i];
-        if (mobs[i] == NULL && player->partyCount == 0) {
-            player->partyCount = i;
+        if (mobs[i] == NULL) {
+            break;
         }
+        player->party[i] = mobs[i];
+        player->partyCount = i + 1;
     }
     player->itemCount = itemCount;
     player->items = calloc(MAX_ITEMS, sizeof(PlayerItemData));
     for (int i = 0; i < itemCount; i++) {
         player->items[i] = &items[i];
     }
+    player->onDeck = calloc(MAX_PARTY_SIZE, sizeof(Mobile));
     return player;
 }
 

@@ -20,6 +20,7 @@
 #define MOB_COLLISION_WIDTH_OFFSET 2
 #define MOB_COLLISION_HEIGHT 12
 #define MOB_COLLISION_HEIGHT_OFFSET 12
+#define MOB_HEIGHT 24
 
 #define SCENE_TYPE_TOWN 1
 #define SCENE_TYPE_DUNGEON 2
@@ -30,8 +31,10 @@
 #define LINE_HEIGHT 30
 #define UI_PADDING 12
 
-#define ACTION_GAUGE_X_OFFSET 100
-#define ACTION_GAUGE_Y_OFFSET 15
+#define HP_X_OFFSET 200
+
+#define ACTION_GAUGE_X_OFFSET 300
+#define ACTION_GAUGE_Y_OFFSET 17
 #define ACTION_GAUGE_WIDTH 100
 #define ACTION_GAUGE_HEIGHT 10
 
@@ -93,8 +96,8 @@
 #define COLLIDE_TYPE_COUNT 3
 
 typedef enum {
-    ACTION,
-} FightCursors;
+    FIGHT_CURSOR_MAIN,
+} FightCursor;
 
 const char *logLevels[] = {
         "error",
