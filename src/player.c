@@ -78,7 +78,9 @@ MobileData createMobDataFromMob(Mobile *mob) {
             mob->animations[0]->name,
             getPositionAsString(mob->position),
             getAnimationStringFromType(mob->direction),
-            createDataFromAttributes(mob->attributes),
+            mob->hp,
+            mob->mana,
+            createDataFromAttributes(mob->attributes)
     };
 }
 
@@ -275,8 +277,10 @@ Player *mapSaveDataToPlayer(AnimationManager *am, Log *log, SaveData *save) {
                 save->player->party[i].name,
                 getPositionFromString(save->player->party[i].position),
                 getDirectionFromString(save->player->party[i].direction),
-                animations);
-        mobs[i]->attributes = createAttributesFromData(save->player->party[i].attributes);
+                animations,
+                save->player->party[i].hp,
+                save->player->party[i].mana,
+                createAttributesFromData(save->player->party[i].attributes));
     }
     for (int i = save->player->party_count; i < MAX_PARTY_SIZE; i++) {
         mobs[i] = NULL;
@@ -300,18 +304,45 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
     loadAnimationsByName(am, "fireas", animations);
     Mobile *mobiles[MAX_PARTY_SIZE] = {
             createMobile(
-                    "player",
+                    "player1",
                     "Fireas",
                     (Vector2) {429, 252},
                     DOWN,
-                    animations),
-            NULL,
-            NULL,
-            NULL,
+                    animations,
+                    STARTING_HP,
+                    STARTING_MANA,
+                    createStartingAttributes()),
+            createMobile(
+                    "player2",
+                    "Gandalf",
+                    (Vector2) {429, 252},
+                    DOWN,
+                    animations,
+                    STARTING_HP,
+                    STARTING_MANA,
+                    createStartingAttributes()),
+            createMobile(
+                    "player3",
+                    "RazzleKhan",
+                    (Vector2) {429, 252},
+                    DOWN,
+                    animations,
+                    STARTING_HP,
+                    STARTING_MANA,
+                    createStartingAttributes()),
+            createMobile(
+                    "player4",
+                    "Krusty",
+                    (Vector2) {429, 252},
+                    DOWN,
+                    animations,
+                    STARTING_HP,
+                    STARTING_MANA,
+                    createStartingAttributes()),
     };
     const char **storylines = malloc(sizeof(char **));
     PlayerItemData *items = calloc(MAX_ITEMS, sizeof(PlayerItemData));
-    Player *p = createPlayer(
+    return createPlayer(
             log,
             mobiles,
             0,
@@ -322,5 +353,4 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
             0,
             items,
             0);
-    return p;
 }

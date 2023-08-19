@@ -53,7 +53,7 @@ void canMoveMobTest() {
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
 
-    Mobile *mob = createMobile("test", "test", start, DOWN, animations);
+    Mobile *mob = createMobile("test", "test", start, DOWN, animations, 20, 20, createStartingAttributes());
 
     // when
     moveMob(mob, (Vector2){startX + 5, startY + 5});
@@ -70,7 +70,9 @@ void canMobStopMovingTest() {
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
-    Mobile *mob = createMobile("test", "test", start, DOWN, animations);
+    Mobile *mob = createMobile(
+            "test", "test", start, DOWN,
+            animations, STARTING_HP, STARTING_MANA, createStartingAttributes());
 
     // when
     moveMob(mob, start);

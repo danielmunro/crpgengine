@@ -44,7 +44,10 @@ Mobile *createMobile(
         const char *name,
         Vector2 position,
         AnimationType direction,
-        Animation *animations[MAX_ANIMATIONS]) {
+        Animation *animations[MAX_ANIMATIONS],
+        int hp,
+        int mana,
+        Attributes attributes) {
     Mobile *mobile = malloc(sizeof(Mobile));
     mobile->id = &id[0];
     mobile->name = &name[0];
@@ -54,7 +57,7 @@ Mobile *createMobile(
     mobile->moving[DOWN] = false;
     mobile->moving[LEFT] = false;
     mobile->moving[RIGHT] = false;
-    mobile->attributes = createEmptyAttributes();
+    mobile->attributes = attributes;
     mobile->turnCounter = 0;
     mobile->waitTimer = -1;
     mobile->locked = false;
@@ -66,8 +69,8 @@ Mobile *createMobile(
     mobile->isBeingMoved = false;
     mobile->actionGauge = 0;
     mobile->equipment = calloc(MAX_EQUIPMENT, sizeof(ItemData));
-    mobile->hp = 0;
-    mobile->mana = 0;
+    mobile->hp = hp;
+    mobile->mana = mana;
     return mobile;
 }
 
@@ -77,7 +80,10 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
             data->name,
             getPositionFromString(data->position),
             getDirectionFromString(data->direction),
-            animations);
+            animations,
+            data->hp,
+            data->mana,
+            createAttributesFromData(data->attributes));
     return mob;
 }
 

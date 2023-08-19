@@ -4,6 +4,8 @@ typedef struct {
     const char *animations;
     const char *position;
     const char *direction;
+    int hp;
+    int mana;
     AttributesData *attributes;
 } MobileData;
 
@@ -21,6 +23,10 @@ static const cyaml_schema_field_t mobileTopMappingField[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "attributes", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
                 MobileData, attributes, attributesFieldSchema),
+        CYAML_FIELD_INT(
+                "hp", CYAML_FLAG_OPTIONAL, MobileData, hp),
+        CYAML_FIELD_INT(
+                "mana", CYAML_FLAG_OPTIONAL, MobileData, mana),
         CYAML_FIELD_END
 };
 

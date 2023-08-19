@@ -24,7 +24,36 @@ typedef struct {
     ArmorClass ac;
 } Attributes;
 
+Attributes createEmptyAttributes() {
+    return (Attributes) {
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            (ArmorClass) {
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+            }
+    };
+}
+
 Attributes createAttributesFromData(AttributesData *data) {
+    if (data == NULL) {
+        return createEmptyAttributes();
+    }
     return (Attributes) {
         data->strength,
         data->dexterity,
@@ -103,30 +132,11 @@ Attributes cloneAttributes(const Attributes a) {
     };
 }
 
-Attributes createEmptyAttributes() {
-    return (Attributes) {
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        (ArmorClass) {
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-        }
-    };
+Attributes createStartingAttributes() {
+    Attributes a = createEmptyAttributes();
+    a.hp = STARTING_HP;
+    a.mana = STARTING_MANA;
+    return a;
 }
 
 Attributes combineAttributes(const Attributes a, const Attributes b) {
