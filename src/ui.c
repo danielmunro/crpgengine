@@ -104,19 +104,34 @@ Rectangle drawFullscreenMenu() {
 }
 
 Rectangle drawBottomMenu() {
-    Rectangle rect = (Rectangle) {0, SCREEN_HEIGHT - 150, SCREEN_WIDTH, 150};
+    Rectangle rect = (Rectangle) {
+        0,
+        SCREEN_HEIGHT - BOTTOM_MENU_HEIGHT,
+        SCREEN_WIDTH,
+        BOTTOM_MENU_HEIGHT,
+        };
     drawMenuRect(rect);
     return rect;
 }
 
 Rectangle drawBottomLeftMenu() {
-    Rectangle rect = (Rectangle) {0, SCREEN_HEIGHT - 150, SCREEN_WIDTH - 600, 150};
+    Rectangle rect = (Rectangle) {
+        0,
+        SCREEN_HEIGHT - BOTTOM_MENU_HEIGHT,
+        SCREEN_WIDTH - BOTTOM_MENU_PLAYER_WIDTH,
+        BOTTOM_MENU_HEIGHT,
+    };
     drawMenuRect(rect);
     return rect;
 }
 
 Rectangle drawBottomRightMenu() {
-    Rectangle rect = (Rectangle) {SCREEN_WIDTH - 600, SCREEN_HEIGHT - 150, 600, 150};
+    Rectangle rect = (Rectangle) {
+        SCREEN_WIDTH - BOTTOM_MENU_PLAYER_WIDTH,
+        SCREEN_HEIGHT - BOTTOM_MENU_HEIGHT,
+        BOTTOM_MENU_PLAYER_WIDTH,
+        BOTTOM_MENU_HEIGHT,
+    };
     drawMenuRect(rect);
     return rect;
 }
