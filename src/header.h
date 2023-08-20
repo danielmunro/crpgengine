@@ -52,8 +52,6 @@
 #define EXIT_MOBILE_NOT_FOUND 4
 #define EXIT_FORCE_NEW_AND_LOAD_SAVE 5
 
-#define START_SCENE 0
-
 #define SPRITESHEET_NAME_UI "uipack"
 
 #define CURSOR_INDEX 801
