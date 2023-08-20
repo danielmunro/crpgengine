@@ -1,0 +1,6 @@
+name: uipack
+filename: uipack.png
+frame:
+  width: 16
+  height: 16
+  padding: 2
