@@ -10,6 +10,7 @@ typedef struct {
 } Encounters;
 
 typedef struct {
+    FightMenu menu;
     Beast **beasts;
     Player *player;
     int beastCount;
@@ -83,29 +84,6 @@ void cancelFight(Fight *fight) {
     fight->beastCount = 0;
 }
 
-void fightSpaceKeyPressed(Fight *fight) {
-    int c = fight->cursors[FIGHT_CURSOR_MAIN];
-    Player *p = fight->player;
-    if (c > -1) {
-        p->party[c]->actionGauge = 0;
-        p->party[c]->hp -= 2;
-        p->party[c]->mana -= 1;
-        for (int i = c; i < MAX_CURSORS; i++) {
-            if (isReadyForAction(p->party[i])) {
-                fight->cursors[FIGHT_CURSOR_MAIN] = i;
-                return;
-            }
-        }
-        for (int i = c; i >= 0; i--) {
-            if (isReadyForAction(p->party[i])) {
-                fight->cursors[FIGHT_CURSOR_MAIN] = i;
-                return;
-            }
-        }
-        fight->cursors[FIGHT_CURSOR_MAIN] = -1;
-    }
-}
-
 int getNextCursorPosition(Fight *fight, FightCursor cursor) {
     for (int i = fight->cursors[cursor] + 1; i < MAX_CURSORS; i++) {
         if (isReadyForAction(fight->player->party[i])) {
@@ -132,6 +110,20 @@ int getPreviousCursorPosition(Fight *fight, FightCursor cursor) {
         }
     }
     return fight->cursors[cursor];
+}
+
+void fightSpaceKeyPressed(Fight *fight) {
+    int c = fight->cursors[FIGHT_CURSOR_MAIN];
+    Player *p = fight->player;
+    if (c > -1) {
+        p->party[c]->actionGauge = 0;
+        p->party[c]->hp -= 2;
+        p->party[c]->mana -= 1;
+        fight->cursors[FIGHT_CURSOR_MAIN] = getNextCursorPosition(fight, FIGHT_CURSOR_MAIN);
+        if (fight->cursors[FIGHT_CURSOR_MAIN] == c) {
+            fight->cursors[FIGHT_CURSOR_MAIN] = -1;
+        }
+    }
 }
 
 void checkFightInput(Fight *fight) {
