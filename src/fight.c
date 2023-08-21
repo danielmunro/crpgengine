@@ -10,7 +10,7 @@ typedef struct {
 } Encounters;
 
 typedef struct {
-    FightMenu menu;
+    MenuType menu;
     Beast **beasts;
     Player *player;
     int beastCount;

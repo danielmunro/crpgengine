@@ -225,6 +225,12 @@ typedef enum {
     SAVE_MENU,
     QUIT_MENU,
     ACKNOWLEDGE_MENU,
+    FIGHT_MENU_MOBILE_SELECT,
+    FIGHT_MENU_ACTION_SELECT,
+    FIGHT_MENU_ATTACK,
+    FIGHT_MENU_MAGIC,
+    FIGHT_MENU_SPECIAL,
+    FIGHT_MENU_ITEMS,
 } MenuType;
 
 typedef enum {
@@ -259,15 +265,6 @@ char *QuitMenuItems[] = {
         QUIT_MENU_NO,
         QUIT_MENU_YES,
 };
-
-typedef enum {
-    FIGHT_MENU_MOBILE_SELECT,
-    FIGHT_MENU_ACTION_SELECT,
-    FIGHT_MENU_ATTACK,
-    FIGHT_MENU_MAGIC,
-    FIGHT_MENU_SPECIAL,
-    FIGHT_MENU_ITEMS,
-} FightMenu;
 
 typedef enum {
     CONSUMABLE,
@@ -340,6 +337,7 @@ const char *Events[MAX_EVENTS] = {
 #include "menu/quit_menu.c"
 #include "menu/load_menu.c"
 #include "menu/acknowledge_menu.c"
+#include "menu/fight_mob_select_menu.c"
 #include "exploration.c"
 #include "scene.c"
 #include "tilemap_xmlreader.c"

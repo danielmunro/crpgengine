@@ -1,8 +1,8 @@
-int getAcknowledgeCursorLength(MenuContext *menuContext) {
-    return 1;
+int getFightMobSelectMenuCursorLength(MenuContext *menuContext) {
+    return MAX_PARTY_SIZE;
 }
 
-void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
+void drawFightMobSelectMenuScreen(MenuContext *menuContext) {
     Rectangle rect = drawMediumMenu();
     TextBox *b = createTextBox(rect, menuContext->fontStyle);
     drawInMenu(b, "Your game has been saved.");
@@ -20,6 +20,6 @@ void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
     free(b);
 }
 
-MenuSelectResponse *acknowledgeMenuItemSelected(MenuContext *menuContext) {
-    return createMenuSelectResponse(CLOSE_MENU, SAVE_MENU);
+MenuSelectResponse *fightMobSelectMenuItemSelected(MenuContext *menuContext) {
+    return createMenuSelectResponse(OPEN_MENU, FIGHT_MENU_ACTION_SELECT);
 }
