@@ -123,13 +123,13 @@ void drawFightSelectActionMenu(Fight *fight, UIManager *ui) {
 
 void drawFightMenu(Fight *fight, UIManager *ui) {
     TextBox *left = createTextBox(drawBottomLeftMenu(), ui->defaultFont);
-    TextBox *right = createTextBox(drawBottomRightMenu(), ui->defaultFont);
     int count = fight->beastCount > MAX_MOB_NAMES_IN_FIGHT ? MAX_MOB_NAMES_IN_FIGHT : fight->beastCount;
     for (int i = 0; i < count; i++) {
         drawInMenu(left, fight->beasts[i]->name);
     }
+    TextBox *right = createTextBox(drawBottomRightMenu(), ui->defaultFont);
     drawPlayerFightTopLevel(fight, right, ui);
-    if (fight->menu == FIGHT_MENU_ACTION_SELECT) {
+    if (fight->menu == ACTION_SELECT_FIGHT_MENU) {
         drawFightSelectActionMenu(fight, ui);
     }
 }

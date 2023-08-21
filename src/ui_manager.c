@@ -36,6 +36,12 @@ int getMenuList(UIManager *ui) {
                     getAcknowledgeCursorLength,
                     drawAcknowledgeMenuScreen,
                     acknowledgeMenuItemSelected),
+            createMenu(
+                    MOBILE_SELECT_FIGHT_MENU,
+                    getMobileSelectFightMenuCursorLength,
+                    drawMobileSelectFightMenuScreen,
+                    mobileSelectFightMenuItemSelected
+            )
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {

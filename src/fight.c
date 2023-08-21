@@ -120,8 +120,8 @@ void fightSpaceKeyPressed(Fight *fight) {
 //        p->party[c]->hp -= 2;
 //        p->party[c]->mana -= 1;
         fight->cursors[fight->menu] = getNextCursorPosition(fight);
-        if (fight->menu == FIGHT_MENU_MOBILE_SELECT) {
-            fight->menu = FIGHT_MENU_ACTION_SELECT;
+        if (fight->menu == MOBILE_SELECT_FIGHT_MENU) {
+            fight->menu = ACTION_SELECT_FIGHT_MENU;
         }
         if (fight->cursors[fight->menu] == c) {
             fight->cursors[fight->menu] = -1;
