@@ -141,18 +141,18 @@ void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
 }
 
 void drawAllMenus(
-        Player *player,
+        Fight *fight,
         Menu *menus[MAX_MENUS],
         int menuCount,
-        FontStyle *font,
+        FontStyle **fonts,
         const char *scene,
         const char *indexDir) {
     BeginDrawing();
     MenuContext *c = createMenuContext(
-            player,
+            fight,
+            fonts,
             scene,
             indexDir,
-            font,
             0);
     for (int i = 0; i < menuCount; i++) {
         c->cursorLine = menus[i]->cursor;

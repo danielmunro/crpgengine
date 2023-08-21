@@ -91,18 +91,20 @@ void checkExplorationInput(Game *g) {
 void menuItemSelected(Game *g) {
     Exploration *exploration = g->scenes->current->exploration;
     Menu *menu = getCurrentMenu(exploration);
-    MenuContext *context = createMenuContext(
-            g->player,
+    MenuContext *c = createMenuContext(
+            g->fight,
+            g->ui->fonts,
             g->scenes->current->name,
             g->runtimeArgs->indexDir,
-            getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT),
             menu->cursor);
-    MenuSelectResponse *response = menu->selected(context);
+    MenuSelectResponse *response = menu->selected(c);
+    free(c);
     if (response->type == OPEN_MENU) {
         addMenu(exploration, findMenu(g->ui, response->menuType));
     } else if (response->type == CLOSE_MENU) {
         removeMenu(exploration);
     }
+    free(response);
 }
 
 void checkMenuInput(Game *g) {
@@ -114,10 +116,10 @@ void checkMenuInput(Game *g) {
         Menu *menu = getCurrentMenu(exploration);
         menu->cursor++;
         MenuContext *c = createMenuContext(
-                g->player,
+                g->fight,
+                g->ui->fonts,
                 g->scenes->current->name,
                 g->runtimeArgs->indexDir,
-                getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT),
                 menu->cursor);
         normalizeMenuCursor(menu, c);
         free(c);
@@ -126,10 +128,10 @@ void checkMenuInput(Game *g) {
         Menu *menu = getCurrentMenu(exploration);
         menu->cursor--;
         MenuContext *c = createMenuContext(
-                g->player,
+                g->fight,
+                g->ui->fonts,
                 g->scenes->current->name,
                 g->runtimeArgs->indexDir,
-                getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT),
                 menu->cursor);
         normalizeMenuCursor(menu, c);
         free(c);
@@ -163,7 +165,8 @@ void checkFights(Game *g, Scene *s) {
         g->fight = createFightFromEncounters(
                 g->log,
                 s->encounters,
-                g->player);
+                g->player,
+                findSpritesheetByName(g->sprites, SPRITESHEET_NAME_UI));
         Animation *animation = findAnimation(getPartyLeader(g->player)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;
     }
@@ -206,10 +209,10 @@ void doFightLoop(Game *g) {
 void doInGameMenuLoop(Game *g) {
     Exploration *exploration = g->scenes->current->exploration;
     drawAllMenus(
-            g->player,
+            g->fight,
             exploration->menus,
             exploration->menuCount,
-            getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT),
+            g->ui->fonts,
             g->scenes->current->name,
             g->runtimeArgs->indexDir);
     checkMenuInput(g);

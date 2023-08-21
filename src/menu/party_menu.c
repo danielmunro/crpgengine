@@ -8,38 +8,39 @@ void drawPlayer(Player *player) {
 void drawPartyMenuScreen(MenuContext *menuContext) {
     drawFullscreenMenu();
     drawPlayer(menuContext->player);
+    FontStyle *defaultFont = getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT);
     float column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;
     float column2 = SCREEN_WIDTH - 200;
     drawText(
             getPartyLeader(menuContext->player)->name,
             (Vector2) {column1, UI_PADDING},
-            menuContext->defaultFont);
+            defaultFont);
     char hp[64];
     sprintf(hp, "hp %d/%d", 20, 20);
     drawText(
             hp,
             (Vector2) {column1, UI_PADDING + line(1)},
-            menuContext->defaultFont);
+            defaultFont);
     char mp[64];
     sprintf(mp, "mp %d/%d", 20, 20);
     drawText(
             mp,
             (Vector2) {column1, UI_PADDING + line(2)},
-            menuContext->defaultFont);
+            defaultFont);
     int count = sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
     TextBox *textBox = createTextBox((Rectangle) {
             (float) column2,
             0,
             200,
             SCREEN_HEIGHT - (UI_PADDING * 2)
-    }, menuContext->defaultFont);
+    }, defaultFont);
     for (int i = 0; i < count; i++) {
         drawInMenu(textBox, PartyMenuItems[i]);
     }
     drawText(
             ">",
             (Vector2) {column2 - 20, UI_PADDING + line(menuContext->cursorLine)},
-            menuContext->defaultFont);
+            defaultFont);
     free(textBox);
 }
 

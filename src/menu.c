@@ -4,8 +4,9 @@ typedef struct {
     SaveFiles *saveFiles;
     const char *indexDir;
     int cursorLine;
-    Font font;
     FontStyle *defaultFont;
+    FontStyle **fonts;
+    Fight *fight;
 } MenuContext;
 
 typedef struct {
@@ -19,7 +20,6 @@ typedef struct {
     int (*getCursorLength)(MenuContext *);
     void (*draw)(MenuContext *);
     MenuSelectResponse *(*selected)(MenuContext *menuContext);
-    Font font;
 } Menu;
 
 MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuType menuType) {
@@ -44,17 +44,18 @@ Menu *createMenu(
 }
 
 MenuContext *createMenuContext(
-        Player *player,
+        Fight *fight,
+        FontStyle **fonts,
         const char *scene,
         const char *indexDir,
-        FontStyle *fontStyle,
         int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
-    context->player = player;
+    context->fight = fight;
+    context->player = fight->player;
     context->scene = scene;
     context->indexDir = indexDir;
     context->cursorLine = cursorLine;
-    context->defaultFont = fontStyle;
+    context->fonts = fonts;
     return context;
 }
 

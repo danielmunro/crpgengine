@@ -13,6 +13,7 @@ typedef struct {
     MenuType menu;
     Beast **beasts;
     Player *player;
+    Spritesheet *menuSprite;
     int beastCount;
     int *cursors;
     Log *log;
@@ -40,6 +41,7 @@ Fight *createFight(
         Log *log,
         Beast **beasts,
         Player *player,
+        Spritesheet *menuSprite,
         int beastCount) {
     Fight *fight = malloc(sizeof(Fight));
     fight->log = log;
@@ -49,6 +51,7 @@ Fight *createFight(
         fight->beasts[i] = beasts[i];
     }
     fight->player = player;
+    fight->menuSprite = menuSprite;
     fight->time = getTimeInMS();
     fight->cursors = calloc(MAX_CURSORS, sizeof(int));
     for (int i = 0; i < MAX_CURSORS; i++) {
@@ -57,7 +60,7 @@ Fight *createFight(
     return fight;
 }
 
-Fight *createFightFromEncounters(Log *log, Encounters *encounters, Player *player) {
+Fight *createFightFromEncounters(Log *log, Encounters *encounters, Player *player, Spritesheet *menuSprite) {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
     addDebug(log, "creating %d beasts for fight", beastsToCreate);
@@ -74,7 +77,7 @@ Fight *createFightFromEncounters(Log *log, Encounters *encounters, Player *playe
             created++;
         }
     }
-    Fight *fight = createFight(log, beasts, player, created);
+    Fight *fight = createFight(log, beasts, player, menuSprite, created);
     fight->beastCount = created;
     addDebug(log, "fight encountered with %d opponents", fight->beastCount);
     return fight;

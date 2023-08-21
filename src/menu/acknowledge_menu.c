@@ -4,7 +4,8 @@ int getAcknowledgeCursorLength(MenuContext *menuContext) {
 
 void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
     Rectangle rect = drawMediumMenu();
-    TextBox *b = createTextBox(rect, menuContext->defaultFont);
+    FontStyle *defaultFont = getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT);
+    TextBox *b = createTextBox(rect,defaultFont);
     drawInMenu(b, "Your game has been saved.");
     drawInMenu(b, "Reminder: your progress will save");
     drawInMenu(b, "automatically.");
@@ -16,7 +17,7 @@ void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
                     rect.x,
                     rect.y + line(4 + menuContext->cursorLine) + UI_PADDING
             },
-            menuContext->defaultFont);
+            defaultFont);
     free(b);
 }
 

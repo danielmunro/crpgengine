@@ -29,88 +29,6 @@ void drawFightPlayer(Player *player) {
     }
 }
 
-void drawActionGauge(float y, float width, Color color) {
-    float actionGaugeX = SCREEN_WIDTH - ACTION_GAUGE_WIDTH - UI_PADDING;
-    float actionGaugeY = SCREEN_HEIGHT - BOTTOM_MENU_HEIGHT + UI_PADDING + y;
-    Rectangle rect = {
-            actionGaugeX,
-            actionGaugeY,
-            width,
-            ACTION_GAUGE_HEIGHT,
-    };
-    DrawRectangleRounded(
-            rect,
-            (float) 1,
-            4,
-            color);
-}
-
-FontStyle *getFontStyleForFightCursor(UIManager *ui, Mobile *mob, int mobIndex, int loopIndex) {
-    if (mobIndex == loopIndex) {
-        return getFontStyle(ui->fonts, FONT_STYLE_HIGHLIGHTED);
-    } else if(isReadyForAction(mob)) {
-        return getFontStyle(ui->fonts, FONT_STYLE_DEFAULT);
-    } else {
-        return getFontStyle(ui->fonts, FONT_STYLE_DISABLED);
-    }
-}
-
-FontStyle *getFontStyleForHealthLevel(UIManager *ui, float percent) {
-    if (percent >= FONT_WARNING_THRESHOLD) {
-        return getFontStyle(ui->fonts, FONT_STYLE_DEFAULT);
-    } else if (percent >= FONT_DANGER_THRESHOLD) {
-        return getFontStyle(ui->fonts, FONT_STYLE_WARNING);
-    } else {
-        return getFontStyle(ui->fonts, FONT_STYLE_DANGER);
-    }
-}
-
-void drawStat(UIManager *ui, int amount, float percent, Vector2 vect) {
-    char stat[10];
-    sprintf(stat, "%d", amount);
-    FontStyle *fs = getFontStyleForHealthLevel(ui,percent);
-    drawText(stat,vect,fs);
-}
-
-void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox, UIManager *ui) {
-    for (int i = 0; i < fight->player->partyCount; i++) {
-        Mobile *mob = fight->player->party[i];
-        FontStyle *fs = getFontStyleForFightCursor(ui, mob, fight->cursors[fight->menu], i);
-        drawInMenuWithStyle(textBox,
-                fs,
-                mob->name);
-        if (fight->cursors[fight->menu] == i) {
-            Spritesheet *spritesheet = findSpritesheetByName(ui->sprites, SPRITESHEET_NAME_UI);
-            drawImageFromSprite(spritesheet, (Vector2) {
-                    textBox->area.x + FIGHT_CURSOR_X_OFFSET,
-                    textBox->area.y + (float) (LINE_HEIGHT * i) + FIGHT_CURSOR_Y_OFFSET,
-            }, CURSOR_INDEX);
-        }
-        drawStat(ui,
-                mob->hp,
-                (float) mob->hp / (float) calculateAttributes(mob).hp,
-                (Vector2) {
-                        textBox->area.x + HP_X_OFFSET,
-                        textBox->area.y + UI_PADDING + (float) (i * LINE_HEIGHT)
-                });
-        drawStat(ui,
-                mob->mana,
-                (float) mob->mana / (float) calculateAttributes(mob).mana,
-                (Vector2) {
-                        textBox->area.x + MANA_X_OFFSET,
-                        textBox->area.y + UI_PADDING + (float) (i * LINE_HEIGHT)
-                });
-        drawActionGauge(
-                (float) (i * LINE_HEIGHT),
-                ACTION_GAUGE_WIDTH,
-                DISABLED_COLOR);
-        drawActionGauge(
-                (float) (i * LINE_HEIGHT),
-                ACTION_GAUGE_WIDTH * ((float) fight->player->party[i]->actionGauge / MAX_ACTION_GAUGE),
-                DEFAULT_COLOR);
-    }
-}
-
 void drawFightSelectActionMenu(Fight *fight, UIManager *ui) {
     TextBox *t = createTextBox(
             drawActionSelectMenu(),
@@ -131,13 +49,17 @@ void drawFightMenu(Fight *fight, UIManager *ui) {
     for (int i = 0; i < count; i++) {
         drawInMenu(left, fight->beasts[i]->name);
     }
-    TextBox *right = createTextBox(
-            drawBottomRightMenu(),
-            getFontStyle(ui->fonts, FONT_STYLE_DEFAULT));
-    drawPlayerFightTopLevel(fight, right, ui);
-    if (fight->menu == ACTION_SELECT_FIGHT_MENU) {
-        drawFightSelectActionMenu(fight, ui);
-    }
+    free(left);
+    Menu *menu = findMenu(ui, MOBILE_SELECT_FIGHT_MENU);
+    MenuContext *c = createMenuContext(
+            fight,
+            ui->fonts,
+            NULL,
+            NULL,
+            fight->cursors[fight->menu]
+            );
+    menu->draw(c);
+    free(c);
 }
 
 void drawFightView(Encounters *encounters, Fight *fight, UIManager *ui) {
