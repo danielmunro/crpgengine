@@ -31,6 +31,9 @@
 #define LINE_HEIGHT 30
 #define UI_PADDING 20
 #define HIGHLIGHT_COLOR YELLOW
+#define DISABLED_COLOR GRAY
+#define DEFAULT_COLOR WHITE
+#define WARNING_COLOR YELLOW
 #define DANGER_COLOR RED
 #define BOTTOM_MENU_HEIGHT 150
 #define BOTTOM_MENU_PLAYER_WIDTH 560
@@ -52,6 +55,7 @@
 #define EXIT_MENU_NOT_DEFINED 3
 #define EXIT_MOBILE_NOT_FOUND 4
 #define EXIT_FORCE_NEW_AND_LOAD_SAVE 5
+#define EXIT_FONT_STYLE_NOT_FOUND 6
 
 #define SPRITESHEET_NAME_UI "uipack"
 
@@ -294,6 +298,16 @@ const char *Events[MAX_EVENTS] = {
         "game_loop",
         "scene_loaded",
 };
+
+#define FONT_STYLE_COUNT 5
+
+typedef enum {
+    FONT_STYLE_DEFAULT,
+    FONT_STYLE_DISABLED,
+    FONT_STYLE_HIGHLIGHTED,
+    FONT_STYLE_WARNING,
+    FONT_STYLE_DANGER,
+} FontStyleType;
 
 #include "log.c"
 #include "util.c"

@@ -95,7 +95,7 @@ void menuItemSelected(Game *g) {
             g->player,
             g->scenes->current->name,
             g->runtimeArgs->indexDir,
-            g->ui->defaultFont,
+            getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT),
             menu->cursor);
     MenuSelectResponse *response = menu->selected(context);
     if (response->type == OPEN_MENU) {
@@ -117,7 +117,7 @@ void checkMenuInput(Game *g) {
                 g->player,
                 g->scenes->current->name,
                 g->runtimeArgs->indexDir,
-                g->ui->defaultFont,
+                getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT),
                 menu->cursor);
         normalizeMenuCursor(menu, c);
         free(c);
@@ -129,7 +129,7 @@ void checkMenuInput(Game *g) {
                 g->player,
                 g->scenes->current->name,
                 g->runtimeArgs->indexDir,
-                g->ui->defaultFont,
+                getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT),
                 menu->cursor);
         normalizeMenuCursor(menu, c);
         free(c);
@@ -184,7 +184,7 @@ void doExplorationLoop(Game *g) {
             g->player,
             g->notifications,
             s->activeControlBlocks,
-            g->ui->defaultFont);
+            getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT));
     doMobileMovementUpdates(s->exploration);
     processAnimations(g->animations);
     evaluateMovement(s->exploration, g->player);
@@ -209,7 +209,7 @@ void doInGameMenuLoop(Game *g) {
             g->player,
             exploration->menus,
             exploration->menuCount,
-            g->ui->defaultFont,
+            getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT),
             g->scenes->current->name,
             g->runtimeArgs->indexDir);
     checkMenuInput(g);
@@ -261,7 +261,7 @@ Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
     g->runtimeArgs = r;
     g->log = createLog(g->runtimeArgs->logLevel);
     g->sprites = loadSpritesheetManager(g->log, r->indexDir);
-    g->ui = createUIManager(g->sprites, r->indexDir, cfg->font);
+    g->ui = createUIManager(g->log, g->sprites, r->indexDir, cfg->font);
     g->animations = createAnimationManager(g->log);
     loadAllAnimations(g->animations, g->sprites, r->indexDir);
     g->audio = loadAudioManager(g->log, r->indexDir);

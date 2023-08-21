@@ -47,21 +47,21 @@ void drawActionGauge(float y, float width, Color color) {
 
 FontStyle *getFontStyleForFightCursor(UIManager *ui, Mobile *mob, int mobIndex, int loopIndex) {
     if (mobIndex == loopIndex) {
-        return ui->highlightedFont;
+        return getFontStyle(ui->fonts, FONT_STYLE_HIGHLIGHTED);
     } else if(isReadyForAction(mob)) {
-        return ui->defaultFont;
+        return getFontStyle(ui->fonts, FONT_STYLE_DEFAULT);
     } else {
-        return ui->disabledFont;
+        return getFontStyle(ui->fonts, FONT_STYLE_DISABLED);
     }
 }
 
 FontStyle *getFontStyleForHealthLevel(UIManager *ui, float percent) {
     if (percent >= FONT_WARNING_THRESHOLD) {
-        return ui->defaultFont;
+        return getFontStyle(ui->fonts, FONT_STYLE_DEFAULT);
     } else if (percent >= FONT_DANGER_THRESHOLD) {
-        return ui->warningFont;
+        return getFontStyle(ui->fonts, FONT_STYLE_WARNING);
     } else {
-        return ui->dangerFont;
+        return getFontStyle(ui->fonts, FONT_STYLE_DANGER);
     }
 }
 
@@ -103,16 +103,18 @@ void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox, UIManager *ui) {
         drawActionGauge(
                 (float) (i * LINE_HEIGHT),
                 ACTION_GAUGE_WIDTH,
-                ui->disabledFont->color);
+                DISABLED_COLOR);
         drawActionGauge(
                 (float) (i * LINE_HEIGHT),
                 ACTION_GAUGE_WIDTH * ((float) fight->player->party[i]->actionGauge / MAX_ACTION_GAUGE),
-                ui->defaultFont->color);
+                DEFAULT_COLOR);
     }
 }
 
 void drawFightSelectActionMenu(Fight *fight, UIManager *ui) {
-    TextBox *t = createTextBox(drawActionSelectMenu(), ui->defaultFont);
+    TextBox *t = createTextBox(
+            drawActionSelectMenu(),
+            getFontStyle(ui->fonts, FONT_STYLE_DEFAULT));
 //    drawInMenuWithStyle(t, fight->currentCursor == 0)
     drawInMenu(t, "Attack");
     drawInMenu(t, "Items");
@@ -122,12 +124,16 @@ void drawFightSelectActionMenu(Fight *fight, UIManager *ui) {
 }
 
 void drawFightMenu(Fight *fight, UIManager *ui) {
-    TextBox *left = createTextBox(drawBottomLeftMenu(), ui->defaultFont);
+    TextBox *left = createTextBox(
+            drawBottomLeftMenu(),
+            getFontStyle(ui->fonts, FONT_STYLE_DEFAULT));
     int count = fight->beastCount > MAX_MOB_NAMES_IN_FIGHT ? MAX_MOB_NAMES_IN_FIGHT : fight->beastCount;
     for (int i = 0; i < count; i++) {
         drawInMenu(left, fight->beasts[i]->name);
     }
-    TextBox *right = createTextBox(drawBottomRightMenu(), ui->defaultFont);
+    TextBox *right = createTextBox(
+            drawBottomRightMenu(),
+            getFontStyle(ui->fonts, FONT_STYLE_DEFAULT));
     drawPlayerFightTopLevel(fight, right, ui);
     if (fight->menu == ACTION_SELECT_FIGHT_MENU) {
         drawFightSelectActionMenu(fight, ui);

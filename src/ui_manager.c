@@ -1,12 +1,9 @@
 typedef struct {
+    Log *log;
     SpritesheetManager *sprites;
     Menu *menus[MAX_MENUS];
     int menuCount;
-    FontStyle *defaultFont;
-    FontStyle *disabledFont;
-    FontStyle *highlightedFont;
-    FontStyle *warningFont;
-    FontStyle *dangerFont;
+    FontStyle **fonts;
 } UIManager;
 
 int getMenuList(UIManager *ui) {
@@ -50,16 +47,22 @@ int getMenuList(UIManager *ui) {
     return count;
 }
 
-UIManager *createUIManager(SpritesheetManager *sprites, const char *indexDir, const char *fontName) {
+UIManager *createUIManager(
+        Log *log,
+        SpritesheetManager *sprites,
+        const char *indexDir,
+        const char *fontName) {
     UIManager *ui = malloc(sizeof(UIManager));
+    ui->log = log;
     char path[MAX_FS_PATH_LENGTH];
     sprintf(path, "%s/fonts/%s", indexDir, fontName);
     Font font = LoadFont(path);
-    ui->defaultFont = createDefaultFontStyle(font);
-    ui->disabledFont = createDefaultDisabledFontStyle(font);
-    ui->highlightedFont = createHighlightedFontStyle(font);
-    ui->warningFont = createWarningFontStyle(font);
-    ui->dangerFont = createDangerFontStyle(font);
+    ui->fonts = calloc(FONT_STYLE_COUNT, sizeof(FontStyle));
+    ui->fonts[0] = createDefaultFontStyle(font);
+    ui->fonts[1] = createDisabledFontStyle(font);
+    ui->fonts[2] = createHighlightedFontStyle(font);
+    ui->fonts[3] = createWarningFontStyle(font);
+    ui->fonts[4] = createDangerFontStyle(font);
     ui->menuCount = getMenuList(ui);
     ui->sprites = sprites;
     return ui;
