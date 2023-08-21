@@ -5,7 +5,7 @@ typedef struct {
     const char *indexDir;
     int cursorLine;
     Font font;
-    FontStyle *fontStyle;
+    FontStyle *defaultFont;
 } MenuContext;
 
 typedef struct {
@@ -54,7 +54,7 @@ MenuContext *createMenuContext(
     context->scene = scene;
     context->indexDir = indexDir;
     context->cursorLine = cursorLine;
-    context->fontStyle = fontStyle;
+    context->defaultFont = fontStyle;
     return context;
 }
 
