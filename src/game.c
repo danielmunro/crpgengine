@@ -169,11 +169,20 @@ void checkFights(Game *g, Scene *s) {
                 findSpritesheetByName(g->sprites, SPRITESHEET_NAME_UI));
         Animation *animation = findAnimation(getPartyLeader(g->player)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;
+        g->ui->menuContext = createMenuContext(
+                g->fight,
+                g->ui->fonts,
+                NULL,
+                NULL,
+                g->fight->cursors[g->fight->menu]
+        );
     }
 }
 
 void checkRemoveFight(Game *g) {
     if (isFightDone(g->fight)) {
+        free(g->ui->menuContext);
+        g->ui->menuContext = NULL;
         free(g->fight);
         g->fight = NULL;
     }

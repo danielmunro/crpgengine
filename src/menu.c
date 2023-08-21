@@ -20,6 +20,7 @@ typedef struct {
     int (*getCursorLength)(MenuContext *);
     void (*draw)(MenuContext *);
     MenuSelectResponse *(*selected)(MenuContext *menuContext);
+    MenuContext *context;
 } Menu;
 
 MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuType menuType) {
@@ -40,6 +41,7 @@ Menu *createMenu(
     menu->getCursorLength = getCursorLength;
     menu->draw = draw;
     menu->selected = selected;
+    menu->context = NULL;
     return menu;
 }
 

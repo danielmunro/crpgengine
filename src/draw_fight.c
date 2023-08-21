@@ -51,15 +51,7 @@ void drawFightMenu(Fight *fight, UIManager *ui) {
     }
     free(left);
     Menu *menu = findMenu(ui, MOBILE_SELECT_FIGHT_MENU);
-    MenuContext *c = createMenuContext(
-            fight,
-            ui->fonts,
-            NULL,
-            NULL,
-            fight->cursors[fight->menu]
-            );
-    menu->draw(c);
-    free(c);
+    menu->draw(ui->menuContext);
 }
 
 void drawFightView(Encounters *encounters, Fight *fight, UIManager *ui) {

@@ -1,6 +1,7 @@
 typedef struct {
     Log *log;
     SpritesheetManager *sprites;
+    MenuContext *menuContext;
     Menu *menus[MAX_MENUS];
     int menuCount;
     FontStyle **fonts;
