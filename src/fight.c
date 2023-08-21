@@ -84,44 +84,47 @@ void cancelFight(Fight *fight) {
     fight->beastCount = 0;
 }
 
-int getNextCursorPosition(Fight *fight, FightCursor cursor) {
-    for (int i = fight->cursors[cursor] + 1; i < MAX_CURSORS; i++) {
+int getNextCursorPosition(Fight *fight) {
+    for (int i = fight->cursors[fight->menu] + 1; i < MAX_CURSORS; i++) {
         if (isReadyForAction(fight->player->party[i])) {
             return i;
         }
     }
-    for (int i = 0; i < fight->cursors[cursor]; i++) {
+    for (int i = 0; i < fight->cursors[fight->menu]; i++) {
         if (isReadyForAction(fight->player->party[i])) {
             return i;
         }
     }
-    return fight->cursors[cursor];
+    return fight->cursors[fight->menu];
 }
 
-int getPreviousCursorPosition(Fight *fight, FightCursor cursor) {
-    for (int i = fight->cursors[cursor] - 1; i >= 0; i--) {
+int getPreviousCursorPosition(Fight *fight) {
+    for (int i = fight->cursors[fight->menu] - 1; i >= 0; i--) {
         if (isReadyForAction(fight->player->party[i])) {
             return i;
         }
     }
-    for (int i = MAX_CURSORS - 1; i > fight->cursors[cursor]; i--) {
+    for (int i = MAX_CURSORS - 1; i > fight->cursors[fight->menu]; i--) {
         if (isReadyForAction(fight->player->party[i])) {
             return i;
         }
     }
-    return fight->cursors[cursor];
+    return fight->cursors[fight->menu];
 }
 
 void fightSpaceKeyPressed(Fight *fight) {
-    int c = fight->cursors[FIGHT_CURSOR_MAIN];
-    Player *p = fight->player;
+    int c = fight->cursors[fight->menu];
     if (c > -1) {
-        p->party[c]->actionGauge = 0;
-        p->party[c]->hp -= 2;
-        p->party[c]->mana -= 1;
-        fight->cursors[FIGHT_CURSOR_MAIN] = getNextCursorPosition(fight, FIGHT_CURSOR_MAIN);
-        if (fight->cursors[FIGHT_CURSOR_MAIN] == c) {
-            fight->cursors[FIGHT_CURSOR_MAIN] = -1;
+//        Player *p = fight->player;
+//        p->party[c]->actionGauge = 0;
+//        p->party[c]->hp -= 2;
+//        p->party[c]->mana -= 1;
+        fight->cursors[fight->menu] = getNextCursorPosition(fight);
+        if (fight->menu == FIGHT_MENU_MOBILE_SELECT) {
+            fight->menu = FIGHT_MENU_ACTION_SELECT;
+        }
+        if (fight->cursors[fight->menu] == c) {
+            fight->cursors[fight->menu] = -1;
         }
     }
 }
@@ -129,10 +132,10 @@ void fightSpaceKeyPressed(Fight *fight) {
 void checkFightInput(Fight *fight) {
     addDebug(fight->log, "fight -- check player input");
     if (IsKeyPressed(KEY_DOWN)) {
-        fight->cursors[FIGHT_CURSOR_MAIN] = getNextCursorPosition(fight, FIGHT_CURSOR_MAIN);
+        fight->cursors[fight->menu] = getNextCursorPosition(fight);
     }
     if (IsKeyPressed(KEY_UP)) {
-        fight->cursors[FIGHT_CURSOR_MAIN] = getPreviousCursorPosition(fight, FIGHT_CURSOR_MAIN);
+        fight->cursors[fight->menu] = getPreviousCursorPosition(fight);
     }
     if (IsKeyPressed(KEY_SPACE)) {
         fightSpaceKeyPressed(fight);
@@ -169,8 +172,8 @@ void fightUpdate(Fight *fight) {
         int amountToRaise = getActionGaugeRaise(interval, calculateAttributes(mob).dexterity);
         if (!isReadyForAction(mob)) {
             mob->actionGauge += amountToRaise;
-            if (isReadyForAction(mob) && fight->cursors[FIGHT_CURSOR_MAIN] == -1) {
-                fight->cursors[FIGHT_CURSOR_MAIN] = i;
+            if (isReadyForAction(mob) && fight->cursors[fight->menu] == -1) {
+                fight->cursors[fight->menu] = i;
             }
         }
     }

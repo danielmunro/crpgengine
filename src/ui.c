@@ -136,6 +136,17 @@ Rectangle drawBottomRightMenu() {
     return rect;
 }
 
+Rectangle drawActionSelectMenu() {
+    Rectangle rect = (Rectangle) {
+            SCREEN_WIDTH - BOTTOM_MENU_PLAYER_WIDTH,
+            SCREEN_HEIGHT - BOTTOM_MENU_HEIGHT,
+            BOTTOM_MENU_ACTION_SELECT_WIDTH,
+            BOTTOM_MENU_HEIGHT,
+    };
+    drawMenuRect(rect);
+    return rect;
+}
+
 float line(int line) {
     return (float) line * LINE_HEIGHT;
 }

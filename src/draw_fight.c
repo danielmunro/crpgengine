@@ -75,11 +75,11 @@ void drawStat(UIManager *ui, int amount, float percent, Vector2 vect) {
 void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox, UIManager *ui) {
     for (int i = 0; i < fight->player->partyCount; i++) {
         Mobile *mob = fight->player->party[i];
-        FontStyle *fs = getFontStyleForFightCursor(ui, mob, fight->cursors[FIGHT_CURSOR_MAIN], i);
+        FontStyle *fs = getFontStyleForFightCursor(ui, mob, fight->cursors[fight->menu], i);
         drawInMenuWithStyle(textBox,
                 fs,
                 mob->name);
-        if (fight->cursors[FIGHT_CURSOR_MAIN] == i) {
+        if (fight->cursors[fight->menu] == i) {
             Spritesheet *spritesheet = findSpritesheetByName(ui->sprites, SPRITESHEET_NAME_UI);
             drawImageFromSprite(spritesheet, (Vector2) {
                     textBox->area.x + FIGHT_CURSOR_X_OFFSET,
@@ -111,6 +111,16 @@ void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox, UIManager *ui) {
     }
 }
 
+void drawFightSelectActionMenu(Fight *fight, UIManager *ui) {
+    TextBox *t = createTextBox(drawActionSelectMenu(), ui->defaultFont);
+//    drawInMenuWithStyle(t, fight->currentCursor == 0)
+    drawInMenu(t, "Attack");
+    drawInMenu(t, "Items");
+    drawInMenu(t, "Magic");
+    drawInMenu(t, "Defend");
+    drawInMenu(t, "Run");
+}
+
 void drawFightMenu(Fight *fight, UIManager *ui) {
     TextBox *left = createTextBox(drawBottomLeftMenu(), ui->defaultFont);
     TextBox *right = createTextBox(drawBottomRightMenu(), ui->defaultFont);
@@ -119,6 +129,9 @@ void drawFightMenu(Fight *fight, UIManager *ui) {
         drawInMenu(left, fight->beasts[i]->name);
     }
     drawPlayerFightTopLevel(fight, right, ui);
+    if (fight->menu == FIGHT_MENU_ACTION_SELECT) {
+        drawFightSelectActionMenu(fight, ui);
+    }
 }
 
 void drawFightView(Encounters *encounters, Fight *fight, UIManager *ui) {

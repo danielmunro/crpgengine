@@ -34,6 +34,7 @@
 #define DANGER_COLOR RED
 #define BOTTOM_MENU_HEIGHT 150
 #define BOTTOM_MENU_PLAYER_WIDTH 560
+#define BOTTOM_MENU_ACTION_SELECT_WIDTH 300
 
 #define FIGHT_CURSOR_X_OFFSET 5
 #define FIGHT_CURSOR_Y_OFFSET 22
@@ -107,10 +108,6 @@
 #define COLLIDE_TYPE_PLAYER "player"
 #define COLLIDE_TYPE_WARPS "warps"
 #define COLLIDE_TYPE_COUNT 3
-
-typedef enum {
-    FIGHT_CURSOR_MAIN,
-} FightCursor;
 
 const char *logLevels[] = {
         "error",
@@ -262,6 +259,15 @@ char *QuitMenuItems[] = {
         QUIT_MENU_NO,
         QUIT_MENU_YES,
 };
+
+typedef enum {
+    FIGHT_MENU_MOBILE_SELECT,
+    FIGHT_MENU_ACTION_SELECT,
+    FIGHT_MENU_ATTACK,
+    FIGHT_MENU_MAGIC,
+    FIGHT_MENU_SPECIAL,
+    FIGHT_MENU_ITEMS,
+} FightMenu;
 
 typedef enum {
     CONSUMABLE,
