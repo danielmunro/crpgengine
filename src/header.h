@@ -352,6 +352,7 @@ typedef enum {
 #include "menu/load_menu.c"
 #include "menu/acknowledge_menu.c"
 #include "menu/fight_mob_select_menu.c"
+#include "draw.c"
 #include "exploration.c"
 #include "scene.c"
 #include "tilemap_xmlreader.c"

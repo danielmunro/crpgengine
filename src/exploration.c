@@ -140,28 +140,6 @@ void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
     addInfo(e->log, "player coordinates: %f, %f", position.x, position.y);
 }
 
-void drawAllMenus(
-        Fight *fight,
-        Menu *menus[MAX_MENUS],
-        int menuCount,
-        FontStyle **fonts,
-        const char *scene,
-        const char *indexDir) {
-    BeginDrawing();
-    MenuContext *c = createMenuContext(
-            fight,
-            fonts,
-            scene,
-            indexDir,
-            0);
-    for (int i = 0; i < menuCount; i++) {
-        c->cursorLine = menus[i]->cursor;
-        menus[i]->draw(c);
-    }
-    free(c);
-    EndDrawing();
-}
-
 void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
     Object *o = getObject(e, index);
     if (o != NULL) {
