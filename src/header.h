@@ -229,6 +229,7 @@ typedef enum {
     SAVE_MENU,
     QUIT_MENU,
     ACKNOWLEDGE_MENU,
+    BEAST_LIST_FIGHT_MENU,
     MOBILE_SELECT_FIGHT_MENU,
     ACTION_SELECT_FIGHT_MENU,
     FIGHT_MENU_ATTACK,
@@ -351,7 +352,9 @@ typedef enum {
 #include "menu/quit_menu.c"
 #include "menu/load_menu.c"
 #include "menu/acknowledge_menu.c"
-#include "menu/fight_mob_select_menu.c"
+#include "menu/mob_select_menu.c"
+#include "menu/beast_select_menu.c"
+#include "menu/action_select_menu.c"
 #include "draw.c"
 #include "exploration.c"
 #include "scene.c"

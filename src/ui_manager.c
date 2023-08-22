@@ -38,8 +38,17 @@ int getMenuList(UIManager *ui) {
                     MOBILE_SELECT_FIGHT_MENU,
                     getMobileSelectFightMenuCursorLength,
                     drawMobileSelectFightMenuScreen,
-                    mobileSelectFightMenuItemSelected
-            )
+                    mobileSelectFightMenuItemSelected),
+            createMenu(
+                    BEAST_LIST_FIGHT_MENU,
+                    getBeastSelectCursorLength,
+                    drawBeastSelectMenuScreen,
+                    beastSelectMenuItemSelected),
+            createMenu(
+                    ACTION_SELECT_FIGHT_MENU,
+                    getActionSelectCursorLength,
+                    drawActionSelectMenuScreen,
+                    actionSelectMenuItemSelected)
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {

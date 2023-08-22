@@ -57,6 +57,7 @@ Fight *createFight(
     for (int i = 0; i < MAX_CURSORS; i++) {
         fight->cursors[i] = -1;
     }
+    fight->menu = MOBILE_SELECT_FIGHT_MENU;
     return fight;
 }
 
@@ -122,9 +123,10 @@ void fightSpaceKeyPressed(Fight *fight) {
 //        p->party[c]->actionGauge = 0;
 //        p->party[c]->hp -= 2;
 //        p->party[c]->mana -= 1;
-        fight->cursors[fight->menu] = getNextCursorPosition(fight);
+//        fight->cursors[fight->menu] = getNextCursorPosition(fight);
         if (fight->menu == MOBILE_SELECT_FIGHT_MENU) {
             fight->menu = ACTION_SELECT_FIGHT_MENU;
+            fight->cursors[ACTION_SELECT_FIGHT_MENU] = 0;
         }
         if (fight->cursors[fight->menu] == c) {
             fight->cursors[fight->menu] = -1;

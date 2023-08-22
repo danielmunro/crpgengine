@@ -28,30 +28,25 @@ void drawFightPlayer(Player *player) {
         }
     }
 }
-
-void drawFightSelectActionMenu(Fight *fight, UIManager *ui) {
-    TextBox *t = createTextBox(
-            drawActionSelectMenu(),
-            getFontStyle(ui->fonts, FONT_STYLE_DEFAULT));
-//    drawInMenuWithStyle(t, fight->currentCursor == 0)
-    drawInMenu(t, "Attack");
-    drawInMenu(t, "Items");
-    drawInMenu(t, "Magic");
-    drawInMenu(t, "Defend");
-    drawInMenu(t, "Run");
-}
+//
+//void drawFightSelectActionMenu(Fight *fight, UIManager *ui) {
+//    TextBox *t = createTextBox(
+//            drawActionSelectMenu(),
+//            getFontStyle(ui->fonts, FONT_STYLE_DEFAULT));
+////    drawInMenuWithStyle(t, fight->currentCursor == 0)
+//    drawInMenu(t, "Attack");
+//    drawInMenu(t, "Items");
+//    drawInMenu(t, "Magic");
+//    drawInMenu(t, "Defend");
+//    drawInMenu(t, "Run");
+//}
 
 void drawFightMenu(Fight *fight, UIManager *ui) {
-    TextBox *left = createTextBox(
-            drawBottomLeftMenu(),
-            getFontStyle(ui->fonts, FONT_STYLE_DEFAULT));
-    int count = fight->beastCount > MAX_MOB_NAMES_IN_FIGHT ? MAX_MOB_NAMES_IN_FIGHT : fight->beastCount;
-    for (int i = 0; i < count; i++) {
-        drawInMenu(left, fight->beasts[i]->name);
+    findMenu(ui, BEAST_LIST_FIGHT_MENU)->draw(ui->menuContext);
+    findMenu(ui, MOBILE_SELECT_FIGHT_MENU)->draw(ui->menuContext);
+    if (fight->menu == ACTION_SELECT_FIGHT_MENU) {
+        findMenu(ui, ACTION_SELECT_FIGHT_MENU)->draw(ui->menuContext);
     }
-    free(left);
-    Menu *menu = findMenu(ui, MOBILE_SELECT_FIGHT_MENU);
-    menu->draw(ui->menuContext);
 }
 
 void drawFightView(Encounters *encounters, Fight *fight, UIManager *ui) {
