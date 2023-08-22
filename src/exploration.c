@@ -28,8 +28,8 @@ typedef struct {
     bool showCollisions;
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
-    Menu **menus;
-    int menuCount;
+//    Menu **menus;
+//    int menuCount;
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
     RuntimeArgs *runtimeArgs;
 } Exploration;
@@ -66,7 +66,6 @@ Exploration *createExploration(Log *log, RuntimeArgs *runtimeArgs) {
     exploration->mobileCount = 0;
     exploration->entranceCount = 0;
     exploration->exitCount = 0;
-    exploration->menuCount = 0;
     exploration->objectCount = 0;
     exploration->arriveAtCount = 0;
     exploration->log = log;
@@ -74,7 +73,6 @@ Exploration *createExploration(Log *log, RuntimeArgs *runtimeArgs) {
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         exploration->mobMovements[i] = NULL;
     }
-    exploration->menus = calloc(MAX_MENUS, sizeof(Menu));
     return exploration;
 }
 
@@ -122,19 +120,6 @@ Vector2D getTileCount(Exploration *e) {
     int x = SCREEN_WIDTH / e->tilemap->size.x + 1;
     int y = SCREEN_HEIGHT / e->tilemap->size.y + 2;
     return (Vector2D) {x, y};
-}
-
-void addMenu(Exploration *e, Menu *m) {
-    addInfo(e->log, "adding in-game menu %d", m->type);
-    e->menus[e->menuCount] = m;
-    e->menuCount++;
-}
-
-Menu *getCurrentMenu(Exploration *e) {
-    if (e->menuCount < 1) {
-        return NULL;
-    }
-    return e->menus[e->menuCount - 1];
 }
 
 void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
@@ -433,12 +418,6 @@ void renderExplorationLayers(Exploration *e) {
     renderExplorationLayer(e, MIDGROUND);
     renderExplorationLayer(e, FOREGROUND);
     addDebug(e->log, "exploration successfully rendered");
-}
-
-void removeMenu(Exploration *exploration) {
-    exploration->menuCount--;
-    exploration->menus[exploration->menuCount]->cursor = 0;
-    exploration->menus[exploration->menuCount] = NULL;
 }
 
 void dialogEngaged(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
