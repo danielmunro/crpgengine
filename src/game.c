@@ -15,27 +15,7 @@ typedef struct {
     UIManager *ui;
     Fight *fight;
     Menu **menus;
-    int menuCount;
 } Game;
-
-void addMenu(Game *g, Menu *m) {
-    addInfo(g->log, "adding in-game menu %d", m->type);
-    g->menus[g->menuCount] = m;
-    g->menuCount++;
-}
-
-Menu *getCurrentMenu(Game *g) {
-    if (g->menuCount < 1) {
-        return NULL;
-    }
-    return g->menus[g->menuCount - 1];
-}
-
-void removeMenu(Game *g) {
-    g->menuCount--;
-    g->menus[g->menuCount]->cursor = 0;
-    g->menus[g->menuCount] = NULL;
-}
 
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
     if (entrance == NULL) {
@@ -86,7 +66,7 @@ void explorationMenuKeyPressed(Game *g) {
             g->scenes->current->name,
             g->runtimeArgs->indexDir,
             0);
-    addMenu(g, findMenu(g->ui, PARTY_MENU));
+    addMenu(g->menus, findMenu(g->ui, PARTY_MENU));
 }
 
 void checkExplorationInput(Game *g) {
@@ -117,31 +97,31 @@ void checkExplorationInput(Game *g) {
 }
 
 void menuItemSelected(Game *g) {
-    Menu *menu = getCurrentMenu(g);
+    Menu *menu = getCurrentMenu(g->menus);
     MenuSelectResponse *response = menu->selected(g->ui->menuContext);
     if (response->type == OPEN_MENU) {
-        addMenu(g, findMenu(g->ui, response->menuType));
+        addMenu(g->menus, findMenu(g->ui, response->menuType));
     } else if (response->type == CLOSE_MENU) {
-        removeMenu(g);
+        removeMenu(g->menus);
     }
     free(response);
 }
 
 void checkMenuInput(Game *g) {
     if (IsKeyPressed(KEY_ESCAPE)) {
-        removeMenu(g);
-        if (g->menuCount == 0) {
+        int menuCount = removeMenu(g->menus);
+        if (menuCount == 0) {
             free(g->ui->menuContext);
             g->ui->menuContext = NULL;
         }
     }
     if (IsKeyPressed(KEY_DOWN)) {
-        Menu *menu = getCurrentMenu(g);
+        Menu *menu = getCurrentMenu(g->menus);
         menu->cursor++;
         normalizeMenuCursor(menu, g->ui->menuContext);
     }
     if (IsKeyPressed(KEY_UP)) {
-        Menu *menu = getCurrentMenu(g);
+        Menu *menu = getCurrentMenu(g->menus);
         menu->cursor--;
         normalizeMenuCursor(menu, g->ui->menuContext);
     }
@@ -151,7 +131,7 @@ void checkMenuInput(Game *g) {
 }
 
 bool isExploring(Game *g) {
-    return g->fight == NULL && !getCurrentMenu(g);
+    return g->fight == NULL && !getCurrentMenu(g->menus);
 }
 
 bool isFighting(Game *g) {
@@ -228,8 +208,7 @@ void doFightLoop(Game *g) {
 void doInGameMenuLoop(Game *g) {
     drawAllMenus(
             g->ui->menuContext,
-            g->menus,
-            g->menuCount);
+            g->menus);
     checkMenuInput(g);
 }
 
@@ -238,7 +217,7 @@ void run(Game *g) {
         startTiming(g->timing);
         if (isFighting(g)) {
             doFightLoop(g);
-        } else if (getCurrentMenu(g) != NULL) {
+        } else if (getCurrentMenu(g->menus) != NULL) {
             doInGameMenuLoop(g);
         } else if (isExploring(g)) {
             doExplorationLoop(g);
@@ -304,7 +283,6 @@ Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
     g->fight = NULL;
     addDebug(g->log, "done creating game object");
     free(save);
-    g->menuCount = 0;
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
     return g;
 }

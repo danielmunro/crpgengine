@@ -71,3 +71,35 @@ void normalizeMenuCursor(Menu *menu, MenuContext *menuContext) {
         menu->cursor = menu->getCursorLength(menuContext) - 1;
     }
 }
+
+int addMenu(Menu **menus, Menu *m) {
+    for (int i = 0; i < MAX_MENUS; i++) {
+        if (menus[i] == NULL) {
+            menus[i] = m;
+            return i;
+        }
+    }
+    fprintf(stderr, "could not add menu");
+    return MAX_MENUS;
+}
+
+Menu *getCurrentMenu(Menu **menus) {
+    for (int i = 0; i < MAX_MENUS; i++) {
+        if (menus[i] == NULL) {
+            return i > 0 ? menus[i - 1] : NULL;
+        }
+    }
+    return menus[MAX_MENUS - 1];
+}
+
+int removeMenu(Menu **menus) {
+    for (int i = 0; i < MAX_MENUS; i++) {
+        if (menus[i] == NULL) {
+            if (i > 0) {
+                menus[i - 1] = NULL;
+            }
+            return i - 1;
+        }
+    }
+    return -1;
+}
