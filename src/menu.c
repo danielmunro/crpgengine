@@ -47,13 +47,14 @@ Menu *createMenu(
 
 MenuContext *createMenuContext(
         Fight *fight,
+        Player *player,
         FontStyle **fonts,
         const char *scene,
         const char *indexDir,
         int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
     context->fight = fight;
-    context->player = fight->player;
+    context->player = player;
     context->scene = scene;
     context->indexDir = indexDir;
     context->cursorLine = cursorLine;
