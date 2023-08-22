@@ -13,7 +13,7 @@ typedef struct {
     ControlManager *controls;
     MobileManager *mobiles;
     UIManager *ui;
-    FightManager *fight2;
+    FightManager *fights;
     Menu **menus;
 } Game;
 
@@ -60,7 +60,7 @@ void evaluateExits(Game *g) {
 
 void explorationMenuKeyPressed(Game *g) {
         g->ui->menuContext = createMenuContext(
-//            g->fight,
+            g->fights->fight,
             g->player,
             g->ui->fonts,
             g->scenes->current->name,
@@ -131,11 +131,11 @@ void checkMenuInput(Game *g) {
 }
 
 bool isExploring(Game *g) {
-    return !isFighting(g->fight2) && !getCurrentMenu(g->menus);
+    return !isFighting(g->fights) && !getCurrentMenu(g->menus);
 }
 
 bool canTriggerFight(Game *g, Player *p) {
-    if (!isDungeon(g->scenes->current) || isFighting(g->fight2) || !isMoving(getPartyLeader(p))) {
+    if (!isDungeon(g->scenes->current) || isFighting(g->fights) || !isMoving(getPartyLeader(p))) {
         return false;
     }
     return true;
@@ -148,7 +148,7 @@ void checkFights(Game *g, Scene *s) {
     }
     if (rand() % 100 + 1 == 1) {
         createFightFromEncounters(
-                g->fight2,
+                g->fights,
                 g->log,
                 s->encounters,
                 g->player,
@@ -156,7 +156,7 @@ void checkFights(Game *g, Scene *s) {
         Animation *animation = findAnimation(getPartyLeader(g->player)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;
         g->ui->menuContext = createMenuContext(
-//                g->fight,
+                g->fights->fight,
                 g->player,
                 g->ui->fonts,
                 NULL,
@@ -186,12 +186,12 @@ void doExplorationLoop(Game *g) {
 
 void doFightLoop(Game *g) {
     Scene *s = g->scenes->current;
-    fightUpdate(g->fight2->fight);
-    checkFightInput(g->fight2->fight);
-    drawFightView(s->encounters, g->fight2->fight, g->ui);
+    fightUpdate(g->fights->fight);
+    checkFightInput(g->fights->fight);
+    drawFightView(s->encounters, g->fights->fight, g->ui);
     processFightAnimations();
     checkControls(g->controls);
-    checkRemoveFight(g->fight2);
+    checkRemoveFight(g->fights);
 }
 
 void doInGameMenuLoop(Game *g) {
@@ -204,7 +204,7 @@ void doInGameMenuLoop(Game *g) {
 void run(Game *g) {
     while (!WindowShouldClose()) {
         startTiming(g->timing);
-        if (isFighting(g->fight2)) {
+        if (isFighting(g->fights)) {
             doFightLoop(g);
         } else if (getCurrentMenu(g->menus) != NULL) {
             doInGameMenuLoop(g);
@@ -272,6 +272,6 @@ Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
     addDebug(g->log, "done creating game object");
     free(save);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
-    g->fight2 = createFightManager(g->log);
+    g->fights = createFightManager(g->log);
     return g;
 }
