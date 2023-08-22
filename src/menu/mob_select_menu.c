@@ -87,7 +87,7 @@ void drawMobileSelectFightMenuScreen(MenuContext *menuContext) {
     TextBox *right = createTextBox(
             drawBottomRightMenu(),
             getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT));
-    drawPlayerFightTopLevel(menuContext->fight, right, menuContext->fonts);
+//    drawPlayerFightTopLevel(menuContext->fight, right, menuContext->fonts);
     free(right);
 }
 

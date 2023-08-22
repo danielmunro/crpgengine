@@ -62,29 +62,6 @@ Fight *createFight(
     return fight;
 }
 
-Fight *createFightFromEncounters(Log *log, Encounters *encounters, Player *player, Spritesheet *menuSprite) {
-    Beast *beasts[MAX_BEASTS_IN_FIGHT];
-    int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
-    addDebug(log, "creating %d beasts for fight", beastsToCreate);
-    int created = 0;
-    while (created < beastsToCreate) {
-        int e = rand() % encounters->beastEncountersCount + 0;
-        int max = encounters->beastEncounters[e]->max;
-        int amount = rand() % max + 1;
-        if (amount > beastsToCreate - created) {
-            amount = beastsToCreate - created;
-        }
-        for (int i = 0; i < amount; i++) {
-            beasts[created] = cloneBeast(encounters->beastEncounters[e]->beast);
-            created++;
-        }
-    }
-    Fight *fight = createFight(log, beasts, player, menuSprite, created);
-    fight->beastCount = created;
-    addDebug(log, "fight encountered with %d opponents", fight->beastCount);
-    return fight;
-}
-
 void cancelFight(Fight *fight) {
     fight->beastCount = 0;
 }

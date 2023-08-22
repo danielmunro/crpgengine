@@ -6,7 +6,7 @@ typedef struct {
     int cursorLine;
     FontStyle *defaultFont;
     FontStyle **fonts;
-    Fight *fight;
+//    Fight *fight;
 } MenuContext;
 
 typedef struct {
@@ -46,14 +46,14 @@ Menu *createMenu(
 }
 
 MenuContext *createMenuContext(
-        Fight *fight,
+//        Fight *fight,
         Player *player,
         FontStyle **fonts,
         const char *scene,
         const char *indexDir,
         int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
-    context->fight = fight;
+//    context->fight = fight;
     context->player = player;
     context->scene = scene;
     context->indexDir = indexDir;
