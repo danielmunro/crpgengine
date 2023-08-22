@@ -57,7 +57,8 @@ Fight *createFight(
     for (int i = 0; i < MAX_CURSORS; i++) {
         fight->cursors[i] = -1;
     }
-    fight->menu = MOBILE_SELECT_FIGHT_MENU;
+//    fight->menu = MOBILE_SELECT_FIGHT_MENU;
+    fight->menu = 0;
     return fight;
 }
 

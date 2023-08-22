@@ -28,7 +28,7 @@ typedef struct {
     bool showCollisions;
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
-    Menu *menus[MAX_MENUS];
+    Menu **menus;
     int menuCount;
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
     RuntimeArgs *runtimeArgs;
@@ -74,6 +74,7 @@ Exploration *createExploration(Log *log, RuntimeArgs *runtimeArgs) {
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         exploration->mobMovements[i] = NULL;
     }
+    exploration->menus = calloc(MAX_MENUS, sizeof(Menu));
     return exploration;
 }
 
