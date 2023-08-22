@@ -80,7 +80,7 @@ void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox, FontStyle **fonts) 
 }
 
 int getMobileSelectFightMenuCursorLength(MenuContext *menuContext) {
-    return MAX_PARTY_SIZE;
+    return menuContext->player->partyCount;
 }
 
 void drawMobileSelectFightMenuScreen(MenuContext *menuContext) {
