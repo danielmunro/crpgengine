@@ -5,7 +5,7 @@ int getQuitCursorLength(MenuContext *menuContext) {
 void drawQuitMenuScreen(MenuContext *menuContext) {
     Rectangle rect = drawMediumMenu();
     FontStyle *defaultFont = getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT);
-    TextBox *textBox = createTextBox(rect, defaultFont);
+    TextBox *textBox = createTextBox(rect, defaultFont, QUIT_BOX);
     drawInMenu(textBox, "Are you sure?");
     drawInMenu(textBox, "");
     int cursorLength = getQuitCursorLength(menuContext);

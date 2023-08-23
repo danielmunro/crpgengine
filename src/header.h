@@ -107,11 +107,23 @@
 #define MAX_MOB_NAMES_IN_FIGHT 4
 #define MAX_CURSORS 4
 #define MAX_ACTION_GAUGE 300
+#define MAX_TEXT_BOXES 32
 
 #define COLLIDE_TYPE_OBJECTS "objects"
 #define COLLIDE_TYPE_PLAYER "player"
 #define COLLIDE_TYPE_WARPS "warps"
 #define COLLIDE_TYPE_COUNT 3
+
+typedef enum {
+    ACKNOWLEDGE_BOX,
+    ACTION_SELECT_BOX,
+    BEAST_SELECT_BOX,
+    ITEMS_BOX,
+    LOAD_BOX,
+    MOBILE_SELECT_BOX,
+    PARTY_BOX,
+    QUIT_BOX,
+} TextBoxLabel;
 
 const char *logLevels[] = {
         "error",

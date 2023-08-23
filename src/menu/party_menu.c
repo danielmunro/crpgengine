@@ -33,7 +33,7 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
             0,
             200,
             SCREEN_HEIGHT - (UI_PADDING * 2)
-    }, defaultFont);
+    }, defaultFont, PARTY_BOX);
     for (int i = 0; i < count; i++) {
         drawInMenu(textBox, PartyMenuItems[i]);
     }

@@ -7,6 +7,7 @@ typedef struct {
     FontStyle *defaultFont;
     FontStyle **fonts;
     Fight *fight;
+    TextBox **textBoxes;
 } MenuContext;
 
 typedef struct {
@@ -59,6 +60,7 @@ MenuContext *createMenuContext(
     context->indexDir = indexDir;
     context->cursorLine = cursorLine;
     context->fonts = fonts;
+    context->textBoxes = calloc(MAX_TEXT_BOXES, sizeof(TextBox));
     return context;
 }
 

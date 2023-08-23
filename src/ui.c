@@ -1,13 +1,15 @@
 typedef struct {
     Rectangle area;
     FontStyle *fontStyle;
+    TextBoxLabel label;
     int cursor;
 } TextBox;
 
-TextBox *createTextBox(Rectangle area, FontStyle *fontStyle) {
+TextBox *createTextBox(Rectangle area, FontStyle *fontStyle, TextBoxLabel label) {
     TextBox *textBox = malloc(sizeof(TextBox));
     textBox->area = area;
     textBox->fontStyle = fontStyle;
+    textBox->label = label;
     textBox->cursor = 0;
     return textBox;
 }

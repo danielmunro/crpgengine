@@ -1,7 +1,8 @@
 void drawActionSelectMenuScreen(MenuContext *menuContext) {
     TextBox *t = createTextBox(
             drawActionSelectMenu(),
-            getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT));
+            getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT),
+            ACTION_SELECT_BOX);
     drawInMenu(t, "Attack");
     drawInMenu(t, "Items");
     drawInMenu(t, "Magic");

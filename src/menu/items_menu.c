@@ -1,6 +1,6 @@
 void drawItemsMenuScreen(MenuContext *menuContext) {
     FontStyle *defaultFont = getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT);
-    TextBox *textBox = createTextBox(drawFullscreenMenu(), defaultFont);
+    TextBox *textBox = createTextBox(drawFullscreenMenu(), defaultFont, ITEMS_BOX);
     for (int i = 0; i < menuContext->player->itemCount; i++) {
         drawInMenu(textBox, menuContext->player->items[i]->name);
     }
