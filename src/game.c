@@ -169,7 +169,6 @@ void checkFights(Game *g, Scene *s) {
                 NULL,
                 NULL,
                 -1
-//                g->fight->cursors[g->fight->menu]
         );
     }
 }
