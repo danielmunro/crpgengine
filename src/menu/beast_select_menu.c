@@ -1,17 +1,17 @@
 void drawBeastSelectMenuScreen(MenuContext *menuContext) {
-    TextBox *left = createTextBox(
+    TextBox *t = createTextBox(
             drawBottomLeftMenu(),
             getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT));
     int count = menuContext->fight->beastCount > MAX_MOB_NAMES_IN_FIGHT ?
             MAX_MOB_NAMES_IN_FIGHT : menuContext->fight->beastCount;
     for (int i = 0; i < count; i++) {
-        drawInMenu(left, menuContext->fight->beasts[i]->name);
+        drawInMenu(t, menuContext->fight->beasts[i]->name);
     }
-    free(left);
+    free(t);
 }
 
 int getBeastSelectCursorLength(MenuContext *menuContext) {
-    return -1;
+    return menuContext->fight->beastCount;
 }
 
 MenuSelectResponse *beastSelectMenuItemSelected(MenuContext *menuContext) {
