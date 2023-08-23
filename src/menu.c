@@ -83,6 +83,17 @@ int addMenu(Menu **menus, Menu *m) {
     return MAX_MENUS;
 }
 
+Menu *findMenu(Menu **menus, MenuType type) {
+    for (int i = 0; i < MAX_MENUS; i++) {
+        if (menus[i] == NULL) {
+            return NULL;
+        } else if (menus[i]->type == type) {
+            return menus[i];
+        }
+    }
+    return NULL;
+}
+
 Menu *getCurrentMenu(Menu **menus) {
     for (int i = 0; i < MAX_MENUS; i++) {
         if (menus[i] == NULL) {

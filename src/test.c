@@ -39,6 +39,7 @@ void createFightInSceneTest() {
                         log,
                         createTestAnimationManager(),
                         "examples/simple_demo"),
+                NULL,
                 NULL);
         Fight *f = fm->fight;
         char message[MAX_LOG_LINE_LENGTH];

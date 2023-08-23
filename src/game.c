@@ -66,7 +66,7 @@ void explorationMenuKeyPressed(Game *g) {
             g->scenes->current->name,
             g->runtimeArgs->indexDir,
             0);
-    addMenu(g->menus, findMenu(g->ui, PARTY_MENU));
+    addMenu(g->menus, findMenu(g->ui->menus, PARTY_MENU));
 }
 
 void checkExplorationInput(Game *g) {
@@ -100,7 +100,7 @@ void menuItemSelected(Game *g) {
     Menu *menu = getCurrentMenu(g->menus);
     MenuSelectResponse *response = menu->selected(g->ui->menuContext);
     if (response->type == OPEN_MENU) {
-        addMenu(g->menus, findMenu(g->ui, response->menuType));
+        addMenu(g->menus, findMenu(g->ui->menus, response->menuType));
     } else if (response->type == CLOSE_MENU) {
         removeMenu(g->menus);
     }
@@ -152,7 +152,14 @@ void checkFights(Game *g, Scene *s) {
                 g->log,
                 s->encounters,
                 g->player,
-                findSpritesheetByName(g->sprites, SPRITESHEET_NAME_UI));
+                findSpritesheetByName(g->sprites, SPRITESHEET_NAME_UI),
+                createMenuContext(
+                        g->fights->fight,
+                        g->player,
+                        g->ui->fonts,
+                        g->scenes->current->name,
+                        g->runtimeArgs->indexDir,
+                        0));
         Animation *animation = findAnimation(getPartyLeader(g->player)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;
         g->ui->menuContext = createMenuContext(
@@ -187,17 +194,19 @@ void doExplorationLoop(Game *g) {
 void doFightLoop(Game *g) {
     Scene *s = g->scenes->current;
     fightUpdate(g->fights->fight);
-    checkFightInput(g->fights->fight);
-    drawFightView(s->encounters, g->fights->fight, g->ui);
+    checkFightInput(g->fights);
+    drawFightView(s->encounters, g->fights);
     processFightAnimations();
     checkControls(g->controls);
     checkRemoveFight(g->fights);
 }
 
 void doInGameMenuLoop(Game *g) {
+    BeginDrawing();
     drawAllMenus(
             g->ui->menuContext,
             g->menus);
+    EndDrawing();
     checkMenuInput(g);
 }
 
@@ -272,6 +281,6 @@ Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
     addDebug(g->log, "done creating game object");
     free(save);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
-    g->fights = createFightManager(g->log);
+    g->fights = createFightManager(g->log, g->ui);
     return g;
 }

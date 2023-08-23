@@ -41,20 +41,21 @@ void drawFightPlayer(Player *player) {
 //    drawInMenu(t, "Run");
 //}
 
-void drawFightMenu(Fight *fight, UIManager *ui) {
-    findMenu(ui, BEAST_LIST_FIGHT_MENU)->draw(ui->menuContext);
-    findMenu(ui, MOBILE_SELECT_FIGHT_MENU)->draw(ui->menuContext);
-    if (fight->menu == ACTION_SELECT_FIGHT_MENU) {
-        findMenu(ui, ACTION_SELECT_FIGHT_MENU)->draw(ui->menuContext);
-    }
+void drawFightMenu(FightManager *fm) {
+    drawAllMenus(fm->menuContext, fm->menus);
+//    findMenu(ui->menus, BEAST_LIST_FIGHT_MENU)->draw(ui->menuContext);
+//    findMenu(ui->menus, MOBILE_SELECT_FIGHT_MENU)->draw(ui->menuContext);
+//    if (fight->menu == ACTION_SELECT_FIGHT_MENU) {
+//        findMenu(ui->menus, ACTION_SELECT_FIGHT_MENU)->draw(ui->menuContext);
+//    }
 }
 
-void drawFightView(Encounters *encounters, Fight *fight, UIManager *ui) {
+void drawFightView(Encounters *encounters, FightManager *fights) {
     BeginDrawing();
     ClearBackground(BLACK);
     drawFightBackground(encounters);
-    drawFightBeasts(fight);
-    drawFightPlayer(fight->player);
-    drawFightMenu(fight, ui);
+    drawFightBeasts(fights->fight);
+    drawFightPlayer(fights->fight->player);
+    drawFightMenu(fights);
     EndDrawing();
 }

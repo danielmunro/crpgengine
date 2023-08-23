@@ -41,27 +41,29 @@ void drawActionGauge(float y, float width, Color color) {
             color);
 }
 
-void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox, FontStyle **fonts) {
-    for (int i = 0; i < fight->player->partyCount; i++) {
-        Mobile *mob = fight->player->party[i];
-        FontStyle *fs = getFontStyleForFightCursor(mob, fonts, fight->cursors[fight->menu], i);
+void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox) {
+    for (int i = 0; i < mc->fight->player->partyCount; i++) {
+        Mobile *mob = mc->fight->player->party[i];
+        FontStyle *fs = isReadyForAction(mob)
+                ? getFontStyleForFightCursor(mob,  mc->fonts, mc->cursorLine, i)
+                : getFontStyle(mc->fonts, FONT_STYLE_DISABLED);
         drawInMenuWithStyle(textBox,
                             fs,
                             mob->name);
-        if (fight->cursors[fight->menu] == i) {
-            drawImageFromSprite(fight->menuSprite, (Vector2) {
+        if (mc->cursorLine == i && isReadyForAction(mob)) {
+            drawImageFromSprite(mc->fight->menuSprite, (Vector2) {
                     textBox->area.x + FIGHT_CURSOR_X_OFFSET,
                     textBox->area.y + (float) (LINE_HEIGHT * i) + FIGHT_CURSOR_Y_OFFSET,
             }, CURSOR_INDEX);
         }
-        drawStat(fonts,
+        drawStat(mc->fonts,
                  mob->hp,
                  (float) mob->hp / (float) calculateAttributes(mob).hp,
                  (Vector2) {
                          textBox->area.x + HP_X_OFFSET,
                          textBox->area.y + UI_PADDING + (float) (i * LINE_HEIGHT)
                  });
-        drawStat(fonts,
+        drawStat(mc->fonts,
                  mob->mana,
                  (float) mob->mana / (float) calculateAttributes(mob).mana,
                  (Vector2) {
@@ -74,7 +76,7 @@ void drawPlayerFightTopLevel(Fight *fight, TextBox *textBox, FontStyle **fonts) 
                 DISABLED_COLOR);
         drawActionGauge(
                 (float) (i * LINE_HEIGHT),
-                ACTION_GAUGE_WIDTH * ((float) fight->player->party[i]->actionGauge / MAX_ACTION_GAUGE),
+                ACTION_GAUGE_WIDTH * ((float) mob->actionGauge / MAX_ACTION_GAUGE),
                 DEFAULT_COLOR);
     }
 }
@@ -87,7 +89,7 @@ void drawMobileSelectFightMenuScreen(MenuContext *menuContext) {
     TextBox *right = createTextBox(
             drawBottomRightMenu(),
             getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT));
-    drawPlayerFightTopLevel(menuContext->fight, right, menuContext->fonts);
+    drawPlayerFightTopLevel(menuContext, right);
     free(right);
 }
 
