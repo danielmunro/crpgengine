@@ -85,12 +85,16 @@ int getMobileSelectFightMenuCursorLength(MenuContext *menuContext) {
     return menuContext->player->partyCount;
 }
 
-void drawMobileSelectFightMenuScreen(MenuContext *menuContext) {
-    TextBox *t = createTextBox(
+TextBox *createMobileSelectTextBox(MenuContext *menuContext) {
+    return createTextBox(
             drawBottomRightMenu(),
             getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT), MOBILE_SELECT_BOX);
+}
+
+void drawMobileSelectFightMenuScreen(MenuContext *menuContext) {
+    drawBottomRightMenu();
+    TextBox *t = findOrCreateTextBox(menuContext, MOBILE_SELECT_BOX, createMobileSelectTextBox);
     drawPlayerFightTopLevel(menuContext, t);
-    free(t);
 }
 
 MenuSelectResponse *mobileSelectFightMenuItemSelected(MenuContext *menuContext) {

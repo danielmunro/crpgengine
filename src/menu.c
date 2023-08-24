@@ -116,3 +116,17 @@ int removeMenu(Menu **menus) {
     }
     return -1;
 }
+
+TextBox *findOrCreateTextBox(MenuContext *mc, TextBoxLabel label, TextBox *(createTextBox)(MenuContext *)) {
+    for (int i = 0; i < MAX_TEXT_BOXES; i++) {
+        if (mc->textBoxes[i] == NULL) {
+            TextBox *t = createTextBox(mc);
+            mc->textBoxes[i] = t;
+            return t;
+        }
+        if (mc->textBoxes[i]->label == label) {
+            mc->textBoxes[i]->cursor = 0;
+            return mc->textBoxes[i];
+        }
+    }
+}

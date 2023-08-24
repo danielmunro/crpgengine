@@ -28,26 +28,9 @@ void drawFightPlayer(Player *player) {
         }
     }
 }
-//
-//void drawFightSelectActionMenu(Fight *fight, UIManager *ui) {
-//    TextBox *t = createTextBox(
-//            drawActionSelectMenu(),
-//            getFontStyle(ui->fonts, FONT_STYLE_DEFAULT));
-////    drawInMenuWithStyle(t, fight->currentCursor == 0)
-//    drawInMenu(t, "Attack");
-//    drawInMenu(t, "Items");
-//    drawInMenu(t, "Magic");
-//    drawInMenu(t, "Defend");
-//    drawInMenu(t, "Run");
-//}
 
 void drawFightMenu(FightManager *fm) {
     drawAllMenus(fm->menuContext, fm->menus);
-//    findMenu(ui->menus, BEAST_LIST_FIGHT_MENU)->draw(ui->menuContext);
-//    findMenu(ui->menus, MOBILE_SELECT_FIGHT_MENU)->draw(ui->menuContext);
-//    if (fight->menu == ACTION_SELECT_FIGHT_MENU) {
-//        findMenu(ui->menus, ACTION_SELECT_FIGHT_MENU)->draw(ui->menuContext);
-//    }
 }
 
 void drawFightView(Encounters *encounters, FightManager *fights) {
