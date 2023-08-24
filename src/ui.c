@@ -64,11 +64,13 @@ void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
 }
 
 void drawMenuRect(Rectangle rect) {
-    DrawRectangleRounded(
-            (Rectangle) { rect.x + 4, rect.y + 4, rect.width - 8, rect.height - 8 },
-            (float) 0.005,
-            4,
-            BLUE);
+    DrawRectangleGradientV(
+            (int) rect.x + 4,
+            (int) rect.y + 4,
+            (int) rect.width - 8,
+            (int) rect.height - 8,
+            LIGHTBLUE,
+            DARKBLUE);
     DrawRectangleRoundedLines(
             (Rectangle) { rect.x + 4, rect.y + 4, rect.width - 8, rect.height - 8 },
             (float) 0.005,

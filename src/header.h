@@ -68,6 +68,8 @@
 #define STARTING_HP 20
 #define STARTING_MANA 10
 
+#define LIGHTBLUE (Color){100, 134, 175, 255}
+
 #define MAX_OBJECTS 255
 #define MAX_SCENES    256
 #define MAX_FILES 256
