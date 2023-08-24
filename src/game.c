@@ -96,17 +96,6 @@ void checkExplorationInput(Game *g) {
     }
 }
 
-void menuItemSelected(Game *g) {
-    Menu *menu = getCurrentMenu(g->menus);
-    MenuSelectResponse *response = menu->selected(g->ui->menuContext);
-    if (response->type == OPEN_MENU) {
-        addMenu(g->menus, findMenu(g->ui->menus, response->menuType));
-    } else if (response->type == CLOSE_MENU) {
-        removeMenu(g->menus);
-    }
-    free(response);
-}
-
 void checkMenuInput(Game *g) {
     if (IsKeyPressed(KEY_ESCAPE)) {
         int menuCount = removeMenu(g->menus);
@@ -126,7 +115,7 @@ void checkMenuInput(Game *g) {
         normalizeMenuCursor(menu, g->ui->menuContext);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        menuItemSelected(g);
+        menuItemSelected(g->menus, g->ui->menus, g->ui->menuContext);
     }
 }
 

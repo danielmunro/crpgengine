@@ -144,3 +144,14 @@ int getDefaultNextOption(MenuContext *mc) {
 int getDefaultPreviousOption(MenuContext *mc) {
     return mc->cursorLine - 1;
 }
+
+void menuItemSelected(Menu **menus, Menu **allMenus, MenuContext *menuContext) {
+    Menu *menu = getCurrentMenu(menus);
+    MenuSelectResponse *response = menu->selected(menuContext);
+    if (response->type == OPEN_MENU) {
+        addMenu(menus, findMenu(allMenus, response->menuType));
+    } else if (response->type == CLOSE_MENU) {
+        removeMenu(menus);
+    }
+    free(response);
+}

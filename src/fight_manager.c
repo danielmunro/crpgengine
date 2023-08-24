@@ -3,7 +3,6 @@ typedef struct {
     UIManager *ui;
     Fight *fight;
     Menu **menus;
-    MenuContext *menuContext;
 } FightManager;
 
 FightManager *createFightManager(Log *log, UIManager *ui) {
@@ -52,10 +51,12 @@ Fight *createFightFromEncounters(
 
 void checkRemoveFight(FightManager *f) {
     if (isFightDone(f->fight)) {
-        free(f->menuContext);
-        f->menuContext = NULL;
-        free(f->fight);
+        Player *p = f->fight->player;
+        for (int i = 0; i < p->partyCount; i++) {
+            p->party[i]->actionGauge = 0;
+        }
         f->fight = NULL;
+        free(f->fight);
     }
 }
 
@@ -65,9 +66,10 @@ void fightSpaceKeyPressed(FightManager *fm) {
     if (c > -1) {
         currentMenu->cursor = currentMenu->getNextOption(fm->ui->menuContext);
         normalizeMenuCursor(currentMenu, fm->ui->menuContext);
-        if (currentMenu->type == MOBILE_SELECT_FIGHT_MENU) {
-            addMenu(fm->menus, findMenu(fm->ui->menus, ACTION_SELECT_FIGHT_MENU));
-        }
+        menuItemSelected(fm->menus, fm->ui->menus, fm->ui->menuContext);
+//        if (currentMenu->type == MOBILE_SELECT_FIGHT_MENU) {
+//            addMenu(fm->menus, findMenu(fm->ui->menus, ACTION_SELECT_FIGHT_MENU));
+//        }
     }
 }
 
