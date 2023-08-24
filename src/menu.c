@@ -20,6 +20,8 @@ typedef struct {
     int cursor;
     int (*getCursorLength)(MenuContext *);
     void (*draw)(MenuContext *);
+    int (*getNextOption)(MenuContext *);
+    int (*getPreviousOption)(MenuContext *);
     MenuSelectResponse *(*selected)(MenuContext *menuContext);
     MenuContext *context;
 } Menu;
@@ -35,12 +37,16 @@ Menu *createMenu(
         MenuType type,
         int (getCursorLength)(MenuContext *),
         void (draw)(MenuContext *),
+        int (*getPreviousOption)(MenuContext *),
+        int (*getNextOption)(MenuContext *),
         MenuSelectResponse *(*selected)()) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;
     menu->type = type;
     menu->getCursorLength = getCursorLength;
     menu->draw = draw;
+    menu->getPreviousOption = getPreviousOption;
+    menu->getNextOption = getNextOption;
     menu->selected = selected;
     menu->context = NULL;
     return menu;
@@ -68,7 +74,6 @@ void normalizeMenuCursor(Menu *menu, MenuContext *menuContext) {
     if (menu->cursor >= menu->getCursorLength(menuContext)) {
         menu->cursor = 0;
     }
-
     if (menu->cursor < 0) {
         menu->cursor = menu->getCursorLength(menuContext) - 1;
     }
@@ -129,4 +134,14 @@ TextBox *findOrCreateTextBox(MenuContext *mc, TextBoxLabel label, TextBox *(crea
             return mc->textBoxes[i];
         }
     }
+    fprintf(stderr, "could not find text box");
+    exit(EXIT_TEXT_BOX_NOT_FOUND);
+}
+
+int getDefaultNextOption(MenuContext *mc) {
+    return mc->cursorLine + 1;
+}
+
+int getDefaultPreviousOption(MenuContext *mc) {
+    return mc->cursorLine - 1;
 }

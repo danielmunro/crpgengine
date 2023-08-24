@@ -29,7 +29,13 @@ void createFightInSceneTest() {
     Encounters *e = createEncounters();
     e->beastEncountersCount = 1;
     e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
-    FightManager *fm = createFightManager(log);
+    Spritesheet **sprites = calloc(MAX_SPRITES, sizeof(Spritesheet));
+    UIManager *ui = createUIManager(
+            log,
+            createSpriteSheetManager(sprites, 0),
+            NULL,
+            NULL);
+    FightManager *fm = createFightManager(log, ui);
     for (int i = 0; i < 100; i++) {
         createFightFromEncounters(
                 fm,
@@ -39,7 +45,6 @@ void createFightInSceneTest() {
                         log,
                         createTestAnimationManager(),
                         "examples/simple_demo"),
-                NULL,
                 NULL);
         Fight *f = fm->fight;
         char message[MAX_LOG_LINE_LENGTH];

@@ -30,7 +30,7 @@ void drawFightPlayer(Player *player) {
 }
 
 void drawFightMenu(FightManager *fm) {
-    drawAllMenus(fm->menuContext, fm->menus);
+    drawAllMenus(fm->ui->menuContext, fm->menus);
 }
 
 void drawFightView(Encounters *encounters, FightManager *fights) {

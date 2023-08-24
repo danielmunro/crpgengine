@@ -13,41 +13,57 @@ int getMenuList(UIManager *ui) {
                     PARTY_MENU,
                     getPartyMenuCursorLength,
                     drawPartyMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
                     partyMenuItemSelected),
             createMenu(
                     ITEMS_MENU,
                     getItemsCursorLength,
                     drawItemsMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
                     itemMenuItemSelected),
             createMenu(
                     LOAD_MENU,
                     getLoadCursorLength,
                     drawLoadMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
                     loadMenuItemSelected),
             createMenu(
                     QUIT_MENU,
                     getQuitCursorLength,
                     drawQuitMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
                     quitMenuItemSelected),
             createMenu(
                     ACKNOWLEDGE_MENU,
                     getAcknowledgeCursorLength,
                     drawAcknowledgeMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
                     acknowledgeMenuItemSelected),
             createMenu(
                     MOBILE_SELECT_FIGHT_MENU,
                     getMobileSelectFightMenuCursorLength,
                     drawMobileSelectFightMenuScreen,
+                    getPreviousMobSelectCursorPosition,
+                    getNextMobSelectCursorPosition,
                     mobileSelectFightMenuItemSelected),
             createMenu(
                     BEAST_LIST_FIGHT_MENU,
                     getBeastSelectCursorLength,
                     drawBeastSelectMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
                     beastSelectMenuItemSelected),
             createMenu(
                     ACTION_SELECT_FIGHT_MENU,
                     getActionSelectCursorLength,
                     drawActionSelectMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
                     actionSelectMenuItemSelected)
     };
     int count = sizeof(list) / sizeof(list[0]);

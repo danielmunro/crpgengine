@@ -48,7 +48,6 @@ int getPartyMenuCursorLength(MenuContext *menuContext) {
     return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
 }
 
-
 MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext) {
     int c = menuContext->cursorLine;
     if (strcmp(PartyMenuItems[c], PARTY_MENU_ITEMS) == 0) {

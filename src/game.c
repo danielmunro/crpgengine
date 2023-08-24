@@ -117,12 +117,12 @@ void checkMenuInput(Game *g) {
     }
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *menu = getCurrentMenu(g->menus);
-        menu->cursor++;
+        menu->cursor = menu->getNextOption(g->ui->menuContext);
         normalizeMenuCursor(menu, g->ui->menuContext);
     }
     if (IsKeyPressed(KEY_UP)) {
         Menu *menu = getCurrentMenu(g->menus);
-        menu->cursor--;
+        menu->cursor = menu->getPreviousOption(g->ui->menuContext);
         normalizeMenuCursor(menu, g->ui->menuContext);
     }
     if (IsKeyPressed(KEY_SPACE)) {
@@ -152,14 +152,7 @@ void checkFights(Game *g, Scene *s) {
                 g->log,
                 s->encounters,
                 g->player,
-                findSpritesheetByName(g->sprites, SPRITESHEET_NAME_UI),
-                createMenuContext(
-                        g->fights->fight,
-                        g->player,
-                        g->ui->fonts,
-                        g->scenes->current->name,
-                        g->runtimeArgs->indexDir,
-                        0));
+                findSpritesheetByName(g->sprites, SPRITESHEET_NAME_UI));
         Animation *animation = findAnimation(getPartyLeader(g->player)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;
         g->ui->menuContext = createMenuContext(
@@ -168,8 +161,7 @@ void checkFights(Game *g, Scene *s) {
                 g->ui->fonts,
                 NULL,
                 NULL,
-                -1
-        );
+                0);
     }
 }
 

@@ -21,13 +21,12 @@ bool isFighting(FightManager *f) {
     return f->fight != NULL;
 }
 
-void createFightFromEncounters(
+Fight *createFightFromEncounters(
         FightManager *f,
         Log *log,
         Encounters *encounters,
         Player *player,
-        Spritesheet *menuSprite,
-        MenuContext *mc) {
+        Spritesheet *menuSprite) {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
     addDebug(log, "creating %d beasts for fight", beastsToCreate);
@@ -48,8 +47,7 @@ void createFightFromEncounters(
     fight->beastCount = created;
     addDebug(log, "fight encountered with %d opponents", fight->beastCount);
     f->fight = fight;
-    mc->fight = fight;
-    f->menuContext = mc;
+    return fight;
 }
 
 void checkRemoveFight(FightManager *f) {
@@ -61,44 +59,12 @@ void checkRemoveFight(FightManager *f) {
     }
 }
 
-int getNextCursorPosition(FightManager *fm) {
-    Menu *m = getCurrentMenu(fm->menus);
-    Player *p = fm->fight->player;
-    for (int i = m->cursor + 1; i < m->getCursorLength(fm->menuContext); i++) {
-        if (isReadyForAction(p->party[i])) {
-            return i;
-        }
-    }
-    for (int i = 0; i < m->cursor; i++) {
-        if (isReadyForAction(p->party[i])) {
-            return i;
-        }
-    }
-    return m->cursor;
-}
-
-int getPreviousCursorPosition(FightManager *fm) {
-    Menu *m = getCurrentMenu(fm->menus);
-    Player *p = fm->fight->player;
-    int cursorLength = m->getCursorLength(fm->menuContext) - 1;
-    for (int i = m->cursor - 1; i >= 0; i--) {
-        if (isReadyForAction(p->party[i])) {
-            return i;
-        }
-    }
-    for (int i = cursorLength; i > m->cursor; i--) {
-        if (isReadyForAction(p->party[i])) {
-            return i;
-        }
-    }
-    return m->cursor;
-}
-
 void fightSpaceKeyPressed(FightManager *fm) {
     Menu *currentMenu = getCurrentMenu(fm->menus);
     int c = currentMenu->cursor;
     if (c > -1) {
-        currentMenu->cursor = getNextCursorPosition(fm);
+//        currentMenu->cursor = getNextMobSelectCursorPosition(fm->ui->menuContext);
+        currentMenu->cursor = currentMenu->getNextOption(fm->ui->menuContext);
         if (currentMenu->type == MOBILE_SELECT_FIGHT_MENU) {
 //            fm->fight->player->party[c]->actionGauge = 0;
             addMenu(fm->menus, findMenu(fm->ui->menus, ACTION_SELECT_FIGHT_MENU));
@@ -112,10 +78,14 @@ void fightSpaceKeyPressed(FightManager *fm) {
 void checkFightInput(FightManager *fm) {
     addDebug(fm->log, "fight -- check player input");
     if (IsKeyPressed(KEY_DOWN)) {
-        getCurrentMenu(fm->menus)->cursor = getNextCursorPosition(fm);
+        Menu *m = getCurrentMenu(fm->menus);
+        MenuContext *mc = fm->ui->menuContext;
+        m->cursor = m->getNextOption(mc);
     }
     if (IsKeyPressed(KEY_UP)) {
-        getCurrentMenu(fm->menus)->cursor = getPreviousCursorPosition(fm);
+        Menu *m = getCurrentMenu(fm->menus);
+        MenuContext *mc = fm->ui->menuContext;
+        m->cursor = m->getPreviousOption(mc);
     }
     if (IsKeyPressed(KEY_SPACE)) {
         fightSpaceKeyPressed(fm);
