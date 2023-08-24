@@ -64,17 +64,19 @@ void fightSpaceKeyPressed(FightManager *fm) {
     Menu *currentMenu = getCurrentMenu(fm->menus);
     int c = currentMenu->cursor;
     if (c > -1) {
-        currentMenu->cursor = currentMenu->getNextOption(fm->ui->menuContext);
-        normalizeMenuCursor(currentMenu, fm->ui->menuContext);
         menuItemSelected(fm->menus, fm->ui->menus, fm->ui->menuContext);
-//        if (currentMenu->type == MOBILE_SELECT_FIGHT_MENU) {
-//            addMenu(fm->menus, findMenu(fm->ui->menus, ACTION_SELECT_FIGHT_MENU));
-//        }
     }
 }
 
 void checkFightInput(FightManager *fm) {
     addDebug(fm->log, "fight -- check player input");
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        Menu *m = getCurrentMenu(fm->menus);
+        if (m->type == MOBILE_SELECT_FIGHT_MENU) {
+            return;
+        }
+        removeMenu(fm->menus);
+    }
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *m = getCurrentMenu(fm->menus);
         MenuContext *mc = fm->ui->menuContext;
@@ -89,8 +91,5 @@ void checkFightInput(FightManager *fm) {
     }
     if (IsKeyPressed(KEY_SPACE)) {
         fightSpaceKeyPressed(fm);
-    }
-    if (IsKeyPressed(KEY_ESCAPE)) {
-        cancelFight(fm->fight);
     }
 }
