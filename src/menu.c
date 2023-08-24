@@ -4,7 +4,6 @@ typedef struct {
     SaveFiles *saveFiles;
     const char *indexDir;
     int cursorLine;
-    FontStyle *defaultFont;
     FontStyle **fonts;
     Fight *fight;
     TextBox **textBoxes;

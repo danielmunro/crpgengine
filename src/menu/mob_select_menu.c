@@ -51,10 +51,12 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox) {
                             fs,
                             mob->name);
         if (mc->cursorLine == i && isReadyForAction(mob)) {
-            drawImageFromSprite(mc->fight->menuSprite, (Vector2) {
-                    textBox->area.x + FIGHT_CURSOR_X_OFFSET,
-                    textBox->area.y + (float) (LINE_HEIGHT * i) + FIGHT_CURSOR_Y_OFFSET,
-            }, CURSOR_INDEX);
+            drawCursor(
+                    mc->fight->menuSprite,
+                    (Vector2) {
+                        textBox->area.x,
+                        textBox->area.y + (float) (LINE_HEIGHT * i),
+                    });
         }
         drawStat(mc->fonts,
                  mob->hp,
