@@ -30,6 +30,8 @@ Fight *createFightFromEncounters(
     int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
     addDebug(log, "creating %d beasts for fight", beastsToCreate);
     int created = 0;
+    float x = BEAST_AREA.x;
+    float y = BEAST_AREA.y;
     while (created < beastsToCreate) {
         int e = rand() % encounters->beastEncountersCount + 0;
         int max = encounters->beastEncounters[e]->max;
@@ -39,6 +41,16 @@ Fight *createFightFromEncounters(
         }
         for (int i = 0; i < amount; i++) {
             beasts[created] = cloneBeast(encounters->beastEncounters[e]->beast);
+            beasts[created]->position = (Rectangle) {
+                    x, y, (float) beasts[created]->image.width, (float) beasts[created]->image.height,
+            };
+            float height = (float) beasts[created]->image.height;
+            y += height + (float) (height * 0.5);
+            if (y > BEAST_AREA.height) {
+                y = BEAST_AREA.y;
+                float width = (float) beasts[created]->image.width;
+                x += width + (float) (width * 0.5);
+            }
             created++;
         }
     }

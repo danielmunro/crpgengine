@@ -4,18 +4,12 @@ void drawFightBackground(Encounters *encounters) {
 }
 
 void drawFightBeasts(Fight *fight) {
-    int width = 0;
-    int height = 0;
     for (int i = 0; i < fight->beastCount; i++) {
-        const int x = i % 3;
         DrawTextureEx(fight->beasts[i]->image,
-                      (Vector2) {(float) width, (float) height},
+                      (Vector2) {
+                                    fight->beasts[i]->position.x,
+                                 fight->beasts[i]->position.y},
                       0, SCALE, WHITE);
-        width += fight->beasts[i]->image.width;
-        if (x > 0 && x % 2 == 0) {
-            height += fight->beasts[i]->image.height;
-            width = 0;
-        }
     }
 }
 

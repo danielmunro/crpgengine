@@ -14,7 +14,13 @@ void drawAttackFightMenuScreen(MenuContext *menuContext) {
                     t->area.x,
                     t->area.y + (float) (LINE_HEIGHT * menuContext->cursorLine),
             });
-//    menuContext->fight->beasts[menuContext->cursorLine]->
+    Rectangle p = menuContext->fight->beasts[menuContext->cursorLine]->position;
+    drawCursor(
+            menuContext->fight->menuSprite,
+            (Vector2) {
+                    p.x - (p.width / 2),
+                    p.y - (p.height / 2),
+            });
 }
 
 MenuSelectResponse *attackFightMenuItemSelected(MenuContext *menuContext) {

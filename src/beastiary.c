@@ -8,6 +8,7 @@ typedef struct {
     int mana;
     int gp;
     int actionGauge;
+    Rectangle position;
 } Beast;
 
 typedef struct {
@@ -29,6 +30,7 @@ Beast *createBeastFromData(const char *indexDir, BeastData *data) {
     sprintf(filePath, "%s/images/%s", indexDir, data->image);
     beast->image = LoadTextureFromImage(LoadImage(filePath));
     beast->attributes = createAttributesFromData(data->attributes);
+    beast->position = (Rectangle){0, 0, 0, 0};
     return beast;
 }
 
@@ -43,5 +45,6 @@ Beast *cloneBeast(Beast *original) {
     new->mana = original->mana;
     new->gp = original->gp;
     new->actionGauge = original->actionGauge;
+    new->position = original->position;
     return new;
 }

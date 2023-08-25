@@ -117,6 +117,8 @@
 #define COLLIDE_TYPE_WARPS "warps"
 #define COLLIDE_TYPE_COUNT 3
 
+#define BEAST_AREA (Rectangle) {20, 20, 240, 240}
+
 typedef enum {
     ACKNOWLEDGE_BOX,
     ACTION_SELECT_BOX,
