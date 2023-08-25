@@ -145,7 +145,7 @@ int getDefaultPreviousOption(MenuContext *mc) {
     return mc->cursorLine - 1;
 }
 
-void menuItemSelected(Menu **menus, Menu **allMenus, MenuContext *menuContext) {
+MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext *menuContext) {
     Menu *menu = getCurrentMenu(menus);
     MenuSelectResponse *response = menu->selected(menuContext);
     if (response->type == OPEN_MENU) {
@@ -153,5 +153,5 @@ void menuItemSelected(Menu **menus, Menu **allMenus, MenuContext *menuContext) {
     } else if (response->type == CLOSE_MENU) {
         removeMenu(menus);
     }
-    free(response);
+    return response;
 }

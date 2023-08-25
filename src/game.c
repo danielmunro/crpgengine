@@ -115,7 +115,8 @@ void checkMenuInput(Game *g) {
         normalizeMenuCursor(menu, g->ui->menuContext);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        menuItemSelected(g->menus, g->ui->menus, g->ui->menuContext);
+        MenuSelectResponse *response = menuItemSelected(g->menus, g->ui->menus, g->ui->menuContext);
+        free(response);
     }
 }
 
