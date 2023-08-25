@@ -107,7 +107,7 @@
 #define MAX_NOTIFICATIONS 64
 #define MAX_LINE_BUFFER 128
 #define MAX_MESSAGE_BUFFER 1024
-#define MAX_MOB_NAMES_IN_FIGHT 4
+#define MAX_MOB_NAMES_IN_FIGHT 6
 #define MAX_CURSORS 4
 #define MAX_ACTION_GAUGE 300
 #define MAX_TEXT_BOXES 32
@@ -247,10 +247,9 @@ typedef enum {
     BEAST_LIST_FIGHT_MENU,
     MOBILE_SELECT_FIGHT_MENU,
     ACTION_SELECT_FIGHT_MENU,
-    FIGHT_MENU_ATTACK,
-    FIGHT_MENU_MAGIC,
-    FIGHT_MENU_SPECIAL,
-    FIGHT_MENU_ITEMS,
+    ATTACK_FIGHT_MENU,
+    MAGIC_FIGHT_MENU,
+    ITEMS_FIGHT_MENU,
 } MenuType;
 
 typedef enum {
@@ -367,9 +366,10 @@ typedef enum {
 #include "menu/quit_menu.c"
 #include "menu/load_menu.c"
 #include "menu/acknowledge_menu.c"
-#include "menu/mob_select_menu.c"
-#include "menu/beast_select_menu.c"
 #include "menu/action_select_menu.c"
+#include "menu/beast_select_menu.c"
+#include "menu/attack_fight_menu.c"
+#include "menu/mob_select_menu.c"
 #include "draw.c"
 #include "exploration.c"
 #include "scene.c"

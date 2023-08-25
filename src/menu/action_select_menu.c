@@ -35,5 +35,12 @@ void drawActionSelectMenuScreen(MenuContext *menuContext) {
 }
 
 MenuSelectResponse *actionSelectMenuItemSelected(MenuContext *menuContext) {
+    if (menuContext->cursorLine == 0) {
+        return createMenuSelectResponse(OPEN_MENU, ATTACK_FIGHT_MENU);
+    } else if (menuContext->cursorLine == 1) {
+        return createMenuSelectResponse(OPEN_MENU, MAGIC_FIGHT_MENU);
+    } else if (menuContext->cursorLine == 2) {
+        return createMenuSelectResponse(OPEN_MENU, ITEMS_FIGHT_MENU);
+    }
     return createMenuSelectResponse(CLOSE_MENU, ACTION_SELECT_FIGHT_MENU);
 }
