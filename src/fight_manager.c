@@ -72,24 +72,32 @@ void checkRemoveFight(FightManager *f) {
     }
 }
 
+void attackBeast(FightManager *fm, Menu *menu) {
+    // hack -- insta kill
+    free(fm->fight->beasts[menu->cursor]);
+    for (int i = menu->cursor; i < fm->fight->beastCount - 1; i++) {
+        fm->fight->beasts[i] = fm->fight->beasts[i + 1];
+    }
+    fm->fight->beasts[fm->fight->beastCount] = NULL;
+    fm->fight->beastCount--;
+    // end hack
+    Menu *m = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
+    fm->fight->player->party[m->cursor]->actionGauge = 0;
+    removeMenu(fm->menus);
+    removeMenu(fm->menus);
+    Menu *newCurrent = getCurrentMenu(fm->menus);
+    normalizeMenuCursor(menu, fm->ui->menuContext);
+    newCurrent->cursor = newCurrent->getNextOption(fm->ui->menuContext);
+    normalizeMenuCursor(newCurrent, fm->ui->menuContext);
+}
+
 void fightSpaceKeyPressed(FightManager *fm) {
     Menu *currentMenu = getCurrentMenu(fm->menus);
     int c = currentMenu->cursor;
     if (c > -1) {
         MenuSelectResponse *response = menuItemSelected(fm->menus, fm->ui->menus, fm->ui->menuContext);
         if (response->type == TARGET_FOR_ATTACK) {
-            free(fm->fight->beasts[currentMenu->cursor]);
-            for (int i = currentMenu->cursor; i < fm->fight->beastCount - 1; i++) {
-                fm->fight->beasts[i] = fm->fight->beasts[i + 1];
-            }
-            fm->fight->beasts[fm->fight->beastCount] = NULL;
-            fm->fight->beastCount--;
-            Menu *m = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
-            fm->fight->player->party[m->cursor]->actionGauge = 0;
-            removeMenu(fm->menus);
-            removeMenu(fm->menus);
-            Menu *newCurrent = getCurrentMenu(fm->menus);
-            newCurrent->cursor = newCurrent->getNextOption(fm->ui->menuContext);
+            attackBeast(fm, currentMenu);
         }
         free(response);
     }
