@@ -65,13 +65,20 @@ int getMenuList(UIManager *ui) {
                     getDefaultPreviousOption,
                     getDefaultNextOption,
                     actionSelectMenuItemSelected),
-                createMenu(
-                        ATTACK_FIGHT_MENU,
-                        getAttackFightMenuCursorLength,
-                        drawAttackFightMenuScreen,
-                        getDefaultPreviousOption,
-                        getDefaultNextOption,
-                        attackFightMenuItemSelected)
+            createMenu(
+                    ATTACK_FIGHT_MENU,
+                    getAttackFightMenuCursorLength,
+                    drawAttackFightMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
+                    attackFightMenuItemSelected),
+            createMenu(
+                    MAGIC_FIGHT_MENU,
+                    getMagicFightCursorLength,
+                    drawMagicFightMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
+                    magicFightMenuItemSelected)
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {

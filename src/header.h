@@ -111,6 +111,7 @@
 #define MAX_CURSORS 4
 #define MAX_ACTION_GAUGE 300
 #define MAX_TEXT_BOXES 32
+#define MAX_SPELLS 256
 
 #define COLLIDE_TYPE_OBJECTS "objects"
 #define COLLIDE_TYPE_PLAYER "player"
@@ -128,6 +129,7 @@ typedef enum {
     MOBILE_SELECT_BOX,
     PARTY_BOX,
     QUIT_BOX,
+    MAGIC_SELECT_BOX,
 } TextBoxLabel;
 
 const char *logLevels[] = {
@@ -327,6 +329,22 @@ typedef enum {
     FONT_STYLE_DANGER,
 } FontStyleType;
 
+const char *Spells[] = {
+        "cure",
+        "fire",
+        "lightning",
+        "ice",
+        "energy",
+};
+
+typedef enum {
+    CURE,
+    FIRE,
+    LIGHTNING,
+    ICE,
+    ENERGY,
+} SpellType;
+
 #include "log.c"
 #include "util.c"
 #include "yaml/spritesheet.c"
@@ -356,6 +374,7 @@ typedef enum {
 #include "item.c"
 #include "beastiary.c"
 #include "warp.c"
+#include "spell.c"
 #include "mobile.c"
 #include "player.c"
 #include "control.c"
@@ -373,6 +392,7 @@ typedef enum {
 #include "menu/beast_select_menu.c"
 #include "menu/attack_fight_menu.c"
 #include "menu/mob_select_menu.c"
+#include "menu/magic_fight_menu.c"
 #include "draw.c"
 #include "exploration.c"
 #include "scene.c"
