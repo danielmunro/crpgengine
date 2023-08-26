@@ -95,7 +95,10 @@ void fightSpaceKeyPressed(FightManager *fm) {
     Menu *currentMenu = getCurrentMenu(fm->menus);
     int c = currentMenu->cursor;
     if (c > -1) {
-        MenuSelectResponse *response = menuItemSelected(fm->menus, fm->ui->menus, fm->ui->menuContext);
+        MenuSelectResponse *response = menuItemSelected(
+                fm->menus,
+                fm->ui->menus,
+                fm->ui->menuContext);
         if (response->type == TARGET_FOR_ATTACK) {
             attackBeast(fm, currentMenu);
         }
