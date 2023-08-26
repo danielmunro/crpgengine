@@ -391,7 +391,7 @@ typedef enum {
 #include "menu/action_select_menu.c"
 #include "menu/beast_select_menu.c"
 #include "menu/attack_fight_menu.c"
-#include "menu/mob_select_menu.c"
+#include "menu/mobile_select_menu.c"
 #include "menu/magic_fight_menu.c"
 #include "draw.c"
 #include "exploration.c"
