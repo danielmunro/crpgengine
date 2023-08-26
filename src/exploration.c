@@ -28,8 +28,8 @@ typedef struct {
     bool showCollisions;
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
-    Menu *menus[MAX_MENUS];
-    int menuCount;
+//    Menu **menus;
+//    int menuCount;
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
     RuntimeArgs *runtimeArgs;
 } Exploration;
@@ -66,7 +66,6 @@ Exploration *createExploration(Log *log, RuntimeArgs *runtimeArgs) {
     exploration->mobileCount = 0;
     exploration->entranceCount = 0;
     exploration->exitCount = 0;
-    exploration->menuCount = 0;
     exploration->objectCount = 0;
     exploration->arriveAtCount = 0;
     exploration->log = log;
@@ -123,43 +122,8 @@ Vector2D getTileCount(Exploration *e) {
     return (Vector2D) {x, y};
 }
 
-void addMenu(Exploration *e, Menu *m) {
-    addInfo(e->log, "adding in-game menu %d", m->type);
-    e->menus[e->menuCount] = m;
-    e->menuCount++;
-}
-
-Menu *getCurrentMenu(Exploration *e) {
-    if (e->menuCount < 1) {
-        return NULL;
-    }
-    return e->menus[e->menuCount - 1];
-}
-
 void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
     addInfo(e->log, "player coordinates: %f, %f", position.x, position.y);
-}
-
-void drawAllMenus(
-        Player *player,
-        Menu *menus[MAX_MENUS],
-        int menuCount,
-        FontStyle *font,
-        const char *scene,
-        const char *indexDir) {
-    BeginDrawing();
-    MenuContext *c = createMenuContext(
-            player,
-            scene,
-            indexDir,
-            font,
-            0);
-    for (int i = 0; i < menuCount; i++) {
-        c->cursorLine = menus[i]->cursor;
-        menus[i]->draw(c);
-    }
-    free(c);
-    EndDrawing();
 }
 
 void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
@@ -454,12 +418,6 @@ void renderExplorationLayers(Exploration *e) {
     renderExplorationLayer(e, MIDGROUND);
     renderExplorationLayer(e, FOREGROUND);
     addDebug(e->log, "exploration successfully rendered");
-}
-
-void removeMenu(Exploration *exploration) {
-    exploration->menuCount--;
-    exploration->menus[exploration->menuCount]->cursor = 0;
-    exploration->menus[exploration->menuCount] = NULL;
 }
 
 void dialogEngaged(Exploration *exploration, Player *player, ControlBlock *controlBlock) {

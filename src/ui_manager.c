@@ -1,12 +1,10 @@
 typedef struct {
+    Log *log;
     SpritesheetManager *sprites;
+    MenuContext *menuContext;
     Menu *menus[MAX_MENUS];
     int menuCount;
-    FontStyle *defaultFont;
-    FontStyle *disabledFont;
-    FontStyle *highlightedFont;
-    FontStyle *warningFont;
-    FontStyle *dangerFont;
+    FontStyle **fonts;
 } UIManager;
 
 int getMenuList(UIManager *ui) {
@@ -15,27 +13,65 @@ int getMenuList(UIManager *ui) {
                     PARTY_MENU,
                     getPartyMenuCursorLength,
                     drawPartyMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
                     partyMenuItemSelected),
             createMenu(
                     ITEMS_MENU,
                     getItemsCursorLength,
                     drawItemsMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
                     itemMenuItemSelected),
             createMenu(
                     LOAD_MENU,
                     getLoadCursorLength,
                     drawLoadMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
                     loadMenuItemSelected),
             createMenu(
                     QUIT_MENU,
                     getQuitCursorLength,
                     drawQuitMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
                     quitMenuItemSelected),
             createMenu(
                     ACKNOWLEDGE_MENU,
                     getAcknowledgeCursorLength,
                     drawAcknowledgeMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
                     acknowledgeMenuItemSelected),
+            createMenu(
+                    MOBILE_SELECT_FIGHT_MENU,
+                    getMobileSelectFightMenuCursorLength,
+                    drawMobileSelectFightMenuScreen,
+                    getPreviousMobSelectCursorPosition,
+                    getNextMobSelectCursorPosition,
+                    mobileSelectFightMenuItemSelected),
+            createMenu(
+                    BEAST_LIST_FIGHT_MENU,
+                    getBeastSelectCursorLength,
+                    drawBeastSelectMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
+                    beastSelectMenuItemSelected),
+            createMenu(
+                    ACTION_SELECT_FIGHT_MENU,
+                    getActionSelectCursorLength,
+                    drawActionSelectMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
+                    actionSelectMenuItemSelected),
+                createMenu(
+                        ATTACK_FIGHT_MENU,
+                        getAttackFightMenuCursorLength,
+                        drawAttackFightMenuScreen,
+                        getDefaultPreviousOption,
+                        getDefaultNextOption,
+                        attackFightMenuItemSelected)
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {
@@ -44,26 +80,23 @@ int getMenuList(UIManager *ui) {
     return count;
 }
 
-UIManager *createUIManager(SpritesheetManager *sprites, const char *indexDir, const char *fontName) {
+UIManager *createUIManager(
+        Log *log,
+        SpritesheetManager *sprites,
+        const char *indexDir,
+        const char *fontName) {
     UIManager *ui = malloc(sizeof(UIManager));
+    ui->log = log;
     char path[MAX_FS_PATH_LENGTH];
     sprintf(path, "%s/fonts/%s", indexDir, fontName);
     Font font = LoadFont(path);
-    ui->defaultFont = createDefaultFontStyle(font);
-    ui->disabledFont = createDefaultDisabledFontStyle(font);
-    ui->highlightedFont = createHighlightedFontStyle(font);
-    ui->warningFont = createWarningFontStyle(font);
-    ui->dangerFont = createDangerFontStyle(font);
+    ui->fonts = calloc(FONT_STYLE_COUNT, sizeof(FontStyle));
+    ui->fonts[0] = createDefaultFontStyle(font);
+    ui->fonts[1] = createDisabledFontStyle(font);
+    ui->fonts[2] = createHighlightedFontStyle(font);
+    ui->fonts[3] = createWarningFontStyle(font);
+    ui->fonts[4] = createDangerFontStyle(font);
     ui->menuCount = getMenuList(ui);
     ui->sprites = sprites;
     return ui;
-}
-
-Menu *findMenu(UIManager *ui, MenuType type) {
-    for (int i = 0; i < ui->menuCount; i++) {
-        if (ui->menus[i]->type == type) {
-            return ui->menus[i];
-        }
-    }
-    return NULL;
 }

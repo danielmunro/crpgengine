@@ -10,9 +10,10 @@ typedef struct {
 } Encounters;
 
 typedef struct {
-    FightMenu menu;
+    MenuType menu;
     Beast **beasts;
     Player *player;
+    Spritesheet *menuSprite;
     int beastCount;
     int *cursors;
     Log *log;
@@ -40,6 +41,7 @@ Fight *createFight(
         Log *log,
         Beast **beasts,
         Player *player,
+        Spritesheet *menuSprite,
         int beastCount) {
     Fight *fight = malloc(sizeof(Fight));
     fight->log = log;
@@ -49,97 +51,18 @@ Fight *createFight(
         fight->beasts[i] = beasts[i];
     }
     fight->player = player;
+    fight->menuSprite = menuSprite;
     fight->time = getTimeInMS();
     fight->cursors = calloc(MAX_CURSORS, sizeof(int));
     for (int i = 0; i < MAX_CURSORS; i++) {
         fight->cursors[i] = -1;
     }
-    return fight;
-}
-
-Fight *createFightFromEncounters(Log *log, Encounters *encounters, Player *player) {
-    Beast *beasts[MAX_BEASTS_IN_FIGHT];
-    int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
-    addDebug(log, "creating %d beasts for fight", beastsToCreate);
-    int created = 0;
-    while (created < beastsToCreate) {
-        int e = rand() % encounters->beastEncountersCount + 0;
-        int max = encounters->beastEncounters[e]->max;
-        int amount = rand() % max + 1;
-        if (amount > beastsToCreate - created) {
-            amount = beastsToCreate - created;
-        }
-        for (int i = 0; i < amount; i++) {
-            beasts[created] = cloneBeast(encounters->beastEncounters[e]->beast);
-            created++;
-        }
-    }
-    Fight *fight = createFight(log, beasts, player, created);
-    fight->beastCount = created;
-    addDebug(log, "fight encountered with %d opponents", fight->beastCount);
+    fight->menu = 0;
     return fight;
 }
 
 void cancelFight(Fight *fight) {
     fight->beastCount = 0;
-}
-
-int getNextCursorPosition(Fight *fight, FightCursor cursor) {
-    for (int i = fight->cursors[cursor] + 1; i < MAX_CURSORS; i++) {
-        if (isReadyForAction(fight->player->party[i])) {
-            return i;
-        }
-    }
-    for (int i = 0; i < fight->cursors[cursor]; i++) {
-        if (isReadyForAction(fight->player->party[i])) {
-            return i;
-        }
-    }
-    return fight->cursors[cursor];
-}
-
-int getPreviousCursorPosition(Fight *fight, FightCursor cursor) {
-    for (int i = fight->cursors[cursor] - 1; i >= 0; i--) {
-        if (isReadyForAction(fight->player->party[i])) {
-            return i;
-        }
-    }
-    for (int i = MAX_CURSORS - 1; i > fight->cursors[cursor]; i--) {
-        if (isReadyForAction(fight->player->party[i])) {
-            return i;
-        }
-    }
-    return fight->cursors[cursor];
-}
-
-void fightSpaceKeyPressed(Fight *fight) {
-    int c = fight->cursors[FIGHT_CURSOR_MAIN];
-    Player *p = fight->player;
-    if (c > -1) {
-        p->party[c]->actionGauge = 0;
-        p->party[c]->hp -= 2;
-        p->party[c]->mana -= 1;
-        fight->cursors[FIGHT_CURSOR_MAIN] = getNextCursorPosition(fight, FIGHT_CURSOR_MAIN);
-        if (fight->cursors[FIGHT_CURSOR_MAIN] == c) {
-            fight->cursors[FIGHT_CURSOR_MAIN] = -1;
-        }
-    }
-}
-
-void checkFightInput(Fight *fight) {
-    addDebug(fight->log, "fight -- check player input");
-    if (IsKeyPressed(KEY_DOWN)) {
-        fight->cursors[FIGHT_CURSOR_MAIN] = getNextCursorPosition(fight, FIGHT_CURSOR_MAIN);
-    }
-    if (IsKeyPressed(KEY_UP)) {
-        fight->cursors[FIGHT_CURSOR_MAIN] = getPreviousCursorPosition(fight, FIGHT_CURSOR_MAIN);
-    }
-    if (IsKeyPressed(KEY_SPACE)) {
-        fightSpaceKeyPressed(fight);
-    }
-    if (IsKeyPressed(KEY_ESCAPE)) {
-        cancelFight(fight);
-    }
 }
 
 int isFightDone(Fight *fight) {
@@ -169,8 +92,8 @@ void fightUpdate(Fight *fight) {
         int amountToRaise = getActionGaugeRaise(interval, calculateAttributes(mob).dexterity);
         if (!isReadyForAction(mob)) {
             mob->actionGauge += amountToRaise;
-            if (isReadyForAction(mob) && fight->cursors[FIGHT_CURSOR_MAIN] == -1) {
-                fight->cursors[FIGHT_CURSOR_MAIN] = i;
+            if (isReadyForAction(mob) && fight->cursors[fight->menu] == -1) {
+                fight->cursors[fight->menu] = i;
             }
         }
     }

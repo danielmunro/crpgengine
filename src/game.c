@@ -13,7 +13,8 @@ typedef struct {
     ControlManager *controls;
     MobileManager *mobiles;
     UIManager *ui;
-    Fight *fight;
+    FightManager *fights;
+    Menu **menus;
 } Game;
 
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
@@ -58,7 +59,14 @@ void evaluateExits(Game *g) {
 }
 
 void explorationMenuKeyPressed(Game *g) {
-    addMenu(g->scenes->current->exploration, findMenu(g->ui, PARTY_MENU));
+        g->ui->menuContext = createMenuContext(
+            g->fights->fight,
+            g->player,
+            g->ui->fonts,
+            g->scenes->current->name,
+            g->runtimeArgs->indexDir,
+            0);
+    addMenu(g->menus, findMenu(g->ui->menus, PARTY_MENU));
 }
 
 void checkExplorationInput(Game *g) {
@@ -88,67 +96,36 @@ void checkExplorationInput(Game *g) {
     }
 }
 
-void menuItemSelected(Game *g) {
-    Exploration *exploration = g->scenes->current->exploration;
-    Menu *menu = getCurrentMenu(exploration);
-    MenuContext *context = createMenuContext(
-            g->player,
-            g->scenes->current->name,
-            g->runtimeArgs->indexDir,
-            g->ui->defaultFont,
-            menu->cursor);
-    MenuSelectResponse *response = menu->selected(context);
-    if (response->type == OPEN_MENU) {
-        addMenu(exploration, findMenu(g->ui, response->menuType));
-    } else if (response->type == CLOSE_MENU) {
-        removeMenu(exploration);
-    }
-}
-
 void checkMenuInput(Game *g) {
-    Exploration *exploration = g->scenes->current->exploration;
     if (IsKeyPressed(KEY_ESCAPE)) {
-        removeMenu(exploration);
+        int menuCount = removeMenu(g->menus);
+        if (menuCount == 0) {
+            free(g->ui->menuContext);
+            g->ui->menuContext = NULL;
+        }
     }
     if (IsKeyPressed(KEY_DOWN)) {
-        Menu *menu = getCurrentMenu(exploration);
-        menu->cursor++;
-        MenuContext *c = createMenuContext(
-                g->player,
-                g->scenes->current->name,
-                g->runtimeArgs->indexDir,
-                g->ui->defaultFont,
-                menu->cursor);
-        normalizeMenuCursor(menu, c);
-        free(c);
+        Menu *menu = getCurrentMenu(g->menus);
+        menu->cursor = menu->getNextOption(g->ui->menuContext);
+        normalizeMenuCursor(menu, g->ui->menuContext);
     }
     if (IsKeyPressed(KEY_UP)) {
-        Menu *menu = getCurrentMenu(exploration);
-        menu->cursor--;
-        MenuContext *c = createMenuContext(
-                g->player,
-                g->scenes->current->name,
-                g->runtimeArgs->indexDir,
-                g->ui->defaultFont,
-                menu->cursor);
-        normalizeMenuCursor(menu, c);
-        free(c);
+        Menu *menu = getCurrentMenu(g->menus);
+        menu->cursor = menu->getPreviousOption(g->ui->menuContext);
+        normalizeMenuCursor(menu, g->ui->menuContext);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        menuItemSelected(g);
+        MenuSelectResponse *response = menuItemSelected(g->menus, g->ui->menus, g->ui->menuContext);
+        free(response);
     }
 }
 
 bool isExploring(Game *g) {
-    return g->fight == NULL && !getCurrentMenu(g->scenes->current->exploration);
-}
-
-bool isFighting(Game *g) {
-    return g->fight != NULL;
+    return !isFighting(g->fights) && !getCurrentMenu(g->menus);
 }
 
 bool canTriggerFight(Game *g, Player *p) {
-    if (!isDungeon(g->scenes->current) || isFighting(g) || !isMoving(getPartyLeader(p))) {
+    if (!isDungeon(g->scenes->current) || isFighting(g->fights) || !isMoving(getPartyLeader(p))) {
         return false;
     }
     return true;
@@ -160,19 +137,21 @@ void checkFights(Game *g, Scene *s) {
         return;
     }
     if (rand() % 100 + 1 == 1) {
-        g->fight = createFightFromEncounters(
+        createFightFromEncounters(
+                g->fights,
                 g->log,
                 s->encounters,
-                g->player);
+                g->player,
+                findSpritesheetByName(g->sprites, SPRITESHEET_NAME_UI));
         Animation *animation = findAnimation(getPartyLeader(g->player)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;
-    }
-}
-
-void checkRemoveFight(Game *g) {
-    if (isFightDone(g->fight)) {
-        free(g->fight);
-        g->fight = NULL;
+        g->ui->menuContext = createMenuContext(
+                g->fights->fight,
+                g->player,
+                g->ui->fonts,
+                NULL,
+                NULL,
+                0);
     }
 }
 
@@ -184,7 +163,7 @@ void doExplorationLoop(Game *g) {
             g->player,
             g->notifications,
             s->activeControlBlocks,
-            g->ui->defaultFont);
+            getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT));
     doMobileMovementUpdates(s->exploration);
     processAnimations(g->animations);
     evaluateMovement(s->exploration, g->player);
@@ -195,32 +174,29 @@ void doExplorationLoop(Game *g) {
 
 void doFightLoop(Game *g) {
     Scene *s = g->scenes->current;
-    fightUpdate(g->fight);
-    checkFightInput(g->fight);
-    drawFightView(s->encounters, g->fight, g->ui);
+    fightUpdate(g->fights->fight);
+    checkFightInput(g->fights);
+    drawFightView(s->encounters, g->fights);
     processFightAnimations();
     checkControls(g->controls);
-    checkRemoveFight(g);
+    checkRemoveFight(g->fights);
 }
 
 void doInGameMenuLoop(Game *g) {
-    Exploration *exploration = g->scenes->current->exploration;
+    BeginDrawing();
     drawAllMenus(
-            g->player,
-            exploration->menus,
-            exploration->menuCount,
-            g->ui->defaultFont,
-            g->scenes->current->name,
-            g->runtimeArgs->indexDir);
+            g->ui->menuContext,
+            g->menus);
+    EndDrawing();
     checkMenuInput(g);
 }
 
 void run(Game *g) {
     while (!WindowShouldClose()) {
         startTiming(g->timing);
-        if (isFighting(g)) {
+        if (isFighting(g->fights)) {
             doFightLoop(g);
-        } else if (getCurrentMenu(g->scenes->current->exploration) != NULL) {
+        } else if (getCurrentMenu(g->menus) != NULL) {
             doInGameMenuLoop(g);
         } else if (isExploring(g)) {
             doExplorationLoop(g);
@@ -261,7 +237,7 @@ Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
     g->runtimeArgs = r;
     g->log = createLog(g->runtimeArgs->logLevel);
     g->sprites = loadSpritesheetManager(g->log, r->indexDir);
-    g->ui = createUIManager(g->sprites, r->indexDir, cfg->font);
+    g->ui = createUIManager(g->log, g->sprites, r->indexDir, cfg->font);
     g->animations = createAnimationManager(g->log);
     loadAllAnimations(g->animations, g->sprites, r->indexDir);
     g->audio = loadAudioManager(g->log, r->indexDir);
@@ -283,8 +259,9 @@ Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
                                    g->animations, g->audio);
     loadScenesFromFiles(g->scenes, g->mobiles, g->beastiary, g->runtimeArgs);
     setSceneBasedOnSave(g->scenes, g->player, save, g->runtimeArgs->sceneIndex);
-    g->fight = NULL;
     addDebug(g->log, "done creating game object");
     free(save);
+    g->menus = calloc(MAX_MENUS, sizeof(Menu));
+    g->fights = createFightManager(g->log, g->ui);
     return g;
 }

@@ -29,14 +29,24 @@ void createFightInSceneTest() {
     Encounters *e = createEncounters();
     e->beastEncountersCount = 1;
     e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
+    Spritesheet **sprites = calloc(MAX_SPRITES, sizeof(Spritesheet));
+    UIManager *ui = createUIManager(
+            log,
+            createSpriteSheetManager(sprites, 0),
+            NULL,
+            NULL);
+    FightManager *fm = createFightManager(log, ui);
     for (int i = 0; i < 100; i++) {
-        Fight *f = createFightFromEncounters(
+        createFightFromEncounters(
+                fm,
                 log,
                 e,
                 createNewPlayer(
                         log,
                         createTestAnimationManager(),
-                        "examples/simple_demo"));
+                        "examples/simple_demo"),
+                NULL);
+        Fight *f = fm->fight;
         char message[MAX_LOG_LINE_LENGTH];
         sprintf(message, "beast count is within expected range: %d", f->beastCount);
         ok(0 < f->beastCount && f->beastCount <= 9, message);

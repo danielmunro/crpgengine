@@ -31,9 +31,13 @@
 #define LINE_HEIGHT 30
 #define UI_PADDING 20
 #define HIGHLIGHT_COLOR YELLOW
+#define DISABLED_COLOR GRAY
+#define DEFAULT_COLOR WHITE
+#define WARNING_COLOR YELLOW
 #define DANGER_COLOR RED
-#define BOTTOM_MENU_HEIGHT 150
+#define BOTTOM_MENU_HEIGHT 200
 #define BOTTOM_MENU_PLAYER_WIDTH 560
+#define BOTTOM_MENU_ACTION_SELECT_WIDTH 300
 
 #define FIGHT_CURSOR_X_OFFSET 5
 #define FIGHT_CURSOR_Y_OFFSET 22
@@ -51,6 +55,8 @@
 #define EXIT_MENU_NOT_DEFINED 3
 #define EXIT_MOBILE_NOT_FOUND 4
 #define EXIT_FORCE_NEW_AND_LOAD_SAVE 5
+#define EXIT_FONT_STYLE_NOT_FOUND 6
+#define EXIT_TEXT_BOX_NOT_FOUND 7
 
 #define SPRITESHEET_NAME_UI "uipack"
 
@@ -61,6 +67,8 @@
 
 #define STARTING_HP 20
 #define STARTING_MANA 10
+
+#define LIGHTBLUE (Color){100, 134, 175, 255}
 
 #define MAX_OBJECTS 255
 #define MAX_SCENES    256
@@ -99,18 +107,28 @@
 #define MAX_NOTIFICATIONS 64
 #define MAX_LINE_BUFFER 128
 #define MAX_MESSAGE_BUFFER 1024
-#define MAX_MOB_NAMES_IN_FIGHT 4
+#define MAX_MOB_NAMES_IN_FIGHT 6
 #define MAX_CURSORS 4
 #define MAX_ACTION_GAUGE 300
+#define MAX_TEXT_BOXES 32
 
 #define COLLIDE_TYPE_OBJECTS "objects"
 #define COLLIDE_TYPE_PLAYER "player"
 #define COLLIDE_TYPE_WARPS "warps"
 #define COLLIDE_TYPE_COUNT 3
 
+#define BEAST_AREA (Rectangle) {20, 20, 240, 240}
+
 typedef enum {
-    FIGHT_CURSOR_MAIN,
-} FightCursor;
+    ACKNOWLEDGE_BOX,
+    ACTION_SELECT_BOX,
+    BEAST_SELECT_BOX,
+    ITEMS_BOX,
+    LOAD_BOX,
+    MOBILE_SELECT_BOX,
+    PARTY_BOX,
+    QUIT_BOX,
+} TextBoxLabel;
 
 const char *logLevels[] = {
         "error",
@@ -228,6 +246,12 @@ typedef enum {
     SAVE_MENU,
     QUIT_MENU,
     ACKNOWLEDGE_MENU,
+    BEAST_LIST_FIGHT_MENU,
+    MOBILE_SELECT_FIGHT_MENU,
+    ACTION_SELECT_FIGHT_MENU,
+    ATTACK_FIGHT_MENU,
+    MAGIC_FIGHT_MENU,
+    ITEMS_FIGHT_MENU,
 } MenuType;
 
 typedef enum {
@@ -280,6 +304,7 @@ typedef enum {
 typedef enum {
     OPEN_MENU,
     CLOSE_MENU,
+    TARGET_FOR_ATTACK,
 } MenuSelectResponseType;
 
 typedef enum {
@@ -291,6 +316,16 @@ const char *Events[MAX_EVENTS] = {
         "game_loop",
         "scene_loaded",
 };
+
+#define FONT_STYLE_COUNT 5
+
+typedef enum {
+    FONT_STYLE_DEFAULT,
+    FONT_STYLE_DISABLED,
+    FONT_STYLE_HIGHLIGHTED,
+    FONT_STYLE_WARNING,
+    FONT_STYLE_DANGER,
+} FontStyleType;
 
 #include "log.c"
 #include "util.c"
@@ -326,19 +361,25 @@ const char *Events[MAX_EVENTS] = {
 #include "control.c"
 #include "object.c"
 #include "timing.c"
-#include "fight.c"
 #include "tilemap.c"
+#include "fight.c"
 #include "menu.c"
 #include "menu/items_menu.c"
 #include "menu/party_menu.c"
 #include "menu/quit_menu.c"
 #include "menu/load_menu.c"
 #include "menu/acknowledge_menu.c"
+#include "menu/action_select_menu.c"
+#include "menu/beast_select_menu.c"
+#include "menu/attack_fight_menu.c"
+#include "menu/mob_select_menu.c"
+#include "draw.c"
 #include "exploration.c"
 #include "scene.c"
 #include "tilemap_xmlreader.c"
 #include "xmlparser.c"
 #include "ui_manager.c"
+#include "fight_manager.c"
 #include "control_manager.c"
 #include "scene_manager.c"
 #include "draw_fight.c"

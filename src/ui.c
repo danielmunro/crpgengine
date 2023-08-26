@@ -1,13 +1,15 @@
 typedef struct {
     Rectangle area;
     FontStyle *fontStyle;
+    TextBoxLabel label;
     int cursor;
 } TextBox;
 
-TextBox *createTextBox(Rectangle area, FontStyle *fontStyle) {
+TextBox *createTextBox(Rectangle area, FontStyle *fontStyle, TextBoxLabel label) {
     TextBox *textBox = malloc(sizeof(TextBox));
     textBox->area = area;
     textBox->fontStyle = fontStyle;
+    textBox->label = label;
     textBox->cursor = 0;
     return textBox;
 }
@@ -62,11 +64,13 @@ void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
 }
 
 void drawMenuRect(Rectangle rect) {
-    DrawRectangleRounded(
-            (Rectangle) { rect.x + 4, rect.y + 4, rect.width - 8, rect.height - 8 },
-            (float) 0.005,
-            4,
-            BLUE);
+    DrawRectangleGradientV(
+            (int) rect.x + 4,
+            (int) rect.y + 4,
+            (int) rect.width - 8,
+            (int) rect.height - 8,
+            LIGHTBLUE,
+            DARKBLUE);
     DrawRectangleRoundedLines(
             (Rectangle) { rect.x + 4, rect.y + 4, rect.width - 8, rect.height - 8 },
             (float) 0.005,
@@ -131,6 +135,17 @@ Rectangle drawBottomRightMenu() {
         SCREEN_HEIGHT - BOTTOM_MENU_HEIGHT,
         BOTTOM_MENU_PLAYER_WIDTH,
         BOTTOM_MENU_HEIGHT,
+    };
+    drawMenuRect(rect);
+    return rect;
+}
+
+Rectangle drawActionSelectMenu() {
+    Rectangle rect = (Rectangle) {
+            SCREEN_WIDTH - BOTTOM_MENU_PLAYER_WIDTH,
+            SCREEN_HEIGHT - BOTTOM_MENU_HEIGHT,
+            BOTTOM_MENU_ACTION_SELECT_WIDTH,
+            BOTTOM_MENU_HEIGHT,
     };
     drawMenuRect(rect);
     return rect;

@@ -1,12 +1,13 @@
 void drawItemsMenuScreen(MenuContext *menuContext) {
-    TextBox *textBox = createTextBox(drawFullscreenMenu(), menuContext->fontStyle);
+    FontStyle *defaultFont = getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT);
+    TextBox *textBox = createTextBox(drawFullscreenMenu(), defaultFont, ITEMS_BOX);
     for (int i = 0; i < menuContext->player->itemCount; i++) {
         drawInMenu(textBox, menuContext->player->items[i]->name);
     }
     drawText(
             ">",
             (Vector2) {0, line(menuContext->cursorLine) + UI_PADDING},
-            menuContext->fontStyle);
+            defaultFont);
     free(textBox);
 }
 
