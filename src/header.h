@@ -289,18 +289,35 @@ char *QuitMenuItems[] = {
         QUIT_MENU_YES,
 };
 
-typedef enum {
-    CONSUMABLE,
-    EQUIPMENT,
-    CRAFTING_MATERIAL,
-    QUEST,
-} ItemType;
+const char *ItemTypes[] = {
+        "consumable",
+        "equipment",
+        "crafting material",
+        "quest",
+};
 
 typedef enum {
-    WEAPON,
-    TORSO,
-    WRIST,
-    ACCESSORY,
+    ITEM_TYPE_NONE,
+    ITEM_TYPE_CONSUMABLE,
+    ITEM_TYPE_EQUIPMENT,
+    ITEM_TYPE_CRAFTING_MATERIAL,
+    ITEM_TYPE_QUEST,
+} ItemType;
+
+const char *EquipmentPositions[] = {
+        "none",
+        "weapon",
+        "torso",
+        "wrist",
+        "accessory",
+};
+
+typedef enum {
+    POSITION_NONE,
+    POSITION_WEAPON,
+    POSITION_TORSO,
+    POSITION_WRIST,
+    POSITION_ACCESSORY,
 } EquipmentPosition;
 
 typedef enum {
@@ -377,6 +394,7 @@ typedef enum {
 #include "animation.c"
 #include "attributes.c"
 #include "item.c"
+#include "item_manager.c"
 #include "beastiary.c"
 #include "warp.c"
 #include "spell.c"

@@ -217,7 +217,7 @@ SaveData *initializePlayer(Game *g) {
     SaveData *save = NULL;
     if (FileExists(saveFilePath) && !r->forceNewGame) {
         save = loadSaveData(saveFilePath);
-        g->player = mapSaveDataToPlayer(g->animations, g->log, save);
+        g->player = mapSaveDataToPlayer(g->animations, g->items, g->log, save);
     } else {
         g->player = createNewPlayer(g->log, g->animations, r->indexDir);
         addItem(g->player, g->items->items[0]);

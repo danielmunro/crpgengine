@@ -239,7 +239,7 @@ void loadAllItems(ItemManager *itemManager, const char *indexDir) {
     ItemsData *itemsData = loadItemYaml(itemsFile);
     itemManager->items = calloc(itemsData->items_count, sizeof(ItemData));
     for (int i = 0; i < itemsData->items_count; i++) {
-        itemManager->items[i] = &itemsData->items[i];
+        itemManager->items[i] = createItemFromData(&itemsData->items[i]);
     }
     itemManager->count = itemsData->items_count;
     free((char *)itemsFile);

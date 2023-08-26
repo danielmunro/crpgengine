@@ -1,17 +1,56 @@
 typedef struct {
-    ItemData **items;
-    int count;
-} ItemManager;
+    ItemType type;
+    const char *name;
+    int worth;
+    Attributes attributes;
+    EquipmentPosition position;
+} Item;
 
-ItemManager *createItemManager() {
-    return (ItemManager *) malloc(sizeof(ItemManager));
-}
-
-ItemData *findItem(ItemManager *itemManager, const char *name) {
-    for (int i = 0; i < itemManager->count; i++) {
-        if (strcmp(itemManager->items[i]->name, name) == 0) {
-            return itemManager->items[i];
+ItemType getItemTypeFromString(const char *type) {
+    int count = sizeof(ItemTypes) / sizeof(ItemTypes[0]);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(ItemTypes[i], type) == 0) {
+            return i;
         }
     }
-    return NULL;
+    return ITEM_TYPE_NONE;
+}
+
+EquipmentPosition getEquipmentPositionFromString(const char *position) {
+    if (position == NULL) {
+        return POSITION_NONE;
+    }
+    int count = sizeof(EquipmentPositions) / sizeof(EquipmentPositions[0]);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(EquipmentPositions[i], position) == 0) {
+            return i;
+        }
+    }
+    return POSITION_NONE;
+}
+
+Item *createItem(
+        ItemType type,
+        const char *name,
+        int worth,
+        Attributes attributes,
+        EquipmentPosition position) {
+    Item *item = malloc(sizeof(Item));
+    item->type = type;
+    item->name = name;
+    item->worth = worth;
+    item->attributes = attributes;
+    item->position = position;
+    return item;
+}
+
+Item *createItemFromData(ItemData *data) {
+    return createItem(
+            getItemTypeFromString(data->type),
+            data->name,
+            data->worth,
+            data->attributes == NULL ? createEmptyAttributes() :
+                    data->attributes == NULL ? createEmptyAttributes() :
+                            createAttributesFromData(data->attributes),
+            getEquipmentPositionFromString(data->position));
 }

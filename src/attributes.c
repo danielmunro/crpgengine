@@ -50,6 +50,22 @@ Attributes createEmptyAttributes() {
     };
 }
 
+ArmorClass createEmptyArmorClass() {
+    return (ArmorClass) {
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+    };
+}
+
 Attributes createAttributesFromData(AttributesData *data) {
     if (data == NULL) {
         return createEmptyAttributes();
@@ -62,7 +78,7 @@ Attributes createAttributesFromData(AttributesData *data) {
         data->constitution,
         data->hp,
         data->mana,
-        (ArmorClass) {
+        data->ac == NULL ? createEmptyArmorClass() : (ArmorClass) {
             data->ac->bash,
             data->ac->slash,
             data->ac->pierce,

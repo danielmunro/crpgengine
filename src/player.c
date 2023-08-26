@@ -3,6 +3,7 @@ typedef struct {
     Mobile **onDeck;
     const char **storylines;
     PlayerItemData **items;
+    Item **items2;
     SaveFiles *saveFiles;
     Mobile *blockedBy;
     Mobile *engageable;
@@ -18,24 +19,15 @@ typedef struct {
     int storylineCount;
 } Player;
 
-void addItem(Player *player, ItemData *item) {
-    for (int i = 0; i < player->itemCount; i++) {
-        if (strcmp(player->items[i]->name, item->name) == 0) {
-            player->items[i]->quantity++;
-            return;
-        }
-    }
-    PlayerItemData *it = malloc(sizeof(PlayerItemData));
-    it->name = item->name;
-    it->quantity = 1;
-    player->items[player->itemCount] = it;
+void addItem(Player *player, Item *item) {
+    player->items2[player->itemCount] = item;
     player->itemCount++;
 }
 
 Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
                      int coins, int experience, int level, int secondsPlayed,
                      const char **storylines, int storylineCount,
-                     PlayerItemData *items, int itemCount) {
+                     Item **items, int itemCount) {
     Player *player = malloc(sizeof(Player));
     player->blockedBy = NULL;
     player->engageable = NULL;
@@ -59,10 +51,7 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
         player->partyCount = i + 1;
     }
     player->itemCount = itemCount;
-    player->items = calloc(MAX_ITEMS, sizeof(PlayerItemData));
-    for (int i = 0; i < itemCount; i++) {
-        player->items[i] = &items[i];
-    }
+    player->items2 = items;
     player->onDeck = calloc(MAX_PARTY_SIZE, sizeof(Mobile));
     return player;
 }
@@ -104,8 +93,8 @@ PlayerData *createPlayerData(Player *p) {
     }
     for (int i = 0; i < p->itemCount; i++) {
         pd->items[i] = (PlayerItemData) {
-                p->items[i]->name,
-                p->items[i]->quantity,
+            p->items2[i]->name,
+            1,
         };
     }
     for (int i = 0; i < p->partyCount; i++) {
@@ -232,8 +221,7 @@ void save(Player *player, const char *sceneName, const char *indexDir) {
             sceneName,
             name);
 
-    printf("item: %s\n", player->items[0]->name);
-    printf("quantity: %d\n", player->items[0]->quantity);
+    printf("item: %s\n", player->items2[0]->name);
     // auto save
     saveFile(player->log, save, indexDir, "autosave.yaml");
     char filename[MAX_FS_PATH_LENGTH];
@@ -266,7 +254,7 @@ bool hasStory(Player *p, const char *story) {
 }
 
 
-Player *mapSaveDataToPlayer(AnimationManager *am, Log *log, SaveData *save) {
+Player *mapSaveDataToPlayer(AnimationManager *am, ItemManager *im, Log *log, SaveData *save) {
     Mobile *mobs[MAX_PARTY_SIZE];
     addInfo(log, "save file party count :: %d", save->player->party_count);
     for (int i = 0; i < save->player->party_count; i++) {
@@ -285,6 +273,10 @@ Player *mapSaveDataToPlayer(AnimationManager *am, Log *log, SaveData *save) {
     for (int i = save->player->party_count; i < MAX_PARTY_SIZE; i++) {
         mobs[i] = NULL;
     }
+    Item **items = calloc(MAX_ITEMS, sizeof(Item));
+    for (int i = 0; i < save->player->items_count; i++) {
+        items[i] = createItemFromPlayerData(im, save->player->items[i]);
+    }
     return createPlayer(
             log,
             mobs,
@@ -294,7 +286,7 @@ Player *mapSaveDataToPlayer(AnimationManager *am, Log *log, SaveData *save) {
             save->player->secondsPlayed,
             save->player->storylines,
             save->player->storylines_count,
-            save->player->items,
+            items,
             save->player->items_count);
 }
 
@@ -341,8 +333,8 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
                     createStartingAttributes()),
     };
     const char **storylines = malloc(sizeof(char **));
-    PlayerItemData *items = calloc(MAX_ITEMS, sizeof(PlayerItemData));
-    return createPlayer(
+    Item **items = calloc(MAX_ITEMS, sizeof(Item));
+    Player *p = createPlayer(
             log,
             mobiles,
             0,
@@ -353,4 +345,14 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
             0,
             items,
             0);
+    // hack -- add a bunch of items
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        ItemData *item = malloc(sizeof(ItemData));
+        item->name = "potion";
+        item->type = "consumable";
+        item->attributes = NULL;
+        item->position = NULL;
+        addItem(p, createItemFromData(item));
+    }
+    return p;
 }

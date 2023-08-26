@@ -14,7 +14,9 @@ void drawBeastSelectMenuScreen(MenuContext *menuContext) {
     int count = menuContext->fight->beastCount > MAX_BEAST_NAMES_IN_FIGHT ?
                 MAX_BEAST_NAMES_IN_FIGHT : menuContext->fight->beastCount;
     for (int i = 0; i < count; i++) {
-        drawInMenu(t, menuContext->fight->beasts[i]->name);
+        if (t->area.height > (float) i * LINE_HEIGHT) {
+            drawInMenu(t, menuContext->fight->beasts[i]->name);
+        }
     }
 }
 

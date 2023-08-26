@@ -95,7 +95,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         progress++;
     } else if (needsToReceiveItem(then, getPartyLeader(cm->player))) {
         addInfo(cm->log, "player receiving item: %s", then->item);
-        addItem(cm->player, findItem(cm->itemManager, then->item));
+        addItem(cm->player, findItem(cm->itemManager->items, then->item));
         const char *message = malloc(64);
         sprintf((char *)message, "you received:\n%s", then->item);
         addNotification(
