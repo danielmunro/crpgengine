@@ -54,3 +54,13 @@ Item *createItemFromData(ItemData *data) {
                             createAttributesFromData(data->attributes),
             getEquipmentPositionFromString(data->position));
 }
+
+ItemData createItemData(Item *item) {
+    return (ItemData) {
+            item->name,
+            ItemTypes[item->type],
+            EquipmentPositions[item->position],
+            item->worth,
+            createDataFromAttributes(item->attributes),
+    };
+}

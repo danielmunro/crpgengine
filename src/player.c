@@ -83,7 +83,7 @@ PlayerData *createPlayerData(Player *p) {
     pd->party_count = p->partyCount;
     pd->items_count = p->itemCount;
     pd->onDeck_count = p->onDeckCount;
-    pd->items = (PlayerItemData *) malloc(p->itemCount * sizeof(PlayerItemData));
+    pd->items = (ItemData *) malloc(p->itemCount * sizeof(ItemData));
     pd->party = (MobileData *) malloc(p->partyCount * sizeof(MobileData));
     pd->onDeck = (MobileData *) malloc(p->onDeckCount * sizeof(MobileData));
     pd->storylines = calloc(p->storylineCount, sizeof(char *));
@@ -91,10 +91,7 @@ PlayerData *createPlayerData(Player *p) {
         pd->storylines[i] = &p->storylines[i][0];
     }
     for (int i = 0; i < p->itemCount; i++) {
-        pd->items[i] = (PlayerItemData) {
-            p->items[i]->name,
-            1,
-        };
+        pd->items[i] = createItemData(p->items[i]);
     }
     for (int i = 0; i < p->partyCount; i++) {
         pd->party[i] = createMobDataFromMob(p->party[i]);
@@ -274,7 +271,7 @@ Player *mapSaveDataToPlayer(AnimationManager *am, ItemManager *im, Log *log, Sav
     }
     Item **items = calloc(MAX_ITEMS, sizeof(Item));
     for (int i = 0; i < save->player->items_count; i++) {
-        items[i] = createItemFromPlayerData(im, save->player->items[i]);
+        items[i] = createItemFromData(&save->player->items[i]);
     }
     return createPlayer(
             log,
