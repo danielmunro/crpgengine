@@ -2,8 +2,7 @@ typedef struct {
     Mobile **party;
     Mobile **onDeck;
     const char **storylines;
-    PlayerItemData **items;
-    Item **items2;
+    Item **items;
     SaveFiles *saveFiles;
     Mobile *blockedBy;
     Mobile *engageable;
@@ -20,7 +19,7 @@ typedef struct {
 } Player;
 
 void addItem(Player *player, Item *item) {
-    player->items2[player->itemCount] = item;
+    player->items[player->itemCount] = item;
     player->itemCount++;
 }
 
@@ -51,7 +50,7 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
         player->partyCount = i + 1;
     }
     player->itemCount = itemCount;
-    player->items2 = items;
+    player->items = items;
     player->onDeck = calloc(MAX_PARTY_SIZE, sizeof(Mobile));
     return player;
 }
@@ -93,7 +92,7 @@ PlayerData *createPlayerData(Player *p) {
     }
     for (int i = 0; i < p->itemCount; i++) {
         pd->items[i] = (PlayerItemData) {
-            p->items2[i]->name,
+            p->items[i]->name,
             1,
         };
     }
@@ -221,7 +220,7 @@ void save(Player *player, const char *sceneName, const char *indexDir) {
             sceneName,
             name);
 
-    printf("item: %s\n", player->items2[0]->name);
+    printf("item: %s\n", player->items[0]->name);
     // auto save
     saveFile(player->log, save, indexDir, "autosave.yaml");
     char filename[MAX_FS_PATH_LENGTH];
