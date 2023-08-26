@@ -55,5 +55,12 @@ Debug arguments:
 
 ## Todos
 
-* Finish fight implementation
-* Save/load
+* Fight implementation
+  * Actions to finish
+    * Attack
+    * Magic
+  * Actions to start
+    * Defend
+    * Run
+  * Proper targeting based on offensive/defensive actions
+* Spells

@@ -17,7 +17,7 @@ typedef struct {
     ItemData **equipment;
     int hp;
     int mana;
-    Spell **spells;
+    MobileSpell **spells;
     int spellCount;
 } Mobile;
 
@@ -73,7 +73,7 @@ Mobile *createMobile(
     mobile->equipment = calloc(MAX_EQUIPMENT, sizeof(ItemData));
     mobile->hp = hp;
     mobile->mana = mana;
-    mobile->spells = calloc(MAX_SPELLS, sizeof(Spell));
+    mobile->spells = calloc(MAX_SPELLS, sizeof(MobileSpell));
     mobile->spellCount = 0;
     return mobile;
 }

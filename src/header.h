@@ -345,6 +345,11 @@ typedef enum {
     ENERGY,
 } SpellType;
 
+typedef enum {
+    INTENT_HARM,
+    INTENT_HELP,
+} Intent;
+
 #include "log.c"
 #include "util.c"
 #include "yaml/spritesheet.c"
@@ -398,6 +403,7 @@ typedef enum {
 #include "scene.c"
 #include "tilemap_xmlreader.c"
 #include "xmlparser.c"
+#include "spell_manager.c"
 #include "ui_manager.c"
 #include "fight_manager.c"
 #include "control_manager.c"
