@@ -83,7 +83,7 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox) {
     }
 }
 
-int getMobileSelectFightMenuCursorLength(MenuContext *menuContext) {
+int getMobileSelectMenuCursorLength(MenuContext *menuContext) {
     return menuContext->player->partyCount;
 }
 
@@ -93,13 +93,13 @@ TextBox *createMobileSelectTextBox(MenuContext *menuContext) {
             getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT), MOBILE_SELECT_BOX);
 }
 
-void drawMobileSelectFightMenuScreen(MenuContext *menuContext) {
+void drawMobileSelectMenuScreen(MenuContext *menuContext) {
     drawBottomRightMenu();
     TextBox *t = findOrCreateTextBox(menuContext, MOBILE_SELECT_BOX, createMobileSelectTextBox);
     drawPlayerFightTopLevel(menuContext, t);
 }
 
-MenuSelectResponse *mobileSelectFightMenuItemSelected(MenuContext *menuContext) {
+MenuSelectResponse *mobileSelectMenuItemSelected(MenuContext *menuContext) {
     menuContext->selectedMob = menuContext->player->party[menuContext->cursorLine];
     return createMenuSelectResponse(OPEN_MENU, ACTION_SELECT_FIGHT_MENU);
 }

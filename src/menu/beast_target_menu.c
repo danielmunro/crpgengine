@@ -1,8 +1,8 @@
-int getAttackFightMenuCursorLength(MenuContext *menuContext) {
+int geBeastTargetMenuCursorLength(MenuContext *menuContext) {
     return getBeastSelectCursorLength(menuContext);
 }
 
-void drawAttackFightMenuScreen(MenuContext *menuContext) {
+void drawBeastTargetMenuScreen(MenuContext *menuContext) {
     drawBeastSelectMenuScreen(menuContext);
     TextBox *t = findOrCreateTextBox(
             menuContext,
@@ -23,6 +23,6 @@ void drawAttackFightMenuScreen(MenuContext *menuContext) {
             });
 }
 
-MenuSelectResponse *attackFightMenuItemSelected(MenuContext *menuContext) {
+MenuSelectResponse *beastTargetMenuItemSelected(MenuContext *menuContext) {
     return beastSelectMenuItemSelected(menuContext);
 }

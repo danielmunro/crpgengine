@@ -46,11 +46,11 @@ int getMenuList(UIManager *ui) {
                     acknowledgeMenuItemSelected),
             createMenu(
                     MOBILE_SELECT_FIGHT_MENU,
-                    getMobileSelectFightMenuCursorLength,
-                    drawMobileSelectFightMenuScreen,
+                    getMobileSelectMenuCursorLength,
+                    drawMobileSelectMenuScreen,
                     getPreviousMobSelectCursorPosition,
                     getNextMobSelectCursorPosition,
-                    mobileSelectFightMenuItemSelected),
+                    mobileSelectMenuItemSelected),
             createMenu(
                     BEAST_LIST_FIGHT_MENU,
                     getBeastSelectCursorLength,
@@ -67,11 +67,11 @@ int getMenuList(UIManager *ui) {
                     actionSelectMenuItemSelected),
             createMenu(
                     ATTACK_FIGHT_MENU,
-                    getAttackFightMenuCursorLength,
-                    drawAttackFightMenuScreen,
+                    geBeastTargetMenuCursorLength,
+                    drawBeastTargetMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
-                    attackFightMenuItemSelected),
+                    beastTargetMenuItemSelected),
             createMenu(
                     MAGIC_FIGHT_MENU,
                     getMagicFightCursorLength,
