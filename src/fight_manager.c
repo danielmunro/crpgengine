@@ -105,6 +105,8 @@ void attackMobile(FightManager *fm, Menu *menu) {
     Mobile *attacker = fm->fight->player->party[m->cursor];
     target->hp -= calculateAttributes(attacker).strength;
     resetAfterAction(fm, m->cursor);
+    fm->ui->menuContext->cursorLine = m->cursor;
+    m->cursor = m->getNextOption(fm->ui->menuContext);
 }
 
 void fightSpaceKeyPressed(FightManager *fm) {
@@ -130,7 +132,13 @@ void tryToggleTargetMenus(FightManager *fm) {
     Menu *current = getCurrentMenu(fm->menus);
     if (current->type == BEAST_TARGET_FIGHT_MENU) {
         removeMenu(fm->menus);
-        addMenu(fm->menus, findMenu(fm->ui->menus, MOBILE_TARGET_FIGHT_MENU));
+        Menu *m = findMenu(fm->ui->menus, MOBILE_TARGET_FIGHT_MENU);
+        Mobile *mob = fm->fight->player->party[m->cursor];
+        if (mob->hp <= 0) {
+            fm->ui->menuContext->cursorLine = m->cursor;
+            m->cursor = m->getNextOption(fm->ui->menuContext);
+        }
+        addMenu(fm->menus, m);
     } else if (current->type == MOBILE_TARGET_FIGHT_MENU) {
         removeMenu(fm->menus);
         addMenu(fm->menus, findMenu(fm->ui->menus, BEAST_TARGET_FIGHT_MENU));

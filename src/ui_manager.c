@@ -48,8 +48,8 @@ int getMenuList(UIManager *ui) {
                     MOBILE_SELECT_FIGHT_MENU,
                     getMobileSelectMenuCursorLength,
                     drawMobileSelectMenuScreen,
-                    getPreviousMobSelectCursorPosition,
-                    getNextMobSelectCursorPosition,
+                    getPreviousMobileSelectCursorPosition,
+                    getNextMobileSelectCursorPosition,
                     mobileSelectMenuItemSelected),
             createMenu(
                     BEAST_LIST_FIGHT_MENU,
@@ -79,13 +79,13 @@ int getMenuList(UIManager *ui) {
                     getDefaultPreviousOption,
                     getDefaultNextOption,
                     magicFightMenuItemSelected),
-                createMenu(
-                        MOBILE_TARGET_FIGHT_MENU,
-                        getMobileTargetMenuCursorLength,
-                        drawMobileTargetMenuScreen,
-                        getDefaultPreviousOption,
-                        getDefaultNextOption,
-                        mobileTargetMenuItemSelected)
+            createMenu(
+                    MOBILE_TARGET_FIGHT_MENU,
+                    getMobileTargetMenuCursorLength,
+                    drawMobileTargetMenuScreen,
+                    getPreviousMobileTargetCursorPosition,
+                    getNextMobileTargetCursorPosition,
+                    mobileTargetMenuItemSelected)
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {
