@@ -41,7 +41,7 @@ void drawActionGauge(float y, float width, Color color) {
             color);
 }
 
-void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox) {
+void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownCursor) {
     for (int i = 0; i < mc->fight->player->partyCount; i++) {
         Mobile *mob = mc->fight->player->party[i];
         FontStyle *fs = isReadyForAction(mob)
@@ -51,12 +51,21 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox) {
                             fs,
                             mob->name);
         if (mc->cursorLine == i && isReadyForAction(mob)) {
-            drawCursor(
+            drawRightCursor(
                     mc->fight->menuSprite,
                     (Vector2) {
-                        textBox->area.x,
-                        textBox->area.y + (float) (LINE_HEIGHT * i),
+                            textBox->area.x,
+                            textBox->area.y + (float) (LINE_HEIGHT * i),
                     });
+            if (doDrawDownCursor) {
+                Vector2 playerPosition = getFightPlayerPosition(i);
+                int frameHeight = mob->animations[0]->spriteSheet->frameHeight;
+                drawDownCursor(mc->fight->menuSprite,
+                               (Vector2) {
+                                       playerPosition.x - 5,
+                                       playerPosition.y - (float) frameHeight - 15,
+                               });
+            }
         }
         drawStat(mc->fonts,
                  mob->hp,
@@ -96,7 +105,7 @@ TextBox *createMobileSelectTextBox(MenuContext *menuContext) {
 void drawMobileSelectMenuScreen(MenuContext *menuContext) {
     drawBottomRightMenu();
     TextBox *t = findOrCreateTextBox(menuContext, MOBILE_SELECT_BOX, createMobileSelectTextBox);
-    drawPlayerFightTopLevel(menuContext, t);
+    drawPlayerFightTopLevel(menuContext, t, true);
 }
 
 MenuSelectResponse *mobileSelectMenuItemSelected(MenuContext *menuContext) {

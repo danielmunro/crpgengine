@@ -99,3 +99,10 @@ void fightUpdate(Fight *fight) {
     }
     fight->time = end;
 }
+
+Vector2 getFightPlayerPosition(int playerNumber) {
+    return (Vector2) {
+            FIGHT_PLAYER_X,
+            (float) (FIGHT_PLAYER_Y_MARGIN + (MOB_HEIGHT * playerNumber) + (FIGHT_PLAYER_Y_PADDING * playerNumber))
+    };
+}

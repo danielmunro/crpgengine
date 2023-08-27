@@ -106,6 +106,17 @@ void fightSpaceKeyPressed(FightManager *fm) {
     }
 }
 
+void tryToggleTargetMenus(FightManager *fm) {
+    Menu *current = getCurrentMenu(fm->menus);
+    if (current->type == BEAST_TARGET_FIGHT_MENU) {
+        removeMenu(fm->menus);
+        addMenu(fm->menus, findMenu(fm->ui->menus, MOBILE_TARGET_FIGHT_MENU));
+    } else if (current->type == MOBILE_TARGET_FIGHT_MENU) {
+        removeMenu(fm->menus);
+        addMenu(fm->menus, findMenu(fm->ui->menus, BEAST_TARGET_FIGHT_MENU));
+    }
+}
+
 void checkFightInput(FightManager *fm) {
     addDebug(fm->log, "fight -- check player input");
     if (IsKeyPressed(KEY_ESCAPE)) {
@@ -129,5 +140,11 @@ void checkFightInput(FightManager *fm) {
     }
     if (IsKeyPressed(KEY_SPACE)) {
         fightSpaceKeyPressed(fm);
+    }
+    if (IsKeyPressed(KEY_LEFT)) {
+        tryToggleTargetMenus(fm);
+    }
+    if (IsKeyPressed(KEY_RIGHT)) {
+        tryToggleTargetMenus(fm);
     }
 }

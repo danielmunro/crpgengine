@@ -19,7 +19,7 @@ void drawMagicFightMenuScreen(MenuContext *menuContext) {
         FontStyle *fs = m->mana >= m->spells[i]->cost ? defaultFont : disabledFont;
         drawInMenuWithStyle(t, fs, Spells[m->spells[i]->type]);
     }
-    drawCursor(
+    drawRightCursor(
             menuContext->fight->menuSprite,
             (Vector2) {
                     t->area.x,
@@ -28,5 +28,5 @@ void drawMagicFightMenuScreen(MenuContext *menuContext) {
 }
 
 MenuSelectResponse *magicFightMenuItemSelected(MenuContext *menuContext) {
-    return createMenuSelectResponse(OPEN_MENU, ATTACK_FIGHT_MENU);
+    return createMenuSelectResponse(OPEN_MENU, BEAST_TARGET_FIGHT_MENU);
 }

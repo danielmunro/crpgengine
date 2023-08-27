@@ -26,7 +26,7 @@ void drawActionSelectMenuScreen(MenuContext *menuContext) {
     for (int i = 0; i < getActionSelectCursorLength(menuContext); i++) {
         drawInMenu(t, actionMenu[i]);
     }
-    drawCursor(
+    drawRightCursor(
             menuContext->fight->menuSprite,
             (Vector2) {
                     t->area.x,
@@ -36,7 +36,7 @@ void drawActionSelectMenuScreen(MenuContext *menuContext) {
 
 MenuSelectResponse *actionSelectMenuItemSelected(MenuContext *menuContext) {
     if (menuContext->cursorLine == 0) {
-        return createMenuSelectResponse(OPEN_MENU, ATTACK_FIGHT_MENU);
+        return createMenuSelectResponse(OPEN_MENU, BEAST_TARGET_FIGHT_MENU);
     } else if (menuContext->cursorLine == 1) {
         return createMenuSelectResponse(OPEN_MENU, MAGIC_FIGHT_MENU);
     } else if (menuContext->cursorLine == 2) {

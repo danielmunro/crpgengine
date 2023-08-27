@@ -18,7 +18,7 @@ void drawFightPlayer(Player *player) {
         if (player->party[i] != NULL) {
             drawAnimation(
                     findAnimation(getPartyLeader(player)->animations, LEFT),
-                    (Vector2) {SCREEN_WIDTH * .8, (float) (100 + (MOB_HEIGHT * i))});
+                    getFightPlayerPosition(i));
         }
     }
 }
