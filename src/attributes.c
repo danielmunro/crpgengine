@@ -152,6 +152,7 @@ Attributes createStartingAttributes() {
     Attributes a = createEmptyAttributes();
     a.hp = STARTING_HP;
     a.mana = STARTING_MANA;
+    a.strength = 5;
     return a;
 }
 

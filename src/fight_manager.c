@@ -72,23 +72,39 @@ void checkRemoveFight(FightManager *f) {
     }
 }
 
-void attackBeast(FightManager *fm, Menu *menu) {
-    // hack -- insta kill
-    free(fm->fight->beasts[menu->cursor]);
-    for (int i = menu->cursor; i < fm->fight->beastCount - 1; i++) {
-        fm->fight->beasts[i] = fm->fight->beasts[i + 1];
-    }
-    fm->fight->beasts[fm->fight->beastCount] = NULL;
-    fm->fight->beastCount--;
-    // end hack
-    Menu *m = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
-    fm->fight->player->party[m->cursor]->actionGauge = 0;
+void resetAfterAction(FightManager *fm, int playerIndex) {
+    fm->fight->player->party[playerIndex]->actionGauge = 0;
+    Menu *current = getCurrentMenu(fm->menus);
+    normalizeMenuCursor(current, fm->ui->menuContext);
     removeMenu(fm->menus);
     removeMenu(fm->menus);
     Menu *newCurrent = getCurrentMenu(fm->menus);
-    normalizeMenuCursor(menu, fm->ui->menuContext);
     newCurrent->cursor = newCurrent->getNextOption(fm->ui->menuContext);
     normalizeMenuCursor(newCurrent, fm->ui->menuContext);
+}
+
+void attackBeast(FightManager *fm, Menu *menu) {
+    Menu *m = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
+    Mobile *mob = fm->fight->player->party[m->cursor];
+    Beast *beast = fm->fight->beasts[menu->cursor];
+    beast->hp -= calculateAttributes(mob).strength;
+    if (beast->hp < 0) {
+        free(fm->fight->beasts[menu->cursor]);
+        for (int i = menu->cursor; i < fm->fight->beastCount - 1; i++) {
+            fm->fight->beasts[i] = fm->fight->beasts[i + 1];
+        }
+        fm->fight->beasts[fm->fight->beastCount] = NULL;
+        fm->fight->beastCount--;
+    }
+    resetAfterAction(fm, m->cursor);
+}
+
+void attackMobile(FightManager *fm, Menu *menu) {
+    Menu *m = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
+    Mobile *target = fm->fight->player->party[menu->cursor];
+    Mobile *attacker = fm->fight->player->party[m->cursor];
+    target->hp -= calculateAttributes(attacker).strength;
+    resetAfterAction(fm, m->cursor);
 }
 
 void fightSpaceKeyPressed(FightManager *fm) {
@@ -100,7 +116,11 @@ void fightSpaceKeyPressed(FightManager *fm) {
                 fm->ui->menus,
                 fm->ui->menuContext);
         if (response->type == TARGET_FOR_ATTACK) {
-            attackBeast(fm, currentMenu);
+            if (currentMenu->type == BEAST_TARGET_FIGHT_MENU) {
+                attackBeast(fm, currentMenu);
+            } else {
+                attackMobile(fm, currentMenu);
+            }
         }
         free(response);
     }

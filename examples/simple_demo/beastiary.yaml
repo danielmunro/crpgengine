@@ -9,7 +9,7 @@ beasts:
       fire: -5
       frost: 5
   level: 3
-  hp: 20
+  hp: 5
   gp: 100
   image: warg.png
 - id: werewarg
@@ -22,7 +22,7 @@ beasts:
       fire: -5
       frost: 10
   level: 6
-  hp: 30
+  hp: 6
   gp: 140
   image: warg.png
 - id: goblin
