@@ -361,11 +361,11 @@ const char *Spells[] = {
 };
 
 typedef enum {
-    CURE,
-    FIRE,
-    LIGHTNING,
-    ICE,
-    ENERGY,
+    SPELL_CURE,
+    SPELL_FIRE,
+    SPELL_LIGHTNING,
+    SPELL_ICE,
+    SPELL_ENERGY,
 } SpellType;
 
 typedef enum {
