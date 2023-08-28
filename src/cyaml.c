@@ -134,3 +134,14 @@ void saveSaveData(SaveData *saveData, const char *filePath) {
         fprintf(stderr, "%s\n", cyaml_strerror(err));
     }
 }
+
+SpellsData *loadSpellData(const char *filePath) {
+    SpellsData *spells = malloc(sizeof(SpellsData));
+    cyaml_err_t err = cyaml_load_file(filePath, &config,
+                                      &spellsTopSchema, (cyaml_data_t **) &spells, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error loading file, filename and error :: %s - %s\n", filePath, cyaml_strerror(err));
+        exit(1);
+    }
+    return spells;
+}

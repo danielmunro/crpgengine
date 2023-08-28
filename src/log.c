@@ -57,7 +57,7 @@ void addFatal(Log *log, char *message, ...) {
     va_start(args, message);
     addLogWithLevel(log, ERROR, message, args);
     va_end(args);
-    exit(EXIT_MISSING_SPRITESHEET);
+    exit(-1);
 }
 
 Log *createLog(LogLevel configuredLogLevel) {

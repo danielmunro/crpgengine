@@ -55,12 +55,14 @@
 #define ACTION_GAUGE_HEIGHT 10
 
 #define EXIT_NO_INDEX_DIR 1
-#define EXIT_MISSING_SPRITESHEET 2
-#define EXIT_MENU_NOT_DEFINED 3
-#define EXIT_MOBILE_NOT_FOUND 4
-#define EXIT_FORCE_NEW_AND_LOAD_SAVE 5
-#define EXIT_FONT_STYLE_NOT_FOUND 6
-#define EXIT_TEXT_BOX_NOT_FOUND 7
+#define EXIT_MENU_NOT_DEFINED 100
+#define EXIT_MOBILE_NOT_FOUND 200
+#define EXIT_FORCE_NEW_AND_LOAD_SAVE 300
+#define EXIT_FONT_STYLE_NOT_FOUND 400
+#define EXIT_TEXT_BOX_NOT_FOUND 401
+#define EXIT_UNABLE_TO_CREATE_SPELL 500
+#define EXIT_UNABLE_TO_FIND_SPELL 501
+#define EXIT_UNKNOWN_INTENT 600
 
 #define SPRITESHEET_NAME_UI "uipack"
 
@@ -380,6 +382,7 @@ typedef enum {
 #include "yaml/config.c"
 #include "yaml/music.c"
 #include "yaml/attributes.c"
+#include "yaml/spell.c"
 #include "yaml/storyline.c"
 #include "yaml/item.c"
 #include "yaml/player_item.c"
@@ -399,6 +402,7 @@ typedef enum {
 #include "spritesheet.c"
 #include "animation.c"
 #include "attributes.c"
+#include "intent.c"
 #include "item.c"
 #include "item_manager.c"
 #include "beastiary.c"

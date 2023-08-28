@@ -15,6 +15,7 @@ typedef struct {
     UIManager *ui;
     FightManager *fights;
     Menu **menus;
+    SpellManager *spells;
 } Game;
 
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
@@ -263,5 +264,6 @@ Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
     free(save);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
     g->fights = createFightManager(g->log, g->ui);
+    g->spells = loadSpellManager(g->log, g->runtimeArgs->indexDir);
     return g;
 }

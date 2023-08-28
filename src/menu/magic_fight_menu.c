@@ -16,7 +16,7 @@ void drawMagicFightMenuScreen(MenuContext *menuContext) {
     FontStyle *disabledFont = getFontStyle(menuContext->fonts, FONT_STYLE_DISABLED);
     Mobile *m = menuContext->selectedMob;
     for (int i = 0; i < m->spellCount; i++) {
-        FontStyle *fs = m->mana >= m->spells[i]->cost ? defaultFont : disabledFont;
+        FontStyle *fs = m->mana >= m->spells[i]->cost.mana ? defaultFont : disabledFont;
         drawInMenuWithStyle(t, fs, Spells[m->spells[i]->type]);
     }
     drawRightCursor(
@@ -28,5 +28,8 @@ void drawMagicFightMenuScreen(MenuContext *menuContext) {
 }
 
 MenuSelectResponse *magicFightMenuItemSelected(MenuContext *menuContext) {
-    return createMenuSelectResponse(OPEN_MENU, BEAST_TARGET_FIGHT_MENU);
+    Spell *spell = menuContext->selectedMob->spells[menuContext->cursorLine];
+    return createMenuSelectResponse(
+            OPEN_MENU,
+            spell->intent == INTENT_HARM ? BEAST_TARGET_FIGHT_MENU : MOBILE_TARGET_FIGHT_MENU);
 }

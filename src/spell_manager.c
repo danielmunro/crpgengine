@@ -1,11 +1,13 @@
 typedef struct {
     Log *log;
     Spell **spells;
+    int count;
 } SpellManager;
 
-SpellManager *createSpellManager(Log *log) {
+SpellManager *createSpellManager(Log *log, Spell **spells, int count) {
     SpellManager *sp = malloc(sizeof(SpellManager));
     sp->log = log;
-    sp->spells = calloc(MAX_SPELLS, sizeof(Spell));
+    sp->spells = spells;
+    sp->count = count;
     return sp;
 }

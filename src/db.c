@@ -274,3 +274,17 @@ Beastiary *loadBeastiary(Log *log, const char *indexDir) {
     free(data);
     return beastiary;
 }
+
+SpellManager *loadSpellManager(Log *log, const char *indexDir) {
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/spells.yaml", indexDir);
+    SpellsData *data = loadSpellData(filePath);
+    Spell **spells = calloc(MAX_SPELLS, sizeof(Spell));
+    for (int i = 0; i < data->spells_count; i++) {
+        spells[i] = createSpellFromData(data->spells[i]);
+        addDebug(log, "spell created :: %s", data->spells[i].type);
+    }
+    SpellManager *sm = createSpellManager(log, spells, data->spells_count);
+    free(data);
+    return sm;
+}
