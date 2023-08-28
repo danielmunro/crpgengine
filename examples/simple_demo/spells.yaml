@@ -1,0 +1,11 @@
+spells:
+- type: cure
+  intent: help
+  level: 1
+  cost:
+    mana: 10
+- type: fire
+  intent: harm
+  level: 1
+  cost:
+    mana: 10
