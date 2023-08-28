@@ -331,7 +331,7 @@ typedef enum {
 typedef enum {
     OPEN_MENU,
     CLOSE_MENU,
-    TARGET_FOR_ATTACK,
+    FIND_TARGET_MENU,
 } MenuSelectResponseType;
 
 typedef enum {

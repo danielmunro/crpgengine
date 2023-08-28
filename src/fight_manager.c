@@ -117,7 +117,7 @@ void fightSpaceKeyPressed(FightManager *fm) {
                 fm->menus,
                 fm->ui->menus,
                 fm->ui->menuContext);
-        if (response->type == TARGET_FOR_ATTACK) {
+        if (response->type == FIND_TARGET_MENU) {
             if (currentMenu->type == BEAST_TARGET_FIGHT_MENU) {
                 attackBeast(fm, currentMenu);
             } else {
