@@ -188,7 +188,7 @@ bool isReadyForAction(Mobile *mob) {
     return mob->actionGauge >= MAX_ACTION_GAUGE && mob->hp > 0;
 }
 
-Attributes calculateAttributes(Mobile *mob) {
+Attributes calculateMobileAttributes(Mobile *mob) {
     Attributes calculated = mob->attributes;
     for (int i = 0; i < MAX_EQUIPMENT; i++) {
         if (mob->equipment[i] != NULL) {
@@ -198,12 +198,27 @@ Attributes calculateAttributes(Mobile *mob) {
     return calculated;
 }
 
-void normalizeVitals(Mobile *mob) {
-    Attributes calculated = calculateAttributes(mob);
+void normalizeVitalsForMobile(Mobile *mob) {
+    Attributes calculated = calculateMobileAttributes(mob);
     if (mob->hp > calculated.hp) {
         mob->hp = calculated.hp;
     }
     if (mob->mana > calculated.mana) {
         mob->mana = calculated.mana;
     }
+}
+
+bool canApplyCost(Mobile *caster, Attributes cost) {
+    if (caster->mana < cost.mana) {
+        return false;
+    }
+    return true;
+}
+
+bool applyCastCost(Mobile *caster, Attributes cost) {
+    if (!canApplyCost(caster, cost)) {
+        return false;
+    }
+    caster->mana -= cost.mana;
+    return true;
 }

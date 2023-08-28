@@ -3,6 +3,8 @@ typedef struct {
     Intent intent;
     int level;
     Attributes cost;
+    Attributes impact;
+    float levelModifier;
 } Spell;
 
 SpellType getSpellTypeFromString(const char *type) {
@@ -26,6 +28,8 @@ Spell *createSpellFromData(SpellData data) {
     s->intent = getIntentFromString(data.intent);
     s->level = data.level;
     s->cost = createAttributesFromData(data.cost);
+    s->impact = createAttributesFromData(data.impact);
+    s->levelModifier = data.levelModifier;
     return s;
 }
 

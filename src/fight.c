@@ -95,7 +95,7 @@ void fightUpdate(Fight *fight) {
     }
     for (int i = 0; i < fight->player->partyCount; i++) {
         Mobile *mob = fight->player->party[i];
-        int amountToRaise = getActionGaugeRaise(interval, calculateAttributes(mob).dexterity);
+        int amountToRaise = getActionGaugeRaise(interval, calculateMobileAttributes(mob).dexterity);
         if (!isReadyForAction(mob) && mob->hp > 0) {
             mob->actionGauge = normalizeActionGauge(mob->actionGauge, amountToRaise);
             if (isReadyForAction(mob) && fight->cursors[fight->menu] == -1) {

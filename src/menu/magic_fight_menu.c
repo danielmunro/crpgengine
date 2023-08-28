@@ -16,7 +16,7 @@ void drawMagicFightMenuScreen(MenuContext *menuContext) {
     FontStyle *disabledFont = getFontStyle(menuContext->fonts, FONT_STYLE_DISABLED);
     Mobile *m = menuContext->selectedMob;
     for (int i = 0; i < m->spellCount; i++) {
-        FontStyle *fs = m->mana >= m->spells[i]->cost.mana ? defaultFont : disabledFont;
+        FontStyle *fs = canApplyCost(m, m->spells[i]->cost) ? defaultFont : disabledFont;
         drawInMenuWithStyle(t, fs, Spells[m->spells[i]->type]);
     }
     drawRightCursor(

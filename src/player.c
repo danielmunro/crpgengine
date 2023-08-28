@@ -353,20 +353,28 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
     // hack -- add some spells
     AttributesData *a = malloc(sizeof(AttributesData));
     a->mana = 10;
+    AttributesData *cureImpact = malloc(sizeof(AttributesData));
+    cureImpact->hp = 20;
     SpellData cure = (SpellData) {
         "cure",
         "help",
         1,
         a,
+        cureImpact,
+        (float) 1.0,
     };
     p->party[0]->spells[0] = createSpellFromData(cure);
     p->party[0]->spellCount = 1;
 
+    AttributesData *fireImpact = malloc(sizeof(AttributesData));
+    fireImpact->hp = 20;
     SpellData fire = (SpellData) {
             "fire",
             "harm",
             1,
             a,
+            fireImpact,
+            (float) 1.0,
     };
     p->party[1]->spells[0] = createSpellFromData(fire);
     p->party[1]->spellCount = 1;
