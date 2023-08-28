@@ -35,7 +35,7 @@ void createFightInSceneTest() {
             createSpriteSheetManager(sprites, 0),
             NULL,
             NULL);
-    FightManager *fm = createFightManager(log, ui);
+    FightManager *fm = createFightManager(log, ui, NULL);
     for (int i = 0; i < 100; i++) {
         createFightFromEncounters(
                 fm,

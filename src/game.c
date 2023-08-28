@@ -263,7 +263,7 @@ Game *createGame(ConfigData *cfg, RuntimeArgs *r) {
     addDebug(g->log, "done creating game object");
     free(save);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
-    g->fights = createFightManager(g->log, g->ui);
     g->spells = loadSpellManager(g->log, g->runtimeArgs->indexDir);
+    g->fights = createFightManager(g->log, g->ui, g->spells);
     return g;
 }

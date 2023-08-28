@@ -197,3 +197,13 @@ Attributes calculateAttributes(Mobile *mob) {
     }
     return calculated;
 }
+
+void normalizeVitals(Mobile *mob) {
+    Attributes calculated = calculateAttributes(mob);
+    if (mob->hp > calculated.hp) {
+        mob->hp = calculated.hp;
+    }
+    if (mob->mana > calculated.mana) {
+        mob->mana = calculated.mana;
+    }
+}

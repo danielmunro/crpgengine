@@ -74,7 +74,13 @@ void processFightAnimations() {
 }
 
 int getActionGaugeRaise(double elapsedTime, int dexterity) {
-    return (int) (elapsedTime + dexterity) / 10;
+    int amount = (int) (elapsedTime + dexterity) / 10;
+    return amount > MAX_ACTION_GAUGE_RAISE ? MAX_ACTION_GAUGE_RAISE : amount;
+}
+
+int normalizeActionGauge(int current, int amount) {
+    int total = current + amount;
+    return total > MAX_ACTION_GAUGE ? MAX_ACTION_GAUGE : total;
 }
 
 void fightUpdate(Fight *fight) {
@@ -84,14 +90,14 @@ void fightUpdate(Fight *fight) {
         Beast *b = fight->beasts[i];
         int amountToRaise = getActionGaugeRaise(interval, b->attributes.dexterity);
         if (b->actionGauge < MAX_ACTION_GAUGE) {
-            b->actionGauge += amountToRaise;
+            b->actionGauge = normalizeActionGauge(b->actionGauge, amountToRaise);
         }
     }
     for (int i = 0; i < fight->player->partyCount; i++) {
         Mobile *mob = fight->player->party[i];
         int amountToRaise = getActionGaugeRaise(interval, calculateAttributes(mob).dexterity);
         if (!isReadyForAction(mob) && mob->hp > 0) {
-            mob->actionGauge += amountToRaise;
+            mob->actionGauge = normalizeActionGauge(mob->actionGauge, amountToRaise);
             if (isReadyForAction(mob) && fight->cursors[fight->menu] == -1) {
                 fight->cursors[fight->menu] = i;
             }

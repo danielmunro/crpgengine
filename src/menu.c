@@ -111,6 +111,15 @@ Menu *getCurrentMenu(Menu **menus) {
     return menus[MAX_MENUS - 1];
 }
 
+Menu *getPreviousMenu(Menu **menus) {
+    for (int i = 0; i < MAX_MENUS; i++) {
+        if (menus[i] == NULL) {
+            return i > 1 ? menus[i - 2] : NULL;
+        }
+    }
+    return menus[MAX_MENUS - 2];
+}
+
 int removeMenu(Menu **menus) {
     for (int i = 0; i < MAX_MENUS; i++) {
         if (menus[i] == NULL) {
