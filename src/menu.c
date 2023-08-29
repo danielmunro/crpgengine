@@ -24,7 +24,6 @@ typedef struct {
     int (*getNextOption)(MenuContext *);
     int (*getPreviousOption)(MenuContext *);
     MenuSelectResponse *(*selected)(MenuContext *menuContext);
-    MenuContext *context;
 } Menu;
 
 MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuType menuType) {
@@ -49,7 +48,6 @@ Menu *createMenu(
     menu->getPreviousOption = getPreviousOption;
     menu->getNextOption = getNextOption;
     menu->selected = selected;
-    menu->context = NULL;
     return menu;
 }
 
