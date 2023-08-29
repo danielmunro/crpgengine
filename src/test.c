@@ -44,8 +44,7 @@ void createFightInSceneTest() {
                 createNewPlayer(
                         log,
                         createTestAnimationManager(),
-                        "examples/simple_demo"),
-                NULL);
+                        "examples/simple_demo"));
         Fight *f = fm->fight;
         char message[MAX_LOG_LINE_LENGTH];
         sprintf(message, "beast count is within expected range: %d", f->beastCount);

@@ -8,6 +8,7 @@ typedef struct {
     Fight *fight;
     TextBox **textBoxes;
     Mobile *selectedMob;
+    Spritesheet *menuSprite;
 } MenuContext;
 
 typedef struct {
@@ -56,6 +57,7 @@ MenuContext *createMenuContext(
         Fight *fight,
         Player *player,
         FontStyle **fonts,
+        Spritesheet *menuSprite,
         const char *scene,
         const char *indexDir,
         int cursorLine) {
@@ -66,6 +68,7 @@ MenuContext *createMenuContext(
     context->indexDir = indexDir;
     context->cursorLine = cursorLine;
     context->fonts = fonts;
+    context->menuSprite = menuSprite;
     context->textBoxes = calloc(MAX_TEXT_BOXES, sizeof(TextBox));
     context->selectedMob = NULL;
     return context;

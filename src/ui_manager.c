@@ -5,6 +5,7 @@ typedef struct {
     Menu *menus[MAX_MENUS];
     int menuCount;
     FontStyle **fonts;
+    Spritesheet *menuSprite;
 } UIManager;
 
 int getMenuList(UIManager *ui) {
@@ -112,5 +113,6 @@ UIManager *createUIManager(
     ui->fonts[4] = createDangerFontStyle(font);
     ui->menuCount = getMenuList(ui);
     ui->sprites = sprites;
+    ui->menuSprite = findSpritesheetByName(sprites, SPRITESHEET_NAME_UI);
     return ui;
 }

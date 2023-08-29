@@ -26,8 +26,7 @@ Fight *createFightFromEncounters(
         FightManager *f,
         Log *log,
         Encounters *encounters,
-        Player *player,
-        Spritesheet *menuSprite) {
+        Player *player) {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
     addDebug(log, "creating %d beasts for fight", beastsToCreate);
@@ -56,7 +55,7 @@ Fight *createFightFromEncounters(
             created++;
         }
     }
-    Fight *fight = createFight(log, beasts, player, menuSprite, created);
+    Fight *fight = createFight(log, beasts, player, created);
     fight->beastCount = created;
     addDebug(log, "fight encountered with %d opponents", fight->beastCount);
     f->fight = fight;

@@ -27,7 +27,7 @@ void drawActionSelectMenuScreen(MenuContext *menuContext) {
         drawInMenu(t, actionMenu[i]);
     }
     drawRightCursor(
-            menuContext->fight->menuSprite,
+            menuContext->menuSprite,
             (Vector2) {
                     t->area.x,
                     t->area.y + (float) (LINE_HEIGHT * menuContext->cursorLine),

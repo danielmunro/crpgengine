@@ -64,6 +64,7 @@ void explorationMenuKeyPressed(Game *g) {
             g->fights->fight,
             g->player,
             g->ui->fonts,
+            g->ui->menuSprite,
             g->scenes->current->name,
             g->runtimeArgs->indexDir,
             0);
@@ -142,14 +143,14 @@ void checkFights(Game *g, Scene *s) {
                 g->fights,
                 g->log,
                 s->encounters,
-                g->player,
-                findSpritesheetByName(g->sprites, SPRITESHEET_NAME_UI));
+                g->player);
         Animation *animation = findAnimation(getPartyLeader(g->player)->animations, LEFT);
         animation->currentFrame = animation->firstFrame;
         g->ui->menuContext = createMenuContext(
                 g->fights->fight,
                 g->player,
                 g->ui->fonts,
+                g->ui->menuSprite,
                 NULL,
                 NULL,
                 0);

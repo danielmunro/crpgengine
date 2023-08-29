@@ -20,7 +20,7 @@ void drawMagicFightMenuScreen(MenuContext *menuContext) {
         drawInMenuWithStyle(t, fs, Spells[m->spells[i]->type]);
     }
     drawRightCursor(
-            menuContext->fight->menuSprite,
+            menuContext->menuSprite,
             (Vector2) {
                     t->area.x,
                     t->area.y + (float) (LINE_HEIGHT * menuContext->cursorLine),
