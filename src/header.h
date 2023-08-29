@@ -14,7 +14,9 @@
 #include "header/control.h"
 #include "header/exit.h"
 #include "header/item.h"
+#include "header/layer.h"
 #include "header/menu.h"
+#include "header/spell.h"
 #include "header/ui.h"
 
 #define TARGET_FRAMERATE 60
@@ -80,8 +82,6 @@
 #define COLLIDE_TYPE_WARPS "warps"
 #define COLLIDE_TYPE_COUNT 3
 
-#define BEAST_AREA (Rectangle) {20, 20, 240, 240}
-
 const char *logLevels[] = {
         "error",
         "warn",
@@ -95,20 +95,6 @@ typedef enum {
     INFO = 2,
     DEBUG = 3,
 } LogLevel;
-
-typedef enum {
-    BACKGROUND = 0,
-    MIDGROUND,
-    FOREGROUND,
-} LayerType;
-
-LayerType LAYERS[] = {
-    BACKGROUND,
-    MIDGROUND,
-    FOREGROUND,
-};
-
-#define LAYER_COUNT sizeof(LAYERS) / sizeof(LAYERS[0])
 
 typedef enum {
     EXIT = 1,
@@ -133,22 +119,6 @@ const char *Events[MAX_EVENTS] = {
         "game_loop",
         "scene_loaded",
 };
-
-const char *Spells[] = {
-        "cure",
-        "fire",
-        "lightning",
-        "ice",
-        "energy",
-};
-
-typedef enum {
-    SPELL_CURE,
-    SPELL_FIRE,
-    SPELL_LIGHTNING,
-    SPELL_ICE,
-    SPELL_ENERGY,
-} SpellType;
 
 typedef enum {
     INTENT_HARM,

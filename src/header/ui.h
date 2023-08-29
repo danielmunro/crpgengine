@@ -43,6 +43,8 @@
 
 #define LIGHTBLUE (Color){100, 134, 175, 255}
 
+#define BEAST_AREA (Rectangle) {20, 20, 240, 240}
+
 typedef enum {
     FONT_STYLE_DEFAULT,
     FONT_STYLE_DISABLED,
