@@ -10,6 +10,13 @@
 #include <math.h>
 #include <sys/time.h>
 
+#include "header/animation.h"
+#include "header/control.h"
+#include "header/exit.h"
+#include "header/item.h"
+#include "header/menu.h"
+#include "header/ui.h"
+
 #define TARGET_FRAMERATE 60
 
 #define MOB_COLLISION_WIDTH 12
@@ -22,16 +29,6 @@
 #define SCENE_TYPE_DUNGEON 2
 
 #define START_ENTRANCE "start"
-
-#define EXIT_NO_INDEX_DIR 1
-#define EXIT_MENU_NOT_DEFINED 100
-#define EXIT_MOBILE_NOT_FOUND 200
-#define EXIT_FORCE_NEW_AND_LOAD_SAVE 300
-#define EXIT_FONT_STYLE_NOT_FOUND 400
-#define EXIT_TEXT_BOX_NOT_FOUND 401
-#define EXIT_UNABLE_TO_CREATE_SPELL 500
-#define EXIT_UNABLE_TO_FIND_SPELL 501
-#define EXIT_UNKNOWN_INTENT 600
 
 #define STARTING_HP 20
 #define STARTING_MANA 10
@@ -50,7 +47,6 @@
 #define MAX_CONTROLS 255
 #define MAX_ACTIVE_CONTROLS 64
 #define MAX_AUDIO 1024
-#define MAX_CHARACTERS_PER_LINE 60
 #define MAX_STORIES 1024
 #define MAX_BEASTIARY_SIZE 1024
 #define MAX_BEASTS 255
@@ -61,7 +57,6 @@
 #define MAX_ITEMS 255
 #define MAX_EQUIPMENT 4
 #define MAX_PARTY_SIZE 4
-#define MAX_TEAM_SIZE 255
 #define MAX_FS_PATH_LENGTH 255
 #define MAX_MOBILE_MOVEMENTS 64
 #define MAX_SPRITES 1024
@@ -116,36 +111,6 @@ LayerType LAYERS[] = {
 #define LAYER_COUNT sizeof(LAYERS) / sizeof(LAYERS[0])
 
 typedef enum {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-} AnimationType;
-const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT};
-const AnimationType DIRECTIONS[] = {UP, DOWN, LEFT, RIGHT};
-#define DIRECTION_COUNT sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0])
-AnimationType getOppositeDirection(AnimationType direction) {
-    if (direction == UP) {
-        return DOWN;
-    } else if (direction == DOWN) {
-        return UP;
-    } else if (direction == LEFT) {
-        return RIGHT;
-    } else if (direction == RIGHT) {
-        return LEFT;
-    }
-    return DOWN;
-}
-const AnimationType ANIMATION_TYPES[] = {UP, DOWN, LEFT, RIGHT};
-const char *AnimationTypeStrings[] = {
-        "up",
-        "down",
-        "left",
-        "right",
-};
-#define ANIMATION_TYPE_COUNT sizeof(AnimationTypeStrings) / sizeof(AnimationTypeStrings[0])
-
-typedef enum {
     EXIT = 1,
     ENTRANCE,
 } ObjectType;
@@ -190,10 +155,6 @@ typedef enum {
     INTENT_HELP,
 } Intent;
 
-#include "header/control.h"
-#include "header/item.h"
-#include "header/menu.h"
-#include "header/ui.h"
 #include "log.c"
 #include "util.c"
 #include "yaml/spritesheet.c"

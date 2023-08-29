@@ -1,7 +1,3 @@
-//
-// Created by Dan Munro on 8/29/23.
-//
-
 #ifndef CJRPGENGINE_CONTROL_H
 #define CJRPGENGINE_CONTROL_H
 
