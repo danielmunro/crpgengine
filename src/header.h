@@ -10,10 +10,6 @@
 #include <math.h>
 #include <sys/time.h>
 
-#define SCREEN_WIDTH 720
-#define SCREEN_HEIGHT 450
-#define SCALE (float) 1.0
-
 #define TARGET_FRAMERATE 60
 
 #define MOB_COLLISION_WIDTH 12
@@ -26,33 +22,6 @@
 #define SCENE_TYPE_DUNGEON 2
 
 #define START_ENTRANCE "start"
-
-#define FONT_SIZE 20
-#define LINE_HEIGHT 30
-#define UI_PADDING 20
-#define HIGHLIGHT_COLOR YELLOW
-#define DISABLED_COLOR GRAY
-#define DEFAULT_COLOR WHITE
-#define WARNING_COLOR YELLOW
-#define DANGER_COLOR RED
-#define BOTTOM_MENU_HEIGHT 200
-#define BOTTOM_MENU_PLAYER_WIDTH 560
-#define BOTTOM_MENU_ACTION_SELECT_WIDTH 300
-
-#define FIGHT_PLAYER_X (SCREEN_WIDTH * 0.8)
-#define FIGHT_PLAYER_Y_MARGIN 40
-#define FIGHT_PLAYER_Y_PADDING 24
-
-#define FIGHT_CURSOR_X_OFFSET 5
-#define FIGHT_CURSOR_Y_OFFSET 22
-
-#define FONT_WARNING_THRESHOLD 0.6
-#define FONT_DANGER_THRESHOLD 0.3
-
-#define HP_X_OFFSET 200
-#define MANA_X_OFFSET 320
-#define ACTION_GAUGE_WIDTH 100
-#define ACTION_GAUGE_HEIGHT 10
 
 #define EXIT_NO_INDEX_DIR 1
 #define EXIT_MENU_NOT_DEFINED 100
@@ -128,18 +97,6 @@
 
 #define BEAST_AREA (Rectangle) {20, 20, 240, 240}
 
-typedef enum {
-    ACKNOWLEDGE_BOX,
-    ACTION_SELECT_BOX,
-    BEAST_SELECT_BOX,
-    ITEMS_BOX,
-    LOAD_BOX,
-    MOBILE_SELECT_BOX,
-    PARTY_BOX,
-    QUIT_BOX,
-    MAGIC_SELECT_BOX,
-} TextBoxLabel;
-
 const char *logLevels[] = {
         "error",
         "warn",
@@ -153,52 +110,6 @@ typedef enum {
     INFO = 2,
     DEBUG = 3,
 } LogLevel;
-
-const char *conditions[] = {
-        "engaged",
-        "has_story",
-        "not_has_story",
-        "scene_loaded",
-        "arrive_at",
-};
-
-typedef enum {
-    ENGAGED = 0,
-    HAS_STORY,
-    NOT_HAS_STORY,
-    SCENE_LOADED,
-    ARRIVE_AT,
-} Condition;
-
-const char *outcomes[] = {
-        "speak",
-        "move_to",
-        "set_direction",
-        "sprite",
-        "wait",
-        "give_item",
-        "take",
-        "add_story",
-        "set_position",
-        "lock",
-        "unlock",
-        "save",
-};
-
-typedef enum {
-    SPEAK = 0,
-    MOVE_TO,
-    SET_DIRECTION,
-    SPRITE,
-    WAIT,
-    GIVE_ITEM,
-    TAKE,
-    ADD_STORY,
-    SET_POSITION,
-    LOCK,
-    UNLOCK,
-    SAVE,
-} Outcome;
 
 typedef enum {
     BACKGROUND = 0,
@@ -250,22 +161,6 @@ typedef enum {
 } ObjectType;
 
 typedef enum {
-    PARTY_MENU,
-    ITEMS_MENU,
-    LOAD_MENU,
-    SAVE_MENU,
-    QUIT_MENU,
-    ACKNOWLEDGE_MENU,
-    BEAST_LIST_FIGHT_MENU,
-    BEAST_TARGET_FIGHT_MENU,
-    MOBILE_SELECT_FIGHT_MENU,
-    MOBILE_TARGET_FIGHT_MENU,
-    ACTION_SELECT_FIGHT_MENU,
-    MAGIC_FIGHT_MENU,
-    ITEMS_FIGHT_MENU,
-} MenuType;
-
-typedef enum {
     RECEIVE_QUEST_ITEM,
     LOSE_QUEST_ITEM,
     RECEIVE_EXPERIENCE,
@@ -273,67 +168,6 @@ typedef enum {
     LOSE_GOLD,
     SAVED,
 } NotificationType;
-
-#define PARTY_MENU_ITEMS "Items"
-#define PARTY_MENU_REARRANGE "Rearrange"
-#define PARTY_MENU_CONFIG "Config"
-#define PARTY_MENU_SAVE "Save"
-#define PARTY_MENU_LOAD "Load"
-#define PARTY_MENU_QUIT "Quit"
-
-char *PartyMenuItems[] = {
-        PARTY_MENU_ITEMS,
-        PARTY_MENU_REARRANGE,
-        PARTY_MENU_CONFIG,
-        PARTY_MENU_SAVE,
-        PARTY_MENU_LOAD,
-        PARTY_MENU_QUIT,
-};
-
-#define QUIT_MENU_YES "Yes"
-#define QUIT_MENU_NO "No"
-
-char *QuitMenuItems[] = {
-        QUIT_MENU_NO,
-        QUIT_MENU_YES,
-};
-
-const char *ItemTypes[] = {
-        "consumable",
-        "equipment",
-        "crafting material",
-        "quest",
-};
-
-typedef enum {
-    ITEM_TYPE_NONE,
-    ITEM_TYPE_CONSUMABLE,
-    ITEM_TYPE_EQUIPMENT,
-    ITEM_TYPE_CRAFTING_MATERIAL,
-    ITEM_TYPE_QUEST,
-} ItemType;
-
-const char *EquipmentPositions[] = {
-        "none",
-        "weapon",
-        "torso",
-        "wrist",
-        "accessory",
-};
-
-typedef enum {
-    POSITION_NONE,
-    POSITION_WEAPON,
-    POSITION_TORSO,
-    POSITION_WRIST,
-    POSITION_ACCESSORY,
-} EquipmentPosition;
-
-typedef enum {
-    OPEN_MENU,
-    CLOSE_MENU,
-    FIND_TARGET_MENU,
-} MenuSelectResponseType;
 
 typedef enum {
     EVENT_GAME_LOOP,
@@ -344,16 +178,6 @@ const char *Events[MAX_EVENTS] = {
         "game_loop",
         "scene_loaded",
 };
-
-#define FONT_STYLE_COUNT 5
-
-typedef enum {
-    FONT_STYLE_DEFAULT,
-    FONT_STYLE_DISABLED,
-    FONT_STYLE_HIGHLIGHTED,
-    FONT_STYLE_WARNING,
-    FONT_STYLE_DANGER,
-} FontStyleType;
 
 const char *Spells[] = {
         "cure",
@@ -376,6 +200,10 @@ typedef enum {
     INTENT_HELP,
 } Intent;
 
+#include "header/control.h"
+#include "header/item.h"
+#include "header/menu.h"
+#include "header/ui.h"
 #include "log.c"
 #include "util.c"
 #include "yaml/spritesheet.c"
