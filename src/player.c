@@ -60,6 +60,10 @@ Mobile *getPartyLeader(Player *p) {
 }
 
 MobileData createMobDataFromMob(Mobile *mob) {
+    SpellData *spellData = (SpellData *) malloc(mob->spellCount * sizeof(SpellData));
+    for (int i = 0; i < mob->spellCount; i++) {
+        spellData[i] = createDataFromSpell(mob->spells[i]);
+    }
     return (MobileData) {
             mob->id,
             mob->name,
@@ -68,7 +72,9 @@ MobileData createMobDataFromMob(Mobile *mob) {
             getAnimationStringFromType(mob->direction),
             mob->hp,
             mob->mana,
-            createDataFromAttributes(mob->attributes)
+            createDataFromAttributes(mob->attributes),
+            spellData,
+            mob->spellCount,
     };
 }
 
@@ -255,16 +261,19 @@ Player *mapSaveDataToPlayer(AnimationManager *am, ItemManager *im, Log *log, Sav
     addInfo(log, "save file party count :: %d", save->player->party_count);
     for (int i = 0; i < save->player->party_count; i++) {
         Animation *animations[MAX_ANIMATIONS];
-        loadAnimationsByName(am, save->player->party[i].animations, animations);
+        MobileData mob = save->player->party[i];
+        loadAnimationsByName(am, mob.animations, animations);
         mobs[i] = createMobile(
-                save->player->party[i].id,
-                save->player->party[i].name,
-                getPositionFromString(save->player->party[i].position),
-                getDirectionFromString(save->player->party[i].direction),
+                mob.id,
+                mob.name,
+                getPositionFromString(mob.position),
+                getDirectionFromString(mob.direction),
                 animations,
-                save->player->party[i].hp,
-                save->player->party[i].mana,
-                createAttributesFromData(save->player->party[i].attributes));
+                mob.hp,
+                mob.mana,
+                createAttributesFromData(mob.attributes),
+                mapSpellsFromData(mob.spells, mob.spells_count),
+                mob.spells_count);
     }
     for (int i = save->player->party_count; i < MAX_PARTY_SIZE; i++) {
         mobs[i] = NULL;
@@ -290,6 +299,27 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
     addInfo(log, "loading player from dir %s", indexDir);
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
+    Spell **spells1 = calloc(MAX_SPELLS, sizeof(Spell));
+    spells1[0] = createSpellFromData((SpellData) {
+            (char *) Spells[0],
+            (char *) Intents[0],
+            1,
+            (float) 1.0,
+            createEmptyAttributesData(),
+            createEmptyAttributesData(),
+    });
+    Spell **spells2 = calloc(MAX_SPELLS, sizeof(Spell));
+//    spells2[0] = createSpellFromData((SpellData) {
+//            (char *) Spells[1],
+//            (char *) Intents[1],
+//            1,
+//            (float) 1.0,
+//            createEmptyAttributesData(),
+//            createEmptyAttributesData(),
+//    });
+    Spell **spells3 = calloc(MAX_SPELLS, sizeof(Spell));
+    Spell **spells4 = calloc(MAX_SPELLS, sizeof(Spell));
+
     Mobile *mobiles[MAX_PARTY_SIZE] = {
             createMobile(
                     "player1",
@@ -299,7 +329,9 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
                     animations,
                     STARTING_HP,
                     STARTING_MANA,
-                    createStartingAttributes()),
+                    createStartingAttributes(),
+                    spells1,
+                    0),
             createMobile(
                     "player2",
                     "Gandalf",
@@ -308,7 +340,9 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
                     animations,
                     STARTING_HP,
                     STARTING_MANA,
-                    createStartingAttributes()),
+                    createStartingAttributes(),
+                    spells2,
+                    0),
             createMobile(
                     "player3",
                     "RazzleKhan",
@@ -317,7 +351,9 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
                     animations,
                     STARTING_HP,
                     STARTING_MANA,
-                    createStartingAttributes()),
+                    createStartingAttributes(),
+                    spells3,
+                    0),
             createMobile(
                     "player4",
                     "Krusty",
@@ -326,7 +362,9 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
                     animations,
                     STARTING_HP,
                     STARTING_MANA,
-                    createStartingAttributes()),
+                    createStartingAttributes(),
+                    spells4,
+                    0),
     };
     const char **storylines = malloc(sizeof(char **));
     Item **items = calloc(MAX_ITEMS, sizeof(Item));
@@ -342,7 +380,7 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
             items,
             0);
     // hack -- add a bunch of items
-    for (int i = 0; i < MAX_ITEMS; i++) {
+    for (int i = 0; i < 3; i++) {
         ItemData *item = malloc(sizeof(ItemData));
         item->name = "potion";
         item->type = "consumable";
@@ -360,9 +398,9 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
         "cure",
         "help",
         1,
+        (float) 1.0,
         a,
         cureImpact,
-        (float) 1.0,
     };
     p->party[0]->spells[0] = createSpellFromData(cure);
     p->party[0]->spellCount = 1;
@@ -373,9 +411,9 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
             "fire",
             "harm",
             1,
+            (float) 1.0,
             a,
             fireImpact,
-            (float) 1.0,
     };
     p->party[1]->spells[0] = createSpellFromData(fire);
     p->party[1]->spellCount = 1;

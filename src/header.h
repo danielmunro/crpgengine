@@ -120,6 +120,11 @@ const char *Events[MAX_EVENTS] = {
         "scene_loaded",
 };
 
+const char *Intents[] = {
+        "harm",
+        "help",
+};
+
 typedef enum {
     INTENT_HARM,
     INTENT_HELP,

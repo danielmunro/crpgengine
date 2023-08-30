@@ -2,9 +2,9 @@ typedef struct {
     char *type;
     char *intent;
     int level;
+    float levelModifier;
     AttributesData *cost;
     AttributesData *impact;
-    float levelModifier;
 } SpellData;
 
 typedef struct {
@@ -26,7 +26,7 @@ static const cyaml_schema_field_t spellFieldSchema[] = {
                 "impact", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
                 SpellData, impact, attributesFieldSchema),
         CYAML_FIELD_FLOAT(
-                "levelModifier", CYAML_FLAG_OPTIONAL, SpellData, levelModifier),
+                "levelModifier", CYAML_FLAG_DEFAULT, SpellData, levelModifier),
         CYAML_FIELD_END
 };
 

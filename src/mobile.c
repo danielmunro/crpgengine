@@ -49,7 +49,9 @@ Mobile *createMobile(
         Animation *animations[MAX_ANIMATIONS],
         int hp,
         int mana,
-        Attributes attributes) {
+        Attributes attributes,
+        Spell **spells,
+        int spellCount) {
     Mobile *mobile = malloc(sizeof(Mobile));
     mobile->id = &id[0];
     mobile->name = &name[0];
@@ -73,8 +75,8 @@ Mobile *createMobile(
     mobile->equipment = calloc(MAX_EQUIPMENT, sizeof(ItemData));
     mobile->hp = hp;
     mobile->mana = mana;
-    mobile->spells = calloc(MAX_SPELLS, sizeof(Spell));
-    mobile->spellCount = 0;
+    mobile->spells = spells;
+    mobile->spellCount = spellCount;
     return mobile;
 }
 
@@ -87,7 +89,9 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
             animations,
             data->hp,
             data->mana,
-            createAttributesFromData(data->attributes));
+            createAttributesFromData(data->attributes),
+            mapSpellsFromData(data->spells, data->spells_count),
+            data->spells_count);
     return mob;
 }
 

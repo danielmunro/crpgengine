@@ -33,6 +33,34 @@ Spell *createSpellFromData(SpellData data) {
     return s;
 }
 
+Spell **mapSpellsFromData(SpellData *spellData, int spellCount) {
+    Spell **spells = calloc(spellCount, sizeof(Spell));
+    for (int i = 0; i < spellCount; i++) {
+        spells[i] = createSpellFromData(spellData[i]);
+    }
+    return spells;
+}
+
+SpellData createDataFromSpell(Spell *spell) {
+    return (SpellData) {
+            (char *) Spells[spell->type],
+            (char *) Intents[spell->intent],
+            spell->level,
+            spell->levelModifier,
+            createDataFromAttributes(spell->cost),
+            createDataFromAttributes(spell->impact),
+    };
+}
+
+SpellData *mapSpellsToData(Spell **spells, int spellCount) {
+    SpellData *spellData = (SpellData *) malloc(spellCount * sizeof(SpellData));
+//    SpellData *spellData = (SpellData *) calloc(spellCount, sizeof(SpellData));
+    for (int i = 0; i < spellCount; i++) {
+        spellData[i] = createDataFromSpell(spells[i]);
+    }
+    return spellData;
+}
+
 Spell *findSpell(Spell **spells, SpellType type) {
     for (int i = 0; i < MAX_SPELLS; i ++) {
         if (spells[i]->type == type) {

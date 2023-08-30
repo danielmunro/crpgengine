@@ -7,6 +7,8 @@ typedef struct {
     int hp;
     int mana;
     AttributesData *attributes;
+    SpellData *spells;
+    int spells_count;
 } MobileData;
 
 static const cyaml_schema_field_t mobileTopMappingField[] = {
@@ -23,6 +25,9 @@ static const cyaml_schema_field_t mobileTopMappingField[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "attributes", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
                 MobileData, attributes, attributesFieldSchema),
+        CYAML_FIELD_SEQUENCE(
+                "spells", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
+                MobileData, spells, &spellSchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_INT(
                 "hp", CYAML_FLAG_OPTIONAL, MobileData, hp),
         CYAML_FIELD_INT(

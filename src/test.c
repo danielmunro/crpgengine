@@ -59,8 +59,19 @@ void canMoveMobTest() {
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
+    Spell **spells = calloc(0, sizeof(Spell));
 
-    Mobile *mob = createMobile("test", "test", start, DOWN, animations, 20, 20, createStartingAttributes());
+    Mobile *mob = createMobile(
+            "test",
+            "test",
+            start,
+            DOWN,
+            animations,
+            20,
+            20,
+            createStartingAttributes(),
+            spells,
+            0);
 
     // when
     moveMob(mob, (Vector2){startX + 5, startY + 5});
@@ -77,9 +88,18 @@ void canMobStopMovingTest() {
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
+    Spell **spells = calloc(0, sizeof(Spell));
     Mobile *mob = createMobile(
-            "test", "test", start, DOWN,
-            animations, STARTING_HP, STARTING_MANA, createStartingAttributes());
+            "test",
+            "test",
+            start,
+            DOWN,
+            animations,
+            STARTING_HP,
+            STARTING_MANA,
+            createStartingAttributes(),
+            spells,
+            0);
 
     // when
     moveMob(mob, start);
