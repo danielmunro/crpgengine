@@ -346,14 +346,15 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
         ItemData *item = malloc(sizeof(ItemData));
         item->name = "potion";
         item->type = "consumable";
+        item->worth = 10;
         item->attributes = NULL;
         item->position = NULL;
         addItem(p, createItemFromData(item));
     }
     // hack -- add some spells
-    AttributesData *a = malloc(sizeof(AttributesData));
+    AttributesData *a = createDataFromAttributes(createEmptyAttributes());
     a->mana = 10;
-    AttributesData *cureImpact = malloc(sizeof(AttributesData));
+    AttributesData *cureImpact = createDataFromAttributes(createEmptyAttributes());
     cureImpact->hp = 20;
     SpellData cure = (SpellData) {
         "cure",
@@ -366,7 +367,7 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
     p->party[0]->spells[0] = createSpellFromData(cure);
     p->party[0]->spellCount = 1;
 
-    AttributesData *fireImpact = malloc(sizeof(AttributesData));
+    AttributesData *fireImpact = createDataFromAttributes(createEmptyAttributes());
     fireImpact->hp = 20;
     SpellData fire = (SpellData) {
             "fire",
