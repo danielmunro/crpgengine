@@ -13,6 +13,7 @@
 #include "header/animation.h"
 #include "header/control.h"
 #include "header/exit.h"
+#include "header/intent.h"
 #include "header/item.h"
 #include "header/layer.h"
 #include "header/menu.h"
