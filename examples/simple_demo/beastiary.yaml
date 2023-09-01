@@ -31,9 +31,6 @@ beasts:
     str: 2
     dex: 1
     con: 1
-    ac:
-      poison: 10
-      water: -10
   level: 4
   hp: 25
   gp: 185

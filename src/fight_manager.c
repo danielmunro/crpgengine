@@ -112,7 +112,7 @@ void attackBeast(FightManager *fm, int targetIndex) {
     Menu *m = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
     Mobile *mob = fm->fight->player->party[m->cursor];
     Beast *beast = fm->fight->beasts[targetIndex];
-    beast->hp -= calculateMobileAttributes(mob).strength;
+    beast->hp -= calculateMobileAttributes(mob)->strength;
     if (beast->hp < 0) {
         destroyBeast(fm, targetIndex);
     }
@@ -122,7 +122,7 @@ void attackMobile(FightManager *fm, int targetIndex) {
     Menu *m = findMenu(fm->menus, MOBILE_TARGET_FIGHT_MENU);
     Mobile *target = fm->fight->player->party[targetIndex];
     Mobile *attacker = fm->fight->player->party[m->cursor];
-    target->hp -= calculateMobileAttributes(attacker).strength;
+    target->hp -= calculateMobileAttributes(attacker)->strength;
 //    resetAfterAttackAction(fm, m->cursor);
 //    fm->ui->menuContext->cursorLine = m->cursor;
 //    m->cursor = m->getNextOption(fm->ui->menuContext);
@@ -144,14 +144,14 @@ int getAttributeAmount(Spell *spell, int base) {
 }
 
 void executeSpellOnBeast(Beast *beast, Spell *spell) {
-    beast->hp += (int) getAttributeAmount(spell, spell->impact.hp);
-    beast->mana += (int) getAttributeAmount(spell, spell->impact.mana);
+    beast->hp += (int) getAttributeAmount(spell, spell->impact->hp);
+    beast->mana += (int) getAttributeAmount(spell, spell->impact->mana);
     normalizeVitalsForBeast(beast);
 }
 
 void executeSpellOnMobile(Mobile *mob, Spell *spell) {
-    mob->hp += (int) getAttributeAmount(spell, spell->impact.hp);
-    mob->mana += (int) getAttributeAmount(spell, spell->impact.mana);
+    mob->hp += (int) getAttributeAmount(spell, spell->impact->hp);
+    mob->mana += (int) getAttributeAmount(spell, spell->impact->mana);
     normalizeVitalsForMobile(mob);
 }
 

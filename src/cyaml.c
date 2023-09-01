@@ -121,6 +121,10 @@ SaveData *loadSaveData(const char *filePath) {
         fprintf(stderr, "%s\n", cyaml_strerror(err));
         return NULL;
     }
+    if (save == NULL) {
+        fprintf(stderr, "error loading save file");
+        return NULL;
+    }
     if (save->player->storylines == NULL) {
         save->player->storylines = calloc(MAX_STORIES, sizeof(char *));
     }

@@ -69,14 +69,14 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
         }
         drawStat(mc->fonts,
                  mob->hp,
-                 (float) mob->hp / (float) calculateMobileAttributes(mob).hp,
+                 (float) mob->hp / (float) calculateMobileAttributes(mob)->hp,
                  (Vector2) {
                          textBox->area.x + HP_X_OFFSET,
                          textBox->area.y + UI_PADDING + (float) (i * LINE_HEIGHT)
                  });
         drawStat(mc->fonts,
                  mob->mana,
-                 (float) mob->mana / (float) calculateMobileAttributes(mob).mana,
+                 (float) mob->mana / (float) calculateMobileAttributes(mob)->mana,
                  (Vector2) {
                          textBox->area.x + MANA_X_OFFSET,
                          textBox->area.y + UI_PADDING + (float) (i * LINE_HEIGHT)

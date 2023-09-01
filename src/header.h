@@ -13,6 +13,7 @@
 #include "header/animation.h"
 #include "header/control.h"
 #include "header/exit.h"
+#include "header/intent.h"
 #include "header/item.h"
 #include "header/layer.h"
 #include "header/menu.h"
@@ -62,7 +63,6 @@
 #define MAX_FS_PATH_LENGTH 255
 #define MAX_MOBILE_MOVEMENTS 64
 #define MAX_SPRITES 1024
-#define MAX_EVENTS 64
 #define MAX_ARRIVE_AT 64
 #define MAX_SAVE_FILES 255
 #define MAX_SAVE_NAME 255
@@ -115,21 +115,6 @@ typedef enum {
     EVENT_SCENE_LOADED,
 } EventType;
 
-const char *Events[MAX_EVENTS] = {
-        "game_loop",
-        "scene_loaded",
-};
-
-const char *Intents[] = {
-        "harm",
-        "help",
-};
-
-typedef enum {
-    INTENT_HARM,
-    INTENT_HELP,
-} Intent;
-
 #include "log.c"
 #include "util.c"
 #include "yaml/spritesheet.c"
@@ -157,7 +142,6 @@ typedef enum {
 #include "spritesheet.c"
 #include "animation.c"
 #include "attributes.c"
-#include "intent.c"
 #include "item.c"
 #include "item_manager.c"
 #include "beastiary.c"
@@ -182,7 +166,6 @@ typedef enum {
 #include "menu/mobile_select_menu.c"
 #include "menu/mobile_target_menu.c"
 #include "menu/magic_fight_menu.c"
-#include "draw.c"
 #include "exploration.c"
 #include "scene.c"
 #include "tilemap_xmlreader.c"

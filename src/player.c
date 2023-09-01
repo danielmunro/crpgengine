@@ -86,7 +86,7 @@ PlayerData *createPlayerData(Player *p) {
     pd->experience = p->experience;
     pd->level = p->level;
     pd->storylines_count = p->storylineCount;
-    pd->party_count = p->partyCount;
+    pd->party_count = 0;
     pd->items_count = p->itemCount;
     pd->onDeck_count = p->onDeckCount;
     pd->items = (ItemData *) malloc(p->itemCount * sizeof(ItemData));
@@ -172,6 +172,9 @@ SaveFiles *getSaveFiles(const char *indexDir) {
         char *filePath = malloc(MAX_FS_PATH_LENGTH);
         sprintf(filePath, "%s/%s", savesDirectory, files[i]);
         SaveData *s = loadSaveData(filePath);
+        if (s == NULL) {
+            break;
+        }
         if (strcmp(files[i], "autosave.yaml") == 0) {
             char *name = malloc(MAX_SAVE_NAME);
             sprintf(name, "(autosave) %s", s->name);
@@ -223,7 +226,6 @@ void save(Player *player, const char *sceneName, const char *indexDir) {
             sceneName,
             name);
 
-    printf("item: %s\n", player->items[0]->name);
     // auto save
     saveFile(player->log, save, indexDir, "autosave.yaml");
     char filename[MAX_FS_PATH_LENGTH];
@@ -385,7 +387,7 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
         item->name = "potion";
         item->type = "consumable";
         item->worth = 10;
-        item->attributes = NULL;
+        item->attributes = createEmptyAttributesData();
         item->position = NULL;
         addItem(p, createItemFromData(item));
     }

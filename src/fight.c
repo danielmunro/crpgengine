@@ -85,14 +85,14 @@ void fightUpdate(Fight *fight) {
     double interval = end - fight->time;
     for (int i = 0; i < fight->beastCount; i++) {
         Beast *b = fight->beasts[i];
-        int amountToRaise = getActionGaugeRaise(interval, b->attributes.dexterity);
+        int amountToRaise = getActionGaugeRaise(interval, b->attributes->dexterity);
         if (b->actionGauge < MAX_ACTION_GAUGE) {
             b->actionGauge = normalizeActionGauge(b->actionGauge, amountToRaise);
         }
     }
     for (int i = 0; i < fight->player->partyCount; i++) {
         Mobile *mob = fight->player->party[i];
-        int amountToRaise = getActionGaugeRaise(interval, calculateMobileAttributes(mob).dexterity);
+        int amountToRaise = getActionGaugeRaise(interval, calculateMobileAttributes(mob)->dexterity);
         if (!isReadyForAction(mob) && mob->hp > 0) {
             mob->actionGauge = normalizeActionGauge(mob->actionGauge, amountToRaise);
             if (isReadyForAction(mob) && fight->cursors[fight->menu] == -1) {

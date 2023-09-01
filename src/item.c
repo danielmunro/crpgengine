@@ -2,7 +2,7 @@ typedef struct {
     ItemType type;
     const char *name;
     int worth;
-    Attributes attributes;
+    Attributes *attributes;
     EquipmentPosition position;
 } Item;
 
@@ -33,7 +33,7 @@ Item *createItem(
         ItemType type,
         const char *name,
         int worth,
-        Attributes attributes,
+        Attributes *attributes,
         EquipmentPosition position) {
     Item *item = malloc(sizeof(Item));
     item->type = type;
@@ -49,9 +49,7 @@ Item *createItemFromData(ItemData *data) {
             getItemTypeFromString(data->type),
             data->name,
             data->worth,
-            data->attributes == NULL ? createEmptyAttributes() :
-                    data->attributes == NULL ? createEmptyAttributes() :
-                            createAttributesFromData(data->attributes),
+            createAttributesFromData(data->attributes),
             getEquipmentPositionFromString(data->position));
 }
 

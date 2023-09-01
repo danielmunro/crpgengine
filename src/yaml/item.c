@@ -21,7 +21,7 @@ static const cyaml_schema_field_t itemFieldSchema[] = {
         CYAML_FIELD_INT(
                 "worth", CYAML_FLAG_OPTIONAL, ItemData, worth),
         CYAML_FIELD_MAPPING_PTR(
-                "attributes", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
+                "attributes", CYAML_FLAG_OPTIONAL,
                 ItemData, attributes, attributesFieldSchema),
         CYAML_FIELD_END
 };

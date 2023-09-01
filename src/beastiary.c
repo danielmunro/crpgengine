@@ -2,7 +2,7 @@ typedef struct {
     const char *id;
     const char *name;
     Texture2D image;
-    Attributes attributes;
+    Attributes *attributes;
     int level;
     int hp;
     int mana;
@@ -49,17 +49,17 @@ Beast *cloneBeast(Beast *original) {
     return new;
 }
 
-Attributes calculateBeastAttributes(Beast *beast) {
+Attributes *calculateBeastAttributes(Beast *beast) {
     // todo take into effect affects
     return beast->attributes;
 }
 
 void normalizeVitalsForBeast(Beast *beast) {
-    Attributes calculated = calculateBeastAttributes(beast);
-    if (beast->hp > calculated.hp) {
-        beast->hp = calculated.hp;
+    Attributes *calculated = calculateBeastAttributes(beast);
+    if (beast->hp > calculated->hp) {
+        beast->hp = calculated->hp;
     }
-    if (beast->mana > calculated.mana) {
-        beast->mana = calculated.mana;
+    if (beast->mana > calculated->mana) {
+        beast->mana = calculated->mana;
     }
 }

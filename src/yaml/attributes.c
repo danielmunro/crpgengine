@@ -3,14 +3,8 @@ typedef struct {
     int slash;
     int pierce;
     int fire;
-    int water;
     int frost;
-    int electricity;
-    int dark;
-    int light;
-    int corrosive;
-    int poison;
-    int energy;
+    int shock;
 } ArmorClassData;
 
 typedef struct {
@@ -47,21 +41,9 @@ static const cyaml_schema_field_t acFieldSchema[] = {
         CYAML_FIELD_INT(
                 "fire", CYAML_FLAG_OPTIONAL, ArmorClassData, fire),
         CYAML_FIELD_INT(
-                "water", CYAML_FLAG_OPTIONAL, ArmorClassData, water),
-        CYAML_FIELD_INT(
                 "frost", CYAML_FLAG_OPTIONAL, ArmorClassData, frost),
         CYAML_FIELD_INT(
-                "electricity", CYAML_FLAG_OPTIONAL, ArmorClassData, electricity),
-        CYAML_FIELD_INT(
-                "dark", CYAML_FLAG_OPTIONAL, ArmorClassData, dark),
-        CYAML_FIELD_INT(
-                "light", CYAML_FLAG_OPTIONAL, ArmorClassData, light),
-        CYAML_FIELD_INT(
-                "corrosive", CYAML_FLAG_OPTIONAL, ArmorClassData, corrosive),
-        CYAML_FIELD_INT(
-                "poison", CYAML_FLAG_OPTIONAL, ArmorClassData, poison),
-        CYAML_FIELD_INT(
-                "energy", CYAML_FLAG_OPTIONAL, ArmorClassData, energy),
+                "shock", CYAML_FLAG_OPTIONAL, ArmorClassData, shock),
 };
 
 static const cyaml_schema_field_t attributesFieldSchema[] = {
@@ -80,7 +62,7 @@ static const cyaml_schema_field_t attributesFieldSchema[] = {
         CYAML_FIELD_INT(
                 "mana", CYAML_FLAG_OPTIONAL, AttributesData, mana),
         CYAML_FIELD_MAPPING_PTR(
-                "ac", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
+                "ac", CYAML_FLAG_OPTIONAL,
                 AttributesData, ac, acFieldSchema),
         CYAML_FIELD_END
 };
