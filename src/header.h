@@ -62,7 +62,6 @@
 #define MAX_FS_PATH_LENGTH 255
 #define MAX_MOBILE_MOVEMENTS 64
 #define MAX_SPRITES 1024
-#define MAX_EVENTS 64
 #define MAX_ARRIVE_AT 64
 #define MAX_SAVE_FILES 255
 #define MAX_SAVE_NAME 255
@@ -114,11 +113,6 @@ typedef enum {
     EVENT_GAME_LOOP,
     EVENT_SCENE_LOADED,
 } EventType;
-
-const char *Events[MAX_EVENTS] = {
-        "game_loop",
-        "scene_loaded",
-};
 
 #include "log.c"
 #include "util.c"
