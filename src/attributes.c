@@ -3,14 +3,9 @@ typedef struct {
     int slash;
     int pierce;
     int fire;
-    int water;
     int frost;
-    int electricity;
-    int dark;
-    int light;
-    int corrosive;
-    int poison;
-    int energy;
+    int shock;
+    int blast;
 } ArmorClass;
 
 typedef struct {
@@ -41,21 +36,12 @@ Attributes createEmptyAttributes() {
                     0,
                     0,
                     0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
             }
     };
 }
 
 ArmorClass createEmptyArmorClass() {
     return (ArmorClass) {
-        0,
-        0,
-        0,
-        0,
         0,
         0,
         0,
@@ -83,14 +69,9 @@ Attributes createAttributesFromData(AttributesData *data) {
             data->ac->slash,
             data->ac->pierce,
             data->ac->fire,
-            data->ac->water,
             data->ac->frost,
-            data->ac->electricity,
-            data->ac->dark,
-            data->ac->light,
-            data->ac->corrosive,
-            data->ac->poison,
-            data->ac->energy,
+            data->ac->shock,
+            data->ac->blast,
         }
     };
 }
@@ -110,14 +91,9 @@ AttributesData *createDataFromAttributes(const Attributes a) {
     ac->slash = a.ac.slash;
     ac->pierce = a.ac.pierce;
     ac->fire = a.ac.fire;
-    ac->water = a.ac.water;
     ac->frost = a.ac.frost;
-    ac->electricity = a.ac.electricity;
-    ac->dark = a.ac.dark;
-    ac->light = a.ac.light;
-    ac->corrosive = a.ac.corrosive;
-    ac->poison = a.ac.poison;
-    ac->energy = a.ac.energy;
+    ac->shock = a.ac.shock;
+    ac->blast = a.ac.blast;
     data->ac = ac;
     return data;
 }
@@ -136,14 +112,9 @@ Attributes cloneAttributes(const Attributes a) {
             a.ac.slash,
             a.ac.pierce,
             a.ac.fire,
-            a.ac.water,
             a.ac.frost,
-            a.ac.electricity,
-            a.ac.dark,
-            a.ac.light,
-            a.ac.corrosive,
-            a.ac.poison,
-            a.ac.energy,
+            a.ac.shock,
+            a.ac.blast,
         }
     };
 }
@@ -170,14 +141,9 @@ Attributes combineAttributes(const Attributes a, const Attributes b) {
                     a.ac.slash + b.ac.slash,
                     a.ac.pierce + b.ac.pierce,
                     a.ac.fire + b.ac.fire,
-                    a.ac.water + b.ac.water,
                     a.ac.frost + b.ac.frost,
-                    a.ac.electricity + b.ac.electricity,
-                    a.ac.dark + b.ac.dark,
-                    a.ac.light + b.ac.light,
-                    a.ac.corrosive + b.ac.corrosive,
-                    a.ac.poison + b.ac.poison,
-                    a.ac.energy + b.ac.energy,
+                    a.ac.shock + b.ac.shock,
+                    a.ac.blast + b.ac.blast,
             }
     };
 }
