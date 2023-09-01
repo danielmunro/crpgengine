@@ -120,16 +120,6 @@ const char *Events[MAX_EVENTS] = {
         "scene_loaded",
 };
 
-const char *Intents[] = {
-        "harm",
-        "help",
-};
-
-typedef enum {
-    INTENT_HARM,
-    INTENT_HELP,
-} Intent;
-
 #include "log.c"
 #include "util.c"
 #include "yaml/spritesheet.c"
@@ -157,7 +147,6 @@ typedef enum {
 #include "spritesheet.c"
 #include "animation.c"
 #include "attributes.c"
-#include "intent.c"
 #include "item.c"
 #include "item_manager.c"
 #include "beastiary.c"
