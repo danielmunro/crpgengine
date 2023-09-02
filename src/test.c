@@ -32,8 +32,8 @@ void createFightInSceneTest() {
     Spritesheet **sprites = calloc(MAX_SPRITES, sizeof(Spritesheet));
     UIManager *ui = createUIManager(
             log,
-            createSpriteSheetManager(sprites, 0),
             NULL,
+            createSpriteSheetManager(sprites, 0),
             NULL);
     FightManager *fm = createFightManager(log, ui, NULL);
     for (int i = 0; i < 100; i++) {

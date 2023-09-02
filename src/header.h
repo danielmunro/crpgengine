@@ -132,6 +132,7 @@ typedef enum {
 #include "yaml/mobile.c"
 #include "yaml/player.c"
 #include "yaml/save.c"
+#include "yaml/ui.c"
 #include "runtime_args.c"
 #include "cyaml.c"
 #include "font.c"

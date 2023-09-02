@@ -145,3 +145,16 @@ SpellsData *loadSpellData(const char *filePath) {
     }
     return spells;
 }
+
+UIData *loadUIData(const char *indexDir) {
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/ui.yaml", indexDir);
+    UIData *ui = malloc(sizeof(UIData));
+    cyaml_err_t err = cyaml_load_file(filePath, &config,
+                                      &uiSchema, (cyaml_data_t **) &ui, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error loading file, filename and error :: %s - %s\n", filePath, cyaml_strerror(err));
+        exit(1);
+    }
+    return ui;
+}

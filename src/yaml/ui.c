@@ -1,0 +1,75 @@
+typedef struct {
+    const char *default_;
+    const char *disable;
+    const char *highlight;
+    const char *warning;
+    const char *danger;
+} FontColorsData;
+
+typedef struct {
+    const char *filename;
+    int size;
+    int lineHeight;
+} FontFamilyData;
+
+typedef struct {
+    FontFamilyData *default_;
+} FontFamiliesData;
+
+typedef struct {
+    FontFamiliesData *families;
+    FontColorsData *colors;
+} FontsData;
+
+typedef struct {
+    FontsData *fonts;
+} UIData;
+
+static const cyaml_schema_field_t fontFamilyFieldSchema[] = {
+        CYAML_FIELD_STRING_PTR(
+                "filename", CYAML_FLAG_POINTER, FontFamilyData, filename, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_INT(
+                "size", CYAML_FLAG_DEFAULT, FontFamilyData, size),
+        CYAML_FIELD_INT(
+                "lineHeight", CYAML_FLAG_DEFAULT, FontFamilyData, lineHeight),
+        CYAML_FIELD_END,
+};
+
+static const cyaml_schema_field_t fontColorsFieldSchema[] = {
+        CYAML_FIELD_STRING_PTR(
+                "default", CYAML_FLAG_POINTER, FontColorsData, default_, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "disable", CYAML_FLAG_POINTER, FontColorsData, disable, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "highlight", CYAML_FLAG_POINTER, FontColorsData, highlight, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "warning", CYAML_FLAG_POINTER, FontColorsData, warning, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "danger", CYAML_FLAG_POINTER, FontColorsData, danger, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_END,
+};
+
+static const cyaml_schema_field_t familiesFieldSchema[] = {
+        CYAML_FIELD_MAPPING_PTR(
+                "default", CYAML_FLAG_POINTER, FontFamiliesData, default_, fontFamilyFieldSchema),
+        CYAML_FIELD_END,
+};
+
+static const cyaml_schema_field_t fontsFieldSchema[] = {
+        CYAML_FIELD_MAPPING_PTR(
+                "families", CYAML_FLAG_POINTER, FontsData, families, familiesFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "colors", CYAML_FLAG_POINTER, FontsData, colors, fontColorsFieldSchema),
+        CYAML_FIELD_END,
+};
+
+static const cyaml_schema_field_t fontsTopMappingField[] = {
+        CYAML_FIELD_MAPPING_PTR(
+                "fonts", CYAML_FLAG_POINTER, UIData, fonts, fontsFieldSchema),
+        CYAML_FIELD_END,
+};
+
+static const cyaml_schema_value_t uiSchema = {
+        CYAML_VALUE_MAPPING(
+                CYAML_FLAG_POINTER, UIData, fontsTopMappingField),
+};
