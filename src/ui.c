@@ -47,7 +47,7 @@ void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
             strcat(test, " ");
         }
         strcat(test, word);
-        Vector2 testArea = MeasureTextEx(font->font, test, FONT_SIZE, 1);
+        Vector2 testArea = MeasureTextEx(font->font, test, font->size, 1);
         if (testArea.x > area.width - UI_PADDING * 2) {
             drawLineInArea(buffer, area, line, font);
             line++;

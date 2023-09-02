@@ -26,11 +26,12 @@ void drawActionSelectMenuScreen(MenuContext *menuContext) {
     for (int i = 0; i < getActionSelectCursorLength(menuContext); i++) {
         drawInMenu(t, actionMenu[i]);
     }
+    float lineHeight = getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT)->lineHeight;
     drawRightCursor(
             menuContext->menuSprite,
             (Vector2) {
                     t->area.x,
-                    t->area.y + (float) (LINE_HEIGHT * menuContext->cursorLine),
+                    t->area.y + (lineHeight * (float) menuContext->cursorLine),
             });
 }
 

@@ -4,6 +4,7 @@ typedef struct {
     const char *color;
     int size;
     int lineHeight;
+    int spacing;
 } FontData;
 
 typedef struct {
@@ -29,6 +30,8 @@ static const cyaml_schema_field_t fontFamilyFieldSchema[] = {
                 "size", CYAML_FLAG_DEFAULT, FontData, size),
         CYAML_FIELD_INT(
                 "lineHeight", CYAML_FLAG_DEFAULT, FontData, lineHeight),
+        CYAML_FIELD_INT(
+                "spacing", CYAML_FLAG_DEFAULT, FontData, spacing),
         CYAML_FIELD_END,
 };
 
