@@ -32,7 +32,7 @@ void createFightInSceneTest() {
     Spritesheet **sprites = calloc(MAX_SPRITES, sizeof(Spritesheet));
     UIManager *ui = createUIManager(
             log,
-            NULL,
+            loadUIData("fixtures"),
             createSpriteSheetManager(sprites, 0),
             NULL);
     FightManager *fm = createFightManager(log, ui, NULL);

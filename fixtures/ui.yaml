@@ -1,0 +1,36 @@
+fonts:
+  default:
+    name: default
+    filename: pixeloid-bold.ttf
+    size: 20
+    lineHeight: 30
+    color: 255, 255, 255, 255
+    spacing: 1
+  disable:
+    name: disable
+    filename: pixeloid-bold.ttf
+    size: 20
+    lineHeight: 30
+    color: 130, 130, 130, 255
+    spacing: 1
+  highlight:
+    name: highlight
+    filename: pixeloid-bold.ttf
+    size: 20
+    lineHeight: 30
+    color: 253, 249, 0, 255
+    spacing: 1
+  warning:
+    name: warning
+    filename: pixeloid-bold.ttf
+    size: 20
+    lineHeight: 30
+    color: 253, 249, 0, 255
+    spacing: 1
+  danger:
+    name: danger
+    filename: pixeloid-bold.ttf
+    size: 20
+    lineHeight: 30
+    color: 230, 41, 55, 255
+    spacing: 1
