@@ -144,14 +144,14 @@ int getAttributeAmount(Spell *spell, int base) {
 }
 
 void executeSpellOnBeast(Beast *beast, Spell *spell) {
-    beast->hp += (int) getAttributeAmount(spell, spell->impact.hp);
-    beast->mana += (int) getAttributeAmount(spell, spell->impact.mana);
+    beast->hp += (int) getAttributeAmount(spell, spell->impact->hp);
+    beast->mana += (int) getAttributeAmount(spell, spell->impact->mana);
     normalizeVitalsForBeast(beast);
 }
 
 void executeSpellOnMobile(Mobile *mob, Spell *spell) {
-    mob->hp += (int) getAttributeAmount(spell, spell->impact.hp);
-    mob->mana += (int) getAttributeAmount(spell, spell->impact.mana);
+    mob->hp += (int) getAttributeAmount(spell, spell->impact->hp);
+    mob->mana += (int) getAttributeAmount(spell, spell->impact->mana);
     normalizeVitalsForMobile(mob);
 }
 

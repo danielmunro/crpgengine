@@ -2,7 +2,7 @@ typedef struct {
     const char *id;
     const char *name;
     Texture2D image;
-    Attributes attributes;
+    Attributes *attributes;
     int level;
     int hp;
     int mana;
@@ -51,7 +51,7 @@ Beast *cloneBeast(Beast *original) {
 
 Attributes calculateBeastAttributes(Beast *beast) {
     // todo take into effect affects
-    return beast->attributes;
+    return *beast->attributes;
 }
 
 void normalizeVitalsForBeast(Beast *beast) {

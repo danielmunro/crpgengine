@@ -2,8 +2,8 @@ typedef struct {
     SpellType type;
     Intent intent;
     int level;
-    Attributes cost;
-    Attributes impact;
+    Attributes *cost;
+    Attributes *impact;
     float levelModifier;
 } Spell;
 

@@ -85,7 +85,7 @@ void fightUpdate(Fight *fight) {
     double interval = end - fight->time;
     for (int i = 0; i < fight->beastCount; i++) {
         Beast *b = fight->beasts[i];
-        int amountToRaise = getActionGaugeRaise(interval, b->attributes.dexterity);
+        int amountToRaise = getActionGaugeRaise(interval, b->attributes->dexterity);
         if (b->actionGauge < MAX_ACTION_GAUGE) {
             b->actionGauge = normalizeActionGauge(b->actionGauge, amountToRaise);
         }

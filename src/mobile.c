@@ -8,7 +8,7 @@ typedef struct {
     bool moving[DIRECTION_COUNT];
     struct timeval lastMovement;
     bool isBeingMoved;
-    Attributes attributes;
+    Attributes *attributes;
     int turnCounter;
     int waitTimer;
     struct timeval lastTimerUpdate;
@@ -49,7 +49,7 @@ Mobile *createMobile(
         Animation *animations[MAX_ANIMATIONS],
         int hp,
         int mana,
-        Attributes attributes,
+        Attributes *attributes,
         Spell **spells,
         int spellCount) {
     Mobile *mobile = malloc(sizeof(Mobile));
@@ -193,10 +193,10 @@ bool isReadyForAction(Mobile *mob) {
 }
 
 Attributes calculateMobileAttributes(Mobile *mob) {
-    Attributes calculated = mob->attributes;
+    Attributes calculated = *mob->attributes;
     for (int i = 0; i < MAX_EQUIPMENT; i++) {
         if (mob->equipment[i] != NULL) {
-            calculated = combineAttributes(calculated, createAttributesFromData(mob->equipment[i]->attributes));
+            calculated = combineAttributes(calculated, *createAttributesFromData(mob->equipment[i]->attributes));
         }
     }
     return calculated;
@@ -212,17 +212,17 @@ void normalizeVitalsForMobile(Mobile *mob) {
     }
 }
 
-bool canApplyCost(Mobile *caster, Attributes cost) {
-    if (caster->mana < cost.mana) {
+bool canApplyCost(Mobile *caster, Attributes *cost) {
+    if (caster->mana < cost->mana) {
         return false;
     }
     return true;
 }
 
-bool applyCastCost(Mobile *caster, Attributes cost) {
+bool applyCastCost(Mobile *caster, Attributes *cost) {
     if (!canApplyCost(caster, cost)) {
         return false;
     }
-    caster->mana -= cost.mana;
+    caster->mana -= cost->mana;
     return true;
 }

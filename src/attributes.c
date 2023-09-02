@@ -19,25 +19,20 @@ typedef struct {
     ArmorClass ac;
 } Attributes;
 
-Attributes createEmptyAttributes() {
-    return (Attributes) {
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            (ArmorClass) {
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-            }
+Attributes *createEmptyAttributes() {
+    Attributes *a = malloc(sizeof(Attributes));
+    a->strength = 0;
+    a->intelligence = 0;
+    a->wisdom = 0;
+    a->dexterity = 0;
+    a->constitution = 0;
+    a->hp = 0;
+    a->mana = 0;
+    a->ac = (ArmorClass) {
+        0, 0, 0, 0, 0, 0, 0,
     };
+
+    return a;
 }
 
 ArmorClass createEmptyArmorClass() {
@@ -52,19 +47,19 @@ ArmorClass createEmptyArmorClass() {
     };
 }
 
-Attributes createAttributesFromData(AttributesData *data) {
+Attributes *createAttributesFromData(AttributesData *data) {
     if (data == NULL) {
-        return createEmptyAttributes();
+        return NULL;
     }
-    return (Attributes) {
-        data->strength,
-        data->dexterity,
-        data->intelligence,
-        data->wisdom,
-        data->constitution,
-        data->hp,
-        data->mana,
-        data->ac == NULL ? createEmptyArmorClass() : (ArmorClass) {
+    Attributes *a = createEmptyAttributes();
+    a->strength = data->strength;
+    a->intelligence = data->intelligence;
+    a->wisdom = data->wisdom;
+    a->dexterity = data->dexterity;
+    a->constitution = data->constitution;
+    a->hp = data->hp;
+    a->mana = data->mana;
+    a->ac = data->ac == NULL ? createEmptyArmorClass() : (ArmorClass) {
             data->ac->bash,
             data->ac->slash,
             data->ac->pierce,
@@ -72,58 +67,46 @@ Attributes createAttributesFromData(AttributesData *data) {
             data->ac->frost,
             data->ac->shock,
             data->ac->blast,
-        }
     };
+    return a;
 }
 
-AttributesData *createDataFromAttributes(const Attributes a) {
+AttributesData *createDataFromAttributes(Attributes *a) {
+    if (a == NULL) {
+        return NULL;
+    }
     AttributesData *data = malloc(sizeof(AttributesData));
-    data->strength = a.strength;
-    data->dexterity = a.dexterity;
-    data->intelligence = a.intelligence;
-    data->wisdom = a.wisdom;
-    data->constitution = a.constitution;
-    data->hp = a.hp;
-    data->mana = a.mana;
+    data->strength = a->strength;
+    data->dexterity = a->dexterity;
+    data->intelligence = a->intelligence;
+    data->wisdom = a->wisdom;
+    data->constitution = a->constitution;
+    data->hp = a->hp;
+    data->mana = a->mana;
     data->ac = NULL;
     ArmorClassData *ac = malloc(sizeof(ArmorClass));
-    ac->bash = a.ac.bash;
-    ac->slash = a.ac.slash;
-    ac->pierce = a.ac.pierce;
-    ac->fire = a.ac.fire;
-    ac->frost = a.ac.frost;
-    ac->shock = a.ac.shock;
-    ac->blast = a.ac.blast;
+    ac->bash = a->ac.bash;
+    ac->slash = a->ac.slash;
+    ac->pierce = a->ac.pierce;
+    ac->fire = a->ac.fire;
+    ac->frost = a->ac.frost;
+    ac->shock = a->ac.shock;
+    ac->blast = a->ac.blast;
     data->ac = ac;
     return data;
 }
 
-Attributes cloneAttributes(const Attributes a) {
-    return (Attributes) {
-        a.strength,
-        a.dexterity,
-        a.intelligence,
-        a.wisdom,
-        a.constitution,
-        a.hp,
-        a.mana,
-        (ArmorClass) {
-            a.ac.bash,
-            a.ac.slash,
-            a.ac.pierce,
-            a.ac.fire,
-            a.ac.frost,
-            a.ac.shock,
-            a.ac.blast,
-        }
-    };
+Attributes *cloneAttributes(Attributes *a) {
+    Attributes *b = malloc(sizeof(Attributes));
+    *b = *a;
+    return b;
 }
 
-Attributes createStartingAttributes() {
-    Attributes a = createEmptyAttributes();
-    a.hp = STARTING_HP;
-    a.mana = STARTING_MANA;
-    a.strength = 5;
+Attributes *createStartingAttributes() {
+    Attributes *a = createEmptyAttributes();
+    a->hp = STARTING_HP;
+    a->mana = STARTING_MANA;
+    a->strength = 5;
     return a;
 }
 
