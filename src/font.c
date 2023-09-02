@@ -16,7 +16,7 @@ FontStyle *createFontStyle(FontStyleType type, Font font, Color color, float siz
     return fs;
 }
 
-FontStyle *createFontFromData(FontFamilyData *data, Font font) {
+FontStyle *createFontFromData(FontData *data, Font font) {
     return createFontStyle(
             getFontStyleType(data->name),
             font,

@@ -1,32 +1,31 @@
 fonts:
-  families:
-    default:
-      name: default
-      filename: pixeloid-bold.ttf
-      size: 20
-      lineHeight: 30
-      color: 255, 255, 255, 255
-    disable:
-      name: disable
-      filename: pixeloid-bold.ttf
-      size: 20
-      lineHeight: 30
-      color: 130, 130, 130, 255
-    highlight:
-      name: highlight
-      filename: pixeloid-bold.ttf
-      size: 20
-      lineHeight: 30
-      color: 130, 130, 130, 255
-    warning:
-      name: warning
-      filename: pixeloid-bold.ttf
-      size: 20
-      lineHeight: 30
-      color: 130, 130, 130, 255
-    danger:
-      name: danger
-      filename: pixeloid-bold.ttf
-      size: 20
-      lineHeight: 30
-      color: 130, 130, 130, 255
+  default:
+    name: default
+    filename: pixeloid-bold.ttf
+    size: 20
+    lineHeight: 30
+    color: 255, 255, 255, 255
+  disable:
+    name: disable
+    filename: pixeloid-bold.ttf
+    size: 20
+    lineHeight: 30
+    color: 130, 130, 130, 255
+  highlight:
+    name: highlight
+    filename: pixeloid-bold.ttf
+    size: 20
+    lineHeight: 30
+    color: 253, 249, 0, 255
+  warning:
+    name: warning
+    filename: pixeloid-bold.ttf
+    size: 20
+    lineHeight: 30
+    color: 253, 249, 0, 255
+  danger:
+    name: danger
+    filename: pixeloid-bold.ttf
+    size: 20
+    lineHeight: 30
+    color: 230, 41, 55, 255
