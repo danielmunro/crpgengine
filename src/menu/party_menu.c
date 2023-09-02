@@ -19,13 +19,13 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
     sprintf(hp, "hp %d/%d", 20, 20);
     drawText(
             hp,
-            (Vector2) {column1, UI_PADDING + line(1)},
+            (Vector2) {column1, UI_PADDING + line(1, defaultFont->lineHeight)},
             defaultFont);
     char mp[64];
     sprintf(mp, "mp %d/%d", 20, 20);
     drawText(
             mp,
-            (Vector2) {column1, UI_PADDING + line(2)},
+            (Vector2) {column1, UI_PADDING + line(2, defaultFont->lineHeight)},
             defaultFont);
     int count = sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
     TextBox *textBox = createTextBox((Rectangle) {
@@ -39,7 +39,7 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
     }
     drawText(
             ">",
-            (Vector2) {column2 - 20, UI_PADDING + line(menuContext->cursorLine)},
+            (Vector2) {column2 - 20, UI_PADDING + line(menuContext->cursorLine, defaultFont->lineHeight)},
             defaultFont);
     free(textBox);
 }

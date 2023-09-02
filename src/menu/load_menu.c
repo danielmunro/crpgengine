@@ -11,7 +11,8 @@ void drawLoadMenuScreen(MenuContext *menuContext) {
     }
     drawText(
             ">",
-            (Vector2) {rect.x, rect.y + UI_PADDING + line(menuContext->cursorLine)},
+            (Vector2) {rect.x, rect.y + UI_PADDING +
+                    line(menuContext->cursorLine, defaultFont->lineHeight)},
             defaultFont);
     free(b);
 }

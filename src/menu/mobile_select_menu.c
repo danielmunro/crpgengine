@@ -55,7 +55,7 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
                     mc->menuSprite,
                     (Vector2) {
                             textBox->area.x,
-                            textBox->area.y + (float) (LINE_HEIGHT * i),
+                            textBox->area.y + (fs->lineHeight * (float) i),
                     });
             if (doDrawDownCursor) {
                 Vector2 playerPosition = getFightPlayerPosition(i);
@@ -72,23 +72,23 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
                  (float) mob->hp / (float) calculateMobileAttributes(mob).hp,
                  (Vector2) {
                          textBox->area.x + HP_X_OFFSET,
-                         textBox->area.y + UI_PADDING + (float) (i * LINE_HEIGHT)
+                         textBox->area.y + UI_PADDING + ((float) i * fs->lineHeight)
                  });
         drawStat(mc->fonts,
                  mob->mana,
                  (float) mob->mana / (float) calculateMobileAttributes(mob).mana,
                  (Vector2) {
                          textBox->area.x + MANA_X_OFFSET,
-                         textBox->area.y + UI_PADDING + (float) (i * LINE_HEIGHT)
+                         textBox->area.y + UI_PADDING + ((float) i * fs->lineHeight)
                  });
         drawActionGauge(
-                (float) (i * LINE_HEIGHT),
+                ((float) i * fs->lineHeight),
                 ACTION_GAUGE_WIDTH,
-                DISABLED_COLOR);
+                getFontStyle(mc->fonts, FONT_STYLE_DISABLE)->color);
         drawActionGauge(
-                (float) (i * LINE_HEIGHT),
+                ((float) i * fs->lineHeight),
                 ACTION_GAUGE_WIDTH * ((float) mob->actionGauge / MAX_ACTION_GAUGE),
-                DEFAULT_COLOR);
+                getFontStyle(mc->fonts, FONT_STYLE_DEFAULT)->color);
     }
 }
 

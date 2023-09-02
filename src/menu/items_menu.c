@@ -6,7 +6,7 @@ void drawItemsMenuScreen(MenuContext *menuContext) {
     }
     drawText(
             ">",
-            (Vector2) {0, line(menuContext->cursorLine) + UI_PADDING},
+            (Vector2) {0, line(menuContext->cursorLine, defaultFont->lineHeight) + UI_PADDING},
             defaultFont);
     free(textBox);
 }

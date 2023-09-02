@@ -16,7 +16,9 @@ void drawQuitMenuScreen(MenuContext *menuContext) {
             ">",
             (Vector2) {
                     rect.x,
-                    rect.y + line(cursorLength + menuContext->cursorLine) + UI_PADDING
+                    rect.y +
+                            line(cursorLength + menuContext->cursorLine, defaultFont->lineHeight)
+                            + UI_PADDING
             },
             defaultFont);
     free(textBox);

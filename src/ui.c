@@ -29,7 +29,7 @@ void drawLineInArea(const char *message, Rectangle area, int lineNumber, FontSty
             message,
             (Vector2) {
                     area.x + UI_PADDING,
-                    area.y + UI_PADDING + (float) (LINE_HEIGHT * lineNumber)
+                    area.y + UI_PADDING + (font->lineHeight * (float) lineNumber)
             }, font);
 }
 
@@ -151,14 +151,14 @@ Rectangle drawActionSelectMenu() {
     return rect;
 }
 
-float line(int line) {
-    return (float) line * LINE_HEIGHT;
+float line(int line, float lineHeight) {
+    return (float) line * lineHeight;
 }
 
 void drawInMenuWithStyle(TextBox *tb, FontStyle *fs, const char *text) {
     drawText(text, (Vector2) {
             tb->area.x + UI_PADDING,
-            tb->area.y + line(tb->cursor) + UI_PADDING
+            tb->area.y + line(tb->cursor, fs->lineHeight) + UI_PADDING
     }, fs);
     tb->cursor++;
 }

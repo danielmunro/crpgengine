@@ -24,7 +24,7 @@ void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
             ">",
             (Vector2) {
                     rect.x,
-                    rect.y + line(4 + menuContext->cursorLine) + UI_PADDING
+                    rect.y + line(4 + menuContext->cursorLine, defaultFont->lineHeight) + UI_PADDING
             },
             defaultFont);
 }
