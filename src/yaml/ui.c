@@ -7,7 +7,9 @@ typedef struct {
 } FontColorsData;
 
 typedef struct {
+    const char *name;
     const char *filename;
+    const char *color;
     int size;
     int lineHeight;
 } FontFamilyData;
@@ -19,6 +21,8 @@ typedef struct {
 typedef struct {
     FontFamiliesData *families;
     FontColorsData *colors;
+    const char *types;
+    int types_count;
 } FontsData;
 
 typedef struct {
@@ -27,7 +31,11 @@ typedef struct {
 
 static const cyaml_schema_field_t fontFamilyFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
+                "name", CYAML_FLAG_POINTER, FontFamilyData, name, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
                 "filename", CYAML_FLAG_POINTER, FontFamilyData, filename, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "color", CYAML_FLAG_POINTER, FontFamilyData, color, 0, CYAML_UNLIMITED),
         CYAML_FIELD_INT(
                 "size", CYAML_FLAG_DEFAULT, FontFamilyData, size),
         CYAML_FIELD_INT(
@@ -55,11 +63,18 @@ static const cyaml_schema_field_t familiesFieldSchema[] = {
         CYAML_FIELD_END,
 };
 
+static const cyaml_schema_value_t fontFamilyTypeEntry = {
+        CYAML_VALUE_STRING(CYAML_FLAG_POINTER, char, 0, 255),
+};
+
 static const cyaml_schema_field_t fontsFieldSchema[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "families", CYAML_FLAG_POINTER, FontsData, families, familiesFieldSchema),
         CYAML_FIELD_MAPPING_PTR(
                 "colors", CYAML_FLAG_POINTER, FontsData, colors, fontColorsFieldSchema),
+        CYAML_FIELD_SEQUENCE(
+                "types", CYAML_FLAG_POINTER, FontsData, types,
+                &fontFamilyTypeEntry, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END,
 };
 

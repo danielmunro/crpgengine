@@ -1,9 +1,17 @@
 fonts:
+  types:
+    - default
+    - disable
+    - highlight
+    - warning
+    - danger
   families:
     default:
+      name: default
       filename: pixeloid-bold.ttf
       size: 20
       lineHeight: 30
+      color: default
   colors:
     default: white
     disable: gray
