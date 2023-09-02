@@ -1,7 +1,6 @@
 #ifndef CJRPGENGINE_UI_H
 #define CJRPGENGINE_UI_H
 
-#define FONT_STYLE_COUNT 5
 #define SCREEN_WIDTH 720
 #define SCREEN_HEIGHT 450
 #define SCALE (float) 1.0
@@ -46,6 +45,8 @@ const char *FontStyleTypes[] = {
         "danger",
 };
 
+#define FONT_STYLE_COUNT sizeof(FontStyleTypes) / sizeof(FontStyleTypes[0])
+
 typedef enum {
     FONT_STYLE_DEFAULT,
     FONT_STYLE_DISABLE,
@@ -55,8 +56,7 @@ typedef enum {
 } FontStyleType;
 
 FontStyleType getFontStyleType(const char *type) {
-    int count = sizeof(FontStyleTypes) / sizeof(FontStyleTypes[0]);
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < FONT_STYLE_COUNT; i++) {
         if (strcmp(type, FontStyleTypes[i]) == 0) {
             return i;
         }
