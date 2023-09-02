@@ -13,7 +13,7 @@ void drawMagicFightMenuScreen(MenuContext *menuContext) {
     drawBottomRightMenu();
     TextBox *t = findOrCreateTextBox(menuContext, MAGIC_SELECT_BOX, createMagicFightMenuTextBox);
     FontStyle *defaultFont = getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT);
-    FontStyle *disabledFont = getFontStyle(menuContext->fonts, FONT_STYLE_DISABLED);
+    FontStyle *disabledFont = getFontStyle(menuContext->fonts, FONT_STYLE_DISABLE);
     Mobile *m = menuContext->selectedMob;
     for (int i = 0; i < m->spellCount; i++) {
         FontStyle *fs = canApplyCost(m, m->spells[i]->cost) ? defaultFont : disabledFont;

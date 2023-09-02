@@ -105,10 +105,8 @@ int max(int a, int b) {
 }
 
 Vector2 getPositionFromString(const char *position) {
-    char pos[255];
-    strcpy(pos, position);
     return (Vector2){
-        strToInt(strtok(pos, ",")),
+        strToInt(strtok((char *)position, ",")),
         strToInt(strtok(NULL, ",")),
     };
 }
@@ -179,4 +177,18 @@ double getTimeInMS() {
     double timeInterval = (double) end.tv_sec * 1000.0;
     timeInterval += end.tv_usec / 1000.0;
     return timeInterval;
+}
+
+Color getFontColor(const char *color) {
+    const char *r = strtok((char *) color, ",");
+    const char *g = strtok(NULL, ",");
+    const char *b = strtok(NULL, ",");
+    const char *a = strtok(NULL, ",");
+
+    return (Color) {
+            strToInt(r),
+            strToInt(g),
+            strToInt(b),
+            strToInt(a),
+    };
 }

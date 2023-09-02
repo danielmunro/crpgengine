@@ -107,11 +107,11 @@ UIManager *createUIManager(
     sprintf(path, "%s/fonts/%s", indexDir, config->fonts->families->default_->filename);
     Font font = LoadFont(path);
     ui->fonts = calloc(FONT_STYLE_COUNT, sizeof(FontStyle));
-    ui->fonts[0] = createDefaultFontStyle(font);
-    ui->fonts[1] = createDisabledFontStyle(font);
-    ui->fonts[2] = createHighlightedFontStyle(font);
-    ui->fonts[3] = createWarningFontStyle(font);
-    ui->fonts[4] = createDangerFontStyle(font);
+    ui->fonts[0] = createFontFromData(config->fonts->families->default_, font);
+    ui->fonts[1] = createFontFromData(config->fonts->families->disable, font);
+    ui->fonts[2] = createFontFromData(config->fonts->families->highlight, font);
+    ui->fonts[3] = createFontFromData(config->fonts->families->warning, font);
+    ui->fonts[4] = createFontFromData(config->fonts->families->danger, font);
     ui->menuCount = getMenuList(ui);
     ui->sprites = sprites;
     ui->menuSprite = findSpritesheetByName(sprites, SPRITESHEET_NAME_UI);

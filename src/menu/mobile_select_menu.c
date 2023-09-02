@@ -1,10 +1,10 @@
 FontStyle *getFontStyleForFightCursor(Mobile *mob, FontStyle **fonts, int mobIndex, int loopIndex) {
     if (mobIndex == loopIndex) {
-        return getFontStyle(fonts, FONT_STYLE_HIGHLIGHTED);
+        return getFontStyle(fonts, FONT_STYLE_HIGHLIGHT);
     } else if(isReadyForAction(mob)) {
         return getFontStyle(fonts, FONT_STYLE_DEFAULT);
     } else {
-        return getFontStyle(fonts, FONT_STYLE_DISABLED);
+        return getFontStyle(fonts, FONT_STYLE_DISABLE);
     }
 }
 
@@ -46,7 +46,7 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
         Mobile *mob = mc->fight->player->party[i];
         FontStyle *fs = isReadyForAction(mob)
                 ? getFontStyleForFightCursor(mob,  mc->fonts, mc->cursorLine, i)
-                : getFontStyle(mc->fonts, FONT_STYLE_DISABLED);
+                : getFontStyle(mc->fonts, FONT_STYLE_DISABLE);
         drawInMenuWithStyle(textBox,
                             fs,
                             mob->name);

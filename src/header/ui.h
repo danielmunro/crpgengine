@@ -45,13 +45,32 @@
 
 #define BEAST_AREA (Rectangle) {20, 20, 240, 240}
 
+const char *FontStyleTypes[] = {
+        "default",
+        "disable",
+        "highlight",
+        "warning",
+        "danger",
+};
+
 typedef enum {
     FONT_STYLE_DEFAULT,
-    FONT_STYLE_DISABLED,
-    FONT_STYLE_HIGHLIGHTED,
+    FONT_STYLE_DISABLE,
+    FONT_STYLE_HIGHLIGHT,
     FONT_STYLE_WARNING,
     FONT_STYLE_DANGER,
 } FontStyleType;
+
+FontStyleType getFontStyleType(const char *type) {
+    int count = sizeof(FontStyleTypes) / sizeof(FontStyleTypes[0]);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(type, FontStyleTypes[i]) == 0) {
+            return i;
+        }
+    }
+    fprintf(stderr, "font style type not found");
+    exit(1);
+}
 
 typedef enum {
     ACKNOWLEDGE_BOX,

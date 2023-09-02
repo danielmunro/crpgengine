@@ -16,13 +16,14 @@ typedef struct {
 
 typedef struct {
     FontFamilyData *default_;
+    FontFamilyData *disable;
+    FontFamilyData *highlight;
+    FontFamilyData *warning;
+    FontFamilyData *danger;
 } FontFamiliesData;
 
 typedef struct {
     FontFamiliesData *families;
-    FontColorsData *colors;
-    const char *types;
-    int types_count;
 } FontsData;
 
 typedef struct {
@@ -60,6 +61,14 @@ static const cyaml_schema_field_t fontColorsFieldSchema[] = {
 static const cyaml_schema_field_t familiesFieldSchema[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "default", CYAML_FLAG_POINTER, FontFamiliesData, default_, fontFamilyFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "disable", CYAML_FLAG_POINTER, FontFamiliesData, disable, fontFamilyFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "highlight", CYAML_FLAG_POINTER, FontFamiliesData, highlight, fontFamilyFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "warning", CYAML_FLAG_POINTER, FontFamiliesData, warning, fontFamilyFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "danger", CYAML_FLAG_POINTER, FontFamiliesData, danger, fontFamilyFieldSchema),
         CYAML_FIELD_END,
 };
 
@@ -70,11 +79,6 @@ static const cyaml_schema_value_t fontFamilyTypeEntry = {
 static const cyaml_schema_field_t fontsFieldSchema[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "families", CYAML_FLAG_POINTER, FontsData, families, familiesFieldSchema),
-        CYAML_FIELD_MAPPING_PTR(
-                "colors", CYAML_FLAG_POINTER, FontsData, colors, fontColorsFieldSchema),
-        CYAML_FIELD_SEQUENCE(
-                "types", CYAML_FLAG_POINTER, FontsData, types,
-                &fontFamilyTypeEntry, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END,
 };
 

@@ -16,51 +16,14 @@ FontStyle *createFontStyle(FontStyleType type, Font font, Color color, float siz
     return fs;
 }
 
-FontStyle *createDefaultFontStyle(Font font) {
+FontStyle *createFontFromData(FontFamilyData *data, Font font) {
     return createFontStyle(
-            FONT_STYLE_DEFAULT,
+            getFontStyleType(data->name),
             font,
-            DEFAULT_COLOR,
-            FONT_SIZE,
+            getFontColor(data->color),
+            (float) data->size,
             1);
 }
-
-FontStyle *createDisabledFontStyle(Font font) {
-    return createFontStyle(
-            FONT_STYLE_DISABLED,
-            font,
-            DISABLED_COLOR,
-            FONT_SIZE,
-            1);
-}
-
-FontStyle *createHighlightedFontStyle(Font font) {
-    return createFontStyle(
-            FONT_STYLE_HIGHLIGHTED,
-            font,
-            HIGHLIGHT_COLOR,
-            FONT_SIZE,
-            1);
-}
-
-FontStyle *createWarningFontStyle(Font font) {
-    return createFontStyle(
-            FONT_STYLE_WARNING,
-            font,
-            WARNING_COLOR,
-            FONT_SIZE,
-            1);
-}
-
-FontStyle *createDangerFontStyle(Font font) {
-    return createFontStyle(
-            FONT_STYLE_DANGER,
-            font,
-            DANGER_COLOR,
-            FONT_SIZE,
-            1);
-}
-
 
 FontStyle *getFontStyle(FontStyle **fonts, FontStyleType fsType) {
     for (int i = 0; i < FONT_STYLE_COUNT; i++) {
