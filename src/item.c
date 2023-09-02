@@ -49,9 +49,8 @@ Item *createItemFromData(ItemData *data) {
             getItemTypeFromString(data->type),
             data->name,
             data->worth,
-            data->attributes == NULL ? createEmptyAttributes() :
-                    data->attributes == NULL ? createEmptyAttributes() :
-                            createAttributesFromData(data->attributes),
+            data->attributes == NULL ?
+                    createEmptyAttributes() : createAttributesFromData(data->attributes),
             getEquipmentPositionFromString(data->position));
 }
 
