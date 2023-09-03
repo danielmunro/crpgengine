@@ -13,6 +13,6 @@ jobs:
                                   libglu1-mesa-dev freeglut3-dev mesa-common-dev build-essential
       - uses: actions/checkout@v3
       - uses: jwlawson/actions-setup-cmake@v1.13
-      - run: cmake . -D CMAKE_C_COMPILER=/usr/bin/cc -D CMAKE_CXX_COMPILER=/usr/bin/gcc
+      - run: cmake .
       - run: make
       - run: ./build/tests
