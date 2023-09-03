@@ -39,28 +39,28 @@ Debug arguments:
 
 `-d` -- dump the state of the loaded game and quit.
 
-`-l` -- specify the log level, one of [debug, info, warn, error]. Default is `info`.
-
-`-s` -- override the game config and start at specified scene index.
-
 `-e` -- exit after loading the game. Useful for debugging startup problems.
 
-`-v` -- load a specific save file. Cannot be used with `-n`.
+`-f` -- show FPS
 
-`-n` -- force a new game. Cannot be used with `-v`.
+`-l` -- specify the log level, one of [debug, info, warn, error]. Default is `info`.
 
 `-m` -- output max memory usage each second.
 
+`-n` -- force a new game. Cannot be used with `-v`.
+
 `-ps` -- purge saves (careful: saves are unrecoverable).
+
+`-s` -- override the game config and start at specified scene index.
+
+`-v` -- load a specific save file. Cannot be used with `-n`.
 
 ## Todos
 
 * Fight implementation
   * Actions to finish
-    * Attack
-    * Magic
+    * Attack animations
+    * Magic animations
   * Actions to start
     * Defend
     * Run
-  * Proper targeting based on offensive/defensive actions
-* Spells
