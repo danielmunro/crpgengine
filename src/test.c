@@ -30,7 +30,7 @@ void createFightInSceneTest() {
     e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
     Spritesheet **sprites = calloc(MAX_SPRITES, sizeof(Spritesheet));
     UIManager *ui = createUIManager(
-            loadUIData("fixtures"),
+            loadUIData(),
             createSpriteSheetManager(sprites, 0));
     FightManager *fm = createFightManager(ui, NULL);
     for (int i = 0; i < 100; i++) {
@@ -119,10 +119,7 @@ void experienceToLevel51Test() {
 }
 
 int main() {
-    UIData *uiCfg = loadUIData("./fixtures");
-    initWindow("./fixtures", uiCfg);
-    createRuntimeArgs(2, (char *[]){"binary", "-i", "./fixtures"});
-    createLog(ERROR);
+    globalSetup(5, (char *[]){"binary", "-i", "fixtures", "-l", "error"});
     plan(107);
     strToIntTest();
     createFightInSceneTest();

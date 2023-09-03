@@ -181,5 +181,6 @@ typedef enum {
 #include "game.c"
 #include "validate.c"
 #include "dump.c"
+#include "global_setup.c"
 
 #endif /* CJRPGENGINE_H_INCLUDED */

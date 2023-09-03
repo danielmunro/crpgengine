@@ -99,7 +99,7 @@ UIManager *createUIManager(
         UIData *config,
         SpritesheetManager *sprites) {
     UIManager *ui = malloc(sizeof(UIManager));
-    char path[MAX_FS_PATH_LENGTH];
+    char path[MAX_FS_PATH_LENGTH] = "";
     sprintf(path, "%s/fonts/%s", runtimeArgs->indexDir, config->fonts->default_->filename);
     Font font = LoadFont(path);
     ui->fonts = calloc(FONT_STYLE_COUNT, sizeof(FontStyle));

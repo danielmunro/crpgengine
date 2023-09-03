@@ -4,10 +4,10 @@ static const cyaml_config_t cyamlConfig = {
         .log_level = CYAML_LOG_WARNING,
 };
 
-ConfigData *loadAppConfigYaml(const char *indexDir) {
+ConfigData *loadAppConfigYaml() {
     ConfigData *appConfig = malloc(sizeof(ConfigData));
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/config.yaml", indexDir);
+    sprintf(filePath, "%s/config.yaml", runtimeArgs->indexDir);
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &appConfigTopSchema, (cyaml_data_t **) &appConfig, NULL);
     if (err != CYAML_OK) {
@@ -146,9 +146,9 @@ SpellsData *loadSpellData(const char *filePath) {
     return spells;
 }
 
-UIData *loadUIData(const char *indexDir) {
+UIData *loadUIData() {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/ui.yaml", indexDir);
+    sprintf(filePath, "%s/ui.yaml", runtimeArgs->indexDir);
     UIData *ui = malloc(sizeof(UIData));
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &uiSchema, (cyaml_data_t **) &ui, NULL);
