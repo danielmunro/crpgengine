@@ -165,7 +165,8 @@ void doExplorationLoop(Game *g) {
             g->player,
             g->notifications,
             s->activeControlBlocks,
-            getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT));
+            getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT),
+            g->runtimeArgs->showFPS);
     doMobileMovementUpdates(s->exploration);
     processAnimations(g->animations);
     evaluateMovement(s->exploration, g->player);
@@ -178,7 +179,7 @@ void doFightLoop(Game *g) {
     Scene *s = g->scenes->current;
     fightUpdate(g->fights->fight);
     checkFightInput(g->fights);
-    drawFightView(s->encounters, g->fights);
+    drawFightView(s->encounters, g->fights, g->runtimeArgs->showFPS);
     processFightAnimations();
     checkControls(g->controls);
     checkRemoveFight(g->fights);
@@ -189,6 +190,9 @@ void doInGameMenuLoop(Game *g) {
     drawAllMenus(
             g->ui->menuContext,
             g->menus);
+    if (g->runtimeArgs->showFPS) {
+        DrawFPS(FPS_X, FPS_Y);
+    }
     EndDrawing();
     checkMenuInput(g);
 }

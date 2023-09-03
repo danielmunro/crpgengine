@@ -1,9 +1,17 @@
 #ifndef CJRPGENGINE_UI_H
 #define CJRPGENGINE_UI_H
 
+
+
+
 #define SCREEN_WIDTH 720
 #define SCREEN_HEIGHT 450
 #define SCALE (float) 1.0
+
+
+
+#define FPS_X 0
+#define FPS_Y 0
 
 #define UI_PADDING 20
 #define BOTTOM_MENU_HEIGHT 200

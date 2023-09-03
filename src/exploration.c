@@ -389,7 +389,8 @@ void drawExplorationView(
         Player *p,
         NotificationManager *nm,
         ControlBlock *c[MAX_ACTIVE_CONTROLS],
-        FontStyle *font) {
+        FontStyle *font,
+        bool showFPS) {
     addDebug(e->log, "exploration -- draw");
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();
@@ -404,6 +405,9 @@ void drawExplorationView(
     DrawTextureEx(e->renderedLayers[FOREGROUND], offset, 0, SCALE, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);
+    if (showFPS) {
+        DrawFPS(FPS_X, FPS_Y);
+    }
     EndDrawing();
 }
 
