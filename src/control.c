@@ -125,11 +125,11 @@ bool isWhenActivated(Player *p, When *when, EventType eventType) {
 bool areConditionsMet(ControlBlock *cb, Player *p, EventType eventType) {
     for (int c = 0; c < cb->whenCount; c++) {
         if (!isWhenActivated(p, cb->when[c], eventType)) {
-            addDebug(p->log, "conditions not met");
+            addDebug("conditions not met");
             return false;
         }
     }
-    addDebug(p->log, "conditions met");
+    addDebug("conditions met");
     return true;
 }
 

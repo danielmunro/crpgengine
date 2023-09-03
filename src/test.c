@@ -14,8 +14,8 @@ Beast *createTestBeast() {
 }
 
 AnimationManager *createTestAnimationManager() {
-    AnimationManager *am = createAnimationManager(createLog(INFO));
-    SpritesheetManager *sm = loadSpritesheetManager(am->log, "./fixtures");
+    AnimationManager *am = createAnimationManager();
+    SpritesheetManager *sm = loadSpritesheetManager("./fixtures");
     loadAllAnimations(am, sm, "./fixtures");
     return am;
 }
@@ -25,24 +25,19 @@ void strToIntTest() {
 }
 
 void createFightInSceneTest() {
-    Log *log = createLog(ERROR);
     Encounters *e = createEncounters();
     e->beastEncountersCount = 1;
     e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
     Spritesheet **sprites = calloc(MAX_SPRITES, sizeof(Spritesheet));
     UIManager *ui = createUIManager(
-            log,
             loadUIData("fixtures"),
-            createSpriteSheetManager(sprites, 0),
-            NULL);
-    FightManager *fm = createFightManager(log, ui, NULL);
+            createSpriteSheetManager(sprites, 0));
+    FightManager *fm = createFightManager(ui, NULL);
     for (int i = 0; i < 100; i++) {
         createFightFromEncounters(
                 fm,
-                log,
                 e,
                 createNewPlayer(
-                        log,
                         createTestAnimationManager(),
                         "examples/simple_demo"));
         Fight *f = fm->fight;
@@ -128,6 +123,8 @@ void experienceToLevel51Test() {
 int main() {
     UIData *uiCfg = loadUIData("./fixtures");
     initWindow("./fixtures", uiCfg);
+    createRuntimeArgs(2, (char *[]){"binary", "-i", "./fixtures"});
+    createLog(ERROR);
     plan(107);
     strToIntTest();
     createFightInSceneTest();

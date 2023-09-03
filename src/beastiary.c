@@ -14,7 +14,6 @@ typedef struct {
 typedef struct {
     Beast *beasts[MAX_BEASTIARY_SIZE];
     int count;
-    Log *log;
 } Beastiary;
 
 Beast *createBeastFromData(const char *indexDir, BeastData *data) {

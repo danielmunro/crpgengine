@@ -2,6 +2,8 @@ typedef struct {
     LogLevel level;
 } Log;
 
+Log *logger;
+
 char *getLogLevelString(LogLevel logLevel) {
     if (logLevel == DEBUG) {
         return "DEBUG";
@@ -16,53 +18,53 @@ char *getLogLevelString(LogLevel logLevel) {
     }
 }
 
-void addLogWithLevel(Log *log, LogLevel logLevel, char *message, va_list ag) {
-    if (log->level >= logLevel) {
+void addLogWithLevel(LogLevel logLevel, char *message, va_list ag) {
+    if (logger->level >= logLevel) {
         char toLog[MAX_LOG_LINE_LENGTH];
         sprintf(toLog, "%s -- %s\n", getLogLevelString(logLevel), message);
         vprintf(toLog, ag);
     }
 }
 
-void addDebug(Log *log, char *message, ...) {
+void addDebug(char *message, ...) {
     va_list args;
     va_start(args, message);
-    addLogWithLevel(log, DEBUG, message, args);
+    addLogWithLevel(DEBUG, message, args);
     va_end(args);
 }
 
-void addInfo(Log *log, char *message, ...) {
+void addInfo(char *message, ...) {
     va_list args;
     va_start(args, message);
-    addLogWithLevel(log, INFO, message, args);
+    addLogWithLevel(INFO, message, args);
     va_end(args);
 }
 
-void addWarning(Log *log, char *message, ...) {
+void addWarning(char *message, ...) {
     va_list args;
     va_start(args, message);
-    addLogWithLevel(log, WARN, message, args);
+    addLogWithLevel(WARN, message, args);
     va_end(args);
 }
 
-void addError(Log *log, char *message, ...) {
+void addError(char *message, ...) {
     va_list args;
     va_start(args, message);
-    addLogWithLevel(log, ERROR, message, args);
+    addLogWithLevel(ERROR, message, args);
     va_end(args);
 }
 
-void addFatal(Log *log, char *message, ...) {
+void addFatal(char *message, ...) {
     va_list args;
     va_start(args, message);
-    addLogWithLevel(log, ERROR, message, args);
+    addLogWithLevel(ERROR, message, args);
     va_end(args);
     exit(-1);
 }
 
 Log *createLog(LogLevel configuredLogLevel) {
-    Log *log = malloc(sizeof(Log));
-    log->level = configuredLogLevel;
-    addInfo(log, "log level set to %s", getLogLevelString(log->level));
-    return log;
+    logger = malloc(sizeof(Log));
+    logger->level = configuredLogLevel;
+    addInfo("log level set to %s", getLogLevelString(logger->level));
+    return logger;
 }

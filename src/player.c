@@ -6,7 +6,6 @@ typedef struct {
     SaveFiles *saveFiles;
     Mobile *blockedBy;
     Mobile *engageable;
-    Log *log;
     bool engaged;
     int coins;
     int secondsPlayed;
@@ -23,7 +22,7 @@ void addItem(Player *player, Item *item) {
     player->itemCount++;
 }
 
-Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
+Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
                      int coins, int experience, int level, int secondsPlayed,
                      const char **storylines, int storylineCount,
                      Item **items, int itemCount) {
@@ -33,7 +32,6 @@ Player *createPlayer(Log *log, Mobile *mobs[MAX_PARTY_SIZE],
     player->engaged = false;
     player->storylineCount = storylineCount;
     player->onDeckCount = 0;
-    player->log = log;
     player->partyCount = 0;
     player->coins = coins;
     player->experience = experience;
@@ -79,7 +77,7 @@ MobileData createMobDataFromMob(Mobile *mob) {
 }
 
 PlayerData *createPlayerData(Player *p) {
-    addDebug(p->log, "create player data");
+    addDebug("create player data");
     PlayerData *pd = malloc(sizeof(PlayerData));
     pd->coins = p->coins;
     pd->secondsPlayed = p->secondsPlayed;
@@ -133,9 +131,9 @@ bool isSpeakingTo(Player *p, Mobile *target) {
 
 void engageWithMobile(Player *p) {
     p->engageable = p->blockedBy;
-    addInfo(p->log, "updating mob direction to: %d", getOppositeDirection(getPartyLeader(p)->direction));
+    addInfo("updating mob direction to: %d", getOppositeDirection(getPartyLeader(p)->direction));
     updateDirection(p->blockedBy, getOppositeDirection(getPartyLeader(p)->direction));
-    addInfo(p->log, "engaging with %s", p->engageable->name);
+    addInfo("engaging with %s", p->engageable->name);
     p->engaged = true;
 }
 
@@ -145,7 +143,7 @@ void disengageWithMobile(Player *p) {
 }
 
 SaveData *createSaveData(Player *player, const char *scene, const char *saveName) {
-    addDebug(player->log, "create save data");
+    addDebug("create save data");
     SaveData *save = malloc(sizeof(SaveData));
     save->name = saveName;
     save->player = createPlayerData(player);
@@ -154,10 +152,10 @@ SaveData *createSaveData(Player *player, const char *scene, const char *saveName
     return save;
 }
 
-void saveFile(Log *log, SaveData *save, const char *indexDir, const char *filename) {
+void saveFile(SaveData *save, const char *indexDir, const char *filename) {
     char filePathAuto[MAX_FS_PATH_LENGTH];
     sprintf(filePathAuto, "%s/%s/%s", indexDir, "_saves", filename);
-    addInfo(log, "player save file :: %s", filePathAuto);
+    addInfo("player save file :: %s", filePathAuto);
     saveSaveData(save, filePathAuto);
 }
 
@@ -211,7 +209,7 @@ SaveFiles *getSaveFiles(const char *indexDir) {
 }
 
 void save(Player *player, const char *sceneName, const char *indexDir) {
-    addInfo(player->log, "save player progress");
+    addInfo("save player progress");
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
     char *date = malloc(MAX_DATETIME_LENGTH);
@@ -225,12 +223,12 @@ void save(Player *player, const char *sceneName, const char *indexDir) {
 
     printf("item: %s\n", player->items[0]->name);
     // auto save
-    saveFile(player->log, save, indexDir, "autosave.yaml");
+    saveFile(save, indexDir, "autosave.yaml");
     char filename[MAX_FS_PATH_LENGTH];
 
     // point-in-time save
     sprintf(filename, "save-%lu.yaml", (unsigned long)time(NULL));
-    saveFile(player->log, save, indexDir, filename);
+    saveFile(save, indexDir, filename);
 
     free(date);
     free(name);
@@ -241,24 +239,24 @@ void save(Player *player, const char *sceneName, const char *indexDir) {
 
 void addStory(Player *p, const char *story) {
     p->storylines[p->storylineCount++] = story;
-    addInfo(p->log, "add story to player :: %s", story);
+    addInfo("add story to player :: %s", story);
 }
 
 bool hasStory(Player *p, const char *story) {
     for (int j = 0; j < p->storylineCount; j++) {
         if (strcmp(story, p->storylines[j]) == 0) {
-            addDebug(p->log, "player has story: %s", story);
+            addDebug("player has story: %s", story);
             return true;
         }
     }
-    addDebug(p->log, "player does not have story: %s", story);
+    addDebug("player does not have story: %s", story);
     return false;
 }
 
 
-Player *mapSaveDataToPlayer(AnimationManager *am, ItemManager *im, Log *log, SaveData *save) {
+Player *mapSaveDataToPlayer(AnimationManager *am, SaveData *save) {
     Mobile *mobs[MAX_PARTY_SIZE];
-    addInfo(log, "save file party count :: %d", save->player->party_count);
+    addInfo("save file party count :: %d", save->player->party_count);
     for (int i = 0; i < save->player->party_count; i++) {
         Animation *animations[MAX_ANIMATIONS];
         MobileData mob = save->player->party[i];
@@ -283,7 +281,6 @@ Player *mapSaveDataToPlayer(AnimationManager *am, ItemManager *im, Log *log, Sav
         items[i] = createItemFromData(&save->player->items[i]);
     }
     return createPlayer(
-            log,
             mobs,
             save->player->coins,
             save->player->experience,
@@ -295,8 +292,8 @@ Player *mapSaveDataToPlayer(AnimationManager *am, ItemManager *im, Log *log, Sav
             save->player->items_count);
 }
 
-Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
-    addInfo(log, "loading player from dir %s", indexDir);
+Player *createNewPlayer(AnimationManager *am, const char *indexDir) {
+    addInfo("loading player from dir %s", indexDir);
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
     Spell **spells1 = calloc(MAX_SPELLS, sizeof(Spell));
@@ -369,7 +366,6 @@ Player *createNewPlayer(Log *log, AnimationManager *am, const char *indexDir) {
     const char **storylines = malloc(sizeof(char **));
     Item **items = calloc(MAX_ITEMS, sizeof(Item));
     Player *p = createPlayer(
-            log,
             mobiles,
             0,
             getExperienceToLevel(1),

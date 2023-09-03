@@ -117,6 +117,7 @@ typedef enum {
 
 #include "log.c"
 #include "util.c"
+#include "runtime_args.c"
 #include "yaml/spritesheet.c"
 #include "yaml/animation.c"
 #include "yaml/config.c"
@@ -133,7 +134,6 @@ typedef enum {
 #include "yaml/player.c"
 #include "yaml/save.c"
 #include "yaml/ui.c"
-#include "runtime_args.c"
 #include "cyaml.c"
 #include "font.c"
 #include "window.c"

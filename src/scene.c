@@ -14,7 +14,6 @@ typedef struct {
     ControlBlock *activeControlBlocks[MAX_ACTIVE_CONTROLS];
     Encounters *encounters;
     Exploration *exploration;
-    Log *log;
 } Scene;
 
 typedef struct {
@@ -34,20 +33,19 @@ void setSceneTypeFromString(Scene *s, const char *sceneType) {
     for (int i = 0; i < count; i++) {
         if (strcmp(sceneTypes[i].scene, sceneType) == 0) {
             s->type = sceneTypes[i].code;
-            addDebug(s->log, "scene '%s' type set to '%s'", s->name, sceneType);
+            addDebug("scene '%s' type set to '%s'", s->name, sceneType);
             return;
         }
     }
-    addError(s->log, "scene type not found: %s, setting to default of 'town'", sceneType);
+    addError("scene type not found: %s, setting to default of 'town'", sceneType);
     s->type = SCENE_TYPE_TOWN;
 }
 
-Scene *createScene(Log *log, RuntimeArgs *runtimeArgs) {
+Scene *createScene() {
     Scene *scene = malloc(sizeof(Scene));
     scene->storylineCount = 0;
     scene->encounters = createEncounters();
-    scene->log = log;
-    scene->exploration = createExploration(log, runtimeArgs);
+    scene->exploration = createExploration();
     scene->controlBlockCount = 0;
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         scene->activeControlBlocks[i] = NULL;
@@ -76,7 +74,7 @@ void addActiveControl(Scene *s, ControlBlock *cb) {
             return;
         }
     }
-    addError(s->log, "too many active control blocks, cannot add new one");
+    addError("too many active control blocks, cannot add new one");
 }
 
 void addStoryline(Scene *scene, StorylineData *storyline) {
@@ -94,13 +92,13 @@ bool isAlreadyAdded(ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS], ControlBlo
 }
 
 void controlWhenCheck(Scene *s, Player *p, EventType eventType) {
-    addDebug(s->log, "control when check");
+    addDebug("control when check");
     for (int i = 0; i < s->controlBlockCount; i++) {
         ControlBlock *cb = s->controlBlocks[i];
         if (areConditionsMet(cb, p, eventType) && !isAlreadyAdded(s->activeControlBlocks, cb)) {
-            addDebug(s->log, "ready to set");
+            addDebug("ready to set");
             addActiveControl(s, cb);
-            addInfo(s->log, "set active control block %d", i);
+            addInfo("set active control block %d", i);
             return;
         }
     }

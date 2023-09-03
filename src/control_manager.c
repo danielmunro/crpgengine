@@ -1,24 +1,18 @@
 typedef struct {
-    Log *log;
     Scene *scene;
     Player *player;
-    RuntimeArgs *runtimeArgs;
     ItemManager *itemManager;
     NotificationManager *notificationManager;
     MobileManager *mobileManager;
 } ControlManager;
 
 ControlManager *createControlManager(
-        Log *log,
         Player *player,
-        RuntimeArgs *runtimeArgs,
         ItemManager *itemManager,
         NotificationManager *notificationManager,
         MobileManager *mobileManager) {
     ControlManager *cm = malloc(sizeof(ControlManager));
-    cm->log = log;
     cm->player = player;
-    cm->runtimeArgs = runtimeArgs;
     cm->itemManager = itemManager;
     cm->notificationManager = notificationManager;
     cm->mobileManager = mobileManager;
@@ -30,16 +24,16 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
     Then *then = cb->then[cb->progress];
     int progress = 0;
     if (isSpeakOutcome(then) && !cm->player->engaged) {
-        addInfo(cm->log, "is speak outcome");
+        addInfo("is speak outcome");
         progress++;
     } else if (isMovingAndAtDestination(cb)) {
-        addInfo(cm->log, "mob at destination, control block proceeding :: %s", then->target->name);
+        addInfo("mob at destination, control block proceeding :: %s", then->target->name);
         progress++;
     } else if (isAddStoryOutcome(then)) {
         addStory(cm->player, then->story);
         progress++;
     } else if (needsToStartMoving(then)) {
-        addInfo(cm->log, "mob needs to start moving");
+        addInfo("mob needs to start moving");
         addMobileMovement(
                 cm->scene->exploration,
                 createMobileMovement(
@@ -50,20 +44,20 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         cm->player->engaged = false;
         getPartyLeader(cm->player)->isBeingMoved = true;
     } else if (isFaceDirectionOutcome(then)) {
-        addInfo(cm->log, "set direction for mob :: %s, %s", then->target->name, then->direction);
+        addInfo("set direction for mob :: %s, %s", then->target->name, then->direction);
         then->target->direction =
                 getDirectionFromString(then->direction);
         progress++;
     } else if (needsToChangePosition(then)) {
         Mobile *target = then->target;
         target->position = then->position;
-        addInfo(cm->log, "change position for mob :: %s, %f, %f",
+        addInfo("change position for mob :: %s, %f, %f",
                 target->name, target->position.x, target->position.y);
         progress++;
     } else if (needsToWait(then)) {
         Mobile *target = then->target;
         if (target->waitTimer == -1) {
-            addInfo(cm->log, "setting initial wait timer");
+            addInfo("setting initial wait timer");
             target->waitTimer = then->amount;
         }
         struct timeval update;
@@ -72,7 +66,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
             target->lastTimerUpdate = update;
             target->waitTimer--;
             if (target->waitTimer == 0) {
-                addInfo(cm->log, "timer done");
+                addInfo("timer done");
                 target->waitTimer = -1;
                 progress++;
             }
@@ -88,13 +82,13 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         resetMoving(mob);
         progress++;
     } else if (needsToSave(then)) {
-        save(cm->player, cm->scene->name, cm->runtimeArgs->indexDir);
+        save(cm->player, cm->scene->name, runtimeArgs->indexDir);
         addNotification(
                 cm->notificationManager,
                 createNotification(SAVED, "Your game has been saved."));
         progress++;
     } else if (needsToReceiveItem(then, getPartyLeader(cm->player))) {
-        addInfo(cm->log, "player receiving item: %s", then->item);
+        addInfo("player receiving item: %s", then->item);
         addItem(cm->player, findItem(cm->itemManager->items, then->item));
         const char *message = malloc(64);
         sprintf((char *)message, "you received:\n%s", then->item);
@@ -118,7 +112,7 @@ int controlThenCheckAllActive(ControlManager *cm) {
 }
 
 void checkControls(ControlManager *cm) {
-    addDebug(cm->log, "exploration -- check %d control blocks",
+    addDebug("exploration -- check %d control blocks",
              cm->scene->controlBlockCount);
     controlWhenCheck(cm->scene, cm->player, EVENT_GAME_LOOP);
     controlThenCheckAllActive(cm);
@@ -146,7 +140,7 @@ When *mapWhen(ControlManager *cm, Scene *s, WhenData wd) {
     ArriveAt *arriveAt = NULL;
     if (wd.mob != NULL) {
         trigger = findMobById(cm->mobileManager, wd.mob);
-        addDebug(cm->log, "mobile trigger is '%s'", trigger->name);
+        addDebug("mobile trigger is '%s'", trigger->name);
     }
     if (wd.arriveAt != NULL) {
         Exploration *e = s->exploration;
@@ -158,7 +152,7 @@ When *mapWhen(ControlManager *cm, Scene *s, WhenData wd) {
         }
     }
     Condition c = mapCondition(wd.condition);
-    addDebug(cm->log, "condition: %s, mapped to: %d, story: %s",
+    addDebug("condition: %s, mapped to: %d, story: %s",
              wd.condition,
              c,
              wd.story);
@@ -189,7 +183,7 @@ Then *mapThen(ControlManager *cm, ThenData td) {
         amount = td.amount;
     }
     Outcome o = mapOutcome(td.action);
-    addDebug(cm->log, "then story is '%s', outcome: %d, message: %s",
+    addDebug("then story is '%s', outcome: %d, message: %s",
              td.story, o, td.message);
     return createThen(
             target,
@@ -208,7 +202,7 @@ ControlBlock *mapStorylineToControlBlock(ControlManager *cm, Scene *scene, Story
     ControlBlock *c = createControlBlock();
     c->whenCount = storyline->when_count;
     c->thenCount = storyline->then_count;
-    addDebug(cm->log, "processing storyline with %d when and %d then clauses",
+    addDebug("processing storyline with %d when and %d then clauses",
              storyline->when_count, storyline->then_count);
     for (int i = 0; i < storyline->when_count; i++) {
         c->when[i] = mapWhen(cm, scene, storyline->when[i]);
@@ -216,6 +210,6 @@ ControlBlock *mapStorylineToControlBlock(ControlManager *cm, Scene *scene, Story
     for (int i = 0; i < storyline->then_count; i++) {
         c->then[i] = mapThen(cm, storyline->then[i]);
     }
-    addDebug(cm->log, "done processing when/then clauses");
+    addDebug("done processing when/then clauses");
     return c;
 }

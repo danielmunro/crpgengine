@@ -1,13 +1,13 @@
 void validateExits(Game *g) {
     for (int i = 0; i < g->scenes->count; i++) {
-        addDebug(g->log, "scene '%s' exit count: %d",
+        addDebug("scene '%s' exit count: %d",
                  g->scenes->scenes[i]->name,
                  g->scenes->scenes[i]->exploration->exitCount);
         for (int j = 0; j < g->scenes->scenes[i]->exploration->exitCount; j++) {
             int found = false;
             Exit *exit = g->scenes->scenes[i]->exploration->exits[j];
             if (strcmp(exit->to, "") == 0) {
-                addWarning(g->log, "exit defined without destination in '%s' scene", g->scenes->scenes[i]->name);
+                addWarning("exit defined without destination in '%s' scene", g->scenes->scenes[i]->name);
                 continue;
             }
             for (int q = 0; q < g->scenes->count; q++) {
@@ -19,9 +19,9 @@ void validateExits(Game *g) {
                 }
             }
             if (!found) {
-                addError(g->log, "exit '%s' for scene '%s' does not exist",
-                        exit->to,
-                        g->scenes->scenes[i]->name
+                addError("exit '%s' for scene '%s' does not exist",
+                         exit->to,
+                         g->scenes->scenes[i]->name
                 );
             }
         }
@@ -29,6 +29,6 @@ void validateExits(Game *g) {
 }
 
 void validateGameData(Game *g) {
-    addDebug(g->log, "validating game data");
+    addDebug("validating game data");
     validateExits(g);
 }

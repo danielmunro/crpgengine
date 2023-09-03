@@ -7,7 +7,6 @@ typedef struct {
     SpritesheetManager *sprites;
     Beastiary *beastiary;
     ItemManager *items;
-    Log *log;
     Timing *timing;
     NotificationManager *notifications;
     ControlManager *controls;
@@ -20,10 +19,10 @@ typedef struct {
 
 void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
     if (entrance == NULL) {
-        addWarning(game->log, "no entrance found for '%s' scene", scene->name);
+        addWarning("no entrance found for '%s' scene", scene->name);
         return;
     }
-    addDebug(game->log, "entrance %s found at %f, %f, %f, %f",
+    addDebug("entrance %s found at %f, %f, %f, %f",
             entrance->name,
             entrance->area.x,
             entrance->area.y,
@@ -38,11 +37,11 @@ void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
 }
 
 void evaluateExits(Game *g) {
-    addDebug(g->log, "exploration -- evaluate exits");
+    addDebug("exploration -- evaluate exits");
     Exploration *e = g->scenes->current->exploration;
     int exit = atExit(e, g->player);
     if (exit > -1) {
-        addDebug(g->log, "player at exit");
+        addDebug("player at exit");
         char *sceneName = e->exits[exit]->scene;
         char *entranceName = e->exits[exit]->to;
         for (int i = 0; i < g->scenes->count; i++) {
@@ -55,7 +54,7 @@ void evaluateExits(Game *g) {
                 return;
             }
         }
-        addError(g->log, "warp to '%s' not found", sceneName);
+        addError("warp to '%s' not found", sceneName);
     }
 }
 
@@ -73,7 +72,7 @@ void explorationMenuKeyPressed(Game *g) {
 
 void checkExplorationInput(Game *g) {
     Mobile *mob = getPartyLeader(g->player);
-    addDebug(g->log, "exploration -- check player input");
+    addDebug("exploration -- check player input");
     resetMoving(mob);
     if (!canPlayerMove(mob)) {
         return;
@@ -91,7 +90,7 @@ void checkExplorationInput(Game *g) {
         explorationMenuKeyPressed(g);
     }
     if (IsKeyPressed(KEY_T)) {
-        addInfo(g->log, "player play time :: %ds", g->player->secondsPlayed);
+        addInfo("player play time :: %ds", g->player->secondsPlayed);
     }
     if (IsKeyPressed(KEY_S)) {
         save(g->player, g->scenes->current->name, g->runtimeArgs->indexDir);
@@ -134,14 +133,13 @@ bool canTriggerFight(Game *g, Player *p) {
 }
 
 void checkFights(Game *g, Scene *s) {
-    addDebug(s->log, "exploration -- check for fight");
+    addDebug("exploration -- check for fight");
     if (!canTriggerFight(g, g->player)) {
         return;
     }
     if (rand() % 100 + 1 == 1) {
         createFightFromEncounters(
                 g->fights,
-                g->log,
                 s->encounters,
                 g->player);
         Animation *animation = findAnimation(getPartyLeader(g->player)->animations, LEFT);
@@ -223,9 +221,9 @@ SaveData *initializePlayer(Game *g) {
     SaveData *save = NULL;
     if (FileExists(saveFilePath) && !r->forceNewGame) {
         save = loadSaveData(saveFilePath);
-        g->player = mapSaveDataToPlayer(g->animations, g->items, g->log, save);
+        g->player = mapSaveDataToPlayer(g->animations, save);
     } else {
-        g->player = createNewPlayer(g->log, g->animations, r->indexDir);
+        g->player = createNewPlayer(g->animations, r->indexDir);
         addItem(g->player, g->items->items[0]);
     }
     g->player->saveFiles = getSaveFiles(r->indexDir);
@@ -241,34 +239,30 @@ SaveData *initializePlayer(Game *g) {
 Game *createGame(UIData *uiData, RuntimeArgs *r) {
     Game *g = malloc(sizeof(Game));
     g->runtimeArgs = r;
-    g->log = createLog(g->runtimeArgs->logLevel);
-    g->sprites = loadSpritesheetManager(g->log, r->indexDir);
-    g->ui = createUIManager(g->log, uiData, g->sprites, r->indexDir);
-    g->animations = createAnimationManager(g->log);
+    g->sprites = loadSpritesheetManager(r->indexDir);
+    g->ui = createUIManager(uiData, g->sprites);
+    g->animations = createAnimationManager();
     loadAllAnimations(g->animations, g->sprites, r->indexDir);
-    g->audio = loadAudioManager(g->log, r->indexDir);
-    g->beastiary = loadBeastiary(g->log, g->runtimeArgs->indexDir);
+    g->audio = loadAudioManager(r->indexDir);
+    g->beastiary = loadBeastiary(g->runtimeArgs->indexDir);
     g->items = createItemManager();
     loadAllItems(g->items, r->indexDir);
-    g->mobiles = createMobileManager(g->log, g->animations);
+    g->mobiles = createMobileManager(g->animations);
     SaveData *save = initializePlayer(g);
     g->notifications = createNotificationManager();
-    g->timing = createTiming(g->log, g->notifications, g->player, g->runtimeArgs->logMemory);
+    g->timing = createTiming(g->notifications, g->player, g->runtimeArgs->logMemory);
     g->controls = createControlManager(
-            g->log,
             g->player,
-            g->runtimeArgs,
             g->items,
             g->notifications,
             g->mobiles);
-    g->scenes = createSceneManager(g->log, g->controls,
-                                   g->animations, g->audio);
+    g->scenes = createSceneManager(g->controls, g->animations, g->audio);
     loadScenesFromFiles(g->scenes, g->mobiles, g->beastiary, g->runtimeArgs);
     setSceneBasedOnSave(g->scenes, g->player, save, g->runtimeArgs->sceneIndex);
-    addDebug(g->log, "done creating game object");
+    addDebug("done creating game object");
     free(save);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
-    g->spells = loadSpellManager(g->log, g->runtimeArgs->indexDir);
-    g->fights = createFightManager(g->log, g->ui, g->spells);
+    g->spells = loadSpellManager();
+    g->fights = createFightManager(g->ui, g->spells);
     return g;
 }

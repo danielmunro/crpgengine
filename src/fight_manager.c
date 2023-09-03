@@ -1,14 +1,12 @@
 typedef struct {
-    Log *log;
     UIManager *ui;
     Fight *fight;
     Menu **menus;
     SpellManager *spells;
 } FightManager;
 
-FightManager *createFightManager(Log *log, UIManager *ui, SpellManager *spells) {
+FightManager *createFightManager(UIManager *ui, SpellManager *spells) {
     FightManager *f = malloc(sizeof(FightManager));
-    f->log = log;
     f->ui = ui;
     f->spells = spells;
     f->fight = NULL;
@@ -24,12 +22,11 @@ bool isFighting(FightManager *f) {
 
 Fight *createFightFromEncounters(
         FightManager *f,
-        Log *log,
         Encounters *encounters,
         Player *player) {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
-    addDebug(log, "creating %d beasts for fight", beastsToCreate);
+    addDebug("creating %d beasts for fight", beastsToCreate);
     int created = 0;
     float x = BEAST_AREA.x;
     float y = BEAST_AREA.y;
@@ -55,9 +52,9 @@ Fight *createFightFromEncounters(
             created++;
         }
     }
-    Fight *fight = createFight(log, beasts, player, created);
+    Fight *fight = createFight(beasts, player, created);
     fight->beastCount = created;
-    addDebug(log, "fight encountered with %d opponents", fight->beastCount);
+    addDebug("fight encountered with %d opponents", fight->beastCount);
     f->fight = fight;
     return fight;
 }
@@ -234,7 +231,7 @@ void tryToggleTargetMenus(FightManager *fm) {
 }
 
 void checkFightInput(FightManager *fm) {
-    addDebug(fm->log, "fight -- check player input");
+    addDebug("fight -- check player input");
     if (IsKeyPressed(KEY_ESCAPE)) {
         Menu *m = getCurrentMenu(fm->menus);
         if (m->type == MOBILE_SELECT_FIGHT_MENU) {

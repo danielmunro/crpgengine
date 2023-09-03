@@ -16,13 +16,11 @@ typedef struct {
     int libraryCount;
     Animation *animations[MAX_ANIMATIONS];
     int animationCount;
-    Log *log;
 } AnimationManager;
 
-AnimationManager *createAnimationManager(Log *log) {
+AnimationManager *createAnimationManager() {
     AnimationManager *animationManager = malloc(sizeof(AnimationManager));
     animationManager->animationCount = 0;
-    animationManager->log = log;
     return animationManager;
 }
 
@@ -38,7 +36,7 @@ void incrementAnimationFrame(Animation *a) {
 }
 
 void processAnimations(AnimationManager *am) {
-    addDebug(am->log, "process animations :: %d", am->animationCount);
+    addDebug("process animations :: %d", am->animationCount);
     for (int i = 0; i < am->animationCount; i++) {
         if (am->animations[i]->isPlaying) {
             incrementAnimationFrame(am->animations[i]);
@@ -47,7 +45,7 @@ void processAnimations(AnimationManager *am) {
 }
 
 void addAnimation(AnimationManager *am, Animation *a) {
-    addInfo(am->log, "add animation to manager :: %s, %s, %d",
+    addInfo("add animation to manager :: %s, %s, %d",
             a->name, a->spriteSheet->name, am->animationCount);
     am->animations[am->animationCount] = a;
     am->animationCount++;

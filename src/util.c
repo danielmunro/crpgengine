@@ -156,12 +156,12 @@ void purgeSaves(const char *indexDir) {
     free(files);
 }
 
-double reportMaxMemory(Log *log) {
+double reportMaxMemory() {
     int who = RUSAGE_SELF;
     struct rusage usage;
     getrusage(who, &usage);
     double memoryInMb = (double) usage.ru_maxrss / 1000000;
-    addInfo(log, "max memory: %f\n", memoryInMb);
+    addInfo("max memory: %f\n", memoryInMb);
     return memoryInMb;
 }
 

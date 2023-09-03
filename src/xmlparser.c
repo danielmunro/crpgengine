@@ -41,7 +41,7 @@ static void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *i
 }
 
 void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename) {
-    addDebug(e->log, "parsing xml tilemap at %s/%s", indexDir, filename);
+    addDebug("parsing xml tilemap at %s/%s", indexDir, filename);
     Tilemap *tilemap = malloc(sizeof(Tilemap));
     e->tilemap = tilemap;
     int ret;
@@ -49,7 +49,7 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
     sprintf(filePath, "%s/%s", indexDir, filename);
     TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(e, filePath);
     if (tilemapXmlReader->reader == NULL) {
-        addError(e->log, "unable to open file: %s", filename);
+        addError("unable to open file: %s", filename);
         return;
     }
     ret = xmlTextReaderRead(tilemapXmlReader->reader);
@@ -57,15 +57,15 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
         processTilemapNode(tilemapXmlReader, indexDir);
         ret = xmlTextReaderRead(tilemapXmlReader->reader);
     }
-    addDebug(e->log, "found %d objects", tilemapXmlReader->exploration->objectCount);
+    addDebug("found %d objects", tilemapXmlReader->exploration->objectCount);
     xmlFreeTextReader(tilemapXmlReader->reader);
     if (ret != 0) {
-        addError(e->log, "failed to parse file: %s", filename);
+        addError("failed to parse file: %s", filename);
     }
 }
 
 void parseSceneLayer(Exploration *e, char *rawData) {
-    addDebug(e->log, "scene layer %d processing now", e->layerCount - 1);
+    addDebug("scene layer %d processing now", e->layerCount - 1);
     char *line = strtok(rawData, "\r\n");
     char *data[MAX_DATA_SIZE];
     int it = 0;
@@ -93,8 +93,7 @@ void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) 
     const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
     static int dataOpen = 0, exitOpen = 0, layerOpen = 0, objectType;
     char *strName = (char *) name;
-    Log *log = tilemapXmlReader->exploration->log;
-    addDebug(log, "process scene node -- %s", strName);
+    addDebug("process scene node -- %s", strName);
     if (strcmp(strName, "tileset") == 0) {
         char *source = getStringAttribute(tilemapXmlReader->reader, "source");
         parseTilemapXml(tilemapXmlReader->exploration, indexDir, source);
@@ -109,7 +108,7 @@ void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) 
         if (strcmp(layerName, "background") == 0) layer->type = BACKGROUND;
         else if (strcmp(layerName, "midground") == 0) layer->type = MIDGROUND;
         else if (strcmp(layerName, "foreground") == 0) layer->type = FOREGROUND;
-        else addError(log, "unknown layer: %s", layerName);
+        else addError("unknown layer: %s", layerName);
         tilemapXmlReader->exploration->layers[tilemapXmlReader->exploration->layerCount] = layer;
     } else if (strcmp(strName, "data") == 0) {
         if (dataOpen == 1) {
@@ -122,7 +121,7 @@ void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) 
         parseSceneLayer(tilemapXmlReader->exploration, (char *) data);
     } else if (strcmp(strName, "object") == 0) {
         char *type = getStringAttribute(tilemapXmlReader->reader, "type");
-        addDebug(log, "object type: %s", type);
+        addDebug("object type: %s", type);
         if (type == NULL) {
             return;
         } else if (strcmp(type, "entrance") == 0) {
@@ -180,7 +179,7 @@ void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) 
 void parseSceneXml(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
     int ret;
     if (tilemapXmlReader->reader == NULL) {
-        addError(tilemapXmlReader->exploration->log, "unable to find file for scene");
+        addError("unable to find file for scene");
         return;
     }
     ret = xmlTextReaderRead(tilemapXmlReader->reader);
@@ -190,6 +189,6 @@ void parseSceneXml(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
     }
     xmlFreeTextReader(tilemapXmlReader->reader);
     if (ret != 0) {
-        addError(tilemapXmlReader->exploration->log, "failed to read scene");
+        addError("failed to read scene");
     }
 }

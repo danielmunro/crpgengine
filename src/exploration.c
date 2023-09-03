@@ -24,12 +24,9 @@ typedef struct {
     int entranceCount;
     Object *objects[MAX_OBJECTS];
     int objectCount;
-    Log *log;
     bool showCollisions;
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
-//    Menu **menus;
-//    int menuCount;
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
     RuntimeArgs *runtimeArgs;
 } Exploration;
@@ -56,11 +53,11 @@ Entrance *findEntrance(Exploration *e, char *name) {
             return e->entrances[i];
         }
     }
-    addError(e->log, "entrance not found: %s", name);
+    addError("entrance not found: %s", name);
     return NULL;
 }
 
-Exploration *createExploration(Log *log, RuntimeArgs *runtimeArgs) {
+Exploration *createExploration() {
     Exploration *exploration = malloc(sizeof(Exploration));
     exploration->layerCount = 0;
     exploration->mobileCount = 0;
@@ -68,7 +65,6 @@ Exploration *createExploration(Log *log, RuntimeArgs *runtimeArgs) {
     exploration->exitCount = 0;
     exploration->objectCount = 0;
     exploration->arriveAtCount = 0;
-    exploration->log = log;
     exploration->runtimeArgs = runtimeArgs;
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         exploration->mobMovements[i] = NULL;
@@ -84,7 +80,7 @@ MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
 }
 
 void addMobileMovement(Exploration *e, MobileMovement *mobMovement) {
-    addInfo(e->log, "add mob movement, %s target to %f, %f",
+    addInfo("add mob movement, %s target to %f, %f",
             mobMovement->mob->name, mobMovement->destination.x, mobMovement->destination.y);
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         if (e->mobMovements[i] == NULL) {
@@ -123,7 +119,7 @@ Vector2D getTileCount(Exploration *e) {
 }
 
 void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
-    addInfo(e->log, "player coordinates: %f, %f", position.x, position.y);
+    addInfo("player coordinates: %f, %f", position.x, position.y);
 }
 
 void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
@@ -358,7 +354,7 @@ void evaluateMovement(Exploration *e, Player *p) {
     if (mob->isBeingMoved) {
         return;
     }
-    addDebug(e->log, "exploration -- evaluate movement -- %f, %f",
+    addDebug("exploration -- evaluate movement -- %f, %f",
              mob->position.x,
              mob->position.y);
     for (int i = 0; i < DIRECTION_COUNT; i++) {
@@ -391,7 +387,7 @@ void drawExplorationView(
         ControlBlock *c[MAX_ACTIVE_CONTROLS],
         FontStyle *font,
         bool showFPS) {
-    addDebug(e->log, "exploration -- draw");
+    addDebug("exploration -- draw");
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();
     ClearBackground(BLACK);
@@ -421,17 +417,17 @@ void renderExplorationLayers(Exploration *e) {
     renderExplorationLayer(e, BACKGROUND);
     renderExplorationLayer(e, MIDGROUND);
     renderExplorationLayer(e, FOREGROUND);
-    addDebug(e->log, "exploration successfully rendered");
+    addDebug("exploration successfully rendered");
 }
 
 void dialogEngaged(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
-    addInfo(exploration->log, "speaking with '%s' mob", player->engageable->name);
+    addInfo("speaking with '%s' mob", player->engageable->name);
     if (controlBlock != NULL) {
         controlBlock->progress++;
-        addDebug(exploration->log, "active control block progress at %d", controlBlock->progress);
+        addDebug("active control block progress at %d", controlBlock->progress);
     }
     if (controlBlock->progress >= controlBlock->thenCount) {
-        addDebug(exploration->log, "unsetting active control block");
+        addDebug("unsetting active control block");
         controlBlock->progress = 0;
         controlBlock = NULL;
         disengageWithMobile(player);
@@ -439,7 +435,7 @@ void dialogEngaged(Exploration *exploration, Player *player, ControlBlock *contr
 }
 
 void explorationSpaceKeyPressed(Exploration *exploration, Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
-    addInfo(exploration->log, "exploration space key pressed");
+    addInfo("exploration space key pressed");
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (controlBlocks[i] != NULL
                 && player->engaged
@@ -461,7 +457,7 @@ void doMobileMovementUpdates(Exploration *exploration) {
         Mobile *mob = exploration->mobMovements[i]->mob;
         bool moved = moveMob(mob, exploration->mobMovements[i]->destination);
         if (!moved) {
-            addInfo(exploration->log, "mob done moving -- %s",
+            addInfo("mob done moving -- %s",
                     exploration->mobMovements[i]->mob->name);
             exploration->mobMovements[i] = NULL;
             mob->isBeingMoved = false;

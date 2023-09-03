@@ -14,21 +14,19 @@ typedef struct {
     int soundCount;
     int musicCount;
     int musicIndex;
-    Log *log;
 } AudioManager;
 
-AudioManager *createAudioManager(Log *log) {
+AudioManager *createAudioManager() {
     AudioManager *s = malloc(sizeof(AudioManager));
     s->soundCount = 0;
     s->musicCount = 0;
     s->musicIndex = -1;
-    s->log = log;
     return s;
 }
 
 void updateMusicStream(AudioManager *am) {
     if (am->musicIndex < 0) {
-        addError(am->log, "cannot play music with negative index");
+        addError("cannot play music with negative index");
         return;
     }
     UpdateMusicStream(am->music[am->musicIndex]->music);
@@ -42,11 +40,11 @@ void playMusic(AudioManager *am, const char *name) {
             }
             if (am->musicIndex > -1 && IsMusicStreamPlaying(am->music[am->musicIndex]->music)) {
                 StopMusicStream(am->music[am->musicIndex]->music);
-                addDebug(am->log, "stopping music '%s'", am->music[am->musicIndex]->name);
+                addDebug("stopping music '%s'", am->music[am->musicIndex]->name);
             }
             am->musicIndex = i;
             PlayMusicStream(am->music[i]->music);
-            addDebug(am->log, "playing music '%s'", name);
+            addDebug("playing music '%s'", name);
             return;
         }
     }

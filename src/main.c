@@ -5,6 +5,7 @@ int main(int argc, char *argv[]) {
     RuntimeArgs *r = createRuntimeArgs(argc, argv);
     ConfigData *appCfg = loadAppConfigYaml(r->indexDir);
     UIData *uiCfg = loadUIData(r->indexDir);
+    createLog(runtimeArgs->logLevel);
     initWindow(appCfg->title, uiCfg);
     Game *g = createGame(uiCfg, r);
     validateGameData(g);

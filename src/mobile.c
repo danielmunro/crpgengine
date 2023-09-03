@@ -22,15 +22,13 @@ typedef struct {
 } Mobile;
 
 typedef struct {
-    Log *log;
     AnimationManager *animationManager;
     Mobile **mobiles;
     int count;
 } MobileManager;
 
-MobileManager *createMobileManager(Log *log, AnimationManager *am) {
+MobileManager *createMobileManager(AnimationManager *am) {
     MobileManager *m = malloc(sizeof(MobileManager));
-    m->log = log;
     m->animationManager = am;
     m->mobiles = calloc(MAX_MOBILES, sizeof(Mobile));
     m->count = 0;
@@ -106,7 +104,7 @@ Mobile *findMobById(MobileManager *mm, const char *id) {
             return mm->mobiles[i];
         }
     }
-    addError(mm->log, "mob not found: %s", id);
+    addError("mob not found: %s", id);
     exit(EXIT_MOBILE_NOT_FOUND);
 }
 

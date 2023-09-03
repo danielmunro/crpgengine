@@ -4,15 +4,13 @@ typedef struct {
     double timeInterval;
     NotificationManager *notificationManager;
     Player *player;
-    Log *log;
     bool logMemory;
 } Timing;
 
-Timing *createTiming(Log *log, NotificationManager *nm, Player *player, bool logMemory) {
+Timing *createTiming(NotificationManager *nm, Player *player, bool logMemory) {
     Timing *t = malloc(sizeof(Timing));
     t->elapsedTime = 0;
     t->timeInterval = 0;
-    t->log = log;
     t->notificationManager = nm;
     t->player = player;
     t->logMemory = logMemory;
@@ -32,7 +30,7 @@ void stopTiming(Timing *t) {
         t->start = end;
         t->player->secondsPlayed += 1;
         if (t->logMemory) {
-            reportMaxMemory(t->log);
+            reportMaxMemory();
         }
     }
 }
