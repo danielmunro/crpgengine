@@ -15,8 +15,8 @@ Beast *createTestBeast() {
 
 AnimationManager *createTestAnimationManager() {
     AnimationManager *am = createAnimationManager();
-    SpritesheetManager *sm = loadSpritesheetManager("./fixtures");
-    loadAllAnimations(am, sm, "./fixtures");
+    SpritesheetManager *sm = loadSpritesheetManager();
+    loadAllAnimations(am, sm);
     return am;
 }
 
@@ -37,9 +37,7 @@ void createFightInSceneTest() {
         createFightFromEncounters(
                 fm,
                 e,
-                createNewPlayer(
-                        createTestAnimationManager(),
-                        "examples/simple_demo"));
+                createNewPlayer(createTestAnimationManager()));
         Fight *f = fm->fight;
         char message[MAX_LOG_LINE_LENGTH];
         sprintf(message, "beast count is within expected range: %d", f->beastCount);

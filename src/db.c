@@ -173,8 +173,7 @@ void loadScenes(
 void loadScenesFromFiles(
         SceneManager *sm,
         MobileManager *mobileManager,
-        Beastiary *beastiary,
-        RuntimeArgs *runtimeArgs) {
+        Beastiary *beastiary) {
     SceneLoader *sl = createSceneLoader(runtimeArgs->indexDir);
     addDebug("get scene directories :: %s", sl->sceneDirectory);
     sl->count = getFilesInDirectory(sl->sceneDirectory, sl->scenes);
@@ -188,19 +187,19 @@ void loadScenesFromFiles(
     free(sl);
 }
 
-AudioManager *loadAudioManager(const char *indexDir) {
-    addInfo("load audio manager from dir '%s'", indexDir);
+AudioManager *loadAudioManager() {
+    addInfo("load audio manager from dir '%s'", runtimeArgs->indexDir);
     AudioManager *am = createAudioManager();
-    assignAudioManagerValues(am, indexDir);
+    assignAudioManagerValues(am);
     addInfo("audio manager loaded %d songs", am->musicCount);
     return am;
 }
 
-SpritesheetManager *loadSpritesheetManager(const char *indexDir) {
-    addInfo("load spritesheet manager :: %s", indexDir);
+SpritesheetManager *loadSpritesheetManager() {
+    addInfo("load spritesheet manager :: %s", runtimeArgs->indexDir);
     Spritesheet *spritesheets[MAX_SPRITES];
     char directory[MAX_FS_PATH_LENGTH];
-    sprintf(directory, "%s/spritesheets", indexDir);
+    sprintf(directory, "%s/spritesheets", runtimeArgs->indexDir);
     char **files = calloc(MAX_FILES, sizeof(char *));
     int filesInDirectory = getFilesInDirectory(directory, files);
     int count = 0;
@@ -227,9 +226,9 @@ SpritesheetManager *loadSpritesheetManager(const char *indexDir) {
     return createSpriteSheetManager(spritesheets, count);
 }
 
-void loadAllItems(ItemManager *itemManager, const char *indexDir) {
+void loadAllItems(ItemManager *itemManager) {
     const char *itemsFile = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *)itemsFile, "%s/items.yaml", indexDir);
+    sprintf((char *)itemsFile, "%s/items.yaml", runtimeArgs->indexDir);
     ItemsData *itemsData = loadItemYaml(itemsFile);
     itemManager->items = calloc(itemsData->items_count, sizeof(ItemData));
     for (int i = 0; i < itemsData->items_count; i++) {
@@ -239,9 +238,9 @@ void loadAllItems(ItemManager *itemManager, const char *indexDir) {
     free((char *)itemsFile);
 }
 
-void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char *indexDir) {
+void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm) {
     char animationsDir[MAX_FS_PATH_LENGTH / 2];
-    sprintf(animationsDir, "%s/animations", indexDir);
+    sprintf(animationsDir, "%s/animations", runtimeArgs->indexDir);
     char **files = calloc(MAX_FILES, sizeof(char *));
     int count = getFilesInDirectory(animationsDir, files);
     for (int i = 0; i < count; i++) {
@@ -254,14 +253,14 @@ void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm, const char 
     free(files);
 }
 
-Beastiary *loadBeastiary(const char *indexDir) {
+Beastiary *loadBeastiary() {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/beastiary.yaml", indexDir);
+    sprintf(filePath, "%s/beastiary.yaml", runtimeArgs->indexDir);
     BeastiaryData *data = loadBeastiaryYaml(filePath);
     Beastiary *beastiary = malloc(sizeof(Beastiary));
     beastiary->count = data->beasts_count;
     for (int i = 0; i < data->beasts_count; i++) {
-        beastiary->beasts[i] = createBeastFromData(indexDir, &data->beasts[i]);
+        beastiary->beasts[i] = createBeastFromData(&data->beasts[i]);
         addDebug("beast '%s' created", beastiary->beasts[i]->id);
     }
     free(data);

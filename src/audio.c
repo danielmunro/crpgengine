@@ -59,10 +59,10 @@ void playSound(AudioManager *s, const char *name) {
     }
 }
 
-void assignMusicValues(AudioManager *am, const char *indexDir) {
-    MusicData *music = loadMusicYaml(indexDir);
+void assignMusicValues(AudioManager *am) {
+    MusicData *music = loadMusicYaml(runtimeArgs->indexDir);
     char *filePath;
-    sprintf(filePath, "%s/audio/%s", indexDir, music->town);
+    sprintf(filePath, "%s/audio/%s", runtimeArgs->indexDir, music->town);
 
     Music_ *m = malloc(sizeof(Music_));
     m->name = "town";
@@ -73,8 +73,8 @@ void assignMusicValues(AudioManager *am, const char *indexDir) {
     free(music);
 }
 
-void assignSoundValues(AudioManager *am, const char *indexDir) {
-    SoundData *sound = loadSoundYaml(indexDir);
+void assignSoundValues(AudioManager *am) {
+    SoundData *sound = loadSoundYaml(runtimeArgs->indexDir);
 
 //    Sound_ *s = malloc(sizeof(Sound_));
 //    s->name = "bump";
@@ -84,7 +84,7 @@ void assignSoundValues(AudioManager *am, const char *indexDir) {
     free(sound);
 }
 
-void assignAudioManagerValues(AudioManager *am, const char *indexDir) {
-    assignMusicValues(am, indexDir);
-    assignSoundValues(am, indexDir);
+void assignAudioManagerValues(AudioManager *am) {
+    assignMusicValues(am);
+    assignSoundValues(am);
 }

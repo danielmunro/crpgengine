@@ -1,5 +1,4 @@
 typedef struct {
-    RuntimeArgs *runtimeArgs;
     SceneManager *scenes;
     Player *player;
     AnimationManager *animations;
@@ -65,7 +64,6 @@ void explorationMenuKeyPressed(Game *g) {
             g->ui->fonts,
             g->ui->menuSprite,
             g->scenes->current->name,
-            g->runtimeArgs->indexDir,
             0);
     addMenu(g->menus, findMenu(g->ui->menus, PARTY_MENU));
 }
@@ -79,12 +77,10 @@ void checkExplorationInput(Game *g) {
     }
     explorationCheckMoveKeys(g->player);
     if (IsKeyPressed(KEY_C)) {
-        explorationDebugKeyPressed(g->scenes->current->exploration, mob->position);
+        explorationDebugKeyPressed(mob->position);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        explorationSpaceKeyPressed(g->scenes->current->exploration,
-                                   g->player,
-                                   g->scenes->current->activeControlBlocks);
+        explorationSpaceKeyPressed(g->player, g->scenes->current->activeControlBlocks);
     }
     if (IsKeyPressed(KEY_M)) {
         explorationMenuKeyPressed(g);
@@ -93,7 +89,7 @@ void checkExplorationInput(Game *g) {
         addInfo("player play time :: %ds", g->player->secondsPlayed);
     }
     if (IsKeyPressed(KEY_S)) {
-        save(g->player, g->scenes->current->name, g->runtimeArgs->indexDir);
+        save(g->player, g->scenes->current->name);
     }
 }
 
@@ -150,7 +146,6 @@ void checkFights(Game *g, Scene *s) {
                 g->ui->fonts,
                 g->ui->menuSprite,
                 NULL,
-                NULL,
                 0);
     }
 }
@@ -163,8 +158,7 @@ void doExplorationLoop(Game *g) {
             g->player,
             g->notifications,
             s->activeControlBlocks,
-            getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT),
-            g->runtimeArgs->showFPS);
+            getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT));
     doMobileMovementUpdates(s->exploration);
     processAnimations(g->animations);
     evaluateMovement(s->exploration, g->player);
@@ -177,7 +171,7 @@ void doFightLoop(Game *g) {
     Scene *s = g->scenes->current;
     fightUpdate(g->fights->fight);
     checkFightInput(g->fights);
-    drawFightView(s->encounters, g->fights, g->runtimeArgs->showFPS);
+    drawFightView(s->encounters, g->fights);
     processFightAnimations();
     checkControls(g->controls);
     checkRemoveFight(g->fights);
@@ -188,7 +182,7 @@ void doInGameMenuLoop(Game *g) {
     drawAllMenus(
             g->ui->menuContext,
             g->menus);
-    if (g->runtimeArgs->showFPS) {
+    if (runtimeArgs->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }
     EndDrawing();
@@ -211,22 +205,21 @@ void run(Game *g) {
 }
 
 SaveData *initializePlayer(Game *g) {
-    RuntimeArgs *r = g->runtimeArgs;
     char saveFilePath[MAX_FS_PATH_LENGTH];
-    if (r->saveFile != NULL) {
-        sprintf((char *)saveFilePath, "%s/_saves/%s", r->indexDir, r->saveFile);
+    if (runtimeArgs->saveFile != NULL) {
+        sprintf((char *)saveFilePath, "%s/_saves/%s", runtimeArgs->indexDir, runtimeArgs->saveFile);
     } else {
-        strcpy(saveFilePath, getAutosaveFile(r->indexDir));
+        strcpy(saveFilePath, getAutosaveFile(runtimeArgs->indexDir));
     }
     SaveData *save = NULL;
-    if (FileExists(saveFilePath) && !r->forceNewGame) {
+    if (FileExists(saveFilePath) && !runtimeArgs->forceNewGame) {
         save = loadSaveData(saveFilePath);
         g->player = mapSaveDataToPlayer(g->animations, save);
     } else {
-        g->player = createNewPlayer(g->animations, r->indexDir);
+        g->player = createNewPlayer(g->animations);
         addItem(g->player, g->items->items[0]);
     }
-    g->player->saveFiles = getSaveFiles(r->indexDir);
+    g->player->saveFiles = getSaveFiles();
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         if (g->player->party[i] == NULL) {
             break;
@@ -236,29 +229,28 @@ SaveData *initializePlayer(Game *g) {
     return save;
 }
 
-Game *createGame(UIData *uiData, RuntimeArgs *r) {
+Game *createGame(UIData *uiData) {
     Game *g = malloc(sizeof(Game));
-    g->runtimeArgs = r;
-    g->sprites = loadSpritesheetManager(r->indexDir);
+    g->sprites = loadSpritesheetManager();
     g->ui = createUIManager(uiData, g->sprites);
     g->animations = createAnimationManager();
-    loadAllAnimations(g->animations, g->sprites, r->indexDir);
-    g->audio = loadAudioManager(r->indexDir);
-    g->beastiary = loadBeastiary(g->runtimeArgs->indexDir);
+    loadAllAnimations(g->animations, g->sprites);
+    g->audio = loadAudioManager();
+    g->beastiary = loadBeastiary();
     g->items = createItemManager();
-    loadAllItems(g->items, r->indexDir);
+    loadAllItems(g->items);
     g->mobiles = createMobileManager(g->animations);
     SaveData *save = initializePlayer(g);
     g->notifications = createNotificationManager();
-    g->timing = createTiming(g->notifications, g->player, g->runtimeArgs->logMemory);
+    g->timing = createTiming(g->notifications, g->player);
     g->controls = createControlManager(
             g->player,
             g->items,
             g->notifications,
             g->mobiles);
     g->scenes = createSceneManager(g->controls, g->animations, g->audio);
-    loadScenesFromFiles(g->scenes, g->mobiles, g->beastiary, g->runtimeArgs);
-    setSceneBasedOnSave(g->scenes, g->player, save, g->runtimeArgs->sceneIndex);
+    loadScenesFromFiles(g->scenes, g->mobiles, g->beastiary);
+    setSceneBasedOnSave(g->scenes, g->player, save);
     addDebug("done creating game object");
     free(save);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));

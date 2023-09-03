@@ -57,13 +57,11 @@ MenuContext *createMenuContext(
         FontStyle **fonts,
         Spritesheet *menuSprite,
         const char *scene,
-        const char *indexDir,
         int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
     context->fight = fight;
     context->player = player;
     context->scene = scene;
-    context->indexDir = indexDir;
     context->cursorLine = cursorLine;
     context->fonts = fonts;
     context->menuSprite = menuSprite;

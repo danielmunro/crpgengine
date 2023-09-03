@@ -82,7 +82,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         resetMoving(mob);
         progress++;
     } else if (needsToSave(then)) {
-        save(cm->player, cm->scene->name, runtimeArgs->indexDir);
+        save(cm->player, cm->scene->name);
         addNotification(
                 cm->notificationManager,
                 createNotification(SAVED, "Your game has been saved."));

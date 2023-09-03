@@ -27,14 +27,14 @@ void drawFightMenu(FightManager *fm) {
     drawAllMenus(fm->ui->menuContext, fm->menus);
 }
 
-void drawFightView(Encounters *encounters, FightManager *fights, bool showFPS) {
+void drawFightView(Encounters *encounters, FightManager *fights) {
     BeginDrawing();
     ClearBackground(BLACK);
     drawFightBackground(encounters);
     drawFightBeasts(fights->fight);
     drawFightPlayer(fights->fight->player);
     drawFightMenu(fights);
-    if (showFPS) {
+    if (runtimeArgs->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }
     EndDrawing();

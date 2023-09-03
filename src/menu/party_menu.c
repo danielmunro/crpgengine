@@ -53,7 +53,7 @@ MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext) {
     if (strcmp(PartyMenuItems[c], PARTY_MENU_ITEMS) == 0) {
         return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_SAVE) == 0) {
-        save(menuContext->player, menuContext->scene, menuContext->indexDir);
+        save(menuContext->player, menuContext->scene);
         return createMenuSelectResponse(OPEN_MENU, ACKNOWLEDGE_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_QUIT) == 0) {
         return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);

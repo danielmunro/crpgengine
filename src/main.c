@@ -2,18 +2,18 @@
 
 int main(int argc, char *argv[]) {
     setupApp();
-    RuntimeArgs *r = createRuntimeArgs(argc, argv);
-    ConfigData *appCfg = loadAppConfigYaml(r->indexDir);
-    UIData *uiCfg = loadUIData(r->indexDir);
+    createRuntimeArgs(argc, argv);
+    ConfigData *appCfg = loadAppConfigYaml(runtimeArgs->indexDir);
+    UIData *uiCfg = loadUIData(runtimeArgs->indexDir);
     createLog(runtimeArgs->logLevel);
     initWindow(appCfg->title, uiCfg);
-    Game *g = createGame(uiCfg, r);
+    Game *g = createGame(uiCfg);
     validateGameData(g);
-    if (r->purgeSaves) {
-        purgeSaves(r->indexDir);
-    } else if (r->dump) {
+    if (runtimeArgs->purgeSaves) {
+        purgeSaves(runtimeArgs->indexDir);
+    } else if (runtimeArgs->dump) {
         dumpGame(g);
-    } else if (!r->exit) {
+    } else if (!runtimeArgs->exit) {
         run(g);
     }
     return 0;

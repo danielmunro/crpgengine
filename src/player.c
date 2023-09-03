@@ -159,9 +159,9 @@ void saveFile(SaveData *save, const char *indexDir, const char *filename) {
     saveSaveData(save, filePathAuto);
 }
 
-SaveFiles *getSaveFiles(const char *indexDir) {
+SaveFiles *getSaveFiles() {
     const char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *)savesDirectory, "%s/_saves", indexDir);
+    sprintf((char *)savesDirectory, "%s/_saves", runtimeArgs->indexDir);
     char **files = calloc(MAX_SAVE_FILES, sizeof(char *));
     const char **names = calloc(MAX_SAVE_FILES, sizeof (char *));
     unsigned long created[MAX_SAVE_FILES];
@@ -208,7 +208,7 @@ SaveFiles *getSaveFiles(const char *indexDir) {
     return sf;
 }
 
-void save(Player *player, const char *sceneName, const char *indexDir) {
+void save(Player *player, const char *sceneName) {
     addInfo("save player progress");
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
@@ -223,18 +223,18 @@ void save(Player *player, const char *sceneName, const char *indexDir) {
 
     printf("item: %s\n", player->items[0]->name);
     // auto save
-    saveFile(save, indexDir, "autosave.yaml");
+    saveFile(save, runtimeArgs->indexDir, "autosave.yaml");
     char filename[MAX_FS_PATH_LENGTH];
 
     // point-in-time save
     sprintf(filename, "save-%lu.yaml", (unsigned long)time(NULL));
-    saveFile(save, indexDir, filename);
+    saveFile(save, runtimeArgs->indexDir, filename);
 
     free(date);
     free(name);
     free(save);
     free(player->saveFiles);
-    player->saveFiles = getSaveFiles(indexDir);
+    player->saveFiles = getSaveFiles();
 }
 
 void addStory(Player *p, const char *story) {
@@ -292,8 +292,8 @@ Player *mapSaveDataToPlayer(AnimationManager *am, SaveData *save) {
             save->player->items_count);
 }
 
-Player *createNewPlayer(AnimationManager *am, const char *indexDir) {
-    addInfo("loading player from dir %s", indexDir);
+Player *createNewPlayer(AnimationManager *am) {
+    addInfo("creating new player");
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
     Spell **spells1 = calloc(MAX_SPELLS, sizeof(Spell));

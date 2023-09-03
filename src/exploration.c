@@ -28,7 +28,6 @@ typedef struct {
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
-    RuntimeArgs *runtimeArgs;
 } Exploration;
 
 Exit *createExit() {
@@ -65,7 +64,6 @@ Exploration *createExploration() {
     exploration->exitCount = 0;
     exploration->objectCount = 0;
     exploration->arriveAtCount = 0;
-    exploration->runtimeArgs = runtimeArgs;
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         exploration->mobMovements[i] = NULL;
     }
@@ -118,7 +116,7 @@ Vector2D getTileCount(Exploration *e) {
     return (Vector2D) {x, y};
 }
 
-void explorationDebugKeyPressed(Exploration *e, Vector2 position) {
+void explorationDebugKeyPressed(Vector2 position) {
     addInfo("player coordinates: %f, %f", position.x, position.y);
 }
 
@@ -159,7 +157,7 @@ void drawTile(Exploration *e, Image layer, int index, int x, int y) {
             (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
             WHITE
     );
-    if (e->runtimeArgs->showObjectCollisions) {
+    if (runtimeArgs->showObjectCollisions) {
         drawObjectCollision(e, layer, index - 1, x, y);
     }
 }
@@ -204,7 +202,7 @@ void renderExplorationLayer(Exploration *e, LayerType layer) {
             );
         }
     }
-    if (e->runtimeArgs->showWarpCollisions) {
+    if (runtimeArgs->showWarpCollisions) {
         drawWarpCollisions(e, &renderedLayer);
     }
     e->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
@@ -267,7 +265,7 @@ void drawExplorationMobiles(Exploration *e, Player *p, Vector2 offset) {
         }
     }
 
-    if (e->runtimeArgs->showPlayerCollision) {
+    if (runtimeArgs->showPlayerCollision) {
         DrawRectangle(
                 (int) (mob->position.x + offset.x + MOB_COLLISION_WIDTH_OFFSET),
                 (int) (mob->position.y + offset.y + MOB_COLLISION_HEIGHT_OFFSET),
@@ -385,8 +383,7 @@ void drawExplorationView(
         Player *p,
         NotificationManager *nm,
         ControlBlock *c[MAX_ACTIVE_CONTROLS],
-        FontStyle *font,
-        bool showFPS) {
+        FontStyle *font) {
     addDebug("exploration -- draw");
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();
@@ -401,7 +398,7 @@ void drawExplorationView(
     DrawTextureEx(e->renderedLayers[FOREGROUND], offset, 0, SCALE, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);
-    if (showFPS) {
+    if (runtimeArgs->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }
     EndDrawing();
@@ -420,7 +417,7 @@ void renderExplorationLayers(Exploration *e) {
     addDebug("exploration successfully rendered");
 }
 
-void dialogEngaged(Exploration *exploration, Player *player, ControlBlock *controlBlock) {
+void dialogEngaged(Player *player, ControlBlock *controlBlock) {
     addInfo("speaking with '%s' mob", player->engageable->name);
     if (controlBlock != NULL) {
         controlBlock->progress++;
@@ -434,13 +431,13 @@ void dialogEngaged(Exploration *exploration, Player *player, ControlBlock *contr
     }
 }
 
-void explorationSpaceKeyPressed(Exploration *exploration, Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
+void explorationSpaceKeyPressed(Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
     addInfo("exploration space key pressed");
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (controlBlocks[i] != NULL
                 && player->engaged
                 && isSpeakOutcome(controlBlocks[i]->then[controlBlocks[i]->progress])) {
-            dialogEngaged(exploration, player, controlBlocks[i]);
+            dialogEngaged(player, controlBlocks[i]);
             return;
         }
     }
