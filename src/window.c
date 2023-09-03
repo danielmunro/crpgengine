@@ -1,6 +1,6 @@
-void initWindow(const char *title) {
-    SetTargetFPS(TARGET_FRAMERATE);
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, title);
+void initWindow(const char *title, UIData *ui) {
+    SetTargetFPS(ui->screen->targetFrameRate);
+    InitWindow(ui->screen->width, ui->screen->height, title);
     InitAudioDevice();
     if (!IsAudioDeviceReady()) {
         printf("not ready");
@@ -8,5 +8,7 @@ void initWindow(const char *title) {
     }
     HideCursor();
     SetExitKey(0);
-//    ToggleFullscreen();
+    if (ui->screen->full) {
+        ToggleFullscreen();
+    }
 }

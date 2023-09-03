@@ -16,7 +16,16 @@ typedef struct {
 } FontsData;
 
 typedef struct {
+    bool full;
+    int width;
+    int height;
+    float scale;
+    int targetFrameRate;
+} ScreenData;
+
+typedef struct {
     FontsData *fonts;
+    ScreenData *screen;
 } UIData;
 
 static const cyaml_schema_field_t fontFamilyFieldSchema[] = {
@@ -49,9 +58,25 @@ static const cyaml_schema_field_t familiesFieldSchema[] = {
         CYAML_FIELD_END,
 };
 
+static const cyaml_schema_field_t screenFieldSchema[] = {
+        CYAML_FIELD_BOOL(
+                "full", CYAML_FLAG_DEFAULT, ScreenData, full),
+        CYAML_FIELD_INT(
+                "width", CYAML_FLAG_DEFAULT, ScreenData, width),
+        CYAML_FIELD_INT(
+                "height", CYAML_FLAG_DEFAULT, ScreenData, height),
+        CYAML_FIELD_FLOAT(
+                "scale", CYAML_FLAG_DEFAULT, ScreenData, scale),
+        CYAML_FIELD_INT(
+                "targetFrameRate", CYAML_FLAG_DEFAULT, ScreenData, targetFrameRate),
+        CYAML_FIELD_END,
+};
+
 static const cyaml_schema_field_t fontsTopMappingField[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "fonts", CYAML_FLAG_POINTER, UIData, fonts, familiesFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "screen", CYAML_FLAG_POINTER, UIData, screen, screenFieldSchema),
         CYAML_FIELD_END,
 };
 

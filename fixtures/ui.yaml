@@ -1,3 +1,9 @@
+screen:
+  full: false
+  width: 720
+  height: 450
+  scale: 1.0
+  targetFrameRate: 60
 fonts:
   default:
     name: default

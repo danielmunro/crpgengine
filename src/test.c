@@ -126,7 +126,8 @@ void experienceToLevel51Test() {
 }
 
 int main() {
-    initWindow("./fixtures");
+    UIData *uiCfg = loadUIData("./fixtures");
+    initWindow("./fixtures", uiCfg);
     plan(107);
     strToIntTest();
     createFightInSceneTest();
