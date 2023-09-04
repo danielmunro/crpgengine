@@ -1,4 +1,8 @@
-spritesheet: uipack
+sprite:
+  name: uipack
+  cursors:
+    down: 769
+    right: 801
 screen:
   full: false
   width: 720

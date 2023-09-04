@@ -52,7 +52,7 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
                             mob->name);
         if (mc->cursorLine == i && isReadyForAction(mob)) {
             drawRightCursor(
-                    mc->menuSprite,
+                    mc->uiSprite,
                     (Vector2) {
                             textBox->area.x,
                             textBox->area.y + (fs->lineHeight * (float) i),
@@ -60,7 +60,7 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
             if (doDrawDownCursor) {
                 Vector2 playerPosition = getFightPlayerPosition(i);
                 int frameHeight = mob->animations[0]->spriteSheet->frameHeight;
-                drawDownCursor(mc->menuSprite,
+                drawDownCursor(mc->uiSprite,
                                (Vector2) {
                                        playerPosition.x - 5,
                                        playerPosition.y - (float) frameHeight - 15,

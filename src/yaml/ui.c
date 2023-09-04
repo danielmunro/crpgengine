@@ -24,7 +24,17 @@ typedef struct {
 } ScreenData;
 
 typedef struct {
-    const char *spritesheet;
+    int down;
+    int right;
+} CursorData;
+
+typedef struct {
+    const char *name;
+    CursorData *cursors;
+} UISpriteData;
+
+typedef struct {
+    UISpriteData *sprite;
     FontsData *fonts;
     ScreenData *screen;
 } UIData;
@@ -73,9 +83,25 @@ static const cyaml_schema_field_t screenFieldSchema[] = {
         CYAML_FIELD_END,
 };
 
-static const cyaml_schema_field_t fontsTopMappingField[] = {
+static const cyaml_schema_field_t cursorFieldSchema[] = {
+        CYAML_FIELD_INT(
+                "down", CYAML_FLAG_DEFAULT, CursorData, down),
+        CYAML_FIELD_INT(
+                "right", CYAML_FLAG_DEFAULT, CursorData, right),
+        CYAML_FIELD_END,
+};
+
+static const cyaml_schema_field_t spritesheetFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
-                "spritesheet", CYAML_FLAG_POINTER, UIData, spritesheet, 0, CYAML_UNLIMITED),
+                "name", CYAML_FLAG_POINTER, UISpriteData, name, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_MAPPING_PTR(
+                "cursors", CYAML_FLAG_POINTER, UISpriteData, cursors, cursorFieldSchema),
+        CYAML_FIELD_END,
+};
+
+static const cyaml_schema_field_t fontsTopMappingField[] = {
+        CYAML_FIELD_MAPPING_PTR(
+                "sprite", CYAML_FLAG_POINTER, UIData, sprite, spritesheetFieldSchema),
         CYAML_FIELD_MAPPING_PTR(
                 "fonts", CYAML_FLAG_POINTER, UIData, fonts, familiesFieldSchema),
         CYAML_FIELD_MAPPING_PTR(

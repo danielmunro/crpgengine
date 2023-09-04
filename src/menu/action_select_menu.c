@@ -27,7 +27,7 @@ void drawActionSelectMenuScreen(MenuContext *menuContext) {
         drawInMenu(t, actionMenu[i]);
     }
     drawRightCursor(
-            menuContext->menuSprite,
+            menuContext->uiSprite,
             (Vector2) {
                     t->area.x,
                     t->area.y +

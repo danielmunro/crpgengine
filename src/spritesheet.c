@@ -64,17 +64,3 @@ void drawImageFromSprite(Spritesheet *s, Vector2 position, int imageIndex) {
             WHITE
     );
 }
-
-void drawRightCursor(Spritesheet *sprites, Vector2 position) {
-    drawImageFromSprite(sprites, (Vector2) {
-            position.x + FIGHT_CURSOR_X_OFFSET,
-            position.y + FIGHT_CURSOR_Y_OFFSET,
-    }, CURSOR_RIGHT_INDEX);
-}
-
-void drawDownCursor(Spritesheet *sprites, Vector2 position) {
-    drawImageFromSprite(sprites, (Vector2) {
-            position.x + FIGHT_CURSOR_X_OFFSET,
-            position.y + FIGHT_CURSOR_Y_OFFSET,
-    }, CURSOR_DOWN_INDEX);
-}

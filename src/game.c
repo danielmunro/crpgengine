@@ -62,7 +62,7 @@ void explorationMenuKeyPressed(Game *g) {
             g->fights->fight,
             g->player,
             g->ui->fonts,
-            g->ui->spritesheet,
+            g->ui->uiSprite,
             g->scenes->current->name,
             0);
     addMenu(g->menus, findMenu(g->ui->menus, PARTY_MENU));
@@ -144,7 +144,7 @@ void checkFights(Game *g, Scene *s) {
                 g->fights->fight,
                 g->player,
                 g->ui->fonts,
-                g->ui->spritesheet,
+                g->ui->uiSprite,
                 NULL,
                 0);
     }
@@ -235,7 +235,9 @@ Game *createGame() {
     UIData *uiData = loadUIData();
     g->ui = createUIManager(
             uiData,
-            findSpritesheetByName(g->sprites, uiData->spritesheet));
+            createUISprite(
+                    findSpritesheetByName(g->sprites, uiData->sprite->name),
+                    uiData));
     g->animations = createAnimationManager();
     loadAllAnimations(g->animations, g->sprites);
     g->audio = loadAudioManager();

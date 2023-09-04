@@ -1,4 +1,9 @@
 typedef struct {
+    Spritesheet *sprite;
+    UIData *config;
+} UISprite;
+
+typedef struct {
     const char *scene;
     Player *player;
     SaveFiles *saveFiles;
@@ -8,7 +13,7 @@ typedef struct {
     Fight *fight;
     TextBox **textBoxes;
     Mobile *selectedMob;
-    Spritesheet *menuSprite;
+    UISprite *uiSprite;
 } MenuContext;
 
 typedef struct {
@@ -55,7 +60,7 @@ MenuContext *createMenuContext(
         Fight *fight,
         Player *player,
         Fonts *fonts,
-        Spritesheet *menuSprite,
+        UISprite *uiSprite,
         const char *scene,
         int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
@@ -64,10 +69,17 @@ MenuContext *createMenuContext(
     context->scene = scene;
     context->cursorLine = cursorLine;
     context->fonts = fonts;
-    context->menuSprite = menuSprite;
+    context->uiSprite = uiSprite;
     context->textBoxes = calloc(MAX_TEXT_BOXES, sizeof(TextBox));
     context->selectedMob = NULL;
     return context;
+}
+
+UISprite *createUISprite(Spritesheet *sprite, UIData *config) {
+    UISprite *uiSprite = malloc(sizeof(UISprite));
+    uiSprite->sprite = sprite;
+    uiSprite->config = config;
+    return uiSprite;
 }
 
 void normalizeMenuCursor(Menu *menu, MenuContext *menuContext) {
@@ -164,4 +176,18 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
         removeMenu(menus);
     }
     return response;
+}
+
+void drawRightCursor(UISprite *sprites, Vector2 position) {
+    drawImageFromSprite(sprites->sprite, (Vector2) {
+            position.x + FIGHT_CURSOR_X_OFFSET,
+            position.y + FIGHT_CURSOR_Y_OFFSET,
+    }, sprites->config->sprite->cursors->right);
+}
+
+void drawDownCursor(UISprite *sprites, Vector2 position) {
+    drawImageFromSprite(sprites->sprite, (Vector2) {
+            position.x + FIGHT_CURSOR_X_OFFSET,
+            position.y + FIGHT_CURSOR_Y_OFFSET,
+    }, sprites->config->sprite->cursors->down);
 }

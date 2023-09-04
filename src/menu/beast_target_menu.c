@@ -9,7 +9,7 @@ void drawBeastTargetMenuScreen(MenuContext *menuContext) {
             BEAST_SELECT_BOX,
             createBeastSelectTextBox);
     drawRightCursor(
-            menuContext->menuSprite,
+            menuContext->uiSprite,
             (Vector2) {
                     t->area.x,
                     t->area.y +
@@ -18,7 +18,7 @@ void drawBeastTargetMenuScreen(MenuContext *menuContext) {
             });
     Rectangle p = menuContext->fight->beasts[menuContext->cursorLine]->position;
     drawRightCursor(
-            menuContext->menuSprite,
+            menuContext->uiSprite,
             (Vector2) {
                     p.x - (p.width / 2),
                     p.y - (p.height / 2),

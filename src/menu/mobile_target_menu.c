@@ -10,7 +10,7 @@ void drawMobileTargetMenuScreen(MenuContext *menuContext) {
     int frameWidth = menuContext->selectedMob->animations[0]->spriteSheet->frameWidth;
     int frameHeight = menuContext->selectedMob->animations[0]->spriteSheet->frameHeight;
     drawRightCursor(
-            menuContext->menuSprite,
+            menuContext->uiSprite,
             (Vector2) {
                     playerPosition.x - (float) frameWidth,
                     (float) (playerPosition.y - frameHeight / 1.5),
