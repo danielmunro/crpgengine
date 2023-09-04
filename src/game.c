@@ -229,9 +229,10 @@ SaveData *initializePlayer(Game *g) {
     return save;
 }
 
-Game *createGame(UIData *uiData) {
+Game *createGame() {
     Game *g = malloc(sizeof(Game));
     g->sprites = loadSpritesheetManager();
+    UIData *uiData = loadUIData();
     g->ui = createUIManager(
             uiData,
             findSpritesheetByName(g->sprites, uiData->spritesheet));
