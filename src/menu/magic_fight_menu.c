@@ -5,15 +5,15 @@ int getMagicFightCursorLength(MenuContext *menuContext) {
 TextBox *createMagicFightMenuTextBox(MenuContext *menuContext) {
     return createTextBox(
             drawBottomRightMenu(),
-            getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT),
+            menuContext->fonts->default_,
             MAGIC_SELECT_BOX);
 }
 
 void drawMagicFightMenuScreen(MenuContext *menuContext) {
     drawBottomRightMenu();
     TextBox *t = findOrCreateTextBox(menuContext, MAGIC_SELECT_BOX, createMagicFightMenuTextBox);
-    FontStyle *defaultFont = getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT);
-    FontStyle *disabledFont = getFontStyle(menuContext->fonts, FONT_STYLE_DISABLE);
+    FontStyle *defaultFont = menuContext->fonts->default_;
+    FontStyle *disabledFont = menuContext->fonts->disable;
     Mobile *m = menuContext->selectedMob;
     for (int i = 0; i < m->spellCount; i++) {
         FontStyle *fs = canApplyCost(m, m->spells[i]->cost) ? defaultFont : disabledFont;
@@ -24,8 +24,8 @@ void drawMagicFightMenuScreen(MenuContext *menuContext) {
             (Vector2) {
                     t->area.x,
                     t->area.y +
-                            (getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT)->lineHeight *
-                                    (float) menuContext->cursorLine),
+                            defaultFont->lineHeight *
+                                    (float) menuContext->cursorLine,
             });
 }
 

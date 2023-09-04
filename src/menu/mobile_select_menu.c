@@ -1,24 +1,24 @@
-FontStyle *getFontStyleForFightCursor(Mobile *mob, FontStyle **fonts, int mobIndex, int loopIndex) {
+FontStyle *getFontStyleForFightCursor(Mobile *mob, Fonts *fonts, int mobIndex, int loopIndex) {
     if (mobIndex == loopIndex) {
-        return getFontStyle(fonts, FONT_STYLE_HIGHLIGHT);
+        return fonts->highlight;
     } else if(isReadyForAction(mob)) {
-        return getFontStyle(fonts, FONT_STYLE_DEFAULT);
+        return fonts->default_;
     } else {
-        return getFontStyle(fonts, FONT_STYLE_DISABLE);
+        return fonts->disable;
     }
 }
 
-FontStyle *getFontStyleForHealthLevel(FontStyle **fonts, float percent) {
+FontStyle *getFontStyleForHealthLevel(Fonts *fonts, float percent) {
     if (percent >= FONT_WARNING_THRESHOLD) {
-        return getFontStyle(fonts, FONT_STYLE_DEFAULT);
+        return fonts->default_;
     } else if (percent >= FONT_DANGER_THRESHOLD) {
-        return getFontStyle(fonts, FONT_STYLE_WARNING);
+        return fonts->warning;
     } else {
-        return getFontStyle(fonts, FONT_STYLE_DANGER);
+        return fonts->danger;
     }
 }
 
-void drawStat(FontStyle **fonts, int amount, float percent, Vector2 vect) {
+void drawStat(Fonts *fonts, int amount, float percent, Vector2 vect) {
     char stat[10];
     sprintf(stat, "%d", amount);
     FontStyle *fs = getFontStyleForHealthLevel(fonts, percent);
@@ -46,7 +46,7 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
         Mobile *mob = mc->fight->player->party[i];
         FontStyle *fs = isReadyForAction(mob)
                 ? getFontStyleForFightCursor(mob,  mc->fonts, mc->cursorLine, i)
-                : getFontStyle(mc->fonts, FONT_STYLE_DISABLE);
+                : mc->fonts->disable;
         drawInMenuWithStyle(textBox,
                             fs,
                             mob->name);
@@ -84,11 +84,11 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
         drawActionGauge(
                 ((float) i * fs->lineHeight),
                 ACTION_GAUGE_WIDTH,
-                getFontStyle(mc->fonts, FONT_STYLE_DISABLE)->color);
+                mc->fonts->disable->color);
         drawActionGauge(
                 ((float) i * fs->lineHeight),
                 ACTION_GAUGE_WIDTH * ((float) mob->actionGauge / MAX_ACTION_GAUGE),
-                getFontStyle(mc->fonts, FONT_STYLE_DEFAULT)->color);
+                mc->fonts->default_->color);
     }
 }
 
@@ -99,7 +99,7 @@ int getMobileSelectMenuCursorLength(MenuContext *menuContext) {
 TextBox *createMobileSelectTextBox(MenuContext *menuContext) {
     return createTextBox(
             drawBottomRightMenu(),
-            getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT), MOBILE_SELECT_BOX);
+            menuContext->fonts->default_, MOBILE_SELECT_BOX);
 }
 
 void drawMobileSelectMenuScreen(MenuContext *menuContext) {

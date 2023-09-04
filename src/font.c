@@ -7,6 +7,14 @@ typedef struct {
     float spacing;
 } FontStyle;
 
+typedef struct {
+    FontStyle *default_;
+    FontStyle *disable;
+    FontStyle *highlight;
+    FontStyle *warning;
+    FontStyle *danger;
+} Fonts;
+
 FontStyle *createFontStyle(FontStyleType type, Font font, Color color, float size, float lineHeight, float spacing) {
     FontStyle *fs = malloc(sizeof(FontStyle));
     fs->type = type;
@@ -29,14 +37,4 @@ FontStyle *createFontFromData(FontData *data) {
             (float) data->size,
             (float) data->lineHeight,
             (float) data->spacing);
-}
-
-FontStyle *getFontStyle(FontStyle **fonts, FontStyleType fsType) {
-    for (int i = 0; i < FONT_STYLE_COUNT; i++) {
-        if (fonts[i]->type == fsType) {
-            return fonts[i];
-        }
-    }
-    fprintf(stderr, "font style type not found: %d\n", fsType);
-    exit(EXIT_FONT_STYLE_NOT_FOUND);
 }

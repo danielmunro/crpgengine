@@ -8,7 +8,7 @@ void drawPlayer(Player *player) {
 void drawPartyMenuScreen(MenuContext *menuContext) {
     drawFullscreenMenu();
     drawPlayer(menuContext->player);
-    FontStyle *defaultFont = getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT);
+    FontStyle *defaultFont = menuContext->fonts->default_;
     float column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;
     float column2 = SCREEN_WIDTH - 200;
     drawText(

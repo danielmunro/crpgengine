@@ -13,8 +13,8 @@ void drawBeastTargetMenuScreen(MenuContext *menuContext) {
             (Vector2) {
                     t->area.x,
                     t->area.y +
-                        (getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT)->lineHeight *
-                                (float) menuContext->cursorLine),
+                        menuContext->fonts->default_->lineHeight *
+                                (float) menuContext->cursorLine,
             });
     Rectangle p = menuContext->fight->beasts[menuContext->cursorLine]->position;
     drawRightCursor(

@@ -4,7 +4,7 @@ typedef struct {
     SaveFiles *saveFiles;
     const char *indexDir;
     int cursorLine;
-    FontStyle **fonts;
+    Fonts *fonts;
     Fight *fight;
     TextBox **textBoxes;
     Mobile *selectedMob;
@@ -54,7 +54,7 @@ Menu *createMenu(
 MenuContext *createMenuContext(
         Fight *fight,
         Player *player,
-        FontStyle **fonts,
+        Fonts *fonts,
         Spritesheet *menuSprite,
         const char *scene,
         int cursorLine) {

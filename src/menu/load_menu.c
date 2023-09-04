@@ -4,7 +4,7 @@ int getLoadCursorLength(MenuContext *menuContext) {
 
 void drawLoadMenuScreen(MenuContext *menuContext) {
     Rectangle rect = drawSmallMenu();
-    FontStyle *defaultFont = getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT);
+    FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *b = createTextBox(rect, defaultFont, LOAD_BOX);
     for (int i = 0; i < menuContext->saveFiles->count; i++) {
         drawInMenu(b, menuContext->saveFiles->saveNames[i]);

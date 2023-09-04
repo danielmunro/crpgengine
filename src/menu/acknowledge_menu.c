@@ -4,13 +4,13 @@ int getAcknowledgeCursorLength(MenuContext *menuContext) {
 
 TextBox *createAcknowledgeBox(MenuContext *mc) {
     Rectangle rect = drawMediumMenu();
-    FontStyle *defaultFont = getFontStyle(mc->fonts, FONT_STYLE_DEFAULT);
+    FontStyle *defaultFont = mc->fonts->default_;
     return createTextBox(rect, defaultFont, ACKNOWLEDGE_BOX);
 }
 
 void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
     Rectangle rect = drawMediumMenu();
-    FontStyle *defaultFont = getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT);
+    FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *b = findOrCreateTextBox(
             menuContext,
             ACKNOWLEDGE_BOX,

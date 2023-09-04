@@ -158,7 +158,7 @@ void doExplorationLoop(Game *g) {
             g->player,
             g->notifications,
             s->activeControlBlocks,
-            getFontStyle(g->ui->fonts, FONT_STYLE_DEFAULT));
+            g->ui->fonts->default_);
     doMobileMovementUpdates(s->exploration);
     processAnimations(g->animations);
     evaluateMovement(s->exploration, g->player);

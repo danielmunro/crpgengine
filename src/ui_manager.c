@@ -3,7 +3,7 @@ typedef struct {
     MenuContext *menuContext;
     Menu *menus[MAX_MENUS];
     int menuCount;
-    FontStyle **fonts;
+    Fonts *fonts;
     Spritesheet *spritesheet;
     UIData *config;
 } UIManager;
@@ -97,12 +97,12 @@ int getMenuList(UIManager *ui) {
 
 UIManager *createUIManager(UIData *config, Spritesheet *uiSprite) {
     UIManager *ui = malloc(sizeof(UIManager));
-    ui->fonts = calloc(FONT_STYLE_COUNT, sizeof(FontStyle));
-    ui->fonts[0] = createFontFromData(config->fonts->default_);
-    ui->fonts[1] = createFontFromData(config->fonts->disable);
-    ui->fonts[2] = createFontFromData(config->fonts->highlight);
-    ui->fonts[3] = createFontFromData(config->fonts->warning);
-    ui->fonts[4] = createFontFromData(config->fonts->danger);
+    ui->fonts = malloc(sizeof(Fonts));
+    ui->fonts->default_ = createFontFromData(config->fonts->default_);
+    ui->fonts->disable = createFontFromData(config->fonts->disable);
+    ui->fonts->highlight = createFontFromData(config->fonts->highlight);
+    ui->fonts->warning = createFontFromData(config->fonts->warning);
+    ui->fonts->danger = createFontFromData(config->fonts->danger);
     ui->menuCount = getMenuList(ui);
     ui->spritesheet = uiSprite;
     ui->config = config;

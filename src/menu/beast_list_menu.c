@@ -1,7 +1,7 @@
 TextBox *createBeastSelectTextBox(MenuContext *mc) {
     return createTextBox(
             drawBottomLeftMenu(),
-            getFontStyle(mc->fonts, FONT_STYLE_DEFAULT),
+            mc->fonts->default_,
             BEAST_SELECT_BOX);
 }
 
@@ -14,7 +14,7 @@ void drawBeastSelectMenuScreen(MenuContext *menuContext) {
     int count = menuContext->fight->beastCount > MAX_BEAST_NAMES_IN_FIGHT ?
                 MAX_BEAST_NAMES_IN_FIGHT : menuContext->fight->beastCount;
     for (int i = 0; i < count; i++) {
-        if (t->area.height > (float) i * getFontStyle(menuContext->fonts, FONT_STYLE_DEFAULT)->lineHeight) {
+        if (t->area.height > (float) i * menuContext->fonts->default_->lineHeight) {
             drawInMenu(t, menuContext->fight->beasts[i]->name);
         }
     }
