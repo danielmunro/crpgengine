@@ -34,12 +34,10 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
             (Vector2) {column1, UI_PADDING + line(2, defaultFont->lineHeight)},
             defaultFont);
     int count = sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
-
     TextBox *textBox = findOrCreateTextBox(
             menuContext,
             PARTY_BOX,
             createPartyTextBox);
-
     for (int i = 0; i < count; i++) {
         drawInMenu(textBox, PartyMenuItems[i]);
     }
