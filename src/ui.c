@@ -138,6 +138,15 @@ Rectangle drawBottomMenu() {
     return rect;
 }
 
+Rectangle drawPartyMenu() {
+    return (Rectangle) {
+            (float) ui->screen->width - PARTY_MENU_WIDTH,
+            0,
+            PARTY_MENU_WIDTH,
+            (float) ui->screen->height - (UI_PADDING * 2)
+    };
+}
+
 Rectangle drawBottomLeftMenu() {
     Rectangle rect = (Rectangle) {
         0,

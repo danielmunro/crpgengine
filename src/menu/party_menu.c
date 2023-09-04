@@ -5,12 +5,18 @@ void drawPlayer(Player *player) {
     );
 }
 
+TextBox *createPartyTextBox(MenuContext *mc) {
+    return createTextBox(
+            drawPartyMenu(),
+            mc->fonts->default_,
+            PARTY_BOX);
+}
+
 void drawPartyMenuScreen(MenuContext *menuContext) {
     drawFullscreenMenu();
     drawPlayer(menuContext->player);
     FontStyle *defaultFont = menuContext->fonts->default_;
     float column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;
-    float column2 = ui->screen->width - 200;
     drawText(
             getPartyLeader(menuContext->player)->name,
             (Vector2) {column1, UI_PADDING},
@@ -28,20 +34,21 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
             (Vector2) {column1, UI_PADDING + line(2, defaultFont->lineHeight)},
             defaultFont);
     int count = sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
-    TextBox *textBox = createTextBox((Rectangle) {
-            (float) column2,
-            0,
-            200,
-            ui->screen->height - (UI_PADDING * 2)
-    }, defaultFont, PARTY_BOX);
+
+    TextBox *textBox = findOrCreateTextBox(
+            menuContext,
+            PARTY_BOX,
+            createPartyTextBox);
+
     for (int i = 0; i < count; i++) {
         drawInMenu(textBox, PartyMenuItems[i]);
     }
-    drawText(
-            ">",
-            (Vector2) {column2 - 20, UI_PADDING + line(menuContext->cursorLine, defaultFont->lineHeight)},
-            defaultFont);
-    free(textBox);
+    drawRightCursor(
+            menuContext->uiSprite,
+            (Vector2) {
+                    (float) ui->screen->width - PARTY_MENU_WIDTH,
+                line(menuContext->cursorLine, defaultFont->lineHeight)
+            });
 }
 
 int getPartyMenuCursorLength(MenuContext *menuContext) {
