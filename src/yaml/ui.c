@@ -24,6 +24,7 @@ typedef struct {
 } ScreenData;
 
 typedef struct {
+    const char *spritesheet;
     FontsData *fonts;
     ScreenData *screen;
 } UIData;
@@ -73,6 +74,8 @@ static const cyaml_schema_field_t screenFieldSchema[] = {
 };
 
 static const cyaml_schema_field_t fontsTopMappingField[] = {
+        CYAML_FIELD_STRING_PTR(
+                "spritesheet", CYAML_FLAG_POINTER, UIData, spritesheet, 0, CYAML_UNLIMITED),
         CYAML_FIELD_MAPPING_PTR(
                 "fonts", CYAML_FLAG_POINTER, UIData, fonts, familiesFieldSchema),
         CYAML_FIELD_MAPPING_PTR(

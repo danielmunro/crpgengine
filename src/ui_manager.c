@@ -105,7 +105,7 @@ UIManager *createUIManager(UIData *config, SpritesheetManager *sprites) {
     ui->fonts[4] = createFontFromData(config->fonts->danger);
     ui->menuCount = getMenuList(ui);
     ui->sprites = sprites;
-    ui->menuSprite = findSpritesheetByName(sprites, SPRITESHEET_NAME_UI);
+    ui->menuSprite = findSpritesheetByName(sprites, config->spritesheet);
     ui->config = config;
     return ui;
 }
