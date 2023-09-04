@@ -95,19 +95,14 @@ int getMenuList(UIManager *ui) {
     return count;
 }
 
-UIManager *createUIManager(
-        UIData *config,
-        SpritesheetManager *sprites) {
+UIManager *createUIManager(UIData *config, SpritesheetManager *sprites) {
     UIManager *ui = malloc(sizeof(UIManager));
-    char path[MAX_FS_PATH_LENGTH] = "";
-    sprintf(path, "%s/fonts/%s", runtimeArgs->indexDir, config->fonts->default_->filename);
-    Font font = LoadFont(path);
     ui->fonts = calloc(FONT_STYLE_COUNT, sizeof(FontStyle));
-    ui->fonts[0] = createFontFromData(config->fonts->default_, font);
-    ui->fonts[1] = createFontFromData(config->fonts->disable, font);
-    ui->fonts[2] = createFontFromData(config->fonts->highlight, font);
-    ui->fonts[3] = createFontFromData(config->fonts->warning, font);
-    ui->fonts[4] = createFontFromData(config->fonts->danger, font);
+    ui->fonts[0] = createFontFromData(config->fonts->default_);
+    ui->fonts[1] = createFontFromData(config->fonts->disable);
+    ui->fonts[2] = createFontFromData(config->fonts->highlight);
+    ui->fonts[3] = createFontFromData(config->fonts->warning);
+    ui->fonts[4] = createFontFromData(config->fonts->danger);
     ui->menuCount = getMenuList(ui);
     ui->sprites = sprites;
     ui->menuSprite = findSpritesheetByName(sprites, SPRITESHEET_NAME_UI);
