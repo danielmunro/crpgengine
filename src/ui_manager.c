@@ -4,7 +4,7 @@ typedef struct {
     Menu *menus[MAX_MENUS];
     int menuCount;
     FontStyle **fonts;
-    Spritesheet *menuSprite;
+    Spritesheet *spritesheet;
     UIData *config;
 } UIManager;
 
@@ -95,7 +95,7 @@ int getMenuList(UIManager *ui) {
     return count;
 }
 
-UIManager *createUIManager(UIData *config, SpritesheetManager *sprites) {
+UIManager *createUIManager(UIData *config, Spritesheet *uiSprite) {
     UIManager *ui = malloc(sizeof(UIManager));
     ui->fonts = calloc(FONT_STYLE_COUNT, sizeof(FontStyle));
     ui->fonts[0] = createFontFromData(config->fonts->default_);
@@ -104,8 +104,7 @@ UIManager *createUIManager(UIData *config, SpritesheetManager *sprites) {
     ui->fonts[3] = createFontFromData(config->fonts->warning);
     ui->fonts[4] = createFontFromData(config->fonts->danger);
     ui->menuCount = getMenuList(ui);
-    ui->sprites = sprites;
-    ui->menuSprite = findSpritesheetByName(sprites, config->spritesheet);
+    ui->spritesheet = uiSprite;
     ui->config = config;
     return ui;
 }
