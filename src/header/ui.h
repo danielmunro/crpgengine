@@ -1,15 +1,6 @@
 #ifndef CJRPGENGINE_UI_H
 #define CJRPGENGINE_UI_H
 
-
-
-
-#define SCREEN_WIDTH 720
-#define SCREEN_HEIGHT 450
-#define SCALE (float) 1.0
-
-
-
 #define FPS_X 0
 #define FPS_Y 0
 
@@ -18,7 +9,6 @@
 #define BOTTOM_MENU_PLAYER_WIDTH 560
 #define BOTTOM_MENU_ACTION_SELECT_WIDTH 300
 
-#define FIGHT_PLAYER_X (SCREEN_WIDTH * 0.8)
 #define FIGHT_PLAYER_Y_MARGIN 40
 #define FIGHT_PLAYER_Y_PADDING 24
 

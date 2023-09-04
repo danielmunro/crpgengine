@@ -102,7 +102,7 @@ void fightUpdate(Fight *fight) {
 
 Vector2 getFightPlayerPosition(int playerNumber) {
     return (Vector2) {
-            FIGHT_PLAYER_X,
+            (float) (ui->screen->width * 0.8),
             (float) (FIGHT_PLAYER_Y_MARGIN + (MOB_HEIGHT * playerNumber) + (FIGHT_PLAYER_Y_PADDING * playerNumber))
     };
 }

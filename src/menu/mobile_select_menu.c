@@ -26,8 +26,8 @@ void drawStat(Fonts *fonts, int amount, float percent, Vector2 vect) {
 }
 
 void drawActionGauge(float y, float width, Color color) {
-    float actionGaugeX = SCREEN_WIDTH - ACTION_GAUGE_WIDTH - UI_PADDING;
-    float actionGaugeY = SCREEN_HEIGHT - BOTTOM_MENU_HEIGHT + UI_PADDING + y;
+    float actionGaugeX = (float) ui->screen->width - ACTION_GAUGE_WIDTH - UI_PADDING;
+    float actionGaugeY = (float) ui->screen->height - BOTTOM_MENU_HEIGHT + UI_PADDING + y;
     Rectangle rect = {
             actionGaugeX,
             actionGaugeY,

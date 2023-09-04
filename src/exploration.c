@@ -111,8 +111,8 @@ void addObject(Exploration *e, Object *o) {
 }
 
 Vector2D getTileCount(Exploration *e) {
-    int x = SCREEN_WIDTH / e->tilemap->size.x + 1;
-    int y = SCREEN_HEIGHT / e->tilemap->size.y + 2;
+    int x = ui->screen->width / e->tilemap->size.x + 1;
+    int y = ui->screen->height / e->tilemap->size.y + 2;
     return (Vector2D) {x, y};
 }
 
@@ -185,8 +185,8 @@ void drawWarpCollisions(Exploration *e, Image *image) {
 
 void renderExplorationLayer(Exploration *e, LayerType layer) {
     Vector2D sz = e->tilemap->size;
-    int width = SCREEN_WIDTH / sz.x;
-    int height = SCREEN_HEIGHT / sz.y;
+    int width = ui->screen->width / sz.x;
+    int height = ui->screen->height / sz.y;
     Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
     for (int y = -1; y < height; y++) {
         for (int x = -1; x < width; x++) {
@@ -389,13 +389,13 @@ void drawExplorationView(
     BeginDrawing();
     ClearBackground(BLACK);
     Vector2 offset = {
-            ((float) SCREEN_WIDTH / 2) - mob->position.x,
-            ((float) SCREEN_HEIGHT / 2) - mob->position.y
+            ((float) ui->screen->width / 2) - mob->position.x,
+            ((float) ui->screen->height / 2) - mob->position.y
     };
-    DrawTextureEx(e->renderedLayers[BACKGROUND], offset, 0, SCALE, WHITE);
-    DrawTextureEx(e->renderedLayers[MIDGROUND], offset, 0, SCALE, WHITE);
+    DrawTextureEx(e->renderedLayers[BACKGROUND], offset, 0, ui->screen->scale, WHITE);
+    DrawTextureEx(e->renderedLayers[MIDGROUND], offset, 0, ui->screen->scale, WHITE);
     drawExplorationMobiles(e, p, offset);
-    DrawTextureEx(e->renderedLayers[FOREGROUND], offset, 0, SCALE, WHITE);
+    DrawTextureEx(e->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);
     if (runtimeArgs->showFPS) {

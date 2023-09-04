@@ -4,5 +4,6 @@ void globalSetup(int argc, char *argv[]) {
     createLog(runtimeArgs->logLevel);
     ConfigData *appCfg = loadAppConfigYaml();
     UIData *uiCfg = loadUIData();
+    createUIConfig(uiCfg);
     initWindow(appCfg->title, uiCfg);
 }

@@ -32,8 +32,8 @@ void addNotification(NotificationManager *nm, Notification *n) {
     for (int i = 0; i < MAX_NOTIFICATIONS; i++) {
         if (nm->notifications[i] == NULL) {
             n->rect = (Rectangle) {
-                    SCREEN_WIDTH - 300 - UI_PADDING,
-                    SCREEN_HEIGHT - 200 - (80 * i),
+                    (float) ui->screen->width - 300 - UI_PADDING,
+                    (float) (ui->screen->height - 200 - (80 * i)),
                     300,
                     NOTIFICATION_HEIGHT,
             };

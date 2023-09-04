@@ -10,7 +10,7 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
     drawPlayer(menuContext->player);
     FontStyle *defaultFont = menuContext->fonts->default_;
     float column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;
-    float column2 = SCREEN_WIDTH - 200;
+    float column2 = ui->screen->width - 200;
     drawText(
             getPartyLeader(menuContext->player)->name,
             (Vector2) {column1, UI_PADDING},
@@ -32,7 +32,7 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
             (float) column2,
             0,
             200,
-            SCREEN_HEIGHT - (UI_PADDING * 2)
+            ui->screen->height - (UI_PADDING * 2)
     }, defaultFont, PARTY_BOX);
     for (int i = 0; i < count; i++) {
         drawInMenu(textBox, PartyMenuItems[i]);

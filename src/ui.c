@@ -1,4 +1,24 @@
 typedef struct {
+    int width;
+    int height;
+    float scale;
+} Screen;
+
+typedef struct {
+    Screen *screen;
+} UIConfig;
+
+UIConfig *ui;
+
+void createUIConfig(UIData *data) {
+    ui = malloc(sizeof(UIConfig));
+    ui->screen = malloc(sizeof(Screen));
+    ui->screen->height = data->screen->height;
+    ui->screen->width = data->screen->width;
+    ui->screen->scale = data->screen->scale;
+}
+
+typedef struct {
     Rectangle area;
     FontStyle *fontStyle;
     TextBoxLabel label;
@@ -80,29 +100,29 @@ void drawMenuRect(Rectangle rect) {
 }
 
 Rectangle drawSmallMenu() {
-    float marginX = (float) SCREEN_WIDTH / 10, marginY = (float) SCREEN_HEIGHT / 10;
+    float marginX = (float) ui->screen->width / 10, marginY = (float) ui->screen->height / 10;
     Rectangle alertBox = {
             marginX,
             marginY,
-            SCREEN_WIDTH - (marginX * 2),
-            SCREEN_HEIGHT - (marginY * 2)};
+            (float) ui->screen->width - (marginX * 2),
+            (float) ui->screen->height - (marginY * 2)};
     drawMenuRect(alertBox);
     return alertBox;
 }
 
 Rectangle drawMediumMenu() {
-    float marginX = (float) SCREEN_WIDTH / 5, marginY = (float) SCREEN_HEIGHT / 5;
+    float marginX = (float) ui->screen->width / 5, marginY = (float) ui->screen->height / 5;
     Rectangle alertBox = {
             marginX,
             marginY,
-            SCREEN_WIDTH - (marginX * 2),
-            SCREEN_HEIGHT - (marginY * 2)};
+            (float) ui->screen->width - (marginX * 2),
+            (float) ui->screen->height - (marginY * 2)};
     drawMenuRect(alertBox);
     return alertBox;
 }
 
 Rectangle drawFullscreenMenu() {
-    Rectangle rect = (Rectangle) {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    Rectangle rect = (Rectangle) {0, 0, (float) ui->screen->width, (float) ui->screen->height};
     drawMenuRect(rect);
     return rect;
 }
@@ -110,8 +130,8 @@ Rectangle drawFullscreenMenu() {
 Rectangle drawBottomMenu() {
     Rectangle rect = (Rectangle) {
         0,
-        SCREEN_HEIGHT - BOTTOM_MENU_HEIGHT,
-        SCREEN_WIDTH,
+        (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
+        (float) ui->screen->width,
         BOTTOM_MENU_HEIGHT,
         };
     drawMenuRect(rect);
@@ -121,8 +141,8 @@ Rectangle drawBottomMenu() {
 Rectangle drawBottomLeftMenu() {
     Rectangle rect = (Rectangle) {
         0,
-        SCREEN_HEIGHT - BOTTOM_MENU_HEIGHT,
-        SCREEN_WIDTH - BOTTOM_MENU_PLAYER_WIDTH,
+        (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
+        (float) ui->screen->width - BOTTOM_MENU_PLAYER_WIDTH,
         BOTTOM_MENU_HEIGHT,
     };
     drawMenuRect(rect);
@@ -131,8 +151,8 @@ Rectangle drawBottomLeftMenu() {
 
 Rectangle drawBottomRightMenu() {
     Rectangle rect = (Rectangle) {
-        SCREEN_WIDTH - BOTTOM_MENU_PLAYER_WIDTH,
-        SCREEN_HEIGHT - BOTTOM_MENU_HEIGHT,
+            (float) ui->screen->width - BOTTOM_MENU_PLAYER_WIDTH,
+            (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
         BOTTOM_MENU_PLAYER_WIDTH,
         BOTTOM_MENU_HEIGHT,
     };
@@ -142,8 +162,8 @@ Rectangle drawBottomRightMenu() {
 
 Rectangle drawActionSelectMenu() {
     Rectangle rect = (Rectangle) {
-            SCREEN_WIDTH - BOTTOM_MENU_PLAYER_WIDTH,
-            SCREEN_HEIGHT - BOTTOM_MENU_HEIGHT,
+            (float) ui->screen->width - BOTTOM_MENU_PLAYER_WIDTH,
+            (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
             BOTTOM_MENU_ACTION_SELECT_WIDTH,
             BOTTOM_MENU_HEIGHT,
     };
