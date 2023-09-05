@@ -4,6 +4,7 @@ sprite:
     down: 769
     right: 801
 screen:
+  title: "My TinyTown Demo"
   full: false
   width: 800
   height: 600

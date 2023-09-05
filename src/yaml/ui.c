@@ -16,6 +16,7 @@ typedef struct {
 } FontsData;
 
 typedef struct {
+    const char *title;
     bool full;
     int width;
     int height;
@@ -70,6 +71,8 @@ static const cyaml_schema_field_t familiesFieldSchema[] = {
 };
 
 static const cyaml_schema_field_t screenFieldSchema[] = {
+        CYAML_FIELD_STRING_PTR(
+                "title", CYAML_FLAG_POINTER, ScreenData, title, 0, CYAML_UNLIMITED),
         CYAML_FIELD_BOOL(
                 "full", CYAML_FLAG_DEFAULT, ScreenData, full),
         CYAML_FIELD_INT(

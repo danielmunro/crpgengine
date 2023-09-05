@@ -118,7 +118,6 @@ typedef enum {
 #include "runtime_args.c"
 #include "yaml/spritesheet.c"
 #include "yaml/animation.c"
-#include "yaml/config.c"
 #include "yaml/music.c"
 #include "yaml/attributes.c"
 #include "yaml/spell.c"

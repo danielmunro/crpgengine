@@ -2,8 +2,7 @@ void globalSetup(int argc, char *argv[]) {
     setupApp();
     createRuntimeArgs(argc, argv);
     createLog(runtimeArgs->logLevel);
-    ConfigData *appCfg = loadAppConfigYaml();
     UIData *uiCfg = loadUIData();
     createUIConfig(uiCfg);
-    initWindow(appCfg->title, uiCfg);
+    initWindow(uiCfg->screen->title, uiCfg);
 }
