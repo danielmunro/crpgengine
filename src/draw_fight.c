@@ -18,7 +18,7 @@ void drawFightPlayer(Player *player) {
         if (player->party[i] != NULL) {
             drawAnimation(
                     findAnimation(getPartyLeader(player)->animations, LEFT),
-                    getFightPlayerPosition(i));
+                    getFightPlayerPosition(i, player->party[i]->animations[0]->spriteSheet->frameHeight));
         }
     }
 }

@@ -12,6 +12,7 @@
 
 #include "header/animation.h"
 #include "header/control.h"
+#include "header/db.h"
 #include "header/exit.h"
 #include "header/exploration.h"
 #include "header/fight.h"
@@ -20,53 +21,19 @@
 #include "header/layer.h"
 #include "header/log.h"
 #include "header/menu.h"
+#include "header/notification.h"
 #include "header/player.h"
+#include "header/scene.h"
 #include "header/spell.h"
 #include "header/ui.h"
 
-#define MOB_COLLISION_WIDTH 12
-#define MOB_COLLISION_WIDTH_OFFSET 2
-#define MOB_COLLISION_HEIGHT 12
-#define MOB_COLLISION_HEIGHT_OFFSET 12
-#define MOB_HEIGHT 24
-
-#define SCENE_TYPE_TOWN 1
-#define SCENE_TYPE_DUNGEON 2
-
-#define START_ENTRANCE "start"
-
-#define STARTING_HP 20
-#define STARTING_MANA 10
-
-#define MAX_SCENES 256
-#define MAX_FILES 256
 #define MAX_AUDIO 1024
-#define MAX_STORIES 1024
-#define MAX_DATA_SIZE 2048
-#define MAX_ITEMS 255
-#define MAX_EQUIPMENT 4
-#define MAX_FS_PATH_LENGTH 255
 #define MAX_SPRITES 1024
-#define MAX_NOTIFICATIONS 64
 
 #define COLLIDE_TYPE_OBJECTS "objects"
 #define COLLIDE_TYPE_PLAYER "player"
 #define COLLIDE_TYPE_WARPS "warps"
 #define COLLIDE_TYPE_COUNT 3
-
-typedef enum {
-    EXIT = 1,
-    ENTRANCE,
-} ObjectType;
-
-typedef enum {
-    RECEIVE_QUEST_ITEM,
-    LOSE_QUEST_ITEM,
-    RECEIVE_EXPERIENCE,
-    RECEIVE_GOLD,
-    LOSE_GOLD,
-    SAVED,
-} NotificationType;
 
 #include "log.c"
 #include "util.c"

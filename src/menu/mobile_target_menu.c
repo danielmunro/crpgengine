@@ -9,9 +9,11 @@ void drawMobileTargetMenuScreen(MenuContext *menuContext) {
             createMobileSelectTextBox);
     drawMenuRect(t->area);
     drawPlayerFightTopLevel(menuContext, t, false);
-    Vector2 playerPosition = getFightPlayerPosition(menuContext->cursorLine);
     int frameWidth = menuContext->selectedMob->animations[0]->spriteSheet->frameWidth;
     int frameHeight = menuContext->selectedMob->animations[0]->spriteSheet->frameHeight;
+    Vector2 playerPosition = getFightPlayerPosition(
+            menuContext->cursorLine,
+            frameHeight);
     drawRightCursor(
             menuContext->uiSprite,
             (Vector2) {

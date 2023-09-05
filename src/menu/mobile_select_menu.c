@@ -58,8 +58,10 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
                             textBox->area.y + (fs->lineHeight * (float) i),
                     });
             if (doDrawDownCursor) {
-                Vector2 playerPosition = getFightPlayerPosition(i);
                 int frameHeight = mob->animations[0]->spriteSheet->frameHeight;
+                Vector2 playerPosition = getFightPlayerPosition(
+                        i,
+                        frameHeight);
                 drawDownCursor(mc->uiSprite,
                                (Vector2) {
                                        playerPosition.x - 5,
