@@ -158,15 +158,13 @@ Rectangle getBottomLeftMenu() {
     return rect;
 }
 
-Rectangle drawBottomRightMenu() {
-    Rectangle rect = (Rectangle) {
+Rectangle getBottomRightMenu() {
+    return (Rectangle) {
             (float) ui->screen->width - BOTTOM_MENU_PLAYER_WIDTH,
             (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
         BOTTOM_MENU_PLAYER_WIDTH,
         BOTTOM_MENU_HEIGHT,
     };
-    drawMenuRect(rect);
-    return rect;
 }
 
 Rectangle getActionSelectMenu() {

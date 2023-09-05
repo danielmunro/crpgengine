@@ -98,13 +98,16 @@ int getMobileSelectMenuCursorLength(MenuContext *menuContext) {
 
 TextBox *createMobileSelectTextBox(MenuContext *menuContext) {
     return createTextBox(
-            drawBottomRightMenu(),
+            getBottomRightMenu(),
             menuContext->fonts->default_, MOBILE_SELECT_BOX);
 }
 
 void drawMobileSelectMenuScreen(MenuContext *menuContext) {
-    drawBottomRightMenu();
-    TextBox *t = findOrCreateTextBox(menuContext, MOBILE_SELECT_BOX, createMobileSelectTextBox);
+    TextBox *t = findOrCreateTextBox(
+            menuContext,
+            MOBILE_SELECT_BOX,
+            createMobileSelectTextBox);
+    drawMenuRect(t->area);
     drawPlayerFightTopLevel(menuContext, t, true);
 }
 

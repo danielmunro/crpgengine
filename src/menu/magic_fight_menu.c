@@ -4,14 +4,17 @@ int getMagicFightCursorLength(MenuContext *menuContext) {
 
 TextBox *createMagicFightMenuTextBox(MenuContext *menuContext) {
     return createTextBox(
-            drawBottomRightMenu(),
+            getBottomRightMenu(),
             menuContext->fonts->default_,
             MAGIC_SELECT_BOX);
 }
 
 void drawMagicFightMenuScreen(MenuContext *menuContext) {
-    drawBottomRightMenu();
-    TextBox *t = findOrCreateTextBox(menuContext, MAGIC_SELECT_BOX, createMagicFightMenuTextBox);
+    TextBox *t = findOrCreateTextBox(
+            menuContext,
+            MAGIC_SELECT_BOX,
+            createMagicFightMenuTextBox);
+    drawMenuRect(t->area);
     FontStyle *defaultFont = menuContext->fonts->default_;
     FontStyle *disabledFont = menuContext->fonts->disable;
     Mobile *m = menuContext->selectedMob;
