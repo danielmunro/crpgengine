@@ -9,11 +9,12 @@ void drawLoadMenuScreen(MenuContext *menuContext) {
     for (int i = 0; i < menuContext->saveFiles->count; i++) {
         drawInMenu(b, menuContext->saveFiles->saveNames[i]);
     }
-    drawText(
-            ">",
-            (Vector2) {rect.x, rect.y + UI_PADDING +
-                    line(menuContext->cursorLine, defaultFont->lineHeight)},
-            defaultFont);
+    drawRightCursor(
+            menuContext->uiSprite,
+            (Vector2) {
+                rect.x,
+                rect.y + UI_PADDING + line(menuContext->cursorLine, defaultFont->lineHeight),
+            });
     free(b);
 }
 

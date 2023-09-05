@@ -1,14 +1,26 @@
+TextBox *createItemsTextBox(MenuContext *mc) {
+    return createTextBox(
+            drawFullscreenMenu(),
+            mc->fonts->default_,
+            ITEMS_BOX);
+}
+
 void drawItemsMenuScreen(MenuContext *menuContext) {
+    drawFullscreenMenu();
     FontStyle *defaultFont = menuContext->fonts->default_;
-    TextBox *textBox = createTextBox(drawFullscreenMenu(), defaultFont, ITEMS_BOX);
+    TextBox *textBox = findOrCreateTextBox(
+            menuContext,
+            ITEMS_BOX,
+            createItemsTextBox);
     for (int i = 0; i < menuContext->player->itemCount; i++) {
         drawInMenu(textBox, menuContext->player->items[i]->name);
     }
-    drawText(
-            ">",
-            (Vector2) {0, line(menuContext->cursorLine, defaultFont->lineHeight) + UI_PADDING},
-            defaultFont);
-    free(textBox);
+    drawRightCursor(
+            menuContext->uiSprite,
+            (Vector2) {
+                    0,
+                    line(menuContext->cursorLine, defaultFont->lineHeight),
+            });
 }
 
 int getItemsCursorLength(MenuContext *menuContext) {

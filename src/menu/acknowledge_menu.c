@@ -20,13 +20,12 @@ void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
     drawInMenu(b, "automatically.");
     drawInMenu(b, "");
     drawInMenu(b, "ok");
-    drawText(
-            ">",
+    drawRightCursor(
+            menuContext->uiSprite,
             (Vector2) {
                     rect.x,
-                    rect.y + line(4 + menuContext->cursorLine, defaultFont->lineHeight) + UI_PADDING
-            },
-            defaultFont);
+                    rect.y + line(4 + menuContext->cursorLine, defaultFont->lineHeight)
+            });
 }
 
 MenuSelectResponse *acknowledgeMenuItemSelected(MenuContext *menuContext) {
