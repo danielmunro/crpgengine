@@ -36,14 +36,13 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
             if (argv[i][1] == 'c') {
                 char *collider = strtok(argv[i + 1], ",");
                 while (collider != NULL) {
-                    for (int j = 0; j < COLLIDE_TYPE_COUNT; j++) {
-                        if (strcmp(collider, COLLIDE_TYPE_OBJECTS) == 0) {
-                            runtimeArgs->showObjectCollisions = true;
-                        } else if (strcmp(collider, COLLIDE_TYPE_PLAYER) == 0) {
-                            runtimeArgs->showPlayerCollision = true;
-                        } else if (strcmp(collider, COLLIDE_TYPE_WARPS) == 0) {
-                            runtimeArgs->showWarpCollisions = true;
-                        }
+                    CollisionType collisionType = getCollisionTypeFromString(collider);
+                    if (collisionType == COLLISION_TYPE_OBJECTS) {
+                        runtimeArgs->showObjectCollisions = true;
+                    } else if (collisionType == COLLISION_TYPE_PLAYER) {
+                        runtimeArgs->showPlayerCollision = true;
+                    } else if (collisionType == COLLISION_TYPE_WARPS) {
+                        runtimeArgs->showWarpCollisions = true;
                     }
                     collider = strtok(NULL, ",");
                 }

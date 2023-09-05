@@ -10,10 +10,11 @@
 #include <math.h>
 #include <sys/time.h>
 
+#include "header/errors.h"
 #include "header/animation.h"
+#include "header/collision.h"
 #include "header/control.h"
 #include "header/db.h"
-#include "header/exit.h"
 #include "header/exploration.h"
 #include "header/fight.h"
 #include "header/intent.h"
@@ -29,11 +30,6 @@
 
 #define MAX_AUDIO 1024
 #define MAX_SPRITES 1024
-
-#define COLLIDE_TYPE_OBJECTS "objects"
-#define COLLIDE_TYPE_PLAYER "player"
-#define COLLIDE_TYPE_WARPS "warps"
-#define COLLIDE_TYPE_COUNT 3
 
 #include "log.c"
 #include "util.c"
