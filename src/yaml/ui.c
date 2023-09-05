@@ -35,9 +35,20 @@ typedef struct {
 } UISpriteData;
 
 typedef struct {
+    const char *topColor;
+    const char *bottomColor;
+} VerticalGradientData;
+
+typedef struct {
+    const char *style;
+    VerticalGradientData *verticalGradient;
+} UIMenuData;
+
+typedef struct {
     UISpriteData *sprite;
     FontsData *fonts;
     ScreenData *screen;
+    UIMenuData *menu;
 } UIData;
 
 static const cyaml_schema_field_t fontFamilyFieldSchema[] = {
@@ -102,6 +113,26 @@ static const cyaml_schema_field_t spritesheetFieldSchema[] = {
         CYAML_FIELD_END,
 };
 
+static const cyaml_schema_field_t verticalGradientFieldSchema[] = {
+        CYAML_FIELD_STRING_PTR(
+                "topColor", CYAML_FLAG_POINTER,
+                VerticalGradientData, topColor, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "bottomColor", CYAML_FLAG_POINTER,
+                VerticalGradientData, bottomColor, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_END,
+};
+
+static const cyaml_schema_field_t menuFieldSchema[] = {
+        CYAML_FIELD_STRING_PTR(
+                "style", CYAML_FLAG_POINTER,
+                UIMenuData , style, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_MAPPING_PTR(
+                "verticalGradient", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
+                UIMenuData, verticalGradient, verticalGradientFieldSchema),
+        CYAML_FIELD_END,
+};
+
 static const cyaml_schema_field_t fontsTopMappingField[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "sprite", CYAML_FLAG_POINTER, UIData, sprite, spritesheetFieldSchema),
@@ -109,6 +140,8 @@ static const cyaml_schema_field_t fontsTopMappingField[] = {
                 "fonts", CYAML_FLAG_POINTER, UIData, fonts, familiesFieldSchema),
         CYAML_FIELD_MAPPING_PTR(
                 "screen", CYAML_FLAG_POINTER, UIData, screen, screenFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "menu", CYAML_FLAG_POINTER, UIData, menu,  menuFieldSchema),
         CYAML_FIELD_END,
 };
 

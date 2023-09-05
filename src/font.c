@@ -33,7 +33,7 @@ FontStyle *createFontFromData(FontData *data) {
     return createFontStyle(
             getFontStyleType(data->name),
             font,
-            getFontColor(data->color),
+            getColorFromString(data->color),
             (float) data->size,
             (float) data->lineHeight,
             (float) data->spacing);

@@ -1,6 +1,25 @@
 #ifndef CJRPGENGINE_MENU_H
 #define CJRPGENGINE_MENU_H
 
+const char *MenuStyles[] = {
+        "verticalGradient",
+};
+
+typedef enum {
+    VERTICAL_GRADIENT,
+} MenuStyle;
+
+MenuStyle getMenuStyleFromString(const char *style) {
+    int count = sizeof(MenuStyles) / sizeof(MenuStyles[0]);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(style, MenuStyles[i]) == 0) {
+            return i;
+        }
+    }
+    fprintf(stderr, "cannot get menu style");
+    exit(EXIT_MENU_STYLE_NOT_DEFINED);
+}
+
 typedef enum {
     PARTY_MENU,
     ITEMS_MENU,

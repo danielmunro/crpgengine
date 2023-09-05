@@ -3,21 +3,42 @@ typedef struct {
     int height;
     float scale;
     int targetFrameRate;
-} Screen;
+} ScreenConfig;
 
 typedef struct {
-    Screen *screen;
+    Color top;
+    Color bottom;
+} VerticalGradientConfig;
+
+typedef struct {
+    MenuStyle style;
+    VerticalGradientConfig *verticalGradient;
+} MenuConfig;
+
+typedef struct {
+    ScreenConfig *screen;
+    MenuConfig *menu;
 } UIConfig;
 
 UIConfig *ui;
 
 void createUIConfig(UIData *data) {
     ui = malloc(sizeof(UIConfig));
-    ui->screen = malloc(sizeof(Screen));
+
+    ui->screen = malloc(sizeof(ScreenConfig));
     ui->screen->height = data->screen->height;
     ui->screen->width = data->screen->width;
     ui->screen->scale = data->screen->scale;
     ui->screen->targetFrameRate = data->screen->targetFrameRate;
+
+    ui->menu = malloc(sizeof(MenuConfig));
+    ui->menu->style = getMenuStyleFromString(data->menu->style);
+    ui->menu->verticalGradient = NULL;
+    if (ui->menu->style == VERTICAL_GRADIENT) {
+        ui->menu->verticalGradient = malloc(sizeof(VerticalGradientConfig));
+        ui->menu->verticalGradient->top = getColorFromString(data->menu->verticalGradient->topColor);
+        ui->menu->verticalGradient->bottom = getColorFromString(data->menu->verticalGradient->bottomColor);
+    }
 }
 
 typedef struct {
@@ -86,13 +107,15 @@ void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
 }
 
 void drawMenuRect(Rectangle rect) {
-    DrawRectangleGradientV(
-            (int) rect.x + 4,
-            (int) rect.y + 4,
-            (int) rect.width - 8,
-            (int) rect.height - 8,
-            LIGHTBLUE,
-            DARKBLUE);
+    if (ui->menu->style == VERTICAL_GRADIENT) {
+        DrawRectangleGradientV(
+                (int) rect.x + 4,
+                (int) rect.y + 4,
+                (int) rect.width - 8,
+                (int) rect.height - 8,
+                ui->menu->verticalGradient->top,
+                ui->menu->verticalGradient->bottom);
+    }
     DrawRectangleRoundedLines(
             (Rectangle) { rect.x + 4, rect.y + 4, rect.width - 8, rect.height - 8 },
             (float) 0.005,

@@ -179,7 +179,7 @@ double getTimeInMS() {
     return timeInterval;
 }
 
-Color getFontColor(const char *color) {
+Color getColorFromString(const char *color) {
     const char *r = strtok((char *) color, ",");
     const char *g = strtok(NULL, ",");
     const char *b = strtok(NULL, ",");
