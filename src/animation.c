@@ -26,7 +26,7 @@ AnimationManager *createAnimationManager() {
 
 void incrementAnimationFrame(Animation *a) {
     a->frameRateCount++;
-    if (a->frameRateCount >= (TARGET_FRAMERATE / a->frameRate)) {
+    if (a->frameRateCount >= (ui->screen->targetFrameRate / a->frameRate)) {
         a->frameRateCount = 0;
         a->currentFrame++;
         if (a->currentFrame > a->lastFrame) {

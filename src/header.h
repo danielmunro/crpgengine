@@ -20,8 +20,6 @@
 #include "header/spell.h"
 #include "header/ui.h"
 
-#define TARGET_FRAMERATE 60
-
 #define MOB_COLLISION_WIDTH 12
 #define MOB_COLLISION_WIDTH_OFFSET 2
 #define MOB_COLLISION_HEIGHT 12

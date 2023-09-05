@@ -2,6 +2,7 @@ typedef struct {
     int width;
     int height;
     float scale;
+    int targetFrameRate;
 } Screen;
 
 typedef struct {
@@ -16,6 +17,7 @@ void createUIConfig(UIData *data) {
     ui->screen->height = data->screen->height;
     ui->screen->width = data->screen->width;
     ui->screen->scale = data->screen->scale;
+    ui->screen->targetFrameRate = data->screen->targetFrameRate;
 }
 
 typedef struct {
