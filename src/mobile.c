@@ -137,9 +137,11 @@ Vector2 getMoveFor(Mobile *mob, AnimationType direction) {
         return (Vector2) {mob->position.x, mob->position.y - 1};
     } else if (direction == DOWN) {
         return (Vector2) {mob->position.x, mob->position.y + 1};
-    } if (direction == LEFT) {
+    }
+    if (direction == LEFT) {
         return (Vector2) {mob->position.x - 1, mob->position.y};
-    } if (direction == RIGHT) {
+    }
+    if (direction == RIGHT) {
         return (Vector2) {mob->position.x + 1, mob->position.y};
     }
     return mob->position;

@@ -144,7 +144,7 @@ static const cyaml_schema_field_t borderFieldSchema[] = {
 static const cyaml_schema_field_t menuFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
                 "style", CYAML_FLAG_POINTER,
-                UIMenuData , style, 0, CYAML_UNLIMITED),
+                UIMenuData, style, 0, CYAML_UNLIMITED),
         CYAML_FIELD_MAPPING_PTR(
                 "verticalGradient", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
                 UIMenuData, verticalGradient, verticalGradientFieldSchema),
@@ -162,7 +162,7 @@ static const cyaml_schema_field_t fontsTopMappingField[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "screen", CYAML_FLAG_POINTER, UIData, screen, screenFieldSchema),
         CYAML_FIELD_MAPPING_PTR(
-                "menu", CYAML_FLAG_POINTER, UIData, menu,  menuFieldSchema),
+                "menu", CYAML_FLAG_POINTER, UIData, menu, menuFieldSchema),
         CYAML_FIELD_END,
 };
 

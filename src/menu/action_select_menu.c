@@ -31,8 +31,8 @@ void drawActionSelectMenuScreen(MenuContext *menuContext) {
             (Vector2) {
                     t->area.x,
                     t->area.y +
-                            menuContext->fonts->default_->lineHeight *
-                            (float) menuContext->cursorLine,
+                    menuContext->fonts->default_->lineHeight *
+                    (float) menuContext->cursorLine,
             });
 }
 

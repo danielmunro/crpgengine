@@ -1,7 +1,7 @@
 FontStyle *getFontStyleForFightCursor(Mobile *mob, Fonts *fonts, int mobIndex, int loopIndex) {
     if (mobIndex == loopIndex) {
         return fonts->highlight;
-    } else if(isReadyForAction(mob)) {
+    } else if (isReadyForAction(mob)) {
         return fonts->default_;
     } else {
         return fonts->disable;
@@ -22,7 +22,7 @@ void drawStat(Fonts *fonts, int amount, float percent, Vector2 vect) {
     char stat[10];
     sprintf(stat, "%d", amount);
     FontStyle *fs = getFontStyleForHealthLevel(fonts, percent);
-    drawText(stat,vect,fs);
+    drawText(stat, vect, fs);
 }
 
 void drawActionGauge(float y, float width, Color color) {
@@ -45,8 +45,8 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
     for (int i = 0; i < mc->fight->player->partyCount; i++) {
         Mobile *mob = mc->fight->player->party[i];
         FontStyle *fs = isReadyForAction(mob)
-                ? getFontStyleForFightCursor(mob,  mc->fonts, mc->cursorLine, i)
-                : mc->fonts->disable;
+                        ? getFontStyleForFightCursor(mob, mc->fonts, mc->cursorLine, i)
+                        : mc->fonts->disable;
         drawInMenuWithStyle(textBox,
                             fs,
                             mob->name);

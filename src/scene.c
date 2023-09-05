@@ -56,7 +56,7 @@ Scene *createScene() {
 SceneLoader *createSceneLoader(const char *indexDir) {
     const char *dir = "/scenes";
     SceneLoader *sceneLoader = malloc(sizeof(SceneLoader));
-    sceneLoader->sceneDirectory = (char *)malloc(strlen(indexDir) + strlen(dir));
+    sceneLoader->sceneDirectory = (char *) malloc(strlen(indexDir) + strlen(dir));
     sprintf(sceneLoader->sceneDirectory, "%s%s", indexDir, dir);
     sceneLoader->scenes = calloc(MAX_SCENES, sizeof(char *));
     sceneLoader->sceneFiles = calloc(MAX_SCENES, sizeof(char *));
@@ -115,7 +115,7 @@ int addSubsceneFiles(SceneLoader *sl) {
                 sl->scenes[sl->count] = subScenes[j];
                 char subSceneFile[MAX_FS_PATH_LENGTH];
                 sprintf(subSceneFile, "%s/%s", subSceneDir, subScenes[j]);
-                sl->sceneFiles[sl->count] = (char *)malloc(strlen(subSceneFile));
+                sl->sceneFiles[sl->count] = (char *) malloc(strlen(subSceneFile));
                 strcpy(sl->sceneFiles[sl->count], subSceneFile);
                 sl->count++;
             }

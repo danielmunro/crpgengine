@@ -48,7 +48,7 @@ Spritesheet *findSpritesheetByName(SpritesheetManager *sm, const char *name) {
 }
 
 void drawImageFromSprite(Spritesheet *s, Vector2 position, int imageIndex) {
-    int columns = (int) roundf((float) s->source.width / (float)(s->frameWidth + s->padding));
+    int columns = (int) roundf((float) s->source.width / (float) (s->frameWidth + s->padding));
     int y = imageIndex / columns;
     int x = imageIndex - (y * columns);
     Rectangle rect = {

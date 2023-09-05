@@ -27,8 +27,8 @@ void drawMagicFightMenuScreen(MenuContext *menuContext) {
             (Vector2) {
                     t->area.x,
                     t->area.y +
-                            defaultFont->lineHeight *
-                                    (float) menuContext->cursorLine,
+                    defaultFont->lineHeight *
+                    (float) menuContext->cursorLine,
             });
 }
 

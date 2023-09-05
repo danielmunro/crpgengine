@@ -68,9 +68,9 @@ static const cyaml_schema_field_t thenFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
                 "position", CYAML_FLAG_OPTIONAL, ThenData, position, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
-                "direction", CYAML_FLAG_OPTIONAL, ThenData , direction, 0, CYAML_UNLIMITED),
+                "direction", CYAML_FLAG_OPTIONAL, ThenData, direction, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
-                "item", CYAML_FLAG_OPTIONAL, ThenData , item, 0, CYAML_UNLIMITED),
+                "item", CYAML_FLAG_OPTIONAL, ThenData, item, 0, CYAML_UNLIMITED),
         CYAML_FIELD_INT(
                 "amount", CYAML_FLAG_OPTIONAL, ThenData, amount),
         CYAML_FIELD_END

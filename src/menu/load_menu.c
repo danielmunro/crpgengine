@@ -17,8 +17,8 @@ void drawLoadMenuScreen(MenuContext *menuContext) {
     drawRightCursor(
             menuContext->uiSprite,
             (Vector2) {
-                b->area.x,
-                b->area.y + UI_PADDING + line(menuContext->cursorLine, defaultFont->lineHeight),
+                    b->area.x,
+                    b->area.y + UI_PADDING + line(menuContext->cursorLine, defaultFont->lineHeight),
             });
     free(b);
 }

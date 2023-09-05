@@ -22,11 +22,11 @@ void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
         return;
     }
     addDebug("entrance %s found at %f, %f, %f, %f",
-            entrance->name,
-            entrance->area.x,
-            entrance->area.y,
-            entrance->area.width,
-            entrance->area.height
+             entrance->name,
+             entrance->area.x,
+             entrance->area.y,
+             entrance->area.width,
+             entrance->area.height
     );
     getPartyLeader(game->player)->position = (Vector2) {
             entrance->area.x,
@@ -58,7 +58,7 @@ void evaluateExits(Game *g) {
 }
 
 void explorationMenuKeyPressed(Game *g) {
-        g->ui->menuContext = createMenuContext(
+    g->ui->menuContext = createMenuContext(
             g->fights->fight,
             g->player,
             g->ui->fonts,
@@ -207,7 +207,7 @@ void run(Game *g) {
 SaveData *initializePlayer(Game *g) {
     char saveFilePath[MAX_FS_PATH_LENGTH];
     if (runtimeArgs->saveFile != NULL) {
-        sprintf((char *)saveFilePath, "%s/_saves/%s", runtimeArgs->indexDir, runtimeArgs->saveFile);
+        sprintf((char *) saveFilePath, "%s/_saves/%s", runtimeArgs->indexDir, runtimeArgs->saveFile);
     } else {
         strcpy(saveFilePath, getAutosaveFile(runtimeArgs->indexDir));
     }

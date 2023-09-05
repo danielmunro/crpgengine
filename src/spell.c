@@ -62,7 +62,7 @@ SpellData *mapSpellsToData(Spell **spells, int spellCount) {
 }
 
 Spell *findSpell(Spell **spells, SpellType type) {
-    for (int i = 0; i < MAX_SPELLS; i ++) {
+    for (int i = 0; i < MAX_SPELLS; i++) {
         if (spells[i]->type == type) {
             return spells[i];
         }

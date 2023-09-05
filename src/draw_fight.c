@@ -7,8 +7,8 @@ void drawFightBeasts(Fight *fight) {
     for (int i = 0; i < fight->beastCount; i++) {
         DrawTextureEx(fight->beasts[i]->image,
                       (Vector2) {
-                                    fight->beasts[i]->position.x,
-                                 fight->beasts[i]->position.y},
+                              fight->beasts[i]->position.x,
+                              fight->beasts[i]->position.y},
                       0, ui->screen->scale, WHITE);
     }
 }

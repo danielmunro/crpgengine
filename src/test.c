@@ -47,7 +47,7 @@ void createFightInSceneTest() {
 void canMoveMobTest() {
     // given
     float startX = 100, startY = 100;
-    Vector2 start = (Vector2){startX, startY};
+    Vector2 start = (Vector2) {startX, startY};
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
@@ -66,7 +66,7 @@ void canMoveMobTest() {
             0);
 
     // when
-    moveMob(mob, (Vector2){startX + 5, startY + 5});
+    moveMob(mob, (Vector2) {startX + 5, startY + 5});
 
     // then
     ok(mob->position.x > startX && mob->position.y > startY, "mob moved as expected");
@@ -76,7 +76,7 @@ void canMoveMobTest() {
 void canMobStopMovingTest() {
     // given
     float startX = 100, startY = 100;
-    Vector2 start = (Vector2){startX, startY};
+    Vector2 start = (Vector2) {startX, startY};
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
@@ -118,7 +118,7 @@ void experienceToLevel51Test() {
 }
 
 int main() {
-    globalSetup(5, (char *[]){"binary", "-i", "fixtures", "-l", "error"});
+    globalSetup(5, (char *[]) {"binary", "-i", "fixtures", "-l", "error"});
     plan(107);
     strToIntTest();
     createFightInSceneTest();

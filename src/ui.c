@@ -132,10 +132,10 @@ void drawMenuRect(Rectangle rect) {
     }
     DrawRectangleRoundedLines(
             (Rectangle) {
-                rect.x + t,
-                rect.y + t,
-                rect.width - t2,
-                rect.height - t2 },
+                    rect.x + t,
+                    rect.y + t,
+                    rect.width - t2,
+                    rect.height - t2},
             ui->menu->border->roundness,
             4,
             t,
@@ -164,19 +164,19 @@ Rectangle getMediumMenu() {
 
 Rectangle getFullScreenMenu() {
     return (Rectangle) {
-        0,
-        0,
-        (float) ui->screen->width,
-        (float) ui->screen->height,
+            0,
+            0,
+            (float) ui->screen->width,
+            (float) ui->screen->height,
     };
 }
 
 Rectangle getBottomMenu() {
     return (Rectangle) {
-        0,
-        (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
-        (float) ui->screen->width,
-        BOTTOM_MENU_HEIGHT,
+            0,
+            (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
+            (float) ui->screen->width,
+            BOTTOM_MENU_HEIGHT,
     };
 }
 
@@ -191,10 +191,10 @@ Rectangle getPartyMenu() {
 
 Rectangle getBottomLeftMenu() {
     Rectangle rect = (Rectangle) {
-        0,
-        (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
-        (float) ui->screen->width - BOTTOM_MENU_PLAYER_WIDTH,
-        BOTTOM_MENU_HEIGHT,
+            0,
+            (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
+            (float) ui->screen->width - BOTTOM_MENU_PLAYER_WIDTH,
+            BOTTOM_MENU_HEIGHT,
     };
     return rect;
 }
@@ -203,8 +203,8 @@ Rectangle getBottomRightMenu() {
     return (Rectangle) {
             (float) ui->screen->width - BOTTOM_MENU_PLAYER_WIDTH,
             (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
-        BOTTOM_MENU_PLAYER_WIDTH,
-        BOTTOM_MENU_HEIGHT,
+            BOTTOM_MENU_PLAYER_WIDTH,
+            BOTTOM_MENU_HEIGHT,
     };
 }
 

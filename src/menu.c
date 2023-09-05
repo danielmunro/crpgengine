@@ -24,10 +24,15 @@ typedef struct {
 typedef struct {
     MenuType type;
     int cursor;
+
     int (*getCursorLength)(MenuContext *);
+
     void (*draw)(MenuContext *);
+
     int (*getNextOption)(MenuContext *);
+
     int (*getPreviousOption)(MenuContext *);
+
     MenuSelectResponse *(*selected)(MenuContext *menuContext);
 } Menu;
 

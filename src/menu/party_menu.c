@@ -57,7 +57,7 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
             menuContext->uiSprite,
             (Vector2) {
                     (float) ui->screen->width - PARTY_MENU_WIDTH,
-                line(menuContext->cursorLine, defaultFont->lineHeight)
+                    line(menuContext->cursorLine, defaultFont->lineHeight)
             });
 }
 
@@ -74,7 +74,7 @@ MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext) {
         return createMenuSelectResponse(OPEN_MENU, ACKNOWLEDGE_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_QUIT) == 0) {
         return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);
-    }  else if (strcmp(PartyMenuItems[c], PARTY_MENU_LOAD) == 0) {
+    } else if (strcmp(PartyMenuItems[c], PARTY_MENU_LOAD) == 0) {
         return createMenuSelectResponse(OPEN_MENU, LOAD_MENU);
     }
     fprintf(stderr, "menu type not found :: %d", c);

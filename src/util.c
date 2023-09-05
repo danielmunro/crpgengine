@@ -105,9 +105,9 @@ int max(int a, int b) {
 }
 
 Vector2 getPositionFromString(const char *position) {
-    return (Vector2){
-        strToInt(strtok((char *)position, ",")),
-        strToInt(strtok(NULL, ",")),
+    return (Vector2) {
+            strToInt(strtok((char *) position, ",")),
+            strToInt(strtok(NULL, ",")),
     };
 }
 
@@ -132,7 +132,7 @@ float normalize(float a, float b) {
 
 const char *getFilenameExt(const char *filename) {
     const char *dot = strrchr(filename, '.');
-    if(!dot || dot == filename) return "";
+    if (!dot || dot == filename) return "";
     return dot + 1;
 }
 
@@ -143,7 +143,7 @@ void setupApp() {
 
 void purgeSaves(const char *indexDir) {
     const char *saveDirectory = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *)saveDirectory, "%s/_saves", indexDir);
+    sprintf((char *) saveDirectory, "%s/_saves", indexDir);
     char **files = calloc(MAX_SAVE_FILES, sizeof(char *));
     int count = getFilesInDirectory(saveDirectory, files);
     for (int i = 0; i < count; i++) {
@@ -167,7 +167,7 @@ double reportMaxMemory() {
 
 const char *getAutosaveFile(const char *indexDir) {
     const char *autosaveFilePath = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *)autosaveFilePath, "%s/_saves/autosave.yaml", indexDir);
+    sprintf((char *) autosaveFilePath, "%s/_saves/autosave.yaml", indexDir);
     return autosaveFilePath;
 }
 

@@ -228,14 +228,14 @@ SpritesheetManager *loadSpritesheetManager() {
 
 void loadAllItems(ItemManager *itemManager) {
     const char *itemsFile = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *)itemsFile, "%s/items.yaml", runtimeArgs->indexDir);
+    sprintf((char *) itemsFile, "%s/items.yaml", runtimeArgs->indexDir);
     ItemsData *itemsData = loadItemYaml(itemsFile);
     itemManager->items = calloc(itemsData->items_count, sizeof(ItemData));
     for (int i = 0; i < itemsData->items_count; i++) {
         itemManager->items[i] = createItemFromData(&itemsData->items[i]);
     }
     itemManager->count = itemsData->items_count;
-    free((char *)itemsFile);
+    free((char *) itemsFile);
 }
 
 void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm) {
