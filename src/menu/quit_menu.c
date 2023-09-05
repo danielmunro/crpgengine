@@ -4,15 +4,15 @@ int getQuitCursorLength(MenuContext *menuContext) {
 
 TextBox *createQuitTextBox(MenuContext *mc) {
     return createTextBox(
-            drawMediumMenu(),
+            getMediumMenu(),
             mc->fonts->default_,
             QUIT_BOX);
 }
 
 void drawQuitMenuScreen(MenuContext *menuContext) {
-    Rectangle rect = drawMediumMenu();
     FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *textBox = findOrCreateTextBox(menuContext, QUIT_BOX, createQuitTextBox);
+    drawMenuRect(textBox->area);
     drawInMenu(textBox, "Are you sure?");
     drawInMenu(textBox, "");
     int cursorLength = getQuitCursorLength(menuContext);
@@ -22,8 +22,8 @@ void drawQuitMenuScreen(MenuContext *menuContext) {
     drawRightCursor(
             menuContext->uiSprite,
             (Vector2) {
-                    rect.x,
-                    rect.y +
+                    textBox->area.x,
+                    textBox->area.y +
                     line(cursorLength + menuContext->cursorLine, defaultFont->lineHeight),
             });
 }

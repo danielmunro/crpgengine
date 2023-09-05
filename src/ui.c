@@ -99,25 +99,23 @@ void drawMenuRect(Rectangle rect) {
             WHITE);
 }
 
-Rectangle drawSmallMenu() {
+Rectangle getSmallMenu() {
     float marginX = (float) ui->screen->width / 10, marginY = (float) ui->screen->height / 10;
     Rectangle alertBox = {
             marginX,
             marginY,
             (float) ui->screen->width - (marginX * 2),
             (float) ui->screen->height - (marginY * 2)};
-    drawMenuRect(alertBox);
     return alertBox;
 }
 
-Rectangle drawMediumMenu() {
+Rectangle getMediumMenu() {
     float marginX = (float) ui->screen->width / 5, marginY = (float) ui->screen->height / 5;
     Rectangle alertBox = {
             marginX,
             marginY,
             (float) ui->screen->width - (marginX * 2),
             (float) ui->screen->height - (marginY * 2)};
-    drawMenuRect(alertBox);
     return alertBox;
 }
 

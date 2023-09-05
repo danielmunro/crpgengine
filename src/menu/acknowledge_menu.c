@@ -3,18 +3,18 @@ int getAcknowledgeCursorLength(MenuContext *menuContext) {
 }
 
 TextBox *createAcknowledgeBox(MenuContext *mc) {
-    Rectangle rect = drawMediumMenu();
+    Rectangle rect = getMediumMenu();
     FontStyle *defaultFont = mc->fonts->default_;
     return createTextBox(rect, defaultFont, ACKNOWLEDGE_BOX);
 }
 
 void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
-    Rectangle rect = drawMediumMenu();
     FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *b = findOrCreateTextBox(
             menuContext,
             ACKNOWLEDGE_BOX,
             createAcknowledgeBox);
+    drawMenuRect(b->area);
     drawInMenu(b, "Your game has been saved.");
     drawInMenu(b, "Reminder: your progress will save");
     drawInMenu(b, "automatically.");
@@ -23,8 +23,8 @@ void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
     drawRightCursor(
             menuContext->uiSprite,
             (Vector2) {
-                    rect.x,
-                    rect.y + line(4 + menuContext->cursorLine, defaultFont->lineHeight)
+                    b->area.x,
+                    b->area.y + line(4 + menuContext->cursorLine, defaultFont->lineHeight)
             });
 }
 
