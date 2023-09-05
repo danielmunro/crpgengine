@@ -1,6 +1,8 @@
 #ifndef CJRPGENGINE_LOG_H
 #define CJRPGENGINE_LOG_H
 
+#define MAX_LOG_LINE_LENGTH 2048
+
 const char *logLevels[] = {
         "error",
         "warn",

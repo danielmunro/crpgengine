@@ -30,6 +30,9 @@
 
 #define BEAST_AREA (Rectangle) {20, 20, 240, 240}
 
+#define MAX_LINE_BUFFER 128
+#define MAX_MESSAGE_BUFFER 1024
+
 const char *FontStyleTypes[] = {
         "default",
         "disable",

@@ -3,6 +3,7 @@
 
 #define MAX_CONTROLS 255
 #define MAX_ACTIVE_CONTROLS 64
+#define MAX_INSTRUCTIONS 255
 
 const char *conditions[] = {
         "engaged",
@@ -49,5 +50,10 @@ typedef enum {
     UNLOCK,
     SAVE,
 } Outcome;
+
+typedef enum {
+    EVENT_GAME_LOOP,
+    EVENT_SCENE_LOADED,
+} EventType;
 
 #endif //CJRPGENGINE_CONTROL_H

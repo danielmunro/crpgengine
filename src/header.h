@@ -13,11 +13,14 @@
 #include "header/animation.h"
 #include "header/control.h"
 #include "header/exit.h"
+#include "header/exploration.h"
+#include "header/fight.h"
 #include "header/intent.h"
 #include "header/item.h"
 #include "header/layer.h"
 #include "header/log.h"
 #include "header/menu.h"
+#include "header/player.h"
 #include "header/spell.h"
 #include "header/ui.h"
 
@@ -35,39 +38,16 @@
 #define STARTING_HP 20
 #define STARTING_MANA 10
 
-#define MAX_OBJECTS 255
 #define MAX_SCENES 256
 #define MAX_FILES 256
-#define MAX_EXITS 64
-#define MAX_ENTRANCES 64
-#define MAX_MOBILES 255
-#define MAX_INSTRUCTIONS 255
 #define MAX_AUDIO 1024
 #define MAX_STORIES 1024
-#define MAX_BEASTIARY_SIZE 1024
-#define MAX_BEASTS 255
-#define MAX_BEASTS_IN_FIGHT 9
-#define MAX_LOG_LINE_LENGTH 2048
 #define MAX_DATA_SIZE 2048
 #define MAX_ITEMS 255
 #define MAX_EQUIPMENT 4
-#define MAX_PARTY_SIZE 4
 #define MAX_FS_PATH_LENGTH 255
-#define MAX_MOBILE_MOVEMENTS 64
 #define MAX_SPRITES 1024
-#define MAX_ARRIVE_AT 64
-#define MAX_SAVE_FILES 255
-#define MAX_SAVE_NAME 255
-#define MAX_DATETIME_LENGTH 255
 #define MAX_NOTIFICATIONS 64
-#define MAX_LINE_BUFFER 128
-#define MAX_MESSAGE_BUFFER 1024
-#define MAX_BEAST_NAMES_IN_FIGHT 6
-#define MAX_CURSORS 64
-#define MAX_ACTION_GAUGE 300
-#define MAX_ACTION_GAUGE_RAISE 10
-#define MAX_TEXT_BOXES 32
-#define MAX_SPELLS 256
 
 #define COLLIDE_TYPE_OBJECTS "objects"
 #define COLLIDE_TYPE_PLAYER "player"
@@ -87,11 +67,6 @@ typedef enum {
     LOSE_GOLD,
     SAVED,
 } NotificationType;
-
-typedef enum {
-    EVENT_GAME_LOOP,
-    EVENT_SCENE_LOADED,
-} EventType;
 
 #include "log.c"
 #include "util.c"

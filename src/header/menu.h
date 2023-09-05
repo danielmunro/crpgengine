@@ -2,6 +2,7 @@
 #define CJRPGENGINE_MENU_H
 
 #define MAX_MENUS 255
+#define MAX_TEXT_BOXES 32
 
 const char *MenuStyles[] = {
         "verticalGradient",
