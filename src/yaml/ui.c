@@ -40,8 +40,15 @@ typedef struct {
 } VerticalGradientData;
 
 typedef struct {
+    int lineThickness;
+    float roundness;
+    const char *color;
+} UIMenuBorderData;
+
+typedef struct {
     const char *style;
     VerticalGradientData *verticalGradient;
+    UIMenuBorderData *border;
 } UIMenuData;
 
 typedef struct {
@@ -123,6 +130,17 @@ static const cyaml_schema_field_t verticalGradientFieldSchema[] = {
         CYAML_FIELD_END,
 };
 
+static const cyaml_schema_field_t borderFieldSchema[] = {
+        CYAML_FIELD_INT(
+                "lineThickness", CYAML_FLAG_DEFAULT, UIMenuBorderData, lineThickness),
+        CYAML_FIELD_FLOAT(
+                "roundness", CYAML_FLAG_DEFAULT, UIMenuBorderData, roundness),
+        CYAML_FIELD_STRING_PTR(
+                "color", CYAML_FLAG_POINTER,
+                UIMenuBorderData, color, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_END,
+};
+
 static const cyaml_schema_field_t menuFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
                 "style", CYAML_FLAG_POINTER,
@@ -130,6 +148,9 @@ static const cyaml_schema_field_t menuFieldSchema[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "verticalGradient", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
                 UIMenuData, verticalGradient, verticalGradientFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "border", CYAML_FLAG_POINTER,
+                UIMenuData, border, borderFieldSchema),
         CYAML_FIELD_END,
 };
 

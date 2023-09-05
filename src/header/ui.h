@@ -28,8 +28,6 @@
 #define NOTIFICATION_DECAY_SECONDS 5
 #define NOTIFICATION_HEIGHT 75
 
-#define LIGHTBLUE (Color){100, 134, 175, 255}
-
 #define BEAST_AREA (Rectangle) {20, 20, 240, 240}
 
 const char *FontStyleTypes[] = {

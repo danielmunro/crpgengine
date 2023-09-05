@@ -11,8 +11,15 @@ typedef struct {
 } VerticalGradientConfig;
 
 typedef struct {
+    int lineThickness;
+    float roundness;
+    Color color;
+} BorderConfig;
+
+typedef struct {
     MenuStyle style;
     VerticalGradientConfig *verticalGradient;
+    BorderConfig *border;
 } MenuConfig;
 
 typedef struct {
@@ -39,6 +46,11 @@ void createUIConfig(UIData *data) {
         ui->menu->verticalGradient->top = getColorFromString(data->menu->verticalGradient->topColor);
         ui->menu->verticalGradient->bottom = getColorFromString(data->menu->verticalGradient->bottomColor);
     }
+
+    ui->menu->border = malloc(sizeof(BorderConfig));
+    ui->menu->border->lineThickness = data->menu->border->lineThickness;
+    ui->menu->border->roundness = data->menu->border->roundness;
+    ui->menu->border->color = getColorFromString(data->menu->border->color);
 }
 
 typedef struct {
@@ -107,21 +119,27 @@ void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
 }
 
 void drawMenuRect(Rectangle rect) {
+    float t = ui->menu->border->lineThickness;
+    float t2 = t * 2;
     if (ui->menu->style == VERTICAL_GRADIENT) {
         DrawRectangleGradientV(
-                (int) rect.x + 4,
-                (int) rect.y + 4,
-                (int) rect.width - 8,
-                (int) rect.height - 8,
+                (int) (rect.x + t),
+                (int) (rect.y + t),
+                (int) (rect.width - t2),
+                (int) (rect.height - t2),
                 ui->menu->verticalGradient->top,
                 ui->menu->verticalGradient->bottom);
     }
     DrawRectangleRoundedLines(
-            (Rectangle) { rect.x + 4, rect.y + 4, rect.width - 8, rect.height - 8 },
-            (float) 0.005,
+            (Rectangle) {
+                rect.x + t,
+                rect.y + t,
+                rect.width - t2,
+                rect.height - t2 },
+            ui->menu->border->roundness,
             4,
-            4,
-            WHITE);
+            t,
+            ui->menu->border->color);
 }
 
 Rectangle getSmallMenu() {
