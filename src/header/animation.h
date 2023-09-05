@@ -1,6 +1,9 @@
 #ifndef CJRPGENGINE_ANIMATION_H
 #define CJRPGENGINE_ANIMATION_H
 
+#define MAX_ANIMATIONS 25
+#define MAX_ANIMATIONS_IN_GAME 1440
+
 typedef enum {
     UP,
     DOWN,

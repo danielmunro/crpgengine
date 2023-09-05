@@ -1,6 +1,9 @@
 #ifndef CJRPGENGINE_LAYER_H
 #define CJRPGENGINE_LAYER_H
 
+#define MAX_LAYERS 1024
+#define MAX_LAYER_SIZE 1024
+
 typedef enum {
     BACKGROUND = 0,
     MIDGROUND,

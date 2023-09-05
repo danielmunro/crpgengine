@@ -16,6 +16,7 @@
 #include "header/intent.h"
 #include "header/item.h"
 #include "header/layer.h"
+#include "header/log.h"
 #include "header/menu.h"
 #include "header/spell.h"
 #include "header/ui.h"
@@ -35,18 +36,12 @@
 #define STARTING_MANA 10
 
 #define MAX_OBJECTS 255
-#define MAX_SCENES    256
+#define MAX_SCENES 256
 #define MAX_FILES 256
-#define MAX_LAYERS 1024
-#define MAX_LAYER_SIZE 1024
-#define MAX_ANIMATIONS 25
-#define MAX_ANIMATIONS_IN_GAME 1440
 #define MAX_EXITS 64
 #define MAX_ENTRANCES 64
 #define MAX_MOBILES 255
 #define MAX_INSTRUCTIONS 255
-#define MAX_CONTROLS 255
-#define MAX_ACTIVE_CONTROLS 64
 #define MAX_AUDIO 1024
 #define MAX_STORIES 1024
 #define MAX_BEASTIARY_SIZE 1024
@@ -54,7 +49,6 @@
 #define MAX_BEASTS_IN_FIGHT 9
 #define MAX_LOG_LINE_LENGTH 2048
 #define MAX_DATA_SIZE 2048
-#define MAX_MENUS 255
 #define MAX_ITEMS 255
 #define MAX_EQUIPMENT 4
 #define MAX_PARTY_SIZE 4
@@ -69,7 +63,7 @@
 #define MAX_LINE_BUFFER 128
 #define MAX_MESSAGE_BUFFER 1024
 #define MAX_BEAST_NAMES_IN_FIGHT 6
-#define MAX_CURSORS 4
+#define MAX_CURSORS 64
 #define MAX_ACTION_GAUGE 300
 #define MAX_ACTION_GAUGE_RAISE 10
 #define MAX_TEXT_BOXES 32
@@ -79,20 +73,6 @@
 #define COLLIDE_TYPE_PLAYER "player"
 #define COLLIDE_TYPE_WARPS "warps"
 #define COLLIDE_TYPE_COUNT 3
-
-const char *logLevels[] = {
-        "error",
-        "warn",
-        "info",
-        "debug"
-};
-
-typedef enum {
-    ERROR = 0,
-    WARN = 1,
-    INFO = 2,
-    DEBUG = 3,
-} LogLevel;
 
 typedef enum {
     EXIT = 1,
