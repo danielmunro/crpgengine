@@ -5,15 +5,26 @@ void drawPlayer(Player *player) {
     );
 }
 
+TextBox *createFullScreenTextBox(MenuContext *mc) {
+    return createTextBox(
+            getFullScreenMenu(),
+            mc->fonts->default_,
+            IN_GAME_MENU_BOX);
+}
+
 TextBox *createPartyTextBox(MenuContext *mc) {
     return createTextBox(
-            drawPartyMenu(),
+            getPartyMenu(),
             mc->fonts->default_,
             PARTY_BOX);
 }
 
 void drawPartyMenuScreen(MenuContext *menuContext) {
-    drawFullscreenMenu();
+    TextBox *inGameMenuBox = findOrCreateTextBox(
+            menuContext,
+            IN_GAME_MENU_BOX,
+            createFullScreenTextBox);
+    drawMenuRect(inGameMenuBox->area);
     drawPlayer(menuContext->player);
     FontStyle *defaultFont = menuContext->fonts->default_;
     float column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;
@@ -38,6 +49,7 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
             menuContext,
             PARTY_BOX,
             createPartyTextBox);
+    drawMenuRect(textBox->area);
     for (int i = 0; i < count; i++) {
         drawInMenu(textBox, PartyMenuItems[i]);
     }

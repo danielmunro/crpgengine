@@ -1,6 +1,6 @@
 TextBox *createBeastSelectTextBox(MenuContext *mc) {
     return createTextBox(
-            drawBottomLeftMenu(),
+            getBottomLeftMenu(),
             mc->fonts->default_,
             BEAST_SELECT_BOX);
 }

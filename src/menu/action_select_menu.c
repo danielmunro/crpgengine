@@ -12,17 +12,17 @@ int getActionSelectCursorLength(MenuContext *menuContext) {
 
 TextBox *createActionSelectMenuTextBox(MenuContext *menuContext) {
     return createTextBox(
-        drawActionSelectMenu(),
-        menuContext->fonts->default_,
-        ACTION_SELECT_BOX);
+            getActionSelectMenu(),
+            menuContext->fonts->default_,
+            ACTION_SELECT_BOX);
 }
 
 void drawActionSelectMenuScreen(MenuContext *menuContext) {
-    drawActionSelectMenu();
     TextBox *t = findOrCreateTextBox(
             menuContext,
             ACTION_SELECT_BOX,
             createActionSelectMenuTextBox);
+    drawMenuRect(t->area);
     for (int i = 0; i < getActionSelectCursorLength(menuContext); i++) {
         drawInMenu(t, actionMenu[i]);
     }

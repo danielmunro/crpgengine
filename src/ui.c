@@ -119,10 +119,13 @@ Rectangle getMediumMenu() {
     return alertBox;
 }
 
-Rectangle drawFullscreenMenu() {
-    Rectangle rect = (Rectangle) {0, 0, (float) ui->screen->width, (float) ui->screen->height};
-    drawMenuRect(rect);
-    return rect;
+Rectangle getFullScreenMenu() {
+    return (Rectangle) {
+        0,
+        0,
+        (float) ui->screen->width,
+        (float) ui->screen->height,
+    };
 }
 
 Rectangle drawBottomMenu() {
@@ -136,23 +139,22 @@ Rectangle drawBottomMenu() {
     return rect;
 }
 
-Rectangle drawPartyMenu() {
+Rectangle getPartyMenu() {
     return (Rectangle) {
             (float) ui->screen->width - PARTY_MENU_WIDTH,
             0,
             PARTY_MENU_WIDTH,
-            (float) ui->screen->height - (UI_PADDING * 2)
+            (float) ui->screen->height,
     };
 }
 
-Rectangle drawBottomLeftMenu() {
+Rectangle getBottomLeftMenu() {
     Rectangle rect = (Rectangle) {
         0,
         (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
         (float) ui->screen->width - BOTTOM_MENU_PLAYER_WIDTH,
         BOTTOM_MENU_HEIGHT,
     };
-    drawMenuRect(rect);
     return rect;
 }
 
@@ -167,14 +169,13 @@ Rectangle drawBottomRightMenu() {
     return rect;
 }
 
-Rectangle drawActionSelectMenu() {
+Rectangle getActionSelectMenu() {
     Rectangle rect = (Rectangle) {
             (float) ui->screen->width - BOTTOM_MENU_PLAYER_WIDTH,
             (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
             BOTTOM_MENU_ACTION_SELECT_WIDTH,
             BOTTOM_MENU_HEIGHT,
     };
-    drawMenuRect(rect);
     return rect;
 }
 
