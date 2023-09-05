@@ -365,7 +365,9 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
         if (cb[i] != NULL && cb[i]->progress < cb[i]->thenCount) {
             int p = cb[i]->progress;
             if (cb[i]->then[p]->outcome == SPEAK && isSpeakingTo(player, cb[i]->then[p]->target)) {
-                drawTextInArea(cb[i]->then[p]->message, drawBottomMenu(), font);
+                Rectangle area = getBottomMenu();
+                drawMenuRect(area);
+                drawTextInArea(cb[i]->then[p]->message, area, font);
             }
         }
     }

@@ -128,15 +128,13 @@ Rectangle getFullScreenMenu() {
     };
 }
 
-Rectangle drawBottomMenu() {
-    Rectangle rect = (Rectangle) {
+Rectangle getBottomMenu() {
+    return (Rectangle) {
         0,
         (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
         (float) ui->screen->width,
         BOTTOM_MENU_HEIGHT,
-        };
-    drawMenuRect(rect);
-    return rect;
+    };
 }
 
 Rectangle getPartyMenu() {
