@@ -63,8 +63,8 @@ int getMenuList(UIManager *ui) {
                     ACTION_SELECT_FIGHT_MENU,
                     getActionSelectCursorLength,
                     drawActionSelectMenuScreen,
-                    getDefaultPreviousOption,
-                    getDefaultNextOption,
+                    getPreviousActionSelectCursorPosition,
+                    getNextActionSelectCursorPosition,
                     actionSelectMenuItemSelected),
             createMenu(
                     BEAST_TARGET_FIGHT_MENU,
@@ -96,17 +96,17 @@ int getMenuList(UIManager *ui) {
 }
 
 UIManager *createUIManager(UIData *config, UISprite *uiSprite) {
-    UIManager *ui = malloc(sizeof(UIManager));
-    ui->fonts = malloc(sizeof(Fonts));
-    ui->fonts->default_ = createFontFromData(config->fonts->default_);
-    ui->fonts->disable = createFontFromData(config->fonts->disable);
-    ui->fonts->highlight = createFontFromData(config->fonts->highlight);
-    ui->fonts->warning = createFontFromData(config->fonts->warning);
-    ui->fonts->danger = createFontFromData(config->fonts->danger);
-    ui->menuCount = getMenuList(ui);
-    ui->uiSprite = uiSprite;
-    ui->config = config;
-    return ui;
+    UIManager *uiMan = malloc(sizeof(UIManager));
+    uiMan->fonts = malloc(sizeof(Fonts));
+    uiMan->fonts->default_ = createFontFromData(config->fonts->default_);
+    uiMan->fonts->disable = createFontFromData(config->fonts->disable);
+    uiMan->fonts->highlight = createFontFromData(config->fonts->highlight);
+    uiMan->fonts->warning = createFontFromData(config->fonts->warning);
+    uiMan->fonts->danger = createFontFromData(config->fonts->danger);
+    uiMan->menuCount = getMenuList(uiMan);
+    uiMan->uiSprite = uiSprite;
+    uiMan->config = config;
+    return uiMan;
 }
 
 void drawAllMenus(

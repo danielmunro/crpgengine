@@ -100,6 +100,7 @@ int addMenu(Menu **menus, Menu *m) {
     for (int i = 0; i < MAX_MENUS; i++) {
         if (menus[i] == NULL) {
             menus[i] = m;
+            menus[i]->cursor = 0;
             return i;
         }
     }
