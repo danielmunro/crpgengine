@@ -119,7 +119,7 @@ void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
 }
 
 void drawMenuRect(Rectangle rect) {
-    float t = ui->menu->border->lineThickness;
+    float t = (float) ui->menu->border->lineThickness;
     float t2 = t * 2;
     if (ui->menu->style == VERTICAL_GRADIENT) {
         DrawRectangleGradientV(
