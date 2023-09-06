@@ -18,7 +18,9 @@ void drawLoadMenuScreen(MenuContext *menuContext) {
             menuContext->uiSprite,
             (Vector2) {
                     b->area.x,
-                    b->area.y + UI_PADDING + line(menuContext->cursorLine, defaultFont->lineHeight),
+                    b->area.y
+                        + ui->menu->padding
+                        + line(menuContext->cursorLine, defaultFont->lineHeight),
             });
     free(b);
 }

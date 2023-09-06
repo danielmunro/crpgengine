@@ -20,6 +20,7 @@ typedef struct {
     MenuStyle style;
     VerticalGradientConfig *verticalGradient;
     BorderConfig *border;
+    float padding;
 } MenuConfig;
 
 typedef struct {
@@ -40,6 +41,7 @@ void createUIConfig(UIData *data) {
 
     ui->menu = malloc(sizeof(MenuConfig));
     ui->menu->style = getMenuStyleFromString(data->menu->style);
+    ui->menu->padding = data->menu->padding;
     ui->menu->verticalGradient = NULL;
     if (ui->menu->style == VERTICAL_GRADIENT) {
         ui->menu->verticalGradient = malloc(sizeof(VerticalGradientConfig));
@@ -83,8 +85,8 @@ void drawLineInArea(const char *message, Rectangle area, int lineNumber, FontSty
     drawText(
             message,
             (Vector2) {
-                    area.x + UI_PADDING,
-                    area.y + UI_PADDING + (font->lineHeight * (float) lineNumber)
+                    area.x + ui->menu->padding,
+                    area.y + ui->menu->padding + (font->lineHeight * (float) lineNumber)
             }, font);
 }
 
@@ -103,7 +105,7 @@ void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
         }
         strcat(test, word);
         Vector2 testArea = MeasureTextEx(font->font, test, font->size, 1);
-        if (testArea.x > area.width - UI_PADDING * 2) {
+        if (testArea.x > area.width - ui->menu->padding * 2) {
             drawLineInArea(buffer, area, line, font);
             line++;
             strcpy(buffer, word);
@@ -224,8 +226,8 @@ float line(int line, float lineHeight) {
 
 void drawInMenuWithStyle(TextBox *tb, FontStyle *fs, const char *text) {
     drawText(text, (Vector2) {
-            tb->area.x + UI_PADDING,
-            tb->area.y + line(tb->cursor, fs->lineHeight) + UI_PADDING
+            tb->area.x + ui->menu->padding,
+            tb->area.y + line(tb->cursor, fs->lineHeight) + ui->menu->padding
     }, fs);
     tb->cursor++;
 }

@@ -26,8 +26,8 @@ void drawStat(Fonts *fonts, int amount, float percent, Vector2 vect) {
 }
 
 void drawActionGauge(float y, float width, Color color) {
-    float actionGaugeX = (float) ui->screen->width - ACTION_GAUGE_WIDTH - UI_PADDING;
-    float actionGaugeY = (float) ui->screen->height - BOTTOM_MENU_HEIGHT + UI_PADDING + y;
+    float actionGaugeX = (float) ui->screen->width - ACTION_GAUGE_WIDTH - ui->menu->padding;
+    float actionGaugeY = (float) ui->screen->height - BOTTOM_MENU_HEIGHT + ui->menu->padding + y;
     Rectangle rect = {
             actionGaugeX,
             actionGaugeY,
@@ -74,14 +74,14 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
                  (float) mob->hp / (float) calculateMobileAttributes(mob).hp,
                  (Vector2) {
                          textBox->area.x + HP_X_OFFSET,
-                         textBox->area.y + UI_PADDING + ((float) i * fs->lineHeight)
+                         textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
                  });
         drawStat(mc->fonts,
                  mob->mana,
                  (float) mob->mana / (float) calculateMobileAttributes(mob).mana,
                  (Vector2) {
                          textBox->area.x + MANA_X_OFFSET,
-                         textBox->area.y + UI_PADDING + ((float) i * fs->lineHeight)
+                         textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
                  });
         drawActionGauge(
                 ((float) i * fs->lineHeight),

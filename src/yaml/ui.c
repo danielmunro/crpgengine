@@ -49,6 +49,7 @@ typedef struct {
     const char *style;
     VerticalGradientData *verticalGradient;
     UIMenuBorderData *border;
+    float padding;
 } UIMenuData;
 
 typedef struct {
@@ -151,6 +152,8 @@ static const cyaml_schema_field_t menuFieldSchema[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "border", CYAML_FLAG_POINTER,
                 UIMenuData, border, borderFieldSchema),
+        CYAML_FIELD_FLOAT(
+                "padding", CYAML_FLAG_DEFAULT, UIMenuData, padding),
         CYAML_FIELD_END,
 };
 

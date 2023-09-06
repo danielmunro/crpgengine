@@ -27,22 +27,22 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
     drawMenuRect(inGameMenuBox->area);
     drawPlayer(menuContext->player);
     FontStyle *defaultFont = menuContext->fonts->default_;
-    float column1 = (UI_PADDING * 2) + MOB_COLLISION_WIDTH;
+    float column1 = (ui->menu->padding * 2) + MOB_COLLISION_WIDTH;
     drawText(
             getPartyLeader(menuContext->player)->name,
-            (Vector2) {column1, UI_PADDING},
+            (Vector2) {column1, ui->menu->padding},
             defaultFont);
     char hp[64];
     sprintf(hp, "hp %d/%d", 20, 20);
     drawText(
             hp,
-            (Vector2) {column1, UI_PADDING + line(1, defaultFont->lineHeight)},
+            (Vector2) {column1, ui->menu->padding + line(1, defaultFont->lineHeight)},
             defaultFont);
     char mp[64];
     sprintf(mp, "mp %d/%d", 20, 20);
     drawText(
             mp,
-            (Vector2) {column1, UI_PADDING + line(2, defaultFont->lineHeight)},
+            (Vector2) {column1, ui->menu->padding + line(2, defaultFont->lineHeight)},
             defaultFont);
     int count = sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
     TextBox *textBox = findOrCreateTextBox(
