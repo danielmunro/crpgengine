@@ -4,6 +4,11 @@ typedef struct {
 } UISprite;
 
 typedef struct {
+    const char *name;
+    int amount;
+} ItemList;
+
+typedef struct {
     const char *scene;
     Player *player;
     SaveFiles *saveFiles;
@@ -14,6 +19,8 @@ typedef struct {
     TextBox **textBoxes;
     Mobile *selectedMob;
     UISprite *uiSprite;
+    ItemList *itemList;
+    int itemListCount;
 } MenuContext;
 
 typedef struct {
@@ -77,6 +84,8 @@ MenuContext *createMenuContext(
     context->uiSprite = uiSprite;
     context->textBoxes = calloc(MAX_TEXT_BOXES, sizeof(TextBox));
     context->selectedMob = NULL;
+    context->itemList = calloc(MAX_ITEMS, sizeof(ItemList));
+    context->itemListCount = 0;
     return context;
 }
 

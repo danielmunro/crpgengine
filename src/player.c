@@ -148,7 +148,7 @@ SaveData *createSaveData(Player *player, const char *scene, const char *saveName
     save->name = saveName;
     save->player = createPlayerData(player);
     save->scene = &scene[0];
-    save->time = (unsigned long) time(NULL);
+    save->time = (unsigned long)time(NULL);
     return save;
 }
 
@@ -161,9 +161,9 @@ void saveFile(SaveData *save, const char *indexDir, const char *filename) {
 
 SaveFiles *getSaveFiles() {
     const char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *) savesDirectory, "%s/_saves", runtimeArgs->indexDir);
+    sprintf((char *)savesDirectory, "%s/_saves", runtimeArgs->indexDir);
     char **files = calloc(MAX_SAVE_FILES, sizeof(char *));
-    const char **names = calloc(MAX_SAVE_FILES, sizeof(char *));
+    const char **names = calloc(MAX_SAVE_FILES, sizeof (char *));
     unsigned long created[MAX_SAVE_FILES];
     int count = getFilesInDirectory(savesDirectory, files);
     for (int i = 0; i < count; i++) {
@@ -200,11 +200,11 @@ SaveFiles *getSaveFiles() {
     }
     SaveFiles *sf = malloc(sizeof(SaveFiles));
     sf->count = count;
-    sf->filenames = (const char **) files;
+    sf->filenames = (const char **)files;
     sf->saveNames = names;
     free(names);
     free(files);
-    free((char *) savesDirectory);
+    free((char *)savesDirectory);
     return sf;
 }
 
@@ -213,8 +213,7 @@ void save(Player *player, const char *sceneName) {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
     char *date = malloc(MAX_DATETIME_LENGTH);
-    sprintf(date, "%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min,
-            tm.tm_sec);
+    sprintf(date, "%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
     char *name = malloc(MAX_SAVE_NAME);
     sprintf(name, "%s - %s - %s", date, getPartyLeader(player)->name, sceneName);
     SaveData *save = createSaveData(
@@ -228,7 +227,7 @@ void save(Player *player, const char *sceneName) {
     char filename[MAX_FS_PATH_LENGTH];
 
     // point-in-time save
-    sprintf(filename, "save-%lu.yaml", (unsigned long) time(NULL));
+    sprintf(filename, "save-%lu.yaml", (unsigned long)time(NULL));
     saveFile(save, runtimeArgs->indexDir, filename);
 
     free(date);
@@ -392,12 +391,12 @@ Player *createNewPlayer(AnimationManager *am) {
     AttributesData *cureImpact = createDataFromAttributes(createEmptyAttributes());
     cureImpact->hp = 20;
     SpellData cure = (SpellData) {
-            "cure",
-            "help",
-            1,
-            (float) 1.0,
-            a,
-            cureImpact,
+        "cure",
+        "help",
+        1,
+        (float) 1.0,
+        a,
+        cureImpact,
     };
     p->party[0]->spells[0] = createSpellFromData(cure);
     p->party[0]->spellCount = 1;

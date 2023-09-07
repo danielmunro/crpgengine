@@ -34,7 +34,7 @@ Exit *createExit() {
     Exit *e = malloc(sizeof(Exit));
     e->to = "";
     e->scene = "";
-    e->area = (Rectangle) {0, 0, 0, 0};
+    e->area = (Rectangle){0, 0, 0, 0};
     return e;
 }
 
@@ -215,8 +215,7 @@ void unloadLayers(Exploration *e) {
     }
 }
 
-void createMobileLayer(Mobile *mobiles[MAX_MOBILES], Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES], int mobileCount,
-                       int mobsByYPosition[MAX_LAYERS]) {
+void createMobileLayer(Mobile *mobiles[MAX_MOBILES], Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES], int mobileCount, int mobsByYPosition[MAX_LAYERS]) {
     for (int y = 0; y < MAX_LAYERS; y++) {
         for (int i = 0; i < MAX_MOBILES; i++) {
             mobLayer[y][i] = NULL;
@@ -438,8 +437,8 @@ void explorationSpaceKeyPressed(Player *player, ControlBlock *controlBlocks[MAX_
     addInfo("exploration space key pressed");
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (controlBlocks[i] != NULL
-            && player->engaged
-            && isSpeakOutcome(controlBlocks[i]->then[controlBlocks[i]->progress])) {
+                && player->engaged
+                && isSpeakOutcome(controlBlocks[i]->then[controlBlocks[i]->progress])) {
             dialogEngaged(player, controlBlocks[i]);
             return;
         }

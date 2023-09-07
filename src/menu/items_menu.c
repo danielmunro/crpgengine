@@ -12,8 +12,34 @@ void drawItemsMenuScreen(MenuContext *menuContext) {
             ITEMS_BOX,
             createItemsTextBox);
     drawMenuRect(textBox->area);
-    for (int i = 0; i < menuContext->player->itemCount; i++) {
-        drawInMenu(textBox, menuContext->player->items[i]->name);
+    if (menuContext->itemListCount == 0) {
+        ItemList *itemsSeen = calloc(menuContext->player->itemCount, sizeof(ItemList));
+        int count = 0;
+        for (int i = 0; i < menuContext->player->itemCount; i++) {
+            const char *name = menuContext->player->items[i]->name;
+            bool found = false;
+            for (int j = 0; j < count; j++) {
+                if (strcmp(name, itemsSeen[j].name) == 0) {
+                    itemsSeen[j].amount += 1;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                itemsSeen[count] = (ItemList) {
+                        menuContext->player->items[i]->name,
+                        1,
+                };
+                count++;
+            }
+        }
+        menuContext->itemList = itemsSeen;
+        menuContext->itemListCount = count;
+    }
+    for (int i = 0; i < menuContext->itemListCount; i++) {
+        char buffer[MAX_LINE_BUFFER];
+        sprintf(buffer, "(%d) %s", menuContext->itemList[i].amount, menuContext->itemList[i].name);
+        drawInMenu(textBox, buffer);
     }
     drawRightCursor(
             menuContext->uiSprite,
@@ -24,7 +50,7 @@ void drawItemsMenuScreen(MenuContext *menuContext) {
 }
 
 int getItemsCursorLength(MenuContext *menuContext) {
-    return menuContext->player->itemCount;
+    return menuContext->itemListCount;
 }
 
 MenuSelectResponse *itemMenuItemSelected(MenuContext *menuContext) {

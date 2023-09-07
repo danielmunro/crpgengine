@@ -29,7 +29,7 @@ Attributes *createEmptyAttributes() {
     a->hp = 0;
     a->mana = 0;
     a->ac = (ArmorClass) {
-            0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0,
     };
 
     return a;
@@ -37,13 +37,13 @@ Attributes *createEmptyAttributes() {
 
 ArmorClass createEmptyArmorClass() {
     return (ArmorClass) {
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
     };
 }
 

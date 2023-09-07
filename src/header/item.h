@@ -1,6 +1,8 @@
 #ifndef CJRPGENGINE_ITEM_H
 #define CJRPGENGINE_ITEM_H
 
+#define MAX_ITEM_LIST_BUFFER 10000
+
 const char *ItemTypes[] = {
         "consumable",
         "equipment",
