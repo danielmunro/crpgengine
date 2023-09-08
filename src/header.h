@@ -82,6 +82,7 @@
 #include "menu/mobile_select_menu.c"
 #include "menu/mobile_target_menu.c"
 #include "menu/magic_fight_menu.c"
+#include "menu/party_item_consume_menu.c"
 #include "exploration.c"
 #include "scene.c"
 #include "tilemap_xmlreader.c"

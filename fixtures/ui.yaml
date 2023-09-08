@@ -3,12 +3,27 @@ sprite:
   cursors:
     down: 769
     right: 801
+    up: 768
+
 screen:
+  title: "My TinyTown Demo"
   full: false
-  width: 720
-  height: 450
+  width: 800
+  height: 600
   scale: 1.0
   targetFrameRate: 60
+
+menu:
+  style: verticalGradient
+  verticalGradient:
+    topColor: 100, 134, 175, 255
+    bottomColor: 0, 82, 172, 255
+  border:
+    lineThickness: 4
+    roundness: 0.005
+    color: 255, 255, 255, 255
+  padding: 20.0
+
 fonts:
   default:
     name: default

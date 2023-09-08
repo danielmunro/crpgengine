@@ -13,6 +13,7 @@ typedef struct {
     MenuType menu;
     Beast **beasts;
     Player *player;
+    bool defending[MAX_PARTY_SIZE];
     int beastCount;
     int *cursors;
     double time;
@@ -50,6 +51,9 @@ Fight *createFight(
     fight->cursors = calloc(MAX_CURSORS, sizeof(int));
     for (int i = 0; i < MAX_CURSORS; i++) {
         fight->cursors[i] = -1;
+    }
+    for (int i = 0; i < MAX_PARTY_SIZE; i++) {
+        fight->defending[i] = false;
     }
     fight->menu = 0;
     return fight;

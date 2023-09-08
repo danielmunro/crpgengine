@@ -3,6 +3,7 @@ sprite:
   cursors:
     down: 769
     right: 801
+    up: 768
 
 screen:
   title: "My TinyTown Demo"

@@ -7,11 +7,11 @@ const char *actionMenu[] = {
 };
 
 typedef enum {
-    ATTACK,
-    MAGIC,
-    ITEMS,
-    DEFEND,
-    RUN,
+    ACTION_ATTACK,
+    ACTION_MAGIC,
+    ACTION_ITEMS,
+    ACTION_DEFEND,
+    ACTION_RUN,
 } ActionMenu;
 
 int getActionSelectCursorLength(MenuContext *menuContext) {
@@ -31,14 +31,14 @@ void drawActionSelectMenuScreen(MenuContext *menuContext) {
             ACTION_SELECT_BOX,
             createActionSelectMenuTextBox);
     drawMenuRect(t->area);
-    drawInMenu(t, actionMenu[ATTACK]);
+    drawInMenu(t, actionMenu[ACTION_ATTACK]);
     drawInMenu(
             t,
             menuContext->selectedMob->spellCount > 0
-            ? actionMenu[MAGIC] : "");
-    drawInMenu(t, actionMenu[ITEMS]);
-    drawInMenu(t, actionMenu[DEFEND]);
-    drawInMenu(t, actionMenu[RUN]);
+            ? actionMenu[ACTION_MAGIC] : "");
+    drawInMenu(t, actionMenu[ACTION_ITEMS]);
+    drawInMenu(t, actionMenu[ACTION_DEFEND]);
+    drawInMenu(t, actionMenu[ACTION_RUN]);
     drawRightCursor(
             menuContext->uiSprite,
             (Vector2) {
@@ -49,19 +49,8 @@ void drawActionSelectMenuScreen(MenuContext *menuContext) {
             });
 }
 
-MenuSelectResponse *actionSelectMenuItemSelected(MenuContext *menuContext) {
-    if (menuContext->cursorLine == ATTACK) {
-        return createMenuSelectResponse(OPEN_MENU, BEAST_TARGET_FIGHT_MENU);
-    } else if (menuContext->cursorLine == MAGIC) {
-        return createMenuSelectResponse(OPEN_MENU, MAGIC_FIGHT_MENU);
-    } else if (menuContext->cursorLine == ITEMS) {
-        return createMenuSelectResponse(OPEN_MENU, ITEMS_FIGHT_MENU);
-    }
-    return createMenuSelectResponse(CLOSE_MENU, ACTION_SELECT_FIGHT_MENU);
-}
-
 bool canGoToIndex(Mobile *mob, int index) {
-    if (index == MAGIC) {
+    if (index == ACTION_MAGIC) {
         return mob->spellCount > 0;
     }
     return true;
@@ -95,3 +84,17 @@ int getPreviousActionSelectCursorPosition(MenuContext *mc) {
     return mc->cursorLine;
 }
 
+MenuSelectResponse *actionSelectMenuItemSelected(MenuContext *menuContext) {
+    if (menuContext->cursorLine == ACTION_ATTACK) {
+        return createMenuSelectResponse(OPEN_MENU, BEAST_TARGET_FIGHT_MENU);
+    } else if (menuContext->cursorLine == ACTION_MAGIC) {
+        return createMenuSelectResponse(OPEN_MENU, MAGIC_FIGHT_MENU);
+    } else if (menuContext->cursorLine == ACTION_ITEMS) {
+        return createMenuSelectResponse(OPEN_MENU, ITEMS_FIGHT_MENU);
+    } else if (menuContext->cursorLine == ACTION_DEFEND) {
+        return createMenuSelectResponse(DEFEND_SELECTED, ACTION_SELECT_FIGHT_MENU);
+    } else if (menuContext->cursorLine == ACTION_RUN) {
+        cancelFight(menuContext->fight);
+    }
+    return createMenuSelectResponse(CLOSE_MENU, ACTION_SELECT_FIGHT_MENU);
+}

@@ -27,6 +27,7 @@ typedef struct {
 typedef struct {
     int down;
     int right;
+    int up;
 } CursorData;
 
 typedef struct {
@@ -110,6 +111,8 @@ static const cyaml_schema_field_t cursorFieldSchema[] = {
                 "down", CYAML_FLAG_DEFAULT, CursorData, down),
         CYAML_FIELD_INT(
                 "right", CYAML_FLAG_DEFAULT, CursorData, right),
+        CYAML_FIELD_INT(
+                "up", CYAML_FLAG_DEFAULT, CursorData, up),
         CYAML_FIELD_END,
 };
 

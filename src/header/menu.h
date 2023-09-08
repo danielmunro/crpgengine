@@ -26,6 +26,7 @@ MenuStyle getMenuStyleFromString(const char *style) {
 typedef enum {
     PARTY_MENU,
     ITEMS_MENU,
+    PARTY_ITEM_CONSUME_MENU,
     LOAD_MENU,
     SAVE_MENU,
     QUIT_MENU,
@@ -67,6 +68,7 @@ typedef enum {
     OPEN_MENU,
     CLOSE_MENU,
     FIND_TARGET_MENU,
+    DEFEND_SELECTED,
 } MenuSelectResponseType;
 
 #endif //CJRPGENGINE_MENU_H

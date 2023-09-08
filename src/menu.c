@@ -4,7 +4,7 @@ typedef struct {
 } UISprite;
 
 typedef struct {
-    const char *name;
+    Item *item;
     int amount;
 } ItemList;
 
@@ -18,6 +18,7 @@ typedef struct {
     Fight *fight;
     TextBox **textBoxes;
     Mobile *selectedMob;
+    Item *selectedItem;
     UISprite *uiSprite;
     ItemList *itemList;
     int itemListCount;
@@ -87,6 +88,12 @@ MenuContext *createMenuContext(
     context->itemList = calloc(MAX_ITEMS, sizeof(ItemList));
     context->itemListCount = 0;
     return context;
+}
+
+void resetItemList(MenuContext *mc) {
+    free(mc->itemList);
+    mc->itemList = NULL;
+    mc->itemListCount = 0;
 }
 
 UISprite *createUISprite(Spritesheet *sprite, UIData *config) {
@@ -191,6 +198,13 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
         removeMenu(menus);
     }
     return response;
+}
+
+void drawUpCursor(UISprite *sprites, Vector2 position) {
+    drawImageFromSprite(sprites->sprite, (Vector2) {
+            position.x + FIGHT_CURSOR_X_OFFSET,
+            position.y + FIGHT_CURSOR_Y_OFFSET,
+    }, sprites->config->sprite->cursors->up);
 }
 
 void drawRightCursor(UISprite *sprites, Vector2 position) {

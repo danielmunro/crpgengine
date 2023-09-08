@@ -8,7 +8,7 @@ typedef struct {
     UIData *config;
 } UIManager;
 
-int getMenuList(UIManager *ui) {
+int getMenuList(UIManager *uiMan) {
     Menu *list[] = {
             createMenu(
                     PARTY_MENU,
@@ -86,11 +86,18 @@ int getMenuList(UIManager *ui) {
                     drawMobileTargetMenuScreen,
                     getPreviousMobileTargetCursorPosition,
                     getNextMobileTargetCursorPosition,
-                    mobileTargetMenuItemSelected)
+                    mobileTargetMenuItemSelected),
+            createMenu(
+                    PARTY_ITEM_CONSUME_MENU,
+                    getPartyItemConsumeMenuCursorLength,
+                    drawPartyItemConsumeMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
+                    partyItemConsumeMenuItemSelected)
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {
-        ui->menus[i] = list[i];
+        uiMan->menus[i] = list[i];
     }
     return count;
 }

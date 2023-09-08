@@ -226,3 +226,8 @@ bool applyCastCost(Mobile *caster, Attributes *cost) {
     caster->mana -= cost->mana;
     return true;
 }
+
+void applyConsumable(Mobile *mob, Item *item) {
+    mob->hp += item->attributes->hp;
+    mob->mana += item->attributes->mana;
+}

@@ -47,9 +47,15 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
         FontStyle *fs = isReadyForAction(mob)
                         ? getFontStyleForFightCursor(mob, mc->fonts, mc->cursorLine, i)
                         : mc->fonts->disable;
+        char namePart[255];
+        if (mc->fight->defending[i]) {
+            sprintf(namePart, "[D] %s", mob->name);
+        } else {
+            sprintf(namePart, "%s", mob->name);
+        }
         drawInMenuWithStyle(textBox,
                             fs,
-                            mob->name);
+                            namePart);
         if (mc->cursorLine == i && isReadyForAction(mob)) {
             drawRightCursor(
                     mc->uiSprite,

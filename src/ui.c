@@ -191,6 +191,15 @@ Rectangle getPartyMenu() {
     };
 }
 
+Rectangle getTopWideMenu() {
+    return (Rectangle) {
+            0,
+            0,
+            (float) ui->screen->width,
+            TOP_MENU_HEIGHT,
+    };
+}
+
 Rectangle getBottomLeftMenu() {
     Rectangle rect = (Rectangle) {
             0,

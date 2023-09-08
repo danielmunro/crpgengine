@@ -4,6 +4,7 @@
 #define MAX_ITEM_LIST_BUFFER 10000
 
 const char *ItemTypes[] = {
+        "none",
         "consumable",
         "equipment",
         "crafting material",

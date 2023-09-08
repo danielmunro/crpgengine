@@ -22,6 +22,20 @@ void addItem(Player *player, Item *item) {
     player->itemCount++;
 }
 
+void removeItem(Player *player, Item *item) {
+    bool foundItem = false;
+    for (int i = 0; i < player->itemCount; i++) {
+        if (player->items[i] == item) {
+            foundItem = true;
+        }
+        if (foundItem) {
+            player->items[i] = player->items[i + 1];
+        }
+    }
+    free(item);
+    player->itemCount--;
+}
+
 Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
                      int coins, int experience, int level, int secondsPlayed,
                      const char **storylines, int storylineCount,
@@ -306,14 +320,14 @@ Player *createNewPlayer(AnimationManager *am) {
             createEmptyAttributesData(),
     });
     Spell **spells2 = calloc(MAX_SPELLS, sizeof(Spell));
-//    spells2[0] = createSpellFromData((SpellData) {
-//            (char *) Spells[1],
-//            (char *) Intents[1],
-//            1,
-//            (float) 1.0,
-//            createEmptyAttributesData(),
-//            createEmptyAttributesData(),
-//    });
+    spells2[0] = createSpellFromData((SpellData) {
+            (char *) Spells[1],
+            (char *) Intents[1],
+            1,
+            (float) 1.0,
+            createEmptyAttributesData(),
+            createEmptyAttributesData(),
+    });
     Spell **spells3 = calloc(MAX_SPELLS, sizeof(Spell));
     Spell **spells4 = calloc(MAX_SPELLS, sizeof(Spell));
 
@@ -381,22 +395,24 @@ Player *createNewPlayer(AnimationManager *am) {
         item->name = "potion";
         item->type = "consumable";
         item->worth = 10;
-        item->attributes = NULL;
+        AttributesData *a = createEmptyAttributesData();
+        a->hp = 10;
+        item->attributes = a;
         item->position = NULL;
         addItem(p, createItemFromData(item));
     }
     // hack -- add some spells
-    AttributesData *a = createDataFromAttributes(createEmptyAttributes());
-    a->mana = 10;
+    AttributesData *cureCost = createDataFromAttributes(createEmptyAttributes());
+    cureCost->mana = 10;
     AttributesData *cureImpact = createDataFromAttributes(createEmptyAttributes());
     cureImpact->hp = 20;
     SpellData cure = (SpellData) {
-        "cure",
-        "help",
-        1,
-        (float) 1.0,
-        a,
-        cureImpact,
+            "cure",
+            "help",
+            1,
+            (float) 1.0,
+            cureCost,
+            cureImpact,
     };
     p->party[0]->spells[0] = createSpellFromData(cure);
     p->party[0]->spellCount = 1;
@@ -408,7 +424,7 @@ Player *createNewPlayer(AnimationManager *am) {
             "harm",
             1,
             (float) 1.0,
-            a,
+            cureCost,
             fireImpact,
     };
     p->party[1]->spells[0] = createSpellFromData(fire);

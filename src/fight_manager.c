@@ -5,14 +5,14 @@ typedef struct {
     SpellManager *spells;
 } FightManager;
 
-FightManager *createFightManager(UIManager *ui, SpellManager *spells) {
+FightManager *createFightManager(UIManager *uiMan, SpellManager *spells) {
     FightManager *f = malloc(sizeof(FightManager));
-    f->ui = ui;
+    f->ui = uiMan;
     f->spells = spells;
     f->fight = NULL;
     f->menus = calloc(MAX_MENUS, sizeof(Menu));
-    addMenu(f->menus, findMenu(ui->menus, BEAST_LIST_FIGHT_MENU));
-    addMenu(f->menus, findMenu(ui->menus, MOBILE_SELECT_FIGHT_MENU));
+    addMenu(f->menus, findMenu(uiMan->menus, BEAST_LIST_FIGHT_MENU));
+    addMenu(f->menus, findMenu(uiMan->menus, MOBILE_SELECT_FIGHT_MENU));
     return f;
 }
 
@@ -181,6 +181,20 @@ void castOnMobile(FightManager *fm) {
     executeSpellOnMobile(target, spell);
 }
 
+void startDefending(Menu **menus, Menu *currentMenu, MenuContext *mc) {
+    for (int i = 0; i < MAX_PARTY_SIZE; i++) {
+        if (mc->selectedMob == mc->player->party[i]) {
+            mc->fight->defending[i] = true;
+            mc->selectedMob->actionGauge = 0;
+            break;
+        }
+    }
+    removeMenu(menus);
+    Menu *newCurrent = getCurrentMenu(menus);
+    mc->cursorLine = currentMenu->cursor;
+    newCurrent->cursor = newCurrent->getNextOption(mc);
+}
+
 void fightSpaceKeyPressed(FightManager *fm) {
     Menu *currentMenu = getCurrentMenu(fm->menus);
     int c = currentMenu->cursor;
@@ -190,14 +204,15 @@ void fightSpaceKeyPressed(FightManager *fm) {
                 fm->ui->menus,
                 fm->ui->menuContext);
         if (response->type == FIND_TARGET_MENU) {
+            Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
             Menu *previous = getPreviousMenu(fm->menus);
+            fm->fight->defending[c] = false;
             if (previous->type == MAGIC_FIGHT_MENU) {
                 if (currentMenu->type == BEAST_TARGET_FIGHT_MENU) {
                     castOnBeast(fm);
                 } else {
                     castOnMobile(fm);
                 }
-                Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
                 resetAfterSpellAction(fm, mobileSelectMenu->cursor);
             } else {
                 if (currentMenu->type == BEAST_TARGET_FIGHT_MENU) {
@@ -205,9 +220,14 @@ void fightSpaceKeyPressed(FightManager *fm) {
                 } else {
                     attackMobile(fm, currentMenu->cursor);
                 }
-                Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
                 resetAfterAttackAction(fm, mobileSelectMenu->cursor);
             }
+        }
+        if (response->type == DEFEND_SELECTED) {
+            startDefending(
+                    fm->menus,
+                    currentMenu,
+                    fm->ui->menuContext);
         }
         free(response);
     }

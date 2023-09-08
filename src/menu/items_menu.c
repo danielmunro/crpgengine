@@ -19,7 +19,7 @@ void drawItemsMenuScreen(MenuContext *menuContext) {
             const char *name = menuContext->player->items[i]->name;
             bool found = false;
             for (int j = 0; j < count; j++) {
-                if (strcmp(name, itemsSeen[j].name) == 0) {
+                if (strcmp(name, itemsSeen[j].item->name) == 0) {
                     itemsSeen[j].amount += 1;
                     found = true;
                     break;
@@ -27,7 +27,7 @@ void drawItemsMenuScreen(MenuContext *menuContext) {
             }
             if (!found) {
                 itemsSeen[count] = (ItemList) {
-                        menuContext->player->items[i]->name,
+                        menuContext->player->items[i],
                         1,
                 };
                 count++;
@@ -38,7 +38,7 @@ void drawItemsMenuScreen(MenuContext *menuContext) {
     }
     for (int i = 0; i < menuContext->itemListCount; i++) {
         char buffer[MAX_LINE_BUFFER];
-        sprintf(buffer, "(%d) %s", menuContext->itemList[i].amount, menuContext->itemList[i].name);
+        sprintf(buffer, "(%d) %s", menuContext->itemList[i].amount, menuContext->itemList[i].item->name);
         drawInMenu(textBox, buffer);
     }
     drawRightCursor(
@@ -54,5 +54,10 @@ int getItemsCursorLength(MenuContext *menuContext) {
 }
 
 MenuSelectResponse *itemMenuItemSelected(MenuContext *menuContext) {
+    Item *item = menuContext->itemList[menuContext->cursorLine].item;
+    if (item->type == ITEM_TYPE_CONSUMABLE) {
+        menuContext->selectedItem = item;
+        return createMenuSelectResponse(OPEN_MENU, PARTY_ITEM_CONSUME_MENU);
+    }
     return createMenuSelectResponse(CLOSE_MENU, ITEMS_MENU);
 }
