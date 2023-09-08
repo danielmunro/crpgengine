@@ -213,6 +213,17 @@ void attack(FightManager *fm, Menu *currentMenu, int playerIndex) {
     resetAfterAttackAction(fm, playerIndex);
 }
 
+void fightAction(FightManager *fm, Menu *currentMenu) {
+    Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
+    Menu *previous = getPreviousMenu(fm->menus);
+    fm->fight->defending[mobileSelectMenu->cursor] = false;
+    if (previous->type == MAGIC_FIGHT_MENU) {
+        castSpell(fm, currentMenu->type, mobileSelectMenu->cursor);
+    } else {
+        attack(fm, currentMenu, mobileSelectMenu->cursor);
+    }
+}
+
 void fightSpaceKeyPressed(FightManager *fm) {
     Menu *currentMenu = getCurrentMenu(fm->menus);
     int c = currentMenu->cursor;
@@ -222,16 +233,8 @@ void fightSpaceKeyPressed(FightManager *fm) {
                 fm->ui->menus,
                 fm->ui->menuContext);
         if (response->type == FIND_TARGET_MENU) {
-            Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
-            Menu *previous = getPreviousMenu(fm->menus);
-            fm->fight->defending[c] = false;
-            if (previous->type == MAGIC_FIGHT_MENU) {
-                castSpell(fm, currentMenu->type, mobileSelectMenu->cursor);
-            } else {
-                attack(fm, currentMenu, mobileSelectMenu->cursor);
-            }
-        }
-        if (response->type == DEFEND_SELECTED) {
+            fightAction(fm, currentMenu);
+        } else if (response->type == DEFEND_SELECTED) {
             startDefending(
                     fm->menus,
                     currentMenu,
