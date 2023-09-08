@@ -195,6 +195,24 @@ void startDefending(Menu **menus, Menu *currentMenu, MenuContext *mc) {
     newCurrent->cursor = newCurrent->getNextOption(mc);
 }
 
+void castSpell(FightManager *fm, MenuType type, int playerIndex) {
+    if (type == BEAST_TARGET_FIGHT_MENU) {
+        castOnBeast(fm);
+    } else {
+        castOnMobile(fm);
+    }
+    resetAfterSpellAction(fm, playerIndex);
+}
+
+void attack(FightManager *fm, Menu *currentMenu, int playerIndex) {
+    if (currentMenu->type == BEAST_TARGET_FIGHT_MENU) {
+        attackBeast(fm, currentMenu->cursor);
+    } else {
+        attackMobile(fm, currentMenu->cursor);
+    }
+    resetAfterAttackAction(fm, playerIndex);
+}
+
 void fightSpaceKeyPressed(FightManager *fm) {
     Menu *currentMenu = getCurrentMenu(fm->menus);
     int c = currentMenu->cursor;
@@ -208,19 +226,9 @@ void fightSpaceKeyPressed(FightManager *fm) {
             Menu *previous = getPreviousMenu(fm->menus);
             fm->fight->defending[c] = false;
             if (previous->type == MAGIC_FIGHT_MENU) {
-                if (currentMenu->type == BEAST_TARGET_FIGHT_MENU) {
-                    castOnBeast(fm);
-                } else {
-                    castOnMobile(fm);
-                }
-                resetAfterSpellAction(fm, mobileSelectMenu->cursor);
+                castSpell(fm, currentMenu->type, mobileSelectMenu->cursor);
             } else {
-                if (currentMenu->type == BEAST_TARGET_FIGHT_MENU) {
-                    attackBeast(fm, currentMenu->cursor);
-                } else {
-                    attackMobile(fm, currentMenu->cursor);
-                }
-                resetAfterAttackAction(fm, mobileSelectMenu->cursor);
+                attack(fm, currentMenu, mobileSelectMenu->cursor);
             }
         }
         if (response->type == DEFEND_SELECTED) {
