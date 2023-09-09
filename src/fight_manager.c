@@ -215,9 +215,8 @@ void attack(FightManager *fm, Menu *currentMenu, int playerIndex) {
 
 void fightAction(FightManager *fm, Menu *currentMenu) {
     Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
-    Menu *previous = getPreviousMenu(fm->menus);
     fm->fight->defending[mobileSelectMenu->cursor] = false;
-    if (previous->type == MAGIC_FIGHT_MENU) {
+    if (getPreviousMenu(fm->menus)->type == MAGIC_FIGHT_MENU) {
         castSpell(fm, currentMenu->type, mobileSelectMenu->cursor);
     } else {
         attack(fm, currentMenu, mobileSelectMenu->cursor);
