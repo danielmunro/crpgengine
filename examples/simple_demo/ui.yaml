@@ -26,25 +26,25 @@ menu:
 
 textAreas:
   - type: small
-    x: 80
-    y: 60
-    width: 740
-    height: 480
+    x: .1
+    y: .1
+    width: .8
+    height: .8
   - type: medium
-    x: 160
-    y: 120
-    width: 480
-    height: 360
+    x: .2
+    y: .2
+    width: .6
+    height: .6
   - type: full
     x: 0
     y: 0
-    width: 800
-    height: 600
+    width: 1
+    height: 1
   - type: bottom
     x: 0
-    y: 400
-    width: 800
-    height: 200
+    y: .6
+    width: 1
+    height: .4
 
 fonts:
   default:

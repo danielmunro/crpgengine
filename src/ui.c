@@ -49,10 +49,10 @@ TextAreaConfig *findTextArea(TextAreaType type, TextAreaData *areas, int areaCou
             TextAreaConfig *area = malloc(sizeof(TextAreaConfig));
             area->type = type;
             area->rect = (Rectangle) {
-                    areas[i].x,
-                    areas[i].y,
-                    areas[i].width,
-                    areas[i].height,
+                    (float) ui->screen->width * areas[i].x,
+                    (float) ui->screen->height * areas[i].y,
+                    (float) ui->screen->width * areas[i].width,
+                    (float) ui->screen->height * areas[i].height,
             };
             return area;
         }
