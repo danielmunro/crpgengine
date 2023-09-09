@@ -54,10 +54,20 @@ typedef struct {
 } UIMenuData;
 
 typedef struct {
+    const char *type;
+    float x;
+    float y;
+    float width;
+    float height;
+} TextAreaData;
+
+typedef struct {
     UISpriteData *sprite;
     FontsData *fonts;
     ScreenData *screen;
     UIMenuData *menu;
+    TextAreaData *textAreas;
+    int textAreasCount;
 } UIData;
 
 static const cyaml_schema_field_t fontFamilyFieldSchema[] = {
@@ -160,6 +170,26 @@ static const cyaml_schema_field_t menuFieldSchema[] = {
         CYAML_FIELD_END,
 };
 
+static const cyaml_schema_field_t textAreaFieldSchema[] = {
+        CYAML_FIELD_STRING_PTR(
+                "type", CYAML_FLAG_POINTER,
+                TextAreaData, type, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_FLOAT(
+                "x", CYAML_FLAG_DEFAULT, TextAreaData, x),
+        CYAML_FIELD_FLOAT(
+                "y", CYAML_FLAG_DEFAULT, TextAreaData, y),
+        CYAML_FIELD_FLOAT(
+                "width", CYAML_FLAG_DEFAULT, TextAreaData, width),
+        CYAML_FIELD_FLOAT(
+                "height", CYAML_FLAG_DEFAULT, TextAreaData, height),
+        CYAML_FIELD_END,
+};
+
+static const cyaml_schema_value_t textAreaSchema = {
+        CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT,
+                            TextAreaData, textAreaFieldSchema),
+};
+
 static const cyaml_schema_field_t fontsTopMappingField[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "sprite", CYAML_FLAG_POINTER, UIData, sprite, spritesheetFieldSchema),
@@ -169,6 +199,9 @@ static const cyaml_schema_field_t fontsTopMappingField[] = {
                 "screen", CYAML_FLAG_POINTER, UIData, screen, screenFieldSchema),
         CYAML_FIELD_MAPPING_PTR(
                 "menu", CYAML_FLAG_POINTER, UIData, menu, menuFieldSchema),
+        CYAML_FIELD_SEQUENCE_COUNT(
+                "textAreas", CYAML_FLAG_POINTER, UIData, textAreas,
+                textAreasCount, &textAreaSchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END,
 };
 

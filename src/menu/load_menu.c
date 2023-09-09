@@ -3,9 +3,10 @@ int getLoadCursorLength(MenuContext *menuContext) {
 }
 
 TextBox *createLoadMenuBox(MenuContext *mc) {
-    Rectangle rect = getSmallMenu();
-    FontStyle *defaultFont = mc->fonts->default_;
-    return createTextBox(rect, defaultFont, LOAD_BOX);
+    return createTextBox(
+            ui->textAreas->small->rect,
+            mc->fonts->default_,
+            LOAD_BOX);
 }
 
 void drawLoadMenuScreen(MenuContext *menuContext) {

@@ -10,8 +10,6 @@
 
 #define PARTY_MENU_WIDTH 200
 
-#define TOP_MENU_HEIGHT 200
-
 #define FIGHT_PLAYER_Y_MARGIN 40
 #define FIGHT_PLAYER_Y_PADDING 24
 
@@ -33,6 +31,21 @@
 
 #define MAX_LINE_BUFFER 128
 #define MAX_MESSAGE_BUFFER 1024
+#define MAX_TEXT_AREAS 128
+
+const char *TextAreaTypes[] = {
+        "unknown",
+        "small",
+        "medium",
+        "full",
+};
+
+typedef enum {
+    TEXT_AREA_UNKNOWN,
+    TEXT_AREA_SMALL,
+    TEXT_AREA_MEDIUM,
+    TEXT_AREA_FULL,
+} TextAreaType;
 
 const char *FontStyleTypes[] = {
         "default",

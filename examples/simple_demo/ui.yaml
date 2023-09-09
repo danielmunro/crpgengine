@@ -24,6 +24,23 @@ menu:
     color: 255, 255, 255, 255
   padding: 20.0
 
+textAreas:
+  - type: small
+    x: 80
+    y: 60
+    width: 740
+    height: 480
+  - type: medium
+    x: 160
+    y: 120
+    width: 480
+    height: 360
+  - type: full
+    x: 0
+    y: 0
+    width: 800
+    height: 600
+
 fonts:
   default:
     name: default

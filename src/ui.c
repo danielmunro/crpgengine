@@ -24,11 +24,41 @@ typedef struct {
 } MenuConfig;
 
 typedef struct {
+    TextAreaType type;
+    Rectangle rect;
+} TextAreaConfig;
+
+typedef struct {
+    TextAreaConfig *small;
+    TextAreaConfig *medium;
+    TextAreaConfig *full;
+} TextAreasConfig;
+
+typedef struct {
     ScreenConfig *screen;
     MenuConfig *menu;
+    TextAreasConfig *textAreas;
 } UIConfig;
 
 UIConfig *ui;
+
+TextAreaConfig *findTextArea(TextAreaType type, TextAreaData *areas, int areaCount) {
+    for (int i = 0; i < areaCount; i++) {
+        if (strcmp(areas[i].type, TextAreaTypes[type]) == 0) {
+            TextAreaConfig *area = malloc(sizeof(TextAreaConfig));
+            area->type = type;
+            area->rect = (Rectangle) {
+                    areas[i].x,
+                    areas[i].y,
+                    areas[i].width,
+                    areas[i].height,
+            };
+            return area;
+        }
+    }
+    addError("unknown text area: %d", type);
+    exit(EXIT_UNKNOWN_TEXT_AREA);
+}
 
 void createUIConfig(UIData *data) {
     ui = malloc(sizeof(UIConfig));
@@ -53,6 +83,20 @@ void createUIConfig(UIData *data) {
     ui->menu->border->lineThickness = data->menu->border->lineThickness;
     ui->menu->border->roundness = data->menu->border->roundness;
     ui->menu->border->color = getColorFromString(data->menu->border->color);
+
+    ui->textAreas = malloc(sizeof(TextAreasConfig));
+    ui->textAreas->small = findTextArea(
+            TEXT_AREA_SMALL,
+            data->textAreas,
+            data->textAreasCount);
+    ui->textAreas->medium = findTextArea(
+            TEXT_AREA_MEDIUM,
+            data->textAreas,
+            data->textAreasCount);
+    ui->textAreas->full = findTextArea(
+            TEXT_AREA_FULL,
+            data->textAreas,
+            data->textAreasCount);
 }
 
 typedef struct {
@@ -142,35 +186,6 @@ void drawMenuRect(Rectangle rect) {
             4,
             t,
             ui->menu->border->color);
-}
-
-Rectangle getSmallMenu() {
-    float marginX = (float) ui->screen->width / 10, marginY = (float) ui->screen->height / 10;
-    Rectangle alertBox = {
-            marginX,
-            marginY,
-            (float) ui->screen->width - (marginX * 2),
-            (float) ui->screen->height - (marginY * 2)};
-    return alertBox;
-}
-
-Rectangle getMediumMenu() {
-    float marginX = (float) ui->screen->width / 5, marginY = (float) ui->screen->height / 5;
-    Rectangle alertBox = {
-            marginX,
-            marginY,
-            (float) ui->screen->width - (marginX * 2),
-            (float) ui->screen->height - (marginY * 2)};
-    return alertBox;
-}
-
-Rectangle getFullScreenMenu() {
-    return (Rectangle) {
-            0,
-            0,
-            (float) ui->screen->width,
-            (float) ui->screen->height,
-    };
 }
 
 Rectangle getBottomMenu() {
