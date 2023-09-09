@@ -40,6 +40,11 @@ textAreas:
     y: 0
     width: 800
     height: 600
+  - type: bottom
+    x: 0
+    y: 400
+    width: 800
+    height: 200
 
 fonts:
   default:

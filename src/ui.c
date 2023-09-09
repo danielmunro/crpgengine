@@ -32,6 +32,7 @@ typedef struct {
     TextAreaConfig *small;
     TextAreaConfig *medium;
     TextAreaConfig *full;
+    TextAreaConfig *bottom;
 } TextAreasConfig;
 
 typedef struct {
@@ -95,6 +96,10 @@ void createUIConfig(UIData *data) {
             data->textAreasCount);
     ui->textAreas->full = findTextArea(
             TEXT_AREA_FULL,
+            data->textAreas,
+            data->textAreasCount);
+    ui->textAreas->bottom = findTextArea(
+            TEXT_AREA_BOTTOM,
             data->textAreas,
             data->textAreasCount);
 }
@@ -186,15 +191,6 @@ void drawMenuRect(Rectangle rect) {
             4,
             t,
             ui->menu->border->color);
-}
-
-Rectangle getBottomMenu() {
-    return (Rectangle) {
-            0,
-            (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
-            (float) ui->screen->width,
-            BOTTOM_MENU_HEIGHT,
-    };
 }
 
 Rectangle getPartyMenu() {
