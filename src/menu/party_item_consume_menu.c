@@ -4,7 +4,7 @@ int getPartyItemConsumeMenuCursorLength(MenuContext *mc) {
 
 TextBox *createPartyItemConsumeTextBox(MenuContext *mc) {
     return createTextBox(
-            getRightTallMenu(),
+            ui->textAreas->right,
             mc->fonts->default_,
             PARTY_ITEM_CONSUME_BOX);
 }

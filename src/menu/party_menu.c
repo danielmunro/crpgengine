@@ -14,7 +14,7 @@ TextBox *createFullScreenTextBox(MenuContext *mc) {
 
 TextBox *createPartyTextBox(MenuContext *mc) {
     return createTextBox(
-            getPartyMenu(),
+            ui->textAreas->right,
             mc->fonts->default_,
             PARTY_BOX);
 }
