@@ -29,10 +29,10 @@ typedef struct {
 } TextAreaConfig;
 
 typedef struct {
-    TextAreaConfig *small;
-    TextAreaConfig *medium;
-    TextAreaConfig *full;
-    TextAreaConfig *bottom;
+    Rectangle small;
+    Rectangle medium;
+    Rectangle full;
+    Rectangle bottom;
 } TextAreasConfig;
 
 typedef struct {
@@ -43,18 +43,15 @@ typedef struct {
 
 UIConfig *ui;
 
-TextAreaConfig *findTextArea(TextAreaType type, TextAreaData *areas, int areaCount) {
+Rectangle findTextAreaRect(TextAreaType type, TextAreaData *areas, int areaCount) {
     for (int i = 0; i < areaCount; i++) {
         if (strcmp(areas[i].type, TextAreaTypes[type]) == 0) {
-            TextAreaConfig *area = malloc(sizeof(TextAreaConfig));
-            area->type = type;
-            area->rect = (Rectangle) {
+            return (Rectangle) {
                     (float) ui->screen->width * areas[i].x,
                     (float) ui->screen->height * areas[i].y,
                     (float) ui->screen->width * areas[i].width,
                     (float) ui->screen->height * areas[i].height,
             };
-            return area;
         }
     }
     addError("unknown text area: %d", type);
@@ -86,19 +83,19 @@ void createUIConfig(UIData *data) {
     ui->menu->border->color = getColorFromString(data->menu->border->color);
 
     ui->textAreas = malloc(sizeof(TextAreasConfig));
-    ui->textAreas->small = findTextArea(
+    ui->textAreas->small = findTextAreaRect(
             TEXT_AREA_SMALL,
             data->textAreas,
             data->textAreasCount);
-    ui->textAreas->medium = findTextArea(
+    ui->textAreas->medium = findTextAreaRect(
             TEXT_AREA_MEDIUM,
             data->textAreas,
             data->textAreasCount);
-    ui->textAreas->full = findTextArea(
+    ui->textAreas->full = findTextAreaRect(
             TEXT_AREA_FULL,
             data->textAreas,
             data->textAreasCount);
-    ui->textAreas->bottom = findTextArea(
+    ui->textAreas->bottom = findTextAreaRect(
             TEXT_AREA_BOTTOM,
             data->textAreas,
             data->textAreasCount);

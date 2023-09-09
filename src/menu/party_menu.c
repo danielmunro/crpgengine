@@ -7,7 +7,7 @@ void drawPlayer(Player *player) {
 
 TextBox *createFullScreenTextBox(MenuContext *mc) {
     return createTextBox(
-            ui->textAreas->full->rect,
+            ui->textAreas->full,
             mc->fonts->default_,
             IN_GAME_MENU_BOX);
 }

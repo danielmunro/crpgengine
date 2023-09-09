@@ -4,7 +4,7 @@ int getQuitCursorLength(MenuContext *menuContext) {
 
 TextBox *createQuitTextBox(MenuContext *mc) {
     return createTextBox(
-            ui->textAreas->medium->rect,
+            ui->textAreas->medium,
             mc->fonts->default_,
             QUIT_BOX);
 }

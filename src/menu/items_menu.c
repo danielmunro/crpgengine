@@ -1,6 +1,6 @@
 TextBox *createItemsTextBox(MenuContext *mc) {
     return createTextBox(
-            ui->textAreas->full->rect,
+            ui->textAreas->full,
             mc->fonts->default_,
             ITEMS_BOX);
 }

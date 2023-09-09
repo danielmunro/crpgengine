@@ -4,7 +4,7 @@ int getLoadCursorLength(MenuContext *menuContext) {
 
 TextBox *createLoadMenuBox(MenuContext *mc) {
     return createTextBox(
-            ui->textAreas->small->rect,
+            ui->textAreas->small,
             mc->fonts->default_,
             LOAD_BOX);
 }
