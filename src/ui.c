@@ -29,6 +29,8 @@ typedef struct {
     Rectangle full;
     Rectangle bottom;
     Rectangle right;
+    Rectangle bottomLeft;
+    Rectangle bottomMidRight;
 } TextAreasConfig;
 
 typedef struct {
@@ -97,6 +99,14 @@ void createUIConfig(UIData *data) {
             data->textAreasCount);
     ui->textAreas->right = findTextAreaRect(
             TEXT_AREA_RIGHT,
+            data->textAreas,
+            data->textAreasCount);
+    ui->textAreas->bottomLeft = findTextAreaRect(
+            TEXT_AREA_BOTTOM_LEFT,
+            data->textAreas,
+            data->textAreasCount);
+    ui->textAreas->bottomMidRight = findTextAreaRect(
+            TEXT_AREA_BOTTOM_MID_RIGHT,
             data->textAreas,
             data->textAreasCount);
 }
@@ -188,25 +198,6 @@ void drawMenuRect(Rectangle rect) {
             4,
             t,
             ui->menu->border->color);
-}
-
-Rectangle getBottomLeftMenu() {
-    Rectangle rect = (Rectangle) {
-            0,
-            (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
-            (float) ui->screen->width - BOTTOM_MENU_PLAYER_WIDTH,
-            BOTTOM_MENU_HEIGHT,
-    };
-    return rect;
-}
-
-Rectangle getBottomRightMenu() {
-    return (Rectangle) {
-            (float) ui->screen->width - BOTTOM_MENU_PLAYER_WIDTH,
-            (float) ui->screen->height - BOTTOM_MENU_HEIGHT,
-            BOTTOM_MENU_PLAYER_WIDTH,
-            BOTTOM_MENU_HEIGHT,
-    };
 }
 
 Rectangle getActionSelectMenu() {

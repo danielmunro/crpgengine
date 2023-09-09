@@ -20,10 +20,10 @@ FontStyle *getFontStyleForHealthLevel(Fonts *fonts, float percent) {
 
 void drawActionGauge(float y, float width, Color color) {
     float actionGaugeX = (float) ui->screen->width - ACTION_GAUGE_WIDTH - ui->menu->padding;
-    float actionGaugeY = (float) ui->screen->height - BOTTOM_MENU_HEIGHT + ui->menu->padding + y;
+//    float actionGaugeY = (float) ui->screen->height - BOTTOM_MENU_HEIGHT + ui->menu->padding + y;
     Rectangle rect = {
             actionGaugeX,
-            actionGaugeY,
+            y,
             width,
             ACTION_GAUGE_HEIGHT,
     };
@@ -81,11 +81,11 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
                 },
                 mc->fonts->default_);
         drawActionGauge(
-                ((float) i * fs->lineHeight),
+                textBox->area.y + ui->menu->padding + line(i, mc->fonts->default_->lineHeight) + 3,
                 ACTION_GAUGE_WIDTH,
                 mc->fonts->disable->color);
         drawActionGauge(
-                ((float) i * fs->lineHeight),
+                textBox->area.y + ui->menu->padding + line(i, mc->fonts->default_->lineHeight) + 3,
                 ACTION_GAUGE_WIDTH * ((float) mob->actionGauge / MAX_ACTION_GAUGE),
                 mc->fonts->default_->color);
     }
@@ -97,7 +97,7 @@ int getMobileSelectMenuCursorLength(MenuContext *menuContext) {
 
 TextBox *createMobileSelectTextBox(MenuContext *menuContext) {
     return createTextBox(
-            getBottomRightMenu(),
+            ui->textAreas->bottomMidRight,
             menuContext->fonts->default_, MOBILE_SELECT_BOX);
 }
 

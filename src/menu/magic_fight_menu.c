@@ -4,7 +4,7 @@ int getMagicFightCursorLength(MenuContext *menuContext) {
 
 TextBox *createMagicFightMenuTextBox(MenuContext *menuContext) {
     return createTextBox(
-            getBottomRightMenu(),
+            ui->textAreas->bottomMidRight,
             menuContext->fonts->default_,
             MAGIC_SELECT_BOX);
 }

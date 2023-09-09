@@ -50,6 +50,16 @@ textAreas:
     y: 0
     width: .25
     height: 1
+  - type: bottomLeft
+    x: 0
+    y: .75
+    width: .25
+    height: .25
+  - type: bottomMidRight
+    x: .25
+    y: .75
+    width: .75
+    height: .25
 
 fonts:
   default:
