@@ -39,7 +39,12 @@ void drawItemsMenuScreen(MenuContext *menuContext) {
     for (int i = 0; i < menuContext->itemListCount; i++) {
         char buffer[MAX_LINE_BUFFER];
         sprintf(buffer, "(%d) %s", menuContext->itemList[i].amount, menuContext->itemList[i].item->name);
-        drawInMenu(textBox, buffer);
+        drawInMenuWithStyle(
+                textBox,
+                menuContext->itemList[i].item->type == ITEM_TYPE_CONSUMABLE
+                    ? menuContext->fonts->default_
+                    : menuContext->fonts->disable,
+                buffer);
     }
     drawRightCursor(
             menuContext->uiSprite,
@@ -59,5 +64,5 @@ MenuSelectResponse *itemMenuItemSelected(MenuContext *menuContext) {
         menuContext->selectedItem = item;
         return createMenuSelectResponse(OPEN_MENU, PARTY_ITEM_CONSUME_MENU);
     }
-    return createMenuSelectResponse(CLOSE_MENU, ITEMS_MENU);
+    return NULL;
 }

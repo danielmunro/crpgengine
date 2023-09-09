@@ -192,3 +192,9 @@ Color getColorFromString(const char *color) {
             strToInt(a),
     };
 }
+
+char *getVital(int current, int max) {
+    char *vital = malloc(sizeof(char *));
+    sprintf(vital, "%d/%d", current, max);
+    return vital;
+}

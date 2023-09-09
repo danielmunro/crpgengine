@@ -192,6 +192,9 @@ int getDefaultPreviousOption(MenuContext *mc) {
 MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext *menuContext) {
     Menu *menu = getCurrentMenu(menus);
     MenuSelectResponse *response = menu->selected(menuContext);
+    if (response == NULL) {
+        return NULL;
+    }
     if (response->type == OPEN_MENU) {
         addMenu(menus, findMenu(allMenus, response->menuType));
     } else if (response->type == CLOSE_MENU) {

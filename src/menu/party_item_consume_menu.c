@@ -4,7 +4,7 @@ int getPartyItemConsumeMenuCursorLength(MenuContext *mc) {
 
 TextBox *createPartyItemConsumeTextBox(MenuContext *mc) {
     return createTextBox(
-            getTopWideMenu(),
+            getRightTallMenu(),
             mc->fonts->default_,
             PARTY_ITEM_CONSUME_BOX);
 }
@@ -20,13 +20,27 @@ void drawPartyItemConsumeMenuScreen(MenuContext *mc) {
             PARTY_ITEM_CONSUME_BOX,
             createPartyItemConsumeTextBox);
     drawMenuRect(t->area);
-    float quarter = (float) ui->screen->width / 4;
+    float quarter = (float) ui->screen->height / 4;
+    FontStyle *f = mc->fonts->default_;
     for (int i = 0; i < mc->player->partyCount; i++) {
+        Mobile *mob = mc->player->party[i];
         Vector2 pos = (Vector2) {
+                ui->menu->padding + t->area.x,
                 ui->menu->padding + (quarter * (float) i),
-                ui->menu->padding,
         };
-        drawPartyItemConsumerPlayer(mc->player->party[i], pos);
+        drawPartyItemConsumerPlayer(mob, pos);
+        drawText(
+                mob->name,
+                (Vector2) {pos.x + 30, pos.y },
+                f);
+        drawText(
+                getVital(mob->hp, calculateMobileAttributes(mob).hp),
+                (Vector2) {pos.x + 30, pos.y + line(1, f->lineHeight) },
+                f);
+        drawText(
+                getVital(mob->mana, calculateMobileAttributes(mob).mana),
+                (Vector2) {pos.x + 30, pos.y + line(2, f->lineHeight) },
+                f);
         if (mc->cursorLine == i) {
             drawUpCursor(
                     mc->uiSprite,
