@@ -24,11 +24,6 @@ typedef struct {
 } MenuConfig;
 
 typedef struct {
-    TextAreaType type;
-    Rectangle rect;
-} TextAreaConfig;
-
-typedef struct {
     Rectangle small;
     Rectangle medium;
     Rectangle full;
