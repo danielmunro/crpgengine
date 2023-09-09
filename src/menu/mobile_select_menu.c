@@ -18,13 +18,6 @@ FontStyle *getFontStyleForHealthLevel(Fonts *fonts, float percent) {
     }
 }
 
-void drawStat(Fonts *fonts, int amount, float percent, Vector2 vect) {
-    char stat[10];
-    sprintf(stat, "%d", amount);
-    FontStyle *fs = getFontStyleForHealthLevel(fonts, percent);
-    drawText(stat, vect, fs);
-}
-
 void drawActionGauge(float y, float width, Color color) {
     float actionGaugeX = (float) ui->screen->width - ACTION_GAUGE_WIDTH - ui->menu->padding;
     float actionGaugeY = (float) ui->screen->height - BOTTOM_MENU_HEIGHT + ui->menu->padding + y;
@@ -75,20 +68,18 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
                                });
             }
         }
-        drawStat(mc->fonts,
-                 mob->hp,
-                 (float) mob->hp / (float) calculateMobileAttributes(mob).hp,
-                 (Vector2) {
-                         textBox->area.x + HP_X_OFFSET,
-                         textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
-                 });
-        drawStat(mc->fonts,
-                 mob->mana,
-                 (float) mob->mana / (float) calculateMobileAttributes(mob).mana,
-                 (Vector2) {
-                         textBox->area.x + MANA_X_OFFSET,
-                         textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
-                 });
+        drawText(getVital(mob->hp, calculateMobileAttributes(mob).hp),
+                (Vector2) {
+                        textBox->area.x + HP_X_OFFSET,
+                        textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
+                },
+                mc->fonts->default_);
+        drawText(getVital(mob->mana, calculateMobileAttributes(mob).mana),
+                (Vector2) {
+                        textBox->area.x + MANA_X_OFFSET,
+                        textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
+                },
+                mc->fonts->default_);
         drawActionGauge(
                 ((float) i * fs->lineHeight),
                 ACTION_GAUGE_WIDTH,
