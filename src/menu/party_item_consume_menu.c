@@ -42,11 +42,11 @@ void drawPartyItemConsumeMenuScreen(MenuContext *mc) {
                 (Vector2) {pos.x + 30, pos.y + line(2, f->lineHeight) },
                 f);
         if (mc->cursorLine == i) {
-            drawUpCursor(
+            drawRightCursor(
                     mc->uiSprite,
                     (Vector2) {
-                        pos.x - (float) mc->uiSprite->sprite->frameWidth / 4,
-                        pos.y + ui->menu->padding,
+                        pos.x - ui->menu->padding,
+                        pos.y - ui->menu->padding,
                     });
         }
     }

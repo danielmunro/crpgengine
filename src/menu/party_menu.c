@@ -1,10 +1,3 @@
-void drawPlayer(Player *player) {
-    drawAnimation(
-            findAnimation(getPartyLeader(player)->animations, DOWN),
-            (Vector2) {20, 20}
-    );
-}
-
 TextBox *createFullScreenTextBox(MenuContext *mc) {
     return createTextBox(
             ui->textAreas->full,
@@ -25,25 +18,33 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
             IN_GAME_MENU_BOX,
             createFullScreenTextBox);
     drawMenuRect(inGameMenuBox->area);
-    drawPlayer(menuContext->player);
     FontStyle *defaultFont = menuContext->fonts->default_;
     float column1 = (ui->menu->padding * 2) + MOB_COLLISION_WIDTH;
-    drawText(
-            getPartyLeader(menuContext->player)->name,
-            (Vector2) {column1, ui->menu->padding},
-            defaultFont);
-    char hp[64];
-    sprintf(hp, "hp %d/%d", 20, 20);
-    drawText(
-            hp,
-            (Vector2) {column1, ui->menu->padding + line(1, defaultFont->lineHeight)},
-            defaultFont);
-    char mp[64];
-    sprintf(mp, "mp %d/%d", 20, 20);
-    drawText(
-            mp,
-            (Vector2) {column1, ui->menu->padding + line(2, defaultFont->lineHeight)},
-            defaultFont);
+    for (int i = 0; i < menuContext->player->partyCount; i++) {
+        Mobile *mob = menuContext->player->party[i];
+        float y = ui->menu->padding + ((float) ui->screen->height / 4) * (float) i;
+        drawAnimation(
+                findAnimation(mob->animations, DOWN),
+                (Vector2) {
+                    ui->menu->padding,
+                    y}
+        );
+        drawText(
+                mob->name,
+                (Vector2) {
+                    column1,
+                    y},
+                defaultFont);
+        Attributes calculated = calculateMobileAttributes(mob);
+        drawText(
+                getVital(mob->hp, calculated.hp),
+                (Vector2) {column1, y + line(1, defaultFont->lineHeight)},
+                defaultFont);
+        drawText(
+                getVital(mob->mana, calculated.mana),
+                (Vector2) {column1, y + line(2, defaultFont->lineHeight)},
+                defaultFont);
+    }
     int count = sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
     TextBox *textBox = findOrCreateTextBox(
             menuContext,
