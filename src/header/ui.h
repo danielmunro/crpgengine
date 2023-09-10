@@ -40,6 +40,7 @@ const char *TextAreaTypes[] = {
         "right",
         "bottomLeft",
         "bottomMidRight",
+        "bottomMid",
 };
 
 typedef enum {
@@ -51,6 +52,7 @@ typedef enum {
     TEXT_AREA_RIGHT,
     TEXT_AREA_BOTTOM_LEFT,
     TEXT_AREA_BOTTOM_MID_RIGHT,
+    TEXT_AREA_BOTTOM_MID,
 } TextAreaType;
 
 const char *FontStyleTypes[] = {

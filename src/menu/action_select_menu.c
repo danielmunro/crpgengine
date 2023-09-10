@@ -20,7 +20,7 @@ int getActionSelectCursorLength(MenuContext *menuContext) {
 
 TextBox *createActionSelectMenuTextBox(MenuContext *menuContext) {
     return createTextBox(
-            getActionSelectMenu(),
+            ui->textAreas->bottomMid,
             menuContext->fonts->default_,
             ACTION_SELECT_BOX);
 }
