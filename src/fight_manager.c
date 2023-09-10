@@ -120,9 +120,6 @@ void attackMobile(FightManager *fm, int targetIndex) {
     Mobile *target = fm->fight->player->party[targetIndex];
     Mobile *attacker = fm->fight->player->party[m->cursor];
     target->hp -= calculateMobileAttributes(attacker).strength;
-//    resetAfterAttackAction(fm, m->cursor);
-//    fm->ui->menuContext->cursorLine = m->cursor;
-//    m->cursor = m->getNextOption(fm->ui->menuContext);
 }
 
 int getAttributeAmount(Spell *spell, int base) {
