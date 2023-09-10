@@ -24,6 +24,14 @@ menu:
     color: 255, 255, 255, 255
   padding: 20.0
 
+fightMenu:
+  hpXOffset: .3
+  manaXOffset: .5
+  actionGauge:
+    xOffset: .7
+    height: 15
+    width: 100
+
 textAreas:
   - type: small
     x: .1

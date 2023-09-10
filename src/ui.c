@@ -17,6 +17,12 @@ typedef struct {
 } BorderConfig;
 
 typedef struct {
+    float width;
+    float height;
+    float xOffset;
+} ActionGaugeConfig;
+
+typedef struct {
     MenuStyle style;
     VerticalGradientConfig *verticalGradient;
     BorderConfig *border;
@@ -34,9 +40,16 @@ typedef struct {
 } TextAreasConfig;
 
 typedef struct {
+    ActionGaugeConfig *actionGauge;
+    float hpXOffset;
+    float manaXOffset;
+} FightMenuConfig;
+
+typedef struct {
     ScreenConfig *screen;
     MenuConfig *menu;
     TextAreasConfig *textAreas;
+    FightMenuConfig *fightMenu;
 } UIConfig;
 
 UIConfig *ui;
@@ -79,6 +92,14 @@ void createUIConfig(UIData *data) {
     ui->menu->border->lineThickness = data->menu->border->lineThickness;
     ui->menu->border->roundness = data->menu->border->roundness;
     ui->menu->border->color = getColorFromString(data->menu->border->color);
+
+    ui->fightMenu = malloc(sizeof(FightMenuConfig));
+    ui->fightMenu->hpXOffset = data->fightMenu->hpXOffset;
+    ui->fightMenu->manaXOffset = data->fightMenu->manaXOffset;
+    ui->fightMenu->actionGauge = malloc(sizeof(ActionGaugeConfig));
+    ui->fightMenu->actionGauge->xOffset = data->fightMenu->actionGauge->xOffset;
+    ui->fightMenu->actionGauge->width = data->fightMenu->actionGauge->width;
+    ui->fightMenu->actionGauge->height = data->fightMenu->actionGauge->height;
 
     ui->textAreas = malloc(sizeof(TextAreasConfig));
     ui->textAreas->small = findTextAreaRect(

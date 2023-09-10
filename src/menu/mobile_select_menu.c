@@ -18,18 +18,15 @@ FontStyle *getFontStyleForHealthLevel(Fonts *fonts, float percent) {
     }
 }
 
-void drawActionGauge(float y, float width, Color color) {
-    float actionGaugeX = (float) ui->screen->width - ACTION_GAUGE_WIDTH - ui->menu->padding;
-//    float actionGaugeY = (float) ui->screen->height - BOTTOM_MENU_HEIGHT + ui->menu->padding + y;
-    Rectangle rect = {
-            actionGaugeX,
-            y,
-            width,
-            ACTION_GAUGE_HEIGHT,
-    };
+void drawActionGauge(Rectangle rect, float percent, Color color) {
     DrawRectangleRounded(
-            rect,
-            (float) 1,
+            (Rectangle) {
+                    rect.x,
+                    rect.y,
+                    rect.width * percent,
+                    rect.height,
+            },
+            1,
             4,
             color);
 }
@@ -68,26 +65,30 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
                                });
             }
         }
+        FontStyle *default_ = mc->fonts->default_;
         drawText(getVital(mob->hp, calculateMobileAttributes(mob).hp),
                 (Vector2) {
-                        textBox->area.x + HP_X_OFFSET,
+                        textBox->area.x + (ui->fightMenu->hpXOffset * textBox->area.width),
                         textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
                 },
-                mc->fonts->default_);
+                default_);
         drawText(getVital(mob->mana, calculateMobileAttributes(mob).mana),
                 (Vector2) {
-                        textBox->area.x + MANA_X_OFFSET,
+                        textBox->area.x + (ui->fightMenu->manaXOffset * textBox->area.width),
                         textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
                 },
-                mc->fonts->default_);
+                default_);
+        Rectangle rect = (Rectangle) {
+                textBox->area.x + (ui->fightMenu->actionGauge->xOffset * textBox->area.width),
+                textBox->area.y + ui->menu->padding + line(i, default_->lineHeight),
+                ui->fightMenu->actionGauge->width,
+                ui->fightMenu->actionGauge->height,
+        };
+        drawActionGauge(rect, (float) 1.0, mc->fonts->disable->color);
         drawActionGauge(
-                textBox->area.y + ui->menu->padding + line(i, mc->fonts->default_->lineHeight) + 3,
-                ACTION_GAUGE_WIDTH,
-                mc->fonts->disable->color);
-        drawActionGauge(
-                textBox->area.y + ui->menu->padding + line(i, mc->fonts->default_->lineHeight) + 3,
-                ACTION_GAUGE_WIDTH * ((float) mob->actionGauge / MAX_ACTION_GAUGE),
-                mc->fonts->default_->color);
+                rect,
+                (float) mob->actionGauge / MAX_ACTION_GAUGE,
+                default_->color);
     }
 }
 

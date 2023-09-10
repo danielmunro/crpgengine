@@ -21,8 +21,7 @@
 
 #define HP_X_OFFSET 200
 #define MANA_X_OFFSET 320
-#define ACTION_GAUGE_WIDTH 100
-#define ACTION_GAUGE_HEIGHT 10
+#define ACTION_GAUGE_X_OFFSET 440
 
 #define NOTIFICATION_DECAY_SECONDS 5
 #define NOTIFICATION_HEIGHT 75
@@ -31,7 +30,6 @@
 
 #define MAX_LINE_BUFFER 128
 #define MAX_MESSAGE_BUFFER 1024
-#define MAX_TEXT_AREAS 128
 
 const char *TextAreaTypes[] = {
         "unknown",

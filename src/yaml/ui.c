@@ -47,11 +47,23 @@ typedef struct {
 } UIMenuBorderData;
 
 typedef struct {
+    float height;
+    float width;
+    float xOffset;
+} ActionGaugeData;
+
+typedef struct {
     const char *style;
     VerticalGradientData *verticalGradient;
     UIMenuBorderData *border;
     float padding;
 } UIMenuData;
+
+typedef struct {
+    ActionGaugeData *actionGauge;
+    float hpXOffset;
+    float manaXOffset;
+} FightMenuData;
 
 typedef struct {
     const char *type;
@@ -67,6 +79,7 @@ typedef struct {
     ScreenData *screen;
     UIMenuData *menu;
     TextAreaData *textAreas;
+    FightMenuData *fightMenu;
     int textAreasCount;
 } UIData;
 
@@ -155,6 +168,16 @@ static const cyaml_schema_field_t borderFieldSchema[] = {
         CYAML_FIELD_END,
 };
 
+static const cyaml_schema_field_t actionGaugeFieldSchema[] = {
+        CYAML_FIELD_FLOAT(
+                "width", CYAML_FLAG_DEFAULT, ActionGaugeData, width),
+        CYAML_FIELD_FLOAT(
+                "height", CYAML_FLAG_DEFAULT, ActionGaugeData, height),
+        CYAML_FIELD_FLOAT(
+                "xOffset", CYAML_FLAG_DEFAULT, ActionGaugeData , xOffset),
+        CYAML_FIELD_END,
+};
+
 static const cyaml_schema_field_t menuFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
                 "style", CYAML_FLAG_POINTER,
@@ -167,6 +190,17 @@ static const cyaml_schema_field_t menuFieldSchema[] = {
                 UIMenuData, border, borderFieldSchema),
         CYAML_FIELD_FLOAT(
                 "padding", CYAML_FLAG_DEFAULT, UIMenuData, padding),
+        CYAML_FIELD_END,
+};
+
+static const cyaml_schema_field_t fightMenuFieldSchema[] = {
+        CYAML_FIELD_FLOAT(
+                "hpXOffset", CYAML_FLAG_DEFAULT, FightMenuData, hpXOffset),
+        CYAML_FIELD_FLOAT(
+                "manaXOffset", CYAML_FLAG_DEFAULT, FightMenuData, manaXOffset),
+        CYAML_FIELD_MAPPING_PTR(
+                "actionGauge", CYAML_FLAG_POINTER,
+                FightMenuData, actionGauge, actionGaugeFieldSchema),
         CYAML_FIELD_END,
 };
 
@@ -202,6 +236,8 @@ static const cyaml_schema_field_t fontsTopMappingField[] = {
         CYAML_FIELD_SEQUENCE_COUNT(
                 "textAreas", CYAML_FLAG_POINTER, UIData, textAreas,
                 textAreasCount, &textAreaSchema, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_MAPPING_PTR(
+                "fightMenu", CYAML_FLAG_POINTER, UIData, fightMenu, fightMenuFieldSchema),
         CYAML_FIELD_END,
 };
 
