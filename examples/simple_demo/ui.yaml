@@ -25,11 +25,15 @@ menu:
   padding: 20.0
 
 fightMenu:
-  hpXOffset: .3
-  manaXOffset: .5
+  columns:
+    name: 0
+    hp: .3
+    mana: .5
+    actionGauge: .7
   actionGauge:
-    xOffset: .7
-    height: 15
+    x: 0
+    y: 3
+    height: 10
     width: 100
 
 textAreas:

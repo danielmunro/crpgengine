@@ -17,10 +17,15 @@ typedef struct {
 } BorderConfig;
 
 typedef struct {
-    float width;
-    float height;
-    float xOffset;
+    Rectangle rect;
 } ActionGaugeConfig;
+
+typedef struct {
+    float name;
+    float hp;
+    float mana;
+    float actionGauge;
+} ColumnsConfig;
 
 typedef struct {
     MenuStyle style;
@@ -41,8 +46,7 @@ typedef struct {
 
 typedef struct {
     ActionGaugeConfig *actionGauge;
-    float hpXOffset;
-    float manaXOffset;
+    ColumnsConfig *columns;
 } FightMenuConfig;
 
 typedef struct {
@@ -94,12 +98,19 @@ void createUIConfig(UIData *data) {
     ui->menu->border->color = getColorFromString(data->menu->border->color);
 
     ui->fightMenu = malloc(sizeof(FightMenuConfig));
-    ui->fightMenu->hpXOffset = data->fightMenu->hpXOffset;
-    ui->fightMenu->manaXOffset = data->fightMenu->manaXOffset;
+    ui->fightMenu->columns = malloc(sizeof(ColumnsConfig));
+    ui->fightMenu->columns->name = data->fightMenu->columns->name;
+    ui->fightMenu->columns->hp = data->fightMenu->columns->hp;
+    ui->fightMenu->columns->mana = data->fightMenu->columns->mana;
+    ui->fightMenu->columns->actionGauge = data->fightMenu->columns->actionGauge;
+
     ui->fightMenu->actionGauge = malloc(sizeof(ActionGaugeConfig));
-    ui->fightMenu->actionGauge->xOffset = data->fightMenu->actionGauge->xOffset;
-    ui->fightMenu->actionGauge->width = data->fightMenu->actionGauge->width;
-    ui->fightMenu->actionGauge->height = data->fightMenu->actionGauge->height;
+    ui->fightMenu->actionGauge->rect = (Rectangle) {
+            data->fightMenu->actionGauge->x,
+            data->fightMenu->actionGauge->y,
+            data->fightMenu->actionGauge->width,
+            data->fightMenu->actionGauge->height,
+    };
 
     ui->textAreas = malloc(sizeof(TextAreasConfig));
     ui->textAreas->small = findTextAreaRect(

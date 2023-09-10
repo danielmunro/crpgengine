@@ -49,7 +49,8 @@ typedef struct {
 typedef struct {
     float height;
     float width;
-    float xOffset;
+    float x;
+    float y;
 } ActionGaugeData;
 
 typedef struct {
@@ -60,9 +61,15 @@ typedef struct {
 } UIMenuData;
 
 typedef struct {
+    float name;
+    float hp;
+    float mana;
+    float actionGauge;
+} ColumnsData;
+
+typedef struct {
     ActionGaugeData *actionGauge;
-    float hpXOffset;
-    float manaXOffset;
+    ColumnsData *columns;
 } FightMenuData;
 
 typedef struct {
@@ -174,7 +181,9 @@ static const cyaml_schema_field_t actionGaugeFieldSchema[] = {
         CYAML_FIELD_FLOAT(
                 "height", CYAML_FLAG_DEFAULT, ActionGaugeData, height),
         CYAML_FIELD_FLOAT(
-                "xOffset", CYAML_FLAG_DEFAULT, ActionGaugeData , xOffset),
+                "x", CYAML_FLAG_DEFAULT, ActionGaugeData , x),
+        CYAML_FIELD_FLOAT(
+                "y", CYAML_FLAG_DEFAULT, ActionGaugeData , y),
         CYAML_FIELD_END,
 };
 
@@ -193,11 +202,22 @@ static const cyaml_schema_field_t menuFieldSchema[] = {
         CYAML_FIELD_END,
 };
 
+static const cyaml_schema_field_t columnsFieldSchema[] = {
+        CYAML_FIELD_FLOAT(
+                "name", CYAML_FLAG_DEFAULT, ColumnsData, name),
+        CYAML_FIELD_FLOAT(
+                "hp", CYAML_FLAG_DEFAULT, ColumnsData, hp),
+        CYAML_FIELD_FLOAT(
+                "mana", CYAML_FLAG_DEFAULT, ColumnsData, mana),
+        CYAML_FIELD_FLOAT(
+                "actionGauge", CYAML_FLAG_DEFAULT, ColumnsData, actionGauge),
+        CYAML_FIELD_END,
+};
+
 static const cyaml_schema_field_t fightMenuFieldSchema[] = {
-        CYAML_FIELD_FLOAT(
-                "hpXOffset", CYAML_FLAG_DEFAULT, FightMenuData, hpXOffset),
-        CYAML_FIELD_FLOAT(
-                "manaXOffset", CYAML_FLAG_DEFAULT, FightMenuData, manaXOffset),
+        CYAML_FIELD_MAPPING_PTR(
+                "columns", CYAML_FLAG_POINTER,
+                FightMenuData, columns, columnsFieldSchema),
         CYAML_FIELD_MAPPING_PTR(
                 "actionGauge", CYAML_FLAG_POINTER,
                 FightMenuData, actionGauge, actionGaugeFieldSchema),
