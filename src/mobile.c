@@ -191,7 +191,7 @@ bool canPlayerMove(Mobile *mob) {
 }
 
 bool isReadyForAction(Mobile *mob) {
-    return mob->actionGauge >= MAX_ACTION_GAUGE && mob->hp > 0;
+    return mob->actionGauge >= MAX_ACTION_GAUGE && mob->hp > 0 && mob->step == STEP_NONE;
 }
 
 Attributes calculateMobileAttributes(Mobile *mob) {

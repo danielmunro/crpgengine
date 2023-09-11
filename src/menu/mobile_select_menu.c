@@ -8,16 +8,6 @@ FontStyle *getFontStyleForFightCursor(Mobile *mob, Fonts *fonts, int mobIndex, i
     }
 }
 
-FontStyle *getFontStyleForHealthLevel(Fonts *fonts, float percent) {
-    if (percent >= FONT_WARNING_THRESHOLD) {
-        return fonts->default_;
-    } else if (percent >= FONT_DANGER_THRESHOLD) {
-        return fonts->warning;
-    } else {
-        return fonts->danger;
-    }
-}
-
 void drawActionGauge(Rectangle rect, float percent, Color color) {
     DrawRectangleRounded(
             (Rectangle) {

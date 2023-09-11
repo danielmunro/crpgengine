@@ -87,55 +87,6 @@ void processFightAnimations() {
     // stub
 }
 
-int getActionGaugeRaise(double elapsedTime, int dexterity) {
-    int amount = (int) (elapsedTime + dexterity) / 10;
-    return amount > MAX_ACTION_GAUGE_RAISE ? MAX_ACTION_GAUGE_RAISE : amount;
-}
-
-int normalizeActionGauge(int current, int amount) {
-    int total = current + amount;
-    return total > MAX_ACTION_GAUGE ? MAX_ACTION_GAUGE : total;
-}
-
-void fightUpdate(Fight *fight) {
-    double end = getTimeInMS();
-    double interval = end - fight->time;
-    for (int i = 0; i < fight->beastCount; i++) {
-        Beast *b = fight->beasts[i];
-        int amountToRaise = getActionGaugeRaise(interval, b->attributes->dexterity);
-        if (b->actionGauge < MAX_ACTION_GAUGE) {
-            b->actionGauge = normalizeActionGauge(b->actionGauge, amountToRaise);
-        }
-    }
-    for (int i = 0; i < fight->player->partyCount; i++) {
-        Mobile *mob = fight->player->party[i];
-        int amountToRaise = getActionGaugeRaise(interval, calculateMobileAttributes(mob).dexterity);
-        if (!isReadyForAction(mob) && mob->hp > 0) {
-            mob->actionGauge = normalizeActionGauge(mob->actionGauge, amountToRaise);
-            if (isReadyForAction(mob) && fight->cursors[fight->menu] == -1) {
-                fight->cursors[fight->menu] = i;
-            }
-        }
-    }
-    if (fight->actionCount > 0) {
-        Action *act = fight->actions[0];
-        act->elapsedTime += (float) interval;
-        if (act->type == ATTACK) {
-            if (act->initiator->mob != NULL) {
-                if (act->initiator->mob->step == STEP_NONE) {
-                    act->initiator->mob->step = ATTACK_STEP_OUT;
-                } else if (act->initiator->mob->step == ATTACK_STEP_OUT && act->elapsedTime > 800) {
-                    act->initiator->mob->step = ATTACK_ACTION;
-                    act->elapsedTime = 0;
-                } else if (act->initiator->mob->step == ATTACK_ACTION && act->elapsedTime > 1000) {
-                    removeAction(fight);
-                }
-            }
-        }
-    }
-    fight->time = end;
-}
-
 Vector2 getFightPlayerPosition(int playerNumber, int mobileHeight) {
     return (Vector2) {
             (float) (ui->screen->width * 0.8),

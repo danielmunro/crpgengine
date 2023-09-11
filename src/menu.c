@@ -165,6 +165,18 @@ int removeMenu(Menu **menus) {
     return -1;
 }
 
+Menu *removeMenusTo(Menu **menus, MenuType type) {
+    for (int i = 10; i > 0; i--) {
+        if (menus[i] != NULL) {
+            if (menus[i]->type == type) {
+                return menus[i];
+            }
+            menus[i] = NULL;
+        }
+    }
+    return NULL;
+}
+
 TextBox *findOrCreateTextBox(MenuContext *mc, TextBoxLabel label, TextBox *(createTextBox)(MenuContext *)) {
     for (int i = 0; i < MAX_TEXT_BOXES; i++) {
         if (mc->textBoxes[i] == NULL) {
