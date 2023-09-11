@@ -13,6 +13,8 @@ typedef struct {
     MenuType menu;
     Beast **beasts;
     Player *player;
+    Action **actions;
+    int actionCount;
     bool defending[MAX_PARTY_SIZE];
     int beastCount;
     int *cursors;
@@ -47,6 +49,7 @@ Fight *createFight(
         fight->beasts[i] = beasts[i];
     }
     fight->player = player;
+    fight->actions = calloc(MAX_ACTIONS, sizeof(Action));
     fight->time = getTimeInMS();
     fight->cursors = calloc(MAX_CURSORS, sizeof(int));
     for (int i = 0; i < MAX_CURSORS; i++) {
@@ -56,7 +59,20 @@ Fight *createFight(
         fight->defending[i] = false;
     }
     fight->menu = 0;
+    fight->actionCount = 0;
     return fight;
+}
+
+void addAction(Fight *fight, Action *action) {
+    fight->actions[fight->actionCount] = action;
+    fight->actionCount++;
+}
+
+void removeAction(Fight *fight) {
+    for (int i = 1; i < fight->actionCount; i++) {
+        fight->actions[i - 1] = fight->actions[i];
+    }
+    fight->actionCount--;
 }
 
 void cancelFight(Fight *fight) {
@@ -98,6 +114,22 @@ void fightUpdate(Fight *fight) {
             mob->actionGauge = normalizeActionGauge(mob->actionGauge, amountToRaise);
             if (isReadyForAction(mob) && fight->cursors[fight->menu] == -1) {
                 fight->cursors[fight->menu] = i;
+            }
+        }
+    }
+    if (fight->actionCount > 0) {
+        Action *act = fight->actions[0];
+        act->elapsedTime += (float) interval;
+        if (act->type == ATTACK) {
+            if (act->initiator->mob != NULL) {
+                if (act->initiator->mob->step == STEP_NONE) {
+                    act->initiator->mob->step = ATTACK_STEP_OUT;
+                } else if (act->initiator->mob->step == ATTACK_STEP_OUT && act->elapsedTime > 800) {
+                    act->initiator->mob->step = ATTACK_ACTION;
+                    act->elapsedTime = 0;
+                } else if (act->initiator->mob->step == ATTACK_ACTION && act->elapsedTime > 1000) {
+                    removeAction(fight);
+                }
             }
         }
     }

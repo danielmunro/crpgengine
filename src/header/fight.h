@@ -14,4 +14,19 @@
 #define MAX_ACTION_GAUGE 300
 #define MAX_ACTION_GAUGE_RAISE 10
 
+#define MAX_ACTIONS 256
+
+typedef enum {
+    ATTACK,
+    CAST,
+    ITEM,
+} ActionType;
+
+typedef enum {
+    STEP_NONE,
+    ATTACK_STEP_OUT,
+    ATTACK_ACTION,
+    ATTACK_RETURN,
+} ActionStep;
+
 #endif //CJRPGENGINE_FIGHT_H

@@ -69,6 +69,7 @@
 #include "object.c"
 #include "timing.c"
 #include "tilemap.c"
+#include "action.c"
 #include "fight.c"
 #include "menu.c"
 #include "menu/items_menu.c"

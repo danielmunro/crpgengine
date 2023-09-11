@@ -19,6 +19,7 @@ typedef struct {
     int mana;
     Spell **spells;
     int spellCount;
+    ActionStep step;
 } Mobile;
 
 typedef struct {
@@ -75,6 +76,7 @@ Mobile *createMobile(
     mobile->mana = mana;
     mobile->spells = spells;
     mobile->spellCount = spellCount;
+    mobile->step = STEP_NONE;
     return mobile;
 }
 

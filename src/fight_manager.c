@@ -74,8 +74,8 @@ void resetAfterAttackAction(FightManager *fm, int playerIndex) {
     fm->fight->player->party[playerIndex]->actionGauge = 0;
     Menu *current = getCurrentMenu(fm->menus);
     normalizeMenuCursor(current, fm->ui->menuContext);
-    removeMenu(fm->menus); // target menu
-    removeMenu(fm->menus); // action menu
+    removeMenu(fm->menus);
+    removeMenu(fm->menus);
     Menu *newCurrent = getCurrentMenu(fm->menus); // mobile select menu
     fm->ui->menuContext->cursorLine = newCurrent->cursor;
     newCurrent->cursor = newCurrent->getNextOption(fm->ui->menuContext);
@@ -87,11 +87,9 @@ void resetAfterSpellAction(FightManager *fm, int playerIndex) {
     Menu *c = getCurrentMenu(fm->menus);
     normalizeMenuCursor(c, fm->ui->menuContext);
     removeMenu(fm->menus);
-    getCurrentMenu(fm->menus)->cursor = 0;
     removeMenu(fm->menus);
-    getCurrentMenu(fm->menus)->cursor = 0;
     removeMenu(fm->menus);
-    Menu *newCurrent = getCurrentMenu(fm->menus);
+    Menu *newCurrent = getCurrentMenu(fm->menus); // mobile select menu
     newCurrent->cursor = newCurrent->getNextOption(fm->ui->menuContext);
     normalizeMenuCursor(newCurrent, fm->ui->menuContext);
 }
@@ -192,31 +190,40 @@ void startDefending(Menu **menus, Menu *currentMenu, MenuContext *mc) {
     newCurrent->cursor = newCurrent->getNextOption(mc);
 }
 
-void castSpell(FightManager *fm, MenuType type, int playerIndex) {
+void castSpell(FightManager *fm, MenuType type) {
     if (type == BEAST_TARGET_FIGHT_MENU) {
         castOnBeast(fm);
     } else {
         castOnMobile(fm);
     }
-    resetAfterSpellAction(fm, playerIndex);
 }
 
-void attack(FightManager *fm, Menu *currentMenu, int playerIndex) {
+void attack(FightManager *fm, Menu *currentMenu) {
     if (currentMenu->type == BEAST_TARGET_FIGHT_MENU) {
         attackBeast(fm, currentMenu->cursor);
     } else {
         attackMobile(fm, currentMenu->cursor);
     }
-    resetAfterAttackAction(fm, playerIndex);
 }
 
 void fightAction(FightManager *fm, Menu *currentMenu) {
     Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
+    addAction(
+            fm->fight,
+            createAction(
+                    ATTACK,
+                    ATTACK_STEP_OUT,
+                    createMobParticipant(fm->fight->player->party[mobileSelectMenu->cursor]),
+                    createBeastParticipant(fm->fight->beasts[currentMenu->cursor]),
+                    NULL));
+    Menu *previous = getPreviousMenu(fm->menus);
     fm->fight->defending[mobileSelectMenu->cursor] = false;
-    if (getPreviousMenu(fm->menus)->type == MAGIC_FIGHT_MENU) {
-        castSpell(fm, currentMenu->type, mobileSelectMenu->cursor);
+    if (previous->type == MAGIC_FIGHT_MENU) {
+        castSpell(fm, currentMenu->type);
+        resetAfterSpellAction(fm, mobileSelectMenu->cursor);
     } else {
-        attack(fm, currentMenu, mobileSelectMenu->cursor);
+        attack(fm, currentMenu);
+        resetAfterAttackAction(fm, mobileSelectMenu->cursor);
     }
 }
 

@@ -16,9 +16,14 @@ void drawFightBeasts(Fight *fight) {
 void drawFightPlayer(Player *player) {
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         if (player->party[i] != NULL) {
+            Spritesheet *sprite = player->party[i]->animations[0]->spriteSheet;
+            Vector2 position = getFightPlayerPosition(i, sprite->frameHeight);
+            if (player->party[i]->step == ATTACK_STEP_OUT) {
+                position.x -= (float) sprite->frameWidth;
+            }
             drawAnimation(
                     findAnimation(getPartyLeader(player)->animations, LEFT),
-                    getFightPlayerPosition(i, player->party[i]->animations[0]->spriteSheet->frameHeight));
+                    position);
         }
     }
 }
