@@ -65,6 +65,9 @@ Fight *createFight(
 
 void addAction(Fight *fight, Action *action) {
     fight->actions[fight->actionCount] = action;
+    if (action->initiator->mob != NULL) {
+        action->initiator->mob->step = ATTACK_QUEUE;
+    }
     fight->actionCount++;
 }
 

@@ -234,7 +234,7 @@ void fightUpdate(FightManager *fm) {
         if (act->type == ATTACK) {
             Mobile *mob = act->initiator->mob;
             if (mob != NULL) {
-                if (mob->step == STEP_NONE) {
+                if (mob->step == ATTACK_QUEUE) {
                     mob->step = ATTACK_STEP_OUT;
                 } else if (mob->step == ATTACK_STEP_OUT && act->elapsedTime > 500) {
                     mob->step = ATTACK_ACTION;
