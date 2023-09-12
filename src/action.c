@@ -31,6 +31,20 @@ ActionParticipant *createBeastParticipant(Beast *beast) {
     return a;
 }
 
+ActionObject *createActionSpellObject(Spell *spell) {
+    ActionObject *o = malloc(sizeof(ActionObject));
+    o->item = NULL;
+    o->spell = spell;
+    return o;
+}
+
+ActionObject *createActionItemObject(Item *item) {
+    ActionObject *o = malloc(sizeof(ActionObject));
+    o->item = item;
+    o->spell = NULL;
+    return o;
+}
+
 Action *createAction(
         ActionType type,
         ActionStep step,

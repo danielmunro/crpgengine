@@ -14,11 +14,13 @@ typedef struct {
     TextBox **textBoxes;
     Mobile *selectedMob;
     Item *selectedItem;
+    Spell *selectedSpell;
     UISprite *uiSprite;
     ItemList *itemList;
     int itemListCount;
     Beast *targetBeast;
     Mobile *targetMob;
+    ActionType actionType;
 } MenuContext;
 
 typedef struct {
@@ -86,6 +88,7 @@ MenuContext *createMenuContext(
     context->itemListCount = 0;
     context->targetBeast = NULL;
     context->targetMob = NULL;
+    context->actionType = NONE;
     return context;
 }
 

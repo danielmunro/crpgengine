@@ -34,6 +34,7 @@ void drawMagicSelectMenuScreen(MenuContext *menuContext) {
 
 MenuSelectResponse *magicSelectMenuItemSelected(MenuContext *menuContext) {
     Spell *spell = menuContext->selectedMob->spells[menuContext->cursorLine];
+    menuContext->selectedSpell = spell;
     return createMenuSelectResponse(
             OPEN_MENU,
             spell->intent == INTENT_HARM ? BEAST_TARGET_FIGHT_MENU : MOBILE_TARGET_FIGHT_MENU);

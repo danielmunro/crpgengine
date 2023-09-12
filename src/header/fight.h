@@ -20,6 +20,7 @@ typedef enum {
     ATTACK,
     CAST,
     ITEM,
+    NONE,
 } ActionType;
 
 typedef enum {

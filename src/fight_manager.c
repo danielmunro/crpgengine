@@ -138,12 +138,9 @@ void castOnBeast(FightManager *fm, Action *act) {
 }
 
 void castOnMobile(FightManager *fm) {
-    Menu *targetMenu = findMenu(fm->menus, MOBILE_TARGET_FIGHT_MENU);
-    Menu *spellMenu = findMenu(fm->menus, MAGIC_FIGHT_MENU);
-    Menu *casterMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
-    Mobile *target = fm->fight->player->party[targetMenu->cursor];
-    Mobile *caster = fm->fight->player->party[casterMenu->cursor];
-    Spell *spell = caster->spells[spellMenu->cursor];
+    Mobile *target = fm->ui->menuContext->targetMob;
+    Mobile *caster = fm->ui->menuContext->selectedMob;
+    Spell *spell = fm->ui->menuContext->selectedSpell;
     if (!applyCastCost(caster, spell->cost)) {
         return;
     }
@@ -180,20 +177,45 @@ void attack(FightManager *fm, Action *act) {
     }
 }
 
+void applyItemToMob(Mobile *mob, Item *item) {
+    mob->hp += item->attributes->hp;
+    mob->mana += item->attributes->mana;
+}
+
+void applyItemToBeast(Beast *beast, Item *item) {
+    beast->hp += item->attributes->hp;
+    beast->mana += item->attributes->mana;
+}
+
+void consumeItem(FightManager *fm, Action *act) {
+    if (act->target->mob != NULL) {
+        applyItemToMob(act->target->mob, act->object->item);
+    } else {
+        applyItemToBeast(act->target->beast, act->object->item);
+    }
+    removeItem(fm->fight->player, act->object->item);
+}
+
 void fightAction(FightManager *fm) {
     Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
+    MenuContext *mc = fm->ui->menuContext;
+    ActionObject *o = NULL;
+    if (mc->actionType == CAST) {
+        o = createActionSpellObject(mc->selectedSpell);
+    } else if (fm->ui->menuContext->actionType == ITEM) {
+        o = createActionItemObject(mc->selectedItem);
+    }
     addAction(
             fm->fight,
             createAction(
-                    ATTACK,
+                    mc->actionType,
                     ATTACK_STEP_OUT,
                     createMobParticipant(fm->fight->player->party[mobileSelectMenu->cursor]),
-                    fm->ui->menuContext->targetBeast != NULL
-                            ? createBeastParticipant(fm->ui->menuContext->targetBeast)
-                            : createMobParticipant(fm->ui->menuContext->targetMob),
-                    NULL));
+                    mc->targetBeast != NULL
+                            ? createBeastParticipant(mc->targetBeast)
+                            : createMobParticipant(mc->targetMob),
+                    o));
     fm->fight->defending[mobileSelectMenu->cursor] = false;
-
 }
 
 int getActionGaugeRaise(double elapsedTime, int dexterity) {
@@ -209,28 +231,29 @@ int normalizeActionGauge(int current, int amount) {
 void actionUpdate(FightManager *fm, double interval) {
     Action *act = fm->fight->actions[0];
     act->elapsedTime += interval;
-    if (act->type == ATTACK) {
-        Mobile *mob = act->initiator->mob;
-        if (mob != NULL) {
-            if (mob->step == ATTACK_QUEUE) {
-                mob->step = ATTACK_STEP_OUT;
-            } else if (mob->step == ATTACK_STEP_OUT && act->elapsedTime > 500) {
-                mob->step = ATTACK_ACTION;
-                act->elapsedTime = 0;
-            } else if (mob->step == ATTACK_ACTION && act->elapsedTime > 300) {
-                if (act->type == ATTACK) {
-                    attack(fm, act);
-                    mob->actionGauge = 0;
-                } else {
-                    castSpell(fm, act);
-                    mob->actionGauge = 0;
-                }
-                act->initiator->mob->step = ATTACK_RETURN;
-                act->elapsedTime = 0;
-            } else if (act->initiator->mob->step == ATTACK_RETURN && act->elapsedTime > 500) {
-                removeAction(fm->fight);
-                act->initiator->mob->step = STEP_NONE;
+    Mobile *mob = act->initiator->mob;
+    if (mob != NULL) {
+        if (mob->step == ATTACK_QUEUE) {
+            mob->step = ATTACK_STEP_OUT;
+        } else if (mob->step == ATTACK_STEP_OUT && act->elapsedTime > 500) {
+            mob->step = ATTACK_ACTION;
+            act->elapsedTime = 0;
+        } else if (mob->step == ATTACK_ACTION && act->elapsedTime > 300) {
+            if (act->type == ATTACK) {
+                attack(fm, act);
+                mob->actionGauge = 0;
+            } else if (act->type == CAST) {
+                castSpell(fm, act);
+                mob->actionGauge = 0;
+            } else if (act->type == ITEM) {
+                consumeItem(fm, act);
+                mob->actionGauge = 0;
             }
+            act->initiator->mob->step = ATTACK_RETURN;
+            act->elapsedTime = 0;
+        } else if (act->initiator->mob->step == ATTACK_RETURN && act->elapsedTime > 500) {
+            removeAction(fm->fight);
+            act->initiator->mob->step = STEP_NONE;
         }
     }
 }
