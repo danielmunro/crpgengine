@@ -1,19 +1,19 @@
-int getMagicFightCursorLength(MenuContext *menuContext) {
+int getMagicSelectCursorLength(MenuContext *menuContext) {
     return menuContext->selectedMob->spellCount;
 }
 
-TextBox *createMagicFightMenuTextBox(MenuContext *menuContext) {
+TextBox *createMagicSelectMenuTextBox(MenuContext *menuContext) {
     return createTextBox(
             ui->textAreas->bottomMidRight,
             menuContext->fonts->default_,
             MAGIC_SELECT_BOX);
 }
 
-void drawMagicFightMenuScreen(MenuContext *menuContext) {
+void drawMagicSelectMenuScreen(MenuContext *menuContext) {
     TextBox *t = findOrCreateTextBox(
             menuContext,
             MAGIC_SELECT_BOX,
-            createMagicFightMenuTextBox);
+            createMagicSelectMenuTextBox);
     drawMenuRect(t->area);
     FontStyle *defaultFont = menuContext->fonts->default_;
     FontStyle *disabledFont = menuContext->fonts->disable;
@@ -32,7 +32,7 @@ void drawMagicFightMenuScreen(MenuContext *menuContext) {
             });
 }
 
-MenuSelectResponse *magicFightMenuItemSelected(MenuContext *menuContext) {
+MenuSelectResponse *magicSelectMenuItemSelected(MenuContext *menuContext) {
     Spell *spell = menuContext->selectedMob->spells[menuContext->cursorLine];
     return createMenuSelectResponse(
             OPEN_MENU,

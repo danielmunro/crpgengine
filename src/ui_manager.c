@@ -75,11 +75,11 @@ int getMenuList(UIManager *uiMan) {
                     beastTargetMenuItemSelected),
             createMenu(
                     MAGIC_FIGHT_MENU,
-                    getMagicFightCursorLength,
-                    drawMagicFightMenuScreen,
+                    getMagicSelectCursorLength,
+                    drawMagicSelectMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
-                    magicFightMenuItemSelected),
+                    magicSelectMenuItemSelected),
             createMenu(
                     MOBILE_TARGET_FIGHT_MENU,
                     getMobileTargetMenuCursorLength,
