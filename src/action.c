@@ -14,7 +14,7 @@ typedef struct {
     ActionObject *object;
     ActionType type;
     ActionStep step;
-    float elapsedTime;
+    double elapsedTime;
 } Action;
 
 ActionParticipant *createMobParticipant(Mobile *mob) {

@@ -205,6 +205,35 @@ int normalizeActionGauge(int current, int amount) {
     return total > MAX_ACTION_GAUGE ? MAX_ACTION_GAUGE : total;
 }
 
+void actionUpdate(FightManager *fm, double interval) {
+    Action *act = fm->fight->actions[0];
+    act->elapsedTime += interval;
+    if (act->type == ATTACK) {
+        Mobile *mob = act->initiator->mob;
+        if (mob != NULL) {
+            if (mob->step == ATTACK_QUEUE) {
+                mob->step = ATTACK_STEP_OUT;
+            } else if (mob->step == ATTACK_STEP_OUT && act->elapsedTime > 500) {
+                mob->step = ATTACK_ACTION;
+                act->elapsedTime = 0;
+            } else if (mob->step == ATTACK_ACTION && act->elapsedTime > 300) {
+                if (act->type == ATTACK) {
+                    attack(fm, act);
+                    mob->actionGauge = 0;
+                } else {
+                    castSpell(fm, act);
+                    mob->actionGauge = 0;
+                }
+                act->initiator->mob->step = ATTACK_RETURN;
+                act->elapsedTime = 0;
+            } else if (act->initiator->mob->step == ATTACK_RETURN && act->elapsedTime > 500) {
+                removeAction(fm->fight);
+                act->initiator->mob->step = STEP_NONE;
+            }
+        }
+    }
+}
+
 void fightUpdate(FightManager *fm) {
     Fight *fight = fm->fight;
     double end = getTimeInMS();
@@ -229,32 +258,7 @@ void fightUpdate(FightManager *fm) {
         }
     }
     if (fight->actionCount > 0) {
-        Action *act = fight->actions[0];
-        act->elapsedTime += (float) interval;
-        if (act->type == ATTACK) {
-            Mobile *mob = act->initiator->mob;
-            if (mob != NULL) {
-                if (mob->step == ATTACK_QUEUE) {
-                    mob->step = ATTACK_STEP_OUT;
-                } else if (mob->step == ATTACK_STEP_OUT && act->elapsedTime > 500) {
-                    mob->step = ATTACK_ACTION;
-                    act->elapsedTime = 0;
-                } else if (mob->step == ATTACK_ACTION && act->elapsedTime > 300) {
-                    if (act->type == ATTACK) {
-                        attack(fm, act);
-                        mob->actionGauge = 0;
-                    } else {
-                        castSpell(fm, act);
-                        mob->actionGauge = 0;
-                    }
-                    act->initiator->mob->step = ATTACK_RETURN;
-                    act->elapsedTime = 0;
-                } else if (act->initiator->mob->step == ATTACK_RETURN && act->elapsedTime > 500) {
-                    removeAction(fight);
-                    act->initiator->mob->step = STEP_NONE;
-                }
-            }
-        }
+        actionUpdate(fm, interval);
     }
     fight->time = end;
 }
