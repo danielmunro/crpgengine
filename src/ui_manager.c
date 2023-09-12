@@ -93,7 +93,14 @@ int getMenuList(UIManager *uiMan) {
                     drawPartyItemConsumeMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
-                    partyItemConsumeMenuItemSelected)
+                    partyItemConsumeMenuItemSelected),
+            createMenu(
+                    ITEMS_FIGHT_MENU,
+                    getItemSelectCursorLength,
+                    drawItemSelectMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
+                    itemSelectMenuItemSelected),
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {

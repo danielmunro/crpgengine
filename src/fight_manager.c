@@ -92,10 +92,9 @@ void attackBeast(FightManager *fm, Action *act) {
     }
 }
 
-void attackMobile(FightManager *fm, Action *act) {
-    Menu *m = findMenu(fm->menus, MOBILE_TARGET_FIGHT_MENU);
-    Mobile *attacker = fm->fight->player->party[m->cursor];
-    act->target->mob->hp -= calculateMobileAttributes(attacker).strength;
+void attackMobile(Action *act) {
+    act->target->mob->hp -= calculateMobileAttributes(
+            act->initiator->mob).strength;
 }
 
 int getAttributeAmount(Spell *spell, int base) {
@@ -177,11 +176,11 @@ void attack(FightManager *fm, Action *act) {
     if (act->target->beast != NULL) {
         attackBeast(fm, act);
     } else {
-        attackMobile(fm, act);
+        attackMobile(act);
     }
 }
 
-void fightAction(FightManager *fm, Menu *currentMenu) {
+void fightAction(FightManager *fm) {
     Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
     addAction(
             fm->fight,
@@ -189,7 +188,9 @@ void fightAction(FightManager *fm, Menu *currentMenu) {
                     ATTACK,
                     ATTACK_STEP_OUT,
                     createMobParticipant(fm->fight->player->party[mobileSelectMenu->cursor]),
-                    createBeastParticipant(fm->fight->beasts[currentMenu->cursor]),
+                    fm->ui->menuContext->targetBeast != NULL
+                            ? createBeastParticipant(fm->ui->menuContext->targetBeast)
+                            : createMobParticipant(fm->ui->menuContext->targetMob),
                     NULL));
     fm->fight->defending[mobileSelectMenu->cursor] = false;
 
@@ -272,7 +273,7 @@ void fightSpaceKeyPressed(FightManager *fm) {
                 fm->ui->menus,
                 fm->ui->menuContext);
         if (response->type == FIND_TARGET_MENU) {
-            fightAction(fm, currentMenu);
+            fightAction(fm);
             Menu *menu = removeMenusTo(fm->menus, MOBILE_SELECT_FIGHT_MENU);
             fm->ui->menuContext->cursorLine = menu->cursor;
             menu->cursor = currentMenu->getNextOption(fm->ui->menuContext);

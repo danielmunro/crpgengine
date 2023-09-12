@@ -6,6 +6,16 @@ typedef struct {
     EquipmentPosition position;
 } Item;
 
+typedef struct {
+    Item *item;
+    int amount;
+} ItemList;
+
+typedef struct {
+    ItemList *itemList;
+    int count;
+} ItemListResult;
+
 ItemType getItemTypeFromString(const char *type) {
     int count = sizeof(ItemTypes) / sizeof(ItemTypes[0]);
     for (int i = 0; i < count; i++) {

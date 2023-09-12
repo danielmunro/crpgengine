@@ -432,3 +432,31 @@ Player *createNewPlayer(AnimationManager *am) {
 
     return p;
 }
+
+ItemListResult createItemList(Player *p) {
+    ItemList *itemList = calloc(p->itemCount, sizeof(ItemList));
+    int count = 0;
+    for (int i = 0; i < p->itemCount; i++) {
+        const char *name = p->items[i]->name;
+        bool found = false;
+        for (int j = 0; j < count; j++) {
+            if (strcmp(name, itemList[j].item->name) == 0) {
+                itemList[j].amount += 1;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            itemList[count] = (ItemList) {
+                    p->items[i],
+                    1,
+            };
+            count++;
+        }
+    }
+
+    return (ItemListResult) {
+        itemList,
+        count,
+    };
+}

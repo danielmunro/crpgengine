@@ -13,28 +13,9 @@ void drawItemsMenuScreen(MenuContext *menuContext) {
             createItemsTextBox);
     drawMenuRect(textBox->area);
     if (menuContext->itemListCount == 0) {
-        ItemList *itemsSeen = calloc(menuContext->player->itemCount, sizeof(ItemList));
-        int count = 0;
-        for (int i = 0; i < menuContext->player->itemCount; i++) {
-            const char *name = menuContext->player->items[i]->name;
-            bool found = false;
-            for (int j = 0; j < count; j++) {
-                if (strcmp(name, itemsSeen[j].item->name) == 0) {
-                    itemsSeen[j].amount += 1;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                itemsSeen[count] = (ItemList) {
-                        menuContext->player->items[i],
-                        1,
-                };
-                count++;
-            }
-        }
-        menuContext->itemList = itemsSeen;
-        menuContext->itemListCount = count;
+        ItemListResult result = createItemList(menuContext->player);
+        menuContext->itemList = result.itemList;
+        menuContext->itemListCount = result.count;
     }
     for (int i = 0; i < menuContext->itemListCount; i++) {
         char buffer[MAX_LINE_BUFFER];

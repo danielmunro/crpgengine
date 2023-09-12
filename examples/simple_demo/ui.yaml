@@ -54,9 +54,9 @@ textAreas:
     height: 1
   - type: bottom
     x: 0
-    y: .6
+    y: .75
     width: 1
-    height: .4
+    height: .25
   - type: right
     x: .75
     y: 0

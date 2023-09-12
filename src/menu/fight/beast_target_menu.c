@@ -26,5 +26,6 @@ void drawBeastTargetMenuScreen(MenuContext *menuContext) {
 }
 
 MenuSelectResponse *beastTargetMenuItemSelected(MenuContext *menuContext) {
+    menuContext->targetBeast = menuContext->fight->beasts[menuContext->cursorLine];
     return beastSelectMenuItemSelected(menuContext);
 }

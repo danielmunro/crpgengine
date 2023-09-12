@@ -85,16 +85,19 @@ FontStyleType getFontStyleType(const char *type) {
 
 typedef enum {
     ACKNOWLEDGE_BOX,
-    ACTION_SELECT_BOX,
-    BEAST_SELECT_BOX,
     ITEMS_BOX,
     LOAD_BOX,
-    MOBILE_SELECT_BOX,
     PARTY_ITEM_CONSUME_BOX,
     IN_GAME_MENU_BOX,
     PARTY_BOX,
     QUIT_BOX,
+
+    // fight
+    MOBILE_SELECT_BOX,
     MAGIC_SELECT_BOX,
+    ACTION_SELECT_BOX,
+    BEAST_SELECT_BOX,
+    ITEM_SELECT_FIGHT_BOX,
 } TextBoxLabel;
 
 #endif // CJRPGENGINE_UI_H
