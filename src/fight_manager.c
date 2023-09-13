@@ -82,6 +82,7 @@ void destroyBeast(FightManager *fm, Beast *beast) {
     }
     fm->fight->beasts[fm->fight->beastCount] = NULL;
     fm->fight->beastCount--;
+    free(beast);
 }
 
 void attackBeast(FightManager *fm, Action *act) {
@@ -223,6 +224,19 @@ int normalizeActionGauge(int current, int amount) {
     return total > MAX_ACTION_GAUGE ? MAX_ACTION_GAUGE : total;
 }
 
+void attackAction(FightManager *fm, Action *act) {
+    if (act->type == ATTACK) {
+        attack(fm, act);
+    } else if (act->type == CAST) {
+        castSpell(fm, act);
+    } else if (act->type == ITEM) {
+        consumeItem(fm, act);
+    } else {
+        return;
+    }
+    act->initiator->mob->actionGauge = 0;
+}
+
 void actionUpdate(FightManager *fm, double interval) {
     Action *act = fm->fight->actions[0];
     act->elapsedTime += interval;
@@ -232,24 +246,16 @@ void actionUpdate(FightManager *fm, double interval) {
             mob->step = ATTACK_STEP_OUT;
         } else if (mob->step == ATTACK_STEP_OUT && act->elapsedTime > 500) {
             mob->step = ATTACK_ACTION;
-            act->elapsedTime = 0;
         } else if (mob->step == ATTACK_ACTION && act->elapsedTime > 300) {
-            if (act->type == ATTACK) {
-                attack(fm, act);
-                mob->actionGauge = 0;
-            } else if (act->type == CAST) {
-                castSpell(fm, act);
-                mob->actionGauge = 0;
-            } else if (act->type == ITEM) {
-                consumeItem(fm, act);
-                mob->actionGauge = 0;
-            }
+            attackAction(fm, act);
             act->initiator->mob->step = ATTACK_RETURN;
-            act->elapsedTime = 0;
         } else if (act->initiator->mob->step == ATTACK_RETURN && act->elapsedTime > 500) {
             removeAction(fm->fight);
             act->initiator->mob->step = STEP_NONE;
+        } else {
+            return;
         }
+        act->elapsedTime = 0;
     }
 }
 
