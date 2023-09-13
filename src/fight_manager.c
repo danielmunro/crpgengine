@@ -178,8 +178,10 @@ void attack(FightManager *fm, Action *act) {
 }
 
 void applyItemToMob(Mobile *mob, Item *item) {
-    mob->hp += item->attributes->hp;
-    mob->mana += item->attributes->mana;
+    if (item->attributes != NULL) {
+        mob->hp += item->attributes->hp;
+        mob->mana += item->attributes->mana;
+    }
 }
 
 void applyItemToBeast(Beast *beast, Item *item) {
