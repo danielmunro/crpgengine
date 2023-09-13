@@ -69,6 +69,7 @@ typedef enum {
     CLOSE_MENU,
     FIND_TARGET_MENU,
     DEFEND_SELECTED,
+    NO_OP,
 } MenuSelectResponseType;
 
 #endif //CJRPGENGINE_MENU_H

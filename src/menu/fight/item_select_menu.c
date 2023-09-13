@@ -38,7 +38,11 @@ void drawItemSelectMenuScreen(MenuContext *menuContext) {
 }
 
 MenuSelectResponse *itemSelectMenuItemSelected(MenuContext *menuContext) {
-    menuContext->selectedItem = menuContext->itemList[menuContext->cursorLine].item;
+    Item *item = menuContext->itemList[menuContext->cursorLine].item;
+    if (item->type != ITEM_TYPE_CONSUMABLE) {
+        return createMenuSelectResponse(NO_OP, ITEMS_MENU);
+    }
+    menuContext->selectedItem = item;
     menuContext->actionType = ITEM;
     return createMenuSelectResponse(
             OPEN_MENU,
