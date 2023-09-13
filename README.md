@@ -61,6 +61,3 @@ Debug arguments:
   * Actions to finish
     * Attack animations
     * Magic animations
-  * Actions to start
-    * Defend
-    * Run
