@@ -232,4 +232,5 @@ bool applyCastCost(Mobile *caster, Attributes *cost) {
 void applyConsumable(Mobile *mob, Item *item) {
     mob->hp += item->attributes->hp;
     mob->mana += item->attributes->mana;
+    normalizeVitalsForMobile(mob);
 }

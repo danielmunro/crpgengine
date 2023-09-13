@@ -177,23 +177,16 @@ void attack(FightManager *fm, Action *act) {
     }
 }
 
-void applyItemToMob(Mobile *mob, Item *item) {
-    if (item->attributes != NULL) {
-        mob->hp += item->attributes->hp;
-        mob->mana += item->attributes->mana;
-    }
-}
-
-void applyItemToBeast(Beast *beast, Item *item) {
+void applyConsumableToBeast(Beast *beast, Item *item) {
     beast->hp += item->attributes->hp;
     beast->mana += item->attributes->mana;
 }
 
 void consumeItem(FightManager *fm, Action *act) {
     if (act->target->mob != NULL) {
-        applyItemToMob(act->target->mob, act->object->item);
+        applyConsumable(act->target->mob, act->object->item);
     } else {
-        applyItemToBeast(act->target->beast, act->object->item);
+        applyConsumableToBeast(act->target->beast, act->object->item);
     }
     removeItem(fm->fight->player, act->object->item);
 }
