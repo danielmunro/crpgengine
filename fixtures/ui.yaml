@@ -24,6 +24,60 @@ menu:
     color: 255, 255, 255, 255
   padding: 20.0
 
+fightMenu:
+  columns:
+    name: 0
+    hp: .3
+    mana: .5
+    actionGauge: .7
+  actionGauge:
+    x: 0
+    y: 3
+    height: 10
+    width: 100
+
+textAreas:
+  - type: small
+    x: .1
+    y: .1
+    width: .8
+    height: .8
+  - type: medium
+    x: .2
+    y: .2
+    width: .6
+    height: .6
+  - type: full
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  - type: bottom
+    x: 0
+    y: .75
+    width: 1
+    height: .25
+  - type: right
+    x: .75
+    y: 0
+    width: .25
+    height: 1
+  - type: bottomLeft
+    x: 0
+    y: .75
+    width: .25
+    height: .25
+  - type: bottomMidRight
+    x: .25
+    y: .75
+    width: .75
+    height: .25
+  - type: bottomMid
+    x: .25
+    y: .75
+    width: .5
+    height: .25
+
 fonts:
   default:
     name: default
@@ -37,7 +91,7 @@ fonts:
     filename: pixeloid-bold.ttf
     size: 20
     lineHeight: 30
-    color: 130, 130, 130, 255
+    color: 90, 90, 90, 255
     spacing: 1
   highlight:
     name: highlight
