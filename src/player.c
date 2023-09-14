@@ -51,7 +51,6 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
     player->experience = experience;
     player->level = level;
     player->secondsPlayed = secondsPlayed;
-    player->storylines = malloc(sizeof(char **));
     player->storylines = storylines;
     player->party = calloc(MAX_PARTY_SIZE, sizeof(Mobile));
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
@@ -82,6 +81,7 @@ MobileData createMobDataFromMob(Mobile *mob) {
             mob->animations[0]->name,
             getPositionAsString(mob->position),
             getAnimationStringFromType(mob->direction),
+            mob->avatar->filename,
             mob->hp,
             mob->mana,
             createDataFromAttributes(mob->attributes),
@@ -281,6 +281,7 @@ Player *mapSaveDataToPlayer(AnimationManager *am, SaveData *save) {
                 getPositionFromString(mob.position),
                 getDirectionFromString(mob.direction),
                 animations,
+                createAvatar(mob.avatar),
                 mob.hp,
                 mob.mana,
                 createAttributesFromData(mob.attributes),
@@ -338,6 +339,7 @@ Player *createNewPlayer(AnimationManager *am) {
                     (Vector2) {429, 252},
                     DOWN,
                     animations,
+                    createAvatar("fireas.png"),
                     STARTING_HP,
                     STARTING_MANA,
                     createStartingAttributes(),
@@ -349,6 +351,7 @@ Player *createNewPlayer(AnimationManager *am) {
                     (Vector2) {429, 252},
                     DOWN,
                     animations,
+                    createAvatar("fireas.png"),
                     STARTING_HP,
                     STARTING_MANA,
                     createStartingAttributes(),
@@ -360,6 +363,7 @@ Player *createNewPlayer(AnimationManager *am) {
                     (Vector2) {429, 252},
                     DOWN,
                     animations,
+                    createAvatar("fireas.png"),
                     STARTING_HP,
                     STARTING_MANA,
                     createStartingAttributes(),
@@ -371,6 +375,7 @@ Player *createNewPlayer(AnimationManager *am) {
                     (Vector2) {429, 252},
                     DOWN,
                     animations,
+                    createAvatar("fireas.png"),
                     STARTING_HP,
                     STARTING_MANA,
                     createStartingAttributes(),

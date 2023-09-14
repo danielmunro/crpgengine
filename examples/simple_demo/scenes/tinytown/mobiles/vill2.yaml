@@ -1,5 +1,6 @@
 id: vill2
 name: Bobarian
 animations: fireas
+avatar: fireas.png
 position: 340,300
 direction: down

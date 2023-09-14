@@ -50,6 +50,7 @@
 #include "yaml/save.c"
 #include "yaml/ui.c"
 #include "cyaml.c"
+#include "avatar.c"
 #include "font.c"
 #include "window.c"
 #include "ui.c"

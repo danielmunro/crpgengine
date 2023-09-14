@@ -19,16 +19,19 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
             createFullScreenTextBox);
     drawMenuRect(inGameMenuBox->area);
     FontStyle *defaultFont = menuContext->fonts->default_;
-    float column1 = (ui->menu->padding * 2) + MOB_COLLISION_WIDTH;
     for (int i = 0; i < menuContext->player->partyCount; i++) {
         Mobile *mob = menuContext->player->party[i];
+        float w = (float) mob->avatar->image.width;
+        float h = (float) mob->avatar->image.height;
+        float column1 = w + (ui->menu->padding * 2);
         float y = ui->menu->padding + ((float) ui->screen->height / 4) * (float) i;
-        drawAnimation(
-                findAnimation(mob->animations, DOWN),
+        DrawTextureRec(
+                mob->avatar->image,
+                (Rectangle) { 0, 0, w, h },
                 (Vector2) {
                     ui->menu->padding,
-                    y}
-        );
+                    y},
+                WHITE);
         drawText(
                 mob->name,
                 (Vector2) {

@@ -1,9 +1,10 @@
 typedef struct {
-    Animation *animations[MAX_ANIMATIONS];
     const char *id;
     const char *name;
     AnimationType direction;
     AnimationType previousDirection;
+    Animation *animations[MAX_ANIMATIONS];
+    Avatar *avatar;
     Vector2 position;
     bool moving[DIRECTION_COUNT];
     struct timeval lastMovement;
@@ -46,6 +47,7 @@ Mobile *createMobile(
         Vector2 position,
         AnimationType direction,
         Animation *animations[MAX_ANIMATIONS],
+        Avatar *avatar,
         int hp,
         int mana,
         Attributes *attributes,
@@ -69,6 +71,7 @@ Mobile *createMobile(
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         mobile->animations[i] = animations[i];
     }
+    mobile->avatar = avatar;
     mobile->isBeingMoved = false;
     mobile->actionGauge = 0;
     mobile->equipment = calloc(MAX_EQUIPMENT, sizeof(ItemData));
@@ -87,6 +90,7 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
             getPositionFromString(data->position),
             getDirectionFromString(data->direction),
             animations,
+            createAvatar(data->avatar),
             data->hp,
             data->mana,
             createAttributesFromData(data->attributes),
