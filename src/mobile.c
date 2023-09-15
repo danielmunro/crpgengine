@@ -238,3 +238,16 @@ void applyConsumable(Mobile *mob, Item *item) {
     mob->mana += item->attributes->mana;
     normalizeVitalsForMobile(mob);
 }
+
+void drawAvatar(Mobile *mob, Vector2 position) {
+    DrawTextureRec(
+            mob->avatar->image,
+            (Rectangle) {
+                0,
+                0,
+                (float) mob->avatar->image.width,
+                (float) mob->avatar->image.height,
+            },
+            position,
+            WHITE);
+}

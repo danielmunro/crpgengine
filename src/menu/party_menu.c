@@ -21,22 +21,12 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
     FontStyle *defaultFont = menuContext->fonts->default_;
     for (int i = 0; i < menuContext->player->partyCount; i++) {
         Mobile *mob = menuContext->player->party[i];
-        float w = (float) mob->avatar->image.width;
-        float h = (float) mob->avatar->image.height;
-        float column1 = w + (ui->menu->padding * 2);
+        float column1 = (float) mob->avatar->image.width + (ui->menu->padding * 2);
         float y = ui->menu->padding + ((float) ui->screen->height / 4) * (float) i;
-        DrawTextureRec(
-                mob->avatar->image,
-                (Rectangle) { 0, 0, w, h },
-                (Vector2) {
-                    ui->menu->padding,
-                    y},
-                WHITE);
+        drawAvatar(mob, (Vector2) { ui->menu->padding, y });
         drawText(
                 mob->name,
-                (Vector2) {
-                    column1,
-                    y},
+                (Vector2) {column1, y },
                 defaultFont);
         Attributes calculated = calculateMobileAttributes(mob);
         drawText(
