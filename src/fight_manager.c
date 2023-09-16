@@ -334,7 +334,6 @@ void actionUpdate(FightManager *fm, double interval) {
         } else {
             act->initiator->beast->actionGauge = 0;
         }
-
     } else {
         return;
     }
