@@ -332,6 +332,20 @@ Player *createNewPlayer(AnimationManager *am) {
     Spell **spells3 = calloc(MAX_SPELLS, sizeof(Spell));
     Spell **spells4 = calloc(MAX_SPELLS, sizeof(Spell));
 
+    Attributes *p1Attributes = createStartingAttributes();
+    p1Attributes->dexterity = 1;
+
+    Attributes *p2Attributes = createStartingAttributes();
+    p2Attributes->dexterity = 1;
+
+    Attributes *p3Attributes = createStartingAttributes();
+    p3Attributes->strength = 3;
+    p3Attributes->dexterity = 2;
+
+    Attributes *p4Attributes = createStartingAttributes();
+    p4Attributes->strength = 2;
+    p4Attributes->dexterity = 4;
+
     Mobile *mobiles[MAX_PARTY_SIZE] = {
             createMobile(
                     "player1",
@@ -342,7 +356,7 @@ Player *createNewPlayer(AnimationManager *am) {
                     createAvatar("fireas.png"),
                     STARTING_HP,
                     STARTING_MANA,
-                    createStartingAttributes(),
+                    p1Attributes,
                     spells1,
                     0),
             createMobile(
@@ -354,7 +368,7 @@ Player *createNewPlayer(AnimationManager *am) {
                     createAvatar("fireas.png"),
                     STARTING_HP,
                     STARTING_MANA,
-                    createStartingAttributes(),
+                    p2Attributes,
                     spells2,
                     0),
             createMobile(
@@ -366,7 +380,7 @@ Player *createNewPlayer(AnimationManager *am) {
                     createAvatar("fireas.png"),
                     STARTING_HP,
                     STARTING_MANA,
-                    createStartingAttributes(),
+                    p3Attributes,
                     spells3,
                     0),
             createMobile(
@@ -378,7 +392,7 @@ Player *createNewPlayer(AnimationManager *am) {
                     createAvatar("fireas.png"),
                     STARTING_HP,
                     STARTING_MANA,
-                    createStartingAttributes(),
+                    p4Attributes,
                     spells4,
                     0),
     };

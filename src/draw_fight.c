@@ -5,11 +5,14 @@ void drawFightBackground(Encounters *encounters) {
 
 void drawFightBeasts(Fight *fight) {
     for (int i = 0; i < fight->beastCount; i++) {
-        DrawTextureEx(fight->beasts[i]->image,
-                      (Vector2) {
-                                    fight->beasts[i]->position.x,
-                                 fight->beasts[i]->position.y},
-                      0, ui->screen->scale, WHITE);
+        Beast *beast = fight->beasts[i];
+        float x = beast->position.x;
+        if (beast->step == ATTACK_STEP_OUT) {
+            x += (float) beast->image.width;
+        }
+        DrawTextureEx(beast->image,
+        (Vector2) { x, beast->position.y },
+        0, ui->screen->scale, WHITE);
     }
 }
 
