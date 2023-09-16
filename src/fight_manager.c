@@ -316,7 +316,9 @@ void attackAction(FightManager *fm, Action *act) {
 void actionUpdate(FightManager *fm, double interval) {
     Action *act = fm->fight->actions[0];
     act->elapsedTime += interval;
-    ActionStep step = act->initiator->mob != NULL ? act->initiator->mob->step : act->initiator->beast->step;
+    ActionStep step = act->initiator->mob != NULL
+            ? act->initiator->mob->step
+            : act->initiator->beast->step;
     if (step == ATTACK_QUEUE) {
         step = ATTACK_STEP_OUT;
     } else if (step == ATTACK_STEP_OUT && act->elapsedTime > STEP_OUT_TIMEOUT_MS) {
