@@ -172,7 +172,6 @@ void doFightLoop(Game *g) {
     fightUpdate(g->fights);
     checkFightInput(g->fights);
     drawFightView(s->encounters, g->fights);
-    processFightAnimations();
     checkControls(g->controls);
     checkRemoveFight(g->fights);
 }

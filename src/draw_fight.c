@@ -3,12 +3,26 @@ void drawFightBackground(Encounters *encounters) {
     DrawTextureEx(encounters->background, (Vector2) {0, 0}, 0, scale, WHITE);
 }
 
+float getHitAnimationX(float timer) {
+    if (timer > 0) {
+        int mod = (int) timer % 100;
+        if (mod > 50) {
+            return 3;
+        } else {
+            return -3;
+        }
+    }
+}
+
 void drawFightBeasts(Fight *fight) {
     for (int i = 0; i < fight->beastCount; i++) {
         Beast *beast = fight->beasts[i];
         float x = beast->position.x;
         if (beast->step == ATTACK_STEP_OUT) {
             x += (float) beast->image.width;
+        }
+        if (beast->hitAnimationTimer > 0) {
+            x += getHitAnimationX(beast->hitAnimationTimer);
         }
         DrawTextureEx(beast->image,
         (Vector2) { x, beast->position.y },
@@ -23,6 +37,9 @@ void drawFightPlayer(Player *player) {
             Vector2 position = getFightPlayerPosition(i, sprite->frameHeight);
             if (player->party[i]->step == ATTACK_STEP_OUT) {
                 position.x -= (float) sprite->frameWidth;
+            }
+            if (player->party[i]->hitAnimationTimer > 0) {
+                position.x += getHitAnimationX(player->party[i]->hitAnimationTimer);
             }
             drawAnimation(
                     findAnimation(getPartyLeader(player)->animations, LEFT),

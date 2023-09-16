@@ -10,6 +10,7 @@ typedef struct {
     int actionGauge;
     Rectangle position;
     ActionStep step;
+    float hitAnimationTimer;
 } Beast;
 
 typedef struct {
@@ -32,6 +33,7 @@ Beast *createBeastFromData(BeastData *data) {
     beast->attributes = createAttributesFromData(data->attributes);
     beast->position = (Rectangle){0, 0, 0, 0};
     beast->step = STEP_NONE;
+    beast->hitAnimationTimer = 0;
     return beast;
 }
 
@@ -48,6 +50,7 @@ Beast *cloneBeast(Beast *original) {
     new->actionGauge = original->actionGauge;
     new->position = original->position;
     new->step = STEP_NONE;
+    new->hitAnimationTimer = 0;
     return new;
 }
 

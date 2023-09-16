@@ -108,7 +108,7 @@ void drawMobileSelectMenuScreen(MenuContext *menuContext) {
 
 MenuSelectResponse *mobileSelectMenuItemSelected(MenuContext *menuContext) {
     menuContext->selectedMob = menuContext->player->party[menuContext->cursorLine];
-    if (menuContext->selectedMob == NULL) {
+    if (menuContext->selectedMob == NULL || !isReadyForAction(menuContext->selectedMob)) {
         return createMenuSelectResponse(NO_OP, MOBILE_SELECT_FIGHT_MENU);
     }
     return createMenuSelectResponse(OPEN_MENU, ACTION_SELECT_FIGHT_MENU);

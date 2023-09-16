@@ -136,6 +136,7 @@ void attackBeast(FightManager *fm, Action *act) {
     beast->hp -= act->initiator->mob != NULL
             ? calculateMobileAttributes(act->initiator->mob).strength
             : calculateBeastAttributes(act->initiator->beast).strength;
+    beast->hitAnimationTimer = HIT_ANIMATION_TIMER_MS;
     if (beast->hp < 0) {
         destroyBeast(fm, beast);
     }
@@ -149,6 +150,7 @@ void attackMobile(FightManager *fm, Action *act) {
     mob->hp -= act->initiator->mob != NULL
             ? calculateMobileAttributes(act->initiator->mob).strength
             : calculateBeastAttributes(act->initiator->beast).strength;
+    mob->hitAnimationTimer = HIT_ANIMATION_TIMER_MS;
 }
 
 int getAttributeAmount(Spell *spell, int base) {
@@ -278,13 +280,19 @@ void queueMobFightAction(FightManager *fm) {
 
 void queueBeastFightAction(FightManager *fm, Beast *beast) {
     ActionObject *o = NULL;
+    int index = -1;
+    for (int i = 0; i < fm->fight->beastCount; i++) {
+        if (fm->fight->beasts[i] == beast) {
+            index = i;
+        }
+    }
     int i = randomWithLimit(3);
     addAction(
             fm->fight,
             createAction(
                     ATTACK,
                     ATTACK_STEP_OUT,
-                    createBeastParticipant(beast, -1),
+                    createBeastParticipant(beast, index),
                     createMobParticipant(fm->fight->player->party[i]),
                     o));
     beast->step = ATTACK_QUEUE;
@@ -343,6 +351,7 @@ void actionUpdate(FightManager *fm, double interval) {
         act->initiator->beast->step = step;
     }
     act->elapsedTime = 0;
+//    free(act);
 }
 
 void raiseBeastsActionGauge(FightManager *fm, double interval) {
@@ -379,6 +388,19 @@ void ensureActiveCursor(FightManager *fm) {
     }
 }
 
+void reduceHitAnimationTimer(FightManager *fm, double interval) {
+    for (int i = 0; i < fm->fight->beastCount; i++) {
+        if (fm->fight->beasts[i]->hitAnimationTimer > 0) {
+            fm->fight->beasts[i]->hitAnimationTimer -= (float) interval;
+        }
+    }
+    for (int i = 0; i < fm->fight->player->partyCount; i++) {
+        if (fm->fight->player->party[i]->hitAnimationTimer > 0) {
+            fm->fight->player->party[i]->hitAnimationTimer -= (float) interval;
+        }
+    }
+}
+
 void fightUpdate(FightManager *fm) {
     Fight *fight = fm->fight;
     double end = getTimeInMS();
@@ -388,6 +410,7 @@ void fightUpdate(FightManager *fm) {
     if (fight->actionCount > 0) {
         actionUpdate(fm, interval);
     }
+    reduceHitAnimationTimer(fm, interval);
     ensureActiveCursor(fm);
     fight->time = end;
 }

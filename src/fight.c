@@ -87,10 +87,6 @@ int isFightDone(Fight *fight) {
     return fight->beastCount == 0;
 }
 
-void processFightAnimations() {
-    // stub
-}
-
 Vector2 getFightPlayerPosition(int playerNumber, int mobileHeight) {
     return (Vector2) {
             (float) (ui->screen->width * 0.8),

@@ -35,4 +35,6 @@ typedef enum {
 #define ACTION_TIMEOUT_MS 100
 #define RETURN_TIMEOUT_MS 300
 
+#define HIT_ANIMATION_TIMER_MS 300
+
 #endif //CJRPGENGINE_FIGHT_H
