@@ -346,12 +346,9 @@ void actionUpdate(FightManager *fm, double interval) {
     act->elapsedTime = 0;
 }
 
-void fightUpdate(FightManager *fm) {
-    Fight *fight = fm->fight;
-    double end = getTimeInMS();
-    double interval = end - fight->time;
-    for (int i = 0; i < fight->beastCount; i++) {
-        Beast *b = fight->beasts[i];
+void raiseBeastsActionGauge(FightManager *fm, double interval) {
+    for (int i = 0; i < fm->fight->beastCount; i++) {
+        Beast *b = fm->fight->beasts[i];
         int amountToRaise = getActionGaugeRaise(interval, b->attributes->dexterity);
         if (b->actionGauge < MAX_ACTION_GAUGE) {
             b->actionGauge = normalizeActionGauge(b->actionGauge, amountToRaise);
@@ -359,21 +356,40 @@ void fightUpdate(FightManager *fm) {
             queueBeastFightAction(fm, b);
         }
     }
-    for (int i = 0; i < fight->player->partyCount; i++) {
-        Mobile *mob = fight->player->party[i];
+}
+
+void raiseMobsActionGauge(FightManager *fm, double interval) {
+    for (int i = 0; i < fm->fight->player->partyCount; i++) {
+        Mobile *mob = fm->fight->player->party[i];
         int amountToRaise = getActionGaugeRaise(interval, calculateMobileAttributes(mob).dexterity);
         if (!isReadyForAction(mob) && mob->hp > 0) {
             mob->actionGauge = normalizeActionGauge(mob->actionGauge, amountToRaise);
-            Menu *m = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
-            Mobile *currentMob = fight->player->party[m->cursor];
-            if (isReadyForAction(mob) && (currentMob == NULL || !isReadyForAction(currentMob))) {
+        }
+    }
+}
+
+void ensureActiveCursor(FightManager *fm) {
+    Menu *m = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
+    Mobile *currentMob = fm->fight->player->party[m->cursor];
+    if (currentMob == NULL || !isReadyForAction(currentMob)) {
+        for (int i = 0; i < fm->fight->player->partyCount; i++) {
+            if (isReadyForAction(fm->fight->player->party[i])) {
                 m->cursor = i;
             }
         }
     }
+}
+
+void fightUpdate(FightManager *fm) {
+    Fight *fight = fm->fight;
+    double end = getTimeInMS();
+    double interval = end - fight->time;
+    raiseBeastsActionGauge(fm, interval);
+    raiseMobsActionGauge(fm, interval);
     if (fight->actionCount > 0) {
         actionUpdate(fm, interval);
     }
+    ensureActiveCursor(fm);
     fight->time = end;
 }
 
