@@ -198,3 +198,17 @@ char *getVital(int current, int max) {
     sprintf(vital, "%d/%d", current, max);
     return vital;
 }
+
+int randomWithLimit(int limit) {
+/* return a random number between 0 and limit inclusive.
+ */
+
+    int divisor = RAND_MAX/(limit+1);
+    int retval;
+
+    do {
+        retval = rand() / divisor;
+    } while (retval > limit);
+
+    return retval;
+}

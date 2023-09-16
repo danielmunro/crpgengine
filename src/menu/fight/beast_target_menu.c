@@ -16,6 +16,9 @@ void drawBeastTargetMenuScreen(MenuContext *menuContext) {
                     menuContext->fonts->default_->lineHeight *
                     (float) menuContext->cursorLine,
             });
+    if (menuContext->fight->beastCount <= menuContext->cursorLine) {
+        return;
+    }
     Rectangle p = menuContext->fight->beasts[menuContext->cursorLine]->position;
     drawRightCursor(
             menuContext->uiSprite,

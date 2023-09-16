@@ -9,20 +9,20 @@ beasts:
       fire: -5
       frost: 5
   level: 3
-  hp: 5
-  gp: 100
+  hp: 3
+  gp: 1
   image: warg.png
 - id: werewarg
   name: Werewarg
   attributes:
-    str: 4
+    str: 2
     dex: 4
     con: 4
     ac:
       fire: -5
       frost: 10
   level: 6
-  hp: 6
+  hp: 5
   gp: 140
   image: warg.png
 - id: goblin

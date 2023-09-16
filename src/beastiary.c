@@ -9,6 +9,7 @@ typedef struct {
     int gp;
     int actionGauge;
     Rectangle position;
+    ActionStep step;
 } Beast;
 
 typedef struct {
@@ -30,6 +31,7 @@ Beast *createBeastFromData(BeastData *data) {
     beast->image = LoadTextureFromImage(LoadImage(filePath));
     beast->attributes = createAttributesFromData(data->attributes);
     beast->position = (Rectangle){0, 0, 0, 0};
+    beast->step = STEP_NONE;
     return beast;
 }
 
@@ -45,6 +47,7 @@ Beast *cloneBeast(Beast *original) {
     new->gp = original->gp;
     new->actionGauge = original->actionGauge;
     new->position = original->position;
+    new->step = STEP_NONE;
     return new;
 }
 

@@ -28,7 +28,7 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
                         ? getFontStyleForFightCursor(mob, mc->fonts, mc->cursorLine, i)
                         : mc->fonts->disable;
         char namePart[255];
-        if (mc->fight->defending[i]) {
+        if (mc->fight->mobsDefending[i]) {
             sprintf(namePart, "[D] %s", mob->name);
         } else {
             sprintf(namePart, "%s", mob->name);
@@ -108,6 +108,9 @@ void drawMobileSelectMenuScreen(MenuContext *menuContext) {
 
 MenuSelectResponse *mobileSelectMenuItemSelected(MenuContext *menuContext) {
     menuContext->selectedMob = menuContext->player->party[menuContext->cursorLine];
+    if (menuContext->selectedMob == NULL) {
+        return createMenuSelectResponse(NO_OP, MOBILE_SELECT_FIGHT_MENU);
+    }
     return createMenuSelectResponse(OPEN_MENU, ACTION_SELECT_FIGHT_MENU);
 }
 

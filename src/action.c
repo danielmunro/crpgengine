@@ -1,6 +1,7 @@
 typedef struct {
     Mobile *mob;
     Beast *beast;
+    int beastIndex;
 } ActionParticipant;
 
 typedef struct {
@@ -21,13 +22,15 @@ ActionParticipant *createMobParticipant(Mobile *mob) {
     ActionParticipant *a = malloc(sizeof(ActionParticipant));
     a->mob = mob;
     a->beast = NULL;
+    a->beastIndex = -1;
     return a;
 }
 
-ActionParticipant *createBeastParticipant(Beast *beast) {
+ActionParticipant *createBeastParticipant(Beast *beast, int index) {
     ActionParticipant *a = malloc(sizeof(ActionParticipant));
     a->mob = NULL;
     a->beast = beast;
+    a->beastIndex = index;
     return a;
 }
 

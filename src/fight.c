@@ -15,7 +15,8 @@ typedef struct {
     Player *player;
     Action **actions;
     int actionCount;
-    bool defending[MAX_PARTY_SIZE];
+    bool mobsDefending[MAX_PARTY_SIZE];
+    bool beastsDefending[MAX_BEASTS_IN_FIGHT];
     int beastCount;
     int *cursors;
     double time;
@@ -56,7 +57,7 @@ Fight *createFight(
         fight->cursors[i] = -1;
     }
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
-        fight->defending[i] = false;
+        fight->mobsDefending[i] = false;
     }
     fight->menu = 0;
     fight->actionCount = 0;
