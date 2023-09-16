@@ -16,7 +16,7 @@ beasts:
   name: Werewarg
   attributes:
     str: 2
-    dex: 4
+    dex: 2
     con: 4
     ac:
       fire: -5
