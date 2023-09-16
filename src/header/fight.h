@@ -31,4 +31,8 @@ typedef enum {
     ATTACK_RETURN,
 } ActionStep;
 
+#define STEP_OUT_TIMEOUT_MS 300
+#define ACTION_TIMEOUT_MS 100
+#define RETURN_TIMEOUT_MS 300
+
 #endif //CJRPGENGINE_FIGHT_H

@@ -319,12 +319,12 @@ void actionUpdate(FightManager *fm, double interval) {
     ActionStep step = act->initiator->mob != NULL ? act->initiator->mob->step : act->initiator->beast->step;
     if (step == ATTACK_QUEUE) {
         step = ATTACK_STEP_OUT;
-    } else if (step == ATTACK_STEP_OUT && act->elapsedTime > 300) {
+    } else if (step == ATTACK_STEP_OUT && act->elapsedTime > STEP_OUT_TIMEOUT_MS) {
         step = ATTACK_ACTION;
-    } else if (step == ATTACK_ACTION && act->elapsedTime > 100) {
+    } else if (step == ATTACK_ACTION && act->elapsedTime > ACTION_TIMEOUT_MS) {
         attackAction(fm, act);
         step = ATTACK_RETURN;
-    } else if (step == ATTACK_RETURN && act->elapsedTime > 300) {
+    } else if (step == ATTACK_RETURN && act->elapsedTime > RETURN_TIMEOUT_MS) {
         removeAction(fm->fight);
         step = STEP_NONE;
         if (act->initiator->mob != NULL) {
