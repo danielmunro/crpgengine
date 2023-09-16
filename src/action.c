@@ -63,3 +63,27 @@ Action *createAction(
     action->elapsedTime = 0;
     return action;
 }
+
+void setParticipantStep(ActionParticipant *participant, ActionStep step) {
+    if (participant->mob != NULL) {
+        participant->mob->step = step;
+    } else {
+        participant->beast->step = step;
+    }
+}
+
+void setParticipantActionGauge(ActionParticipant *participant, int actionGauge) {
+    if (participant->mob != NULL) {
+        participant->mob->actionGauge = actionGauge;
+    } else {
+        participant->beast->actionGauge = actionGauge;
+    }
+}
+
+ActionStep getParticipantActionStep(ActionParticipant *participant) {
+    if (participant->mob != NULL) {
+        return participant->mob->step;
+    } else {
+        return participant->beast->step;
+    }
+}

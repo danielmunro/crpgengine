@@ -324,9 +324,7 @@ void attackAction(FightManager *fm, Action *act) {
 void actionUpdate(FightManager *fm, double interval) {
     Action *act = fm->fight->actions[0];
     act->elapsedTime += interval;
-    ActionStep step = act->initiator->mob != NULL
-            ? act->initiator->mob->step
-            : act->initiator->beast->step;
+    ActionStep step = getParticipantActionStep(act->initiator);
     bool removed = false;
     if (step == ATTACK_QUEUE) {
         step = ATTACK_STEP_OUT;
@@ -338,28 +336,16 @@ void actionUpdate(FightManager *fm, double interval) {
     } else if (step == ATTACK_RETURN && act->elapsedTime > RETURN_TIMEOUT_MS) {
         removeAction(fm->fight);
         step = STEP_NONE;
-        if (act->initiator->mob != NULL) {
-            act->initiator->mob->actionGauge = 0;
-        } else {
-            act->initiator->beast->actionGauge = 0;
-        }
+        setParticipantActionGauge(act->initiator, 0);
         removed = true;
     } else {
         return;
     }
-    if (act->initiator->mob != NULL) {
-        act->initiator->mob->step = step;
-    } else {
-        act->initiator->beast->step = step;
-    }
+    setParticipantStep(act->initiator, step);
     act->elapsedTime = 0;
     if (removed) {
         // shouldn't be necessary
-        if (act->initiator->mob != NULL) {
-            act->initiator->mob->step = STEP_NONE;
-        } else {
-            act->initiator->beast->step = STEP_NONE;
-        }
+        setParticipantStep(act->initiator, STEP_NONE);
         free(act);
     }
 }
