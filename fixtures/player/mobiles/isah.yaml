@@ -1,0 +1,13 @@
+id: isah
+name: Isah
+animations: fireas
+avatar: fireas.png
+position: 273,243
+direction: up
+hp: 20
+mana: 10
+attributes:
+  dex: 3
+  str: 2
+  hp: 20
+  mana: 10

@@ -1,0 +1,15 @@
+id: fireas
+name: Fireas
+animations: fireas
+avatar: fireas.png
+position: 273,243
+direction: up
+hp: 20
+mana: 10
+attributes:
+  dex: 1
+  str: 1
+  hp: 20
+  mana: 10
+spells:
+  - cure
