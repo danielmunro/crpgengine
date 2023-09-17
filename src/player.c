@@ -316,12 +316,19 @@ void loadAllPlayerItems(Player *p) {
 
 Player *createNewPlayer(MobileManager *mm) {
     addInfo("creating new player");
-    Mobile *mobiles[MAX_PARTY_SIZE] = {
-            mm->playableMobiles[0],
-            mm->playableMobiles[1],
-            mm->playableMobiles[2],
-            mm->playableMobiles[3],
-    };
+    StartPartyData *data = loadStartPartyData();
+    Mobile *mobiles[MAX_PARTY_SIZE];
+    for (int i = 0; i < MAX_PARTY_SIZE; i++) {
+        mobiles[i] = NULL;
+    }
+    for (int i = 0; i < data->mobiles_count; i++) {
+        for (int j = 0; j < mm->playableMobileCount; j++) {
+            if (strcmp(mm->playableMobiles[j]->id, data->mobiles[i]) == 0) {
+                mobiles[i] = mm->playableMobiles[j];
+                break;
+            }
+        }
+    }
     const char **storylines = malloc(sizeof(char **));
     Item **items = calloc(MAX_ITEMS, sizeof(Item));
     Player *p = createPlayer(

@@ -146,3 +146,16 @@ UIData *loadUIData() {
     }
     return ui;
 }
+
+StartPartyData *loadStartPartyData() {
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/player/start_party.yaml", runtimeArgs->indexDir);
+    StartPartyData *startParty = malloc(sizeof(StartPartyData));
+    cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
+                                      &startPartyTopSchema, (cyaml_data_t **) &startParty, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error loading file, filename and error :: %s - %s\n", filePath, cyaml_strerror(err));
+        exit(1);
+    }
+    return startParty;
+}

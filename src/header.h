@@ -48,6 +48,7 @@
 #include "yaml/mobile.c"
 #include "yaml/player.c"
 #include "yaml/save.c"
+#include "yaml/start_party.c"
 #include "yaml/ui.c"
 #include "cyaml.c"
 #include "avatar.c"

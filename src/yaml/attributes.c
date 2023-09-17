@@ -19,19 +19,6 @@ typedef struct {
     ArmorClassData *ac;
 } AttributesData;
 
-AttributesData *createEmptyAttributesData() {
-    AttributesData *a = malloc(sizeof(AttributesData));
-    a->strength = 0;
-    a->dexterity = 0;
-    a->constitution = 0;
-    a->wisdom = 0;
-    a->intelligence = 0;
-    a->hp = 0;
-    a->mana = 0;
-    a->ac = NULL;
-    return a;
-}
-
 static const cyaml_schema_field_t acFieldSchema[] = {
         CYAML_FIELD_INT(
                 "bash", CYAML_FLAG_OPTIONAL, ArmorClassData, bash),
