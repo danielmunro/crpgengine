@@ -217,7 +217,7 @@ SaveData *initializePlayer(Game *g) {
         save = loadSaveData(saveFilePath);
         g->player = mapSaveDataToPlayer(g->animations, save);
     } else {
-        g->player = createNewPlayer(g->animations);
+        g->player = createNewPlayer(g->mobiles, g->animations);
         addItem(g->player, g->items->items[0]);
     }
     g->player->saveFiles = getSaveFiles();
@@ -228,6 +228,11 @@ SaveData *initializePlayer(Game *g) {
         addMobileToManager(g->mobiles, g->player->party[i]);
     }
     return save;
+}
+
+void loadAllMobiles(Game *g) {
+    g->mobiles = createMobileManager(g->animations);
+    loadPlayerMobiles(g->mobiles);
 }
 
 Game *createGame() {
@@ -245,7 +250,7 @@ Game *createGame() {
     g->beastiary = loadBeastiary();
     g->items = createItemManager();
     loadAllItems(g->items);
-    g->mobiles = createMobileManager(g->animations);
+    loadAllMobiles(g);
     SaveData *save = initializePlayer(g);
     g->notifications = createNotificationManager();
     g->timing = createTiming(g->notifications, g->player);

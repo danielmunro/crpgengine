@@ -27,14 +27,18 @@ typedef struct {
 typedef struct {
     AnimationManager *animationManager;
     Mobile **mobiles;
-    int count;
+    int mobileCount;
+    Mobile **playableMobiles;
+    int playableMobileCount;
 } MobileManager;
 
 MobileManager *createMobileManager(AnimationManager *am) {
     MobileManager *m = malloc(sizeof(MobileManager));
     m->animationManager = am;
     m->mobiles = calloc(MAX_MOBILES, sizeof(Mobile));
-    m->count = 0;
+    m->mobileCount = 0;
+    m->playableMobiles = calloc(MAX_MOBILES, sizeof(Mobile));
+    m->playableMobileCount = 0;
     return m;
 }
 
@@ -102,12 +106,17 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
 }
 
 void addMobileToManager(MobileManager *mm, Mobile *mob) {
-    mm->mobiles[mm->count] = mob;
-    mm->count++;
+    mm->mobiles[mm->mobileCount] = mob;
+    mm->mobileCount++;
+}
+
+void addPlayerMobileToManager(MobileManager *mm, Mobile *mob) {
+    mm->playableMobiles[mm->mobileCount] = mob;
+    mm->playableMobileCount++;
 }
 
 Mobile *findMobById(MobileManager *mm, const char *id) {
-    for (int i = 0; i < mm->count; i++) {
+    for (int i = 0; i < mm->mobileCount; i++) {
         if (strcmp(mm->mobiles[i]->id, id) == 0) {
             return mm->mobiles[i];
         }

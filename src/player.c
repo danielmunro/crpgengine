@@ -303,80 +303,13 @@ Player *mapSaveDataToPlayer(AnimationManager *am, SaveData *save) {
             save->player->items_count);
 }
 
-Player *createNewPlayer(AnimationManager *am) {
+Player *createNewPlayer(MobileManager *mm, AnimationManager *am) {
     addInfo("creating new player");
-    Animation *animations[MAX_ANIMATIONS];
-    loadAnimationsByName(am, "fireas", animations);
-    const char **spells1 = calloc(MAX_SPELLS, sizeof(const char *));
-    spells1[0] = "cure";
-    const char **spells2 = calloc(MAX_SPELLS, sizeof(const char *));
-    spells2[0] = "fire";
-    const char **spells3 = calloc(MAX_SPELLS, sizeof(const char *));
-    const char **spells4 = calloc(MAX_SPELLS, sizeof(const char *));
-
-    Attributes *p1Attributes = createStartingAttributes();
-    p1Attributes->dexterity = 1;
-
-    Attributes *p2Attributes = createStartingAttributes();
-    p2Attributes->dexterity = 1;
-
-    Attributes *p3Attributes = createStartingAttributes();
-    p3Attributes->strength = 3;
-    p3Attributes->dexterity = 2;
-
-    Attributes *p4Attributes = createStartingAttributes();
-    p4Attributes->strength = 2;
-    p4Attributes->dexterity = 4;
-
     Mobile *mobiles[MAX_PARTY_SIZE] = {
-            createMobile(
-                    "player1",
-                    "Fireas",
-                    (Vector2) {429, 252},
-                    DOWN,
-                    animations,
-                    createAvatar("fireas.png"),
-                    STARTING_HP,
-                    STARTING_MANA,
-                    p1Attributes,
-                    spells1,
-                    1),
-            createMobile(
-                    "player2",
-                    "Gandalf",
-                    (Vector2) {429, 252},
-                    DOWN,
-                    animations,
-                    createAvatar("fireas.png"),
-                    STARTING_HP,
-                    STARTING_MANA,
-                    p2Attributes,
-                    spells2,
-                    1),
-            createMobile(
-                    "player3",
-                    "RazzleKhan",
-                    (Vector2) {429, 252},
-                    DOWN,
-                    animations,
-                    createAvatar("fireas.png"),
-                    STARTING_HP,
-                    STARTING_MANA,
-                    p3Attributes,
-                    spells3,
-                    0),
-            createMobile(
-                    "player4",
-                    "Krusty",
-                    (Vector2) {429, 252},
-                    DOWN,
-                    animations,
-                    createAvatar("fireas.png"),
-                    STARTING_HP,
-                    STARTING_MANA,
-                    p4Attributes,
-                    spells4,
-                    0),
+            mm->playableMobiles[0],
+            mm->playableMobiles[1],
+            mm->playableMobiles[2],
+            mm->playableMobiles[3],
     };
     const char **storylines = malloc(sizeof(char **));
     Item **items = calloc(MAX_ITEMS, sizeof(Item));

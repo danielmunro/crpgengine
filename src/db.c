@@ -49,6 +49,29 @@ void loadMobiles(MobileManager *mm, Scene *scene, const char *sceneDirectory) {
     free(mobFiles);
 }
 
+void loadPlayerMobiles(MobileManager *mm) {
+    char directory[MAX_FS_PATH_LENGTH] = "player/mobiles";
+    addInfo("load player mobiles from %s", directory);
+    if (!FileExists(directory)) {
+        addError("player mobiles directory does not exist -- %s", directory);
+        return;
+    }
+    char **mobFiles = calloc(MAX_FILES, sizeof(char *));
+    int files = getFilesInDirectory(directory, mobFiles);
+    for (int i = 0; i < files; i++) {
+        char *filePath = malloc(1 + strlen(directory) + strlen(&mobFiles[i][0]));
+        sprintf(filePath, "%s/%s", directory, &mobFiles[i][0]);
+        MobileData *mobData = loadMobYaml(filePath);
+        Animation *animations[MAX_ANIMATIONS];
+        loadAnimationsByName(mm->animationManager, mobData->animations, animations);
+        Mobile *mob = createMobileFromData(mobData, animations);
+        addPlayerMobileToManager(mm, mob);
+        free(filePath);
+        free(mobData);
+    }
+    free(mobFiles);
+}
+
 void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/images/%s", indexDir, data->background);
