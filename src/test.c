@@ -28,10 +28,10 @@ void createFightInSceneTest() {
     Encounters *e = createEncounters();
     e->beastEncountersCount = 1;
     e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
-    UIManager *ui = createUIManager(
+    UIManager *uiMan = createUIManager(
             loadUIData(),
             NULL);
-    FightManager *fm = createFightManager(ui, NULL);
+    FightManager *fm = createFightManager(uiMan, NULL);
     for (int i = 0; i < 100; i++) {
         createFightFromEncounters(
                 fm,
@@ -51,7 +51,7 @@ void canMoveMobTest() {
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
-    Spell **spells = calloc(0, sizeof(Spell));
+    const char **spells = calloc(0, sizeof(const char *));
 
     Mobile *mob = createMobile(
             "test",
@@ -81,7 +81,7 @@ void canMobStopMovingTest() {
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
-    Spell **spells = calloc(0, sizeof(Spell));
+    const char **spells = calloc(0, sizeof(const char *));
     Mobile *mob = createMobile(
             "test",
             "test",
