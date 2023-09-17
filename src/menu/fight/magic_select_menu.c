@@ -19,8 +19,8 @@ void drawMagicSelectMenuScreen(MenuContext *menuContext) {
     FontStyle *disabledFont = menuContext->fonts->disable;
     Mobile *m = menuContext->selectedMob;
     for (int i = 0; i < m->spellCount; i++) {
-        FontStyle *fs = canApplyCost(m, m->spells[i]->cost) ? defaultFont : disabledFont;
-        drawInMenuWithStyle(t, fs, Spells[m->spells[i]->type]);
+        FontStyle *fs = canApplyCost(m, menuContext->spells[i]->cost) ? defaultFont : disabledFont;
+        drawInMenuWithStyle(t, fs, m->spells[i]);
     }
     drawRightCursor(
             menuContext->uiSprite,
@@ -33,7 +33,7 @@ void drawMagicSelectMenuScreen(MenuContext *menuContext) {
 }
 
 MenuSelectResponse *magicSelectMenuItemSelected(MenuContext *menuContext) {
-    Spell *spell = menuContext->selectedMob->spells[menuContext->cursorLine];
+    Spell *spell = menuContext->spells[menuContext->cursorLine];
     menuContext->selectedSpell = spell;
     return createMenuSelectResponse(
             OPEN_MENU,

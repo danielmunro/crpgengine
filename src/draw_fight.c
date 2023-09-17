@@ -12,6 +12,7 @@ float getHitAnimationX(float timer) {
             return -3;
         }
     }
+    return 0;
 }
 
 void drawFightBeasts(Fight *fight) {

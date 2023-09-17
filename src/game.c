@@ -63,6 +63,7 @@ void explorationMenuKeyPressed(Game *g) {
             g->player,
             g->ui->fonts,
             g->ui->uiSprite,
+            g->spells->spells,
             g->scenes->current->name,
             0);
     addMenu(g->menus, findMenu(g->ui->menus, PARTY_MENU));
@@ -145,6 +146,7 @@ void checkFights(Game *g, Scene *s) {
                 g->player,
                 g->ui->fonts,
                 g->ui->uiSprite,
+                g->spells->spells,
                 NULL,
                 0);
     }

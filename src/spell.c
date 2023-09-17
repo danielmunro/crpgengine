@@ -33,14 +33,6 @@ Spell *createSpellFromData(SpellData data) {
     return s;
 }
 
-Spell **mapSpellsFromData(SpellData *spellData, int spellCount) {
-    Spell **spells = calloc(spellCount, sizeof(Spell));
-    for (int i = 0; i < spellCount; i++) {
-        spells[i] = createSpellFromData(spellData[i]);
-    }
-    return spells;
-}
-
 SpellData createDataFromSpell(Spell *spell) {
     return (SpellData) {
             (char *) Spells[spell->type],

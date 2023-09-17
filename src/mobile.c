@@ -18,7 +18,7 @@ typedef struct {
     ItemData **equipment;
     int hp;
     int mana;
-    Spell **spells;
+    const char **spells;
     int spellCount;
     ActionStep step;
     float hitAnimationTimer;
@@ -52,7 +52,7 @@ Mobile *createMobile(
         int hp,
         int mana,
         Attributes *attributes,
-        Spell **spells,
+        const char **spells,
         int spellCount) {
     Mobile *mobile = malloc(sizeof(Mobile));
     mobile->id = &id[0];
@@ -96,7 +96,7 @@ Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATI
             data->hp,
             data->mana,
             createAttributesFromData(data->attributes),
-            mapSpellsFromData(data->spells, data->spells_count),
+            data->spells,
             data->spells_count);
     return mob;
 }

@@ -71,10 +71,6 @@ Mobile *getPartyLeader(Player *p) {
 }
 
 MobileData createMobDataFromMob(Mobile *mob) {
-    SpellData *spellData = (SpellData *) malloc(mob->spellCount * sizeof(SpellData));
-    for (int i = 0; i < mob->spellCount; i++) {
-        spellData[i] = createDataFromSpell(mob->spells[i]);
-    }
     return (MobileData) {
             mob->id,
             mob->name,
@@ -85,7 +81,7 @@ MobileData createMobDataFromMob(Mobile *mob) {
             mob->hp,
             mob->mana,
             createDataFromAttributes(mob->attributes),
-            spellData,
+            mob->spells,
             mob->spellCount,
     };
 }
@@ -285,7 +281,7 @@ Player *mapSaveDataToPlayer(AnimationManager *am, SaveData *save) {
                 mob.hp,
                 mob.mana,
                 createAttributesFromData(mob.attributes),
-                mapSpellsFromData(mob.spells, mob.spells_count),
+                mob.spells,
                 mob.spells_count);
     }
     for (int i = save->player->party_count; i < MAX_PARTY_SIZE; i++) {
@@ -311,26 +307,12 @@ Player *createNewPlayer(AnimationManager *am) {
     addInfo("creating new player");
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
-    Spell **spells1 = calloc(MAX_SPELLS, sizeof(Spell));
-    spells1[0] = createSpellFromData((SpellData) {
-            (char *) Spells[0],
-            (char *) Intents[0],
-            1,
-            (float) 1.0,
-            createEmptyAttributesData(),
-            createEmptyAttributesData(),
-    });
-    Spell **spells2 = calloc(MAX_SPELLS, sizeof(Spell));
-    spells2[0] = createSpellFromData((SpellData) {
-            (char *) Spells[1],
-            (char *) Intents[1],
-            1,
-            (float) 1.0,
-            createEmptyAttributesData(),
-            createEmptyAttributesData(),
-    });
-    Spell **spells3 = calloc(MAX_SPELLS, sizeof(Spell));
-    Spell **spells4 = calloc(MAX_SPELLS, sizeof(Spell));
+    const char **spells1 = calloc(MAX_SPELLS, sizeof(const char *));
+    spells1[0] = "cure";
+    const char **spells2 = calloc(MAX_SPELLS, sizeof(const char *));
+    spells2[0] = "fire";
+    const char **spells3 = calloc(MAX_SPELLS, sizeof(const char *));
+    const char **spells4 = calloc(MAX_SPELLS, sizeof(const char *));
 
     Attributes *p1Attributes = createStartingAttributes();
     p1Attributes->dexterity = 1;
@@ -358,7 +340,7 @@ Player *createNewPlayer(AnimationManager *am) {
                     STARTING_MANA,
                     p1Attributes,
                     spells1,
-                    0),
+                    1),
             createMobile(
                     "player2",
                     "Gandalf",
@@ -370,7 +352,7 @@ Player *createNewPlayer(AnimationManager *am) {
                     STARTING_MANA,
                     p2Attributes,
                     spells2,
-                    0),
+                    1),
             createMobile(
                     "player3",
                     "RazzleKhan",
@@ -420,34 +402,6 @@ Player *createNewPlayer(AnimationManager *am) {
         item->position = NULL;
         addItem(p, createItemFromData(item));
     }
-    // hack -- add some spells
-    AttributesData *cureCost = createDataFromAttributes(createEmptyAttributes());
-    cureCost->mana = 10;
-    AttributesData *cureImpact = createDataFromAttributes(createEmptyAttributes());
-    cureImpact->hp = 20;
-    SpellData cure = (SpellData) {
-            "cure",
-            "help",
-            1,
-            (float) 1.0,
-            cureCost,
-            cureImpact,
-    };
-    p->party[0]->spells[0] = createSpellFromData(cure);
-    p->party[0]->spellCount = 1;
-
-    AttributesData *fireImpact = createDataFromAttributes(createEmptyAttributes());
-    fireImpact->hp = 20;
-    SpellData fire = (SpellData) {
-            "fire",
-            "harm",
-            1,
-            (float) 1.0,
-            cureCost,
-            fireImpact,
-    };
-    p->party[1]->spells[0] = createSpellFromData(fire);
-    p->party[1]->spellCount = 1;
 
     return p;
 }

@@ -16,6 +16,7 @@ typedef struct {
     Item *selectedItem;
     Spell *selectedSpell;
     UISprite *uiSprite;
+    Spell **spells;
     ItemList *itemList;
     int itemListCount;
     Beast *targetBeast;
@@ -73,6 +74,7 @@ MenuContext *createMenuContext(
         Player *player,
         Fonts *fonts,
         UISprite *uiSprite,
+        Spell **spells,
         const char *scene,
         int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
@@ -82,6 +84,7 @@ MenuContext *createMenuContext(
     context->cursorLine = cursorLine;
     context->fonts = fonts;
     context->uiSprite = uiSprite;
+    context->spells = spells;
     context->textBoxes = calloc(MAX_TEXT_BOXES, sizeof(TextBox));
     context->selectedMob = NULL;
     context->itemList = calloc(MAX_ITEMS, sizeof(ItemList));
