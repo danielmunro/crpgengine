@@ -217,7 +217,7 @@ SaveData *initializePlayer(Game *g) {
         save = loadSaveData(saveFilePath);
         g->player = mapSaveDataToPlayer(g->animations, save);
     } else {
-        g->player = createNewPlayer(g->mobiles, g->animations);
+        g->player = createNewPlayer(g->mobiles);
         addItem(g->player, g->items->items[0]);
     }
     g->player->saveFiles = getSaveFiles();

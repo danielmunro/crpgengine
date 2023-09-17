@@ -303,7 +303,7 @@ Player *mapSaveDataToPlayer(AnimationManager *am, SaveData *save) {
             save->player->items_count);
 }
 
-Player *createNewPlayer(MobileManager *mm, AnimationManager *am) {
+Player *createNewPlayer(MobileManager *mm) {
     addInfo("creating new player");
     Mobile *mobiles[MAX_PARTY_SIZE] = {
             mm->playableMobiles[0],
