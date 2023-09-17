@@ -9,5 +9,7 @@ mana: 10
 attributes:
   dex: 1
   str: 1
+  hp: 20
+  mana: 10
 spells:
   - fire

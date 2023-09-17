@@ -50,7 +50,8 @@ void loadMobiles(MobileManager *mm, Scene *scene, const char *sceneDirectory) {
 }
 
 void loadPlayerMobiles(MobileManager *mm) {
-    char directory[MAX_FS_PATH_LENGTH] = "player/mobiles";
+    char directory[MAX_FS_PATH_LENGTH];
+    sprintf(directory, "%s/player/mobiles", runtimeArgs->indexDir);
     addInfo("load player mobiles from %s", directory);
     if (!FileExists(directory)) {
         addError("player mobiles directory does not exist -- %s", directory);
@@ -59,14 +60,13 @@ void loadPlayerMobiles(MobileManager *mm) {
     char **mobFiles = calloc(MAX_FILES, sizeof(char *));
     int files = getFilesInDirectory(directory, mobFiles);
     for (int i = 0; i < files; i++) {
-        char *filePath = malloc(1 + strlen(directory) + strlen(&mobFiles[i][0]));
+        char filePath[MAX_FS_PATH_LENGTH];
         sprintf(filePath, "%s/%s", directory, &mobFiles[i][0]);
         MobileData *mobData = loadMobYaml(filePath);
         Animation *animations[MAX_ANIMATIONS];
         loadAnimationsByName(mm->animationManager, mobData->animations, animations);
         Mobile *mob = createMobileFromData(mobData, animations);
         addPlayerMobileToManager(mm, mob);
-        free(filePath);
         free(mobData);
     }
     free(mobFiles);

@@ -111,7 +111,7 @@ void addMobileToManager(MobileManager *mm, Mobile *mob) {
 }
 
 void addPlayerMobileToManager(MobileManager *mm, Mobile *mob) {
-    mm->playableMobiles[mm->mobileCount] = mob;
+    mm->playableMobiles[mm->playableMobileCount] = mob;
     mm->playableMobileCount++;
 }
 

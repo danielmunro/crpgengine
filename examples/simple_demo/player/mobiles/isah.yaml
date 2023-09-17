@@ -9,3 +9,5 @@ mana: 10
 attributes:
   dex: 3
   str: 2
+  hp: 20
+  mana: 10

@@ -303,6 +303,17 @@ Player *mapSaveDataToPlayer(AnimationManager *am, SaveData *save) {
             save->player->items_count);
 }
 
+void loadAllPlayerItems(Player *p) {
+    const char *itemsFile = malloc(MAX_FS_PATH_LENGTH);
+    sprintf((char *) itemsFile, "%s/player/items.yaml", runtimeArgs->indexDir);
+    ItemsData *itemsData = loadItemYaml(itemsFile);
+    for (int i = 0; i < itemsData->items_count; i++) {
+        addItem(p, createItemFromData(&itemsData->items[i]));
+    }
+    p->itemCount = itemsData->items_count;
+    free((char *) itemsFile);
+}
+
 Player *createNewPlayer(MobileManager *mm) {
     addInfo("creating new player");
     Mobile *mobiles[MAX_PARTY_SIZE] = {
@@ -323,19 +334,7 @@ Player *createNewPlayer(MobileManager *mm) {
             0,
             items,
             0);
-    // hack -- add a bunch of items
-    for (int i = 0; i < 3; i++) {
-        ItemData *item = malloc(sizeof(ItemData));
-        item->name = "potion";
-        item->type = "consumable";
-        item->worth = 10;
-        AttributesData *a = createEmptyAttributesData();
-        a->hp = 10;
-        item->attributes = a;
-        item->position = NULL;
-        addItem(p, createItemFromData(item));
-    }
-
+    loadAllPlayerItems(p);
     return p;
 }
 
