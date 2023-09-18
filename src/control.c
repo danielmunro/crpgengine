@@ -16,7 +16,7 @@ typedef struct {
     const char *message;
     const char *story;
     const char *direction;
-    const char *item;
+    ItemReferenceData *item;
     Outcome outcome;
     int amount;
     Vector2 position;
@@ -65,7 +65,7 @@ Then *createThen(
         const char *message,
         const char *story,
         const char *direction,
-        const char *item,
+        ItemReferenceData *item,
         const Outcome outcome,
         Vector2 position,
         bool parallel,

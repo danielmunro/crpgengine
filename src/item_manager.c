@@ -36,9 +36,8 @@ Item **createItemsFromReferenceData(ItemManager *im, ItemReferenceData *referenc
     Item **items = calloc(referenceData->quantity, sizeof(Item));
     for (int i = 0; i < im->count; i++) {
         if (strcmp(im->items[i]->name, referenceData->name) == 0) {
-            ItemData data = createItemData(im->items[i]);
             for (int j = 0; j < referenceData->quantity; j++) {
-                items[j] = createItemFromData(&data);
+                items[j] = im->items[i];
             }
             break;
         }

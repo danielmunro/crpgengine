@@ -88,10 +88,12 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
                 createNotification(SAVED, "Your game has been saved."));
         progress++;
     } else if (needsToReceiveItem(then, getPartyLeader(cm->player))) {
-        addInfo("player receiving item: %s", then->item);
-        addItem(cm->player, findItem(cm->itemManager->items, then->item));
+        addInfo("player receiving item: %s", then->item->name);
+        for (int i = 0; i < then->item->quantity; i++) {
+            addItem(cm->player, findItem(cm->itemManager->items, then->item->name));
+        }
         const char *message = malloc(64);
-        sprintf((char *)message, "you received:\n%s", then->item);
+        sprintf((char *)message, "you received:\n%s", then->item->name);
         addNotification(
                 cm->notificationManager,
                 createNotification(RECEIVE_QUEST_ITEM, message));

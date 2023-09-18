@@ -32,7 +32,6 @@ void removeItem(Player *player, Item *item) {
             player->items[i] = player->items[i + 1];
         }
     }
-    free(item);
     player->itemCount--;
 }
 

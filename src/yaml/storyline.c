@@ -16,7 +16,7 @@ typedef struct {
     const char *story;
     const char *position;
     const char *direction;
-    const char *item;
+    ItemReferenceData *item;
     int amount;
 } ThenData;
 
@@ -69,8 +69,9 @@ static const cyaml_schema_field_t thenFieldSchema[] = {
                 "position", CYAML_FLAG_OPTIONAL, ThenData, position, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "direction", CYAML_FLAG_OPTIONAL, ThenData, direction, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_STRING_PTR(
-                "item", CYAML_FLAG_OPTIONAL, ThenData, item, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_MAPPING_PTR(
+                "item", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
+                ThenData, item, itemReferenceFieldSchema),
         CYAML_FIELD_INT(
                 "amount", CYAML_FLAG_OPTIONAL, ThenData, amount),
         CYAML_FIELD_END
