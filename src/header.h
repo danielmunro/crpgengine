@@ -41,7 +41,7 @@
 #include "yaml/spell.c"
 #include "yaml/storyline.c"
 #include "yaml/item.c"
-#include "yaml/player_item.c"
+#include "yaml/item_reference.c"
 #include "yaml/scene.c"
 #include "yaml/sound.c"
 #include "yaml/beastiary.c"

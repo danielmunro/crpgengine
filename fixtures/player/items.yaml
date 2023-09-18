@@ -1,16 +1,3 @@
 items:
   - name: potion
-    type: consumable
-    worth: 30
-    attributes:
-      hp: 20
-  - name: potion
-    type: consumable
-    worth: 30
-    attributes:
-      hp: 20
-  - name: potion
-    type: consumable
-    worth: 30
-    attributes:
-      hp: 20
+    quantity: 3

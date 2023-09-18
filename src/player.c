@@ -303,18 +303,23 @@ Player *mapSaveDataToPlayer(AnimationManager *am, SaveData *save) {
             save->player->items_count);
 }
 
-void loadAllPlayerItems(Player *p) {
+void loadAllPlayerItems(ItemManager *im, Player *p) {
     const char *itemsFile = malloc(MAX_FS_PATH_LENGTH);
     sprintf((char *) itemsFile, "%s/player/items.yaml", runtimeArgs->indexDir);
-    ItemsData *itemsData = loadItemYaml(itemsFile);
+    ItemsReferenceData *itemsData = loadItemsReferenceData(itemsFile);
+    int itemCount = 0;
     for (int i = 0; i < itemsData->items_count; i++) {
-        addItem(p, createItemFromData(&itemsData->items[i]));
+        Item **items = createItemsFromReferenceData(im, &itemsData->items[i]);
+        for (int j = 0; j < itemsData->items[i].quantity; j++) {
+            addItem(p, items[j]);
+            itemCount++;
+        }
     }
-    p->itemCount = itemsData->items_count;
+    p->itemCount = itemCount;
     free((char *) itemsFile);
 }
 
-Player *createNewPlayer(MobileManager *mm) {
+Player *createNewPlayer(MobileManager *mm, ItemManager *im) {
     addInfo("creating new player");
     StartPartyData *data = loadStartPartyData();
     Mobile *mobiles[MAX_PARTY_SIZE];
@@ -341,7 +346,7 @@ Player *createNewPlayer(MobileManager *mm) {
             0,
             items,
             0);
-    loadAllPlayerItems(p);
+    loadAllPlayerItems(im, p);
     return p;
 }
 

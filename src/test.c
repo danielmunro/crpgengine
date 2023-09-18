@@ -32,12 +32,14 @@ void createFightInSceneTest() {
             loadUIData(),
             NULL);
     FightManager *fm = createFightManager(uiMan, NULL);
+    ItemManager *itemMan = createItemManager();
+    loadAllItems(itemMan);
     for (int i = 0; i < 100; i++) {
         createFightFromEncounters(
                 fm,
                 e,
                 createNewPlayer(
-                        createMobileManager(NULL)));
+                        createMobileManager(NULL), itemMan));
         Fight *f = fm->fight;
         char message[MAX_LOG_LINE_LENGTH];
         sprintf(message, "beast count is within expected range: %d", f->beastCount);
@@ -120,14 +122,32 @@ void experienceToLevel51Test() {
     ok(experience == 133650, "experience value was expected :: %d", experience);
 }
 
+void canCreateItemFromReferenceData() {
+    // setup
+    ItemManager *im = createItemManager();
+    loadAllItems(im);
+
+    // given
+    ItemReferenceData *data = malloc(sizeof(ItemReferenceData));
+    data->name = "potion";
+    data->quantity = 3; // ignored
+
+    // when
+    Item *item = createItemFromReferenceData(im, data);
+
+    // then
+    ok(strcmp(item->name, "potion") == 0, "received a potion");
+}
+
 int main() {
     globalSetup(5, (char *[]) {"binary", "-i", "fixtures", "-l", "error"});
-    plan(107);
+    plan(108);
     strToIntTest();
     createFightInSceneTest();
     canMoveMobTest();
     canMobStopMovingTest();
     experienceToLevel1Test();
     experienceToLevel51Test();
+    canCreateItemFromReferenceData();
     done_testing();
 }

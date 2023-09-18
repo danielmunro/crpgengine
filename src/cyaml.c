@@ -159,3 +159,13 @@ StartPartyData *loadStartPartyData() {
     }
     return startParty;
 }
+
+ItemsReferenceData *loadItemsReferenceData(const char *filePath) {
+    ItemsReferenceData *items = malloc(sizeof(ItemsReferenceData));
+    cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
+                                      &itemsReferenceSchema, (cyaml_data_t **) &items, NULL);
+    if (err != CYAML_OK) {
+        fprintf(stderr, "error parsing item yaml\n");
+    }
+    return items;
+}
