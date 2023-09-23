@@ -12,6 +12,25 @@ typedef struct {
     const char **saveNames;
 } SaveFiles;
 
+char *trim(char *str) {
+    char *end;
+
+    // Trim leading space
+    while (isspace((unsigned char) *str)) str++;
+
+    if (*str == 0)  // All spaces?
+        return str;
+
+    // Trim trailing space
+    end = str + strlen(str) - 1;
+    while (end > str && isspace((unsigned char) *end)) end--;
+
+    // Write new null terminator character
+    end[1] = '\0';
+
+    return str;
+}
+
 int getFilesInDirectory(const char *dir, char **files) {
     struct dirent *de;
     DIR *dr = opendir(dir);
@@ -83,13 +102,6 @@ int getDirectionFromString(const char *value) {
     }
 }
 
-int strToInt(const char *value) {
-    char *ptr;
-    long ret;
-    ret = strtol(value, &ptr, 10);
-    return (int) ret;
-}
-
 int min(int a, int b) {
     if (a > b) {
         return b;
@@ -106,8 +118,8 @@ int max(int a, int b) {
 
 Vector2 getPositionFromString(const char *position) {
     return (Vector2) {
-            strToInt(strtok((char *) position, ",")),
-            strToInt(strtok(NULL, ",")),
+            (float) TextToInteger(trim(strtok((char *) position, ","))),
+            (float) TextToInteger(trim(strtok(NULL, ","))),
     };
 }
 
@@ -180,16 +192,16 @@ double getTimeInMS() {
 }
 
 Color getColorFromString(const char *color) {
-    const char *r = strtok((char *) color, ",");
-    const char *g = strtok(NULL, ",");
-    const char *b = strtok(NULL, ",");
-    const char *a = strtok(NULL, ",");
+    const char *r = trim(strtok((char *) color, ","));
+    const char *g = trim(strtok(NULL, ","));
+    const char *b = trim(strtok(NULL, ","));
+    const char *a = trim(strtok(NULL, ","));
 
     return (Color) {
-            strToInt(r),
-            strToInt(g),
-            strToInt(b),
-            strToInt(a),
+            TextToInteger(r),
+            TextToInteger(g),
+            TextToInteger(b),
+            TextToInteger(a),
     };
 }
 
@@ -199,16 +211,11 @@ char *getVital(int current, int max) {
     return vital;
 }
 
-int randomWithLimit(int limit) {
-/* return a random number between 0 and limit inclusive.
- */
-
-    int divisor = RAND_MAX/(limit+1);
-    int retval;
-
-    do {
-        retval = rand() / divisor;
-    } while (retval > limit);
-
-    return retval;
+float getScrollOffset(float lineHeight, int cursorLine, float areaHeight) {
+    float cursorY = ((float) cursorLine + 1) * lineHeight;
+    float diff = cursorY - areaHeight;
+    if (diff >= 0) {
+        return ceil((double) diff + lineHeight);
+    }
+    return 0;
 }

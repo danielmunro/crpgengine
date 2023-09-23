@@ -1,5 +1,5 @@
 int getIntAttribute(xmlTextReaderPtr reader, const char *attribute) {
-    return strToInt((char *) xmlTextReaderGetAttribute(reader, (const xmlChar *) attribute));
+    return TextToInteger((char *) xmlTextReaderGetAttribute(reader, (const xmlChar *) attribute));
 }
 
 float getFloatAttribute(xmlTextReaderPtr reader, const char *attribute) {
@@ -79,7 +79,7 @@ void parseSceneLayer(Exploration *e, char *rawData) {
         char *val = strtok(data[y], ",");
         x = 0;
         while (val != NULL) {
-            e->layers[e->layerCount - 1]->data[y][x] = strToInt(val);
+            e->layers[e->layerCount - 1]->data[y][x] = TextToInteger(val);
             val = strtok(NULL, ",");
             x++;
         }

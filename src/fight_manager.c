@@ -3,9 +3,13 @@ typedef struct {
     Fight *fight;
     Menu **menus;
     SpellManager *spells;
+    NotificationManager *notifications;
 } FightManager;
 
-FightManager *createFightManager(UIManager *uiMan, SpellManager *spells) {
+FightManager *createFightManager(
+        UIManager *uiMan,
+        SpellManager *spells,
+        NotificationManager *notifications) {
     FightManager *f = malloc(sizeof(FightManager));
     f->ui = uiMan;
     f->spells = spells;
@@ -13,6 +17,7 @@ FightManager *createFightManager(UIManager *uiMan, SpellManager *spells) {
     f->menus = calloc(MAX_MENUS, sizeof(Menu));
     addMenu(f->menus, findMenu(uiMan->menus, BEAST_LIST_FIGHT_MENU));
     addMenu(f->menus, findMenu(uiMan->menus, MOBILE_SELECT_FIGHT_MENU));
+    f->notifications = notifications;
     return f;
 }
 
@@ -30,10 +35,14 @@ Fight *createFightFromEncounters(
     int created = 0;
     float x = BEAST_AREA.x;
     float y = BEAST_AREA.y;
+    int partyMax = player->partyCount * 2;
+    if (beastsToCreate > partyMax) {
+        beastsToCreate = partyMax;
+    }
     while (created < beastsToCreate) {
-        int e = rand() % encounters->beastEncountersCount + 0;
+        int e = GetRandomValue(0, encounters->beastEncountersCount - 1);
         int max = encounters->beastEncounters[e]->max;
-        int amount = rand() % max + 1;
+        int amount = GetRandomValue(0, max);
         if (amount > beastsToCreate - created) {
             amount = beastsToCreate - created;
         }
@@ -64,6 +73,7 @@ void checkRemoveFight(FightManager *f) {
         Player *p = f->fight->player;
         for (int i = 0; i < p->partyCount; i++) {
             p->party[i]->actionGauge = 0;
+            p->party[i]->isFleeing = false;
         }
         f->fight = NULL;
         free(f->fight);
@@ -134,8 +144,8 @@ Beast *getFinalBeastTarget(Fight *fight, ActionParticipant *ap) {
 void attackBeast(FightManager *fm, Action *act) {
     Beast *beast = getFinalBeastTarget(fm->fight, act->target);
     beast->hp -= act->initiator->mob != NULL
-            ? calculateMobileAttributes(act->initiator->mob).strength
-            : calculateBeastAttributes(act->initiator->beast).strength;
+                 ? calculateMobileAttributes(act->initiator->mob).strength
+                 : calculateBeastAttributes(act->initiator->beast).strength;
     beast->hitAnimationTimer = HIT_ANIMATION_TIMER_MS;
     if (beast->hp < 0) {
         destroyBeast(fm, beast);
@@ -148,8 +158,8 @@ void attackMobile(FightManager *fm, Action *act) {
         return;
     }
     mob->hp -= act->initiator->mob != NULL
-            ? calculateMobileAttributes(act->initiator->mob).strength
-            : calculateBeastAttributes(act->initiator->beast).strength;
+               ? calculateMobileAttributes(act->initiator->mob).strength
+               : calculateBeastAttributes(act->initiator->beast).strength;
     mob->hitAnimationTimer = HIT_ANIMATION_TIMER_MS;
 }
 
@@ -203,18 +213,14 @@ void castOnMobile(FightManager *fm) {
     executeSpellOnMobile(target, spell);
 }
 
-void startDefending(Menu **menus, Menu *currentMenu, MenuContext *mc) {
+void startDefending(MenuContext *mc) {
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         if (mc->selectedMob == mc->player->party[i]) {
             mc->fight->mobsDefending[i] = true;
             mc->selectedMob->actionGauge = 0;
-            break;
+            return;
         }
     }
-    removeMenu(menus);
-    Menu *newCurrent = getCurrentMenu(menus);
-    mc->cursorLine = currentMenu->cursor;
-    newCurrent->cursor = newCurrent->getNextOption(mc);
 }
 
 void castSpell(FightManager *fm, Action *act) {
@@ -272,8 +278,8 @@ void queueMobFightAction(FightManager *fm) {
                     ATTACK_QUEUE,
                     createMobParticipant(fm->fight->player->party[mobileSelectMenu->cursor]),
                     mc->targetBeast != NULL
-                            ? createBeastParticipant(mc->targetBeast, beastIndex)
-                            : createMobParticipant(mc->targetMob),
+                    ? createBeastParticipant(mc->targetBeast, beastIndex)
+                    : createMobParticipant(mc->targetMob),
                     o));
     fm->fight->mobsDefending[mobileSelectMenu->cursor] = false;
 }
@@ -286,7 +292,7 @@ void queueBeastFightAction(FightManager *fm, Beast *beast) {
             index = i;
         }
     }
-    int i = randomWithLimit(3);
+    int i = GetRandomValue(0, fm->fight->player->partyCount - 1);
     addAction(
             fm->fight,
             createAction(
@@ -296,7 +302,22 @@ void queueBeastFightAction(FightManager *fm, Beast *beast) {
                     createMobParticipant(fm->fight->player->party[i]),
                     o));
     beast->step = ATTACK_QUEUE;
-//    fm->fight->beastsDefending[beastSelectMenu->cursor] = false;
+    fm->fight->beastsDefending[i] = false;
+}
+
+void attemptToRun(FightManager *fm) {
+    Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
+    Mobile *mob = fm->fight->player->party[mobileSelectMenu->cursor];
+    ActionParticipant *participant = createMobParticipant(mob);
+    mob->isFleeing = true;
+    addAction(
+            fm->fight,
+            createAction(
+                    RUN,
+                    ACTION_STEP_RUN,
+                    participant,
+                    participant,
+                    NULL));
 }
 
 int getActionGaugeRaise(double elapsedTime, int dexterity) {
@@ -321,11 +342,17 @@ void attackAction(FightManager *fm, Action *act) {
     }
 }
 
+void clearAction(FightManager *fm, Action *a) {
+    setParticipantStep(a->initiator, STEP_NONE); // shouldn't be necessary
+    finishAction(a);
+    removeAction(fm->fight);
+    free(a);
+}
+
 void actionUpdate(FightManager *fm, double interval) {
     Action *act = fm->fight->actions[0];
     act->elapsedTime += interval;
     ActionStep step = getParticipantActionStep(act->initiator);
-    bool removed = false;
     if (step == ATTACK_QUEUE) {
         step = ATTACK_STEP_OUT;
     } else if (step == ATTACK_STEP_OUT && act->elapsedTime > STEP_OUT_TIMEOUT_MS) {
@@ -334,19 +361,30 @@ void actionUpdate(FightManager *fm, double interval) {
         attackAction(fm, act);
         step = ATTACK_RETURN;
     } else if (step == ATTACK_RETURN && act->elapsedTime > RETURN_TIMEOUT_MS) {
-        removeAction(fm->fight);
         step = STEP_NONE;
-        setParticipantActionGauge(act->initiator, 0);
-        removed = true;
+    } else if (step == ACTION_STEP_RUN && act->elapsedTime > RUN_TIMEOUT_MS) {
+        int option = GetRandomValue(0, 1);
+        if (option == 1) {
+            addNotification(
+                    fm->notifications,
+                    createNotification(FIGHT_ACTION, "You successfully ran away."));
+            cancelFight(fm->fight);
+        } else {
+            if (act->initiator->mob != NULL) {
+                act->initiator->mob->isFleeing = false;
+            }
+            addNotification(
+                    fm->notifications,
+                    createNotification(FIGHT_ACTION, "You failed to run away!"));
+        }
+        step = STEP_NONE;
     } else {
         return;
     }
     setParticipantStep(act->initiator, step);
     act->elapsedTime = 0;
-    if (removed) {
-        // shouldn't be necessary
-        setParticipantStep(act->initiator, STEP_NONE);
-        free(act);
+    if (step == STEP_NONE) {
+        clearAction(fm, act);
     }
 }
 
@@ -401,6 +439,12 @@ void fightUpdate(FightManager *fm) {
     Fight *fight = fm->fight;
     double end = getTimeInMS();
     double interval = end - fight->time;
+    if (fight->cancelled) {
+        if (end - FIGHT_END_TIMEOUT_MS > fight->cancelledAt) {
+            fight->beastCount = 0;
+        }
+        return;
+    }
     raiseBeastsActionGauge(fm, interval);
     raiseMobsActionGauge(fm, interval);
     if (fight->actionCount > 0) {
@@ -409,6 +453,13 @@ void fightUpdate(FightManager *fm) {
     reduceHitAnimationTimer(fm, interval);
     ensureActiveCursor(fm);
     fight->time = end;
+}
+
+void removeMenusUntilMobileSelect(FightManager *fm) {
+    Menu *currentMenu = getCurrentMenu(fm->menus);
+    Menu *menu = removeMenusTo(fm->menus, MOBILE_SELECT_FIGHT_MENU);
+    fm->ui->menuContext->cursorLine = menu->cursor;
+    menu->cursor = currentMenu->getNextOption(fm->ui->menuContext);
 }
 
 void fightSpaceKeyPressed(FightManager *fm) {
@@ -421,15 +472,14 @@ void fightSpaceKeyPressed(FightManager *fm) {
                 fm->ui->menuContext);
         if (response->type == FIND_TARGET_MENU) {
             queueMobFightAction(fm);
-            Menu *menu = removeMenusTo(fm->menus, MOBILE_SELECT_FIGHT_MENU);
-            fm->ui->menuContext->cursorLine = menu->cursor;
-            menu->cursor = currentMenu->getNextOption(fm->ui->menuContext);
+            removeMenusUntilMobileSelect(fm);
         } else if (response->type == DEFEND_SELECTED) {
-            startDefending(
-                    fm->menus,
-                    currentMenu,
-                    fm->ui->menuContext);
-            currentMenu->cursor = currentMenu->getNextOption(fm->ui->menuContext);
+            startDefending(fm->ui->menuContext);
+            removeMenusUntilMobileSelect(fm);
+        } else if (response->type == RESPONSE_TYPE_RUN) {
+            attemptToRun(fm);
+            removeMenusUntilMobileSelect(fm);
+
         }
         free(response);
     }

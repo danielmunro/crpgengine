@@ -69,6 +69,7 @@ typedef enum {
     CLOSE_MENU,
     FIND_TARGET_MENU,
     DEFEND_SELECTED,
+    RESPONSE_TYPE_RUN,
     NO_OP,
 } MenuSelectResponseType;
 

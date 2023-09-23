@@ -20,7 +20,7 @@ void startTiming(Timing *t) {
 }
 
 void stopTiming(Timing *t) {
-    double end =  getTimeInMS();
+    double end = getTimeInMS();
     t->elapsedTime += end - t->start;
     decayNotifications(t->notificationManager, t->elapsedTime);
     if (t->elapsedTime > 1000.0) {

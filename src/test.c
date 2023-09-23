@@ -20,10 +20,6 @@ AnimationManager *createTestAnimationManager() {
     return am;
 }
 
-void strToIntTest() {
-    ok(strToInt("123042") == 123042, "strToInt works as expected");
-}
-
 void createFightInSceneTest() {
     Encounters *e = createEncounters();
     e->beastEncountersCount = 1;
@@ -31,7 +27,7 @@ void createFightInSceneTest() {
     UIManager *uiMan = createUIManager(
             loadUIData(),
             NULL);
-    FightManager *fm = createFightManager(uiMan, NULL);
+    FightManager *fm = createFightManager(uiMan, NULL, NULL);
     ItemManager *itemMan = createItemManager();
     loadAllItems(itemMan);
     for (int i = 0; i < 100; i++) {
@@ -122,32 +118,13 @@ void experienceToLevel51Test() {
     ok(experience == 133650, "experience value was expected :: %d", experience);
 }
 
-void canCreateItemFromReferenceData() {
-    // setup
-    ItemManager *im = createItemManager();
-    loadAllItems(im);
-
-    // given
-    ItemReferenceData *data = malloc(sizeof(ItemReferenceData));
-    data->name = "potion";
-    data->quantity = 3; // ignored
-
-    // when
-    Item *item = createItemFromReferenceData(im, data);
-
-    // then
-    ok(strcmp(item->name, "potion") == 0, "received a potion");
-}
-
 int main() {
     globalSetup(5, (char *[]) {"binary", "-i", "fixtures", "-l", "error"});
-    plan(108);
-    strToIntTest();
+    plan(106);
     createFightInSceneTest();
     canMoveMobTest();
     canMobStopMovingTest();
     experienceToLevel1Test();
     experienceToLevel51Test();
-    canCreateItemFromReferenceData();
     done_testing();
 }

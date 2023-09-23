@@ -20,6 +20,8 @@ typedef struct {
     int beastCount;
     int *cursors;
     double time;
+    bool cancelled;
+    double cancelledAt;
 } Fight;
 
 Encounters *createEncounters() {
@@ -61,13 +63,15 @@ Fight *createFight(
     }
     fight->menu = 0;
     fight->actionCount = 0;
+    fight->cancelled = false;
+    fight->cancelledAt = 0;
     return fight;
 }
 
 void addAction(Fight *fight, Action *action) {
     fight->actions[fight->actionCount] = action;
     if (action->initiator->mob != NULL) {
-        action->initiator->mob->step = ATTACK_QUEUE;
+        action->initiator->mob->step = action->step;
     }
     fight->actionCount++;
 }
@@ -80,7 +84,8 @@ void removeAction(Fight *fight) {
 }
 
 void cancelFight(Fight *fight) {
-    fight->beastCount = 0;
+    fight->cancelled = true;
+    fight->cancelledAt = getTimeInMS();
 }
 
 int isFightDone(Fight *fight) {

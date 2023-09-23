@@ -31,21 +31,23 @@ void drawActionSelectMenuScreen(MenuContext *menuContext) {
             ACTION_SELECT_BOX,
             createActionSelectMenuTextBox);
     drawMenuRect(t->area);
-    drawInMenu(t, actionMenu[ACTION_ATTACK]);
-    drawInMenu(
+    drawScrollableInMenu(t, actionMenu[ACTION_ATTACK], menuContext->cursorLine);
+    drawScrollableInMenu(
             t,
             menuContext->selectedMob->spellCount > 0
-            ? actionMenu[ACTION_MAGIC] : "");
-    drawInMenu(t, actionMenu[ACTION_ITEMS]);
-    drawInMenu(t, actionMenu[ACTION_DEFEND]);
-    drawInMenu(t, actionMenu[ACTION_RUN]);
+            ? actionMenu[ACTION_MAGIC] : "",
+            menuContext->cursorLine);
+    drawScrollableInMenu(t, actionMenu[ACTION_ITEMS], menuContext->cursorLine);
+    drawScrollableInMenu(t, actionMenu[ACTION_DEFEND], menuContext->cursorLine);
+    drawScrollableInMenu(t, actionMenu[ACTION_RUN], menuContext->cursorLine);
+    float h = menuContext->fonts->default_->lineHeight;
     drawRightCursor(
             menuContext->uiSprite,
             (Vector2) {
                     t->area.x,
-                    t->area.y +
-                    menuContext->fonts->default_->lineHeight *
-                    (float) menuContext->cursorLine,
+                    t->area.y
+                    + (h * (float) menuContext->cursorLine)
+                    - getScrollOffset(h, menuContext->cursorLine, t->area.height),
             });
 }
 
@@ -97,7 +99,7 @@ MenuSelectResponse *actionSelectMenuItemSelected(MenuContext *menuContext) {
     } else if (menuContext->cursorLine == ACTION_DEFEND) {
         return createMenuSelectResponse(DEFEND_SELECTED, ACTION_SELECT_FIGHT_MENU);
     } else if (menuContext->cursorLine == ACTION_RUN) {
-        cancelFight(menuContext->fight);
+        return createMenuSelectResponse(RESPONSE_TYPE_RUN, ACTION_SELECT_FIGHT_MENU);
     }
     return createMenuSelectResponse(CLOSE_MENU, ACTION_SELECT_FIGHT_MENU);
 }

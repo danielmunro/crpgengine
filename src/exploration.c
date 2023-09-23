@@ -5,7 +5,7 @@ typedef struct {
 
 typedef struct {
     LayerType type;
-    char data[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
+    int data[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
     int width;
     int height;
     bool showCollisions;
@@ -34,7 +34,7 @@ Exit *createExit() {
     Exit *e = malloc(sizeof(Exit));
     e->to = "";
     e->scene = "";
-    e->area = (Rectangle){0, 0, 0, 0};
+    e->area = (Rectangle) {0, 0, 0, 0};
     return e;
 }
 
@@ -196,7 +196,7 @@ void renderExplorationLayer(Exploration *e, LayerType layer) {
             drawTile(
                     e,
                     renderedLayer,
-                    (int) e->layers[layer]->data[y][x],
+                    e->layers[layer]->data[y][x],
                     x,
                     y
             );
@@ -215,7 +215,8 @@ void unloadLayers(Exploration *e) {
     }
 }
 
-void createMobileLayer(Mobile *mobiles[MAX_MOBILES], Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES], int mobileCount, int mobsByYPosition[MAX_LAYERS]) {
+void createMobileLayer(Mobile *mobiles[MAX_MOBILES], Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES], int mobileCount,
+                       int mobsByYPosition[MAX_LAYERS]) {
     for (int y = 0; y < MAX_LAYERS; y++) {
         for (int i = 0; i < MAX_MOBILES; i++) {
             mobLayer[y][i] = NULL;
@@ -289,7 +290,7 @@ bool isBlockedByMapObject(Exploration *e, Rectangle player) {
     for (int l = 0; l < LAYER_COUNT - 1; l++) {
         for (int y = -1; y < tiles.y; y++) {
             for (int x = -1; x < tiles.x; x++) {
-                int index = (int) e->layers[l]->data[y][x];
+                int index = e->layers[l]->data[y][x];
                 Object *o = getObject(e, index - 1);
                 if (o != NULL) {
                     Rectangle c = GetCollisionRec(player, getObjectSize(e, o, x, y));
@@ -373,13 +374,6 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
     }
 }
 
-void drawNotifications(NotificationManager *nm, FontStyle *font) {
-    for (int i = 0; i < nm->count; i++) {
-        drawMenuRect(nm->notifications[i]->rect);
-        drawTextInArea(nm->notifications[i]->message, nm->notifications[i]->rect, font);
-    }
-}
-
 void drawExplorationView(
         Exploration *e,
         Player *p,
@@ -437,8 +431,8 @@ void explorationSpaceKeyPressed(Player *player, ControlBlock *controlBlocks[MAX_
     addInfo("exploration space key pressed");
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (controlBlocks[i] != NULL
-                && player->engaged
-                && isSpeakOutcome(controlBlocks[i]->then[controlBlocks[i]->progress])) {
+            && player->engaged
+            && isSpeakOutcome(controlBlocks[i]->then[controlBlocks[i]->progress])) {
             dialogEngaged(player, controlBlocks[i]);
             return;
         }

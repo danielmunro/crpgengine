@@ -181,9 +181,9 @@ static const cyaml_schema_field_t actionGaugeFieldSchema[] = {
         CYAML_FIELD_FLOAT(
                 "height", CYAML_FLAG_DEFAULT, ActionGaugeData, height),
         CYAML_FIELD_FLOAT(
-                "x", CYAML_FLAG_DEFAULT, ActionGaugeData , x),
+                "x", CYAML_FLAG_DEFAULT, ActionGaugeData, x),
         CYAML_FIELD_FLOAT(
-                "y", CYAML_FLAG_DEFAULT, ActionGaugeData , y),
+                "y", CYAML_FLAG_DEFAULT, ActionGaugeData, y),
         CYAML_FIELD_END,
 };
 

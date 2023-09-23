@@ -87,3 +87,7 @@ ActionStep getParticipantActionStep(ActionParticipant *participant) {
         return participant->beast->step;
     }
 }
+
+void finishAction(Action *action) {
+    setParticipantActionGauge(action->initiator, 0);
+}

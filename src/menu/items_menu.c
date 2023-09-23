@@ -23,8 +23,8 @@ void drawItemsMenuScreen(MenuContext *menuContext) {
         drawInMenuWithStyle(
                 textBox,
                 menuContext->itemList[i].item->type == ITEM_TYPE_CONSUMABLE
-                    ? menuContext->fonts->default_
-                    : menuContext->fonts->disable,
+                ? menuContext->fonts->default_
+                : menuContext->fonts->disable,
                 buffer);
     }
     drawRightCursor(

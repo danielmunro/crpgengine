@@ -20,8 +20,8 @@ void drawLoadMenuScreen(MenuContext *menuContext) {
             (Vector2) {
                     b->area.x,
                     b->area.y
-                        + ui->menu->padding
-                        + line(menuContext->cursorLine, defaultFont->lineHeight),
+                    + ui->menu->padding
+                    + line(menuContext->cursorLine, defaultFont->lineHeight),
             });
     free(b);
 }

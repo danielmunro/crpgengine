@@ -93,7 +93,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
             addItem(cm->player, findItem(cm->itemManager->items, then->item->name));
         }
         const char *message = malloc(64);
-        sprintf((char *)message, "you received:\n%s", then->item->name);
+        sprintf((char *) message, "you received:\n%s", then->item->name);
         addNotification(
                 cm->notificationManager,
                 createNotification(RECEIVE_QUEST_ITEM, message));
@@ -178,7 +178,7 @@ Then *mapThen(ControlManager *cm, ThenData td) {
     if (td.position != NULL) {
         pos = getPositionFromString(td.position);
     } else {
-        pos = (Vector2){0,0};
+        pos = (Vector2) {0, 0};
     }
     int amount = 0;
     if (hasAmountProperty(td)) {

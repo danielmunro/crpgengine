@@ -31,7 +31,7 @@ Beast *createBeastFromData(BeastData *data) {
     sprintf(filePath, "%s/images/%s", runtimeArgs->indexDir, data->image);
     beast->image = LoadTextureFromImage(LoadImage(filePath));
     beast->attributes = createAttributesFromData(data->attributes);
-    beast->position = (Rectangle){0, 0, 0, 0};
+    beast->position = (Rectangle) {0, 0, 0, 0};
     beast->step = STEP_NONE;
     beast->hitAnimationTimer = 0;
     return beast;

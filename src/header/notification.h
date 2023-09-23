@@ -10,6 +10,7 @@ typedef enum {
     RECEIVE_GOLD,
     LOSE_GOLD,
     SAVED,
+    FIGHT_ACTION,
 } NotificationType;
 
 #endif //CJRPGENGINE_NOTIFICATION_H

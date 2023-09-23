@@ -48,7 +48,7 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
                 }
                 free(collider);
             } else if (argv[i][1] == 's') {
-                runtimeArgs->sceneIndex = strToInt(argv[i + 1]);
+                runtimeArgs->sceneIndex = TextToInteger(argv[i + 1]);
             } else if (argv[i][1] == 'd') {
                 runtimeArgs->dump = true;
             } else if (argv[i][1] == 'e') {

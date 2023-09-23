@@ -22,6 +22,7 @@ typedef struct {
     Beast *targetBeast;
     Mobile *targetMob;
     ActionType actionType;
+    int scrollOffset;
 } MenuContext;
 
 typedef struct {
@@ -92,6 +93,7 @@ MenuContext *createMenuContext(
     context->targetBeast = NULL;
     context->targetMob = NULL;
     context->actionType = NONE;
+    context->scrollOffset = 0;
     return context;
 }
 
@@ -147,15 +149,6 @@ Menu *getCurrentMenu(Menu **menus) {
         }
     }
     return menus[MAX_MENUS - 1];
-}
-
-Menu *getPreviousMenu(Menu **menus) {
-    for (int i = 0; i < MAX_MENUS; i++) {
-        if (menus[i] == NULL) {
-            return i > 1 ? menus[i - 2] : NULL;
-        }
-    }
-    return menus[MAX_MENUS - 2];
 }
 
 int removeMenu(Menu **menus) {
@@ -239,4 +232,14 @@ void drawDownCursor(UISprite *sprites, Vector2 position) {
             position.x + FIGHT_CURSOR_X_OFFSET,
             position.y + FIGHT_CURSOR_Y_OFFSET,
     }, sprites->config->sprite->cursors->down);
+}
+
+void drawAllMenus(MenuContext *mc, Menu **menus) {
+    for (int i = 0; i < MAX_MENUS; i++) {
+        if (menus[i] == NULL) {
+            break;
+        }
+        mc->cursorLine = menus[i]->cursor;
+        menus[i]->draw(mc);
+    }
 }

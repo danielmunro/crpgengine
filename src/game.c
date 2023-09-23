@@ -265,6 +265,6 @@ Game *createGame() {
     free(save);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
     g->spells = loadSpellManager();
-    g->fights = createFightManager(g->ui, g->spells);
+    g->fights = createFightManager(g->ui, g->spells, g->notifications);
     return g;
 }

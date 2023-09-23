@@ -57,25 +57,25 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
         }
         FontStyle *default_ = mc->fonts->default_;
         drawText(getVital(mob->hp, calculateMobileAttributes(mob).hp),
-                (Vector2) {
-                        textBox->area.x + (ui->fightMenu->columns->hp * textBox->area.width),
-                        textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
-                },
-                default_);
+                 (Vector2) {
+                         textBox->area.x + (ui->fightMenu->columns->hp * textBox->area.width),
+                         textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
+                 },
+                 default_);
         drawText(getVital(mob->mana, calculateMobileAttributes(mob).mana),
-                (Vector2) {
-                        textBox->area.x + (ui->fightMenu->columns->mana * textBox->area.width),
-                        textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
-                },
-                default_);
+                 (Vector2) {
+                         textBox->area.x + (ui->fightMenu->columns->mana * textBox->area.width),
+                         textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
+                 },
+                 default_);
         Rectangle rect = (Rectangle) {
                 textBox->area.x
-                        + ui->fightMenu->actionGauge->rect.x
-                        + (ui->fightMenu->columns->actionGauge * textBox->area.width),
+                + ui->fightMenu->actionGauge->rect.x
+                + (ui->fightMenu->columns->actionGauge * textBox->area.width),
                 textBox->area.y
-                        + ui->menu->padding
-                        + ui->fightMenu->actionGauge->rect.y
-                        + line(i, default_->lineHeight),
+                + ui->menu->padding
+                + ui->fightMenu->actionGauge->rect.y
+                + line(i, default_->lineHeight),
                 ui->fightMenu->actionGauge->rect.width,
                 ui->fightMenu->actionGauge->rect.height,
         };

@@ -241,12 +241,27 @@ float line(int line, float lineHeight) {
     return (float) line * lineHeight;
 }
 
-void drawInMenuWithStyle(TextBox *tb, FontStyle *fs, const char *text) {
-    drawText(text, (Vector2) {
-            tb->area.x + ui->menu->padding,
-            tb->area.y + line(tb->cursor, fs->lineHeight) + ui->menu->padding
-    }, fs);
+void drawScrollableInMenuWithStyle(TextBox *tb, FontStyle *fs, const char *text, int menuCursor) {
+    float offset = getScrollOffset(fs->lineHeight, menuCursor, tb->area.height);
+    float y = tb->area.y
+              + line(tb->cursor, fs->lineHeight)
+              + ui->menu->padding
+              - offset;
+    if (y >= tb->area.y) {
+        drawText(text, (Vector2) {
+                tb->area.x + ui->menu->padding,
+                y,
+        }, fs);
+    }
     tb->cursor++;
+}
+
+void drawInMenuWithStyle(TextBox *tb, FontStyle *fs, const char *text) {
+    drawScrollableInMenuWithStyle(tb, fs, text, 0);
+}
+
+void drawScrollableInMenu(TextBox *textBox, const char *text, int cursorLine) {
+    drawScrollableInMenuWithStyle(textBox, textBox->fontStyle, text, cursorLine);
 }
 
 void drawInMenu(TextBox *textBox, const char *text) {

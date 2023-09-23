@@ -20,6 +20,7 @@ typedef enum {
     ATTACK,
     CAST,
     ITEM,
+    RUN,
     NONE,
 } ActionType;
 
@@ -29,11 +30,15 @@ typedef enum {
     ATTACK_STEP_OUT,
     ATTACK_ACTION,
     ATTACK_RETURN,
+    ACTION_STEP_RUN,
 } ActionStep;
 
 #define STEP_OUT_TIMEOUT_MS 300
 #define ACTION_TIMEOUT_MS 100
 #define RETURN_TIMEOUT_MS 300
+#define RUN_TIMEOUT_MS 800
+#define FIGHT_END_TIMEOUT_MS 1000
+#define FIGHT_NOTIFICATION_TIMEOUT 1000
 
 #define HIT_ANIMATION_TIMER_MS 300
 

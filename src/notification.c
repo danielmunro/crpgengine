@@ -33,7 +33,9 @@ void addNotification(NotificationManager *nm, Notification *n) {
         if (nm->notifications[i] == NULL) {
             n->rect = (Rectangle) {
                     (float) ui->screen->width - 300 - ui->menu->padding,
-                    (float) (ui->screen->height - 200 - (80 * i)),
+                    (float) ((float) ui->screen->height
+                            - (ui->menu->padding * (float) (i + 1))
+                            - (float) (NOTIFICATION_HEIGHT * (i + 1))),
                     300,
                     NOTIFICATION_HEIGHT,
             };
@@ -75,5 +77,12 @@ void decayNotifications(NotificationManager *nm, double timeInterval) {
         if (nm->slideDown < 0) {
             nm->slideDown = 0;
         }
+    }
+}
+
+void drawNotifications(NotificationManager *nm, FontStyle *font) {
+    for (int i = 0; i < nm->count; i++) {
+        drawMenuRect(nm->notifications[i]->rect);
+        drawTextInArea(nm->notifications[i]->message, nm->notifications[i]->rect, font);
     }
 }

@@ -31,22 +31,22 @@ void drawPartyItemConsumeMenuScreen(MenuContext *mc) {
         drawPartyItemConsumerPlayer(mob, pos);
         drawText(
                 mob->name,
-                (Vector2) {pos.x + ui->menu->padding, pos.y },
+                (Vector2) {pos.x + ui->menu->padding, pos.y},
                 f);
         drawText(
                 getVital(mob->hp, calculateMobileAttributes(mob).hp),
-                (Vector2) {pos.x + ui->menu->padding, pos.y + line(1, f->lineHeight) },
+                (Vector2) {pos.x + ui->menu->padding, pos.y + line(1, f->lineHeight)},
                 f);
         drawText(
                 getVital(mob->mana, calculateMobileAttributes(mob).mana),
-                (Vector2) {pos.x + ui->menu->padding, pos.y + line(2, f->lineHeight) },
+                (Vector2) {pos.x + ui->menu->padding, pos.y + line(2, f->lineHeight)},
                 f);
         if (mc->cursorLine == i) {
             drawRightCursor(
                     mc->uiSprite,
                     (Vector2) {
-                        pos.x - ui->menu->padding,
-                        pos.y - ui->menu->padding,
+                            pos.x - ui->menu->padding,
+                            pos.y - ui->menu->padding,
                     });
         }
     }

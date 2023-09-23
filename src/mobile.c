@@ -22,6 +22,7 @@ typedef struct {
     int spellCount;
     ActionStep step;
     float hitAnimationTimer;
+    bool isFleeing;
 } Mobile;
 
 typedef struct {
@@ -86,6 +87,7 @@ Mobile *createMobile(
     mobile->spellCount = spellCount;
     mobile->step = STEP_NONE;
     mobile->hitAnimationTimer = 0;
+    mobile->isFleeing = false;
     return mobile;
 }
 
@@ -260,10 +262,10 @@ void drawAvatar(Mobile *mob, Vector2 position) {
     DrawTextureRec(
             mob->avatar->image,
             (Rectangle) {
-                0,
-                0,
-                (float) mob->avatar->image.width,
-                (float) mob->avatar->image.height,
+                    0,
+                    0,
+                    (float) mob->avatar->image.width,
+                    (float) mob->avatar->image.height,
             },
             position,
             WHITE);
