@@ -39,11 +39,9 @@ FightInScene *createFightInScene() {
     fightInScene->fm = createFightManager(uiMan, sm, NULL);
     fightInScene->im = createItemManager();
     loadAllItems(fightInScene->im);
-    AnimationManager *am = createAnimationManager();
-    loadAllAnimations(am, loadSpritesheetManager());
     fightInScene->mm = createMobileManager(
             sm,
-            am);
+            createTestAnimationManager());
     loadPlayerMobiles(fightInScene->mm);
     return fightInScene;
 }
