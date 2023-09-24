@@ -1,4 +1,4 @@
-#include "header.h"
+#include "src/headers/main.h"
 
 int main(int argc, char *argv[]) {
     globalSetup(argc, argv);
