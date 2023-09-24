@@ -32,9 +32,9 @@
 #define MAX_AUDIO 1024
 #define MAX_SPRITES 1024
 
-#include "log.c"
-#include "util.c"
-#include "runtime_args.c"
+#include "src/util/log.c"
+#include "src/util/util.c"
+#include "src/util/runtime_args.c"
 #include "persistence/yaml/spritesheet.c"
 #include "persistence/yaml/animation.c"
 #include "persistence/yaml/music.c"
@@ -102,8 +102,8 @@
 #include "draw_fight.c"
 #include "src/persistence/loader.c"
 #include "game.c"
-#include "validate.c"
-#include "dump.c"
-#include "global_setup.c"
+#include "src/util/validate.c"
+#include "src/util/dump.c"
+#include "src/util/global_setup.c"
 
 #endif /* CJRPGENGINE_H_INCLUDED */
