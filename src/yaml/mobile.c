@@ -8,8 +8,10 @@ typedef struct {
     int hp;
     int mana;
     AttributesData *attributes;
-    const char **spells;
+    SpellData *spells;
     int spells_count;
+    const char **startSpells;
+    int startSpells_count;
 } MobileData;
 
 static const cyaml_schema_value_t stringPtrSchema = {
@@ -33,8 +35,11 @@ static const cyaml_schema_field_t mobileTopMappingField[] = {
                 "attributes", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
                 MobileData, attributes, attributesFieldSchema),
         CYAML_FIELD_SEQUENCE(
-                "spells", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
-                MobileData, spells, &stringPtrSchema, 0, CYAML_UNLIMITED),
+                "startSpells", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, MobileData, startSpells,
+                &stringPtrSchema, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_SEQUENCE(
+                "spells", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, MobileData, spells,
+                &spellSchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_INT(
                 "hp", CYAML_FLAG_OPTIONAL, MobileData, hp),
         CYAML_FIELD_INT(

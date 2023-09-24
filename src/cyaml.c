@@ -65,7 +65,7 @@ MobileData *loadMobYaml(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &mobileTopSchema, (cyaml_data_t **) &mob, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing mob yaml\n");
+        fprintf(stderr, "error parsing mob yaml for file :: %s\n", filePath);
     }
     return mob;
 }

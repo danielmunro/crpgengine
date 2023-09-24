@@ -7,9 +7,9 @@ direction: up
 hp: 20
 mana: 10
 attributes:
-  dex: 1
-  str: 1
+  dex: 4
+  str: 3
   hp: 20
   mana: 10
-spells:
+startSpells:
   - cure

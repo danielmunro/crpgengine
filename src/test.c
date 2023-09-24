@@ -27,15 +27,22 @@ void createFightInSceneTest() {
     UIManager *uiMan = createUIManager(
             loadUIData(),
             NULL);
-    FightManager *fm = createFightManager(uiMan, NULL, NULL);
+    SpellManager *sm = loadSpellManager();
+    FightManager *fm = createFightManager(uiMan, sm, NULL);
     ItemManager *itemMan = createItemManager();
     loadAllItems(itemMan);
+    AnimationManager *am = createAnimationManager();
+
+    loadAllAnimations(am, loadSpritesheetManager());
+    MobileManager *mm = createMobileManager(
+            sm,
+            am);
+    loadPlayerMobiles(mm);
     for (int i = 0; i < 100; i++) {
         createFightFromEncounters(
                 fm,
                 e,
-                createNewPlayer(
-                        createMobileManager(NULL), itemMan));
+                createNewPlayer(mm, itemMan));
         Fight *f = fm->fight;
         char message[MAX_LOG_LINE_LENGTH];
         sprintf(message, "beast count is within expected range: %d", f->beastCount);
@@ -50,7 +57,7 @@ void canMoveMobTest() {
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
-    const char **spells = calloc(0, sizeof(const char *));
+    SpellData *spells = calloc(0, sizeof(SpellData));
 
     Mobile *mob = createMobile(
             "test",
@@ -62,7 +69,7 @@ void canMoveMobTest() {
             20,
             20,
             createStartingAttributes(),
-            spells,
+            mapDataToSpells(NULL, spells, 0),
             0);
 
     // when
@@ -80,7 +87,7 @@ void canMobStopMovingTest() {
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
-    const char **spells = calloc(0, sizeof(const char *));
+    SpellData *spells = calloc(0, sizeof(SpellData));
     Mobile *mob = createMobile(
             "test",
             "test",
@@ -91,7 +98,7 @@ void canMobStopMovingTest() {
             STARTING_HP,
             STARTING_MANA,
             createStartingAttributes(),
-            spells,
+            mapDataToSpells(NULL, spells, 0),
             0);
 
     // when

@@ -40,7 +40,7 @@ void loadMobiles(MobileManager *mm, Scene *scene, const char *sceneDirectory) {
         MobileData *mobData = loadMobYaml(filePath);
         Animation *animations[MAX_ANIMATIONS];
         loadAnimationsByName(mm->animationManager, mobData->animations, animations);
-        Mobile *mob = createMobileFromData(mobData, animations);
+        Mobile *mob = createMobileFromData(mm, mobData, animations);
         addMobileToManager(mm, mob);
         addMobileToExploration(scene->exploration, mob);
         free(filePath);
@@ -65,7 +65,7 @@ void loadPlayerMobiles(MobileManager *mm) {
         MobileData *mobData = loadMobYaml(filePath);
         Animation *animations[MAX_ANIMATIONS];
         loadAnimationsByName(mm->animationManager, mobData->animations, animations);
-        Mobile *mob = createMobileFromData(mobData, animations);
+        Mobile *mob = createMobileFromData(mm, mobData, animations);
         addPlayerMobileToManager(mm, mob);
         free(mobData);
     }

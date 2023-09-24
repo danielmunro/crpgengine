@@ -45,8 +45,7 @@ SpellData createDataFromSpell(Spell *spell) {
 }
 
 SpellData *mapSpellsToData(Spell **spells, int spellCount) {
-    SpellData *spellData = (SpellData *) malloc(spellCount * sizeof(SpellData));
-//    SpellData *spellData = (SpellData *) calloc(spellCount, sizeof(SpellData));
+    SpellData *spellData = calloc(spellCount, sizeof(SpellData));
     for (int i = 0; i < spellCount; i++) {
         spellData[i] = createDataFromSpell(spells[i]);
     }

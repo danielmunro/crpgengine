@@ -11,5 +11,5 @@ attributes:
   str: 1
   hp: 20
   mana: 10
-spells:
+startSpells:
   - fire

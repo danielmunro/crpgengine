@@ -11,5 +11,5 @@ attributes:
   str: 3
   hp: 20
   mana: 10
-spells:
+startSpells:
   - cure

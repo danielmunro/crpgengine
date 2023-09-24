@@ -215,7 +215,7 @@ SaveData *initializePlayer(Game *g) {
     SaveData *save = NULL;
     if (FileExists(saveFilePath) && !runtimeArgs->forceNewGame) {
         save = loadSaveData(saveFilePath);
-        g->player = mapSaveDataToPlayer(g->animations, save);
+        g->player = mapSaveDataToPlayer(g->spells, g->animations, save);
     } else {
         g->player = createNewPlayer(g->mobiles, g->items);
     }
@@ -230,7 +230,7 @@ SaveData *initializePlayer(Game *g) {
 }
 
 void loadAllMobiles(Game *g) {
-    g->mobiles = createMobileManager(g->animations);
+    g->mobiles = createMobileManager(g->spells, g->animations);
     loadPlayerMobiles(g->mobiles);
 }
 
@@ -249,6 +249,7 @@ Game *createGame() {
     g->beastiary = loadBeastiary();
     g->items = createItemManager();
     loadAllItems(g->items);
+    g->spells = loadSpellManager();
     loadAllMobiles(g);
     SaveData *save = initializePlayer(g);
     g->notifications = createNotificationManager();
@@ -264,7 +265,6 @@ Game *createGame() {
     addDebug("done creating game object");
     free(save);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
-    g->spells = loadSpellManager();
     g->fights = createFightManager(g->ui, g->spells, g->notifications);
     return g;
 }

@@ -93,6 +93,8 @@
 #include "tilemap_xmlreader.c"
 #include "xmlparser.c"
 #include "spell_manager.c"
+#include "mobile_manager.c"
+#include "player_manager.c"
 #include "ui_manager.c"
 #include "fight_manager.c"
 #include "control_manager.c"

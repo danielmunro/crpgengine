@@ -18,30 +18,12 @@ typedef struct {
     ItemData **equipment;
     int hp;
     int mana;
-    const char **spells;
+    Spell **spells;
     int spellCount;
     ActionStep step;
     float hitAnimationTimer;
     bool isFleeing;
 } Mobile;
-
-typedef struct {
-    AnimationManager *animationManager;
-    Mobile **mobiles;
-    int mobileCount;
-    Mobile **playableMobiles;
-    int playableMobileCount;
-} MobileManager;
-
-MobileManager *createMobileManager(AnimationManager *am) {
-    MobileManager *m = malloc(sizeof(MobileManager));
-    m->animationManager = am;
-    m->mobiles = calloc(MAX_MOBILES, sizeof(Mobile));
-    m->mobileCount = 0;
-    m->playableMobiles = calloc(MAX_MOBILES, sizeof(Mobile));
-    m->playableMobileCount = 0;
-    return m;
-}
 
 Animation *getMobAnimation(Mobile *mob) {
     return findAnimation(mob->animations, mob->direction);
@@ -57,7 +39,7 @@ Mobile *createMobile(
         int hp,
         int mana,
         Attributes *attributes,
-        const char **spells,
+        Spell **spells,
         int spellCount) {
     Mobile *mobile = malloc(sizeof(Mobile));
     mobile->id = &id[0];
@@ -89,42 +71,6 @@ Mobile *createMobile(
     mobile->hitAnimationTimer = 0;
     mobile->isFleeing = false;
     return mobile;
-}
-
-Mobile *createMobileFromData(MobileData *data, Animation *animations[MAX_ANIMATIONS]) {
-    Mobile *mob = createMobile(
-            data->id,
-            data->name,
-            getPositionFromString(data->position),
-            getDirectionFromString(data->direction),
-            animations,
-            createAvatar(data->avatar),
-            data->hp,
-            data->mana,
-            createAttributesFromData(data->attributes),
-            data->spells,
-            data->spells_count);
-    return mob;
-}
-
-void addMobileToManager(MobileManager *mm, Mobile *mob) {
-    mm->mobiles[mm->mobileCount] = mob;
-    mm->mobileCount++;
-}
-
-void addPlayerMobileToManager(MobileManager *mm, Mobile *mob) {
-    mm->playableMobiles[mm->playableMobileCount] = mob;
-    mm->playableMobileCount++;
-}
-
-Mobile *findMobById(MobileManager *mm, const char *id) {
-    for (int i = 0; i < mm->mobileCount; i++) {
-        if (strcmp(mm->mobiles[i]->id, id) == 0) {
-            return mm->mobiles[i];
-        }
-    }
-    addError("mob not found: %s", id);
-    exit(EXIT_MOBILE_NOT_FOUND);
 }
 
 void resetMoving(Mobile *mob) {

@@ -20,7 +20,7 @@ void drawMagicSelectMenuScreen(MenuContext *menuContext) {
     Mobile *m = menuContext->selectedMob;
     for (int i = 0; i < m->spellCount; i++) {
         FontStyle *fs = canApplyCost(m, menuContext->spells[i]->cost) ? defaultFont : disabledFont;
-        drawInMenuWithStyle(t, fs, m->spells[i]);
+        drawInMenuWithStyle(t, fs, Spells[m->spells[i]->type]);
     }
     drawRightCursor(
             menuContext->uiSprite,

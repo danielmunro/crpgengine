@@ -1,0 +1,17 @@
+spells:
+- type: cure
+  intent: help
+  level: 1
+  cost:
+    mana: 10
+  impact:
+    hp: 20
+  levelModifier: 3.1
+- type: fire
+  intent: harm
+  level: 1
+  cost:
+    mana: 10
+  impact:
+    hp: 20
+  levelModifier: 2.8
