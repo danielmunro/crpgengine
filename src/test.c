@@ -20,30 +20,46 @@ AnimationManager *createTestAnimationManager() {
     return am;
 }
 
-void createFightInSceneTest() {
-    Encounters *e = createEncounters();
-    e->beastEncountersCount = 1;
-    e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
+typedef struct {
+    Encounters *e;
+    FightManager *fm;
+    MobileManager *mm;
+    ItemManager *im;
+} FightInScene;
+
+FightInScene *createFightInScene() {
+    FightInScene *fightInScene = malloc(sizeof(FightInScene));
+    fightInScene->e = createEncounters();
+    fightInScene->e->beastEncountersCount = 1;
+    fightInScene->e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
     UIManager *uiMan = createUIManager(
             loadUIData(),
             NULL);
     SpellManager *sm = loadSpellManager();
-    FightManager *fm = createFightManager(uiMan, sm, NULL);
-    ItemManager *itemMan = createItemManager();
-    loadAllItems(itemMan);
+    fightInScene->fm = createFightManager(uiMan, sm, NULL);
+    fightInScene->im = createItemManager();
+    loadAllItems(fightInScene->im);
     AnimationManager *am = createAnimationManager();
-
     loadAllAnimations(am, loadSpritesheetManager());
-    MobileManager *mm = createMobileManager(
+    fightInScene->mm = createMobileManager(
             sm,
             am);
-    loadPlayerMobiles(mm);
+    loadPlayerMobiles(fightInScene->mm);
+    return fightInScene;
+}
+
+Fight *createFightFromFightInScene(FightInScene *fightInScene) {
+    return createFightFromEncounters(
+            fightInScene->fm,
+            fightInScene->e,
+            createNewPlayer(fightInScene->mm, fightInScene->im));
+}
+
+void createFightInSceneTest() {
+    FightInScene *fightInScene = createFightInScene();
     for (int i = 0; i < 100; i++) {
-        createFightFromEncounters(
-                fm,
-                e,
-                createNewPlayer(mm, itemMan));
-        Fight *f = fm->fight;
+        createFightFromFightInScene(fightInScene);
+        Fight *f = fightInScene->fm->fight;
         char message[MAX_LOG_LINE_LENGTH];
         sprintf(message, "beast count is within expected range: %d", f->beastCount);
         ok(0 < f->beastCount && f->beastCount <= 9, message);
