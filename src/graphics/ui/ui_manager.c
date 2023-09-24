@@ -18,6 +18,20 @@ int getMenuList(UIManager *uiMan) {
                     getDefaultNextOption,
                     partyMenuItemSelected),
             createMenu(
+                    PARTY_SELECT_MENU,
+                    getPartySelectMenuCursorLength,
+                    drawPartySelectMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
+                    partySelectMenuItemSelected),
+            createMenu(
+                    MAGIC_MENU,
+                    getItemsCursorLength,
+                    drawItemsMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
+                    itemMenuItemSelected),
+            createMenu(
                     ITEMS_MENU,
                     getItemsCursorLength,
                     drawItemsMenuScreen,

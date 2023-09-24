@@ -88,6 +88,7 @@ typedef enum {
     ITEMS_BOX,
     LOAD_BOX,
     PARTY_ITEM_CONSUME_BOX,
+    PARTY_SELECT_BOX,
     IN_GAME_MENU_BOX,
     PARTY_BOX,
     QUIT_BOX,

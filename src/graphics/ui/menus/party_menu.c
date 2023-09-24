@@ -63,6 +63,8 @@ MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext) {
     int c = menuContext->cursorLine;
     if (strcmp(PartyMenuItems[c], PARTY_MENU_ITEMS) == 0) {
         return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
+    } else if (strcmp(PartyMenuItems[c], PARTY_MENU_MAGIC) == 0) {
+        return createMenuSelectResponse(OPEN_MENU, PARTY_SELECT_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_SAVE) == 0) {
         save(menuContext->player, menuContext->scene);
         return createMenuSelectResponse(OPEN_MENU, ACKNOWLEDGE_MENU);
