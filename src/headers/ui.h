@@ -30,6 +30,7 @@
 
 #define MAX_LINE_BUFFER 128
 #define MAX_MESSAGE_BUFFER 1024
+#define MAX_VITALS_LENGTH 14
 
 const char *TextAreaTypes[] = {
         "unknown",

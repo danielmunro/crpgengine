@@ -56,13 +56,18 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
             }
         }
         FontStyle *default_ = mc->fonts->default_;
-        drawText(getVital(mob->hp, calculateMobileAttributes(mob).hp),
+        Attributes calculated = calculateMobileAttributes(mob);
+        char hp[MAX_VITALS_LENGTH];
+        getVital(mob->hp, calculated.hp, hp);
+        drawText(hp,
                  (Vector2) {
                          textBox->area.x + (ui->fightMenu->columns->hp * textBox->area.width),
                          textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)
                  },
                  default_);
-        drawText(getVital(mob->mana, calculateMobileAttributes(mob).mana),
+        char mana[MAX_VITALS_LENGTH];
+        getVital(mob->mana, calculated.mana, mana);
+        drawText(mana,
                  (Vector2) {
                          textBox->area.x + (ui->fightMenu->columns->mana * textBox->area.width),
                          textBox->area.y + ui->menu->padding + ((float) i * fs->lineHeight)

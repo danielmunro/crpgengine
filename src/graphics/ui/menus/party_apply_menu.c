@@ -26,12 +26,17 @@ void drawPartyApplyMenuScreen(MenuContext *mc) {
                 mob->name,
                 (Vector2) {pos.x + ui->menu->padding, pos.y},
                 f);
+        Attributes calculated = calculateMobileAttributes(mob);
+        char hp[MAX_VITALS_LENGTH];
+        getVital(mob->hp, calculated.hp, hp);
         drawText(
-                getVital(mob->hp, calculateMobileAttributes(mob).hp),
+                hp,
                 (Vector2) {pos.x + ui->menu->padding, pos.y + line(1, f->lineHeight)},
                 f);
+        char mana[MAX_VITALS_LENGTH];
+        getVital(mob->mana, calculated.mana, mana);
         drawText(
-                getVital(mob->mana, calculateMobileAttributes(mob).mana),
+                mana,
                 (Vector2) {pos.x + ui->menu->padding, pos.y + line(2, f->lineHeight)},
                 f);
         if (mc->cursorLine == i) {

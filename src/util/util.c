@@ -205,10 +205,8 @@ Color getColorFromString(const char *color) {
     };
 }
 
-char *getVital(int current, int max) {
-    char *vital = malloc(sizeof(char *));
-    sprintf(vital, "%d/%d", current, max);
-    return vital;
+void getVital(int current, int max, char result[MAX_VITALS_LENGTH]) {
+    sprintf(result, "%d/%d", current, max);
 }
 
 float getScrollOffset(float lineHeight, int cursorLine, float areaHeight) {

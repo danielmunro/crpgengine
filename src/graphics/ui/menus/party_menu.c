@@ -15,12 +15,16 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
                 (Vector2) {column1, y},
                 defaultFont);
         Attributes calculated = calculateMobileAttributes(mob);
+        char hp[MAX_VITALS_LENGTH];
+        getVital(mob->hp, calculated.hp, hp);
         drawText(
-                getVital(mob->hp, calculated.hp),
+                hp,
                 (Vector2) {column1, y + line(1, defaultFont->lineHeight)},
                 defaultFont);
+        char mana[MAX_VITALS_LENGTH];
+        getVital(mob->mana, calculated.mana, mana);
         drawText(
-                getVital(mob->mana, calculated.mana),
+                mana,
                 (Vector2) {column1, y + line(2, defaultFont->lineHeight)},
                 defaultFont);
     }
