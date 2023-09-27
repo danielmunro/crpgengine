@@ -26,11 +26,11 @@ int getMenuList(UIManager *uiMan) {
                     partySelectMenuItemSelected),
             createMenu(
                     MAGIC_MENU,
-                    getItemsCursorLength,
-                    drawItemsMenuScreen,
+                    getMagicMenuCursorLength,
+                    drawMagicMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
-                    itemMenuItemSelected),
+                    magicMenuItemSelected),
             createMenu(
                     ITEMS_MENU,
                     getItemsCursorLength,
@@ -102,12 +102,12 @@ int getMenuList(UIManager *uiMan) {
                     getNextMobileTargetCursorPosition,
                     mobileTargetMenuItemSelected),
             createMenu(
-                    PARTY_ITEM_CONSUME_MENU,
-                    getPartyItemConsumeMenuCursorLength,
-                    drawPartyItemConsumeMenuScreen,
+                    PARTY_APPLY_MENU,
+                    getPartyApplyMenuCursorLength,
+                    drawPartyApplyMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
-                    partyItemConsumeMenuItemSelected),
+                    partyApplyMenuItemSelected),
             createMenu(
                     ITEMS_FIGHT_MENU,
                     getItemSelectCursorLength,

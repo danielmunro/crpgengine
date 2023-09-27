@@ -27,7 +27,7 @@ typedef enum {
     PARTY_MENU,
     ITEMS_MENU,
     MAGIC_MENU,
-    PARTY_ITEM_CONSUME_MENU,
+    PARTY_APPLY_MENU,
     PARTY_SELECT_MENU,
     LOAD_MENU,
     SAVE_MENU,
@@ -74,6 +74,7 @@ typedef enum {
     FIND_TARGET_MENU,
     DEFEND_SELECTED,
     RESPONSE_TYPE_RUN,
+    PARTY_MEMBER_SELECTED,
     NO_OP,
 } MenuSelectResponseType;
 

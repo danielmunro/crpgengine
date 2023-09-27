@@ -216,3 +216,9 @@ void drawAvatar(Mobile *mob, Vector2 position) {
             position,
             WHITE);
 }
+
+void executeSpellOnMobile(Mobile *mob, Spell *spell) {
+    mob->hp += (int) getSpellAttributeAmount(spell, spell->impact->hp);
+    mob->mana += (int) getSpellAttributeAmount(spell, spell->impact->mana);
+    normalizeVitalsForMobile(mob);
+}

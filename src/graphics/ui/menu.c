@@ -209,6 +209,11 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
         addMenu(menus, findMenu(allMenus, response->menuType));
     } else if (response->type == CLOSE_MENU) {
         removeMenu(menus);
+    } else if (response->type == PARTY_MEMBER_SELECTED) {
+        Menu *partyMenu = findMenu(menus, PARTY_MENU);
+        if (strcmp(PartyMenuItems[partyMenu->cursor], PARTY_MENU_MAGIC) == 0) {
+            addMenu(menus, findMenu(allMenus, MAGIC_MENU));
+        }
     }
     return response;
 }

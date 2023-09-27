@@ -1,6 +1,7 @@
+// @todo refactor away these functions
 TextBox *createPartySelectTextBox(MenuContext *mc) {
     return createTextBox(
-            ui->textAreas->right,
+            ui->textAreas->left,
             mc->fonts->default_,
             PARTY_SELECT_BOX);
 }
@@ -46,22 +47,6 @@ int getPartySelectMenuCursorLength(MenuContext *menuContext) {
 }
 
 MenuSelectResponse *partySelectMenuItemSelected(MenuContext *menuContext) {
-    return createMenuSelectResponse(CLOSE_MENU, PARTY_SELECT_MENU);
-//
-//
-//    int c = menuContext->cursorLine;
-//    if (strcmp(PartyMenuItems[c], PARTY_MENU_ITEMS) == 0) {
-//        return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
-//    } else if (strcmp(PartyMenuItems[c], PARTY_MENU_MAGIC) == 0) {
-//        return createMenuSelectResponse(OPEN_MENU, MAGIC_MENU);
-//    } else if (strcmp(PartyMenuItems[c], PARTY_MENU_SAVE) == 0) {
-//        save(menuContext->player, menuContext->scene);
-//        return createMenuSelectResponse(OPEN_MENU, ACKNOWLEDGE_MENU);
-//    } else if (strcmp(PartyMenuItems[c], PARTY_MENU_QUIT) == 0) {
-//        return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);
-//    } else if (strcmp(PartyMenuItems[c], PARTY_MENU_LOAD) == 0) {
-//        return createMenuSelectResponse(OPEN_MENU, LOAD_MENU);
-//    }
-//    fprintf(stderr, "menu type not found :: %d", c);
-//    exit(EXIT_MENU_NOT_DEFINED);
+    menuContext->selectedMob = menuContext->player->party[menuContext->cursorLine];
+    return createMenuSelectResponse(PARTY_MEMBER_SELECTED, PARTY_SELECT_MENU);
 }

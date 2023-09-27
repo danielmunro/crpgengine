@@ -40,9 +40,11 @@ typedef struct {
     Rectangle full;
     Rectangle bottom;
     Rectangle right;
+    Rectangle left;
     Rectangle bottomLeft;
     Rectangle bottomMidRight;
     Rectangle bottomMid;
+    Rectangle midRight;
 } TextAreasConfig;
 
 typedef struct {
@@ -113,6 +115,7 @@ void createUIConfig(UIData *data) {
             data->fightMenu->actionGauge->height,
     };
 
+    // @todo just do a direct mapping instead of array -> struct
     ui->textAreas = malloc(sizeof(TextAreasConfig));
     ui->textAreas->small = findTextAreaRect(
             TEXT_AREA_SMALL,
@@ -131,6 +134,10 @@ void createUIConfig(UIData *data) {
             data->textAreas,
             data->textAreasCount);
     ui->textAreas->right = findTextAreaRect(
+            TEXT_AREA_LEFT,
+            data->textAreas,
+            data->textAreasCount);
+    ui->textAreas->right = findTextAreaRect(
             TEXT_AREA_RIGHT,
             data->textAreas,
             data->textAreasCount);
@@ -144,6 +151,10 @@ void createUIConfig(UIData *data) {
             data->textAreasCount);
     ui->textAreas->bottomMid = findTextAreaRect(
             TEXT_AREA_BOTTOM_MID,
+            data->textAreas,
+            data->textAreasCount);
+    ui->textAreas->midRight = findTextAreaRect(
+            TEXT_AREA_MID_RIGHT,
             data->textAreas,
             data->textAreasCount);
 }

@@ -68,3 +68,9 @@ void normalizeVitalsForBeast(Beast *beast) {
         beast->mana = calculated.mana;
     }
 }
+
+void executeSpellOnBeast(Beast *beast, Spell *spell) {
+    beast->hp += (int) getSpellAttributeAmount(spell, spell->impact->hp);
+    beast->mana += (int) getSpellAttributeAmount(spell, spell->impact->mana);
+    normalizeVitalsForBeast(beast);
+}

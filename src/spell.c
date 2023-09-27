@@ -1,5 +1,6 @@
 typedef struct {
     SpellType type;
+    const char *name;
     Intent intent;
     int level;
     Attributes *cost;
@@ -25,6 +26,7 @@ SpellType getSpellTypeFromString(const char *type) {
 Spell *createSpellFromData(SpellData data) {
     Spell *s = malloc(sizeof(Spell));
     s->type = getSpellTypeFromString(data.type);
+    s->name = data.type;
     s->intent = getIntentFromString(data.intent);
     s->level = data.level;
     s->cost = createAttributesFromData(data.cost);
@@ -60,4 +62,20 @@ Spell *findSpell(Spell **spells, SpellType type) {
     }
     fprintf(stderr, "spell not found");
     exit(EXIT_UNABLE_TO_FIND_SPELL);
+}
+
+
+int getSpellAttributeAmount(Spell *spell, int base) {
+    if (base == 0) {
+        return 0;
+    }
+    int amount = base + (spell->level * (int) spell->levelModifier);
+    if (spell->intent == INTENT_HARM) {
+        return -amount;
+    } else if (spell->intent == INTENT_HELP) {
+        return amount;
+    } else {
+        fprintf(stderr, "unknown intent in getSpellAttributeAmount");
+        exit(EXIT_UNKNOWN_INTENT);
+    }
 }

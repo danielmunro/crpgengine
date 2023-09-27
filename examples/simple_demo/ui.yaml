@@ -62,6 +62,11 @@ textAreas:
     y: 0
     width: .25
     height: 1
+  - type: left
+    x: 0
+    y: 0
+    width: .25
+    height: 1
   - type: bottomLeft
     x: 0
     y: .75
@@ -77,6 +82,11 @@ textAreas:
     y: .75
     width: .5
     height: .25
+  - type: midRight
+    x: .25
+    y: 0
+    width: .75
+    height: 1.0
 
 fonts:
   default:

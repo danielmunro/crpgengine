@@ -1,24 +1,24 @@
-int getPartyItemConsumeMenuCursorLength(MenuContext *mc) {
+int getPartyApplyMenuCursorLength(MenuContext *mc) {
     return mc->player->partyCount;
 }
 
-TextBox *createPartyItemConsumeTextBox(MenuContext *mc) {
+TextBox *createPartyApplyTextBox(MenuContext *mc) {
     return createTextBox(
             ui->textAreas->right,
             mc->fonts->default_,
-            PARTY_ITEM_CONSUME_BOX);
+            PARTY_APPLY_BOX);
 }
 
-void drawPartyItemConsumerPlayer(Mobile *mob, Vector2 pos) {
+void drawPartyApplyPlayer(Mobile *mob, Vector2 pos) {
     Animation *a = findAnimation(mob->animations, DOWN);
     drawAnimation(a, pos);
 }
 
-void drawPartyItemConsumeMenuScreen(MenuContext *mc) {
+void drawPartyApplyMenuScreen(MenuContext *mc) {
     TextBox *t = findOrCreateTextBox(
             mc,
-            PARTY_ITEM_CONSUME_BOX,
-            createPartyItemConsumeTextBox);
+            PARTY_APPLY_BOX,
+            createPartyApplyTextBox);
     drawMenuRect(t->area);
     float quarter = (float) ui->screen->height / 4;
     FontStyle *f = mc->fonts->default_;
@@ -28,7 +28,7 @@ void drawPartyItemConsumeMenuScreen(MenuContext *mc) {
                 ui->menu->padding + t->area.x,
                 ui->menu->padding + (quarter * (float) i),
         };
-        drawPartyItemConsumerPlayer(mob, pos);
+        drawPartyApplyPlayer(mob, pos);
         drawText(
                 mob->name,
                 (Vector2) {pos.x + ui->menu->padding, pos.y},
@@ -52,15 +52,22 @@ void drawPartyItemConsumeMenuScreen(MenuContext *mc) {
     }
 }
 
-MenuSelectResponse *partyItemConsumeMenuItemSelected(MenuContext *mc) {
-    for (int i = 0; i < mc->player->itemCount; i++) {
-        if (mc->player->items[i] == mc->selectedItem) {
-            applyConsumable(mc->player->party[mc->cursorLine], mc->selectedItem);
-            removeItem(mc->player, mc->selectedItem);
-            mc->selectedItem = NULL;
-            resetItemList(mc);
-            break;
+MenuSelectResponse *partyApplyMenuItemSelected(MenuContext *mc) {
+    if (mc->selectedSpell != NULL) {
+        if (!applyCastCost(mc->selectedMob, mc->selectedSpell->cost)) {
+            return createMenuSelectResponse(NO_OP, PARTY_APPLY_MENU);
+        }
+        executeSpellOnMobile(mc->player->party[mc->cursorLine], mc->selectedSpell);
+    } else {
+        for (int i = 0; i < mc->player->itemCount; i++) {
+            if (mc->player->items[i] == mc->selectedItem) {
+                applyConsumable(mc->player->party[mc->cursorLine], mc->selectedItem);
+                removeItem(mc->player, mc->selectedItem);
+                mc->selectedItem = NULL;
+                resetItemList(mc);
+                break;
+            }
         }
     }
-    return createMenuSelectResponse(CLOSE_MENU, PARTY_ITEM_CONSUME_MENU);
+    return createMenuSelectResponse(CLOSE_MENU, PARTY_APPLY_MENU);
 }

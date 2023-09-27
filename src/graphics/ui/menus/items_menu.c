@@ -43,7 +43,7 @@ MenuSelectResponse *itemMenuItemSelected(MenuContext *menuContext) {
     Item *item = menuContext->itemList[menuContext->cursorLine].item;
     if (item->type == ITEM_TYPE_CONSUMABLE) {
         menuContext->selectedItem = item;
-        return createMenuSelectResponse(OPEN_MENU, PARTY_ITEM_CONSUME_MENU);
+        return createMenuSelectResponse(OPEN_MENU, PARTY_APPLY_MENU);
     }
     return NULL;
 }

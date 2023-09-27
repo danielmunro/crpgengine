@@ -37,10 +37,12 @@ const char *TextAreaTypes[] = {
         "medium",
         "full",
         "bottom",
+        "left",
         "right",
         "bottomLeft",
         "bottomMidRight",
         "bottomMid",
+        "midRight",
 };
 
 typedef enum {
@@ -49,10 +51,12 @@ typedef enum {
     TEXT_AREA_MEDIUM,
     TEXT_AREA_FULL,
     TEXT_AREA_BOTTOM,
+    TEXT_AREA_LEFT,
     TEXT_AREA_RIGHT,
     TEXT_AREA_BOTTOM_LEFT,
     TEXT_AREA_BOTTOM_MID_RIGHT,
     TEXT_AREA_BOTTOM_MID,
+    TEXT_AREA_MID_RIGHT,
 } TextAreaType;
 
 const char *FontStyleTypes[] = {
@@ -86,8 +90,9 @@ FontStyleType getFontStyleType(const char *type) {
 typedef enum {
     ACKNOWLEDGE_BOX,
     ITEMS_BOX,
+    MAGIC_BOX,
     LOAD_BOX,
-    PARTY_ITEM_CONSUME_BOX,
+    PARTY_APPLY_BOX,
     PARTY_SELECT_BOX,
     IN_GAME_MENU_BOX,
     PARTY_BOX,

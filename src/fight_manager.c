@@ -163,33 +163,6 @@ void attackMobile(FightManager *fm, Action *act) {
     mob->hitAnimationTimer = HIT_ANIMATION_TIMER_MS;
 }
 
-int getAttributeAmount(Spell *spell, int base) {
-    if (base == 0) {
-        return 0;
-    }
-    int amount = base + (spell->level * (int) spell->levelModifier);
-    if (spell->intent == INTENT_HARM) {
-        return -amount;
-    } else if (spell->intent == INTENT_HELP) {
-        return amount;
-    } else {
-        fprintf(stderr, "unknown intent in getAttributeAmount");
-        exit(EXIT_UNKNOWN_INTENT);
-    }
-}
-
-void executeSpellOnBeast(Beast *beast, Spell *spell) {
-    beast->hp += (int) getAttributeAmount(spell, spell->impact->hp);
-    beast->mana += (int) getAttributeAmount(spell, spell->impact->mana);
-    normalizeVitalsForBeast(beast);
-}
-
-void executeSpellOnMobile(Mobile *mob, Spell *spell) {
-    mob->hp += (int) getAttributeAmount(spell, spell->impact->hp);
-    mob->mana += (int) getAttributeAmount(spell, spell->impact->mana);
-    normalizeVitalsForMobile(mob);
-}
-
 void castOnBeast(FightManager *fm, Action *act) {
     Beast *target = act->target->beast;
     Mobile *caster = act->initiator->mob;
