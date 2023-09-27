@@ -1,5 +1,4 @@
 void drawMagicMenuScreen(MenuContext *menuContext) {
-    FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *textBox = findOrCreateTextBox(
             menuContext,
             MAGIC_BOX,
@@ -27,7 +26,9 @@ void drawMagicMenuScreen(MenuContext *menuContext) {
             menuContext->uiSprite,
             (Vector2) {
                     ui->textAreas->midRight.x,
-                    line(menuContext->cursorLine, defaultFont->lineHeight),
+                    line(
+                            menuContext->cursorLine,
+                            menuContext->fonts->default_->lineHeight),
             });
 }
 
