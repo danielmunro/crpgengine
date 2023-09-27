@@ -11,7 +11,10 @@ TextBox *createLoadMenuBox(MenuContext *mc) {
 
 void drawLoadMenuScreen(MenuContext *menuContext) {
     FontStyle *defaultFont = menuContext->fonts->default_;
-    TextBox *b = findOrCreateTextBox(menuContext, LOAD_BOX, createLoadMenuBox);
+    TextBox *b = findOrCreateTextBox(
+            menuContext,
+            LOAD_BOX,
+            ui->textAreas->small);
     for (int i = 0; i < menuContext->saveFiles->count; i++) {
         drawInMenu(b, menuContext->saveFiles->saveNames[i]);
     }

@@ -2,18 +2,11 @@ int getItemSelectCursorLength(MenuContext *menuContext) {
     return menuContext->player->itemCount;
 }
 
-TextBox *createItemSelectMenuTextBox(MenuContext *menuContext) {
-    return createTextBox(
-            ui->textAreas->bottom,
-            menuContext->fonts->default_,
-            ITEM_SELECT_FIGHT_BOX);
-}
-
 void drawItemSelectMenuScreen(MenuContext *menuContext) {
     TextBox *t = findOrCreateTextBox(
             menuContext,
             ITEM_SELECT_FIGHT_BOX,
-            createItemSelectMenuTextBox);
+            ui->textAreas->bottom);
     drawMenuRect(t->area);
     FontStyle *defaultFont = menuContext->fonts->default_;
     FontStyle *disabledFont = menuContext->fonts->disable;

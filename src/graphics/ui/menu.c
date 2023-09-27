@@ -175,19 +175,21 @@ Menu *removeMenusTo(Menu **menus, MenuType type) {
     return NULL;
 }
 
-TextBox *findOrCreateTextBox(MenuContext *mc, TextBoxLabel label, TextBox *(createTextBox)(MenuContext *)) {
+TextBox *findOrCreateTextBox(MenuContext *mc, TextBoxLabel label, Rectangle area) {
     for (int i = 0; i < MAX_TEXT_BOXES; i++) {
         if (mc->textBoxes[i] == NULL) {
-            TextBox *t = createTextBox(mc);
+            TextBox *t = createTextBox(
+                    area,
+                    mc->fonts->default_,
+                    label);
             mc->textBoxes[i] = t;
             return t;
-        }
-        if (mc->textBoxes[i]->label == label) {
+        } else if (mc->textBoxes[i]->label == label) {
             mc->textBoxes[i]->cursor = 0;
             return mc->textBoxes[i];
         }
     }
-    fprintf(stderr, "could not find text box");
+    fprintf(stderr, "could not find text box :: %d", label);
     exit(EXIT_TEXT_BOX_NOT_FOUND);
 }
 

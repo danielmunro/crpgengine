@@ -1,16 +1,8 @@
-// @todo refactor away these functions
-TextBox *createPartySelectTextBox(MenuContext *mc) {
-    return createTextBox(
-            ui->textAreas->left,
-            mc->fonts->default_,
-            PARTY_SELECT_BOX);
-}
-
 void drawPartySelectMenuScreen(MenuContext *menuContext) {
     TextBox *inGameMenuBox = findOrCreateTextBox(
             menuContext,
             PARTY_SELECT_BOX,
-            createPartySelectTextBox);
+            ui->textAreas->left);
     drawMenuRect(inGameMenuBox->area);
     FontStyle *defaultFont = menuContext->fonts->default_;
     for (int i = 0; i < menuContext->player->partyCount; i++) {

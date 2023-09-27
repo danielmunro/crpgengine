@@ -1,22 +1,8 @@
-TextBox *createFullScreenTextBox(MenuContext *mc) {
-    return createTextBox(
-            ui->textAreas->full,
-            mc->fonts->default_,
-            IN_GAME_MENU_BOX);
-}
-
-TextBox *createPartyTextBox(MenuContext *mc) {
-    return createTextBox(
-            ui->textAreas->right,
-            mc->fonts->default_,
-            PARTY_BOX);
-}
-
 void drawPartyMenuScreen(MenuContext *menuContext) {
     TextBox *inGameMenuBox = findOrCreateTextBox(
             menuContext,
             IN_GAME_MENU_BOX,
-            createFullScreenTextBox);
+            ui->textAreas->full);
     drawMenuRect(inGameMenuBox->area);
     FontStyle *defaultFont = menuContext->fonts->default_;
     for (int i = 0; i < menuContext->player->partyCount; i++) {
@@ -42,7 +28,7 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
     TextBox *textBox = findOrCreateTextBox(
             menuContext,
             PARTY_BOX,
-            createPartyTextBox);
+            ui->textAreas->right);
     drawMenuRect(textBox->area);
     for (int i = 0; i < count; i++) {
         drawInMenu(textBox, PartyMenuItems[i]);

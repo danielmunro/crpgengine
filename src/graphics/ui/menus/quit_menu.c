@@ -2,16 +2,12 @@ int getQuitCursorLength(MenuContext *menuContext) {
     return sizeof(QuitMenuItems) / sizeof(QuitMenuItems[0]);
 }
 
-TextBox *createQuitTextBox(MenuContext *mc) {
-    return createTextBox(
-            ui->textAreas->medium,
-            mc->fonts->default_,
-            QUIT_BOX);
-}
-
 void drawQuitMenuScreen(MenuContext *menuContext) {
     FontStyle *defaultFont = menuContext->fonts->default_;
-    TextBox *textBox = findOrCreateTextBox(menuContext, QUIT_BOX, createQuitTextBox);
+    TextBox *textBox = findOrCreateTextBox(
+            menuContext,
+            QUIT_BOX,
+            ui->textAreas->medium);
     drawMenuRect(textBox->area);
     drawInMenu(textBox, "Are you sure?");
     drawInMenu(textBox, "");

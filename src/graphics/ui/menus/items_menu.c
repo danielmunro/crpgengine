@@ -1,16 +1,9 @@
-TextBox *createItemsTextBox(MenuContext *mc) {
-    return createTextBox(
-            ui->textAreas->full,
-            mc->fonts->default_,
-            ITEMS_BOX);
-}
-
 void drawItemsMenuScreen(MenuContext *menuContext) {
     FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *textBox = findOrCreateTextBox(
             menuContext,
             ITEMS_BOX,
-            createItemsTextBox);
+            ui->textAreas->full);
     drawMenuRect(textBox->area);
     if (menuContext->itemListCount == 0) {
         ItemListResult result = createItemList(menuContext->player);

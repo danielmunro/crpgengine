@@ -2,19 +2,12 @@ int getAcknowledgeCursorLength(MenuContext *menuContext) {
     return 1;
 }
 
-TextBox *createAcknowledgeBox(MenuContext *mc) {
-    return createTextBox(
-            ui->textAreas->medium,
-            mc->fonts->default_,
-            ACKNOWLEDGE_BOX);
-}
-
 void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
     FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *b = findOrCreateTextBox(
             menuContext,
             ACKNOWLEDGE_BOX,
-            createAcknowledgeBox);
+            ui->textAreas->medium);
     drawMenuRect(b->area);
     drawInMenu(b, "Your game has been saved.");
     drawInMenu(b, "Reminder: your progress will save");

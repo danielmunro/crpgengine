@@ -18,18 +18,11 @@ int getActionSelectCursorLength(MenuContext *menuContext) {
     return sizeof(actionMenu) / sizeof(char *);
 }
 
-TextBox *createActionSelectMenuTextBox(MenuContext *menuContext) {
-    return createTextBox(
-            ui->textAreas->bottomMid,
-            menuContext->fonts->default_,
-            ACTION_SELECT_BOX);
-}
-
 void drawActionSelectMenuScreen(MenuContext *menuContext) {
     TextBox *t = findOrCreateTextBox(
             menuContext,
             ACTION_SELECT_BOX,
-            createActionSelectMenuTextBox);
+            ui->textAreas->bottomMid);
     drawMenuRect(t->area);
     drawScrollableInMenu(t, actionMenu[ACTION_ATTACK], menuContext->cursorLine);
     drawScrollableInMenu(

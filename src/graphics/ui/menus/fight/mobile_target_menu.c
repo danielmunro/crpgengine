@@ -6,7 +6,7 @@ void drawMobileTargetMenuScreen(MenuContext *menuContext) {
     TextBox *t = findOrCreateTextBox(
             menuContext,
             MOBILE_SELECT_BOX,
-            createMobileSelectTextBox);
+            ui->textAreas->bottomMidRight);
     drawMenuRect(t->area);
     drawPlayerFightTopLevel(menuContext, t, false);
     int frameWidth = menuContext->selectedMob->animations[0]->spriteSheet->frameWidth;

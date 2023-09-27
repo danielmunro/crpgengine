@@ -2,13 +2,6 @@ int getPartyApplyMenuCursorLength(MenuContext *mc) {
     return mc->player->partyCount;
 }
 
-TextBox *createPartyApplyTextBox(MenuContext *mc) {
-    return createTextBox(
-            ui->textAreas->right,
-            mc->fonts->default_,
-            PARTY_APPLY_BOX);
-}
-
 void drawPartyApplyPlayer(Mobile *mob, Vector2 pos) {
     Animation *a = findAnimation(mob->animations, DOWN);
     drawAnimation(a, pos);
@@ -18,7 +11,7 @@ void drawPartyApplyMenuScreen(MenuContext *mc) {
     TextBox *t = findOrCreateTextBox(
             mc,
             PARTY_APPLY_BOX,
-            createPartyApplyTextBox);
+            ui->textAreas->right);
     drawMenuRect(t->area);
     float quarter = (float) ui->screen->height / 4;
     FontStyle *f = mc->fonts->default_;

@@ -1,16 +1,9 @@
-TextBox *createMagicMenuTextBox(MenuContext *mc) {
-    return createTextBox(
-            ui->textAreas->midRight,
-            mc->fonts->default_,
-            MAGIC_BOX);
-}
-
 void drawMagicMenuScreen(MenuContext *menuContext) {
     FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *textBox = findOrCreateTextBox(
             menuContext,
             MAGIC_BOX,
-            createMagicMenuTextBox);
+            ui->textAreas->midRight);
     drawMenuRect(textBox->area);
     Mobile *m = menuContext->selectedMob;
     for (int i = 0; i < m->spellCount; i++) {

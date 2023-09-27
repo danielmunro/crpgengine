@@ -2,18 +2,11 @@ int getMagicSelectCursorLength(MenuContext *menuContext) {
     return menuContext->selectedMob->spellCount;
 }
 
-TextBox *createMagicSelectMenuTextBox(MenuContext *menuContext) {
-    return createTextBox(
-            ui->textAreas->bottomMidRight,
-            menuContext->fonts->default_,
-            MAGIC_SELECT_BOX);
-}
-
 void drawMagicSelectMenuScreen(MenuContext *menuContext) {
     TextBox *t = findOrCreateTextBox(
             menuContext,
             MAGIC_SELECT_BOX,
-            createMagicSelectMenuTextBox);
+            ui->textAreas->bottomMidRight);
     drawMenuRect(t->area);
     FontStyle *defaultFont = menuContext->fonts->default_;
     FontStyle *disabledFont = menuContext->fonts->disable;

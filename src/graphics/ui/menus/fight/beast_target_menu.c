@@ -7,7 +7,7 @@ void drawBeastTargetMenuScreen(MenuContext *menuContext) {
     TextBox *t = findOrCreateTextBox(
             menuContext,
             BEAST_SELECT_BOX,
-            createBeastSelectTextBox);
+            ui->textAreas->bottomLeft);
     drawRightCursor(
             menuContext->uiSprite,
             (Vector2) {

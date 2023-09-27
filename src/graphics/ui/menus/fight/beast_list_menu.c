@@ -1,15 +1,8 @@
-TextBox *createBeastSelectTextBox(MenuContext *mc) {
-    return createTextBox(
-            ui->textAreas->bottomLeft,
-            mc->fonts->default_,
-            BEAST_SELECT_BOX);
-}
-
 void drawBeastSelectMenuScreen(MenuContext *menuContext) {
     TextBox *t = findOrCreateTextBox(
             menuContext,
             BEAST_SELECT_BOX,
-            createBeastSelectTextBox);
+            ui->textAreas->bottomLeft);
     drawMenuRect(t->area);
     int count = menuContext->fight->beastCount > MAX_BEAST_NAMES_IN_FIGHT ?
                 MAX_BEAST_NAMES_IN_FIGHT : menuContext->fight->beastCount;
