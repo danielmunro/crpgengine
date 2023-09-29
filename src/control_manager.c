@@ -146,7 +146,9 @@ void checkControls(ControlManager *cm) {
             needsToRemoveActiveControlBlock(cm->scene->activeControlBlocks[i])) {
             cm->scene->activeControlBlocks[i]->progress = 0;
             cm->scene->activeControlBlocks[i] = NULL;
-            disengageWithMobile(cm->player);
+            if (cm->player->engaged) {
+                disengageWithMobile(cm->player);
+            }
         }
     }
 }
@@ -177,7 +179,7 @@ When *mapWhen(ControlManager *cm, Scene *s, WhenData wd) {
             }
         }
     }
-    Condition c = mapCondition(wd.condition);
+    Condition c = mapCondition(wd.condition != NULL ? wd.condition : wd.player);
     addDebug("condition: %s, mapped to: %d, story: %s",
              wd.condition,
              c,

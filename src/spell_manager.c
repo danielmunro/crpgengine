@@ -14,7 +14,7 @@ Spell **mapDataToSpells(SpellManager *sm, SpellData *spellData, int dataCount) {
     Spell **spells = calloc(dataCount, sizeof(Spell));
     for (int i = 0; i < dataCount; i++) {
         for (int j = 0; j < sm->count; j++) {
-            if (strcmp(spellData->type, Spells[sm->spells[i]->type]) == 0) {
+            if (strcmp(spellData->type, Spells[j]) == 0) {
                 spells[i] = sm->spells[j];
             }
         }

@@ -1,10 +1,8 @@
 storylines:
   - when:
-      - player: true
-        condition: not_has_story
+      - player: not_has_story
         story: from_the_past:intro
-      - player: true
-        condition: engaged
+      - player: engaged
         mob: vill1
     then:
       - mob: vill1
@@ -28,11 +26,9 @@ storylines:
         action: set_direction
         direction: down
   - when:
-      - player: true
-        condition: has_story
+      - player: has_story
         story: from_the_past:intro
-      - player: true
-        condition: not_has_story
+      - player: not_has_story
         story: from_the_past:moved_1
     then:
       - player: true
@@ -44,19 +40,16 @@ storylines:
       - player: true
         action: save
   - when:
-      - player: true
-        condition: has_story
+      - player: has_story
         story: from_the_past:intro
-      - player: true
-        condition: engaged
+      - player: engaged
         mob: vill1
     then:
       - mob: vill1
         action: speak
         message: "Please take good care of the amulet."
   - when:
-      - player: true
-        condition: has_story
+      - player: has_story
         story: from_the_past:moved_1
       - condition: scene_loaded
         scene: tinytown

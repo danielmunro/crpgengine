@@ -1,5 +1,5 @@
 typedef struct {
-    bool player;
+    const char *player;
     const char *mob;
     const char *condition;
     const char *story;
@@ -34,10 +34,10 @@ typedef struct {
 } StorylinesData;
 
 static const cyaml_schema_field_t whenFieldSchema[] = {
-        CYAML_FIELD_BOOL(
-                "player", CYAML_FLAG_OPTIONAL, WhenData, player),
         CYAML_FIELD_STRING_PTR(
-                "condition", CYAML_FLAG_POINTER, WhenData, condition, 0, CYAML_UNLIMITED),
+                "player", CYAML_FLAG_OPTIONAL, WhenData, player, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "condition", CYAML_FLAG_OPTIONAL, WhenData, condition, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "mob", CYAML_FLAG_OPTIONAL, WhenData, mob, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(

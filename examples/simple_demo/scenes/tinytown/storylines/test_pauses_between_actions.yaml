@@ -1,10 +1,8 @@
 storylines:
   - when:
-      - player: true
-        condition: arrive_at
+      - player: arrive_at
         arrive_at: demo_wait
-      - player: true
-        condition: not_has_story
+      - player: not_has_story
         story: silly_action
     then:
       - player: true

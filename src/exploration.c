@@ -189,7 +189,7 @@ void renderExplorationLayer(Exploration *e, LayerType layer) {
     int height = ui->screen->height / sz.y;
     Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
     for (int y = -1; y < height; y++) {
-        for (int x = -1; x < width; x++) {
+        for (int x = 0; x < width; x++) {
             if (x >= e->layers[layer]->width || y >= e->layers[layer]->height) {
                 continue;
             }
