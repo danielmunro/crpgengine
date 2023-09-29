@@ -16,6 +16,11 @@ typedef struct {
     int count;
 } ItemListResult;
 
+typedef struct {
+    Item *item;
+    int quantity;
+} ItemWithQuantity;
+
 ItemType getItemTypeFromString(const char *type) {
     int count = sizeof(ItemTypes) / sizeof(ItemTypes[0]);
     for (int i = 0; i < count; i++) {
@@ -52,6 +57,13 @@ Item *createItem(
     item->attributes = attributes;
     item->position = position;
     return item;
+}
+
+ItemWithQuantity *createItemWithQuantity(Item *item, int quantity) {
+    ItemWithQuantity *iq = malloc(sizeof(ItemWithQuantity));
+    iq->item = item;
+    iq->quantity = quantity;
+    return iq;
 }
 
 Item *createItemFromData(ItemData *data) {

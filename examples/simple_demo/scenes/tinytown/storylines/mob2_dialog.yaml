@@ -18,8 +18,10 @@ storylines:
         condition: has_story
         story: from_the_past:intro
       - player: true
-        condition: not_has_story
-        story: from_the_past:cleaned_up_amulet
+        condition: not_has_item
+        item:
+          name: a brilliant amulet
+          quantity: 1
     then:
       - mob: vill2
         action: speak
@@ -34,24 +36,21 @@ storylines:
           quantity: 1
       - player: true
         action: wait
-        amount: 8
+        amount: 2
       - mob: vill2
         action: speak
         message: "Just need to put the finishing touches on now."
       - player: true
         action: wait
-        amount: 6
+        amount: 1
+      - mob: vill2
+        action: speak
+        message: "There! Good as new. Now, don't go scuffing it up again."
       - player: true
         action: give_item
         item:
           name: a brilliant amulet
           quantity: 1
-      - mob: vill2
-        action: speak
-        message: "There! Good as new. Now, don't go scuffing it up again."
-      - player: true
-        action: add_story
-        story: from_the_past:cleaned_up_amulet
       - player: true
         action: save
   - when:
@@ -59,8 +58,10 @@ storylines:
         condition: engaged
         mob: vill2
       - player: true
-        condition: has_story
-        story: from_the_past:cleaned_up_amulet
+        condition: has_item
+        item:
+          name: a brilliant amulet
+          quantity: 1
     then:
       - mob: vill2
         action: speak

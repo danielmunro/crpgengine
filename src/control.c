@@ -8,7 +8,7 @@ typedef struct {
     Condition condition;
     Mobile *trigger;
     const char *story;
-    Item *item;
+    ItemWithQuantity *item;
     ArriveAt *arriveAt;
 } When;
 
@@ -51,7 +51,7 @@ When *createWhen(
         Mobile *trigger,
         int condition,
         const char *story,
-        Item *item,
+        ItemWithQuantity *item,
         ArriveAt *arriveAt) {
     When *when = malloc(sizeof(When));
     when->source = source;
@@ -117,11 +117,15 @@ bool hasArrivedAt(Player *p, Condition condition, ArriveAt *arriveAt) {
     return false;
 }
 
-bool hasItem(Player *p, Condition condition, Item *item) {
-    if (item != NULL) {
+bool hasItem(Player *p, Condition condition, ItemWithQuantity *iq) {
+    if (iq != NULL) {
+        int count = iq->quantity;
         for (int i = 0; i < p->itemCount; i++) {
-            if (p->items[i] == item) {
-                return condition == HAS_ITEM;
+            if (p->items[i] == iq->item) {
+                count--;
+                if (count == 0) {
+                    return condition == HAS_ITEM;
+                }
             }
         }
         return condition == NOT_HAS_ITEM;

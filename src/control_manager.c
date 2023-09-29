@@ -187,7 +187,11 @@ When *mapWhen(ControlManager *cm, Scene *s, WhenData wd) {
             trigger,
             c,
             wd.story,
-            wd.item != NULL ? findItemFromName(cm->itemManager, wd.item) : NULL,
+            wd.item != NULL
+                ? createItemWithQuantity(
+                        findItemFromName(cm->itemManager, wd.item->name),
+                        wd.item->quantity)
+                : NULL,
             arriveAt);
 }
 

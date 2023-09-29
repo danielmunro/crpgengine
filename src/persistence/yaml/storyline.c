@@ -4,7 +4,7 @@ typedef struct {
     const char *condition;
     const char *story;
     const char *scene;
-    const char *item;
+    ItemReferenceData *item;
     const char *arriveAt;
 } WhenData;
 
@@ -42,8 +42,8 @@ static const cyaml_schema_field_t whenFieldSchema[] = {
                 "mob", CYAML_FLAG_OPTIONAL, WhenData, mob, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "story", CYAML_FLAG_OPTIONAL, WhenData, story, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_STRING_PTR(
-                "item", CYAML_FLAG_OPTIONAL, WhenData, item, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_MAPPING_PTR(
+                "item", CYAML_FLAG_OPTIONAL, WhenData, item, itemReferenceFieldSchema),
         CYAML_FIELD_STRING_PTR(
                 "scene", CYAML_FLAG_OPTIONAL, WhenData, scene, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
