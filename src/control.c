@@ -8,6 +8,7 @@ typedef struct {
     Condition condition;
     Mobile *trigger;
     const char *story;
+    Item *item;
     ArriveAt *arriveAt;
 } When;
 
@@ -50,12 +51,14 @@ When *createWhen(
         Mobile *trigger,
         int condition,
         const char *story,
+        Item *item,
         ArriveAt *arriveAt) {
     When *when = malloc(sizeof(When));
     when->source = source;
     when->trigger = trigger;
     when->condition = condition;
     when->story = story;
+    when->item = item;
     when->arriveAt = arriveAt;
     return when;
 }
@@ -114,12 +117,25 @@ bool hasArrivedAt(Player *p, Condition condition, ArriveAt *arriveAt) {
     return false;
 }
 
+bool hasItem(Player *p, Condition condition, Item *item) {
+    if (item != NULL) {
+        for (int i = 0; i < p->itemCount; i++) {
+            if (p->items[i] == item) {
+                return condition == HAS_ITEM;
+            }
+        }
+        return condition == NOT_HAS_ITEM;
+    }
+    return false;
+}
+
 bool isWhenActivated(Player *p, When *when, EventType eventType) {
     return hasConditionEngaged(p, when->condition, when->trigger)
            || hasConditionStory(p, when->condition, when->story)
            || hasConditionNoStory(p, when->condition, when->story)
            || isSceneLoaded(when->condition, eventType)
-           || hasArrivedAt(p, when->condition, when->arriveAt);
+           || hasArrivedAt(p, when->condition, when->arriveAt)
+           || hasItem(p, when->condition, when->item);
 }
 
 bool areConditionsMet(ControlBlock *cb, Player *p, EventType eventType) {
@@ -187,4 +203,8 @@ bool needsToSave(Then *then) {
 
 bool needsToReceiveItem(Then *then, Mobile *playerMob) {
     return then->outcome == GIVE_ITEM && then->target == playerMob;
+}
+
+bool needsToLoseItem(Then *then, Mobile *playerMob) {
+    return then->outcome == LOSE_ITEM && then->target == playerMob;
 }

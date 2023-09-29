@@ -9,14 +9,18 @@ const char *conditions[] = {
         "engaged",
         "has_story",
         "not_has_story",
+        "has_item",
+        "not_has_item",
         "scene_loaded",
         "arrive_at",
 };
 
 typedef enum {
-    ENGAGED = 0,
+    ENGAGED,
     HAS_STORY,
     NOT_HAS_STORY,
+    HAS_ITEM,
+    NOT_HAS_ITEM,
     SCENE_LOADED,
     ARRIVE_AT,
 } Condition;
@@ -28,7 +32,7 @@ const char *outcomes[] = {
         "sprite",
         "wait",
         "give_item",
-        "take",
+        "lose_item",
         "add_story",
         "set_position",
         "lock",
@@ -43,7 +47,7 @@ typedef enum {
     SPRITE,
     WAIT,
     GIVE_ITEM,
-    TAKE,
+    LOSE_ITEM,
     ADD_STORY,
     SET_POSITION,
     LOCK,

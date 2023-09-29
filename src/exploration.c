@@ -414,16 +414,10 @@ void renderExplorationLayers(Exploration *e) {
 }
 
 void dialogEngaged(Player *player, ControlBlock *controlBlock) {
-    addInfo("speaking with '%s' mob", player->engageable->name);
+    addInfo("speaking with mob :: %s", player->engageable->name);
     if (controlBlock != NULL) {
         controlBlock->progress++;
         addDebug("active control block progress at %d", controlBlock->progress);
-    }
-    if (controlBlock->progress >= controlBlock->thenCount) {
-        addDebug("unsetting active control block");
-        controlBlock->progress = 0;
-        controlBlock = NULL;
-        disengageWithMobile(player);
     }
 }
 

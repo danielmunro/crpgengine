@@ -10,18 +10,6 @@ ItemManager *createItemManager() {
     return im;
 }
 
-Item *findItem(Item **items, const char *name) {
-    for (int i = 0; i < MAX_ITEMS; i++) {
-        if (items[i] == NULL) {
-            return NULL;
-        }
-        if (strcmp(items[i]->name, name) == 0) {
-            return items[i];
-        }
-    }
-    return NULL;
-}
-
 Item **createItemsFromReferenceData(ItemManager *im, ItemReferenceData *referenceData) {
     Item **items = calloc(referenceData->quantity, sizeof(Item));
     for (int i = 0; i < im->count; i++) {
@@ -33,4 +21,14 @@ Item **createItemsFromReferenceData(ItemManager *im, ItemReferenceData *referenc
         }
     }
     return items;
+}
+
+Item *findItemFromName(ItemManager *im, const char *name) {
+    for (int i = 0; i < im->count; i++) {
+        if (strcmp(name, im->items[i]->name) == 0) {
+            return im->items[i];
+        }
+    }
+    addError("no item found with name provided :: %s", name);
+    exit(EXIT_UNKNOWN_ITEM);
 }

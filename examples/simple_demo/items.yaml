@@ -21,3 +21,5 @@ items:
       fire: 1
 - name: a blemished amulet
   type: quest
+- name: a brilliant amulet
+  type: quest

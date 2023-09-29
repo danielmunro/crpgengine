@@ -23,7 +23,9 @@ ControlManager *createControlManager(
 int thenCheck(ControlManager *cm, ControlBlock *cb) {
     Then *then = cb->then[cb->progress];
     int progress = 0;
-    if (isSpeakOutcome(then) && !cm->player->engaged) {
+    if (then == NULL) {
+        return 0;
+    } else if (isSpeakOutcome(then) && !cm->player->engaged) {
         addInfo("is speak outcome");
         progress++;
     } else if (isMovingAndAtDestination(cb)) {
@@ -90,13 +92,34 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
     } else if (needsToReceiveItem(then, getPartyLeader(cm->player))) {
         addInfo("player receiving item: %s", then->item->name);
         for (int i = 0; i < then->item->quantity; i++) {
-            addItem(cm->player, findItem(cm->itemManager->items, then->item->name));
+            addItem(cm->player, findItemFromName(cm->itemManager, then->item->name));
         }
         const char *message = malloc(64);
         sprintf((char *) message, "you received:\n%s", then->item->name);
         addNotification(
                 cm->notificationManager,
                 createNotification(RECEIVE_QUEST_ITEM, message));
+        progress++;
+    } else if (needsToLoseItem(then, getPartyLeader(cm->player))) {
+        addInfo("player losing item: %s", then->item->name);
+        int quantity = then->item->quantity;
+        for (int i = 0; i < cm->player->itemCount; i++) {
+            if (quantity > 0 && strcmp(then->item->name, cm->player->items[i]->name) == 0) {
+                removeItem(cm->player, cm->player->items[i]);
+                quantity--;
+                if (quantity == 0) {
+                    break;
+                }
+            }
+        }
+        if (quantity > 0) {
+            addWarning("player didn't have enough items to give :: %d remaining", quantity);
+        }
+        const char *message = malloc(64);
+        sprintf((char *) message, "you lost:\n%s", then->item->name);
+        addNotification(
+                cm->notificationManager,
+                createNotification(LOSE_QUEST_ITEM, message));
         progress++;
     }
     cb->progress += progress;
@@ -123,6 +146,7 @@ void checkControls(ControlManager *cm) {
             needsToRemoveActiveControlBlock(cm->scene->activeControlBlocks[i])) {
             cm->scene->activeControlBlocks[i]->progress = 0;
             cm->scene->activeControlBlocks[i] = NULL;
+            disengageWithMobile(cm->player);
         }
     }
 }
@@ -163,6 +187,7 @@ When *mapWhen(ControlManager *cm, Scene *s, WhenData wd) {
             trigger,
             c,
             wd.story,
+            wd.item != NULL ? findItemFromName(cm->itemManager, wd.item) : NULL,
             arriveAt);
 }
 

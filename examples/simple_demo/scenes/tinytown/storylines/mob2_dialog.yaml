@@ -3,7 +3,65 @@ storylines:
       - player: true
         condition: engaged
         mob: vill2
+      - player: true
+        condition: not_has_story
+        story: from_the_past:intro
     then:
       - mob: vill2
         action: speak
         message: "Hello there adventurer."
+  - when:
+      - player: true
+        condition: engaged
+        mob: vill2
+      - player: true
+        condition: has_story
+        story: from_the_past:intro
+      - player: true
+        condition: not_has_story
+        story: from_the_past:cleaned_up_amulet
+    then:
+      - mob: vill2
+        action: speak
+        message: "Oh my, you found the amulet! But it's seen better days, that's for sure."
+      - mob: vill2
+        action: speak
+        message: "Hmm. If you'll let me borrow it, I should be able to fix it right up."
+      - player: true
+        action: lose_item
+        item:
+          name: a blemished amulet
+          quantity: 1
+      - player: true
+        action: wait
+        amount: 8
+      - mob: vill2
+        action: speak
+        message: "Just need to put the finishing touches on now."
+      - player: true
+        action: wait
+        amount: 6
+      - player: true
+        action: give_item
+        item:
+          name: a brilliant amulet
+          quantity: 1
+      - mob: vill2
+        action: speak
+        message: "There! Good as new. Now, don't go scuffing it up again."
+      - player: true
+        action: add_story
+        story: from_the_past:cleaned_up_amulet
+      - player: true
+        action: save
+  - when:
+      - player: true
+        condition: engaged
+        mob: vill2
+      - player: true
+        condition: has_story
+        story: from_the_past:cleaned_up_amulet
+    then:
+      - mob: vill2
+        action: speak
+        message: "It breaks my heart to part with the amulet."
