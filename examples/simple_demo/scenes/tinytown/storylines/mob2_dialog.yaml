@@ -1,4 +1,6 @@
 storylines:
+
+
   - when:
       - player: engaged
         mob: vill2
@@ -9,6 +11,8 @@ storylines:
       - mob: vill2
         dialog: |
           Hello there adventurer.
+  
+
   - when:
       - player: engaged
         mob: vill2
@@ -49,6 +53,8 @@ storylines:
           quantity: 1
       - player: true
         action: save
+
+
   - when:
       - player: engaged
         mob: vill2

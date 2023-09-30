@@ -1,4 +1,6 @@
 storylines:
+
+
   - when:
       - player: not_has_story
         story: from_the_past:intro
@@ -25,6 +27,8 @@ storylines:
       - mob: vill1
         action: set_direction
         direction: down
+
+
   - when:
       - player: has_story
         story: from_the_past:intro
@@ -39,6 +43,8 @@ storylines:
         story: from_the_past:moved_1
       - player: true
         action: save
+
+
   - when:
       - player: has_story
         story: from_the_past:intro
@@ -48,6 +54,8 @@ storylines:
       - mob: vill1
         dialog: |
           Please take good care of the amulet.
+  
+
   - when:
       - player: has_story
         story: from_the_past:moved_1
