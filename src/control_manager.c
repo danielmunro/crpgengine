@@ -211,6 +211,9 @@ Then *mapThen(ControlManager *cm, ThenData td) {
     } else {
         pos = (Vector2) {0, 0};
     }
+    if (td.message != NULL) {
+        td.action = OUTCOME_SPEAK;
+    }
     int amount = 0;
     if (hasAmountProperty(td)) {
         amount = td.amount;

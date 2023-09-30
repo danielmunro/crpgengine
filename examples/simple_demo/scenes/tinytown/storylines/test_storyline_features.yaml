@@ -6,11 +6,9 @@ storylines:
         mob: vill1
     then:
       - mob: vill1
-        action: speak
-        message: "She always said not to live in the past. That one day I'll need to give my amulet away to someone who needs it."
+        speak: "She always said not to live in the past. That one day I'll need to give my amulet away to someone who needs it."
       - mob: vill1
-        action: speak
-        message: "You look trustworthy. Please keep my amulet safe, adventurer. In return, it will help you in a time of need."
+        speak: "You look trustworthy. Please keep my amulet safe, adventurer. In return, it will help you in a time of need."
       - player: true
         action: give_item
         item:
@@ -46,8 +44,7 @@ storylines:
         mob: vill1
     then:
       - mob: vill1
-        action: speak
-        message: "Please take good care of the amulet."
+        speak: "Please take good care of the amulet."
   - when:
       - player: has_story
         story: from_the_past:moved_1
