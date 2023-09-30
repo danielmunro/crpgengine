@@ -30,5 +30,5 @@ Item *findItemFromName(ItemManager *im, const char *name) {
         }
     }
     addError("no item found with name provided :: %s", name);
-    exit(EXIT_UNKNOWN_ITEM);
+    exit(RuntimeErrorUnknownItem);
 }

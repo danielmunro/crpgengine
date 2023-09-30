@@ -10,8 +10,8 @@ typedef struct {
 
 SpellType getSpellTypeFromString(const char *type) {
     if (type == NULL) {
-        fprintf(stderr, "got null in getSpellTypeFromString");
-        exit(EXIT_UNABLE_TO_CREATE_SPELL);
+        addError("got null in getSpellTypeFromString");
+        exit(RuntimeErrorNullSpellType);
     }
     int count = sizeof(Spells) / sizeof(Spells[0]);
     for (int i = 0; i < count; i++) {
@@ -19,8 +19,8 @@ SpellType getSpellTypeFromString(const char *type) {
             return i;
         }
     }
-    fprintf(stderr, "spell not found");
-    exit(EXIT_UNABLE_TO_CREATE_SPELL);
+    addError("spell not found :: %s", type);
+    exit(RuntimeErrorNoSpellForType);
 }
 
 Spell *createSpellFromData(SpellData data) {
@@ -60,8 +60,8 @@ Spell *findSpell(Spell **spells, SpellType type) {
             return spells[i];
         }
     }
-    fprintf(stderr, "spell not found");
-    exit(EXIT_UNABLE_TO_FIND_SPELL);
+    addError("spell not found :: %d", type);
+    exit(RuntimeErrorNoSpellForType);
 }
 
 
@@ -75,7 +75,7 @@ int getSpellAttributeAmount(Spell *spell, int base) {
     } else if (spell->intent == INTENT_HELP) {
         return amount;
     } else {
-        fprintf(stderr, "unknown intent in getSpellAttributeAmount");
-        exit(EXIT_UNKNOWN_INTENT);
+        addError("unknown intent in getSpellAttributeAmount :: %d", spell->intent);
+        exit(RuntimeErrorUnknownIntent);
     }
 }

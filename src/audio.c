@@ -26,8 +26,8 @@ AudioManager *createAudioManager() {
 
 void updateMusicStream(AudioManager *am) {
     if (am->musicIndex < 0) {
-        addError("cannot play music with negative index");
-        return;
+        addError("cannot play music with negative index :: %d", am->musicIndex);
+        exit(GameEngineErrorMusicNotStreaming);
     }
     UpdateMusicStream(am->music[am->musicIndex]->music);
 }

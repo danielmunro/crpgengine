@@ -63,6 +63,6 @@ MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext) {
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_LOAD) == 0) {
         return createMenuSelectResponse(OPEN_MENU, LOAD_MENU);
     }
-    fprintf(stderr, "menu type not found :: %d", c);
-    exit(EXIT_MENU_NOT_DEFINED);
+    addError("menu type not found :: %d", c);
+    exit(GameEngineErrorMenuNotDefined);
 }

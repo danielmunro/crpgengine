@@ -37,8 +37,8 @@ void setSceneTypeFromString(Scene *s, const char *sceneType) {
             return;
         }
     }
-    addError("scene type not found: %s, setting to default of 'town'", sceneType);
-    s->type = SCENE_TYPE_TOWN;
+    addError("unknown scene type :: %s", sceneType);
+    exit(RuntimeErrorUnknownScene);
 }
 
 Scene *createScene() {
@@ -75,6 +75,7 @@ void addActiveControl(Scene *s, ControlBlock *cb) {
         }
     }
     addError("too many active control blocks, cannot add new one");
+    exit(GameEngineErrorCannotAddMoreActiveControls);
 }
 
 void addStoryline(Scene *scene, StorylineData *storyline) {

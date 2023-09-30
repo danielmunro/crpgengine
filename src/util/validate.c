@@ -5,24 +5,24 @@ void validateExits(Game *g) {
                  g->scenes->scenes[i]->exploration->exitCount);
         for (int j = 0; j < g->scenes->scenes[i]->exploration->exitCount; j++) {
             int found = false;
-            Exit *exit = g->scenes->scenes[i]->exploration->exits[j];
-            if (strcmp(exit->to, "") == 0) {
+            Exit *ex = g->scenes->scenes[i]->exploration->exits[j];
+            if (strcmp(ex->to, "") == 0) {
                 addWarning("exit defined without destination in '%s' scene", g->scenes->scenes[i]->name);
                 continue;
             }
             for (int q = 0; q < g->scenes->count; q++) {
                 for (int e = 0; e < g->scenes->scenes[q]->exploration->entranceCount; e++) {
-                    if (strcmp(exit->to, g->scenes->scenes[q]->exploration->entrances[e]->name) == 0) {
+                    if (strcmp(ex->to, g->scenes->scenes[q]->exploration->entrances[e]->name) == 0) {
                         found = true;
                         break;
                     }
                 }
             }
             if (!found) {
-                addError("exit '%s' for scene '%s' does not exist",
-                         exit->to,
-                         g->scenes->scenes[i]->name
-                );
+                addError("exit for scene does not exist :: %s, %s",
+                         ex->to,
+                         g->scenes->scenes[i]->name);
+                exit(RuntimeErrorUnknownWarp);
             }
         }
     }

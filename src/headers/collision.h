@@ -21,8 +21,8 @@ CollisionType getCollisionTypeFromString(const char *type) {
             return i;
         }
     }
-    fprintf(stderr, "no collision type found");
-    exit(EXIT_BAD_COLLISION_TYPE);
+    fprintf(stderr, "no collision type found :: %s", type);
+    exit(RuntimeErrorUnknownCollisionType);
 }
 
 #endif //CJRPGENGINE_COLLISION_H

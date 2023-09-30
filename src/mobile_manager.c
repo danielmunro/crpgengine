@@ -34,8 +34,8 @@ Mobile *findMobById(MobileManager *mm, const char *id) {
             return mm->mobiles[i];
         }
     }
-    addError("mob not found: %s", id);
-    exit(EXIT_MOBILE_NOT_FOUND);
+    addError("mob not found :: %s", id);
+    exit(RuntimeErrorMobileNotFound);
 }
 
 Mobile *createMobileFromData(MobileManager *mm, MobileData *data, Animation *animations[MAX_ANIMATIONS]) {

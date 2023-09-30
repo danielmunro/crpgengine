@@ -20,7 +20,7 @@ MenuStyle getMenuStyleFromString(const char *style) {
         }
     }
     fprintf(stderr, "cannot get menu style");
-    exit(EXIT_MENU_STYLE_NOT_DEFINED);
+    exit(RuntimeErrorMenuStyleNotDefined);
 }
 
 typedef enum {

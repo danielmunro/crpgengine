@@ -54,14 +54,6 @@ void addError(const char *message, ...) {
     va_end(args);
 }
 
-void addFatal(const char *message, ...) {
-    va_list args;
-    va_start(args, message);
-    addLogWithLevel(ERROR, message, args);
-    va_end(args);
-    exit(-1);
-}
-
 Log *createLog(LogLevel configuredLogLevel) {
     logger = malloc(sizeof(Log));
     logger->level = configuredLogLevel;

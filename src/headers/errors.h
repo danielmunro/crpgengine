@@ -1,24 +1,43 @@
 #ifndef CJRPGENGINE_ERRORS_H
 #define CJRPGENGINE_ERRORS_H
 
-#define EXIT_NO_INDEX_DIR 1
-#define EXIT_MENU_NOT_DEFINED 100
-#define EXIT_MENU_STYLE_NOT_DEFINED 101
-#define EXIT_MOBILE_NOT_FOUND 200
-#define EXIT_FORCE_NEW_AND_LOAD_SAVE 300
+typedef enum {
+    // Argument errors
+    ArgumentErrorIndexDirectoryRequired = 100,
+    ArgumentErrorForceNewAndLoadSave = 101,
 
-#define EXIT_FONT_STYLE_NOT_FOUND 400
-#define EXIT_TEXT_BOX_NOT_FOUND 401
-#define EXIT_UNABLE_TO_CREATE_SPELL 402
-#define EXIT_UNABLE_TO_FIND_SPELL 403
-#define EXIT_UNKNOWN_INTENT 404
-#define EXIT_BAD_COLLISION_TYPE 405
-#define EXIT_UNKNOWN_TEXT_AREA 406
-#define EXIT_UNKNOWN_ITEM 407
+    // Runtime errors
+    RuntimeErrorMenuStyleNotDefined = 200,
+    RuntimeErrorMobileNotFound = 201,
+    RuntimeErrorNullSpellType = 202,
+    RuntimeErrorNoSpellForType = 203,
+    RuntimeErrorUnknownIntent = 204,
+    RuntimeErrorUnknownCollisionType = 205,
+    RuntimeErrorUnknownItem = 206,
+    RuntimeErrorUnknownEntrance = 207,
+    RuntimeErrorUnknownScene = 208,
+    RuntimeErrorUnknownWarp = 209,
 
-#define EXIT_CYAML 500
-#define EXIT_CYAML_SAVE_PLAYER 501
-#define EXIT_CYAML_LOAD_PLAYER 502
-#define EXIT_CYAML_LOAD_STORYLINES 503
+    // Game engine errors
+    GameEngineErrorMenuNotDefined = 300,
+    GameEngineErrorTextBoxNotFound = 301,
+    GameEngineErrorMusicNotStreaming = 302,
+    GameEngineErrorCannotAddMoreActiveControls = 303,
+
+    // Configuration errors
+    ConfigurationErrorUndefinedTextArea = 400,
+    ConfigurationErrorMapResourcesMissing = 401,
+    ConfigurationErrorMapResourcesUnreadable = 402,
+    ConfigurationErrorUnknownLayer = 403,
+    ConfigurationErrorUnknownBeast = 404,
+    ConfigurationErrorPlayerMobilesDirectoryDoesNotExist = 405,
+    ConfigurationErrorUnknownSpriteSheet = 406,
+
+    // Yaml loading/saving
+    CyamlErrorGeneric = 500,
+    CyamlSavePlayer = 501,
+    CyamlLoadPlayer = 502,
+    CyamlLoadStorylines = 503,
+} ExitCode;
 
 #endif //CJRPGENGINE_ERRORS_H

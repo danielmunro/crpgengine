@@ -38,11 +38,11 @@ void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
 void evaluateExits(Game *g) {
     addDebug("exploration -- evaluate exits");
     Exploration *e = g->scenes->current->exploration;
-    int exit = atExit(e, g->player);
-    if (exit > -1) {
+    int ex = atExit(e, g->player);
+    if (ex > -1) {
         addDebug("player at exit");
-        char *sceneName = e->exits[exit]->scene;
-        char *entranceName = e->exits[exit]->to;
+        char *sceneName = e->exits[ex]->scene;
+        char *entranceName = e->exits[ex]->to;
         for (int i = 0; i < g->scenes->count; i++) {
             if (strcmp(sceneName, g->scenes->scenes[i]->name) == 0) {
                 attemptToUseExit(
@@ -53,7 +53,9 @@ void evaluateExits(Game *g) {
                 return;
             }
         }
-        addError("warp to '%s' not found", sceneName);
+        addError("warp not found :: %s, %s",
+                sceneName, entranceName);
+        exit(RuntimeErrorUnknownWarp);
     }
 }
 

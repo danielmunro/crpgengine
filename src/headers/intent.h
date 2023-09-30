@@ -18,7 +18,7 @@ Intent getIntentFromString(const char *intent) {
         return INTENT_HELP;
     }
     fprintf(stderr, "intent could not be found");
-    exit(EXIT_UNKNOWN_INTENT);
+    exit(RuntimeErrorUnknownIntent);
 }
 
 #endif // CJRPGENGINE_INTENT_H

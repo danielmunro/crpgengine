@@ -52,8 +52,8 @@ Entrance *findEntrance(Exploration *e, char *name) {
             return e->entrances[i];
         }
     }
-    addError("entrance not found: %s", name);
-    return NULL;
+    addError("entrance not found :: %s", name);
+    exit(RuntimeErrorUnknownEntrance);
 }
 
 Exploration *createExploration() {

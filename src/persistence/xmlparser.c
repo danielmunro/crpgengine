@@ -49,8 +49,8 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
     sprintf(filePath, "%s/%s", indexDir, filename);
     TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(e, filePath);
     if (tilemapXmlReader->reader == NULL) {
-        addError("unable to open file: %s", filename);
-        return;
+        addError("unable to parse tilemap xml :: %s", filename);
+        exit(ConfigurationErrorMapResourcesUnreadable);
     }
     ret = xmlTextReaderRead(tilemapXmlReader->reader);
     while (ret == 1) {
@@ -60,7 +60,8 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
     addDebug("found %d objects", tilemapXmlReader->exploration->objectCount);
     xmlFreeTextReader(tilemapXmlReader->reader);
     if (ret != 0) {
-        addError("failed to parse file: %s", filename);
+        addError("failed to parse tilemap xml :: %s", filename);
+        exit(ConfigurationErrorMapResourcesUnreadable);
     }
 }
 
@@ -108,7 +109,10 @@ void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) 
         if (strcmp(layerName, "background") == 0) layer->type = BACKGROUND;
         else if (strcmp(layerName, "midground") == 0) layer->type = MIDGROUND;
         else if (strcmp(layerName, "foreground") == 0) layer->type = FOREGROUND;
-        else addError("unknown layer: %s", layerName);
+        else {
+            addError("unknown layer :: %s", layerName);
+            exit(ConfigurationErrorUnknownLayer);
+        }
         tilemapXmlReader->exploration->layers[tilemapXmlReader->exploration->layerCount] = layer;
     } else if (strcmp(strName, "data") == 0) {
         if (dataOpen == 1) {
@@ -179,8 +183,8 @@ void processSceneNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) 
 void parseSceneXml(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
     int ret;
     if (tilemapXmlReader->reader == NULL) {
-        addError("unable to find file for scene");
-        return;
+        addError("unable to find map resources for scene :: %s", indexDir);
+        exit(ConfigurationErrorMapResourcesMissing);
     }
     ret = xmlTextReaderRead(tilemapXmlReader->reader);
     while (ret == 1) {
@@ -189,6 +193,7 @@ void parseSceneXml(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
     }
     xmlFreeTextReader(tilemapXmlReader->reader);
     if (ret != 0) {
-        addError("failed to read scene");
+        addError("failed to read scene :: %s", indexDir);
+        exit(ConfigurationErrorMapResourcesUnreadable);
     }
 }

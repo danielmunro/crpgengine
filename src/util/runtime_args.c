@@ -75,12 +75,12 @@ RuntimeArgs *createRuntimeArgs(int argc, char *argv[]) {
         }
     }
     if (runtimeArgs->indexDir == NULL) {
-        fprintf(stderr, "indexDir (-i) argument is required\n");
-        exit(EXIT_NO_INDEX_DIR);
+        addError("indexDir (-i) argument is required");
+        exit(ArgumentErrorIndexDirectoryRequired);
     }
     if (runtimeArgs->forceNewGame && runtimeArgs->saveFile != NULL) {
-        fprintf(stderr, "cannot specify -n and -v together\n");
-        exit(EXIT_FORCE_NEW_AND_LOAD_SAVE);
+        addError("cannot specify -n and -v together");
+        exit(ArgumentErrorForceNewAndLoadSave);
     }
     return runtimeArgs;
 }

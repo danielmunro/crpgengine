@@ -72,8 +72,8 @@ Rectangle findTextAreaRect(TextAreaType type, TextAreaData *areas, int areaCount
             };
         }
     }
-    addError("unknown text area: %d", type);
-    exit(EXIT_UNKNOWN_TEXT_AREA);
+    addError("unknown text area :: %d", type);
+    exit(ConfigurationErrorUndefinedTextArea);
 }
 
 void createUIConfig(UIData *data) {

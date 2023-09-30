@@ -189,8 +189,8 @@ TextBox *findOrCreateTextBox(MenuContext *mc, TextBoxLabel label, Rectangle area
             return mc->textBoxes[i];
         }
     }
-    fprintf(stderr, "could not find text box :: %d", label);
-    exit(EXIT_TEXT_BOX_NOT_FOUND);
+    addError("could not find text box :: %d", label);
+    exit(GameEngineErrorTextBoxNotFound);
 }
 
 int getDefaultNextOption(MenuContext *mc) {

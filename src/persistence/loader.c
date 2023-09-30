@@ -5,7 +5,9 @@ void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *fi
     AnimationData *animation = loadAnimationYaml(file);
     Spritesheet *sp = findSpritesheetByName(sm, animation->sprite->name);
     if (sp == NULL) {
-        addFatal("spritesheet not found: %s", animation->sprite->name);
+        addError("spritesheet not found :: %s",
+                animation->sprite->name);
+        exit(ConfigurationErrorUnknownSpriteSheet);
     }
     for (int i = 0; i < animation->slices_count; i++) {
         SliceData *s = &animation->slices[i];
@@ -54,8 +56,8 @@ void loadPlayerMobiles(MobileManager *mm) {
     sprintf(directory, "%s/player/mobiles", runtimeArgs->indexDir);
     addInfo("load player mobiles from %s", directory);
     if (!FileExists(directory)) {
-        addError("player mobiles directory does not exist -- %s", directory);
-        return;
+        addError("player mobiles directory does not exist :: %s", directory);
+        exit(ConfigurationErrorPlayerMobilesDirectoryDoesNotExist);
     }
     char **mobFiles = calloc(MAX_FILES, sizeof(char *));
     int files = getFilesInDirectory(directory, mobFiles);
@@ -91,7 +93,8 @@ void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, co
             }
         }
         if (scene->encounters->beastEncounters[i] == NULL) {
-            addError("unable to find beast with id: %s", data->beasts[i].id);
+            addError("unable to find beast from id :: %s", data->beasts[i].id);
+            exit(ConfigurationErrorUnknownBeast);
         }
     }
     addInfo("done loading encounters for scene %s with beast count %d",
