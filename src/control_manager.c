@@ -94,7 +94,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         for (int i = 0; i < then->item->quantity; i++) {
             addItem(cm->player, findItemFromName(cm->itemManager, then->item->name));
         }
-        const char *message = malloc(64);
+        const char *message = malloc(MAX_NOTIFICATION_LENGTH);
         sprintf((char *) message, "you received:\n%s", then->item->name);
         addNotification(
                 cm->notificationManager,
