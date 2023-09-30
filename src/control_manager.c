@@ -115,7 +115,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         if (quantity > 0) {
             addWarning("player didn't have enough items to give :: %d remaining", quantity);
         }
-        const char *message = malloc(64);
+        const char *message = malloc(MAX_NOTIFICATION_LENGTH);
         sprintf((char *) message, "you lost:\n%s", then->item->name);
         addNotification(
                 cm->notificationManager,
