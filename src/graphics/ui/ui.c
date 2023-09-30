@@ -59,7 +59,32 @@ typedef struct {
     FightMenuConfig *fightMenu;
 } UIConfig;
 
+typedef struct {
+    Rectangle area;
+    FontStyle *fontStyle;
+    TextBoxLabel label;
+    int cursor;
+} TextBox;
+
+typedef struct {
+    const char *message;
+    Rectangle area;
+    FontStyle *font;
+    double timeStarted;
+    double timeElapsed;
+} Dialog;
+
 UIConfig *ui;
+
+Dialog *createDialog(const char *message, Rectangle area, FontStyle *font) {
+    Dialog *dialog = malloc(sizeof(Dialog));
+    dialog->message = message;
+    dialog->area = area;
+    dialog->font = font;
+    dialog->timeStarted = getTimeInMS();
+    dialog->timeElapsed = 0;
+    return dialog;
+}
 
 Rectangle findTextAreaRect(TextAreaType type, TextAreaData *areas, int areaCount) {
     for (int i = 0; i < areaCount; i++) {
@@ -159,13 +184,6 @@ void createUIConfig(UIData *data) {
             data->textAreasCount);
 }
 
-typedef struct {
-    Rectangle area;
-    FontStyle *fontStyle;
-    TextBoxLabel label;
-    int cursor;
-} TextBox;
-
 TextBox *createTextBox(Rectangle area, FontStyle *fontStyle, TextBoxLabel label) {
     TextBox *textBox = malloc(sizeof(TextBox));
     textBox->area = area;
@@ -222,6 +240,10 @@ void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
         drawLineInArea(buffer, area, line, font);
     }
     free(word);
+}
+
+void drawDialog(Dialog *dialog) {
+    drawTextInArea(dialog->message, dialog->area, dialog->font);
 }
 
 void drawMenuRect(Rectangle rect) {

@@ -6,6 +6,7 @@ typedef struct {
     SaveFiles *saveFiles;
     Mobile *blockedBy;
     Mobile *engageable;
+    Dialog *dialog;
     bool engaged;
     int coins;
     int secondsPlayed;
@@ -62,6 +63,7 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
     player->itemCount = itemCount;
     player->items = items;
     player->onDeck = calloc(MAX_PARTY_SIZE, sizeof(Mobile));
+    player->dialog = NULL;
     return player;
 }
 
@@ -128,6 +130,11 @@ void checkMoveKey(Player *p, int key, AnimationType direction) {
     }
 }
 
+void clearDialog(Player *p) {
+    free(p->dialog);
+    p->dialog = NULL;
+}
+
 void explorationCheckMoveKeys(Player *player) {
     for (int i = 0; i < DIRECTION_COUNT; i++) {
         checkMoveKey(player, MOVE_KEYS[i], DIRECTIONS[i]);
@@ -148,6 +155,7 @@ void engageWithMobile(Player *p) {
 
 void disengageWithMobile(Player *p) {
     p->engaged = false;
+    clearDialog(p);
     updateDirection(p->blockedBy, p->blockedBy->previousDirection);
 }
 

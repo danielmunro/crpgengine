@@ -44,6 +44,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
                 )
         );
         cm->player->engaged = false;
+        clearDialog(cm->player);
         getPartyLeader(cm->player)->isBeingMoved = true;
     } else if (isFaceDirectionOutcome(then)) {
         addInfo("set direction for mob :: %s, %s", then->target->name, then->direction);

@@ -366,9 +366,15 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
         if (cb[i] != NULL && cb[i]->progress < cb[i]->thenCount) {
             int p = cb[i]->progress;
             if (cb[i]->then[p]->outcome == SPEAK && isSpeakingTo(player, cb[i]->then[p]->target)) {
+                if (player->dialog == NULL) {
+                    player->dialog = createDialog(
+                            cb[i]->then[p]->message,
+                            ui->textAreas->bottom,
+                            font);
+                }
                 Rectangle area = ui->textAreas->bottom;
                 drawMenuRect(area);
-                drawTextInArea(cb[i]->then[p]->message, area, font);
+                drawDialog(player->dialog);
             }
         }
     }
@@ -427,6 +433,7 @@ void explorationSpaceKeyPressed(Player *player, ControlBlock *controlBlocks[MAX_
         if (controlBlocks[i] != NULL
             && player->engaged
             && isSpeakOutcome(controlBlocks[i]->then[controlBlocks[i]->progress])) {
+            clearDialog(player);
             dialogEngaged(player, controlBlocks[i]);
             return;
         }
