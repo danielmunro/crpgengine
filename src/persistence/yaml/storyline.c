@@ -13,7 +13,7 @@ typedef struct {
     bool parallel;
     const char *mob;
     const char *action;
-    const char *message;
+    const char *dialog;
     const char *story;
     const char *position;
     const char *direction;
@@ -65,9 +65,7 @@ static const cyaml_schema_field_t thenFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
                 "action", CYAML_FLAG_OPTIONAL, ThenData, action, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
-                "message", CYAML_FLAG_OPTIONAL, ThenData, message, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_STRING_PTR(
-                "speak", CYAML_FLAG_OPTIONAL, ThenData, message, 0, CYAML_UNLIMITED),
+                "dialog", CYAML_FLAG_OPTIONAL, ThenData, dialog, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "story", CYAML_FLAG_OPTIONAL, ThenData, story, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(

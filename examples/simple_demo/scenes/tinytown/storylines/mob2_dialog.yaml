@@ -7,7 +7,7 @@ storylines:
         story: from_the_past:intro
     then:
       - mob: vill2
-        speak: "Hello there adventurer."
+        dialog: "Hello there adventurer."
   - when:
       - player: engaged
         mob: vill2
@@ -19,9 +19,9 @@ storylines:
           quantity: 1
     then:
       - mob: vill2
-        speak: "Oh my, you found the amulet! But it's seen better days, that's for sure."
+        dialog: "Oh my, you found the amulet! But it's seen better days, that's for sure."
       - mob: vill2
-        speak: "Hmm. If you'll let me borrow it, I should be able to fix it right up."
+        dialog: "Hmm. If you'll let me borrow it, I should be able to fix it right up."
       - player: true
         action: lose_item
         item:
@@ -31,12 +31,12 @@ storylines:
         action: wait
         amount: 2
       - mob: vill2
-        speak: "Just need to put the finishing touches on now."
+        dialog: "Just need to put the finishing touches on now."
       - player: true
         action: wait
         amount: 1
       - mob: vill2
-        speak: "There! Good as new. Now, don't go scuffing it up again."
+        dialog: "There! Good as new. Now, don't go scuffing it up again."
       - player: true
         action: give_item
         item:
@@ -53,4 +53,4 @@ storylines:
           quantity: 1
     then:
       - mob: vill2
-        speak: "It breaks my heart to part with the amulet."
+        dialog: "It breaks my heart to part with the amulet."

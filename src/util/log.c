@@ -18,7 +18,7 @@ char *getLogLevelString(LogLevel logLevel) {
     }
 }
 
-void addLogWithLevel(LogLevel logLevel, char *message, va_list ag) {
+void addLogWithLevel(LogLevel logLevel, const char *message, va_list ag) {
     if (logger->level >= logLevel) {
         char toLog[MAX_LOG_LINE_LENGTH];
         sprintf(toLog, "%s -- %s\n", getLogLevelString(logLevel), message);
@@ -26,35 +26,35 @@ void addLogWithLevel(LogLevel logLevel, char *message, va_list ag) {
     }
 }
 
-void addDebug(char *message, ...) {
+void addDebug(const char *message, ...) {
     va_list args;
     va_start(args, message);
     addLogWithLevel(DEBUG, message, args);
     va_end(args);
 }
 
-void addInfo(char *message, ...) {
+void addInfo(const char *message, ...) {
     va_list args;
     va_start(args, message);
     addLogWithLevel(INFO, message, args);
     va_end(args);
 }
 
-void addWarning(char *message, ...) {
+void addWarning(const char *message, ...) {
     va_list args;
     va_start(args, message);
     addLogWithLevel(WARN, message, args);
     va_end(args);
 }
 
-void addError(char *message, ...) {
+void addError(const char *message, ...) {
     va_list args;
     va_start(args, message);
     addLogWithLevel(ERROR, message, args);
     va_end(args);
 }
 
-void addFatal(char *message, ...) {
+void addFatal(const char *message, ...) {
     va_list args;
     va_start(args, message);
     addLogWithLevel(ERROR, message, args);

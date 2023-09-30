@@ -25,10 +25,10 @@ typedef enum {
     ARRIVE_AT,
 } Condition;
 
-#define OUTCOME_SPEAK "speak"
+#define OUTCOME_DIALOG "dialog"
 
 const char *outcomes[] = {
-        OUTCOME_SPEAK,
+        OUTCOME_DIALOG,
         "move_to",
         "set_direction",
         "sprite",

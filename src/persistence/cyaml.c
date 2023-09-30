@@ -11,7 +11,8 @@ MusicData *loadMusicYaml(const char *indexDir) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &musicTopSchema, (cyaml_data_t **) &music, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing music yaml: %s\n", cyaml_strerror(err));
+        addError("error parsing music yaml :: %s", cyaml_strerror(err));
+        exit(EXIT_CYAML);
     }
     return music;
 }
@@ -23,7 +24,8 @@ SoundData *loadSoundYaml(const char *indexDir) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &musicTopSchema, (cyaml_data_t **) &sound, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing music yaml: %s\n", cyaml_strerror(err));
+        addError("error parsing music yaml :: %s", cyaml_strerror(err));
+        exit(EXIT_CYAML);
     }
     return sound;
 }
@@ -33,7 +35,8 @@ AnimationData *loadAnimationYaml(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &animationTopSchema, (cyaml_data_t **) &animation, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing animation yaml at %s :: %s\n", filePath, cyaml_strerror(err));
+        addError("error parsing animation yaml at %s :: %s", filePath, cyaml_strerror(err));
+        exit(EXIT_CYAML);
     }
     return animation;
 }
@@ -45,7 +48,8 @@ SceneData *loadSceneYaml(const char *indexDir) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &sceneTopSchema, (cyaml_data_t **) &scene, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing scene yaml\n");
+        addError("error parsing scene yaml");
+        exit(EXIT_CYAML);
     }
     return scene;
 }
@@ -55,7 +59,8 @@ SpritesheetData *loadSpritesheetYaml(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &spritesheetTopSchema, (cyaml_data_t **) &scene, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing spritesheet yaml\n");
+        addError("error parsing spritesheet yaml");
+        exit(EXIT_CYAML);
     }
     return scene;
 }
@@ -65,7 +70,8 @@ MobileData *loadMobYaml(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &mobileTopSchema, (cyaml_data_t **) &mob, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing mob yaml for file :: %s\n", filePath);
+        addError("error parsing mob yaml for file :: %s", filePath);
+        exit(EXIT_CYAML);
     }
     return mob;
 }
@@ -75,7 +81,8 @@ ItemsData *loadItemYaml(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &itemsSchema, (cyaml_data_t **) &items, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing item yaml\n");
+        addError("error parsing item yaml");
+        exit(EXIT_CYAML);
     }
     return items;
 }
@@ -85,7 +92,8 @@ BeastiaryData *loadBeastiaryYaml(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &beastiaryTopSchema, (cyaml_data_t **) &beastiary, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing beast yaml\n");
+        addError("error parsing beast yaml");
+        exit(EXIT_CYAML);
     }
     return beastiary;
 }
@@ -95,8 +103,8 @@ StorylinesData *loadStorylinesYaml(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &storylinesTopSchema, (cyaml_data_t **) &storylines, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error loading file, filename and error :: %s - %s\n", filePath, cyaml_strerror(err));
-        exit(1);
+        addError("error loading file, filename and error :: %s - %s", filePath, cyaml_strerror(err));
+        exit(EXIT_CYAML_LOAD_STORYLINES);
     }
     return storylines;
 }
@@ -106,8 +114,8 @@ SaveData *loadSaveData(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &saveTopSchema, (cyaml_data_t **) &save, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "%s\n", cyaml_strerror(err));
-        return NULL;
+        addError("error loading save data :: %s", cyaml_strerror(err));
+        exit(EXIT_CYAML_LOAD_PLAYER);
     }
     if (save->player->storylines == NULL) {
         save->player->storylines = calloc(MAX_STORIES, sizeof(char *));
@@ -119,7 +127,8 @@ void saveSaveData(SaveData *saveData, const char *filePath) {
     cyaml_err_t err = cyaml_save_file(filePath, &cyamlConfig,
                                       &saveTopSchema, saveData, 0);
     if (err != CYAML_OK) {
-        fprintf(stderr, "%s\n", cyaml_strerror(err));
+        addError(cyaml_strerror(err));
+        exit(EXIT_CYAML_SAVE_PLAYER);
     }
 }
 
@@ -128,8 +137,8 @@ SpellsData *loadSpellData(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &spellsTopSchema, (cyaml_data_t **) &spells, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error loading file, filename and error :: %s - %s\n", filePath, cyaml_strerror(err));
-        exit(1);
+        addError("error loading file, filename and error :: %s - %s", filePath, cyaml_strerror(err));
+        exit(EXIT_CYAML);
     }
     return spells;
 }
@@ -141,8 +150,8 @@ UIData *loadUIData() {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &uiSchema, (cyaml_data_t **) &ui, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error loading file, filename and error :: %s - %s\n", filePath, cyaml_strerror(err));
-        exit(1);
+        addError("error loading file, filename and error :: %s, %s", filePath, cyaml_strerror(err));
+        exit(EXIT_CYAML);
     }
     return ui;
 }
@@ -154,8 +163,8 @@ StartPartyData *loadStartPartyData() {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &startPartyTopSchema, (cyaml_data_t **) &startParty, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error loading file, filename and error :: %s - %s\n", filePath, cyaml_strerror(err));
-        exit(1);
+        addError("error loading file, filename and error :: %s, %s", filePath, cyaml_strerror(err));
+        exit(EXIT_CYAML);
     }
     return startParty;
 }
@@ -165,7 +174,8 @@ ItemsReferenceData *loadItemsReferenceData(const char *filePath) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &itemsReferenceSchema, (cyaml_data_t **) &items, NULL);
     if (err != CYAML_OK) {
-        fprintf(stderr, "error parsing item yaml\n");
+        addError("error parsing item yaml :: %s, %s", filePath, cyaml_strerror(err));
+        exit(EXIT_CYAML);
     }
     return items;
 }

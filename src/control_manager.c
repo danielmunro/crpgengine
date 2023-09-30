@@ -211,8 +211,8 @@ Then *mapThen(ControlManager *cm, ThenData td) {
     } else {
         pos = (Vector2) {0, 0};
     }
-    if (td.message != NULL) {
-        td.action = OUTCOME_SPEAK;
+    if (td.dialog != NULL) {
+        td.action = OUTCOME_DIALOG;
     }
     int amount = 0;
     if (hasAmountProperty(td)) {
@@ -220,10 +220,10 @@ Then *mapThen(ControlManager *cm, ThenData td) {
     }
     Outcome o = mapOutcome(td.action);
     addDebug("then story is '%s', outcome: %d, message: %s",
-             td.story, o, td.message);
+             td.story, o, td.dialog);
     return createThen(
             target,
-            &td.message[0],
+            &td.dialog[0],
             &td.story[0],
             &td.direction[0],
             &td.item[0],
