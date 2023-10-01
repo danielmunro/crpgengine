@@ -203,6 +203,9 @@ void run(Game *g) {
             doExplorationLoop(g);
         }
         updateMusicStream(g->audio);
+        if (g->player->dialog != NULL) {
+            updateDialog(g->player->dialog);
+        }
         stopTiming(g->timing);
     }
 }

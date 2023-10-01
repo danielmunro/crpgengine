@@ -242,8 +242,22 @@ void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
     free(word);
 }
 
+void updateDialog(Dialog *dialog) {
+    double end = getTimeInMS();
+    dialog->timeElapsed = dialog->timeElapsed + end - dialog->timeStarted;
+    dialog->timeStarted = end;
+}
+
 void drawDialog(Dialog *dialog) {
-    drawTextInArea(dialog->message, dialog->area, dialog->font);
+    int amount = (int) ceil(dialog->timeElapsed / 10);
+    char message[MAX_MESSAGE_BUFFER];
+    memcpy(message, &dialog->message[0], amount);
+    int len = (int) strlen(dialog->message);
+    while (dialog->message[amount - 1] != ' ' && amount < len) {
+        strcat(message, "\t");
+        amount++;
+    }
+    drawTextInArea(message, dialog->area, dialog->font);
 }
 
 void drawMenuRect(Rectangle rect) {
