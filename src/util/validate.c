@@ -30,7 +30,33 @@ void validateExits(Game *g) {
     }
 }
 
+void validateMobileData(Game *g) {
+    int mobsFound = 0;
+    for (int i = 0; i < g->scenes->count; i++) {
+        Scene *s = g->scenes->scenes[i];
+        addDebug("validate scene mobiles :: %s", s->name);
+        for (int j = 0; j < s->storylineCount; j++) {
+            for (int q = 0; q < s->storylines[j]->when_count; q++) {
+                if (s->storylines[j]->when[q].mob != NULL) {
+                    const char *id = s->storylines[j]->when[q].mob;
+                    findMobById(g->mobiles, id);
+                    mobsFound++;
+                }
+            }
+            for (int q = 0; q < s->storylines[j]->then_count; q++) {
+                if (s->storylines[j]->then[q].mob != NULL) {
+                    const char *id = s->storylines[j]->then[q].mob;
+                    findMobById(g->mobiles, id);
+                    mobsFound++;
+                }
+            }
+        }
+    }
+    addDebug("all mobs validated :: %d total mob references", mobsFound);
+}
+
 void validateGameData(Game *g) {
-    addDebug("validating game data");
+    addDebug("validate game data");
     validateExits(g);
+    validateMobileData(g);
 }
