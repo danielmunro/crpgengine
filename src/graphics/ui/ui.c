@@ -258,7 +258,6 @@ void drawDialog(Dialog *dialog) {
         amount++;
     }
     drawTextInArea(message, dialog->area, dialog->font);
-    addDebug("drawn");
 }
 
 void drawMenuRect(Rectangle rect) {

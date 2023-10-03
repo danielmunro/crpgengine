@@ -363,19 +363,20 @@ void evaluateMovement(Exploration *e, Player *p) {
 
 void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROLS], FontStyle *font) {
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
-        if (cb[i] != NULL && cb[i]->progress < cb[i]->thenCount) {
-            int p = cb[i]->progress;
-            if (cb[i]->then[p]->outcome == SPEAK && isSpeakingTo(player, cb[i]->then[p]->target)) {
-                if (player->dialog == NULL) {
-                    player->dialog = createDialog(
-                            cb[i]->then[p]->message,
-                            ui->textAreas->bottom,
-                            font);
-                }
-                Rectangle area = ui->textAreas->bottom;
-                drawMenuRect(area);
-                drawDialog(player->dialog);
+        if (cb[i] == NULL) {
+            continue;
+        }
+        int p = cb[i]->progress;
+        if (cb[i]->then[p]->outcome == SPEAK && isSpeakingTo(player, cb[i]->then[p]->target)) {
+            if (player->dialog == NULL) {
+                player->dialog = createDialog(
+                        cb[i]->then[p]->message,
+                        ui->textAreas->bottom,
+                        font);
             }
+            Rectangle area = ui->textAreas->bottom;
+            drawMenuRect(area);
+            drawDialog(player->dialog);
         }
     }
 }
