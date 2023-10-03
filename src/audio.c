@@ -61,7 +61,7 @@ void playSound(AudioManager *s, const char *name) {
 
 void assignMusicValues(AudioManager *am) {
     MusicData *music = loadMusicYaml(runtimeArgs->indexDir);
-    char *filePath;
+    char filePath[MAX_FS_PATH_LENGTH] = "";
     sprintf(filePath, "%s/audio/%s", runtimeArgs->indexDir, music->town);
 
     Music_ *m = malloc(sizeof(Music_));

@@ -6,13 +6,15 @@ void drawMagicMenuScreen(MenuContext *menuContext) {
     drawMenuRect(textBox->area);
     Mobile *m = menuContext->selectedMob;
     for (int i = 0; i < m->spellCount; i++) {
-        char buffer[MAX_LINE_BUFFER];
+        char buffer[MAX_LINE_BUFFER] = "";
         sprintf(buffer, "%s", m->spells[i]->name);
-        int count = strlen(m->spells[i]->name) & INT_MAX;
-        for (int j = count; j < 20; j++) {
-            sprintf(buffer, "%s ", buffer);
+        int count = (int) strlen(m->spells[i]->name) & INT_MAX;
+        for (int j = count; j < SPELL_COLUMN_WIDTH; j++) {
+            strcat(buffer, " ");
         }
-        sprintf(buffer, "%s %dmp", buffer, m->spells[i]->cost->mana);
+        char spellMana[MAX_VITALS_LENGTH] = "";
+        sprintf(spellMana, "%d mp", m->spells[i]->cost->mana);
+        strcat(buffer, spellMana);
         FontStyle *fs = menuContext->fonts->default_;
         if (m->spells[i]->intent != INTENT_HELP || !canApplyCost(m, m->spells[i]->cost)) {
             fs = menuContext->fonts->disable;

@@ -288,8 +288,8 @@ Rectangle getObjectSize(Exploration *e, Object *o, int x, int y) {
 bool isBlockedByMapObject(Exploration *e, Rectangle player) {
     Vector2D tiles = getTileCount(e);
     for (int l = 0; l < LAYER_COUNT - 1; l++) {
-        for (int y = -1; y < tiles.y; y++) {
-            for (int x = -1; x < tiles.x; x++) {
+        for (int y = 0; y < tiles.y; y++) {
+            for (int x = 0; x < tiles.x; x++) {
                 int index = e->layers[l]->data[y][x];
                 Object *o = getObject(e, index - 1);
                 if (o != NULL) {

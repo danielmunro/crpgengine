@@ -75,7 +75,7 @@ void parseSceneLayer(Exploration *e, char *rawData) {
         line = strtok(NULL, "\r\n");
         it++;
     }
-    int y = 0, x;
+    int y = 0, x = 0;
     while (y < it) {
         char *val = strtok(data[y], ",");
         x = 0;
