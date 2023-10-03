@@ -8,7 +8,7 @@ typedef struct {
 typedef struct {
     Notification **notifications;
     int count;
-    double timeSinceUpdate;
+    double timeSinceUpdateInMs;
     float slideDown;
 } NotificationManager;
 
@@ -34,34 +34,31 @@ void addNotification(NotificationManager *nm, Notification *n) {
 }
 
 void decayNotifications(NotificationManager *nm, double timeInterval) {
-    nm->timeSinceUpdate = timeInterval;
-    if (nm->timeSinceUpdate > 1000.0) {
+    nm->timeSinceUpdateInMs = timeInterval;
+    if (nm->timeSinceUpdateInMs > MILLISECONDS_IN_SECOND) {
         if (nm->notifications[0] != NULL) {
             nm->notifications[0]->decay--;
             if (nm->notifications[0]->decay == 0) {
                 free(nm->notifications[0]);
                 nm->notifications[0] = NULL;
-                nm->slideDown = NOTIFICATION_HEIGHT;
+                nm->slideDown = NOTIFICATION_HEIGHT + ui->menu->padding;
+            }
+        }
+        nm->timeSinceUpdateInMs -= MILLISECONDS_IN_SECOND;
+    }
+    if (nm->slideDown > 0) {
+        float amount = (float) (nm->timeSinceUpdateInMs / 100);
+        nm->slideDown -= amount;
+        if (nm->slideDown < 0) {
+            nm->slideDown = 0;
+            if (nm->notifications[0] == NULL && nm->notifications[1]) {
                 for (int i = 1; i < nm->count + 1; i++) {
                     nm->notifications[i - 1] = nm->notifications[i];
                 }
                 nm->count--;
             }
         }
-        nm->timeSinceUpdate -= 1000.0;
     }
-//    if (nm->slideDown > 0) {
-//        float amount = (float) (nm->timeSinceUpdate / 100);
-//        for (int i = 0; i < nm->count; i++) {
-//            if (nm->notifications[i] != NULL) {
-//                nm->notifications[i]->rect.y += amount;
-//            }
-//        }
-//        nm->slideDown -= amount;
-//        if (nm->slideDown < 0) {
-//            nm->slideDown = 0;
-//        }
-//    }
 }
 
 void drawNotifications(NotificationManager *nm, FontStyle *font) {
@@ -77,9 +74,14 @@ void drawNotifications(NotificationManager *nm, FontStyle *font) {
             NOTIFICATION_HEIGHT,
         };
         if (i == 0 && nm->notifications[0] != NULL && nm->notifications[0]->decay <= 1) {
-            rect.x += (float) (nm->timeSinceUpdate / 2);
+            rect.x += (float) (nm->timeSinceUpdateInMs / 2);
         }
-        drawMenuRect(rect);
-        drawTextInArea(nm->notifications[i]->message, rect, font);
+        if (nm->notifications[0] == NULL && nm->notifications[1] != NULL && nm->slideDown > 0) {
+            rect.y += NOTIFICATION_HEIGHT + ui->menu->padding - nm->slideDown;
+        }
+        if (nm->notifications[i] != NULL) {
+            drawMenuRect(rect);
+            drawTextInArea(nm->notifications[i]->message, rect, font);
+        }
     }
 }

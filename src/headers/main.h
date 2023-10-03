@@ -27,6 +27,7 @@
 #include "player.h"
 #include "scene.h"
 #include "spell.h"
+#include "timing.h"
 #include "ui.h"
 
 #define MAX_AUDIO 1024
