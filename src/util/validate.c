@@ -30,7 +30,7 @@ void validateExits(Game *g) {
     }
 }
 
-void validateMobileData(Game *g) {
+void validateMobileStorylineReferences(Game *g) {
     int mobsFound = 0;
     for (int i = 0; i < g->scenes->count; i++) {
         Scene *s = g->scenes->scenes[i];
@@ -58,5 +58,5 @@ void validateMobileData(Game *g) {
 void validateGameData(Game *g) {
     addDebug("validate game data");
     validateExits(g);
-    validateMobileData(g);
+    validateMobileStorylineReferences(g);
 }
