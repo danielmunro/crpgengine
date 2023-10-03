@@ -1,13 +1,15 @@
 void validateExits(Game *g) {
     for (int i = 0; i < g->scenes->count; i++) {
-        addDebug("scene '%s' exit count: %d",
+        addDebug("scene exit count :: %s - %d",
                  g->scenes->scenes[i]->name,
                  g->scenes->scenes[i]->exploration->exitCount);
         for (int j = 0; j < g->scenes->scenes[i]->exploration->exitCount; j++) {
             int found = false;
             Exit *ex = g->scenes->scenes[i]->exploration->exits[j];
             if (strcmp(ex->to, "") == 0) {
-                addWarning("exit defined without destination in '%s' scene", g->scenes->scenes[i]->name);
+                addWarning(
+                        "exit defined without destination in scene :: %s",
+                        g->scenes->scenes[i]->name);
                 continue;
             }
             for (int q = 0; q < g->scenes->count; q++) {
