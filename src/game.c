@@ -53,9 +53,8 @@ void evaluateExits(Game *g) {
                 return;
             }
         }
-        addError("warp not found :: %s, %s",
+        addWarning("warp not found :: %s, %s",
                 sceneName, entranceName);
-        exit(RuntimeErrorUnknownWarp);
     }
 }
 
