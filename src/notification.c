@@ -50,9 +50,6 @@ void decayNotifications(NotificationManager *nm, double timeInterval) {
         }
         nm->timeSinceUpdate -= 1000.0;
     }
-//    if (nm->notifications[0] != NULL && nm->notifications[0]->decay <= 1) {
-//        nm->notifications[0]->rect.x += (float) (nm->timeSinceUpdate / 100);
-//    }
 //    if (nm->slideDown > 0) {
 //        float amount = (float) (nm->timeSinceUpdate / 100);
 //        for (int i = 0; i < nm->count; i++) {
@@ -79,6 +76,9 @@ void drawNotifications(NotificationManager *nm, FontStyle *font) {
             NOTIFICATION_WIDTH,
             NOTIFICATION_HEIGHT,
         };
+        if (i == 0 && nm->notifications[0] != NULL && nm->notifications[0]->decay <= 1) {
+            rect.x += (float) (nm->timeSinceUpdate / 2);
+        }
         drawMenuRect(rect);
         drawTextInArea(nm->notifications[i]->message, rect, font);
     }
