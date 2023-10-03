@@ -29,21 +29,8 @@ Notification *createNotification(NotificationType type, const char *message) {
 }
 
 void addNotification(NotificationManager *nm, Notification *n) {
-    for (int i = 0; i < MAX_NOTIFICATIONS; i++) {
-        if (nm->notifications[i] == NULL) {
-            n->rect = (Rectangle) {
-                    (float) ui->screen->width - 300 - ui->menu->padding,
-                    (float) ((float) ui->screen->height
-                            - (ui->menu->padding * (float) (i + 1))
-                            - (float) (NOTIFICATION_HEIGHT * (i + 1))),
-                    300,
-                    NOTIFICATION_HEIGHT,
-            };
-            nm->notifications[i] = n;
-            nm->count++;
-            return;
-        }
-    }
+    nm->notifications[nm->count] = n;
+    nm->count++;
 }
 
 void decayNotifications(NotificationManager *nm, double timeInterval) {
@@ -63,26 +50,36 @@ void decayNotifications(NotificationManager *nm, double timeInterval) {
         }
         nm->timeSinceUpdate -= 1000.0;
     }
-    if (nm->notifications[0] != NULL && nm->notifications[0]->decay <= 1) {
-        nm->notifications[0]->rect.x += (float) (nm->timeSinceUpdate / 100);
-    }
-    if (nm->slideDown > 0) {
-        float amount = (float) (nm->timeSinceUpdate / 100);
-        for (int i = 0; i < nm->count; i++) {
-            if (nm->notifications[i] != NULL) {
-                nm->notifications[i]->rect.y += amount;
-            }
-        }
-        nm->slideDown -= amount;
-        if (nm->slideDown < 0) {
-            nm->slideDown = 0;
-        }
-    }
+//    if (nm->notifications[0] != NULL && nm->notifications[0]->decay <= 1) {
+//        nm->notifications[0]->rect.x += (float) (nm->timeSinceUpdate / 100);
+//    }
+//    if (nm->slideDown > 0) {
+//        float amount = (float) (nm->timeSinceUpdate / 100);
+//        for (int i = 0; i < nm->count; i++) {
+//            if (nm->notifications[i] != NULL) {
+//                nm->notifications[i]->rect.y += amount;
+//            }
+//        }
+//        nm->slideDown -= amount;
+//        if (nm->slideDown < 0) {
+//            nm->slideDown = 0;
+//        }
+//    }
 }
 
 void drawNotifications(NotificationManager *nm, FontStyle *font) {
     for (int i = 0; i < nm->count; i++) {
-        drawMenuRect(nm->notifications[i]->rect);
-        drawTextInArea(nm->notifications[i]->message, nm->notifications[i]->rect, font);
+        Rectangle rect = (Rectangle) {
+            (float) ui->screen->width
+                - NOTIFICATION_WIDTH
+                - ui->menu->padding,
+            (float) ((float) ui->screen->height
+                - (ui->menu->padding * (float) (i + 1))
+                - (float) (NOTIFICATION_HEIGHT * (i + 1))),
+            NOTIFICATION_WIDTH,
+            NOTIFICATION_HEIGHT,
+        };
+        drawMenuRect(rect);
+        drawTextInArea(nm->notifications[i]->message, rect, font);
     }
 }

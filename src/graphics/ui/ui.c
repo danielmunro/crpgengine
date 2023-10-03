@@ -249,8 +249,8 @@ void updateDialog(Dialog *dialog) {
 }
 
 void drawDialog(Dialog *dialog) {
-    int amount = (int) ceil(dialog->timeElapsed / 10);
-    char message[MAX_MESSAGE_BUFFER];
+    int amount = (int) ceil(dialog->timeElapsed / 5);
+    char message[MAX_MESSAGE_BUFFER] = "";
     memcpy(message, &dialog->message[0], amount);
     int len = (int) strlen(dialog->message);
     while (dialog->message[amount - 1] != ' ' && amount < len) {
@@ -258,6 +258,7 @@ void drawDialog(Dialog *dialog) {
         amount++;
     }
     drawTextInArea(message, dialog->area, dialog->font);
+    addDebug("drawn");
 }
 
 void drawMenuRect(Rectangle rect) {
