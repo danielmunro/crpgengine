@@ -29,6 +29,7 @@
 #include "spell.h"
 #include "timing.h"
 #include "ui.h"
+#include "xmlparser.h"
 
 #define MAX_AUDIO 1024
 #define MAX_SPRITES 1024
@@ -93,7 +94,6 @@
 #include "src/graphics/ui/menus/fight/mobile_target_menu.c"
 #include "src/exploration.c"
 #include "src/scene.c"
-#include "src/persistence/tilemap_xmlreader.c"
 #include "src/persistence/xmlparser.c"
 #include "src/spell_manager.c"
 #include "src/mobile_manager.c"

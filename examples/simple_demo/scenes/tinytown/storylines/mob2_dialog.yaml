@@ -18,10 +18,8 @@ storylines:
         mob: vill2
       - player: has_story
         story: from_the_past:intro
-      - player: not_has_item
-        item:
-          name: a brilliant amulet
-          quantity: 1
+      - player: not_has_story
+        story: from_the_past:obtained_brilliant_amulet
     then:
       - mob: vill2
         dialog: |
@@ -52,16 +50,17 @@ storylines:
           name: a brilliant amulet
           quantity: 1
       - player: true
+        action: add_story
+        story: from_the_past:obtained_brilliant_amulet
+      - player: true
         action: save
 
 
   - when:
       - player: engaged
         mob: vill2
-      - player: has_item
-        item:
-          name: a brilliant amulet
-          quantity: 1
+      - player: has_story
+        story: from_the_past:obtained_brilliant_amulet
     then:
       - mob: vill2
         dialog: |

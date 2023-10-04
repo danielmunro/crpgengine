@@ -367,7 +367,9 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
             continue;
         }
         int p = cb[i]->progress;
-        if (cb[i]->then[p]->outcome == SPEAK && isSpeakingTo(player, cb[i]->then[p]->target)) {
+        if (cb[i]->thenCount > p
+                && cb[i]->then[p]->outcome == SPEAK
+                && isSpeakingTo(player, cb[i]->then[p]->target)) {
             if (player->dialog == NULL) {
                 player->dialog = createDialog(
                         cb[i]->then[p]->message,

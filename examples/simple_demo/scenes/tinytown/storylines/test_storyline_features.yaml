@@ -70,4 +70,4 @@ storylines:
         direction: down
       - player: true
         action: add_story
-        story: from_the_past:complete
+        story: from_the_past:blemished_amulet_obtained
