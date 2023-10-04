@@ -3,7 +3,7 @@ int getIntAttribute(xmlTextReaderPtr reader, const char *attribute) {
 }
 
 float getFloatAttribute(xmlTextReaderPtr reader, const char *attribute) {
-    return atoll((char *) xmlTextReaderGetAttribute(reader, (const xmlChar *) attribute));
+    return strtof((char *) xmlTextReaderGetAttribute(reader, (const xmlChar *) attribute), NULL);
 }
 
 char *getStringAttribute(xmlTextReaderPtr reader, const char *attribute) {
