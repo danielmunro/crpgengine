@@ -12,10 +12,6 @@
 #define FIGHT_CURSOR_X_OFFSET 5
 #define FIGHT_CURSOR_Y_OFFSET 22
 
-#define NOTIFICATION_DECAY_SECONDS 5
-#define NOTIFICATION_HEIGHT 75
-#define NOTIFICATION_WIDTH 300
-
 #define BEAST_AREA (Rectangle) {20, 20, 240, 240}
 
 #define MAX_LINE_BUFFER 128
@@ -95,5 +91,10 @@ typedef enum {
     BEAST_SELECT_BOX,
     ITEM_SELECT_FIGHT_BOX,
 } TextBoxLabel;
+
+#include "src/graphics/avatar.c"
+#include "src/graphics/font.c"
+#include "src/graphics/window.c"
+#include "src/graphics/ui/ui.c"
 
 #endif // CJRPGENGINE_UI_H

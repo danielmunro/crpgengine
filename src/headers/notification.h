@@ -4,6 +4,10 @@
 #define MAX_NOTIFICATIONS 64
 #define MAX_NOTIFICATION_LENGTH 64
 
+#define NOTIFICATION_DECAY_SECONDS 5
+#define NOTIFICATION_HEIGHT 75
+#define NOTIFICATION_WIDTH 300
+
 typedef enum {
     RECEIVE_QUEST_ITEM,
     LOSE_QUEST_ITEM,
@@ -13,5 +17,7 @@ typedef enum {
     SAVED,
     FIGHT_ACTION,
 } NotificationType;
+
+#include "src/notification.c"
 
 #endif //CJRPGENGINE_NOTIFICATION_H
