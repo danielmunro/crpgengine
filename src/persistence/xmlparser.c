@@ -78,9 +78,9 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
     }
 }
 
-void parseSceneLayer(Exploration *e, char *rawData) {
+void parseSceneLayer(Exploration *e, const char *rawData) {
     addDebug("scene layer %d processing now", e->layerCount - 1);
-    char *line = strtok(rawData, "\r\n");
+    char *line = strtok((char *) rawData, "\r\n");
     char *data[MAX_DATA_SIZE];
     int it = 0;
     while (line != NULL && it < MAX_DATA_SIZE) {
@@ -131,7 +131,7 @@ void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir
         dataOpen = 1;
         xmlChar *data = xmlTextReaderReadString(tilemapXmlReader->reader);
         tilemapXmlReader->exploration->layerCount++;
-        parseSceneLayer(tilemapXmlReader->exploration, (char *) data);
+        parseSceneLayer(tilemapXmlReader->exploration, (const char *) data);
     } else if (nodeType == TILEMAP_NODE_TYPE_OBJECT) {
         objectType = getObjectTypeFromString(getStringAttribute(tilemapXmlReader->reader, "type"));
         addDebug("object type: %d", objectType);
