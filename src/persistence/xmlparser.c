@@ -26,23 +26,23 @@ char *getStringAttribute(xmlTextReaderPtr reader, const char *attribute) {
 static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
     static int tileOpen = 0, lastObjectId = 0;
-    char *strName = (char *) name;
-    if (strcmp(strName, "tileset") == 0) {
+    TileSetNodeType nodeType = getTileSetNodeTypeFromString((const char *) name);
+    if (nodeType == TILESET_NODE_TYPE_TILESET) {
         const int width = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
         const int height = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
         tilemapXmlReader->exploration->tilemap->size = (Vector2D) {width, height};
-    } else if (strcmp(strName, "image") == 0) {
+    } else if (nodeType == TILESET_NODE_TYPE_IMAGE) {
         char filePath[MAX_FS_PATH_LENGTH];
         sprintf(filePath, "%s/%s", indexDir, getStringAttribute(tilemapXmlReader->reader, "source"));
         tilemapXmlReader->exploration->tilemap->source = LoadImage(filePath);
-    } else if (strcmp(strName, "tile") == 0) {
+    } else if (nodeType == TILESET_NODE_TYPE_TILE) {
         if (tileOpen == 1) {
             tileOpen = 0;
             return;
         }
         tileOpen = 1;
         lastObjectId = getIntAttribute(tilemapXmlReader->reader, "id");
-    } else if (strcmp(strName, "object") == 0) {
+    } else if (nodeType == TILESET_NODE_TYPE_OBJECT) {
         Rectangle rect = {
                 getFloatAttribute(tilemapXmlReader->reader, "x"),
                 getFloatAttribute(tilemapXmlReader->reader, "y"),
@@ -121,13 +121,7 @@ void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir
         layerOpen = 1;
         Layer *layer = createLayer();
         char *layerName = getStringAttribute(tilemapXmlReader->reader, "name");
-        if (strcmp(layerName, "background") == 0) layer->type = BACKGROUND;
-        else if (strcmp(layerName, "midground") == 0) layer->type = MIDGROUND;
-        else if (strcmp(layerName, "foreground") == 0) layer->type = FOREGROUND;
-        else {
-            addError("unknown layer :: %s", layerName);
-            exit(ConfigurationErrorUnknownLayer);
-        }
+        layer->type = getLayerTypeFromString(layerName);
         tilemapXmlReader->exploration->layers[tilemapXmlReader->exploration->layerCount] = layer;
     } else if (nodeType == TILEMAP_NODE_TYPE_DATA) {
         if (dataOpen == 1) {

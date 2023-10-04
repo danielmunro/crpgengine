@@ -24,12 +24,12 @@ TileMapNodeType getTileMapNodeTypeFromString(const char *nodeType) {
             return i;
         }
     }
-    fprintf(stderr, "tile map node type not found :: %s", nodeType);
-//    exit(ConfigurationErrorUnknownTileMapNodeType);
+    fprintf(stderr, "tile map node type not found :: %s\n", nodeType);
     return TILEMAP_NODE_TYPE_OTHER;
 }
 
 const char *ObjectTypes[] = {
+        "other",
         "entrance",
         "exit",
         "arrive_at",
@@ -37,6 +37,7 @@ const char *ObjectTypes[] = {
 };
 
 typedef enum {
+    OBJECT_TYPE_OTHER,
     OBJECT_TYPE_ENTRANCE,
     OBJECT_TYPE_EXIT,
     OBJECT_TYPE_ARRIVE_AT,
@@ -50,8 +51,35 @@ ObjectType getObjectTypeFromString(const char *objectType) {
             return i;
         }
     }
-    fprintf(stderr, "object type not found :: %s", objectType);
-    exit(ConfigurationErrorUnknownTileMapNodeType);
+    fprintf(stderr, "object type not found :: %s\n", objectType);
+    return OBJECT_TYPE_OTHER;
+}
+
+const char *TileSetNodeTypes[] = {
+        "other",
+        "tileset",
+        "image",
+        "tile",
+        "object",
+};
+
+typedef enum {
+    TILESET_NODE_TYPE_OTHER,
+    TILESET_NODE_TYPE_TILESET,
+    TILESET_NODE_TYPE_IMAGE,
+    TILESET_NODE_TYPE_TILE,
+    TILESET_NODE_TYPE_OBJECT,
+} TileSetNodeType;
+
+TileSetNodeType getTileSetNodeTypeFromString(const char *tileSetNodeType) {
+    int count = sizeof(TileSetNodeTypes) / sizeof(const char *);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(TileSetNodeTypes[i], tileSetNodeType) == 0) {
+            return i;
+        }
+    }
+    fprintf(stderr, "tileset type not found :: %s\n", tileSetNodeType);
+    return TILESET_NODE_TYPE_OTHER;
 }
 
 #endif //CJRPGENGINE_OBJECT_H

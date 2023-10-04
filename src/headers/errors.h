@@ -24,7 +24,7 @@ typedef enum {
     ConfigurationErrorUndefinedTextArea = 400,
     ConfigurationErrorMapResourcesMissing = 401,
     ConfigurationErrorMapResourcesUnreadable = 402,
-    ConfigurationErrorUnknownLayer = 403,
+    ConfigurationErrorLayerTypeNotFound = 403,
     ConfigurationErrorUnknownBeast = 404,
     ConfigurationErrorPlayerMobilesDirectoryDoesNotExist = 405,
     ConfigurationErrorUnknownSpriteSheet = 406,
@@ -32,8 +32,6 @@ typedef enum {
     ConfigurationErrorUnknownWarp = 408,
     ConfigurationErrorUnknownScene = 409,
     ConfigurationErrorUnknownCollisionType = 410,
-    ConfigurationErrorUnknownTileMapNodeType = 411,
-    ConfigurationErrorUnknownObjectType = 412,
 
     // Yaml loading/saving
     CyamlErrorGeneric = 500,
