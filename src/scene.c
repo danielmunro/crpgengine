@@ -38,7 +38,7 @@ void setSceneTypeFromString(Scene *s, const char *sceneType) {
         }
     }
     addError("unknown scene type :: %s", sceneType);
-    exit(RuntimeErrorUnknownScene);
+    exit(ConfigurationErrorUnknownScene);
 }
 
 Scene *createScene() {

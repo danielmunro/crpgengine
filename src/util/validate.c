@@ -24,7 +24,7 @@ void validateExits(Game *g) {
                 addError("exit for scene does not exist :: %s, %s",
                          ex->to,
                          g->scenes->scenes[i]->name);
-                exit(RuntimeErrorUnknownWarp);
+                exit(ConfigurationErrorUnknownWarp);
             }
         }
     }

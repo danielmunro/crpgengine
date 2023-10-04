@@ -101,6 +101,17 @@ Rectangle findTextAreaRect(TextAreaType type, TextAreaData *areas, int areaCount
     exit(ConfigurationErrorUndefinedTextArea);
 }
 
+MenuStyle getMenuStyleFromString(const char *style) {
+    int count = sizeof(MenuStyles) / sizeof(MenuStyles[0]);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(style, MenuStyles[i]) == 0) {
+            return i;
+        }
+    }
+    fprintf(stderr, "cannot get menu style :: %s", style);
+    exit(ConfigurationErrorMenuStyleNotDefined);
+}
+
 void createUIConfig(UIData *data) {
     ui = malloc(sizeof(UIConfig));
 

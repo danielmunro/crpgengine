@@ -7,16 +7,12 @@ typedef enum {
     ArgumentErrorForceNewAndLoadSave = 101,
 
     // Runtime errors
-    RuntimeErrorMenuStyleNotDefined = 200,
-    RuntimeErrorMobileNotFound = 201,
-    RuntimeErrorNullSpellType = 202,
-    RuntimeErrorNoSpellForType = 203,
-    RuntimeErrorUnknownIntent = 204,
-    RuntimeErrorUnknownCollisionType = 205,
-    RuntimeErrorUnknownItem = 206,
-    RuntimeErrorUnknownEntrance = 207,
-    RuntimeErrorUnknownScene = 208,
-    RuntimeErrorUnknownWarp = 209,
+    RuntimeErrorMobileNotFound = 200,
+    RuntimeErrorNullSpellType = 201,
+    RuntimeErrorNoSpellForType = 202,
+    RuntimeErrorUnknownIntent = 203,
+    RuntimeErrorUnknownItem = 205,
+    RuntimeErrorUnknownEntrance = 206,
 
     // Game engine errors
     GameEngineErrorMenuNotDefined = 300,
@@ -32,6 +28,10 @@ typedef enum {
     ConfigurationErrorUnknownBeast = 404,
     ConfigurationErrorPlayerMobilesDirectoryDoesNotExist = 405,
     ConfigurationErrorUnknownSpriteSheet = 406,
+    ConfigurationErrorMenuStyleNotDefined = 407,
+    ConfigurationErrorUnknownWarp = 408,
+    ConfigurationErrorUnknownScene = 409,
+    ConfigurationErrorUnknownCollisionType = 410,
 
     // Yaml loading/saving
     CyamlErrorGeneric = 500,
