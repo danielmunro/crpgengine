@@ -2,7 +2,9 @@
 #define CJRPGENGINE_DB_H
 
 #define MAX_DATA_SIZE 2048
-#define MAX_FS_PATH_LENGTH 255
 #define MAX_FILES 256
+#define MAX_SAVE_FILES 255
+
+#include "src/persistence/db.c"
 
 #endif //CJRPGENGINE_DB_H

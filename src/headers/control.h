@@ -62,4 +62,24 @@ typedef enum {
     EVENT_SCENE_LOADED,
 } EventType;
 
+Condition mapCondition(const char *when) {
+    int count = sizeof(conditions) / sizeof(char *);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(conditions[i], when) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+Outcome mapOutcome(const char *then) {
+    int count = sizeof(outcomes) / sizeof(char *);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(outcomes[i], then) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 #endif //CJRPGENGINE_CONTROL_H

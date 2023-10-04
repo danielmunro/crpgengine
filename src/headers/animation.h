@@ -4,13 +4,6 @@
 #define MAX_ANIMATIONS 25
 #define MAX_ANIMATIONS_IN_GAME 1440
 
-typedef enum {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-} AnimationType;
-
 const AnimationType ANIMATION_TYPES[] = {UP, DOWN, LEFT, RIGHT};
 
 const char *AnimationTypeStrings[] = {

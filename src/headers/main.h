@@ -11,11 +11,12 @@
 #include <sys/time.h>
 #include <ctype.h>
 
-#include "log.h"
-#include "src/util/log.c"
+#include "globals.h"
 #include "errors.h"
-#include "animation.h"
+#include "log.h"
 #include "collision.h"
+#include "util.h"
+#include "animation.h"
 #include "control.h"
 #include "db.h"
 #include "exploration.h"
@@ -35,8 +36,6 @@
 #define MAX_AUDIO 1024
 #define MAX_SPRITES 1024
 
-#include "src/util/util.c"
-#include "src/util/runtime_args.c"
 #include "src/persistence/yaml/spritesheet.c"
 #include "src/persistence/yaml/animation.c"
 #include "src/persistence/yaml/music.c"

@@ -57,36 +57,6 @@ int getFilesInDirectory(const char *dir, char **files) {
     return i;
 }
 
-Condition mapCondition(const char *when) {
-    int count = sizeof(conditions) / sizeof(char *);
-    for (int i = 0; i < count; i++) {
-        if (strcmp(conditions[i], when) == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-int mapOutcome(const char *then) {
-    int count = sizeof(outcomes) / sizeof(char *);
-    for (int i = 0; i < count; i++) {
-        if (strcmp(outcomes[i], then) == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-int getLogLevelFromString(char *value) {
-    int count = (sizeof(logLevels)) / sizeof(LogLevel);
-    for (int i = 0; i < count - 1; i++) {
-        if (strcmp(logLevels[i], value) == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 int getDirectionFromString(const char *value) {
     if (strcmp(value, "up") == 0) {
         return UP;
@@ -151,21 +121,6 @@ const char *getFilenameExt(const char *filename) {
 void setupApp() {
     SetTraceLogLevel(LOG_WARNING);
     srand(time(NULL));
-}
-
-void purgeSaves(const char *indexDir) {
-    const char *saveDirectory = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *) saveDirectory, "%s/_saves", indexDir);
-    char **files = calloc(MAX_SAVE_FILES, sizeof(char *));
-    int count = getFilesInDirectory(saveDirectory, files);
-    for (int i = 0; i < count; i++) {
-        printf("remove save file: %s\n", files[i]);
-        char *filepath = malloc(MAX_FS_PATH_LENGTH);
-        sprintf(filepath, "%s/%s", saveDirectory, files[i]);
-        remove(filepath);
-        free(filepath);
-    }
-    free(files);
 }
 
 double reportMaxMemory() {

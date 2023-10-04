@@ -17,4 +17,16 @@ typedef enum {
     DEBUG = 3,
 } LogLevel;
 
+LogLevel getLogLevelFromString(char *value) {
+    int count = (sizeof(logLevels)) / sizeof(LogLevel);
+    for (int i = 0; i < count - 1; i++) {
+        if (strcmp(logLevels[i], value) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+#include "src/util/log.c"
+
 #endif //CJRPGENGINE_LOG_H
