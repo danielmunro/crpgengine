@@ -59,13 +59,13 @@ int getFilesInDirectory(const char *dir, char **files) {
 
 int getDirectionFromString(const char *value) {
     if (strcmp(value, "up") == 0) {
-        return UP;
+        return DIRECTION_UP;
     } else if (strcmp(value, "down") == 0) {
-        return DOWN;
+        return DIRECTION_DOWN;
     } else if (strcmp(value, "left") == 0) {
-        return LEFT;
+        return DIRECTION_LEFT;
     } else if (strcmp(value, "right") == 0) {
-        return RIGHT;
+        return DIRECTION_RIGHT;
     } else {
         fprintf(stderr, "invalid direction: %s\n", value);
         return 0;

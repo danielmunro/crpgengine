@@ -15,6 +15,7 @@
 #include "errors.h"
 #include "log.h"
 #include "collision.h"
+#include "direction.h"
 #include "util.h"
 #include "animation.h"
 #include "control.h"

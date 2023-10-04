@@ -7,5 +7,5 @@ typedef struct {
 typedef struct {
     char *name;
     Rectangle area;
-    AnimationType direction;
+    Direction direction;
 } Entrance;

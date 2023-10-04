@@ -41,7 +41,7 @@ Exit *createExit() {
 Entrance *createEntrance(char *name, Rectangle area) {
     Entrance *e = malloc(sizeof(Entrance));
     e->name = &name[0];
-    e->direction = DOWN;
+    e->direction = DIRECTION_DOWN;
     e->area = area;
     return e;
 }
@@ -326,7 +326,7 @@ int atExit(Exploration *e, Player *p) {
     return -1;
 }
 
-void tryToMove(Exploration *e, Player *p, AnimationType direction, Vector2 pos) {
+void tryToMove(Exploration *e, Player *p, Direction direction, Vector2 pos) {
     Rectangle rect = {
             pos.x + MOB_COLLISION_WIDTH_OFFSET,
             pos.y + MOB_COLLISION_HEIGHT,

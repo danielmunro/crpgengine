@@ -140,7 +140,7 @@ void checkFights(Game *g, Scene *s) {
                 g->fights,
                 s->encounters,
                 g->player);
-        Animation *animation = findAnimation(getPartyLeader(g->player)->animations, LEFT);
+        Animation *animation = findAnimation(getPartyLeader(g->player)->animations, DIRECTION_LEFT);
         animation->currentFrame = animation->firstFrame;
         g->ui->menuContext = createMenuContext(
                 g->fights->fight,

@@ -33,6 +33,7 @@ typedef enum {
     ConfigurationErrorUnknownScene = 409,
     ConfigurationErrorUnknownCollisionType = 410,
     ConfigurationErrorUnknownFontStyleType = 411,
+    ConfigurationErrorNoDirectionForName = 412,
 
     // Yaml loading/saving
     CyamlErrorGeneric = 500,

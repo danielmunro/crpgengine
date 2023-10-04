@@ -4,32 +4,21 @@
 #define MAX_ANIMATIONS 25
 #define MAX_ANIMATIONS_IN_GAME 1440
 
-const AnimationType ANIMATION_TYPES[] = {UP, DOWN, LEFT, RIGHT};
-
-const char *AnimationTypeStrings[] = {
-        "up",
-        "down",
-        "left",
-        "right",
-};
-
-const AnimationType DIRECTIONS[] = {UP, DOWN, LEFT, RIGHT};
 const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT};
 
 #define ANIMATION_TYPE_COUNT sizeof(AnimationTypeStrings) / sizeof(AnimationTypeStrings[0])
-#define DIRECTION_COUNT sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0])
 
-AnimationType getOppositeDirection(AnimationType direction) {
-    if (direction == UP) {
-        return DOWN;
-    } else if (direction == DOWN) {
-        return UP;
-    } else if (direction == LEFT) {
-        return RIGHT;
-    } else if (direction == RIGHT) {
-        return LEFT;
+Direction getOppositeDirection(Direction direction) {
+    if (direction == DIRECTION_UP) {
+        return DIRECTION_DOWN;
+    } else if (direction == DIRECTION_DOWN) {
+        return DIRECTION_UP;
+    } else if (direction == DIRECTION_LEFT) {
+        return DIRECTION_RIGHT;
+    } else if (direction == DIRECTION_RIGHT) {
+        return DIRECTION_LEFT;
     }
-    return DOWN;
+    return DIRECTION_DOWN;
 }
 
 #endif //CJRPGENGINE_ANIMATION_H

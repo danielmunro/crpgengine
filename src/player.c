@@ -121,7 +121,7 @@ int getExperienceToLevel(int level) {
     return (int) pow((double) level, 3.0) + 999;
 }
 
-void checkMoveKey(Player *p, int key, AnimationType direction) {
+void checkMoveKey(Player *p, int key, Direction direction) {
     Mobile *mob = getPartyLeader(p);
     if (IsKeyDown(key) && !p->engaged) {
         mob->moving[direction] = true;

@@ -1,6 +1,6 @@
 typedef struct {
     const char *name;
-    AnimationType type;
+    Direction type;
     Spritesheet *spriteSheet;
     int firstFrame;
     int lastFrame;
@@ -67,7 +67,7 @@ void clearAnimations(AnimationManager *am) {
 
 Animation *createAnimation(
         const char *name,
-        AnimationType type,
+        Direction type,
         Spritesheet *spriteSheet,
         int firstFrame,
         int lastFrame,
@@ -116,7 +116,7 @@ void drawAnimation(Animation *a, Vector2 position) {
     drawImageFromSprite(a->spriteSheet, position, a->currentFrame);
 }
 
-Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], AnimationType type) {
+Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], Direction type) {
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         if (animation[i] == NULL) {
             break;
@@ -128,19 +128,9 @@ Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], AnimationType typ
     return NULL;
 }
 
-AnimationType getAnimationTypeFromName(const char *name) {
+char *getAnimationStringFromType(Direction type) {
     for (int i = 0; i < ANIMATION_TYPE_COUNT; i++) {
-        if (strcmp(AnimationTypeStrings[i], name) == 0) {
-            return ANIMATION_TYPES[i];
-        }
-    }
-    printf("no animation id for name: %s\n", name);
-    exit(1);
-}
-
-char *getAnimationStringFromType(AnimationType type) {
-    for (int i = 0; i < ANIMATION_TYPE_COUNT; i++) {
-        if (ANIMATION_TYPES[i] == type) {
+        if (DIRECTIONS[i] == type) {
             char *animationName = malloc(strlen(AnimationTypeStrings[i]));
             sprintf(animationName, "%s", AnimationTypeStrings[i]);
             return animationName;

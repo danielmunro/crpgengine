@@ -1,8 +1,8 @@
 typedef struct {
     const char *id;
     const char *name;
-    AnimationType direction;
-    AnimationType previousDirection;
+    Direction direction;
+    Direction previousDirection;
     Animation *animations[MAX_ANIMATIONS];
     Avatar *avatar;
     Vector2 position;
@@ -33,7 +33,7 @@ Mobile *createMobile(
         const char *id,
         const char *name,
         Vector2 position,
-        AnimationType direction,
+        Direction direction,
         Animation *animations[MAX_ANIMATIONS],
         Avatar *avatar,
         int hp,
@@ -46,10 +46,10 @@ Mobile *createMobile(
     mobile->name = &name[0];
     mobile->direction = direction;
     mobile->position = position;
-    mobile->moving[UP] = false;
-    mobile->moving[DOWN] = false;
-    mobile->moving[LEFT] = false;
-    mobile->moving[RIGHT] = false;
+    mobile->moving[DIRECTION_UP] = false;
+    mobile->moving[DIRECTION_DOWN] = false;
+    mobile->moving[DIRECTION_LEFT] = false;
+    mobile->moving[DIRECTION_RIGHT] = false;
     mobile->attributes = attributes;
     mobile->turnCounter = 0;
     mobile->waitTimer = -1;
@@ -74,18 +74,18 @@ Mobile *createMobile(
 }
 
 void resetMoving(Mobile *mob) {
-    mob->moving[UP] = false;
-    mob->moving[DOWN] = false;
-    mob->moving[LEFT] = false;
-    mob->moving[RIGHT] = false;
+    mob->moving[DIRECTION_UP] = false;
+    mob->moving[DIRECTION_DOWN] = false;
+    mob->moving[DIRECTION_LEFT] = false;
+    mob->moving[DIRECTION_RIGHT] = false;
     getMobAnimation(mob)->isPlaying = 0;
 }
 
 bool isMoving(Mobile *mob) {
-    return mob->moving[DOWN]
-           || mob->moving[UP]
-           || mob->moving[LEFT]
-           || mob->moving[RIGHT];
+    return mob->moving[DIRECTION_DOWN]
+           || mob->moving[DIRECTION_UP]
+           || mob->moving[DIRECTION_LEFT]
+           || mob->moving[DIRECTION_RIGHT];
 }
 
 Rectangle getMobileRectangle(Mobile *mob) {
@@ -97,22 +97,22 @@ Rectangle getMobileRectangle(Mobile *mob) {
     };
 }
 
-Vector2 getMoveFor(Mobile *mob, AnimationType direction) {
-    if (direction == UP) {
+Vector2 getMoveFor(Mobile *mob, Direction direction) {
+    if (direction == DIRECTION_UP) {
         return (Vector2) {mob->position.x, mob->position.y - 1};
-    } else if (direction == DOWN) {
+    } else if (direction == DIRECTION_DOWN) {
         return (Vector2) {mob->position.x, mob->position.y + 1};
     }
-    if (direction == LEFT) {
+    if (direction == DIRECTION_LEFT) {
         return (Vector2) {mob->position.x - 1, mob->position.y};
     }
-    if (direction == RIGHT) {
+    if (direction == DIRECTION_RIGHT) {
         return (Vector2) {mob->position.x + 1, mob->position.y};
     }
     return mob->position;
 }
 
-void updateDirection(Mobile *mob, AnimationType direction) {
+void updateDirection(Mobile *mob, Direction direction) {
     mob->previousDirection = mob->direction;
     mob->direction = direction;
 }
@@ -127,10 +127,10 @@ bool moveMob(Mobile *mob, Vector2 destination) {
     Animation *animation = getMobAnimation(mob);
     animation->isPlaying = moved;
     if (moved) {
-        if (x > 0) mob->direction = RIGHT;
-        else if (x < 0) mob->direction = LEFT;
-        else if (y > 0) mob->direction = DOWN;
-        else mob->direction = UP;
+        if (x > 0) mob->direction = DIRECTION_RIGHT;
+        else if (x < 0) mob->direction = DIRECTION_LEFT;
+        else if (y > 0) mob->direction = DIRECTION_DOWN;
+        else mob->direction = DIRECTION_UP;
         mob->moving[mob->direction] = true;
     }
     incrementAnimationFrame(animation);

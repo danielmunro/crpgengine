@@ -77,7 +77,7 @@ void canMoveMobTest() {
             "test",
             "test",
             start,
-            DOWN,
+            DIRECTION_DOWN,
             animations,
             createAvatar("fireas.png"),
             20,
@@ -91,7 +91,7 @@ void canMoveMobTest() {
 
     // then
     ok(mob->position.x > startX && mob->position.y > startY, "mob moved as expected");
-    ok(mob->direction == RIGHT, "mob is facing right");
+    ok(mob->direction == DIRECTION_RIGHT, "mob is facing right");
 }
 
 void canMobStopMovingTest() {
@@ -106,7 +106,7 @@ void canMobStopMovingTest() {
             "test",
             "test",
             start,
-            DOWN,
+            DIRECTION_DOWN,
             animations,
             createAvatar("fireas.png"),
             STARTING_HP,
