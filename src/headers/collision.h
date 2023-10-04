@@ -21,7 +21,7 @@ CollisionType getCollisionTypeFromString(const char *type) {
             return i;
         }
     }
-    fprintf(stderr, "no collision type found :: %s", type);
+    addError("no collision type found :: %s", type);
     exit(ConfigurationErrorUnknownCollisionType);
 }
 

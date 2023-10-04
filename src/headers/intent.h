@@ -17,7 +17,7 @@ Intent getIntentFromString(const char *intent) {
     } else if (strcmp(intent, "help") == 0) {
         return INTENT_HELP;
     }
-    fprintf(stderr, "intent could not be found");
+    addError("intent could not be found");
     exit(RuntimeErrorUnknownIntent);
 }
 

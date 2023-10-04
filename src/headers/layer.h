@@ -29,7 +29,7 @@ LayerType getLayerTypeFromString(const char *layerType) {
             return i;
         }
     }
-    fprintf(stderr, "layer type not found :: %s", layerType);
+    addError("layer type not found :: %s", layerType);
     exit(ConfigurationErrorLayerTypeNotFound);
 }
 

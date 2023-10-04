@@ -24,7 +24,7 @@ TileMapNodeType getTileMapNodeTypeFromString(const char *nodeType) {
             return i;
         }
     }
-    fprintf(stderr, "tile map node type not found :: %s\n", nodeType);
+    addError("tile map node type not found :: %s", nodeType);
     return TILEMAP_NODE_TYPE_OTHER;
 }
 
@@ -51,7 +51,7 @@ ObjectType getObjectTypeFromString(const char *objectType) {
             return i;
         }
     }
-    fprintf(stderr, "object type not found :: %s\n", objectType);
+    addError("object type not found :: %s", objectType);
     return OBJECT_TYPE_OTHER;
 }
 
@@ -78,7 +78,7 @@ TileSetNodeType getTileSetNodeTypeFromString(const char *tileSetNodeType) {
             return i;
         }
     }
-    fprintf(stderr, "tileset type not found :: %s\n", tileSetNodeType);
+    addError("tileset type not found :: %s", tileSetNodeType);
     return TILESET_NODE_TYPE_OTHER;
 }
 

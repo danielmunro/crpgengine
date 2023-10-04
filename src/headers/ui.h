@@ -74,8 +74,8 @@ FontStyleType getFontStyleType(const char *type) {
             return i;
         }
     }
-    fprintf(stderr, "font style type not found");
-    exit(1);
+    addError("font style type not found");
+    exit(ConfigurationErrorUnknownFontStyleType);
 }
 
 typedef enum {

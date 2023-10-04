@@ -32,6 +32,7 @@ typedef enum {
     ConfigurationErrorUnknownWarp = 408,
     ConfigurationErrorUnknownScene = 409,
     ConfigurationErrorUnknownCollisionType = 410,
+    ConfigurationErrorUnknownFontStyleType = 411,
 
     // Yaml loading/saving
     CyamlErrorGeneric = 500,
