@@ -26,24 +26,22 @@
 #include "menu.h"
 #include "player.h"
 #include "scene.h"
-#include "spell.h"
 #include "timing.h"
 #include "xmlparser.h"
+#include "warp.h"
 
-// below cyaml.h needs yaml structs
 #include "cyaml.h"
 #include "audio.h"
 #include "attributes.h"
+#include "spell.h"
 #include "item.h"
 
-// below ui.h needs ui
 #include "ui.h"
 #include "animation.h"
+#include "mobile.h"
 #include "notification.h"
 
-#include "src/spell.c"
 #include "src/beastiary.c"
-#include "src/mobile.c"
 #include "src/player.c"
 #include "src/control.c"
 #include "src/object.c"

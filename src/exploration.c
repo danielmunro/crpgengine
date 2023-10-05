@@ -12,18 +12,6 @@ typedef struct {
 } Layer;
 
 typedef struct {
-    Rectangle area;
-    char *to;
-    char *scene;
-} Exit;
-
-typedef struct {
-    char *name;
-    Rectangle area;
-    Direction direction;
-} Entrance;
-
-typedef struct {
     Tilemap *tilemap;
     Layer *layers[LAYER_COUNT];
     int layerCount;
