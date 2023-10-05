@@ -35,4 +35,7 @@ typedef enum {
     POSITION_ACCESSORY,
 } EquipmentPosition;
 
+#include "src/item.c"
+#include "src/item_manager.c"
+
 #endif //CJRPGENGINE_ITEM_H

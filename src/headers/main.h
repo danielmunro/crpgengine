@@ -22,7 +22,6 @@
 #include "exploration.h"
 #include "fight.h"
 #include "intent.h"
-#include "item.h"
 #include "layer.h"
 #include "menu.h"
 #include "player.h"
@@ -30,16 +29,18 @@
 #include "spell.h"
 #include "timing.h"
 #include "xmlparser.h"
+
+// below cyaml.h needs yaml structs
 #include "cyaml.h"
 #include "audio.h"
+#include "attributes.h"
+#include "item.h"
+
+// below ui.h needs ui
 #include "ui.h"
 #include "animation.h"
 #include "notification.h"
 
-#include "src/attributes.c"
-#include "src/item.c"
-#include "src/item_manager.c"
-#include "src/warp.c"
 #include "src/spell.c"
 #include "src/beastiary.c"
 #include "src/mobile.c"

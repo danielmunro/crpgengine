@@ -1,0 +1,6 @@
+#ifndef CJRPGENGINE_ATTRIBUTES_H
+#define CJRPGENGINE_ATTRIBUTES_H
+
+#include "src/attributes.c"
+
+#endif //CJRPGENGINE_ATTRIBUTES_H
