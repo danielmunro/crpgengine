@@ -19,7 +19,6 @@
 #include "util.h"
 #include "cyaml.h"
 #include "db.h"
-#include "exploration.h"
 #include "intent.h"
 #include "layer.h"
 #include "menu.h"
@@ -41,8 +40,8 @@
 #include "notification.h"
 #include "timing.h"
 #include "menus.h"
+#include "exploration.h"
 
-#include "src/exploration.c"
 #include "src/scene.c"
 #include "src/persistence/xmlparser.c"
 #include "src/spell_manager.c"
