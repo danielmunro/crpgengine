@@ -40,7 +40,6 @@
 #include "notification.h"
 #include "timing.h"
 
-#include "src/graphics/tilemap.c"
 #include "src/action.c"
 #include "src/fight.c"
 #include "src/graphics/ui/menu.c"
