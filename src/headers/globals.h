@@ -15,5 +15,24 @@
 #define MAX_DATETIME_LENGTH 255
 #define MAX_EQUIPMENT 4
 #define MILLISECONDS_IN_SECOND 1000.0
+#define MAX_BEASTIARY_SIZE 1024
+#define MAX_ACTION_GAUGE 300
+
+typedef enum {
+    ATTACK,
+    CAST,
+    ITEM,
+    RUN,
+    NONE,
+} ActionType;
+
+typedef enum {
+    STEP_NONE,
+    ATTACK_QUEUE,
+    ATTACK_STEP_OUT,
+    ATTACK_ACTION,
+    ATTACK_RETURN,
+    ACTION_STEP_RUN,
+} ActionStep;
 
 #endif //CJRPGENGINE_GLOBALS_H
