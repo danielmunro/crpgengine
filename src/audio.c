@@ -1,3 +1,7 @@
+#include <mm_malloc.h>
+#include <raylib.h>
+#include "headers/log.h"
+
 typedef struct {
     Sound sound;
     char *name;

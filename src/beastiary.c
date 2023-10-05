@@ -1,3 +1,5 @@
+#include "headers/attributes.h"
+
 typedef struct {
     const char *id;
     const char *name;
