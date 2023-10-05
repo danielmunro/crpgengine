@@ -1,5 +1,3 @@
-#include <unistd.h>
-
 void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *file) {
     addInfo("load animations file: %s", file);
     AnimationData *animation = loadAnimationYaml(file);

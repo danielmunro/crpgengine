@@ -46,10 +46,10 @@
 #include "player_manager.h"
 #include "ui_manager.h"
 #include "fight_manager.h"
+#include "draw_fight.h"
 #include "control_manager.h"
 #include "scene_manager.h"
 
-#include "src/graphics/draw_fight.c"
 #include "src/persistence/loader.c"
 #include "src/game.c"
 #include "src/util/validate.c"
