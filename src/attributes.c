@@ -1,3 +1,5 @@
+#include <mm_malloc.h>
+
 typedef struct {
     int bash;
     int slash;
@@ -96,7 +98,7 @@ AttributesData *createDataFromAttributes(Attributes *a) {
     return data;
 }
 
-Attributes *cloneAttributes(Attributes *a) {
+Attributes *cloneAttributes(const Attributes *a) {
     Attributes *b = malloc(sizeof(Attributes));
     *b = *a;
     return b;
