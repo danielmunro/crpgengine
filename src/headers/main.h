@@ -40,7 +40,6 @@
 #include "control.h"
 #include "notification.h"
 
-#include "src/object.c"
 #include "src/timing.c"
 #include "src/graphics/tilemap.c"
 #include "src/action.c"

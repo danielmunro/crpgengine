@@ -12,6 +12,18 @@ typedef struct {
 } Layer;
 
 typedef struct {
+    Rectangle rect;
+    int tile;
+} Object;
+
+Object *createTileObject(int tile, Rectangle rect) {
+    Object *o = malloc(sizeof(Object));
+    o->tile = tile;
+    o->rect = rect;
+    return o;
+}
+
+typedef struct {
     Tilemap *tilemap;
     Layer *layers[LAYER_COUNT];
     int layerCount;
