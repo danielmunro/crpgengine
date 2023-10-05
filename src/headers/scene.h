@@ -8,4 +8,6 @@
 
 #define MAX_SCENES 256
 
+#include "src/scene.c"
+
 #endif //CJRPGENGINE_SCENE_H

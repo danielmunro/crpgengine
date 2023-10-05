@@ -22,7 +22,6 @@
 #include "intent.h"
 #include "layer.h"
 #include "menu.h"
-#include "scene.h"
 #include "xmlparser.h"
 #include "warp.h"
 #include "audio.h"
@@ -41,8 +40,8 @@
 #include "timing.h"
 #include "menus.h"
 #include "exploration.h"
+#include "scene.h"
 
-#include "src/scene.c"
 #include "src/persistence/xmlparser.c"
 #include "src/spell_manager.c"
 #include "src/mobile_manager.c"
