@@ -49,11 +49,7 @@
 #include "draw_fight.h"
 #include "control_manager.h"
 #include "scene_manager.h"
-
-#include "src/persistence/loader.c"
-#include "src/game.c"
-#include "src/util/validate.c"
-#include "src/util/dump.c"
-#include "src/util/global_setup.c"
+#include "loader.h"
+#include "game.h"
 
 #endif /* CJRPGENGINE_H_INCLUDED */
