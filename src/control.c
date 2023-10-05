@@ -1,3 +1,6 @@
+#include <mm_malloc.h>
+#include "headers/util.h"
+
 typedef struct {
     const char *name;
     Rectangle rect;
@@ -118,19 +121,19 @@ bool hasArrivedAt(Player *p, Condition condition, ArriveAt *arriveAt) {
 }
 
 bool hasItem(Player *p, Condition condition, ItemWithQuantity *iq) {
-    if (iq != NULL) {
-        int count = iq->quantity;
-        for (int i = 0; i < p->itemCount; i++) {
-            if (p->items[i] == iq->item) {
-                count--;
-                if (count == 0) {
-                    return condition == HAS_ITEM;
-                }
+    if (iq == NULL) {
+        return false;
+    }
+    int count = iq->quantity;
+    for (int i = 0; i < p->itemCount; i++) {
+        if (p->items[i] == iq->item) {
+            count--;
+            if (count == 0) {
+                return condition == HAS_ITEM;
             }
         }
-        return condition == NOT_HAS_ITEM;
     }
-    return false;
+    return condition == NOT_HAS_ITEM;
 }
 
 bool isWhenActivated(Player *p, When *when, EventType eventType) {

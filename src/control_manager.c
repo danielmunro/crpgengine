@@ -1,3 +1,11 @@
+#include "headers/log.h"
+#include "headers/exploration.h"
+#include "headers/notification.h"
+#include "headers/control.h"
+#include "headers/item.h"
+#include "headers/player.h"
+#include "headers/scene.h"
+
 typedef struct {
     Scene *scene;
     Player *player;

@@ -1,3 +1,13 @@
+#include <string.h>
+#include <math.h>
+#include <raylib.h>
+#include "headers/log.h"
+#include "headers/mobile.h"
+#include "headers/player.h"
+#include "headers/animation.h"
+#include "headers/control.h"
+#include "headers/ui.h"
+
 typedef struct {
     Mobile *mob;
     Vector2 destination;
@@ -16,11 +26,10 @@ typedef struct {
     Image source;
 } Tilemap;
 
-Vector2D getTileFromIndex(Tilemap *t, int index) {
+Vector2D getTileFromIndex(const Tilemap *t, int index) {
     int width = t->source.width / t->size.x;
-    int x, y;
-    y = index / width;
-    x = (index % width);
+    int y = index / width;
+    int x = (index % width);
     if (x - 1 < 0) {
         y--;
         x = width;
@@ -150,7 +159,7 @@ void addObject(Exploration *e, Object *o) {
     e->objectCount++;
 }
 
-Vector2D getTileCount(Exploration *e) {
+Vector2D getTileCount(const Exploration *e) {
     int x = ui->screen->width / e->tilemap->size.x + 1;
     int y = ui->screen->height / e->tilemap->size.y + 2;
     return (Vector2D) {x, y};
@@ -161,7 +170,7 @@ void explorationDebugKeyPressed(Vector2 position) {
 }
 
 void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
-    Object *o = getObject(e, index);
+    const Object *o = getObject(e, index);
     if (o != NULL) {
         Rectangle r = {
                 (float) (e->tilemap->size.x * x) + o->rect.x,
@@ -316,7 +325,7 @@ void drawExplorationMobiles(Exploration *e, Player *p, Vector2 offset) {
     }
 }
 
-Rectangle getObjectSize(Exploration *e, Object *o, int x, int y) {
+Rectangle getObjectSize(const Exploration *e, const Object *o, int x, int y) {
     return (Rectangle) {
             (float) (e->tilemap->size.x * x) + o->rect.x,
             (float) (e->tilemap->size.y * y) + o->rect.y,
@@ -462,7 +471,7 @@ void renderExplorationLayers(Exploration *e) {
     addDebug("exploration successfully rendered");
 }
 
-void dialogEngaged(Player *player, ControlBlock *controlBlock) {
+void dialogEngaged(const Player *player, ControlBlock *controlBlock) {
     addInfo("speaking with mob :: %s", player->engageable->name);
     if (controlBlock != NULL) {
         controlBlock->progress++;
