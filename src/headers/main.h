@@ -35,12 +35,12 @@
 #include "ui.h"
 #include "animation.h"
 #include "mobile.h"
+#include "action.h"
 #include "player.h"
 #include "control.h"
 #include "notification.h"
 #include "timing.h"
 
-#include "src/action.c"
 #include "src/fight.c"
 #include "src/graphics/ui/menu.c"
 #include "src/graphics/ui/menus/acknowledge_menu.c"
