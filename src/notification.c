@@ -1,3 +1,5 @@
+#include "headers/ui.h"
+
 typedef struct {
     NotificationType type;
     const char *message;

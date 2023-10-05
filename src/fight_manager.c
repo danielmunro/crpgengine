@@ -1,3 +1,13 @@
+#include <raylib.h>
+#include "headers/log.h"
+#include "headers/player.h"
+#include "headers/menu.h"
+#include "headers/notification.h"
+#include "headers/fight.h"
+#include "headers/util.h"
+#include "headers/action.h"
+#include "headers/mobile.h"
+
 typedef struct {
     UIManager *ui;
     Fight *fight;
@@ -21,7 +31,7 @@ FightManager *createFightManager(
     return f;
 }
 
-bool isFighting(FightManager *f) {
+bool isFighting(const FightManager *f) {
     return f->fight != NULL;
 }
 

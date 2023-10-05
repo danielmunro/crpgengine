@@ -1,3 +1,8 @@
+#include <mm_malloc.h>
+#include <stdio.h>
+#include "headers/attributes.h"
+#include "headers/util.h"
+
 typedef struct {
     const char *id;
     const char *name;

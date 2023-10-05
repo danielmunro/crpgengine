@@ -1,3 +1,5 @@
+#include <raylib.h>
+
 typedef struct {
     Texture image;
     const char *filename;

@@ -1,3 +1,9 @@
+#include <string.h>
+#include "headers/util.h"
+#include "headers/attributes.h"
+#include "headers/spell_manager.h"
+#include "headers/ui.h"
+
 typedef struct {
     SpellManager *spellManager;
     AnimationManager *animationManager;

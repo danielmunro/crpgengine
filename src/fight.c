@@ -1,3 +1,5 @@
+#include <mm_malloc.h>
+
 typedef struct {
     Beast *beast;
     int max;
@@ -88,7 +90,7 @@ void cancelFight(Fight *fight) {
     fight->cancelledAt = getTimeInMS();
 }
 
-int isFightDone(Fight *fight) {
+int isFightDone(const Fight *fight) {
     return fight->beastCount == 0;
 }
 
