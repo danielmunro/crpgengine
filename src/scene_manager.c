@@ -1,3 +1,7 @@
+#include "headers/audio.h"
+#include "headers/exploration.h"
+#include "headers/control_manager.h"
+
 typedef struct {
     Scene **scenes;
     int count;
@@ -38,7 +42,7 @@ void setScene(SceneManager *sm, Scene *scene, Player *player, char *entranceName
     proceedControlsUntilDone(sm->controlManager);
 }
 
-Scene *findScene(SceneManager *sm, const char *name) {
+Scene *findScene(const SceneManager *sm, const char *name) {
     for (int i = 0; i < sm->count; i++) {
         if (strcmp(sm->scenes[i]->name, name) == 0) {
             return sm->scenes[i];

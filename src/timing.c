@@ -1,3 +1,6 @@
+#include "headers/util.h"
+#include "headers/notification.h"
+
 typedef struct {
     double start;
     double elapsedTime;

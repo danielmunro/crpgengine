@@ -1,3 +1,9 @@
+#include <string.h>
+#include <mm_malloc.h>
+#include "headers/log.h"
+#include "headers/exploration.h"
+#include "headers/fight.h"
+
 typedef struct {
     int code;
     const char *scene;
@@ -83,7 +89,7 @@ void addStoryline(Scene *scene, StorylineData *storyline) {
     scene->storylineCount++;
 }
 
-bool isAlreadyAdded(ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS], ControlBlock *controlBlock) {
+bool isAlreadyAdded(ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS], const ControlBlock *controlBlock) {
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (controlBlocks[i] == controlBlock) {
             return true;

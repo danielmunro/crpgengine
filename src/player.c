@@ -1,3 +1,14 @@
+#include <math.h>
+#include <time.h>
+#include "headers/util.h"
+#include "headers/log.h"
+#include "headers/direction.h"
+#include "headers/cyaml.h"
+#include "headers/item.h"
+#include "headers/animation.h"
+#include "headers/mobile.h"
+#include "headers/spell.h"
+
 typedef struct {
     Mobile **party;
     Mobile **onDeck;
@@ -67,7 +78,7 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
     return player;
 }
 
-Mobile *getPartyLeader(Player *p) {
+Mobile *getPartyLeader(const Player *p) {
     return p->party[0];
 }
 
@@ -87,7 +98,7 @@ MobileData createMobDataFromMob(Mobile *mob) {
     };
 }
 
-PlayerData *createPlayerData(Player *p) {
+PlayerData *createPlayerData(const Player *p) {
     addDebug("create player data");
     PlayerData *pd = malloc(sizeof(PlayerData));
     pd->coins = p->coins;
@@ -159,7 +170,7 @@ void disengageWithMobile(Player *p) {
     updateDirection(p->blockedBy, p->blockedBy->previousDirection);
 }
 
-SaveData *createSaveData(Player *player, const char *scene, const char *saveName) {
+SaveData *createSaveData(const Player *player, const char *scene, const char *saveName) {
     addDebug("create save data");
     SaveData *save = malloc(sizeof(SaveData));
     save->name = saveName;
@@ -228,7 +239,7 @@ SaveFiles *getSaveFiles() {
 void save(Player *player, const char *sceneName) {
     addInfo("save player progress");
     time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
+    struct tm tm = *localtime_r(&t, NULL);
     char *date = malloc(MAX_DATETIME_LENGTH);
     sprintf(date, "%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min,
             tm.tm_sec);

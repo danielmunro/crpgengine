@@ -1,3 +1,6 @@
+#include "headers/attributes.h"
+#include "headers/intent.h"
+
 typedef struct {
     SpellType type;
     const char *name;

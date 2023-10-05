@@ -1,3 +1,9 @@
+#include "headers/util.h"
+#include "headers/attributes.h"
+#include "headers/spell_manager.h"
+#include "headers/player.h"
+#include "headers/ui.h"
+
 Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *save) {
     Mobile *mobs[MAX_PARTY_SIZE];
     addInfo("save file party count :: %d", save->player->party_count);

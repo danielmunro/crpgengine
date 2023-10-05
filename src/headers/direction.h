@@ -34,4 +34,17 @@ Direction getDirectionFromName(const char *name) {
     exit(ConfigurationErrorNoDirectionForName);
 }
 
+Direction getOppositeDirection(Direction direction) {
+    if (direction == DIRECTION_UP) {
+        return DIRECTION_DOWN;
+    } else if (direction == DIRECTION_DOWN) {
+        return DIRECTION_UP;
+    } else if (direction == DIRECTION_LEFT) {
+        return DIRECTION_RIGHT;
+    } else if (direction == DIRECTION_RIGHT) {
+        return DIRECTION_LEFT;
+    }
+    return DIRECTION_DOWN;
+}
+
 #endif //CJRPGENGINE_DIRECTION_H
