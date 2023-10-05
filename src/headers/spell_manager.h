@@ -1,0 +1,6 @@
+#ifndef CJRPGENGINE_SPELL_MANAGER_H
+#define CJRPGENGINE_SPELL_MANAGER_H
+
+#include "src/spell_manager.c"
+
+#endif //CJRPGENGINE_SPELL_MANAGER_H

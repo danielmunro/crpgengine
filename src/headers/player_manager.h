@@ -1,0 +1,6 @@
+#ifndef CJRPGENGINE_PLAYER_MANAGER_H
+#define CJRPGENGINE_PLAYER_MANAGER_H
+
+#include "src/player_manager.c"
+
+#endif //CJRPGENGINE_PLAYER_MANAGER_H
