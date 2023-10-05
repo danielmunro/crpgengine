@@ -21,4 +21,7 @@ Direction getOppositeDirection(Direction direction) {
     return DIRECTION_DOWN;
 }
 
+#include "src/graphics/spritesheet.c"
+#include "src/graphics/animation.c"
+
 #endif //CJRPGENGINE_ANIMATION_H
