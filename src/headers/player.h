@@ -1,19 +1,8 @@
 #ifndef CJRPGENGINE_PLAYER_H
 #define CJRPGENGINE_PLAYER_H
 
-#define MAX_SAVE_NAME 255
-
-#define SPELL_COLUMN_WIDTH 20
-
-#define MAX_DATETIME_LENGTH 255
-
 #define MAX_PARTY_SIZE 4
-#define MAX_SPELLS 256
-#define MAX_STORIES 1024
-#define MAX_ITEMS 255
-#define MAX_EQUIPMENT 4
 
-#define STARTING_HP 20
-#define STARTING_MANA 10
+#include "src/player.c"
 
 #endif //CJRPGENGINE_PLAYER_H
