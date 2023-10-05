@@ -25,7 +25,6 @@
 #include "layer.h"
 #include "menu.h"
 #include "scene.h"
-#include "timing.h"
 #include "xmlparser.h"
 #include "warp.h"
 #include "audio.h"
@@ -39,8 +38,8 @@
 #include "player.h"
 #include "control.h"
 #include "notification.h"
+#include "timing.h"
 
-#include "src/timing.c"
 #include "src/graphics/tilemap.c"
 #include "src/action.c"
 #include "src/fight.c"

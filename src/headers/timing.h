@@ -1,6 +1,6 @@
 #ifndef CJRPGENGINE_TIMING_H
 #define CJRPGENGINE_TIMING_H
 
-#define MILLISECONDS_IN_SECOND 1000.0
+#include "src/timing.c"
 
 #endif //CJRPGENGINE_TIMING_H
