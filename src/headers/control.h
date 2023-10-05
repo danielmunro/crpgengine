@@ -82,4 +82,6 @@ Outcome mapOutcome(const char *then) {
     return -1;
 }
 
+#include "src/control.c"
+
 #endif //CJRPGENGINE_CONTROL_H
