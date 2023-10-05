@@ -4,33 +4,6 @@
 #define MAX_MENUS 255
 #define MAX_TEXT_BOXES 32
 
-const char *MenuStyles[] = {
-        "verticalGradient",
-};
-
-typedef enum {
-    VERTICAL_GRADIENT,
-} MenuStyle;
-
-typedef enum {
-    PARTY_MENU,
-    ITEMS_MENU,
-    MAGIC_MENU,
-    PARTY_APPLY_MENU,
-    PARTY_SELECT_MENU,
-    LOAD_MENU,
-    SAVE_MENU,
-    QUIT_MENU,
-    ACKNOWLEDGE_MENU,
-    BEAST_LIST_FIGHT_MENU,
-    BEAST_TARGET_FIGHT_MENU,
-    MOBILE_SELECT_FIGHT_MENU,
-    MOBILE_TARGET_FIGHT_MENU,
-    ACTION_SELECT_FIGHT_MENU,
-    MAGIC_FIGHT_MENU,
-    ITEMS_FIGHT_MENU,
-} MenuType;
-
 #define PARTY_MENU_ITEMS "Items"
 #define PARTY_MENU_MAGIC "Magic"
 #define PARTY_MENU_REARRANGE "Rearrange"
@@ -66,5 +39,22 @@ typedef enum {
     PARTY_MEMBER_SELECTED,
     NO_OP,
 } MenuSelectResponseType;
+
+#include "src/graphics/ui/menu.c"
+#include "src/graphics/ui/menus/acknowledge_menu.c"
+#include "src/graphics/ui/menus/items_menu.c"
+#include "src/graphics/ui/menus/load_menu.c"
+#include "src/graphics/ui/menus/magic_menu.c"
+#include "src/graphics/ui/menus/party_apply_menu.c"
+#include "src/graphics/ui/menus/party_menu.c"
+#include "src/graphics/ui/menus/party_select_menu.c"
+#include "src/graphics/ui/menus/quit_menu.c"
+#include "src/graphics/ui/menus/fight/action_select_menu.c"
+#include "src/graphics/ui/menus/fight/beast_list_menu.c"
+#include "src/graphics/ui/menus/fight/beast_target_menu.c"
+#include "src/graphics/ui/menus/fight/item_select_menu.c"
+#include "src/graphics/ui/menus/fight/magic_select_menu.c"
+#include "src/graphics/ui/menus/fight/mobile_select_menu.c"
+#include "src/graphics/ui/menus/fight/mobile_target_menu.c"
 
 #endif //CJRPGENGINE_MENU_H

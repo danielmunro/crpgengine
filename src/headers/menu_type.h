@@ -1,0 +1,31 @@
+#ifndef CJRPGENGINE_MENU_TYPE_H
+#define CJRPGENGINE_MENU_TYPE_H
+
+const char *MenuStyles[] = {
+        "verticalGradient",
+};
+
+typedef enum {
+    VERTICAL_GRADIENT,
+} MenuStyle;
+
+typedef enum {
+    PARTY_MENU,
+    ITEMS_MENU,
+    MAGIC_MENU,
+    PARTY_APPLY_MENU,
+    PARTY_SELECT_MENU,
+    LOAD_MENU,
+    SAVE_MENU,
+    QUIT_MENU,
+    ACKNOWLEDGE_MENU,
+    BEAST_LIST_FIGHT_MENU,
+    BEAST_TARGET_FIGHT_MENU,
+    MOBILE_SELECT_FIGHT_MENU,
+    MOBILE_TARGET_FIGHT_MENU,
+    ACTION_SELECT_FIGHT_MENU,
+    MAGIC_FIGHT_MENU,
+    ITEMS_FIGHT_MENU,
+} MenuType;
+
+#endif //CJRPGENGINE_MENU_TYPE_H

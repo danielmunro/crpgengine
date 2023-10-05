@@ -1,3 +1,22 @@
+#include <raylib.h>
+#include <string.h>
+#include "headers/log.h"
+#include "headers/scene_manager.h"
+#include "headers/exploration.h"
+#include "headers/menu.h"
+#include "headers/fight_manager.h"
+#include "headers/timing.h"
+#include "headers/player.h"
+#include "headers/mobile_manager.h"
+#include "headers/player_manager.h"
+#include "headers/loader.h"
+#include "headers/item.h"
+#include "headers/control_manager.h"
+#include "headers/mobile.h"
+#include "headers/scene.h"
+#include "headers/animation.h"
+#include "headers/draw_fight.h"
+
 typedef struct {
     SceneManager *scenes;
     Player *player;
