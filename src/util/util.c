@@ -1,11 +1,11 @@
 #include <dirent.h>
-#include <unistd.h>
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <mm_malloc.h>
-#include <time.h>
+#include <sys/time.h>
 #include <math.h>
+#include "headers/log.h"
 
 typedef struct {
     int x;
@@ -126,7 +126,6 @@ const char *getFilenameExt(const char *filename) {
 
 void setupApp() {
     SetTraceLogLevel(LOG_WARNING);
-    SetRandomSeed(time(NULL));
 }
 
 double reportMaxMemory() {
