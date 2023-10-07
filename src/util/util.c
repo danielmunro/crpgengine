@@ -153,10 +153,10 @@ double getTimeInMS() {
 }
 
 Color getColorFromString(const char *color) {
-    const char *r = trim(strtok_r((char *) color, ",", NULL));
-    const char *g = trim(strtok_r(NULL, ",", NULL));
-    const char *b = trim(strtok_r(NULL, ",", NULL));
-    const char *a = trim(strtok_r(NULL, ",", NULL));
+    const char *r = trim(strtok((char *) color, ","));
+    const char *g = trim(strtok(NULL, ","));
+    const char *b = trim(strtok(NULL, ","));
+    const char *a = trim(strtok(NULL, ","));
 
     return (Color) {
             TextToInteger(r),
