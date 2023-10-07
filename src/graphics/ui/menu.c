@@ -38,9 +38,9 @@ typedef struct {
 
     void (*draw)(MenuContext *);
 
-    int (*getNextOption)(MenuContext *);
+    int (*getNextOption)(const MenuContext *);
 
-    int (*getPreviousOption)(MenuContext *);
+    int (*getPreviousOption)(const MenuContext *);
 
     MenuSelectResponse *(*selected)(MenuContext *menuContext);
 } Menu;
@@ -56,8 +56,8 @@ Menu *createMenu(
         MenuType type,
         int (getCursorLength)(const MenuContext *),
         void (draw)(MenuContext *),
-        int (*getPreviousOption)(MenuContext *),
-        int (*getNextOption)(MenuContext *),
+        int (*getPreviousOption)(const MenuContext *),
+        int (*getNextOption)(const MenuContext *),
         MenuSelectResponse *(*selected)()) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;

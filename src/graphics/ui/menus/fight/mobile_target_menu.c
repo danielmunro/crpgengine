@@ -30,7 +30,7 @@ MenuSelectResponse *mobileTargetMenuItemSelected(MenuContext *menuContext) {
     return createMenuSelectResponse(FIND_TARGET_MENU, MOBILE_TARGET_FIGHT_MENU);
 }
 
-int getNextMobileTargetCursorPosition(MenuContext *mc) {
+int getNextMobileTargetCursorPosition(const MenuContext *mc) {
     Player *p = mc->player;
     for (int i = mc->cursorLine + 1; i < mc->player->partyCount; i++) {
         if (p->party[i]->hp > 0) {
@@ -45,7 +45,7 @@ int getNextMobileTargetCursorPosition(MenuContext *mc) {
     return mc->cursorLine;
 }
 
-int getPreviousMobileTargetCursorPosition(MenuContext *mc) {
+int getPreviousMobileTargetCursorPosition(const MenuContext *mc) {
     Player *p = mc->player;
     for (int i = mc->cursorLine - 1; i >= 0; i--) {
         if (p->party[i]->hp > 0) {
