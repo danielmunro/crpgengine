@@ -14,7 +14,7 @@
 #include "src/graphics/ui/menus/fight/beast_target_menu.c"
 #include "src/graphics/ui/menus/fight/item_select_menu.c"
 #include "src/graphics/ui/menus/fight/magic_select_menu.c"
-#include "src/graphics/ui/menus/fight/mobile_select_menu.c"
+#include "src/graphics/ui/menus/fight/mobile_select_menu.h"
 #include "src/graphics/ui/menus/fight/mobile_target_menu.c"
 
 #endif //CJRPGENGINE_ALL_MENUS_H

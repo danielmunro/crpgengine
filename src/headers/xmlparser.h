@@ -24,7 +24,7 @@ TileMapNodeType getTileMapNodeTypeFromString(const char *nodeType) {
             return i;
         }
     }
-    addError("tile map node type not found :: %s", nodeType);
+    addDebug("tile map node type not found :: %s", nodeType);
     return TILEMAP_NODE_TYPE_OTHER;
 }
 
@@ -78,7 +78,7 @@ TileSetNodeType getTileSetNodeTypeFromString(const char *tileSetNodeType) {
             return i;
         }
     }
-    addError("tileset type not found :: %s", tileSetNodeType);
+    addDebug("tileset type not found :: %s", tileSetNodeType);
     return TILESET_NODE_TYPE_OTHER;
 }
 
