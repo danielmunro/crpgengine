@@ -10,7 +10,7 @@
 #include "src/graphics/ui/menus/party_select_menu.c"
 #include "src/graphics/ui/menus/quit_menu.c"
 #include "src/graphics/ui/menus/fight/action_select_menu.c"
-#include "src/graphics/ui/menus/fight/beast_list_menu.c"
+#include "src/graphics/ui/menus/fight/beast_list_menu.h"
 #include "src/graphics/ui/menus/fight/beast_target_menu.c"
 #include "src/graphics/ui/menus/fight/item_select_menu.c"
 #include "src/graphics/ui/menus/fight/magic_select_menu.c"

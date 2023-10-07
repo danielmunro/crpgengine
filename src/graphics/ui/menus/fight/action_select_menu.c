@@ -1,4 +1,5 @@
 #include "../../../../headers/menu.h"
+#include "beast_list_menu.h"
 
 const char *actionMenu[] = {
         "Attack",

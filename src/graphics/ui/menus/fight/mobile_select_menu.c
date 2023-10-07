@@ -1,3 +1,6 @@
+#include "../../../../headers/menu.h"
+#include "../../../../headers/mobile.h"
+
 FontStyle *getFontStyleForFightCursor(Mobile *mob, Fonts *fonts, int mobIndex, int loopIndex) {
     if (mobIndex == loopIndex) {
         return fonts->highlight;

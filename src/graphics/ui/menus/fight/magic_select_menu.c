@@ -1,3 +1,5 @@
+#include "../../../../headers/menu.h"
+
 int getMagicSelectCursorLength(MenuContext *menuContext) {
     return menuContext->selectedMob->spellCount;
 }
