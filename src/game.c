@@ -3,7 +3,7 @@
 #include "headers/log.h"
 #include "headers/scene_manager.h"
 #include "headers/exploration.h"
-#include "headers/menu.h"
+#include "src/graphics/ui/menu.h"
 #include "headers/fight_manager.h"
 #include "headers/timing.h"
 #include "headers/player.h"

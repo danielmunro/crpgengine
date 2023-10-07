@@ -1,4 +1,4 @@
-#include "../../../headers/menu.h"
+#include "src/graphics/ui/menu.h"
 
 void drawMagicMenuScreen(MenuContext *menuContext) {
     TextBox *textBox = findOrCreateTextBox(

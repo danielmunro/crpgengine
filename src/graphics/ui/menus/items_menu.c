@@ -1,4 +1,4 @@
-#include "../../../headers/menu.h"
+#include "src/graphics/ui/menu.h"
 
 void drawItemsMenuScreen(MenuContext *menuContext) {
     FontStyle *defaultFont = menuContext->fonts->default_;

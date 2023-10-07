@@ -1,4 +1,4 @@
-#include "../../../../headers/menu.h"
+#include "src/graphics/ui/menu.h"
 #include "../../../../headers/mobile.h"
 
 FontStyle *getFontStyleForFightCursor(Mobile *mob, Fonts *fonts, int mobIndex, int loopIndex) {

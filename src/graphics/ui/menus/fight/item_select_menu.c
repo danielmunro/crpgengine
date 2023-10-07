@@ -1,4 +1,4 @@
-#include "../../../../headers/menu.h"
+#include "src/graphics/ui/menu.h"
 
 int getItemSelectCursorLength(const MenuContext *menuContext) {
     return menuContext->player->itemCount;

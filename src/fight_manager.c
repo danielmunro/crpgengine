@@ -1,7 +1,7 @@
 #include <raylib.h>
 #include "headers/log.h"
 #include "headers/player.h"
-#include "headers/menu.h"
+#include "src/graphics/ui/menu.h"
 #include "headers/notification.h"
 #include "headers/fight.h"
 #include "headers/util.h"
