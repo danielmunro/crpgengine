@@ -1,4 +1,4 @@
-#include "../../headers/util.h"
+#include "src/headers/util.h"
 
 typedef struct {
     int width;

@@ -80,7 +80,7 @@ Fight *createFightFromEncounters(
 
 void checkRemoveFight(FightManager *f) {
     if (isFightDone(f->fight)) {
-        Player *p = f->fight->player;
+        const Player *p = f->fight->player;
         for (int i = 0; i < p->partyCount; i++) {
             p->party[i]->actionGauge = 0;
             p->party[i]->isFleeing = false;
@@ -109,7 +109,7 @@ void destroyBeast(FightManager *fm, Beast *beast) {
     free(beast);
 }
 
-Mobile *getFinalMobileTarget(Fight *fight, Mobile *mob) {
+Mobile *getFinalMobileTarget(const Fight *fight, Mobile *mob) {
     int index = -1;
     for (int i = 0; i < fight->player->partyCount; i++) {
         if (fight->player->party[i] == mob) {

@@ -56,7 +56,7 @@ Beast *cloneBeast(Beast *original) {
     return new;
 }
 
-Attributes calculateBeastAttributes(Beast *beast) {
+Attributes calculateBeastAttributes(const Beast *beast) {
     // todo take into effect affects
     return *beast->attributes;
 }

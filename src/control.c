@@ -156,7 +156,7 @@ bool areConditionsMet(ControlBlock *cb, Player *p, EventType eventType) {
     return true;
 }
 
-bool needsToRemoveActiveControlBlock(ControlBlock *control) {
+bool needsToRemoveActiveControlBlock(const ControlBlock *control) {
     return control != NULL && control->progress >= control->thenCount;
 }
 

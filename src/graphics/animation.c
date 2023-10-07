@@ -1,6 +1,6 @@
 #include <mm_malloc.h>
 #include <string.h>
-#include "../headers/log.h"
+#include "src/headers/log.h"
 
 typedef struct {
     const char *name;

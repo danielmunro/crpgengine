@@ -16,6 +16,7 @@
 #include "headers/scene.h"
 #include "headers/animation.h"
 #include "headers/draw_fight.h"
+#include "headers/ui_manager.h"
 
 typedef struct {
     SceneManager *scenes;
@@ -142,7 +143,7 @@ bool isExploring(Game *g) {
     return !isFighting(g->fights) && !getCurrentMenu(g->menus);
 }
 
-bool canTriggerFight(Game *g, Player *p) {
+bool canTriggerFight(Game *g, const Player *p) {
     if (!isDungeon(g->scenes->current) || isFighting(g->fights) || !isMoving(getPartyLeader(p))) {
         return false;
     }
