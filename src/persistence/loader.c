@@ -1,3 +1,11 @@
+#include <raylib.h>
+#include <mm_malloc.h>
+#include <string.h>
+#include "src/headers/log.h"
+#include "src/headers/fight.h"
+#include "src/headers/control_manager.h"
+#include "src/headers/mobile_manager.h"
+
 void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *file) {
     addInfo("load animations file: %s", file);
     AnimationData *animation = loadAnimationYaml(file);

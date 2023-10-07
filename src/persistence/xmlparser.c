@@ -1,3 +1,8 @@
+#include <mm_malloc.h>
+#include <string.h>
+#include <raylib.h>
+#include <libxml/xmlreader.h>
+
 typedef struct {
     xmlTextReaderPtr reader;
     Exploration *exploration;
@@ -25,7 +30,8 @@ char *getStringAttribute(xmlTextReaderPtr reader, const char *attribute) {
 
 static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
-    static int tileOpen = 0, lastObjectId = 0;
+    static int tileOpen = 0;
+    static int lastObjectId = 0;
     TileSetNodeType nodeType = getTileSetNodeTypeFromString((const char *) name);
     if (nodeType == TILESET_NODE_TYPE_TILESET) {
         const int width = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
@@ -88,7 +94,8 @@ void parseSceneLayer(Exploration *e, const char *rawData) {
         line = strtok(NULL, "\r\n");
         it++;
     }
-    int y = 0, x = 0;
+    int y = 0;
+    int x = 0;
     while (y < it) {
         char *val = strtok(data[y], ",");
         x = 0;
@@ -105,7 +112,9 @@ void parseSceneLayer(Exploration *e, const char *rawData) {
 
 void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
-    static int dataOpen = 0, exitOpen = 0, layerOpen = 0;
+    static int dataOpen = 0;
+    static int exitOpen = 0;
+    static int layerOpen = 0;
     ObjectType objectType;
     char *strName = (char *) name;
     addDebug("process scene node -- %s", strName);
