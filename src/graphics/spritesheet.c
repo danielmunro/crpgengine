@@ -1,3 +1,8 @@
+#include <string.h>
+#include <raylib.h>
+#include <mm_malloc.h>
+#include <math.h>
+
 typedef struct {
     const char *name;
     const char *filename;
@@ -47,7 +52,7 @@ Spritesheet *findSpritesheetByName(SpritesheetManager *sm, const char *name) {
     return NULL;
 }
 
-void drawImageFromSprite(Spritesheet *s, Vector2 position, int imageIndex) {
+void drawImageFromSprite(const Spritesheet *s, Vector2 position, int imageIndex) {
     int columns = (int) roundf((float) s->source.width / (float) (s->frameWidth + s->padding));
     int y = imageIndex / columns;
     int x = imageIndex - (y * columns);

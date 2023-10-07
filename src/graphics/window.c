@@ -1,3 +1,7 @@
+#include <raylib.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 void initWindow(const char *title, UIData *ui) {
     SetTargetFPS(ui->screen->targetFrameRate);
     InitWindow(ui->screen->width, ui->screen->height, title);

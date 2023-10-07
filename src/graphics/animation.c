@@ -1,3 +1,7 @@
+#include <mm_malloc.h>
+#include <string.h>
+#include "../headers/log.h"
+
 typedef struct {
     const char *name;
     Direction type;

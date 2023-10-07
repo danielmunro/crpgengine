@@ -1,3 +1,5 @@
+#include "../../headers/util.h"
+
 typedef struct {
     int width;
     int height;

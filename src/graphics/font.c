@@ -1,3 +1,6 @@
+#include "../headers/util.h"
+#include "../headers/ui.h"
+
 typedef struct {
     FontStyleType type;
     Font font;

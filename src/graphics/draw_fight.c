@@ -1,3 +1,5 @@
+#include <raylib.h>
+
 void drawFightBackground(Encounters *encounters) {
     float scale = (float) ui->screen->width / (float) encounters->background.width;
     DrawTextureEx(encounters->background, (Vector2) {0, 0}, 0, scale, WHITE);
