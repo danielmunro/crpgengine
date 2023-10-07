@@ -34,7 +34,7 @@ void drawMagicMenuScreen(MenuContext *menuContext) {
             });
 }
 
-int getMagicMenuCursorLength(MenuContext *menuContext) {
+int getMagicMenuCursorLength(const MenuContext *menuContext) {
     return menuContext->selectedMob->spellCount;
 }
 

@@ -1,4 +1,4 @@
-int getQuitCursorLength(MenuContext *menuContext) {
+int getQuitCursorLength(const MenuContext *menuContext) {
     return sizeof(QuitMenuItems) / sizeof(QuitMenuItems[0]);
 }
 

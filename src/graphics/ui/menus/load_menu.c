@@ -1,4 +1,4 @@
-int getLoadCursorLength(MenuContext *menuContext) {
+int getLoadCursorLength(const MenuContext *menuContext) {
     return menuContext->saveFiles->count;
 }
 

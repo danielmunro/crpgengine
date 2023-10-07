@@ -34,7 +34,7 @@ typedef struct {
     MenuType type;
     int cursor;
 
-    int (*getCursorLength)(MenuContext *);
+    int (*getCursorLength)(const MenuContext *);
 
     void (*draw)(MenuContext *);
 
@@ -54,7 +54,7 @@ MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuTy
 
 Menu *createMenu(
         MenuType type,
-        int (getCursorLength)(MenuContext *),
+        int (getCursorLength)(const MenuContext *),
         void (draw)(MenuContext *),
         int (*getPreviousOption)(MenuContext *),
         int (*getNextOption)(MenuContext *),

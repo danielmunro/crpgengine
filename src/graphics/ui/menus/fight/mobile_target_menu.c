@@ -1,7 +1,7 @@
 #include "../../../../headers/menu.h"
 #include "mobile_select_menu.h"
 
-int getMobileTargetMenuCursorLength(MenuContext *menuContext) {
+int getMobileTargetMenuCursorLength(const MenuContext *menuContext) {
     return getMobileSelectMenuCursorLength(menuContext);
 }
 

@@ -95,7 +95,7 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
     }
 }
 
-int getMobileSelectMenuCursorLength(MenuContext *menuContext) {
+int getMobileSelectMenuCursorLength(const MenuContext *menuContext) {
     return menuContext->player->partyCount;
 }
 

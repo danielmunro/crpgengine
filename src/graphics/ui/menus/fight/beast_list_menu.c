@@ -13,7 +13,7 @@ void drawBeastSelectMenuScreen(MenuContext *menuContext) {
     }
 }
 
-int getBeastSelectCursorLength(MenuContext *menuContext) {
+int getBeastSelectCursorLength(const MenuContext *menuContext) {
     return menuContext->fight->beastCount;
 }
 

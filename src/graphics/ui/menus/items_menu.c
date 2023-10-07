@@ -28,7 +28,7 @@ void drawItemsMenuScreen(MenuContext *menuContext) {
             });
 }
 
-int getItemsCursorLength(MenuContext *menuContext) {
+int getItemsCursorLength(const MenuContext *menuContext) {
     return menuContext->itemListCount;
 }
 

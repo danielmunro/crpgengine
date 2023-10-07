@@ -45,7 +45,7 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
             });
 }
 
-int getPartyMenuCursorLength(MenuContext *menuContext) {
+int getPartyMenuCursorLength(const MenuContext *menuContext) {
     return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
 }
 

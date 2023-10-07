@@ -1,4 +1,4 @@
-int getPartyApplyMenuCursorLength(MenuContext *mc) {
+int getPartyApplyMenuCursorLength(const MenuContext *mc) {
     return mc->player->partyCount;
 }
 

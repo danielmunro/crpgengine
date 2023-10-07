@@ -38,7 +38,7 @@ void drawPartySelectMenuScreen(MenuContext *menuContext) {
     }
 }
 
-int getPartySelectMenuCursorLength(MenuContext *menuContext) {
+int getPartySelectMenuCursorLength(const MenuContext *menuContext) {
     return menuContext->player->partyCount;
 }
 

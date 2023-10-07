@@ -1,4 +1,4 @@
-int getAcknowledgeCursorLength(MenuContext *menuContext) {
+int getAcknowledgeCursorLength(const MenuContext *menuContext) {
     return 1;
 }
 

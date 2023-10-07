@@ -1,4 +1,4 @@
-int geBeastTargetMenuCursorLength(MenuContext *menuContext) {
+int geBeastTargetMenuCursorLength(const MenuContext *menuContext) {
     return getBeastSelectCursorLength(menuContext);
 }
 
