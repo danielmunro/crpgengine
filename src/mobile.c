@@ -154,7 +154,7 @@ void useEntrance(Mobile *mob, Entrance *e) {
     mob->direction = e->direction;
 }
 
-bool canPlayerMove(Mobile *mob) {
+bool canPlayerMove(const Mobile *mob) {
     return !mob->isBeingMoved && !mob->locked && mob->waitTimer < 0;
 }
 
@@ -188,7 +188,7 @@ void normalizeVitalsForMobile(Mobile *mob) {
     }
 }
 
-bool canApplyCost(Mobile *caster, Attributes *cost) {
+bool canApplyCost(const Mobile *caster, const Attributes *cost) {
     if (caster->mana < cost->mana) {
         return false;
     }
