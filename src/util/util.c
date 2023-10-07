@@ -5,7 +5,7 @@
 #include <mm_malloc.h>
 #include <sys/time.h>
 #include <math.h>
-#include "headers/log.h"
+#include "../headers/log.h"
 
 typedef struct {
     int x;

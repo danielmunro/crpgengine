@@ -1,5 +1,6 @@
 #include <string.h>
 #include <mm_malloc.h>
+#include <unistd.h>
 #include "headers/log.h"
 #include "headers/exploration.h"
 #include "headers/fight.h"
