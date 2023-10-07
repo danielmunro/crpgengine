@@ -1,5 +1,8 @@
 #include <dirent.h>
 #include <unistd.h>
+#include <string.h>
+#include <ctype.h>
+#include <mm_malloc.h>
 
 typedef struct {
     int x;
