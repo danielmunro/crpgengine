@@ -1,8 +1,11 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdio.h>
 #include <ctype.h>
 #include <mm_malloc.h>
+#include <time.h>
+#include <math.h>
 
 typedef struct {
     int x;
@@ -123,7 +126,7 @@ const char *getFilenameExt(const char *filename) {
 
 void setupApp() {
     SetTraceLogLevel(LOG_WARNING);
-    srand(time(NULL));
+    SetRandomSeed(time(NULL));
 }
 
 double reportMaxMemory() {
@@ -150,10 +153,10 @@ double getTimeInMS() {
 }
 
 Color getColorFromString(const char *color) {
-    const char *r = trim(strtok((char *) color, ","));
-    const char *g = trim(strtok(NULL, ","));
-    const char *b = trim(strtok(NULL, ","));
-    const char *a = trim(strtok(NULL, ","));
+    const char *r = trim(strtok_r((char *) color, ",", NULL));
+    const char *g = trim(strtok_r(NULL, ",", NULL));
+    const char *b = trim(strtok_r(NULL, ",", NULL));
+    const char *a = trim(strtok_r(NULL, ",", NULL));
 
     return (Color) {
             TextToInteger(r),
@@ -171,7 +174,7 @@ float getScrollOffset(float lineHeight, int cursorLine, float areaHeight) {
     float cursorY = ((float) cursorLine + 1) * lineHeight;
     float diff = cursorY - areaHeight;
     if (diff >= 0) {
-        return ceil((double) diff + lineHeight);
+        return ceilf(diff + lineHeight);
     }
     return 0;
 }
