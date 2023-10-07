@@ -1,3 +1,5 @@
+#include "beast_list_menu.h"
+
 int geBeastTargetMenuCursorLength(const MenuContext *menuContext) {
     return getBeastSelectCursorLength(menuContext);
 }

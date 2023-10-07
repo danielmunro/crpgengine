@@ -1,3 +1,5 @@
+#include "../../../headers/menu.h"
+
 void drawPartyMenuScreen(MenuContext *menuContext) {
     TextBox *inGameMenuBox = findOrCreateTextBox(
             menuContext,

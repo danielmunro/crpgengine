@@ -1,3 +1,5 @@
+#include "../../../headers/menu.h"
+
 void drawItemsMenuScreen(MenuContext *menuContext) {
     FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *textBox = findOrCreateTextBox(

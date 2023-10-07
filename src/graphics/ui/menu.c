@@ -110,7 +110,7 @@ UISprite *createUISprite(Spritesheet *sprite, UIData *config) {
     return uiSprite;
 }
 
-void normalizeMenuCursor(Menu *menu, MenuContext *menuContext) {
+void normalizeMenuCursor(Menu *menu, const MenuContext *menuContext) {
     if (menu->cursor >= menu->getCursorLength(menuContext)) {
         menu->cursor = 0;
     }
@@ -193,11 +193,11 @@ TextBox *findOrCreateTextBox(MenuContext *mc, TextBoxLabel label, Rectangle area
     exit(GameEngineErrorTextBoxNotFound);
 }
 
-int getDefaultNextOption(MenuContext *mc) {
+int getDefaultNextOption(const MenuContext *mc) {
     return mc->cursorLine + 1;
 }
 
-int getDefaultPreviousOption(MenuContext *mc) {
+int getDefaultPreviousOption(const MenuContext *mc) {
     return mc->cursorLine - 1;
 }
 

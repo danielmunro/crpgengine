@@ -1,12 +1,7 @@
+#include "../../../headers/menu.h"
+
 int getLoadCursorLength(const MenuContext *menuContext) {
     return menuContext->saveFiles->count;
-}
-
-TextBox *createLoadMenuBox(MenuContext *mc) {
-    return createTextBox(
-            ui->textAreas->small,
-            mc->fonts->default_,
-            LOAD_BOX);
 }
 
 void drawLoadMenuScreen(MenuContext *menuContext) {

@@ -1,3 +1,5 @@
+#include "../../../headers/menu.h"
+
 int getQuitCursorLength(const MenuContext *menuContext) {
     return sizeof(QuitMenuItems) / sizeof(QuitMenuItems[0]);
 }

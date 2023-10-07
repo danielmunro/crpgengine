@@ -1,3 +1,8 @@
+#include "../../../headers/menu.h"
+#include "../../../headers/mobile.h"
+#include "../../../headers/player.h"
+#include "../../../headers/ui.h"
+
 int getPartyApplyMenuCursorLength(const MenuContext *mc) {
     return mc->player->partyCount;
 }
