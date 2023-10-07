@@ -1,3 +1,5 @@
+#include "../../../../headers/menu.h"
+
 const char *actionMenu[] = {
         "Attack",
         "Magic",
@@ -14,7 +16,7 @@ typedef enum {
     ACTION_RUN,
 } ActionMenu;
 
-int getActionSelectCursorLength(MenuContext *menuContext) {
+int getActionSelectCursorLength(const MenuContext *menuContext) {
     return sizeof(actionMenu) / sizeof(char *);
 }
 
