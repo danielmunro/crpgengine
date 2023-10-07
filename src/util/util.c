@@ -124,10 +124,6 @@ const char *getFilenameExt(const char *filename) {
     return dot + 1;
 }
 
-void setupApp() {
-    SetTraceLogLevel(LOG_WARNING);
-}
-
 double reportMaxMemory() {
     int who = RUSAGE_SELF;
     struct rusage usage;

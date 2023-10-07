@@ -1,5 +1,5 @@
 void globalSetup(int argc, char *argv[]) {
-    setupApp();
+    SetTraceLogLevel(LOG_WARNING);
     createRuntimeArgs(argc, argv);
     createLog(runtimeArgs->logLevel);
     UIData *uiCfg = loadUIData();
