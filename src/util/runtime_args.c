@@ -1,3 +1,8 @@
+#include <mm_malloc.h>
+#include <raylib.h>
+#include <string.h>
+#include "src/headers/log.h"
+
 typedef struct {
     int sceneIndex;
     bool showObjectCollisions;

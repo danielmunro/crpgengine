@@ -1,3 +1,5 @@
+#include "src/headers/log.h"
+
 void validateExits(Game *g) {
     for (int i = 0; i < g->scenes->count; i++) {
         addDebug("scene exit count :: %s - %d",
