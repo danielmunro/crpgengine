@@ -1,3 +1,6 @@
+#include <mm_malloc.h>
+#include <stdio.h>
+
 typedef struct {
     LogLevel level;
 } Log;
