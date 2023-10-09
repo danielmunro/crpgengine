@@ -5,6 +5,8 @@
 #include <mm_malloc.h>
 #include <sys/time.h>
 #include <math.h>
+#include <sys/resource.h>
+#include <unistd.h>
 #include "src/headers/log.h"
 
 typedef struct {

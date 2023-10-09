@@ -137,6 +137,7 @@ SaveData *loadSaveData(const char *filePath) {
 }
 
 void saveSaveData(SaveData *saveData, const char *filePath) {
+    addDebug("saving to %s", filePath);
     cyaml_err_t err = cyaml_save_file(filePath, &cyamlConfig,
                                       &saveTopSchema, saveData, 0);
     if (err != CYAML_OK) {
