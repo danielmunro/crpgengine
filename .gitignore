@@ -9,3 +9,7 @@ _saves/
 CMakeCache.txt
 .DS_Store
 Project.cbp
+Makefile
+CPackConfig.cmake
+CPackSourceConfig.cmake
+cmake_install.cmake
