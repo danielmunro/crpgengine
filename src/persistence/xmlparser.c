@@ -115,7 +115,7 @@ void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir
     static int dataOpen = 0;
     static int exitOpen = 0;
     static int layerOpen = 0;
-    ObjectType objectType;
+    static ObjectType objectType;
     char *strName = (char *) name;
     addDebug("process scene node -- %s", strName);
     TileMapNodeType nodeType = getTileMapNodeTypeFromString(strName);
