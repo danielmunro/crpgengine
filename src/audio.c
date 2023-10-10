@@ -1,6 +1,8 @@
 #include <mm_malloc.h>
 #include <raylib.h>
 #include "headers/log.h"
+#include "util/runtime_args.h"
+#include "src/headers/cyaml.h"
 
 typedef struct {
     Sound sound;

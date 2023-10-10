@@ -7,6 +7,9 @@
 #include "headers/animation.h"
 #include "headers/control.h"
 #include "headers/ui.h"
+#include "headers/layer.h"
+#include "headers/notification.h"
+#include "headers/warp.h"
 
 typedef struct {
     Mobile *mob;
@@ -38,7 +41,7 @@ Vector2D getTileFromIndex(const Tilemap *t, int index) {
     return pos;
 }
 
-Rectangle getRectForTile(Tilemap *t, int index) {
+Rectangle getRectForTile(const Tilemap *t, int index) {
     Vector2D tile = getTileFromIndex(t, index);
     return (Rectangle) {
             (float) (tile.x * t->size.x),
@@ -258,7 +261,7 @@ void renderExplorationLayer(Exploration *e, LayerType layer) {
     UnloadImage(renderedLayer);
 }
 
-void unloadLayers(Exploration *e) {
+void unloadLayers(const Exploration *e) {
     for (int i = 0; i < e->layerCount; i++) {
         UnloadTexture(e->renderedLayers[i]);
     }
@@ -340,7 +343,7 @@ bool isBlockedByMapObject(Exploration *e, Rectangle player) {
         for (int y = 0; y < tiles.y; y++) {
             for (int x = 0; x < tiles.x; x++) {
                 int index = e->layers[l]->data[y][x];
-                Object *o = getObject(e, index - 1);
+                const Object *o = getObject(e, index - 1);
                 if (o != NULL) {
                     Rectangle c = GetCollisionRec(player, getObjectSize(e, o, x, y));
                     if (c.height > 0 || c.width > 0) {

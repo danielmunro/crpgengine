@@ -1,28 +1,7 @@
 #ifndef CJRPGENGINE_H_INCLUDED
 #define CJRPGENGINE_H_INCLUDED
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "_deps/raylib-src/src/raylib.h"
-#include <libxml/xmlreader.h>
-#include "cyaml/cyaml.h"
-#include <string.h>
-#include <math.h>
-#include <sys/time.h>
-#include <ctype.h>
-
 #include "globals.h"
-#include "errors.h"
-#include "log.h"
-#include "menu_type.h"
-#include "collision.h"
-#include "direction.h"
-#include "util.h"
-#include "cyaml.h"
-#include "db.h"
-#include "intent.h"
-#include "layer.h"
-#include "warp.h"
 #include "audio.h"
 #include "attributes.h"
 #include "spell.h"

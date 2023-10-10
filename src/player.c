@@ -9,6 +9,7 @@
 #include "headers/animation.h"
 #include "headers/mobile.h"
 #include "headers/spell.h"
+#include "src/headers/db.h"
 
 typedef struct {
     Mobile **party;

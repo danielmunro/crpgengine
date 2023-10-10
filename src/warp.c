@@ -1,3 +1,6 @@
+#include <raylib.h>
+#include "src/headers/direction.h"
+
 typedef struct {
     Rectangle area;
     char *to;

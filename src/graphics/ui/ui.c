@@ -1,3 +1,6 @@
+#include <string.h>
+#include <stdbool.h>
+#include "src/headers/menu_type.h"
 #include "src/headers/util.h"
 
 typedef struct {

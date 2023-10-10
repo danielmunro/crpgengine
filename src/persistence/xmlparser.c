@@ -2,6 +2,7 @@
 #include <string.h>
 #include <raylib.h>
 #include <libxml/xmlreader.h>
+#include "src/headers/db.h"
 
 typedef struct {
     xmlTextReaderPtr reader;

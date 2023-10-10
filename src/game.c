@@ -155,7 +155,7 @@ void checkFights(Game *g, Scene *s) {
     if (!canTriggerFight(g, g->player)) {
         return;
     }
-    if (rand() % 100 + 1 == 1) {
+    if (GetRandomValue(1, 100) == 1) {
         createFightFromEncounters(
                 g->fights,
                 s->encounters,

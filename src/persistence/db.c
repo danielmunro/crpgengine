@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <mm_malloc.h>
+#include "src/headers/util.h"
 
 void purgeSaves(const char *indexDir) {
     const char *saveDirectory = malloc(MAX_FS_PATH_LENGTH);
@@ -7,7 +8,7 @@ void purgeSaves(const char *indexDir) {
     char **files = calloc(MAX_SAVE_FILES, sizeof(char *));
     int count = getFilesInDirectory(saveDirectory, files);
     for (int i = 0; i < count; i++) {
-        printf("remove save file: %s\n", files[i]);
+        addInfo("remove save file :: %s", files[i]);
         char *filepath = malloc(MAX_FS_PATH_LENGTH);
         sprintf(filepath, "%s/%s", saveDirectory, files[i]);
         remove(filepath);

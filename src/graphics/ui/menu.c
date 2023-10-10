@@ -1,3 +1,5 @@
+#include "src/headers/menu_type.h"
+
 typedef struct {
     Spritesheet *sprite;
     UIData *config;

@@ -1,6 +1,10 @@
 #ifndef CJRPGENGINE_DIRECTION_H
 #define CJRPGENGINE_DIRECTION_H
 
+#include <string.h>
+#include "errors.h"
+#include "log.h"
+
 typedef enum {
     DIRECTION_UP,
     DIRECTION_DOWN,

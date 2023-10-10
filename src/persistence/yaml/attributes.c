@@ -1,3 +1,5 @@
+#include "cyaml/cyaml.h"
+
 typedef struct {
     int bash;
     int slash;

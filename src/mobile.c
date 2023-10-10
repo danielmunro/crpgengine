@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "headers/attributes.h"
 #include "headers/util.h"
+#include "headers/warp.h"
 
 typedef struct {
     const char *id;
@@ -86,7 +87,7 @@ void resetMoving(Mobile *mob) {
     getMobAnimation(mob)->isPlaying = 0;
 }
 
-bool isMoving(Mobile *mob) {
+bool isMoving(const Mobile *mob) {
     return mob->moving[DIRECTION_DOWN]
            || mob->moving[DIRECTION_UP]
            || mob->moving[DIRECTION_LEFT]
@@ -102,7 +103,7 @@ Rectangle getMobileRectangle(Mobile *mob) {
     };
 }
 
-Vector2 getMoveFor(Mobile *mob, Direction direction) {
+Vector2 getMoveFor(const Mobile *mob, Direction direction) {
     if (direction == DIRECTION_UP) {
         return (Vector2) {mob->position.x, mob->position.y - 1};
     } else if (direction == DIRECTION_DOWN) {
@@ -195,7 +196,7 @@ bool canApplyCost(const Mobile *caster, const Attributes *cost) {
     return true;
 }
 
-bool applyCastCost(Mobile *caster, Attributes *cost) {
+bool applyCastCost(Mobile *caster, const Attributes *cost) {
     if (!canApplyCost(caster, cost)) {
         return false;
     }

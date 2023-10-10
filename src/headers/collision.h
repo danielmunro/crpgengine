@@ -1,6 +1,10 @@
 #ifndef CJRPGENGINE_COLLISION_H
 #define CJRPGENGINE_COLLISION_H
 
+#include <string.h>
+#include "log.h"
+#include "errors.h"
+
 const char *CollisionTypes[] = {
         "objects",
         "player",

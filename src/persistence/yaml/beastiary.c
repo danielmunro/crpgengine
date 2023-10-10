@@ -1,3 +1,5 @@
+#include "cyaml/cyaml.h"
+
 typedef struct {
     const char *id;
     const char *name;

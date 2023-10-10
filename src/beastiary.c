@@ -1,4 +1,5 @@
 #include "headers/attributes.h"
+#include "util/runtime_args.h"
 
 typedef struct {
     const char *id;

@@ -1,3 +1,4 @@
+#include "src/headers/menu_type.h"
 #include "src/graphics/ui/menu.h"
 
 void drawItemsMenuScreen(MenuContext *menuContext) {

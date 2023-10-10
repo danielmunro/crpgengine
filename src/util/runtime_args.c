@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include <string.h>
 #include "src/headers/log.h"
+#include "src/headers/collision.h"
 
 typedef struct {
     int sceneIndex;

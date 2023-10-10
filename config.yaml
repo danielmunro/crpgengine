@@ -1,0 +1,15 @@
+indexDir: examples/simple_demo
+startScene: tinytown
+logLevel: debug
+saveFile: autosave.yaml
+afterLoad:
+  dumpState: false
+  exit: false
+forceNewGame: false
+logMemoryUsage: true
+purgeSaves: false
+showFPS: false
+showCollisions:
+  objects: false
+  player: false
+  warps: false

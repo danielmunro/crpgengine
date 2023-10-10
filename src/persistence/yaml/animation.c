@@ -1,3 +1,6 @@
+#include <stdbool.h>
+#include "cyaml/cyaml.h"
+
 typedef struct {
     const char *name;
 } SpriteData;
