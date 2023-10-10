@@ -6,6 +6,7 @@
 #include "src/headers/control_manager.h"
 #include "src/headers/mobile_manager.h"
 #include "src/headers/db.h"
+#include "src/headers/xmlparser.h"
 
 void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *file) {
     addInfo("load animations file: %s", file);
@@ -17,7 +18,7 @@ void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *fi
         exit(ConfigurationErrorUnknownSpriteSheet);
     }
     for (int i = 0; i < animation->slices_count; i++) {
-        SliceData *s = &animation->slices[i];
+        const SliceData *s = &animation->slices[i];
         am->library[i] = createAnimation(
                 animation->name,
                 getDirectionFromName(s->name),

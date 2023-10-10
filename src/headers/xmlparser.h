@@ -1,6 +1,8 @@
 #ifndef CJRPGENGINE_OBJECT_H
 #define CJRPGENGINE_OBJECT_H
 
+#include "exploration.h"
+
 const char *TileMapNodeTypes[] = {
         "other",
         "tileset",

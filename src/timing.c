@@ -1,5 +1,6 @@
 #include "headers/util.h"
 #include "headers/notification.h"
+#include "headers/player.h"
 
 typedef struct {
     double start;
