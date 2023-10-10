@@ -240,15 +240,11 @@ SaveFiles *getSaveFiles() {
 void save(Player *player, const char *sceneName) {
     addInfo("save player progress");
     time_t t = time(NULL);
-    addInfo("yolo");
     struct tm result;
     struct tm tm = *localtime_r(&t, &result);
-    addInfo("yolo");
     char *date = malloc(MAX_DATETIME_LENGTH);
-    addInfo("yolo");
     sprintf(date, "%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min,
             tm.tm_sec);
-    addInfo("yolo");
     char *name = malloc(MAX_SAVE_NAME);
     sprintf(name, "%s - %s - %s", date, getPartyLeader(player)->name, sceneName);
     SaveData *save = createSaveData(
@@ -256,7 +252,6 @@ void save(Player *player, const char *sceneName) {
             sceneName,
             name);
 
-    printf("item: %s\n", player->items[0]->name);
     // auto save
     saveFile(save, runtimeArgs->indexDir, "autosave.yaml");
     char filename[MAX_FS_PATH_LENGTH];
