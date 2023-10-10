@@ -2,7 +2,8 @@
 #define CJRPGENGINE_H_INCLUDED
 
 #include "globals.h"
-#include "mobile.h"
+#include "cyaml.h"
+
 #include "action.h"
 #include "player.h"
 #include "fight.h"

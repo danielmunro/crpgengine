@@ -1,4 +1,5 @@
 #include "headers/beastiary.h"
+#include "headers/mobile.h"
 
 typedef struct {
     Mobile *mob;
