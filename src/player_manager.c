@@ -3,6 +3,7 @@
 #include "headers/spell_manager.h"
 #include "headers/player.h"
 #include "headers/ui.h"
+#include "headers/mobile_manager.h"
 
 Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *save) {
     Mobile *mobs[MAX_PARTY_SIZE];

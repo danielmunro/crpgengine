@@ -5,6 +5,7 @@
 #include "headers/item.h"
 #include "headers/player.h"
 #include "headers/scene.h"
+#include "headers/mobile_manager.h"
 
 typedef struct {
     Scene *scene;
@@ -170,7 +171,7 @@ void proceedControlsUntilDone(ControlManager *cm) {
     }
 }
 
-When *mapWhen(ControlManager *cm, Scene *s, WhenData wd) {
+When *mapWhen(ControlManager *cm, const Scene *s, WhenData wd) {
     Mobile *trigger = NULL;
     Mobile *mob = getPartyLeader(cm->player);
     ArriveAt *arriveAt = NULL;
@@ -179,7 +180,7 @@ When *mapWhen(ControlManager *cm, Scene *s, WhenData wd) {
         addDebug("mobile trigger is '%s'", trigger->name);
     }
     if (wd.arriveAt != NULL) {
-        Exploration *e = s->exploration;
+        const Exploration *e = s->exploration;
         for (int i = 0; i < e->arriveAtCount; i++) {
             if (strcmp(e->arriveAt[i]->name, wd.arriveAt) == 0) {
                 arriveAt = e->arriveAt[i];
@@ -242,7 +243,7 @@ Then *mapThen(ControlManager *cm, ThenData td) {
     );
 }
 
-ControlBlock *mapStorylineToControlBlock(ControlManager *cm, Scene *scene, StorylineData *storyline) {
+ControlBlock *mapStorylineToControlBlock(ControlManager *cm, Scene *scene, const StorylineData *storyline) {
     ControlBlock *c = createControlBlock();
     c->whenCount = storyline->when_count;
     c->thenCount = storyline->then_count;

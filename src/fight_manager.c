@@ -8,6 +8,8 @@
 #include "headers/action.h"
 #include "headers/mobile.h"
 #include "headers/warp.h"
+#include "headers/spell_manager.h"
+#include "headers/ui_manager.h"
 
 typedef struct {
     UIManager *ui;
@@ -440,7 +442,7 @@ void fightUpdate(FightManager *fm) {
 }
 
 void removeMenusUntilMobileSelect(FightManager *fm) {
-    Menu *currentMenu = getCurrentMenu(fm->menus);
+    const Menu *currentMenu = getCurrentMenu(fm->menus);
     Menu *menu = removeMenusTo(fm->menus, MOBILE_SELECT_FIGHT_MENU);
     fm->ui->menuContext->cursorLine = menu->cursor;
     menu->cursor = currentMenu->getNextOption(fm->ui->menuContext);
@@ -470,11 +472,11 @@ void fightSpaceKeyPressed(FightManager *fm) {
 }
 
 void tryToggleTargetMenus(FightManager *fm) {
-    Menu *current = getCurrentMenu(fm->menus);
+    const Menu *current = getCurrentMenu(fm->menus);
     if (current->type == BEAST_TARGET_FIGHT_MENU) {
         removeMenu(fm->menus);
         Menu *m = findMenu(fm->ui->menus, MOBILE_TARGET_FIGHT_MENU);
-        Mobile *mob = fm->fight->player->party[m->cursor];
+        const Mobile *mob = fm->fight->player->party[m->cursor];
         if (mob->hp <= 0) {
             fm->ui->menuContext->cursorLine = m->cursor;
             m->cursor = m->getNextOption(fm->ui->menuContext);
@@ -489,7 +491,7 @@ void tryToggleTargetMenus(FightManager *fm) {
 void checkFightInput(FightManager *fm) {
     addDebug("fight -- check player input");
     if (IsKeyPressed(KEY_ESCAPE)) {
-        Menu *m = getCurrentMenu(fm->menus);
+        const Menu *m = getCurrentMenu(fm->menus);
         if (m->type == MOBILE_SELECT_FIGHT_MENU) {
             return;
         }
@@ -497,13 +499,13 @@ void checkFightInput(FightManager *fm) {
     }
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *m = getCurrentMenu(fm->menus);
-        MenuContext *mc = fm->ui->menuContext;
+        const MenuContext *mc = fm->ui->menuContext;
         m->cursor = m->getNextOption(mc);
         normalizeMenuCursor(m, mc);
     }
     if (IsKeyPressed(KEY_UP)) {
         Menu *m = getCurrentMenu(fm->menus);
-        MenuContext *mc = fm->ui->menuContext;
+        const MenuContext *mc = fm->ui->menuContext;
         m->cursor = m->getPreviousOption(mc);
         normalizeMenuCursor(m, mc);
     }
