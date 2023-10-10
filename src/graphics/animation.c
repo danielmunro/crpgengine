@@ -2,6 +2,7 @@
 #include <string.h>
 #include "src/headers/log.h"
 #include "src/headers/direction.h"
+#include "src/headers/ui.h"
 
 typedef struct {
     const char *name;

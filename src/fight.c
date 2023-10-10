@@ -1,5 +1,7 @@
 #include <mm_malloc.h>
 #include "headers/beastiary.h"
+#include "headers/menu_type.h"
+#include "headers/ui.h"
 
 typedef struct {
     Beast *beast;

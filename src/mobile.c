@@ -4,6 +4,7 @@
 #include "headers/util.h"
 #include "headers/warp.h"
 #include "headers/spell.h"
+#include "graphics/avatar.h"
 
 typedef struct {
     const char *id;
@@ -211,7 +212,7 @@ void applyConsumable(Mobile *mob, Item *item) {
     normalizeVitalsForMobile(mob);
 }
 
-void drawAvatar(Mobile *mob, Vector2 position) {
+void drawAvatar(const Mobile *mob, Vector2 position) {
     DrawTextureRec(
             mob->avatar->image,
             (Rectangle) {
@@ -225,7 +226,7 @@ void drawAvatar(Mobile *mob, Vector2 position) {
 }
 
 void executeSpellOnMobile(Mobile *mob, Spell *spell) {
-    mob->hp += (int) getSpellAttributeAmount(spell, spell->impact->hp);
-    mob->mana += (int) getSpellAttributeAmount(spell, spell->impact->mana);
+    mob->hp += getSpellAttributeAmount(spell, spell->impact->hp);
+    mob->mana += getSpellAttributeAmount(spell, spell->impact->mana);
     normalizeVitalsForMobile(mob);
 }

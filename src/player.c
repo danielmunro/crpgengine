@@ -9,7 +9,8 @@
 #include "headers/animation.h"
 #include "headers/mobile.h"
 #include "headers/spell.h"
-#include "src/headers/db.h"
+#include "headers/db.h"
+#include "headers/ui.h"
 
 typedef struct {
     Mobile **party;
@@ -36,7 +37,7 @@ void addItem(Player *player, Item *item) {
     player->itemCount++;
 }
 
-void removeItem(Player *player, Item *item) {
+void removeItem(Player *player, const Item *item) {
     bool foundItem = false;
     for (int i = 0; i < player->itemCount; i++) {
         if (player->items[i] == item) {
@@ -134,7 +135,7 @@ int getExperienceToLevel(int level) {
     return (int) pow((double) level, 3.0) + 999;
 }
 
-void checkMoveKey(Player *p, int key, Direction direction) {
+void checkMoveKey(const Player *p, int key, Direction direction) {
     Mobile *mob = getPartyLeader(p);
     if (IsKeyDown(key) && !p->engaged) {
         mob->moving[direction] = true;
@@ -154,7 +155,7 @@ void explorationCheckMoveKeys(Player *player) {
     }
 }
 
-bool isSpeakingTo(Player *p, Mobile *target) {
+bool isSpeakingTo(const Player *p, const Mobile *target) {
     return p->engaged && target == p->engageable;
 }
 
@@ -273,7 +274,7 @@ void addStory(Player *p, const char *story) {
     addInfo("add story to player :: %s", story);
 }
 
-bool hasStory(Player *p, const char *story) {
+bool hasStory(const Player *p, const char *story) {
     for (int j = 0; j < p->storylineCount; j++) {
         if (strcmp(story, p->storylines[j]) == 0) {
             addDebug("player has story: %s", story);
@@ -300,7 +301,7 @@ void loadAllPlayerItems(ItemManager *im, Player *p) {
     free((char *) itemsFile);
 }
 
-ItemListResult createItemList(Player *p) {
+ItemListResult createItemList(const Player *p) {
     ItemList *itemList = calloc(p->itemCount, sizeof(ItemList));
     int count = 0;
     for (int i = 0; i < p->itemCount; i++) {

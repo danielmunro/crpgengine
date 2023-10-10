@@ -96,7 +96,7 @@ typedef enum {
     ITEM_SELECT_FIGHT_BOX,
 } TextBoxLabel;
 
-#include "src/graphics/avatar.c"
+#include "src/graphics/avatar.h"
 #include "src/graphics/font.c"
 #include "src/graphics/window.c"
 #include "src/graphics/ui/ui.c"
