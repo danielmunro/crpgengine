@@ -1,3 +1,5 @@
+#include "src/headers/all_menus.h"
+
 typedef struct {
     SpritesheetManager *sprites;
     MenuContext *menuContext;

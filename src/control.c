@@ -1,5 +1,7 @@
 #include <mm_malloc.h>
 #include "headers/util.h"
+#include "headers/mobile.h"
+#include "headers/player.h"
 
 typedef struct {
     const char *name;

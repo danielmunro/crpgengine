@@ -4,7 +4,6 @@
 #include "globals.h"
 #include "cyaml.h"
 
-#include "all_menus.h"
 #include "control.h"
 #include "notification.h"
 #include "timing.h"
