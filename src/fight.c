@@ -2,6 +2,8 @@
 #include "headers/beastiary.h"
 #include "headers/menu_type.h"
 #include "headers/ui.h"
+#include "headers/action.h"
+#include "headers/player.h"
 
 typedef struct {
     Beast *beast;

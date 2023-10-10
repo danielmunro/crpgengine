@@ -4,8 +4,6 @@
 #include "globals.h"
 #include "cyaml.h"
 
-#include "action.h"
-#include "player.h"
 #include "fight.h"
 #include "src/graphics/ui/menu.h"
 #include "all_menus.h"
