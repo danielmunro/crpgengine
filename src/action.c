@@ -1,3 +1,5 @@
+#include "headers/beastiary.h"
+
 typedef struct {
     Mobile *mob;
     Beast *beast;

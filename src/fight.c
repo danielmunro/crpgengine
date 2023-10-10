@@ -1,4 +1,5 @@
 #include <mm_malloc.h>
+#include "headers/beastiary.h"
 
 typedef struct {
     Beast *beast;

@@ -1,6 +1,10 @@
 #ifndef CJRPGENGINE_UI_H
 #define CJRPGENGINE_UI_H
 
+#include <string.h>
+#include "log.h"
+#include "errors.h"
+
 #define FPS_X 0
 #define FPS_Y 0
 

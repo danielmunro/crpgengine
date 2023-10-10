@@ -1,8 +1,9 @@
 #include <raylib.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "src/headers/cyaml.h"
 
-void initWindow(const char *title, UIData *ui) {
+void initWindow(const char *title, const UIData *ui) {
     SetTargetFPS(ui->screen->targetFrameRate);
     InitWindow(ui->screen->width, ui->screen->height, title);
     InitAudioDevice();

@@ -7,6 +7,7 @@
 #include "headers/util.h"
 #include "headers/action.h"
 #include "headers/mobile.h"
+#include "headers/warp.h"
 
 typedef struct {
     UIManager *ui;
@@ -37,7 +38,7 @@ bool isFighting(const FightManager *f) {
 
 Fight *createFightFromEncounters(
         FightManager *f,
-        Encounters *encounters,
+        const Encounters *encounters,
         Player *player) {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
     int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
@@ -132,7 +133,7 @@ Mobile *getFinalMobileTarget(const Fight *fight, Mobile *mob) {
     return NULL;
 }
 
-Beast *getFinalBeastTarget(Fight *fight, ActionParticipant *ap) {
+Beast *getFinalBeastTarget(const Fight *fight, ActionParticipant *ap) {
     for (int i = 0; i < fight->beastCount; i++) {
         if (fight->beasts[i] == ap->beast) {
             return ap->beast;
@@ -162,7 +163,7 @@ void attackBeast(FightManager *fm, Action *act) {
     }
 }
 
-void attackMobile(FightManager *fm, Action *act) {
+void attackMobile(const FightManager *fm, Action *act) {
     Mobile *mob = getFinalMobileTarget(fm->fight, act->target->mob);
     if (!mob) {
         return;
@@ -222,7 +223,7 @@ void attack(FightManager *fm, Action *act) {
     }
 }
 
-void applyConsumableToBeast(Beast *beast, Item *item) {
+void applyConsumableToBeast(Beast *beast, const Item *item) {
     beast->hp += item->attributes->hp;
     beast->mana += item->attributes->mana;
 }
@@ -405,7 +406,7 @@ void ensureActiveCursor(FightManager *fm) {
     }
 }
 
-void reduceHitAnimationTimer(FightManager *fm, double interval) {
+void reduceHitAnimationTimer(const FightManager *fm, double interval) {
     for (int i = 0; i < fm->fight->beastCount; i++) {
         if (fm->fight->beasts[i]->hitAnimationTimer > 0) {
             fm->fight->beasts[i]->hitAnimationTimer -= (float) interval;

@@ -2,8 +2,6 @@
 #define CJRPGENGINE_H_INCLUDED
 
 #include "globals.h"
-#include "beastiary.h"
-#include "item.h"
 #include "ui.h"
 #include "animation.h"
 #include "mobile.h"
