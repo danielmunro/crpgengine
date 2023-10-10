@@ -111,14 +111,12 @@ void parseSceneLayer(Exploration *e, const char *rawData) {
 }
 
 void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
-    const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
+    const char *name = (const char *) xmlTextReaderConstName(tilemapXmlReader->reader);
     static int dataOpen = 0;
-    static int exitOpen = 0;
     static int layerOpen = 0;
-    ObjectType objectType;
-    char *strName = (char *) name;
-    addDebug("process scene node -- %s", strName);
-    TileMapNodeType nodeType = getTileMapNodeTypeFromString(strName);
+    static ObjectType objectType;
+    addDebug("process scene node :: %s", name);
+    TileMapNodeType nodeType = getTileMapNodeTypeFromString(name);
     if (nodeType == TILEMAP_NODE_TYPE_TILESET) {
         char *source = getStringAttribute(tilemapXmlReader->reader, "source");
         parseTilemapXml(tilemapXmlReader->exploration, indexDir, source);
@@ -178,7 +176,7 @@ void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir
         } else if (objectType == OBJECT_TYPE_CHEST) {
             // todo
         }
-    } else if (strcmp(strName, "property") == 0) {
+    } else if (strcmp(name, "property") == 0) {
         Exploration *e = tilemapXmlReader->exploration;
         char *propName = getStringAttribute(tilemapXmlReader->reader, "name");
         if (objectType == OBJECT_TYPE_EXIT) {
