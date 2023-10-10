@@ -1,10 +1,12 @@
 #include <mm_malloc.h>
 #include <stdio.h>
+#include "headers/cyaml.h"
 #include "headers/attributes.h"
 #include "headers/util.h"
 #include "headers/warp.h"
 #include "headers/spell.h"
 #include "graphics/avatar.h"
+#include "headers/animation.h"
 
 typedef struct {
     const char *id;
@@ -206,7 +208,7 @@ bool applyCastCost(Mobile *caster, const Attributes *cost) {
     return true;
 }
 
-void applyConsumable(Mobile *mob, Item *item) {
+void applyConsumable(Mobile *mob, const Item *item) {
     mob->hp += item->attributes->hp;
     mob->mana += item->attributes->mana;
     normalizeVitalsForMobile(mob);
