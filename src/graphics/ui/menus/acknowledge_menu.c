@@ -1,11 +1,12 @@
 #include "src/headers/menu_type.h"
+#include "src/graphics/ui/menu.h"
 
 int getAcknowledgeCursorLength(const MenuContext *menuContext) {
     return 1;
 }
 
 void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
-    FontStyle *defaultFont = menuContext->fonts->default_;
+    const FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *b = findOrCreateTextBox(
             menuContext,
             ACKNOWLEDGE_BOX,
@@ -24,6 +25,6 @@ void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
             });
 }
 
-MenuSelectResponse *acknowledgeMenuItemSelected(MenuContext *menuContext) {
+MenuSelectResponse *acknowledgeMenuItemSelected(const MenuContext *menuContext) {
     return createMenuSelectResponse(CLOSE_MENU, SAVE_MENU);
 }
