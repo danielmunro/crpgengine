@@ -4,7 +4,6 @@
 #include "globals.h"
 #include "cyaml.h"
 
-#include "fight.h"
 #include "src/graphics/ui/menu.h"
 #include "all_menus.h"
 #include "control.h"
