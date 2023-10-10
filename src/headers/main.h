@@ -2,9 +2,6 @@
 #define CJRPGENGINE_H_INCLUDED
 
 #include "globals.h"
-#include "audio.h"
-#include "attributes.h"
-#include "spell.h"
 #include "beastiary.h"
 #include "item.h"
 #include "ui.h"

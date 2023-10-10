@@ -3,6 +3,7 @@
 #include "headers/attributes.h"
 #include "headers/util.h"
 #include "headers/warp.h"
+#include "headers/spell.h"
 
 typedef struct {
     const char *id;

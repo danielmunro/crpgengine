@@ -1,5 +1,6 @@
 #include "headers/attributes.h"
 #include "util/runtime_args.h"
+#include "headers/spell.h"
 
 typedef struct {
     const char *id;
@@ -73,7 +74,7 @@ void normalizeVitalsForBeast(Beast *beast) {
 }
 
 void executeSpellOnBeast(Beast *beast, Spell *spell) {
-    beast->hp += (int) getSpellAttributeAmount(spell, spell->impact->hp);
-    beast->mana += (int) getSpellAttributeAmount(spell, spell->impact->mana);
+    beast->hp += getSpellAttributeAmount(spell, spell->impact->hp);
+    beast->mana += getSpellAttributeAmount(spell, spell->impact->mana);
     normalizeVitalsForBeast(beast);
 }
