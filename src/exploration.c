@@ -1,12 +1,12 @@
 #include <string.h>
 #include <math.h>
 #include <raylib.h>
-#include "headers/log.h"
+#include "src/headers/util/log.h"
 #include "headers/mobile.h"
 #include "headers/player.h"
-#include "headers/animation.h"
+#include "src/headers/graphics/animation.h"
 #include "headers/control.h"
-#include "headers/ui.h"
+#include "src/headers/graphics/ui/ui.h"
 #include "headers/layer.h"
 #include "headers/notification.h"
 #include "headers/warp.h"

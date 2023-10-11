@@ -1,10 +1,10 @@
 #include <raylib.h>
-#include "headers/log.h"
+#include "src/headers/util/log.h"
 #include "headers/player.h"
-#include "src/graphics/ui/menu.h"
+#include "src/headers/graphics/ui/menu.h"
 #include "headers/notification.h"
 #include "headers/fight.h"
-#include "headers/util.h"
+#include "src/headers/util/util.h"
 #include "headers/action.h"
 #include "headers/mobile.h"
 #include "headers/warp.h"

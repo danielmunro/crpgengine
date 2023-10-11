@@ -1,7 +1,7 @@
 #include "cyaml/cyaml.h"
-#include "src/headers/log.h"
+#include "src/headers/util/log.h"
 #include "src/headers/errors.h"
-#include "src/util/runtime_args.h"
+#include "src/headers/util/runtime_args.h"
 
 static const cyaml_config_t cyamlConfig = {
         .log_fn = cyaml_log,

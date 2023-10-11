@@ -1,7 +1,7 @@
 #include <mm_malloc.h>
 #include "headers/beastiary.h"
 #include "headers/menu_type.h"
-#include "headers/ui.h"
+#include "src/headers/graphics/ui/ui.h"
 #include "headers/action.h"
 #include "headers/player.h"
 

@@ -1,4 +1,4 @@
-#include "src/graphics/ui/menu.h"
+#include "src/headers/graphics/ui/menu.h"
 
 void drawPartySelectMenuScreen(MenuContext *menuContext) {
     TextBox *inGameMenuBox = findOrCreateTextBox(

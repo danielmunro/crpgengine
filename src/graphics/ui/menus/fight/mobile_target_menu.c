@@ -1,5 +1,5 @@
-#include "src/graphics/ui/menu.h"
-#include "mobile_select_menu.h"
+#include "src/headers/graphics/ui/menu.h"
+#include "src/headers/graphics/ui/menus/fight/mobile_select_menu.h"
 
 int getMobileTargetMenuCursorLength(const MenuContext *menuContext) {
     return getMobileSelectMenuCursorLength(menuContext);

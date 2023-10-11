@@ -1,6 +1,6 @@
 #include <string.h>
 #include <limits.h>
-#include "src/graphics/ui/menu.h"
+#include "src/headers/graphics/ui/menu.h"
 
 void drawMagicMenuScreen(MenuContext *menuContext) {
     TextBox *textBox = findOrCreateTextBox(

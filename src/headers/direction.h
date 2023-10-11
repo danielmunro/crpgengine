@@ -3,7 +3,7 @@
 
 #include <string.h>
 #include "errors.h"
-#include "log.h"
+#include "src/headers/util/log.h"
 
 typedef enum {
     DIRECTION_UP,

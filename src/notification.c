@@ -1,4 +1,4 @@
-#include "headers/ui.h"
+#include "src/headers/graphics/ui/ui.h"
 
 typedef struct {
     NotificationType type;

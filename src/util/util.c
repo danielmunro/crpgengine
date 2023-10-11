@@ -8,7 +8,7 @@
 #include <sys/resource.h>
 #include <unistd.h>
 #include <raylib.h>
-#include "src/headers/log.h"
+#include "src/headers/util/log.h"
 #include "src/headers/direction.h"
 
 typedef struct {

@@ -1,7 +1,7 @@
 #ifndef CJRPGENGINE_ANIMATION_H
 #define CJRPGENGINE_ANIMATION_H
 
-#include <raylib.h>
+#include "_deps/raylib-src/src/raylib.h"
 
 #define MAX_ANIMATIONS 25
 #define MAX_ANIMATIONS_IN_GAME 1440

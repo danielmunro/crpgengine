@@ -2,8 +2,8 @@
 #define CJRPGENGINE_UI_H
 
 #include <string.h>
-#include "log.h"
-#include "errors.h"
+#include "src/headers/util/log.h"
+#include "src/headers/errors.h"
 
 #define FPS_X 0
 #define FPS_Y 0
@@ -96,7 +96,7 @@ typedef enum {
     ITEM_SELECT_FIGHT_BOX,
 } TextBoxLabel;
 
-#include "src/graphics/avatar.h"
+#include "src/headers/graphics/avatar.h"
 #include "src/graphics/font.c"
 #include "src/graphics/window.c"
 #include "src/graphics/ui/ui.c"

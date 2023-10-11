@@ -1,8 +1,8 @@
 #include <mm_malloc.h>
 #include <string.h>
-#include "src/headers/log.h"
+#include "src/headers/util/log.h"
 #include "src/headers/direction.h"
-#include "src/headers/ui.h"
+#include "src/headers/graphics/ui/ui.h"
 
 typedef struct {
     const char *name;

@@ -1,5 +1,5 @@
 #include "src/headers/menu_type.h"
-#include "src/graphics/ui/menu.h"
+#include "src/headers/graphics/ui/menu.h"
 
 int getAcknowledgeCursorLength(const MenuContext *menuContext) {
     return 1;

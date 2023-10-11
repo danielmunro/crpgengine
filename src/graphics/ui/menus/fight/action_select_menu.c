@@ -1,5 +1,5 @@
-#include "src/graphics/ui/menu.h"
-#include "beast_list_menu.h"
+#include "src/headers/graphics/ui/menu.h"
+#include "src/headers/graphics/ui/menus/fight/beast_list_menu.h"
 
 const char *actionMenu[] = {
         "Attack",

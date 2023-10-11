@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <mm_malloc.h>
-#include "src/headers/util.h"
+#include "src/headers/util/util.h"
 
 void purgeSaves(const char *indexDir) {
     const char *saveDirectory = malloc(MAX_FS_PATH_LENGTH);

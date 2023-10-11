@@ -6,7 +6,7 @@
 #define LAYER_COUNT sizeof(LAYERS) / sizeof(LAYERS[0])
 
 #include <string.h>
-#include "src/headers/log.h"
+#include "src/headers/util/log.h"
 #include "src/headers/errors.h"
 
 typedef enum {
