@@ -1,7 +1,6 @@
 #include <mm_malloc.h>
 #include <stdio.h>
 #include "headers/persistence/cyaml.h"
-#include "headers/attributes.h"
 #include "headers/util/util.h"
 #include "headers/warp.h"
 #include "headers/spell.h"

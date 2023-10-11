@@ -1,5 +1,4 @@
 #include <raylib.h>
-#include "src/headers/fight_manager.h"
 
 void drawFightBackground(Encounters *encounters) {
     float scale = (float) ui->screen->width / (float) encounters->background.width;

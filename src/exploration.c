@@ -98,7 +98,7 @@ Entrance *createEntrance(char *name, Rectangle area) {
     return e;
 }
 
-Entrance *findEntrance(Exploration *e, char *name) {
+Entrance *findEntrance(Exploration *e, const char *name) {
     for (int i = 0; i < e->entranceCount; i++) {
         if (strcmp(e->entrances[i]->name, name) == 0) {
             return e->entrances[i];

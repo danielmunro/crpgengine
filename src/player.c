@@ -5,7 +5,6 @@
 #include "headers/util/log.h"
 #include "headers/direction.h"
 #include "headers/persistence/cyaml.h"
-#include "headers/item.h"
 #include "headers/graphics/animation.h"
 #include "headers/mobile.h"
 #include "headers/spell.h"
@@ -149,7 +148,7 @@ void clearDialog(Player *p) {
     p->dialog = NULL;
 }
 
-void explorationCheckMoveKeys(Player *player) {
+void explorationCheckMoveKeys(const Player *player) {
     for (int i = 0; i < DIRECTION_COUNT; i++) {
         checkMoveKey(player, MOVE_KEYS[i], DIRECTIONS[i]);
     }

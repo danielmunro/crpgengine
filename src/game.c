@@ -59,23 +59,24 @@ void evaluateExits(Game *g) {
     addDebug("exploration -- evaluate exits");
     Exploration *e = g->scenes->current->exploration;
     int ex = atExit(e, g->player);
-    if (ex > -1) {
-        addDebug("player at exit");
-        char *sceneName = e->exits[ex]->scene;
-        char *entranceName = e->exits[ex]->to;
-        for (int i = 0; i < g->scenes->count; i++) {
-            if (strcmp(sceneName, g->scenes->scenes[i]->name) == 0) {
-                attemptToUseExit(
-                        g,
-                        g->scenes->scenes[i],
-                        findEntrance(g->scenes->scenes[i]->exploration, entranceName)
-                );
-                return;
-            }
-        }
-        addWarning("warp not found :: %s, %s",
-                sceneName, entranceName);
+    if (ex < 0) {
+        return;
     }
+    addDebug("player at exit");
+    char *sceneName = e->exits[ex]->scene;
+    char *entranceName = e->exits[ex]->to;
+    for (int i = 0; i < g->scenes->count; i++) {
+        if (strcmp(sceneName, g->scenes->scenes[i]->name) == 0) {
+            attemptToUseExit(
+                    g,
+                    g->scenes->scenes[i],
+                    findEntrance(g->scenes->scenes[i]->exploration, entranceName)
+            );
+            return;
+        }
+    }
+    addWarning("warp not found :: %s, %s",
+            sceneName, entranceName);
 }
 
 void explorationMenuKeyPressed(Game *g) {
@@ -150,7 +151,7 @@ bool canTriggerFight(Game *g, const Player *p) {
     return true;
 }
 
-void checkFights(Game *g, Scene *s) {
+void checkFights(Game *g, const Scene *s) {
     addDebug("exploration -- check for fight");
     if (!canTriggerFight(g, g->player)) {
         return;

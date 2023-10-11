@@ -1,11 +1,36 @@
 #include <mm_malloc.h>
 #include <stdio.h>
+#include <string.h>
+
+typedef enum {
+    ERROR = 0,
+    WARN = 1,
+    INFO = 2,
+    DEBUG = 3,
+} LogLevel;
 
 typedef struct {
     LogLevel level;
 } Log;
 
 Log *logger;
+
+const char *logLevels[] = {
+        "error",
+        "warn",
+        "info",
+        "debug"
+};
+
+LogLevel getLogLevelFromString(const char *value) {
+    int count = (sizeof(logLevels)) / sizeof(LogLevel);
+    for (int i = 0; i < count - 1; i++) {
+        if (strcmp(logLevels[i], value) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
 
 char *getLogLevelString(LogLevel logLevel) {
     if (logLevel == DEBUG) {

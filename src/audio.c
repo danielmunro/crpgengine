@@ -79,7 +79,7 @@ void assignMusicValues(AudioManager *am) {
     free(music);
 }
 
-void assignSoundValues(AudioManager *am) {
+void assignSoundValues(const AudioManager *am) {
     SoundData *sound = loadSoundYaml(runtimeArgs->indexDir);
 
 //    Sound_ *s = malloc(sizeof(Sound_));

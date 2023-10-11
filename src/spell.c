@@ -68,7 +68,7 @@ Spell *findSpell(Spell **spells, SpellType type) {
 }
 
 
-int getSpellAttributeAmount(Spell *spell, int base) {
+int getSpellAttributeAmount(const Spell *spell, int base) {
     if (base == 0) {
         return 0;
     }

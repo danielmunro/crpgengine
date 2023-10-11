@@ -224,21 +224,21 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
     return response;
 }
 
-void drawUpCursor(UISprite *sprites, Vector2 position) {
+void drawUpCursor(const UISprite *sprites, Vector2 position) {
     drawImageFromSprite(sprites->sprite, (Vector2) {
             position.x + FIGHT_CURSOR_X_OFFSET,
             position.y + FIGHT_CURSOR_Y_OFFSET,
     }, sprites->config->sprite->cursors->up);
 }
 
-void drawRightCursor(UISprite *sprites, Vector2 position) {
+void drawRightCursor(const UISprite *sprites, Vector2 position) {
     drawImageFromSprite(sprites->sprite, (Vector2) {
             position.x + FIGHT_CURSOR_X_OFFSET,
             position.y + FIGHT_CURSOR_Y_OFFSET,
     }, sprites->config->sprite->cursors->right);
 }
 
-void drawDownCursor(UISprite *sprites, Vector2 position) {
+void drawDownCursor(const UISprite *sprites, Vector2 position) {
     drawImageFromSprite(sprites->sprite, (Vector2) {
             position.x + FIGHT_CURSOR_X_OFFSET,
             position.y + FIGHT_CURSOR_Y_OFFSET,

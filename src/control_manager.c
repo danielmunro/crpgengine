@@ -243,7 +243,7 @@ Then *mapThen(ControlManager *cm, ThenData td) {
     );
 }
 
-ControlBlock *mapStorylineToControlBlock(ControlManager *cm, Scene *scene, const StorylineData *storyline) {
+ControlBlock *mapStorylineToControlBlock(ControlManager *cm, const Scene *scene, const StorylineData *storyline) {
     ControlBlock *c = createControlBlock();
     c->whenCount = storyline->when_count;
     c->thenCount = storyline->then_count;

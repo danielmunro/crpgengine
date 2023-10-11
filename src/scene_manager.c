@@ -21,7 +21,7 @@ SceneManager *createSceneManager(ControlManager *cm, AnimationManager *anManager
     return sceneManager;
 }
 
-void setScene(SceneManager *sm, Scene *scene, Player *player, char *entranceName) {
+void setScene(SceneManager *sm, Scene *scene, const Player *player, const char *entranceName) {
     addInfo("setting scene to '%s'", scene->name);
     if (sm->current != NULL) {
         unloadLayers(sm->current->exploration);
@@ -53,8 +53,8 @@ Scene *findScene(const SceneManager *sm, const char *name) {
 
 void setSceneBasedOnSave(
         SceneManager *sm,
-        Player *player,
-        SaveData *save) {
+        const Player *player,
+        const SaveData *save) {
     int sceneToUse = runtimeArgs->sceneIndex;
     if (save != NULL && sceneToUse == -1) {
         setScene(sm, findScene(sm, save->scene), player, NULL);
