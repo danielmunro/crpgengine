@@ -1,12 +1,12 @@
 #include <mm_malloc.h>
 #include <stdio.h>
-#include "src/headers/persistence/cyaml.h"
+#include "headers/persistence/cyaml.h"
 #include "headers/attributes.h"
-#include "src/headers/util/util.h"
+#include "headers/util/util.h"
 #include "headers/warp.h"
 #include "headers/spell.h"
-#include "src/headers/graphics/avatar.h"
-#include "src/headers/graphics/animation.h"
+#include "headers/graphics/avatar.h"
+#include "headers/graphics/animation.h"
 
 typedef struct {
     const char *id;

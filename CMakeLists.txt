@@ -3,6 +3,7 @@ project (cjrpgengine)
 include(ExternalProject)
 set(CMAKE_BUILD_TYPE FILEPATH)
 set(EXECUTABLE_OUTPUT_PATH ./build CACHE PATH "Build directory" FORCE)
+set(CMAKE_C_FLAGS "-Isrc")
 
 # versions
 set(RAYLIB_VERSION 4.2.0)

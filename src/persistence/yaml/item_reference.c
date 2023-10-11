@@ -1,5 +1,3 @@
-
-
 typedef struct {
     const char *name;
     int quantity;

@@ -1,12 +1,12 @@
 #include <raylib.h>
 #include <mm_malloc.h>
 #include <string.h>
-#include "src/headers/util/log.h"
-#include "src/headers/fight.h"
-#include "src/headers/control_manager.h"
-#include "src/headers/mobile_manager.h"
-#include "src/headers/persistence/db.h"
-#include "src/headers/persistence/xmlparser.h"
+#include "headers/util/log.h"
+#include "headers/fight.h"
+#include "headers/control_manager.h"
+#include "headers/mobile_manager.h"
+#include "headers/persistence/db.h"
+#include "headers/persistence/xmlparser.h"
 
 void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *file) {
     addInfo("load animations file: %s", file);

@@ -1,8 +1,8 @@
 #include <mm_malloc.h>
 #include <raylib.h>
 #include <string.h>
-#include "src/headers/util/log.h"
-#include "src/headers/collision.h"
+#include "headers/util/log.h"
+#include "headers/collision.h"
 
 typedef struct {
     int sceneIndex;

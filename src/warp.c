@@ -1,5 +1,5 @@
 #include <raylib.h>
-#include "src/headers/direction.h"
+#include "headers/direction.h"
 
 typedef struct {
     Rectangle area;

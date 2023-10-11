@@ -1,7 +1,7 @@
 #include <string.h>
 #include <mm_malloc.h>
 #include <unistd.h>
-#include "src/headers/util/log.h"
+#include "headers/util/log.h"
 #include "headers/exploration.h"
 #include "headers/fight.h"
 

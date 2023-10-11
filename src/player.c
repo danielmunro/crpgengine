@@ -1,16 +1,16 @@
 #include <math.h>
 #include <time.h>
 
-#include "src/headers/util/util.h"
-#include "src/headers/util/log.h"
+#include "headers/util/util.h"
+#include "headers/util/log.h"
 #include "headers/direction.h"
-#include "src/headers/persistence/cyaml.h"
+#include "headers/persistence/cyaml.h"
 #include "headers/item.h"
-#include "src/headers/graphics/animation.h"
+#include "headers/graphics/animation.h"
 #include "headers/mobile.h"
 #include "headers/spell.h"
-#include "src/headers/persistence/db.h"
-#include "src/headers/graphics/ui/ui.h"
+#include "headers/persistence/db.h"
+#include "headers/graphics/ui/ui.h"
 
 typedef struct {
     Mobile **party;

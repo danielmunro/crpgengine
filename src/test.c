@@ -1,6 +1,5 @@
-#include "headers/globals.h"
-#include "headers/game.h"
 #include "tap.h"
+#include "headers/game.h"
 
 Beast *createTestBeast() {
     Beast *beast = malloc(sizeof(Beast));

@@ -1,8 +1,8 @@
-#include "src/headers/util/util.h"
+#include "headers/util/util.h"
 #include "headers/attributes.h"
 #include "headers/spell_manager.h"
 #include "headers/player.h"
-#include "src/headers/graphics/ui/ui.h"
+#include "headers/graphics/ui/ui.h"
 #include "headers/mobile_manager.h"
 
 Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *save) {

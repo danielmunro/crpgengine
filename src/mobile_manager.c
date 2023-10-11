@@ -1,8 +1,8 @@
 #include <string.h>
-#include "src/headers/util/util.h"
+#include "headers/util/util.h"
 #include "headers/attributes.h"
 #include "headers/spell_manager.h"
-#include "src/headers/graphics/ui/ui.h"
+#include "headers/graphics/ui/ui.h"
 
 typedef struct {
     SpellManager *spellManager;

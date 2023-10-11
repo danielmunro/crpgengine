@@ -1,6 +1,7 @@
 #ifndef CJRPGENGINE_GAME_H
 #define CJRPGENGINE_GAME_H
 
+#include "globals.h"
 #include "src/game.c"
 #include "src/util/validate.c"
 #include "src/util/dump.c"

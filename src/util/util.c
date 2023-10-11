@@ -8,8 +8,8 @@
 #include <sys/resource.h>
 #include <unistd.h>
 #include <raylib.h>
-#include "src/headers/util/log.h"
-#include "src/headers/direction.h"
+#include "headers/util/log.h"
+#include "headers/direction.h"
 
 typedef struct {
     int x;
