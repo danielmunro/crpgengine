@@ -3,6 +3,6 @@
 
 #define MAX_LOG_LINE_LENGTH 2048
 
-#include "src/util/log.c"
+#include "util/log.c"
 
 #endif //CJRPGENGINE_LOG_H

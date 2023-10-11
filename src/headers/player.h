@@ -3,6 +3,6 @@
 
 #define MAX_PARTY_SIZE 4
 
-#include "src/player.c"
+#include "player.c"
 
 #endif //CJRPGENGINE_PLAYER_H

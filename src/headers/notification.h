@@ -18,6 +18,6 @@ typedef enum {
     FIGHT_ACTION,
 } NotificationType;
 
-#include "src/notification.c"
+#include "notification.c"
 
 #endif //CJRPGENGINE_NOTIFICATION_H

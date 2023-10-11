@@ -14,6 +14,6 @@
 
 #define MAX_OBJECTS 255
 
-#include "src/exploration.c"
+#include "exploration.c"
 
 #endif //CJRPGENGINE_EXPLORATION_H

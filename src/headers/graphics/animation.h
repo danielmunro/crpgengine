@@ -10,6 +10,6 @@ const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT};
 
 #define ANIMATION_TYPE_COUNT sizeof(AnimationTypeStrings) / sizeof(AnimationTypeStrings[0])
 
-#include "src/graphics/animation.c"
+#include "graphics/animation.c"
 
 #endif //CJRPGENGINE_ANIMATION_H

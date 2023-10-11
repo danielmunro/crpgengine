@@ -2,8 +2,8 @@
 #define CJRPGENGINE_INTENT_H
 
 #include <string.h>
-#include "src/headers/util/log.h"
-#include "src/headers/errors.h"
+#include "headers/util/log.h"
+#include "headers/errors.h"
 
 const char *Intents[] = {
         "harm",

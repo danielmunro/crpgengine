@@ -2,7 +2,7 @@
 #define CJRPGENGINE_COLLISION_H
 
 #include <string.h>
-#include "src/headers/util/log.h"
+#include "headers/util/log.h"
 #include "errors.h"
 
 const char *CollisionTypes[] = {

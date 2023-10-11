@@ -21,6 +21,8 @@
 #define MAX_LINE_BUFFER 128
 #define MAX_MESSAGE_BUFFER 1024
 
+#include "headers/graphics/avatar.h"
+
 const char *TextAreaTypes[] = {
         "unknown",
         "small",
@@ -96,9 +98,9 @@ typedef enum {
     ITEM_SELECT_FIGHT_BOX,
 } TextBoxLabel;
 
-#include "src/headers/graphics/avatar.h"
-#include "src/graphics/font.c"
-#include "src/graphics/window.c"
-#include "src/graphics/ui/ui.c"
+
+#include "graphics/font.c"
+#include "graphics/window.c"
+#include "graphics/ui/ui.c"
 
 #endif // CJRPGENGINE_UI_H

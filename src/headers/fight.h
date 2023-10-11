@@ -19,6 +19,6 @@
 
 #define HIT_ANIMATION_TIMER_MS 300
 
-#include "src/fight.c"
+#include "fight.c"
 
 #endif //CJRPGENGINE_FIGHT_H

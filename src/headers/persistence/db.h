@@ -5,6 +5,6 @@
 #define MAX_FILES 256
 #define MAX_SAVE_FILES 255
 
-#include "src/persistence/db.c"
+#include "persistence/db.c"
 
 #endif //CJRPGENGINE_DB_H

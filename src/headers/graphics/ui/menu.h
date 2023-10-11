@@ -40,6 +40,6 @@ typedef enum {
     NO_OP,
 } MenuSelectResponseType;
 
-#include "src/graphics/ui/menu.c"
+#include "graphics/ui/menu.c"
 
 #endif //CJRPGENGINE_MENU_H

@@ -17,6 +17,6 @@ typedef enum {
     SPELL_ENERGY,
 } SpellType;
 
-#include "src/spell.c"
+#include "spell.c"
 
 #endif //CJRPGENGINE_SPELL_H

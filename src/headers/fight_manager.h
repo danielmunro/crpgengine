@@ -1,6 +1,6 @@
 #ifndef CJRPGENGINE_FIGHT_MANAGER_H
 #define CJRPGENGINE_FIGHT_MANAGER_H
 
-#include "src/fight_manager.c"
+#include "fight_manager.c"
 
 #endif //CJRPGENGINE_FIGHT_MANAGER_H
