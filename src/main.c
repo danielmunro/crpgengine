@@ -1,4 +1,5 @@
-#include "src/headers/main.h"
+#include "headers/globals.h"
+#include "headers/game.h"
 
 int main(int argc, char *argv[]) {
     globalSetup(argc, argv);

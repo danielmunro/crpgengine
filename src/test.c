@@ -1,4 +1,5 @@
-#include "src/headers/main.h"
+#include "headers/globals.h"
+#include "headers/game.h"
 #include "tap.h"
 
 Beast *createTestBeast() {
@@ -57,7 +58,7 @@ void createFightInSceneTest() {
     FightInScene *fightInScene = createFightInScene();
     for (int i = 0; i < 100; i++) {
         createFightFromFightInScene(fightInScene);
-        Fight *f = fightInScene->fm->fight;
+        const Fight *f = fightInScene->fm->fight;
         char message[MAX_LOG_LINE_LENGTH];
         sprintf(message, "beast count is within expected range: %d", f->beastCount);
         ok(0 < f->beastCount && f->beastCount <= 9, message);
@@ -66,7 +67,8 @@ void createFightInSceneTest() {
 
 void canMoveMobTest() {
     // given
-    float startX = 100, startY = 100;
+    float startX = 100;
+    float startY = 100;
     Vector2 start = (Vector2) {startX, startY};
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
@@ -96,7 +98,8 @@ void canMoveMobTest() {
 
 void canMobStopMovingTest() {
     // given
-    float startX = 100, startY = 100;
+    float startX = 100;
+    float startY = 100;
     Vector2 start = (Vector2) {startX, startY};
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
