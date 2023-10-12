@@ -65,7 +65,7 @@ void drawFightView(Encounters *encounters, FightManager *fights) {
     drawFightPlayer(fights->fight->player);
     drawFightMenu(fights);
     drawNotifications(fights->notifications, fights->ui->fonts->default_);
-    if (runtimeArgs->showFPS) {
+    if (config->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }
     EndDrawing();

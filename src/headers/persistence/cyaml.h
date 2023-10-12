@@ -1,9 +1,9 @@
 #ifndef CJRPGENGINE_CYAML_H
 #define CJRPGENGINE_CYAML_H
 
+#include "headers/persistence/yaml/config.h"
 #include "persistence/yaml/spritesheet.c"
 #include "persistence/yaml/animation.c"
-#include "persistence/yaml/config.c"
 #include "persistence/yaml/music.c"
 #include "persistence/yaml/attributes.c"
 #include "persistence/yaml/spell.c"

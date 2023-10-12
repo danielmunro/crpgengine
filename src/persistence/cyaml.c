@@ -1,8 +1,5 @@
-static const cyaml_config_t cyamlConfig = {
-        .log_fn = cyaml_log,
-        .mem_fn = cyaml_mem,
-        .log_level = CYAML_LOG_WARNING,
-};
+#include "headers/persistence/cyaml_config.h"
+#include "headers/config.h"
 
 MusicData *loadMusicYaml(const char *indexDir) {
     MusicData *music = malloc(sizeof(MusicData));
@@ -161,7 +158,7 @@ SpellsData *loadSpellData(const char *filePath) {
 
 UIData *loadUIData() {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/ui.yaml", runtimeArgs->indexDir);
+    sprintf(filePath, "%s/ui.yaml", config->indexDir);
     UIData *ui = malloc(sizeof(UIData));
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &uiSchema, (cyaml_data_t **) &ui, NULL);
@@ -175,7 +172,7 @@ UIData *loadUIData() {
 
 StartPartyData *loadStartPartyData() {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/player/start_party.yaml", runtimeArgs->indexDir);
+    sprintf(filePath, "%s/player/start_party.yaml", config->indexDir);
     StartPartyData *startParty = malloc(sizeof(StartPartyData));
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &startPartyTopSchema, (cyaml_data_t **) &startParty, NULL);

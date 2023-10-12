@@ -1,0 +1,6 @@
+#ifndef CJRPGENGINE_MYCONFIG_H
+#define CJRPGENGINE_MYCONFIG_H
+
+#include "config.c"
+
+#endif //CJRPGENGINE_MYCONFIG_H

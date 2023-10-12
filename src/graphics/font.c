@@ -32,7 +32,7 @@ FontStyle *createFontStyle(FontStyleType type, Font font, Color color, float siz
 
 FontStyle *createFontFromData(FontData *data) {
     char path[MAX_FS_PATH_LENGTH] = "";
-    sprintf(path, "%s/fonts/%s", runtimeArgs->indexDir, data->filename);
+    sprintf(path, "%s/fonts/%s", config->indexDir, data->filename);
     Font font = LoadFont(path);
     return createFontStyle(
             getFontStyleType(data->name),

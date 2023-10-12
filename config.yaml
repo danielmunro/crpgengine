@@ -1,6 +1,7 @@
 indexDir: examples/simple_demo
 startScene: tinytown
-logLevel: debug
+overrideStartScene: ""
+logLevel: info
 saveFile: autosave.yaml
 afterLoad:
   dumpState: false

@@ -205,7 +205,7 @@ void doInGameMenuLoop(Game *g) {
     drawAllMenus(
             g->ui->menuContext,
             g->menus);
-    if (runtimeArgs->showFPS) {
+    if (config->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }
     EndDrawing();
@@ -232,13 +232,13 @@ void run(Game *g) {
 
 SaveData *initializePlayer(Game *g) {
     char saveFilePath[MAX_FS_PATH_LENGTH];
-    if (runtimeArgs->saveFile != NULL) {
-        sprintf((char *) saveFilePath, "%s/_saves/%s", runtimeArgs->indexDir, runtimeArgs->saveFile);
+    if (config->saveFile != NULL) {
+        sprintf((char *) saveFilePath, "%s/_saves/%s", config->indexDir, config->saveFile);
     } else {
-        strcpy(saveFilePath, getAutosaveFile(runtimeArgs->indexDir));
+        strcpy(saveFilePath, getAutosaveFile(config->indexDir));
     }
     SaveData *save = NULL;
-    if (FileExists(saveFilePath) && !runtimeArgs->forceNewGame) {
+    if (FileExists(saveFilePath) && !config->forceNewGame) {
         save = loadSaveData(saveFilePath);
         g->player = mapSaveDataToPlayer(g->spells, g->animations, save);
     } else {

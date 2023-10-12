@@ -191,7 +191,7 @@ void saveFile(SaveData *save, const char *indexDir, const char *filename) {
 
 SaveFiles *getSaveFiles() {
     const char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *) savesDirectory, "%s/_saves", runtimeArgs->indexDir);
+    sprintf((char *) savesDirectory, "%s/_saves", config->indexDir);
     char **files = calloc(MAX_SAVE_FILES, sizeof(char *));
     const char **names = calloc(MAX_SAVE_FILES, sizeof(char *));
     unsigned long created[MAX_SAVE_FILES];
@@ -254,12 +254,12 @@ void save(Player *player, const char *sceneName) {
             name);
 
     // auto save
-    saveFile(save, runtimeArgs->indexDir, "autosave.yaml");
+    saveFile(save, config->indexDir, "autosave.yaml");
     char filename[MAX_FS_PATH_LENGTH];
 
     // point-in-time save
     sprintf(filename, "save-%lu.yaml", (unsigned long) time(NULL));
-    saveFile(save, runtimeArgs->indexDir, filename);
+    saveFile(save, config->indexDir, filename);
 
     free(date);
     free(name);
@@ -286,7 +286,7 @@ bool hasStory(const Player *p, const char *story) {
 
 void loadAllPlayerItems(ItemManager *im, Player *p) {
     const char *itemsFile = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *) itemsFile, "%s/player/items.yaml", runtimeArgs->indexDir);
+    sprintf((char *) itemsFile, "%s/player/items.yaml", config->indexDir);
     ItemsReferenceData *itemsData = loadItemsReferenceData(itemsFile);
     int itemCount = 0;
     for (int i = 0; i < itemsData->items_count; i++) {

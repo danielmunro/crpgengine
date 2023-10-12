@@ -209,7 +209,7 @@ void drawTile(Exploration *e, Image layer, int index, int x, int y) {
             (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
             WHITE
     );
-    if (runtimeArgs->showObjectCollisions) {
+    if (config->showCollisions->objects) {
         drawObjectCollision(e, layer, index - 1, x, y);
     }
 }
@@ -254,7 +254,7 @@ void renderExplorationLayer(Exploration *e, LayerType layer) {
             );
         }
     }
-    if (runtimeArgs->showWarpCollisions) {
+    if (config->showCollisions->warps) {
         drawWarpCollisions(e, &renderedLayer);
     }
     e->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
@@ -318,7 +318,7 @@ void drawExplorationMobiles(Exploration *e, Player *p, Vector2 offset) {
         }
     }
 
-    if (runtimeArgs->showPlayerCollision) {
+    if (config->showCollisions->player) {
         DrawRectangle(
                 (int) (mob->position.x + offset.x + MOB_COLLISION_WIDTH_OFFSET),
                 (int) (mob->position.y + offset.y + MOB_COLLISION_HEIGHT_OFFSET),
@@ -455,7 +455,7 @@ void drawExplorationView(
     DrawTextureEx(e->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);
-    if (runtimeArgs->showFPS) {
+    if (config->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }
     EndDrawing();

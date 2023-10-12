@@ -33,10 +33,8 @@ void setScene(SceneManager *sm, Scene *scene, const Player *player, const char *
     addAllAnimations(sm->animationManager, mob->animations);
     if (entranceName != NULL) {
         Entrance *entrance = findEntrance(scene->exploration, entranceName);
-        addDebug("set position from scene entrance :: %s", entrance->name);
         useEntrance(mob, entrance);
     }
-    addDebug("player position :: %f %f", mob->position.x, mob->position.y);
     renderExplorationLayers(sm->current->exploration);
     playMusic(sm->audioManager, sm->current->music);
     proceedControlsUntilDone(sm->controlManager);
@@ -55,13 +53,12 @@ void setSceneBasedOnSave(
         SceneManager *sm,
         const Player *player,
         const SaveData *save) {
-    int sceneToUse = runtimeArgs->sceneIndex;
-    if (save != NULL && sceneToUse == -1) {
+    int overrideStartScene = strcmp(config->overrideStartScene, "");
+    if (save != NULL && overrideStartScene == 0) {
         setScene(sm, findScene(sm, save->scene), player, NULL);
-        return;
+    } else if (overrideStartScene != 0) {
+        setScene(sm, findScene(sm, config->overrideStartScene), player, NULL);
+    } else {
+        setScene(sm, findScene(sm, config->startScene), player, START_ENTRANCE);
     }
-    if (sceneToUse < 0) {
-        sceneToUse = 0;
-    }
-    setScene(sm, sm->scenes[sceneToUse], player, START_ENTRANCE);
 }

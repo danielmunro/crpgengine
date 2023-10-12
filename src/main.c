@@ -4,11 +4,11 @@ int main(int argc, char *argv[]) {
     globalSetup(argc, argv);
     Game *g = createGame();
     validateGameData(g);
-    if (runtimeArgs->purgeSaves) {
-        purgeSaves(runtimeArgs->indexDir);
-    } else if (runtimeArgs->dump) {
+    if (config->purgeSaves) {
+        purgeSaves(config->indexDir);
+    } else if (config->afterLoad->dumpState) {
         dumpGame(g);
-    } else if (!runtimeArgs->exit) {
+    } else if (!config->afterLoad->exit) {
         run(g);
     }
     return 0;

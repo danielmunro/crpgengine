@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include <stdio.h>
+#include "headers/config.h"
 
 typedef struct {
     Texture image;
@@ -8,7 +9,7 @@ typedef struct {
 
 Avatar *createAvatar(const char *filename) {
     char path[MAX_FS_PATH_LENGTH];
-    sprintf(path, "%s/images/%s", runtimeArgs->indexDir, filename);
+    sprintf(path, "%s/images/%s", config->indexDir, filename);
     Avatar *a = malloc(sizeof(Avatar));
     a->filename = filename;
     a->image = LoadTextureFromImage(LoadImage(path));

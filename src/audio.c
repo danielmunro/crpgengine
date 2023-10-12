@@ -1,7 +1,6 @@
 #include <mm_malloc.h>
 #include <raylib.h>
 #include "headers/util/log.h"
-#include "headers/util/runtime_args.h"
 #include "headers/persistence/cyaml.h"
 
 typedef struct {
@@ -66,9 +65,9 @@ void playSound(AudioManager *s, const char *name) {
 }
 
 void assignMusicValues(AudioManager *am) {
-    MusicData *music = loadMusicYaml(runtimeArgs->indexDir);
+    MusicData *music = loadMusicYaml(config->indexDir);
     char filePath[MAX_FS_PATH_LENGTH] = "";
-    sprintf(filePath, "%s/audio/%s", runtimeArgs->indexDir, music->town);
+    sprintf(filePath, "%s/audio/%s", config->indexDir, music->town);
 
     Music_ *m = malloc(sizeof(Music_));
     m->name = "town";
@@ -80,7 +79,7 @@ void assignMusicValues(AudioManager *am) {
 }
 
 void assignSoundValues(const AudioManager *am) {
-    SoundData *sound = loadSoundYaml(runtimeArgs->indexDir);
+    SoundData *sound = loadSoundYaml(config->indexDir);
 
 //    Sound_ *s = malloc(sizeof(Sound_));
 //    s->name = "bump";

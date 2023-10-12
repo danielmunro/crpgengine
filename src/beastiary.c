@@ -1,5 +1,5 @@
+#include <raylib.h>
 #include "headers/attributes.h"
-#include "headers/util/runtime_args.h"
 #include "headers/spell.h"
 
 typedef struct {
@@ -32,7 +32,7 @@ Beast *createBeastFromData(BeastData *data) {
     beast->level = data->level;
     beast->actionGauge = 0;
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/images/%s", runtimeArgs->indexDir, data->image);
+    sprintf(filePath, "%s/images/%s", config->indexDir, data->image);
     beast->image = LoadTextureFromImage(LoadImage(filePath));
     beast->attributes = createAttributesFromData(data->attributes);
     beast->position = (Rectangle) {0, 0, 0, 0};
@@ -73,7 +73,7 @@ void normalizeVitalsForBeast(Beast *beast) {
     }
 }
 
-void executeSpellOnBeast(Beast *beast, Spell *spell) {
+void executeSpellOnBeast(Beast *beast, const Spell *spell) {
     beast->hp += getSpellAttributeAmount(spell, spell->impact->hp);
     beast->mana += getSpellAttributeAmount(spell, spell->impact->mana);
     normalizeVitalsForBeast(beast);

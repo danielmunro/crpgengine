@@ -31,7 +31,7 @@ void stopTiming(Timing *t) {
         t->elapsedTime -= 1000.0;
         t->start = end;
         t->player->secondsPlayed += 1;
-        if (runtimeArgs->logMemory) {
+        if (config->logMemoryUsage) {
             reportMaxMemory();
         }
     }
