@@ -24,40 +24,9 @@ make
 Run the provided example game:
 
 ```
-./build/cjrpgengine -i examples/simple_demo
+./build/cjrpgengine
 ```
 
-## Runtime Arguments
+## Runtime Configuration
 
-Required:
-
-`-i` -- index directory to load game from. Example game argument is `examples/simple_demo`.
-
-Debug arguments:
-
-`-c` -- show collisions. Comma separated list, containing: 'player', 'objects', and/or 'warps'. For example, to show all three: '-c player,objects,warps'
-
-`-d` -- dump the state of the loaded game and quit.
-
-`-e` -- exit after loading the game. Useful for debugging startup problems.
-
-`-f` -- show FPS
-
-`-l` -- specify the log level, one of [debug, info, warn, error]. Default is `info`.
-
-`-m` -- output max memory usage each second.
-
-`-n` -- force a new game. Cannot be used with `-v`.
-
-`-ps` -- purge saves (careful: saves are unrecoverable).
-
-`-s` -- override the game config and start at specified scene index.
-
-`-v` -- load a specific save file. Cannot be used with `-n`.
-
-## Todos
-
-* Fight implementation
-  * Actions to finish
-    * Attack animations
-    * Magic animations
+Check out `config.yaml` to see configuration options.
