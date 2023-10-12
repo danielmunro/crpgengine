@@ -9,10 +9,18 @@ new syntax to learn.
 
 ## Running RPGEngine
 
+TODO: document host system dependencies.
+
 Clone this repository:
 
 ```
 git clone git@github.com:danielmunro/cjrpgengine.git
+```
+
+Run cmake:
+
+```
+cmake .
 ```
 
 Make the project:
