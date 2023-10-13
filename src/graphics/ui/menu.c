@@ -107,10 +107,10 @@ void resetItemList(MenuContext *mc) {
     mc->itemListCount = 0;
 }
 
-UISprite *createUISprite(Spritesheet *sprite, UIData *config) {
+UISprite *createUISprite(Spritesheet *sprite, UIData *uiData) {
     UISprite *uiSprite = malloc(sizeof(UISprite));
     uiSprite->sprite = sprite;
-    uiSprite->config = config;
+    uiSprite->config = uiData;
     return uiSprite;
 }
 

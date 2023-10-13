@@ -31,7 +31,7 @@ MenuSelectResponse *mobileTargetMenuItemSelected(MenuContext *menuContext) {
 }
 
 int getNextMobileTargetCursorPosition(const MenuContext *mc) {
-    Player *p = mc->player;
+    const Player *p = mc->player;
     for (int i = mc->cursorLine + 1; i < mc->player->partyCount; i++) {
         if (p->party[i]->hp > 0) {
             return i;
@@ -46,7 +46,7 @@ int getNextMobileTargetCursorPosition(const MenuContext *mc) {
 }
 
 int getPreviousMobileTargetCursorPosition(const MenuContext *mc) {
-    Player *p = mc->player;
+    const Player *p = mc->player;
     for (int i = mc->cursorLine - 1; i >= 0; i--) {
         if (p->party[i]->hp > 0) {
             return i;

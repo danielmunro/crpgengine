@@ -1,11 +1,11 @@
 #include "headers/graphics/ui/menu.h"
 
-int getQuitCursorLength(const MenuContext *menuContext) {
+int getQuitCursorLength() {
     return sizeof(QuitMenuItems) / sizeof(QuitMenuItems[0]);
 }
 
 void drawQuitMenuScreen(MenuContext *menuContext) {
-    FontStyle *defaultFont = menuContext->fonts->default_;
+    const FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *textBox = findOrCreateTextBox(
             menuContext,
             QUIT_BOX,
@@ -13,7 +13,7 @@ void drawQuitMenuScreen(MenuContext *menuContext) {
     drawMenuRect(textBox->area);
     drawInMenu(textBox, "Are you sure?");
     drawInMenu(textBox, "");
-    int cursorLength = getQuitCursorLength(menuContext);
+    int cursorLength = getQuitCursorLength();
     for (int i = 0; i < cursorLength; i++) {
         drawInMenu(textBox, QuitMenuItems[i]);
     }
@@ -26,7 +26,7 @@ void drawQuitMenuScreen(MenuContext *menuContext) {
             });
 }
 
-MenuSelectResponse *quitMenuItemSelected(MenuContext *menuContext) {
+MenuSelectResponse *quitMenuItemSelected(const MenuContext *menuContext) {
     if (strcmp(QuitMenuItems[menuContext->cursorLine], QUIT_MENU_YES) == 0) {
         exit(0);
     }

@@ -1,5 +1,4 @@
 #include "headers/graphics/ui/menu.h"
-#include "headers/graphics/ui/menus/fight/beast_list_menu.h"
 
 const char *actionMenu[] = {
         "Attack",
@@ -17,7 +16,7 @@ typedef enum {
     ACTION_RUN,
 } ActionMenu;
 
-int getActionSelectCursorLength(const MenuContext *menuContext) {
+int getActionSelectCursorLength() {
     return sizeof(actionMenu) / sizeof(char *);
 }
 
@@ -55,7 +54,7 @@ bool canGoToIndex(const Mobile *mob, int index) {
 }
 
 int getNextActionSelectCursorPosition(const MenuContext *mc) {
-    for (int i = mc->cursorLine + 1; i < getActionSelectCursorLength(mc); i++) {
+    for (int i = mc->cursorLine + 1; i < getActionSelectCursorLength(); i++) {
         if (canGoToIndex(mc->selectedMob, i)) {
             return i;
         }

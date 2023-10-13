@@ -1,7 +1,6 @@
-#include "headers/menu_type.h"
 #include "headers/graphics/ui/menu.h"
 
-int getAcknowledgeCursorLength(const MenuContext *menuContext) {
+int getAcknowledgeCursorLength() {
     return 1;
 }
 
@@ -25,6 +24,6 @@ void drawAcknowledgeMenuScreen(MenuContext *menuContext) {
             });
 }
 
-MenuSelectResponse *acknowledgeMenuItemSelected(const MenuContext *menuContext) {
+MenuSelectResponse *acknowledgeMenuItemSelected() {
     return createMenuSelectResponse(CLOSE_MENU, SAVE_MENU);
 }

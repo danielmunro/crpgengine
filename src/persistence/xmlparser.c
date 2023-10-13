@@ -87,22 +87,23 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
 
 void parseSceneLayer(Exploration *e, const char *rawData) {
     addDebug("scene layer %d processing now", e->layerCount - 1);
-    char *line = strtok((char *) rawData, "\r\n");
+    char *newRawData = rawData;
+    char *line = strtok_r(newRawData, "\r\n", &newRawData);
     char *data[MAX_DATA_SIZE];
     int it = 0;
     while (line != NULL && it < MAX_DATA_SIZE) {
         data[it] = line;
-        line = strtok(NULL, "\r\n");
+        line = strtok_r(newRawData, "\r\n", &newRawData);
         it++;
     }
     int y = 0;
     int x = 0;
     while (y < it) {
-        char *val = strtok(data[y], ",");
+        char *val = strtok_r(data[y], ",", &data[y]);
         x = 0;
         while (val != NULL) {
             e->layers[e->layerCount - 1]->data[y][x] = TextToInteger(val);
-            val = strtok(NULL, ",");
+            val = strtok_r(data[y], ",", &data[y]);
             x++;
         }
         y++;
@@ -175,7 +176,7 @@ void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir
                     });
             e->arriveAtCount++;
         } else if (objectType == OBJECT_TYPE_CHEST) {
-            // todo
+            addInfo("chest object found");
         }
     } else if (strcmp(name, "property") == 0) {
         Exploration *e = tilemapXmlReader->exploration;

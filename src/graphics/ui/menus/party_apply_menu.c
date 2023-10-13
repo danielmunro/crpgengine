@@ -8,7 +8,7 @@ int getPartyApplyMenuCursorLength(const MenuContext *mc) {
 }
 
 void drawPartyApplyPlayer(Mobile *mob, Vector2 pos) {
-    Animation *a = findAnimation(mob->animations, DIRECTION_DOWN);
+    const Animation *a = findAnimation(mob->animations, DIRECTION_DOWN);
     drawAnimation(a, pos);
 }
 
