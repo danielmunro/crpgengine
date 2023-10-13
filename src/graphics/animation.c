@@ -1,5 +1,6 @@
 #include <mm_malloc.h>
 #include <string.h>
+#include "headers/util/log.h"
 #include "headers/graphics/ui/ui.h"
 #include "headers/graphics/spritesheet.h"
 
@@ -117,7 +118,7 @@ int loadAnimationsByName(AnimationManager *am, const char *name, Animation *anim
     return count;
 }
 
-void drawAnimation(Animation *a, Vector2 position) {
+void drawAnimation(const Animation *a, Vector2 position) {
     drawImageFromSprite(a->spriteSheet, position, a->currentFrame);
 }
 

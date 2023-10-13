@@ -17,6 +17,7 @@ AnimationManager *createTestAnimationManager() {
     AnimationManager *am = createAnimationManager();
     SpritesheetManager *sm = loadSpritesheetManager();
     loadAllAnimations(am, sm);
+    free(sm);
     return am;
 }
 
