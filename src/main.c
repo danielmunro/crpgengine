@@ -1,7 +1,7 @@
 #include "headers/game.h"
 
 int main(int argc, char *argv[]) {
-    globalSetup(argc, argv);
+    globalSetup();
     Game *g = createGame();
     validateGameData(g);
     if (config->purgeSaves) {

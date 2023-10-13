@@ -143,7 +143,7 @@ void experienceToLevel51Test() {
 }
 
 int main() {
-    globalSetup(5, (char *[]) {"binary", "-i", "examples/simple_demo", "-l", "error"});
+    globalSetup();
     plan(106);
     createFightInSceneTest();
     canMoveMobTest();

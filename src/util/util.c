@@ -24,17 +24,14 @@ typedef struct {
 char *trim(char *str) {
     char *end;
 
-    // Trim leading space
     while (isspace((unsigned char) *str)) str++;
 
-    if (*str == 0)  // All spaces?
+    if (*str == 0)
         return str;
 
-    // Trim trailing space
     end = str + strlen(str) - 1;
     while (end > str && isspace((unsigned char) *end)) end--;
 
-    // Write new null terminator character
     end[1] = '\0';
 
     return str;
@@ -96,9 +93,12 @@ int max(int a, int b) {
 }
 
 Vector2 getPositionFromString(const char *position) {
+    char *p = (char *) position;
+    char *x = trim(strtok_r(p, ",", &p));
+    char *y = trim(strtok_r(p, ",", &p));
     return (Vector2) {
-            (float) TextToInteger(trim(strtok((char *) position, ","))),
-            (float) TextToInteger(trim(strtok(NULL, ","))),
+            strtof(x, &x),
+            strtof(y, &y),
     };
 }
 
@@ -151,16 +151,16 @@ double getTimeInMS() {
 }
 
 Color getColorFromString(const char *color) {
-    const char *r = trim(strtok((char *) color, ","));
-    const char *g = trim(strtok(NULL, ","));
-    const char *b = trim(strtok(NULL, ","));
-    const char *a = trim(strtok(NULL, ","));
-
+    char *c = (char *) color;
+    int r = TextToInteger(trim(strtok_r(c, ",", &c)));
+    int g = TextToInteger(trim(strtok_r(c, ",", &c)));
+    int b = TextToInteger(trim(strtok_r(c, ",", &c)));
+    int a = TextToInteger(trim(strtok_r(c, ",", &c)));
     return (Color) {
-            TextToInteger(r),
-            TextToInteger(g),
-            TextToInteger(b),
-            TextToInteger(a),
+            (unsigned char) r,
+            (unsigned char) g,
+            (unsigned char) b,
+            (unsigned char) a,
     };
 }
 
