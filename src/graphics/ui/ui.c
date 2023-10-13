@@ -1,5 +1,4 @@
 #include <string.h>
-#include <stdbool.h>
 #include "headers/menu_type.h"
 #include "headers/util/util.h"
 
@@ -233,7 +232,8 @@ void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
     char buffer[MAX_LINE_BUFFER];
     strcpy(m, message);
     strcpy(buffer, "");
-    char *word = strtok(m, " ");
+    char *copy = (char *) m;
+    char *word = strtok_r(copy, " ", &copy);
     int line = 0;
     char test[MAX_LINE_BUFFER];
     while (word != NULL) {
@@ -250,7 +250,7 @@ void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
         } else {
             strcpy(buffer, test);
         }
-        word = strtok(NULL, " ");
+        word = strtok_r(copy, " ", &copy);
     }
     if (strcmp(buffer, "") != 0) {
         drawLineInArea(buffer, area, line, font);
