@@ -73,7 +73,7 @@ int getPreviousActionSelectCursorPosition(const MenuContext *mc) {
             return i;
         }
     }
-    for (int i = getActionSelectCursorLength(mc) - 1; i > mc->cursorLine; i--) {
+    for (int i = getActionSelectCursorLength() - 1; i > mc->cursorLine; i--) {
         if (canGoToIndex(mc->selectedMob, i)) {
             return i;
         }

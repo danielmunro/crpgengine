@@ -87,7 +87,7 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
 
 void parseSceneLayer(Exploration *e, const char *rawData) {
     addDebug("scene layer %d processing now", e->layerCount - 1);
-    char *newRawData = rawData;
+    char *newRawData = (char *) rawData;
     char *line = strtok_r(newRawData, "\r\n", &newRawData);
     char *data[MAX_DATA_SIZE];
     int it = 0;
