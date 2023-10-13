@@ -1,4 +1,4 @@
-#include "src/headers/graphics/ui/menus/all_menus.h"
+#include "headers/graphics/ui/menus/all_menus.h"
 
 typedef struct {
     SpritesheetManager *sprites;

@@ -1,7 +1,7 @@
 #include <raylib.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "src/headers/persistence/cyaml.h"
+#include "headers/persistence/cyaml.h"
 
 void initWindow(const char *title, const UIData *ui) {
     SetTargetFPS(ui->screen->targetFrameRate);

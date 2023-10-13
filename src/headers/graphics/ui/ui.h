@@ -2,8 +2,8 @@
 #define CJRPGENGINE_UI_H
 
 #include <string.h>
-#include "src/headers/util/log.h"
-#include "src/headers/errors.h"
+#include "headers/util/log.h"
+#include "headers/errors.h"
 
 #define FPS_X 0
 #define FPS_Y 0

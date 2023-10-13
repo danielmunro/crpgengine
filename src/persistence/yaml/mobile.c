@@ -1,6 +1,6 @@
 #include "cyaml/cyaml.h"
-#include "src/headers/direction.h"
-#include "src/headers/item.h"
+#include "headers/direction.h"
+#include "headers/item.h"
 
 typedef struct {
     const char *id;

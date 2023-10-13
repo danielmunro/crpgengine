@@ -1,6 +1,6 @@
 #ifndef CJRPGENGINE_SCENE_MANAGER_H
 #define CJRPGENGINE_SCENE_MANAGER_H
 
-#include "src/scene_manager.c"
+#include "scene_manager.c"
 
 #endif //CJRPGENGINE_SCENE_MANAGER_H

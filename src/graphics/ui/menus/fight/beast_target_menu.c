@@ -1,4 +1,4 @@
-#include "src/headers/graphics/ui/menus/fight/beast_list_menu.h"
+#include "headers/graphics/ui/menus/fight/beast_list_menu.h"
 
 int geBeastTargetMenuCursorLength(const MenuContext *menuContext) {
     return getBeastSelectCursorLength(menuContext);

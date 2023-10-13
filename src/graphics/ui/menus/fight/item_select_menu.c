@@ -1,4 +1,4 @@
-#include "src/headers/graphics/ui/menu.h"
+#include "headers/graphics/ui/menu.h"
 
 int getItemSelectCursorLength(const MenuContext *menuContext) {
     return menuContext->player->itemCount;
@@ -16,7 +16,7 @@ void drawItemSelectMenuScreen(MenuContext *menuContext) {
     menuContext->itemList = result.itemList;
     menuContext->itemListCount = result.count;
     for (int i = 0; i < result.count; i++) {
-        Item *item = result.itemList[i].item;
+        const Item *item = result.itemList[i].item;
         char buffer[MAX_LINE_BUFFER];
         sprintf(buffer, "(%d) %s", result.itemList[i].amount, item->name);
         FontStyle *fs = item->type == ITEM_TYPE_CONSUMABLE ? defaultFont : disabledFont;

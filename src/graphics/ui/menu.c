@@ -1,6 +1,6 @@
-#include "src/headers/menu_type.h"
-#include "src/headers/player.h"
-#include "src/headers/fight.h"
+#include "headers/menu_type.h"
+#include "headers/player.h"
+#include "headers/fight.h"
 
 typedef struct {
     Spritesheet *sprite;

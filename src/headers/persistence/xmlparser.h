@@ -84,6 +84,6 @@ TileSetNodeType getTileSetNodeTypeFromString(const char *tileSetNodeType) {
     return TILESET_NODE_TYPE_OTHER;
 }
 
-#include "src/persistence/xmlparser.c"
+#include "persistence/xmlparser.c"
 
 #endif //CJRPGENGINE_OBJECT_H

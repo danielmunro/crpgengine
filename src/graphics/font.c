@@ -1,6 +1,6 @@
-#include "src/headers/util/util.h"
-#include "src/headers/graphics/ui/ui.h"
-#include "src/headers/persistence/cyaml.h"
+#include "headers/util/util.h"
+#include "headers/graphics/ui/ui.h"
+#include "headers/persistence/cyaml.h"
 
 typedef struct {
     FontStyleType type;

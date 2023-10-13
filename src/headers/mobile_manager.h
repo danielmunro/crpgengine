@@ -1,6 +1,6 @@
 #ifndef CJRPGENGINE_MOBILE_MANAGER_H
 #define CJRPGENGINE_MOBILE_MANAGER_H
 
-#include "src/mobile_manager.c"
+#include "mobile_manager.c"
 
 #endif //CJRPGENGINE_MOBILE_MANAGER_H

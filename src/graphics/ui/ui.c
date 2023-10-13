@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdbool.h>
-#include "src/headers/menu_type.h"
-#include "src/headers/util/util.h"
+#include "headers/menu_type.h"
+#include "headers/util/util.h"
 
 typedef struct {
     int width;
