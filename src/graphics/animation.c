@@ -27,6 +27,7 @@ typedef struct {
 AnimationManager *createAnimationManager() {
     AnimationManager *animationManager = malloc(sizeof(AnimationManager));
     animationManager->animationCount = 0;
+    animationManager->libraryCount = 0;
     return animationManager;
 }
 

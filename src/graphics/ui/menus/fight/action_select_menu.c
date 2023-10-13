@@ -47,7 +47,7 @@ void drawActionSelectMenuScreen(MenuContext *menuContext) {
             });
 }
 
-bool canGoToIndex(Mobile *mob, int index) {
+bool canGoToIndex(const Mobile *mob, int index) {
     if (index == ACTION_MAGIC) {
         return mob->spellCount > 0;
     }

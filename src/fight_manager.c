@@ -179,7 +179,7 @@ void attackMobile(const FightManager *fm, Action *act) {
 void castOnBeast(FightManager *fm, Action *act) {
     Beast *target = act->target->beast;
     Mobile *caster = act->initiator->mob;
-    Spell *spell = act->object->spell;
+    const Spell *spell = act->object->spell;
     if (!applyCastCost(caster, spell->cost)) {
         return;
     }
@@ -192,7 +192,7 @@ void castOnBeast(FightManager *fm, Action *act) {
 void castOnMobile(FightManager *fm) {
     Mobile *target = fm->ui->menuContext->targetMob;
     Mobile *caster = fm->ui->menuContext->selectedMob;
-    Spell *spell = fm->ui->menuContext->selectedSpell;
+    const Spell *spell = fm->ui->menuContext->selectedSpell;
     if (!applyCastCost(caster, spell->cost)) {
         return;
     }

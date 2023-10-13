@@ -2,7 +2,7 @@
 #include "headers/graphics/ui/ui.h"
 #include "headers/config.h"
 
-void globalSetup(int argc, char *argv[]) {
+void globalSetup() {
     SetTraceLogLevel(LOG_WARNING);
     createConfigFromData(loadConfigYaml());
     createLog(config->logLevel);

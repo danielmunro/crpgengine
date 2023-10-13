@@ -1,6 +1,8 @@
 #ifndef CJRPGENGINE_CONTROL_H
 #define CJRPGENGINE_CONTROL_H
 
+#include <string.h>
+
 #define MAX_CONTROLS 255
 #define MAX_ACTIVE_CONTROLS 64
 #define MAX_INSTRUCTIONS 255

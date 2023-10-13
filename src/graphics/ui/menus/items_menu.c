@@ -1,8 +1,7 @@
-#include "headers/menu_type.h"
 #include "headers/graphics/ui/menu.h"
 
 void drawItemsMenuScreen(MenuContext *menuContext) {
-    FontStyle *defaultFont = menuContext->fonts->default_;
+    const FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *textBox = findOrCreateTextBox(
             menuContext,
             ITEMS_BOX,

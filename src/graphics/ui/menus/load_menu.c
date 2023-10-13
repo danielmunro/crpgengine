@@ -5,7 +5,7 @@ int getLoadCursorLength(const MenuContext *menuContext) {
 }
 
 void drawLoadMenuScreen(MenuContext *menuContext) {
-    FontStyle *defaultFont = menuContext->fonts->default_;
+    const FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *b = findOrCreateTextBox(
             menuContext,
             LOAD_BOX,
@@ -24,6 +24,6 @@ void drawLoadMenuScreen(MenuContext *menuContext) {
     free(b);
 }
 
-MenuSelectResponse *loadMenuItemSelected(MenuContext *menuContext) {
+MenuSelectResponse *loadMenuItemSelected(const MenuContext *menuContext) {
     return createMenuSelectResponse(CLOSE_MENU, LOAD_MENU);
 }

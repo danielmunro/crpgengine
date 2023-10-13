@@ -6,7 +6,6 @@
 #include <sys/time.h>
 #include <math.h>
 #include <sys/resource.h>
-#include <unistd.h>
 #include <raylib.h>
 #include "headers/util/log.h"
 #include "headers/direction.h"
