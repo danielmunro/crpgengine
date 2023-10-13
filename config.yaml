@@ -10,7 +10,7 @@ overrideStartScene: ""
 # The level of logging to use. Options are:
 #   * debug -- very noisy. Enables logging from raylib
 #   * info -- default
-#   * warn -- only misconfigurations or edge cases that should not stop game execution
+#   * warn -- misconfigurations or edge cases that should not stop game execution
 #   * error -- almost always a fatal error
 logLevel: info
 
