@@ -286,16 +286,13 @@ bool hasStory(const Player *p, const char *story) {
 }
 
 void loadAllPlayerItems(ItemManager *im, Player *p) {
-    const char *itemsFile = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *) itemsFile, "%s/player/items.yaml", config->indexDir);
-    ItemsReferenceData *itemsData = loadItemsReferenceData(itemsFile);
+    ItemsReferenceData *itemsData = loadItemsReferenceData();
     for (int i = 0; i < itemsData->items_count; i++) {
         Item **items = createItemsFromReferenceData(im, &itemsData->items[i]);
         for (int j = 0; j < itemsData->items[i].quantity; j++) {
             addItem(p, items[j]);
         }
     }
-    free((char *) itemsFile);
 }
 
 ItemListResult createItemList(const Player *p) {

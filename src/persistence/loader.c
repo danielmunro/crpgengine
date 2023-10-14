@@ -261,15 +261,12 @@ SpritesheetManager *loadSpritesheetManager() {
 }
 
 void loadAllItems(ItemManager *itemManager) {
-    const char *itemsFile = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *) itemsFile, "%s/items.yaml", config->indexDir);
-    ItemsData *itemsData = loadItemYaml(itemsFile);
+    ItemsData *itemsData = loadItemYaml();
     itemManager->items = calloc(itemsData->items_count, sizeof(ItemData));
     for (int i = 0; i < itemsData->items_count; i++) {
         itemManager->items[i] = createItemFromData(&itemsData->items[i]);
     }
     itemManager->count = itemsData->items_count;
-    free((char *) itemsFile);
 }
 
 void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm) {
@@ -288,9 +285,7 @@ void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm) {
 }
 
 Beastiary *loadBeastiary() {
-    char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/beastiary.yaml", config->indexDir);
-    BeastiaryData *data = loadBeastiaryYaml(filePath);
+    BeastiaryData *data = loadBeastiaryYaml();
     Beastiary *beastiary = malloc(sizeof(Beastiary));
     beastiary->count = data->beasts_count;
     for (int i = 0; i < data->beasts_count; i++) {
@@ -302,9 +297,7 @@ Beastiary *loadBeastiary() {
 }
 
 SpellManager *loadSpellManager() {
-    char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/spells.yaml", config->indexDir);
-    SpellsData *data = loadSpellData(filePath);
+    SpellsData *data = loadSpellData();
     Spell **spells = calloc(MAX_SPELLS, sizeof(Spell));
     for (int i = 0; i < data->spells_count; i++) {
         spells[i] = createSpellFromData(data->spells[i]);

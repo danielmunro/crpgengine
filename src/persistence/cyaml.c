@@ -54,13 +54,17 @@ MobileData *loadMobYaml(const char *filePath) {
     return mob;
 }
 
-ItemsData *loadItemYaml(const char *filePath) {
+ItemsData *loadItemYaml() {
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/items.yaml", config->indexDir);
     ItemsData *items = malloc(sizeof(ItemsData));
     loadYamlFile(filePath, itemsSchema, (cyaml_data_t **) &items);
     return items;
 }
 
-BeastiaryData *loadBeastiaryYaml(const char *filePath) {
+BeastiaryData *loadBeastiaryYaml() {
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/beastiary.yaml", config->indexDir);
     BeastiaryData *beastiary = malloc(sizeof(BeastiaryData));
     loadYamlFile(filePath, beastiaryTopSchema, (cyaml_data_t **) &beastiary);
     return beastiary;
@@ -92,7 +96,9 @@ void saveSaveData(const SaveData *saveData, const char *filePath) {
     }
 }
 
-SpellsData *loadSpellData(const char *filePath) {
+SpellsData *loadSpellData() {
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/spells.yaml", config->indexDir);
     SpellsData *spells = malloc(sizeof(SpellsData));
     loadYamlFile(filePath, spellsTopSchema, (cyaml_data_t **) &spells);
     return spells;
@@ -114,7 +120,9 @@ StartPartyData *loadStartPartyData() {
     return startParty;
 }
 
-ItemsReferenceData *loadItemsReferenceData(const char *filePath) {
+ItemsReferenceData *loadItemsReferenceData() {
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/player/items.yaml", config->indexDir);
     ItemsReferenceData *items = malloc(sizeof(ItemsReferenceData));
     loadYamlFile(filePath, itemsReferenceSchema, (cyaml_data_t **) &items);
     return items;
