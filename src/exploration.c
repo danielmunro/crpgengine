@@ -432,13 +432,13 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
         if (cb[i]->thenCount > p
                 && cb[i]->then[p]->outcome == SPEAK
                 && isSpeakingTo(player, cb[i]->then[p]->target)) {
+            Rectangle area = ui->textAreas->bottom;
             if (player->dialog == NULL) {
                 player->dialog = createDialog(
                         cb[i]->then[p]->message,
-                        ui->textAreas->bottom,
+                        area,
                         font);
             }
-            Rectangle area = ui->textAreas->bottom;
             drawMenuRect(area);
             drawDialog(player->dialog);
         }

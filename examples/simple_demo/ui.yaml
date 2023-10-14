@@ -37,52 +37,52 @@ fightMenu:
     width: 100
 
 textAreas:
-  - type: small
+  small:
     x: .1
     y: .1
     width: .8
     height: .8
-  - type: medium
+  medium:
     x: .2
     y: .2
     width: .6
     height: .6
-  - type: full
+  full:
     x: 0
     y: 0
     width: 1
     height: 1
-  - type: bottom
+  bottom:
     x: 0
     y: .75
     width: 1
     height: .25
-  - type: right
+  right:
     x: .75
     y: 0
     width: .25
     height: 1
-  - type: left
+  left:
     x: 0
     y: 0
     width: .25
     height: 1
-  - type: bottomLeft
+  bottomLeft:
     x: 0
     y: .75
     width: .25
     height: .25
-  - type: bottomMidRight
+  bottomMidRight:
     x: .25
     y: .75
     width: .75
     height: .25
-  - type: bottomMid
+  bottomMid:
     x: .25
     y: .75
     width: .5
     height: .25
-  - type: midRight
+  midRight:
     x: .25
     y: 0
     width: .75

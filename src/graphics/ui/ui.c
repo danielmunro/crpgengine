@@ -90,21 +90,6 @@ Dialog *createDialog(const char *message, Rectangle area, FontStyle *font) {
     return dialog;
 }
 
-Rectangle findTextAreaRect(TextAreaType type, TextAreaData *areas, int areaCount) {
-    for (int i = 0; i < areaCount; i++) {
-        if (strcmp(areas[i].type, TextAreaTypes[type]) == 0) {
-            return (Rectangle) {
-                    (float) ui->screen->width * areas[i].x,
-                    (float) ui->screen->height * areas[i].y,
-                    (float) ui->screen->width * areas[i].width,
-                    (float) ui->screen->height * areas[i].height,
-            };
-        }
-    }
-    addError("unknown text area :: %d", type);
-    exit(ConfigurationErrorUndefinedTextArea);
-}
-
 MenuStyle getMenuStyleFromString(const char *style) {
     int count = sizeof(MenuStyles) / sizeof(MenuStyles[0]);
     for (int i = 0; i < count; i++) {
@@ -114,6 +99,15 @@ MenuStyle getMenuStyleFromString(const char *style) {
     }
     fprintf(stderr, "cannot get menu style :: %s", style);
     exit(ConfigurationErrorMenuStyleNotDefined);
+}
+
+Rectangle getScreenRectangle(TextAreaData *data) {
+    return (Rectangle) {
+            data->x * (float) ui->screen->width,
+        data->y * (float) ui->screen->height,
+        data->width * (float) ui->screen->width,
+        data->height * (float) ui->screen->height,
+    };
 }
 
 void createUIConfig(UIData *data) {
@@ -155,48 +149,17 @@ void createUIConfig(UIData *data) {
             data->fightMenu->actionGauge->height,
     };
 
-    // @todo just do a direct mapping instead of array -> struct
     ui->textAreas = malloc(sizeof(TextAreasConfig));
-    ui->textAreas->small = findTextAreaRect(
-            TEXT_AREA_SMALL,
-            data->textAreas,
-            data->textAreasCount);
-    ui->textAreas->medium = findTextAreaRect(
-            TEXT_AREA_MEDIUM,
-            data->textAreas,
-            data->textAreasCount);
-    ui->textAreas->full = findTextAreaRect(
-            TEXT_AREA_FULL,
-            data->textAreas,
-            data->textAreasCount);
-    ui->textAreas->bottom = findTextAreaRect(
-            TEXT_AREA_BOTTOM,
-            data->textAreas,
-            data->textAreasCount);
-    ui->textAreas->right = findTextAreaRect(
-            TEXT_AREA_LEFT,
-            data->textAreas,
-            data->textAreasCount);
-    ui->textAreas->right = findTextAreaRect(
-            TEXT_AREA_RIGHT,
-            data->textAreas,
-            data->textAreasCount);
-    ui->textAreas->bottomLeft = findTextAreaRect(
-            TEXT_AREA_BOTTOM_LEFT,
-            data->textAreas,
-            data->textAreasCount);
-    ui->textAreas->bottomMidRight = findTextAreaRect(
-            TEXT_AREA_BOTTOM_MID_RIGHT,
-            data->textAreas,
-            data->textAreasCount);
-    ui->textAreas->bottomMid = findTextAreaRect(
-            TEXT_AREA_BOTTOM_MID,
-            data->textAreas,
-            data->textAreasCount);
-    ui->textAreas->midRight = findTextAreaRect(
-            TEXT_AREA_MID_RIGHT,
-            data->textAreas,
-            data->textAreasCount);
+    ui->textAreas->small = getScreenRectangle(data->textAreas->small);
+    ui->textAreas->medium = getScreenRectangle(data->textAreas->medium);
+    ui->textAreas->full = getScreenRectangle(data->textAreas->full);
+    ui->textAreas->bottom = getScreenRectangle(data->textAreas->bottom);
+    ui->textAreas->left = getScreenRectangle(data->textAreas->left);
+    ui->textAreas->right = getScreenRectangle(data->textAreas->right);
+    ui->textAreas->bottomLeft = getScreenRectangle(data->textAreas->bottomLeft);
+    ui->textAreas->bottomMidRight = getScreenRectangle(data->textAreas->bottomMidRight);
+    ui->textAreas->bottomMid = getScreenRectangle(data->textAreas->bottomMidRight);
+    ui->textAreas->midRight = getScreenRectangle(data->textAreas->midRight);
 }
 
 TextBox *createTextBox(Rectangle area, FontStyle *fontStyle, TextBoxLabel label) {

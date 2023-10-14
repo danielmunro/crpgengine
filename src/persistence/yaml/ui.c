@@ -75,7 +75,6 @@ typedef struct {
 } FightMenuData;
 
 typedef struct {
-    const char *type;
     float x;
     float y;
     float width;
@@ -83,13 +82,25 @@ typedef struct {
 } TextAreaData;
 
 typedef struct {
+    TextAreaData *small;
+    TextAreaData *medium;
+    TextAreaData *full;
+    TextAreaData *bottom;
+    TextAreaData *right;
+    TextAreaData *left;
+    TextAreaData *bottomLeft;
+    TextAreaData *bottomMidRight;
+    TextAreaData *bottomMid;
+    TextAreaData *midRight;
+} TextAreasData;
+
+typedef struct {
     UISpriteData *sprite;
     FontsData *fonts;
     ScreenData *screen;
     UIMenuData *menu;
-    TextAreaData *textAreas;
+    TextAreasData *textAreas;
     FightMenuData *fightMenu;
-    int textAreasCount;
 } UIData;
 
 static const cyaml_schema_field_t fontFamilyFieldSchema[] = {
@@ -227,9 +238,6 @@ static const cyaml_schema_field_t fightMenuFieldSchema[] = {
 };
 
 static const cyaml_schema_field_t textAreaFieldSchema[] = {
-        CYAML_FIELD_STRING_PTR(
-                "type", CYAML_FLAG_POINTER,
-                TextAreaData, type, 0, CYAML_UNLIMITED),
         CYAML_FIELD_FLOAT(
                 "x", CYAML_FLAG_DEFAULT, TextAreaData, x),
         CYAML_FIELD_FLOAT(
@@ -241,12 +249,31 @@ static const cyaml_schema_field_t textAreaFieldSchema[] = {
         CYAML_FIELD_END,
 };
 
-static const cyaml_schema_value_t textAreaSchema = {
-        CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT,
-                            TextAreaData, textAreaFieldSchema),
+static const cyaml_schema_field_t textAreasFieldSchema[] = {
+        CYAML_FIELD_MAPPING_PTR(
+                "small", CYAML_FLAG_POINTER, TextAreasData, small, textAreaFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "medium", CYAML_FLAG_POINTER, TextAreasData, medium, textAreaFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "full", CYAML_FLAG_POINTER, TextAreasData, full, textAreaFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "bottom", CYAML_FLAG_POINTER, TextAreasData, bottom, textAreaFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "right", CYAML_FLAG_POINTER, TextAreasData, right, textAreaFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "left", CYAML_FLAG_POINTER, TextAreasData, left, textAreaFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "bottomLeft", CYAML_FLAG_POINTER, TextAreasData, bottomLeft, textAreaFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "bottomMid", CYAML_FLAG_POINTER, TextAreasData, bottomMid, textAreaFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "bottomMidRight", CYAML_FLAG_POINTER, TextAreasData, bottomMidRight, textAreaFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "midRight", CYAML_FLAG_POINTER, TextAreasData, midRight, textAreaFieldSchema),
+        CYAML_FIELD_END,
 };
 
-static const cyaml_schema_field_t fontsTopMappingField[] = {
+static const cyaml_schema_field_t uiTopMappingSchema[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "sprite", CYAML_FLAG_POINTER, UIData, sprite, spritesheetFieldSchema),
         CYAML_FIELD_MAPPING_PTR(
@@ -255,9 +282,8 @@ static const cyaml_schema_field_t fontsTopMappingField[] = {
                 "screen", CYAML_FLAG_POINTER, UIData, screen, screenFieldSchema),
         CYAML_FIELD_MAPPING_PTR(
                 "menu", CYAML_FLAG_POINTER, UIData, menu, menuFieldSchema),
-        CYAML_FIELD_SEQUENCE_COUNT(
-                "textAreas", CYAML_FLAG_POINTER, UIData, textAreas,
-                textAreasCount, &textAreaSchema, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_MAPPING_PTR(
+                "textAreas", CYAML_FLAG_POINTER, UIData, textAreas, textAreasFieldSchema),
         CYAML_FIELD_MAPPING_PTR(
                 "fightMenu", CYAML_FLAG_POINTER, UIData, fightMenu, fightMenuFieldSchema),
         CYAML_FIELD_END,
@@ -265,5 +291,5 @@ static const cyaml_schema_field_t fontsTopMappingField[] = {
 
 static const cyaml_schema_value_t uiSchema = {
         CYAML_VALUE_MAPPING(
-                CYAML_FLAG_POINTER, UIData, fontsTopMappingField),
+                CYAML_FLAG_POINTER, UIData, uiTopMappingSchema),
 };
