@@ -37,6 +37,7 @@ void addItem(Player *player, Item *item) {
 }
 
 void removeItem(Player *player, const Item *item) {
+    addInfo("remove item :: %s\n", item->name);
     bool foundItem = false;
     for (int i = 0; i < player->itemCount; i++) {
         if (player->items[i] == item) {
@@ -326,4 +327,27 @@ ItemListResult createItemList(const Player *p) {
             itemList,
             count,
     };
+}
+
+bool losesItemQuantity(Player *player, const ItemReferenceData *ird) {
+    addInfo("player losing item :: %s", ird->name);
+    int found = 0;
+    int itemIndexes[ird->quantity];
+    for (int i = 0; i < player->itemCount; i++) {
+        if (strcmp(ird->name, player->items[i]->name) == 0) {
+            itemIndexes[found] = i;
+            found++;
+            if (found == ird->quantity) {
+                break;
+            }
+        }
+    }
+    if (found == ird->quantity) {
+        for (int i = 0; i < ird->quantity; i++) {
+            removeItem(player, player->items[itemIndexes[i]]);
+        }
+        return true;
+    }
+    addWarning("player didn't have enough items to give :: %d remaining", ird->quantity);
+    return false;
 }

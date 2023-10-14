@@ -17,6 +17,6 @@ int getBeastSelectCursorLength(const MenuContext *menuContext) {
     return menuContext->fight->beastCount;
 }
 
-MenuSelectResponse *beastSelectMenuItemSelected(MenuContext *menuContext) {
+MenuSelectResponse *beastSelectMenuItemSelected() {
     return createMenuSelectResponse(FIND_TARGET_MENU, BEAST_LIST_FIGHT_MENU);
 }

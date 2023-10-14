@@ -110,26 +110,14 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
                 createNotification(RECEIVE_QUEST_ITEM, message));
         progress++;
     } else if (needsToLoseItem(then, getPartyLeader(cm->player))) {
-        addInfo("player losing item: %s", then->item->name);
-        int quantity = then->item->quantity;
-        for (int i = 0; i < cm->player->itemCount; i++) {
-            if (quantity > 0 && strcmp(then->item->name, cm->player->items[i]->name) == 0) {
-                removeItem(cm->player, cm->player->items[i]);
-                quantity--;
-                if (quantity == 0) {
-                    break;
-                }
-            }
+        if (losesItemQuantity(cm->player, then->item)) {
+            const char *message = malloc(MAX_NOTIFICATION_LENGTH);
+            sprintf((char *) message, "you lost:\n%s", then->item->name);
+            addNotification(
+                    cm->notificationManager,
+                    createNotification(LOSE_QUEST_ITEM, message));
+            progress++;
         }
-        if (quantity > 0) {
-            addWarning("player didn't have enough items to give :: %d remaining", quantity);
-        }
-        const char *message = malloc(MAX_NOTIFICATION_LENGTH);
-        sprintf((char *) message, "you lost:\n%s", then->item->name);
-        addNotification(
-                cm->notificationManager,
-                createNotification(LOSE_QUEST_ITEM, message));
-        progress++;
     }
     cb->progress += progress;
     return progress;
