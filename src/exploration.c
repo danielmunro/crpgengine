@@ -262,9 +262,9 @@ void renderExplorationLayer(Exploration *e, LayerType layer) {
 }
 
 void unloadLayers(const Exploration *e) {
-    for (int i = 0; i < e->layerCount; i++) {
-        UnloadTexture(e->renderedLayers[i]);
-    }
+    UnloadTexture(e->renderedLayers[BACKGROUND]);
+    UnloadTexture(e->renderedLayers[MIDGROUND]);
+    UnloadTexture(e->renderedLayers[FOREGROUND]);
 }
 
 void createMobileLayer(Mobile *mobiles[MAX_MOBILES], Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES], int mobileCount,
