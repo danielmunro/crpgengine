@@ -12,7 +12,7 @@ overrideStartScene: ""
 #   * info -- default
 #   * warn -- misconfigurations or edge cases that should not stop game execution
 #   * error -- almost always a fatal error
-logLevel: warn
+logLevel: info
 
 # The save file to use when loading up. If the save file doesn't exist, a
 # default start will happen based on the start scene and it's configuration.
@@ -32,7 +32,7 @@ afterLoad:
 forceNewGame: false
 
 # Log memory usage in regular intervals. Useful for tracking memory leaks.
-logMemoryUsage: true
+logMemoryUsage: false
 
 # Delete all save files. The number of save files can grow quite long during
 # development. This is just a convenience option to clear them out.
