@@ -36,7 +36,7 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
     TileSetNodeType nodeType = getTileSetNodeTypeFromString((const char *) name);
     if (nodeType == TILESET_NODE_TYPE_TILESET) {
         const int width = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
-        const int height = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
+        const int height = getIntAttribute(tilemapXmlReader->reader, "tileheight");
         tilemapXmlReader->exploration->tilemap->size = (Vector2D) {width, height};
     } else if (nodeType == TILESET_NODE_TYPE_IMAGE) {
         char filePath[MAX_FS_PATH_LENGTH];

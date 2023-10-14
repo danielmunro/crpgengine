@@ -289,15 +289,12 @@ void loadAllPlayerItems(ItemManager *im, Player *p) {
     const char *itemsFile = malloc(MAX_FS_PATH_LENGTH);
     sprintf((char *) itemsFile, "%s/player/items.yaml", config->indexDir);
     ItemsReferenceData *itemsData = loadItemsReferenceData(itemsFile);
-    int itemCount = 0;
     for (int i = 0; i < itemsData->items_count; i++) {
         Item **items = createItemsFromReferenceData(im, &itemsData->items[i]);
         for (int j = 0; j < itemsData->items[i].quantity; j++) {
             addItem(p, items[j]);
-            itemCount++;
         }
     }
-    p->itemCount = itemCount;
     free((char *) itemsFile);
 }
 
