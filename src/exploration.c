@@ -337,20 +337,30 @@ Rectangle getObjectSize(const Exploration *e, const Object *o, int x, int y) {
     };
 }
 
-bool isBlockedByMapObject(Exploration *e, Rectangle player) {
+bool isObjectBlocking(const Exploration *e, const Object *o, Rectangle player, int x, int y) {
+    Rectangle objRect = getObjectSize(e, o, x, y);
+    Rectangle c = GetCollisionRec(player, objRect);
+    return c.height > 0 || c.width > 0;
+}
+
+bool checkLayerForBlockingObject(Exploration *e, Rectangle player, int layer) {
     Vector2D tiles = getTileCount(e);
-    for (int l = 0; l < LAYER_COUNT - 1; l++) {
-        for (int y = 0; y < tiles.y; y++) {
-            for (int x = 0; x < tiles.x; x++) {
-                int index = e->layers[l]->data[y][x];
-                const Object *o = getObject(e, index - 1);
-                if (o != NULL) {
-                    Rectangle c = GetCollisionRec(player, getObjectSize(e, o, x, y));
-                    if (c.height > 0 || c.width > 0) {
-                        return true;
-                    }
-                }
+    for (int y = 0; y < tiles.y; y++) {
+        for (int x = 0; x < tiles.x; x++) {
+            int index = e->layers[layer]->data[y][x];
+            const Object *o = getObject(e, index - 1);
+            if (o != NULL && isObjectBlocking(e, o, player, x, y)) {
+                return true;
             }
+        }
+    }
+    return false;
+}
+
+bool isBlockedByMapObject(Exploration *e, Rectangle player) {
+    for (int l = 0; l < LAYER_COUNT - 1; l++) {
+        if (checkLayerForBlockingObject(e, player, l)) {
+            return true;
         }
     }
     return false;
