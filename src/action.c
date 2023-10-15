@@ -1,5 +1,6 @@
 #include "headers/beastiary.h"
 #include "headers/mobile.h"
+#include "headers/action_enums.h"
 
 typedef struct {
     Mobile *mob;

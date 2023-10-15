@@ -13,21 +13,4 @@
 #define MOB_COLLISION_HEIGHT 12
 #define MOB_COLLISION_HEIGHT_OFFSET 12
 
-typedef enum {
-    ATTACK,
-    CAST,
-    ITEM,
-    RUN,
-    NONE,
-} ActionType;
-
-typedef enum {
-    STEP_NONE,
-    ATTACK_QUEUE,
-    ATTACK_STEP_OUT,
-    ATTACK_ACTION,
-    ATTACK_RETURN,
-    ACTION_STEP_RUN,
-} ActionStep;
-
 #endif //CJRPGENGINE_GLOBALS_H

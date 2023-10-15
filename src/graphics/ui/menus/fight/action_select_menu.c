@@ -1,3 +1,4 @@
+#include "headers/action_enums.h"
 #include "headers/graphics/ui/menu.h"
 
 const char *actionMenu[] = {

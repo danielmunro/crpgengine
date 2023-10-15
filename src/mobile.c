@@ -6,6 +6,7 @@
 #include "headers/spell.h"
 #include "headers/graphics/avatar.h"
 #include "headers/graphics/animation.h"
+#include "headers/action_enums.h"
 
 typedef struct {
     const char *id;
