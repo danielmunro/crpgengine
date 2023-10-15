@@ -14,8 +14,8 @@ typedef struct {
 } Music_;
 
 typedef struct {
-    Sound_ *sounds[MAX_AUDIO];
-    Music_ *music[MAX_AUDIO];
+    Sound_ *sounds[MAX_SOUNDS];
+    Music_ *music[MAX_MUSIC];
     int soundCount;
     int musicCount;
     int musicIndex;
