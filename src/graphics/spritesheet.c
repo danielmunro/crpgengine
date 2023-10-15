@@ -10,6 +10,7 @@ typedef struct {
     int frameWidth;
     int frameHeight;
     int padding;
+    Rectangle *collision;
 } Spritesheet;
 
 typedef struct {
@@ -22,7 +23,8 @@ Spritesheet *createSpriteSheet(
         const char *filename,
         int width,
         int height,
-        int padding) {
+        int padding,
+        Rectangle *collision) {
     Texture2D tex = LoadTexture(filename);
     Spritesheet *sp = malloc(sizeof(Spritesheet));
     sp->name = name;
@@ -31,6 +33,7 @@ Spritesheet *createSpriteSheet(
     sp->frameWidth = width;
     sp->frameHeight = height;
     sp->padding = padding;
+    sp->collision = collision;
     return sp;
 }
 

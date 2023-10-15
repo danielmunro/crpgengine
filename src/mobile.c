@@ -99,11 +99,12 @@ bool isMoving(const Mobile *mob) {
 }
 
 Rectangle getMobileRectangle(Mobile *mob) {
+    const Rectangle *c = getMobAnimation(mob)->spriteSheet->collision;
     return (Rectangle) {
-            mob->position.x,
-            mob->position.y + MOB_COLLISION_HEIGHT_OFFSET,
-            MOB_COLLISION_WIDTH,
-            MOB_COLLISION_HEIGHT,
+            mob->position.x + c->x,
+            mob->position.y + c->height,
+            c->width,
+            c->height,
     };
 }
 
@@ -153,9 +154,10 @@ char *getPositionAsString(Vector2 position) {
     return value;
 }
 
-void useEntrance(Mobile *mob, Entrance *e) {
-    mob->position.x = e->area.x + (e->area.width / 2) - (int) (MOB_COLLISION_WIDTH / 2);
-    mob->position.y = e->area.y + (e->area.height / 2) - (int) (MOB_COLLISION_HEIGHT / 2);
+void useEntrance(Mobile *mob, const Entrance *e) {
+    const Rectangle *c = getMobAnimation(mob)->spriteSheet->collision;
+    mob->position.x = e->area.x + (e->area.width / 2) - roundf(c->width / 2);
+    mob->position.y = e->area.y + (e->area.height / 2) - roundf(c->height / 2);
     mob->direction = e->direction;
 }
 

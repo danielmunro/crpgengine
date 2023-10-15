@@ -319,11 +319,16 @@ void drawExplorationMobiles(Exploration *e, Player *p, Vector2 offset) {
     }
 
     if (config->showCollisions->player) {
+        Rectangle *collision = getMobAnimation(mob)->spriteSheet->collision;
+        if (collision == NULL) {
+            addWarning("configured to show player collision but collision data not set in mob spritesheet");
+            return;
+        }
         DrawRectangle(
-                (int) (mob->position.x + offset.x + MOB_COLLISION_WIDTH_OFFSET),
-                (int) (mob->position.y + offset.y + MOB_COLLISION_HEIGHT_OFFSET),
-                MOB_COLLISION_WIDTH,
-                MOB_COLLISION_HEIGHT,
+                (int) (mob->position.x + offset.x + collision->x),
+                (int) (mob->position.y + offset.y + collision->y),
+                (int) collision->width,
+                (int) collision->height,
                 GREEN);
     }
 }
@@ -389,13 +394,14 @@ int atExit(Exploration *e, Player *p) {
 }
 
 void tryToMove(Exploration *e, Player *p, Direction direction, Vector2 pos) {
-    Rectangle rect = {
-            pos.x + MOB_COLLISION_WIDTH_OFFSET,
-            pos.y + MOB_COLLISION_HEIGHT,
-            MOB_COLLISION_WIDTH,
-            MOB_COLLISION_HEIGHT,
-    };
     Mobile *mob = getPartyLeader(p);
+    const Rectangle *collision = getMobAnimation(mob)->spriteSheet->collision;
+    Rectangle rect = {
+            pos.x + collision->x,
+            pos.y + collision->y,
+            collision->width,
+            collision->height,
+    };
     if (mob->moving[direction]) {
         if (isBlockedByMapObject(e, rect)) {
             p->blockedBy = NULL;
@@ -411,7 +417,7 @@ void tryToMove(Exploration *e, Player *p, Direction direction, Vector2 pos) {
 }
 
 void evaluateMovement(Exploration *e, Player *p) {
-    Mobile *mob = getPartyLeader(p);
+    const Mobile *mob = getPartyLeader(p);
     if (mob->isBeingMoved) {
         return;
     }

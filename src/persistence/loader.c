@@ -245,12 +245,20 @@ SpritesheetManager *loadSpritesheetManager() {
             char imageFilePath[MAX_FS_PATH_LENGTH];
             sprintf(imageFilePath, "%s/%s", directory, data->filename);
             addInfo("spritesheet :: %s, %s", data->name, imageFilePath);
+            Rectangle *collision = malloc(sizeof(Rectangle));
+            if (data->collide != NULL) {
+                collision->width = (float) data->collide->width;
+                collision->height = (float) data->collide->height;
+                collision->x = (float) data->collide->left;
+                collision->y = (float) data->collide->top;
+            }
             spritesheets[count] = createSpriteSheet(
                     data->name,
                     imageFilePath,
                     data->frame->width,
                     data->frame->height,
-                    data->frame->padding);
+                    data->frame->padding,
+                    collision);
             count++;
             free(data);
         }
