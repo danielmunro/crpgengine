@@ -1,6 +1,8 @@
 #ifndef CJRPGENGINE_CYAML_H
 #define CJRPGENGINE_CYAML_H
 
+#define MAX_FS_PATH_LENGTH 256
+
 #include "headers/persistence/yaml/config.h"
 #include "persistence/yaml/spritesheet.c"
 #include "persistence/yaml/animation.c"

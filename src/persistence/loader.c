@@ -82,7 +82,7 @@ void loadPlayerMobiles(MobileManager *mm) {
     free(mobFiles);
 }
 
-void loadEncounters(Beastiary *beastiary, Scene *scene, EncountersData *data, const char *indexDir) {
+void loadEncounters(const Beastiary *beastiary, Scene *scene, const EncountersData *data, const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/images/%s", indexDir, data->background);
     scene->encounters->background = LoadTextureFromImage(LoadImage(filePath));
@@ -141,11 +141,11 @@ void loadStorylines(Scene *s, const char *sceneDirectory) {
 
 Scene *loadScene(
         MobileManager *mm,
-        Beastiary *beastiary,
+        const Beastiary *beastiary,
         char *sceneName,
         const char *sceneDirectory) {
     addInfo("create scene '%s'", sceneName);
-    SceneData *sceneData = loadSceneYaml(sceneDirectory);
+    const SceneData *sceneData = loadSceneYaml(sceneDirectory);
     Scene *scene = createScene();
 
     // scene properties
