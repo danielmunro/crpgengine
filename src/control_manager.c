@@ -109,15 +109,14 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
                 cm->notificationManager,
                 createNotification(RECEIVE_QUEST_ITEM, message));
         progress++;
-    } else if (needsToLoseItem(then, getPartyLeader(cm->player))) {
-        if (losesItemQuantity(cm->player, then->item)) {
-            const char *message = malloc(MAX_NOTIFICATION_LENGTH);
-            sprintf((char *) message, "you lost:\n%s", then->item->name);
-            addNotification(
-                    cm->notificationManager,
-                    createNotification(LOSE_QUEST_ITEM, message));
-            progress++;
-        }
+    } else if (needsToLoseItem(then, getPartyLeader(cm->player))
+            && losesItemQuantity(cm->player, then->item)) {
+        const char *message = malloc(MAX_NOTIFICATION_LENGTH);
+        sprintf((char *) message, "you lost:\n%s", then->item->name);
+        addNotification(
+                cm->notificationManager,
+                createNotification(LOSE_QUEST_ITEM, message));
+        progress++;
     }
     cb->progress += progress;
     return progress;

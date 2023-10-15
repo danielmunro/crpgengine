@@ -83,6 +83,7 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
         addError("failed to parse tilemap xml :: %s", filename);
         exit(ConfigurationErrorMapResourcesUnreadable);
     }
+    free(tilemapXmlReader);
 }
 
 void parseSceneLayer(Exploration *e, const char *rawData) {

@@ -32,8 +32,7 @@ void setScene(SceneManager *sm, Scene *scene, const Player *player, const char *
     Mobile *mob = getPartyLeader(player);
     addAllAnimations(sm->animationManager, mob->animations);
     if (entranceName != NULL) {
-        Entrance *entrance = findEntrance(scene->exploration, entranceName);
-        useEntrance(mob, entrance);
+        useEntrance(mob, findEntrance(scene->exploration, entranceName));
     }
     renderExplorationLayers(sm->current->exploration);
     playMusic(sm->audioManager, sm->current->music);
