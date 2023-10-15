@@ -183,7 +183,7 @@ SaveData *createSaveData(const Player *player, const char *scene, const char *sa
     return save;
 }
 
-void saveFile(SaveData *save, const char *indexDir, const char *filename) {
+void saveFile(const SaveData *save, const char *indexDir, const char *filename) {
     char filePathAuto[MAX_FS_PATH_LENGTH];
     sprintf(filePathAuto, "%s/%s/%s", indexDir, "_saves", filename);
     addInfo("player save file :: %s", filePathAuto);
@@ -292,6 +292,7 @@ void loadAllPlayerItems(ItemManager *im, Player *p) {
         for (int j = 0; j < itemsData->items[i].quantity; j++) {
             addItem(p, items[j]);
         }
+        free(items);
     }
 }
 

@@ -50,7 +50,7 @@ ArmorClass createEmptyArmorClass() {
     };
 }
 
-Attributes *createAttributesFromData(AttributesData *data) {
+Attributes *createAttributesFromData(const AttributesData *data) {
     if (data == NULL) {
         return NULL;
     }
@@ -74,7 +74,7 @@ Attributes *createAttributesFromData(AttributesData *data) {
     return a;
 }
 
-AttributesData *createDataFromAttributes(Attributes *a) {
+AttributesData *createDataFromAttributes(const Attributes *a) {
     if (a == NULL) {
         return NULL;
     }

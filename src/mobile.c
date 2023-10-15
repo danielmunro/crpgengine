@@ -26,7 +26,7 @@ typedef struct {
     struct timeval lastTimerUpdate;
     bool locked;
     int actionGauge;
-    ItemData **equipment;
+    Item **equipment;
     int hp;
     int mana;
     Spell **spells;
@@ -174,7 +174,7 @@ Attributes calculateMobileAttributes(Mobile *mob) {
     Attributes calculated = *mob->attributes;
     for (int i = 0; i < MAX_EQUIPMENT; i++) {
         if (mob->equipment[i] != NULL) {
-            calculated = combineAttributes(calculated, *createAttributesFromData(mob->equipment[i]->attributes));
+            calculated = combineAttributes(calculated, *mob->equipment[i]->attributes);
         }
     }
     return calculated;
