@@ -105,14 +105,6 @@ Attributes *cloneAttributes(const Attributes *a) {
     return b;
 }
 
-Attributes *createStartingAttributes() {
-    Attributes *a = createEmptyAttributes();
-    a->hp = STARTING_HP;
-    a->mana = STARTING_MANA;
-    a->strength = 5;
-    return a;
-}
-
 Attributes combineAttributes(const Attributes a, const Attributes b) {
     return (Attributes) {
             a.strength + b.strength,

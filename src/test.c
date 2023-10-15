@@ -21,6 +21,14 @@ AnimationManager *createTestAnimationManager() {
     return am;
 }
 
+Attributes *createTestAttributes() {
+    Attributes *a = createEmptyAttributes();
+    a->hp = STARTING_HP;
+    a->mana = STARTING_MANA;
+    a->strength = 5;
+    return a;
+}
+
 typedef struct {
     Encounters *e;
     FightManager *fm;
@@ -73,7 +81,6 @@ void canMoveMobTest() {
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
-    SpellData *spells = calloc(0, sizeof(SpellData));
 
     Mobile *mob = createMobile(
             "test",
@@ -84,8 +91,8 @@ void canMoveMobTest() {
             createAvatar("fireas.png"),
             20,
             20,
-            createStartingAttributes(),
-            mapDataToSpells(NULL, spells, 0),
+            createTestAttributes(),
+            mapDataToSpells(NULL, NULL, 0),
             0);
 
     // when
@@ -104,7 +111,6 @@ void canMobStopMovingTest() {
     AnimationManager *am = createTestAnimationManager();
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
-    SpellData *spells = calloc(0, sizeof(SpellData));
     Mobile *mob = createMobile(
             "test",
             "test",
@@ -114,8 +120,8 @@ void canMobStopMovingTest() {
             createAvatar("fireas.png"),
             STARTING_HP,
             STARTING_MANA,
-            createStartingAttributes(),
-            mapDataToSpells(NULL, spells, 0),
+            createTestAttributes(),
+            mapDataToSpells(NULL, NULL, 0),
             0);
 
     // when
