@@ -1,5 +1,6 @@
 #include "headers/persistence/cyaml_config.h"
 #include "headers/config.h"
+#include "headers/errors.h"
 
 void loadYamlFile(const char *filePath, cyaml_schema_value_t schema, cyaml_data_t **dataOut) {
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,

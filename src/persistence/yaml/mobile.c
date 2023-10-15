@@ -1,6 +1,4 @@
-#include "cyaml/cyaml.h"
-#include "headers/direction.h"
-#include "headers/item.h"
+#include "headers/persistence/cyaml.h"
 
 typedef struct {
     const char *id;

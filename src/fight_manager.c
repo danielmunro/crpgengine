@@ -42,7 +42,7 @@ Fight *createFightFromEncounters(
         const Encounters *encounters,
         Player *player) {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
-    int beastsToCreate = rand() % MAX_BEASTS_IN_FIGHT + 1;
+    int beastsToCreate = GetRandomValue(1, MAX_BEASTS_IN_FIGHT);
     addDebug("creating %d beasts for fight", beastsToCreate);
     int created = 0;
     float x = BEAST_AREA.x;
@@ -239,7 +239,7 @@ void consumeItem(FightManager *fm, Action *act) {
 }
 
 void queueMobFightAction(FightManager *fm) {
-    Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
+    const Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
     MenuContext *mc = fm->ui->menuContext;
     ActionObject *o = NULL;
     if (mc->actionType == CAST) {
@@ -291,7 +291,7 @@ void queueBeastFightAction(FightManager *fm, Beast *beast) {
 }
 
 void attemptToRun(FightManager *fm) {
-    Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
+    const Menu *mobileSelectMenu = findMenu(fm->menus, MOBILE_SELECT_FIGHT_MENU);
     Mobile *mob = fm->fight->player->party[mobileSelectMenu->cursor];
     ActionParticipant *participant = createMobParticipant(mob);
     mob->isFleeing = true;
@@ -448,7 +448,7 @@ void removeMenusUntilMobileSelect(FightManager *fm) {
 }
 
 void fightSpaceKeyPressed(FightManager *fm) {
-    Menu *currentMenu = getCurrentMenu(fm->menus);
+    const Menu *currentMenu = getCurrentMenu(fm->menus);
     int c = currentMenu->cursor;
     if (c > -1) {
         MenuSelectResponse *response = menuItemSelected(

@@ -1,5 +1,4 @@
 #include <stdbool.h>
-#include "cyaml/cyaml.h"
 
 typedef struct {
     bool dumpState;

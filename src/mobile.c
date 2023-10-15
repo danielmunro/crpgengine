@@ -4,6 +4,7 @@
 #include "headers/util/util.h"
 #include "headers/warp.h"
 #include "headers/spell.h"
+#include "headers/item.h"
 #include "headers/graphics/avatar.h"
 #include "headers/graphics/animation.h"
 #include "headers/action_enums.h"
