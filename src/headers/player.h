@@ -3,6 +3,7 @@
 
 #define MAX_PARTY_SIZE 4
 #define MAX_DATETIME_LENGTH 256
+#define MAX_SAVE_NAME 256
 
 #include "player.c"
 

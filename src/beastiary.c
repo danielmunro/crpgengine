@@ -41,7 +41,7 @@ Beast *createBeastFromData(BeastData *data) {
     return beast;
 }
 
-Beast *cloneBeast(Beast *original) {
+Beast *cloneBeast(const Beast *original) {
     Beast *new = malloc(sizeof(Beast));
     new->id = original->id;
     new->name = original->name;

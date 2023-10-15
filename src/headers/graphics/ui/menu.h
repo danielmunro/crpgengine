@@ -1,6 +1,8 @@
 #ifndef CJRPGENGINE_MENU_H
 #define CJRPGENGINE_MENU_H
 
+#define SPELL_COLUMN_WIDTH 20
+
 #define MAX_MENUS 255
 #define MAX_TEXT_BOXES 32
 
