@@ -16,7 +16,7 @@
 #include "persistence/yaml/sound.c"
 #include "persistence/yaml/beastiary.c"
 #include "persistence/yaml/mobile.c"
-#include "persistence/yaml/player.c"
+#include "headers/persistence/yaml/player.h"
 #include "persistence/yaml/save.c"
 #include "persistence/yaml/start_party.c"
 #include "persistence/yaml/ui.c"

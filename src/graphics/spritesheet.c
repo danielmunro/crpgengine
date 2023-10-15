@@ -13,7 +13,7 @@ typedef struct {
 } Spritesheet;
 
 typedef struct {
-    Spritesheet *spritesheets[MAX_SPRITES];
+    Spritesheet *spritesheets[MAX_SPRITESHEETS];
     int spritesCount;
 } SpritesheetManager;
 
@@ -34,7 +34,7 @@ Spritesheet *createSpriteSheet(
     return sp;
 }
 
-SpritesheetManager *createSpriteSheetManager(Spritesheet *spritesheets[MAX_SPRITES], int count) {
+SpritesheetManager *createSpriteSheetManager(Spritesheet *spritesheets[MAX_SPRITESHEETS], int count) {
     SpritesheetManager *sm = malloc(sizeof(SpritesheetManager));
     for (int i = 0; i < count; i++) {
         sm->spritesheets[i] = spritesheets[i];

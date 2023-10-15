@@ -231,7 +231,7 @@ AudioManager *loadAudioManager() {
 
 SpritesheetManager *loadSpritesheetManager() {
     addInfo("load spritesheet manager :: %s", config->indexDir);
-    Spritesheet *spritesheets[MAX_SPRITES];
+    Spritesheet *spritesheets[MAX_SPRITESHEETS];
     char directory[MAX_FS_PATH_LENGTH];
     sprintf(directory, "%s/spritesheets", config->indexDir);
     char **files = calloc(MAX_FILES, sizeof(char *));

@@ -1,6 +1,8 @@
 #ifndef CJRPGENGINE_SPRITESHEET_H
 #define CJRPGENGINE_SPRITESHEET_H
 
+#define MAX_SPRITESHEETS 1024
+
 #include "graphics/spritesheet.c"
 
 #endif //CJRPGENGINE_SPRITESHEET_H

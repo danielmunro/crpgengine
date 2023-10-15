@@ -1,5 +1,5 @@
 #include <mm_malloc.h>
-#include "headers/globals.h"
+#include "headers/constants.h"
 #include "headers/errors.h"
 #include "headers/persistence/yaml/config.h"
 #include "headers/util/log.h"
