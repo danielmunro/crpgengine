@@ -1,8 +1,8 @@
 #ifndef CJRPGENGINE_LAYER_H
 #define CJRPGENGINE_LAYER_H
 
-#define MAX_LAYERS 1024
-#define MAX_LAYER_SIZE 1024
+#define MAX_LAYERS 5096
+#define MAX_LAYER_SIZE 5096
 #define LAYER_COUNT sizeof(LAYERS) / sizeof(LAYERS[0])
 
 #include <string.h>

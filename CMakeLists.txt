@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.6)
 project (cjrpgengine)
 include(ExternalProject)
-set(CMAKE_BUILD_TYPE FILEPATH)
+set(CMAKE_BUILD_TYPE Debug)
 set(EXECUTABLE_OUTPUT_PATH ./build CACHE PATH "Build directory" FORCE)
 set(CMAKE_C_FLAGS "-Isrc")
 

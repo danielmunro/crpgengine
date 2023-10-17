@@ -31,9 +31,10 @@ typedef enum {
     ConfigurationErrorMenuStyleNotDefined = 407,
     ConfigurationErrorUnknownWarp = 408,
     ConfigurationErrorUnknownScene = 409,
-    ConfigurationErrorUnknownCollisionType = 410,
-    ConfigurationErrorUnknownFontStyleType = 411,
-    ConfigurationErrorNoDirectionForName = 412,
+    ConfigurationErrorMissingTileset = 410,
+    ConfigurationErrorMissingTilesetImage = 411,
+    ConfigurationErrorUnknownFontStyleType = 412,
+    ConfigurationErrorNoDirectionForName = 413,
 
     // Yaml loading/saving
     CyamlErrorGeneric = 500,

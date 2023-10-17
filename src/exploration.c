@@ -10,6 +10,7 @@
 #include "headers/layer.h"
 #include "headers/notification.h"
 #include "headers/warp.h"
+#include "headers/tiles.h"
 
 typedef struct {
     Mobile *mob;
@@ -24,13 +25,8 @@ typedef struct {
     bool showCollisions;
 } Layer;
 
-typedef struct {
-    Vector2D size;
-    Image source;
-} Tilemap;
-
 Vector2D getTileFromIndex(const Tilemap *t, int index) {
-    int width = t->source.width / t->size.x;
+    int width = t->source.width / t->tileset->size.x;
     int y = index / width;
     int x = (index % width);
     if (x - 1 < 0) {
@@ -44,10 +40,10 @@ Vector2D getTileFromIndex(const Tilemap *t, int index) {
 Rectangle getRectForTile(const Tilemap *t, int index) {
     Vector2D tile = getTileFromIndex(t, index);
     return (Rectangle) {
-            (float) (tile.x * t->size.x),
-            (float) (tile.y * t->size.y),
-            (float) t->size.x,
-            (float) t->size.y,
+            (float) (tile.x * t->tileset->size.x),
+            (float) (tile.y * t->tileset->size.y),
+            (float) t->tileset->size.x,
+            (float) t->tileset->size.y,
     };
 }
 
@@ -163,8 +159,8 @@ void addObject(Exploration *e, Object *o) {
 }
 
 Vector2D getTileCount(const Exploration *e) {
-    int x = ui->screen->width / e->tilemap->size.x + 1;
-    int y = ui->screen->height / e->tilemap->size.y + 2;
+    int x = ui->screen->width / e->tilemap->tileset->size.x + 1;
+    int y = ui->screen->height / e->tilemap->tileset->size.y + 2;
     return (Vector2D) {x, y};
 }
 
@@ -176,8 +172,8 @@ void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
     const Object *o = getObject(e, index);
     if (o != NULL) {
         Rectangle r = {
-                (float) (e->tilemap->size.x * x) + o->rect.x,
-                (float) (e->tilemap->size.y * y) + o->rect.y,
+                (float) (e->tilemap->tileset->size.x * x) + o->rect.x,
+                (float) (e->tilemap->tileset->size.y * y) + o->rect.y,
                 o->rect.width,
                 o->rect.height,
         };
@@ -196,17 +192,18 @@ void drawTile(Exploration *e, Image layer, int index, int x, int y) {
     if (index <= 0) {
         return;
     }
-    Vector2D sz = e->tilemap->size;
+    Vector2D sz = e->tilemap->tileset->size;
     Vector2 pos = {
             (float) (sz.x * x),
             (float) (sz.y * y),
     };
-    Rectangle rect = getRectForTile(e->tilemap, index);
+    Rectangle source = getRectForTile(e->tilemap, index);
+    Rectangle destination = (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y};
     ImageDraw(
             &layer,
             e->tilemap->source,
-            rect,
-            (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
+            source,
+            destination,
             WHITE
     );
     if (config->showCollisions->objects) {
@@ -236,13 +233,16 @@ void drawWarpCollisions(Exploration *e, Image *image) {
 }
 
 void renderExplorationLayer(Exploration *e, LayerType layer) {
-    Vector2D sz = e->tilemap->size;
+    Vector2D sz = e->tilemap->tileset->size;
     int width = ui->screen->width / sz.x;
     int height = ui->screen->height / sz.y;
     Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
     for (int y = -1; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            if (x >= e->layers[layer]->width || y >= e->layers[layer]->height) {
+            if (x >= e->layers[layer]->width
+                    || y >= e->layers[layer]->height
+                    || x < 0
+                    || y < 0) {
                 continue;
             }
             drawTile(
@@ -335,8 +335,8 @@ void drawExplorationMobiles(Exploration *e, Player *p, Vector2 offset) {
 
 Rectangle getObjectSize(const Exploration *e, const Object *o, int x, int y) {
     return (Rectangle) {
-            (float) (e->tilemap->size.x * x) + o->rect.x,
-            (float) (e->tilemap->size.y * y) + o->rect.y,
+            (float) (e->tilemap->tileset->size.x * x) + o->rect.x,
+            (float) (e->tilemap->tileset->size.y * y) + o->rect.y,
             o->rect.width,
             o->rect.height,
     };

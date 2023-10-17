@@ -80,7 +80,10 @@ TileSetNodeType getTileSetNodeTypeFromString(const char *tileSetNodeType) {
             return i;
         }
     }
-    addDebug("tileset type not found :: %s", tileSetNodeType);
+    if (strcmp(tileSetNodeType, "#text") != 0
+            && strcmp(tileSetNodeType, "objectgroup") != 0) {
+        addDebug("tileset type not found :: %s", tileSetNodeType);
+    }
     return TILESET_NODE_TYPE_OTHER;
 }
 

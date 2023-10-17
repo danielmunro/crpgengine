@@ -2,7 +2,9 @@
 #include <string.h>
 #include <raylib.h>
 #include <libxml/xmlreader.h>
+#include <libgen.h>
 #include "headers/persistence/db.h"
+#include "headers/tiles.h"
 
 typedef struct {
     xmlTextReaderPtr reader;
@@ -13,7 +15,7 @@ TilemapXmlReader *createTilemapXmlReader(Exploration *exploration, const char *s
     addDebug("attempting to load scene file '%s'", sceneFile);
     TilemapXmlReader *reader = malloc(sizeof(TilemapXmlReader));
     reader->exploration = exploration;
-    reader->reader = xmlReaderForFile(sceneFile, NULL, 0);
+    reader->reader = xmlReaderForFile(sceneFile, NULL, XML_PARSE_HUGE);
     return reader;
 }
 
@@ -37,10 +39,20 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
     if (nodeType == TILESET_NODE_TYPE_TILESET) {
         const int width = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
         const int height = getIntAttribute(tilemapXmlReader->reader, "tileheight");
-        tilemapXmlReader->exploration->tilemap->size = (Vector2D) {width, height};
+        tilemapXmlReader->exploration->tilemap->tileset->size = (Vector2D) {width, height};
     } else if (nodeType == TILESET_NODE_TYPE_IMAGE) {
         char filePath[MAX_FS_PATH_LENGTH];
-        sprintf(filePath, "%s/%s", indexDir, getStringAttribute(tilemapXmlReader->reader, "source"));
+        const char *source = getStringAttribute(tilemapXmlReader->reader, "source");
+        sprintf(filePath, "%s/%s", indexDir, source);
+        addDebug("check for module tile set image :: %s", filePath);
+        if (access(filePath, F_OK) != 0) {
+            sprintf(filePath, "%s/%s/%s", config->indexDir, "tilesets", source);
+            addDebug("check for global tile set image :: %s", filePath);
+            if (access(filePath, F_OK) != 0) {
+                addError("no tileset image exists with filename :: %s", source);
+                exit(ConfigurationErrorMissingTileset);
+            }
+        }
         tilemapXmlReader->exploration->tilemap->source = LoadImage(filePath);
     } else if (nodeType == TILESET_NODE_TYPE_TILE) {
         if (tileOpen == 1) {
@@ -62,11 +74,20 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
 
 void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename) {
     addDebug("parsing xml tilemap at %s/%s", indexDir, filename);
-    Tilemap *tilemap = malloc(sizeof(Tilemap));
-    e->tilemap = tilemap;
+    e->tilemap = createTilemap();
     int ret;
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/%s", indexDir, filename);
+    const char *baseFile = basename((char *) filename);
+    sprintf(filePath, "%s/%s", indexDir, baseFile);
+    addInfo("check for module tile set :: %s", filePath);
+    if (access(filePath, F_OK) != 0) {
+        sprintf(filePath, "%s/%s/%s", config->indexDir, "tilesets", baseFile);
+        addInfo("check for global tile set :: %s", filePath);
+        if (access(filePath, F_OK) != 0) {
+            addError("no tileset exists with filename :: %s", baseFile);
+            exit(ConfigurationErrorMissingTileset);
+        }
+    }
     TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(e, filePath);
     if (tilemapXmlReader->reader == NULL) {
         addError("unable to parse tilemap xml :: %s", filename);
@@ -118,8 +139,8 @@ void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir
     static int dataOpen = 0;
     static int layerOpen = 0;
     static ObjectType objectType;
-    addDebug("process scene node :: %s", name);
     TileMapNodeType nodeType = getTileMapNodeTypeFromString(name);
+    addDebug("process scene node :: %s, %d", name, nodeType);
     if (nodeType == TILEMAP_NODE_TYPE_TILESET) {
         char *source = getStringAttribute(tilemapXmlReader->reader, "source");
         parseTilemapXml(tilemapXmlReader->exploration, indexDir, source);
@@ -210,7 +231,7 @@ void parseSceneXml(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
     }
     xmlFreeTextReader(tilemapXmlReader->reader);
     if (ret != 0) {
-        addError("failed to read scene :: %s", indexDir);
+        addError("failed to read scene :: %s, %d", indexDir, ret);
         exit(ConfigurationErrorMapResourcesUnreadable);
     }
 }
