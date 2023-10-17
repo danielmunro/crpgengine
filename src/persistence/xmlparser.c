@@ -118,9 +118,9 @@ void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir
     static int dataOpen = 0;
     static int layerOpen = 0;
     static ObjectType objectType;
-    addDebug("process scene node :: %s", name);
     TileMapNodeType nodeType = getTileMapNodeTypeFromString(name);
     if (nodeType == TILEMAP_NODE_TYPE_TILESET) {
+        addDebug("process tileset xml node :: %s", name);
         char *source = getStringAttribute(tilemapXmlReader->reader, "source");
         parseTilemapXml(tilemapXmlReader->exploration, indexDir, source);
     } else if (nodeType == TILEMAP_NODE_TYPE_LAYER) {
@@ -131,6 +131,7 @@ void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir
         layerOpen = 1;
         Layer *layer = createLayer();
         char *layerName = getStringAttribute(tilemapXmlReader->reader, "name");
+        addDebug("create new layer :: %s", layerName);
         layer->type = getLayerTypeFromString(layerName);
         tilemapXmlReader->exploration->layers[tilemapXmlReader->exploration->layerCount] = layer;
     } else if (nodeType == TILEMAP_NODE_TYPE_DATA) {
@@ -144,7 +145,7 @@ void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir
         parseSceneLayer(tilemapXmlReader->exploration, (const char *) data);
     } else if (nodeType == TILEMAP_NODE_TYPE_OBJECT) {
         objectType = getObjectTypeFromString(getStringAttribute(tilemapXmlReader->reader, "type"));
-        addDebug("object type: %d", objectType);
+        addDebug("evaluate object type :: %d", objectType);
         if (objectType == OBJECT_TYPE_ENTRANCE) {
             Rectangle rect = {
                     getFloatAttribute(tilemapXmlReader->reader, "x"),
@@ -182,6 +183,7 @@ void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir
     } else if (strcmp(name, "property") == 0) {
         Exploration *e = tilemapXmlReader->exploration;
         char *propName = getStringAttribute(tilemapXmlReader->reader, "name");
+        addDebug("property parsed :: %s", propName);
         if (objectType == OBJECT_TYPE_EXIT) {
             if (strcmp(propName, "scene") == 0) {
                 e->exits[e->exitCount - 1]->scene = getStringAttribute(tilemapXmlReader->reader, "value");

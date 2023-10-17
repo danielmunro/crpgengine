@@ -9,6 +9,11 @@ const char *TileMapNodeTypes[] = {
         "layer",
         "data",
         "object",
+        "objectgroup",
+        "#text",
+        "property",
+        "properties",
+        "map",
 };
 
 typedef enum {
@@ -17,6 +22,11 @@ typedef enum {
     TILEMAP_NODE_TYPE_LAYER,
     TILEMAP_NODE_TYPE_DATA,
     TILEMAP_NODE_TYPE_OBJECT,
+    TILEMAP_NODE_TYPE_OBJECTGROUP,
+    TILEMAP_NODE_TYPE_TEXT,
+    TILEMAP_NODE_TYPE_PROPERTY,
+    TILEMAP_NODE_TYPE_PROPERTIES,
+    TILEMAP_NODE_TYPE_MAP,
 } TileMapNodeType;
 
 TileMapNodeType getTileMapNodeTypeFromString(const char *nodeType) {
@@ -63,6 +73,8 @@ const char *TileSetNodeTypes[] = {
         "image",
         "tile",
         "object",
+        "objectgroup",
+        "#text",
 };
 
 typedef enum {
@@ -71,6 +83,9 @@ typedef enum {
     TILESET_NODE_TYPE_IMAGE,
     TILESET_NODE_TYPE_TILE,
     TILESET_NODE_TYPE_OBJECT,
+    TILESET_NODE_TYPE_OBJECTGROUP,
+    TILESET_NODE_TYPE_TEXT,
+
 } TileSetNodeType;
 
 TileSetNodeType getTileSetNodeTypeFromString(const char *tileSetNodeType) {
