@@ -31,7 +31,7 @@ typedef enum {
     ConfigurationErrorMenuStyleNotDefined = 407,
     ConfigurationErrorUnknownWarp = 408,
     ConfigurationErrorUnknownScene = 409,
-    ConfigurationErrorUnknownCollisionType = 410,
+    ConfigurationErrorMissingComponent = 410,
     ConfigurationErrorUnknownFontStyleType = 411,
     ConfigurationErrorNoDirectionForName = 412,
 

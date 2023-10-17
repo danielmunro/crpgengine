@@ -7,8 +7,11 @@
 #include <math.h>
 #include <sys/resource.h>
 #include <raylib.h>
+#include <unistd.h>
+#include <libgen.h>
 #include "headers/util/log.h"
 #include "headers/direction.h"
+#include "headers/errors.h"
 
 typedef struct {
     int x;
@@ -175,4 +178,23 @@ float getScrollOffset(float lineHeight, int cursorLine, float areaHeight) {
         return ceilf(diff + lineHeight);
     }
     return 0;
+}
+
+void getComponentPath(
+        char dest[MAX_FS_PATH_LENGTH],
+        const char *moduleIndexDir,
+        const char *componentName,
+        const char *filename) {
+    sprintf(dest, "%s/%s", moduleIndexDir, filename);
+    const char *baseFile = basename((char *) filename);
+    sprintf(dest, "%s/%s", moduleIndexDir, baseFile);
+    addInfo("check for module component :: %s, %s", componentName, dest);
+    if (access(dest, F_OK) != 0) {
+        sprintf(dest, "%s/%s/%s", config->indexDir, componentName, baseFile);
+        addInfo("check for global component :: %s, %s", componentName, dest);
+        if (access(dest, F_OK) != 0) {
+            addError("no component exists with filename :: %s", baseFile);
+            exit(ConfigurationErrorMissingComponent);
+        }
+    }
 }

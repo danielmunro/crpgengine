@@ -10,7 +10,7 @@ typedef struct {
 } TilemapXmlReader;
 
 TilemapXmlReader *createTilemapXmlReader(Exploration *exploration, const char *sceneFile) {
-    addDebug("attempting to load scene file '%s'", sceneFile);
+    addDebug("attempting to load scene file :: %s", sceneFile);
     TilemapXmlReader *reader = malloc(sizeof(TilemapXmlReader));
     reader->exploration = exploration;
     reader->reader = xmlReaderForFile(sceneFile, NULL, 0);
@@ -33,6 +33,7 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
     const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
     static int tileOpen = 0;
     static int lastObjectId = 0;
+    addDebug("process tileset node :: %s", name);
     TileSetNodeType nodeType = getTileSetNodeTypeFromString((const char *) name);
     if (nodeType == TILESET_NODE_TYPE_TILESET) {
         const int width = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
@@ -40,7 +41,11 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
         tilemapXmlReader->exploration->tilemap->size = (Vector2D) {width, height};
     } else if (nodeType == TILESET_NODE_TYPE_IMAGE) {
         char filePath[MAX_FS_PATH_LENGTH];
-        sprintf(filePath, "%s/%s", indexDir, getStringAttribute(tilemapXmlReader->reader, "source"));
+        getComponentPath(
+                filePath,
+                indexDir,
+                "tilesets",
+                getStringAttribute(tilemapXmlReader->reader, "source"));
         tilemapXmlReader->exploration->tilemap->source = LoadImage(filePath);
     } else if (nodeType == TILESET_NODE_TYPE_TILE) {
         if (tileOpen == 1) {
@@ -66,7 +71,12 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
     e->tilemap = tilemap;
     int ret;
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/%s", indexDir, filename);
+    getComponentPath(
+            filePath,
+            indexDir,
+            "tilesets",
+            filename);
+    addInfo("component path calculated to :: %s", filePath);
     TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(e, filePath);
     if (tilemapXmlReader->reader == NULL) {
         addError("unable to parse tilemap xml :: %s", filename);
