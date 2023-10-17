@@ -56,7 +56,7 @@ void setSceneBasedOnSave(
     if (save != NULL && overrideStartScene == 0) {
         setScene(sm, findScene(sm, save->scene), player, NULL);
     } else if (overrideStartScene != 0) {
-        setScene(sm, findScene(sm, config->overrideStartScene), player, NULL);
+        setScene(sm, findScene(sm, config->overrideStartScene), player, START_ENTRANCE);
     } else {
         setScene(sm, findScene(sm, config->startScene), player, START_ENTRANCE);
     }
