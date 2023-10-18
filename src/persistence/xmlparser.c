@@ -33,13 +33,14 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
     const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
     static int tileOpen = 0;
     static int lastObjectId = 0;
-    addDebug("process tileset node :: %s", name);
     TileSetNodeType nodeType = getTileSetNodeTypeFromString((const char *) name);
     if (nodeType == TILESET_NODE_TYPE_TILESET) {
+        addDebug("process tileset main node :: %s", name);
         const int width = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
         const int height = getIntAttribute(tilemapXmlReader->reader, "tileheight");
         tilemapXmlReader->exploration->tilemap->size = (Vector2D) {width, height};
     } else if (nodeType == TILESET_NODE_TYPE_IMAGE) {
+        addDebug("process tileset image node :: %s", name);
         char filePath[MAX_FS_PATH_LENGTH];
         getComponentPath(
                 filePath,
@@ -48,6 +49,7 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
                 getStringAttribute(tilemapXmlReader->reader, "source"));
         tilemapXmlReader->exploration->tilemap->source = LoadImage(filePath);
     } else if (nodeType == TILESET_NODE_TYPE_TILE) {
+        addDebug("process tileset tile node :: %s", name);
         if (tileOpen == 1) {
             tileOpen = 0;
             return;
@@ -55,11 +57,13 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
         tileOpen = 1;
         lastObjectId = getIntAttribute(tilemapXmlReader->reader, "id");
     } else if (nodeType == TILESET_NODE_TYPE_OBJECT) {
+        addDebug("process tileset object node :: %s", name);
         Rectangle rect = {
                 getFloatAttribute(tilemapXmlReader->reader, "x"),
                 getFloatAttribute(tilemapXmlReader->reader, "y"),
                 getFloatAttribute(tilemapXmlReader->reader, "width"),
-                getFloatAttribute(tilemapXmlReader->reader, "height")};
+                getFloatAttribute(tilemapXmlReader->reader, "height"),
+        };
         Object *o = createTileObject(lastObjectId, rect);
         addObject(tilemapXmlReader->exploration, o);
     }
