@@ -32,7 +32,7 @@ char *getStringAttribute(xmlTextReaderPtr reader, const char *attribute) {
 static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
     static int tileOpen = 0;
-    static int lastObjectId = 0;
+    static int tileId = 0;
     TileSetNodeType nodeType = getTileSetNodeTypeFromString((const char *) name);
     if (nodeType == TILESET_NODE_TYPE_TILESET) {
         addDebug("process tileset main node :: %s", name);
@@ -55,7 +55,7 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
             return;
         }
         tileOpen = 1;
-        lastObjectId = getIntAttribute(tilemapXmlReader->reader, "id");
+        tileId = getIntAttribute(tilemapXmlReader->reader, "id");
     } else if (nodeType == TILESET_NODE_TYPE_OBJECT) {
         addDebug("process tileset object node :: %s", name);
         Rectangle rect = {
@@ -64,7 +64,7 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
                 getFloatAttribute(tilemapXmlReader->reader, "width"),
                 getFloatAttribute(tilemapXmlReader->reader, "height"),
         };
-        Object *o = createTileObject(lastObjectId, rect);
+        Object *o = createTileObject(tileId, rect);
         addObject(tilemapXmlReader->exploration, o);
     }
 }
