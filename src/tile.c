@@ -6,6 +6,15 @@ typedef struct {
     Image source;
 } Tilemap;
 
+TilesetType getTilesetTypeFromString(char *type) {
+    for (int i = 0; i < TilesetTypeCount; i++) {
+        if (strcmp(TilesetTypes[i], type) == 0) {
+            return i;
+        }
+    }
+    return TILESET_TYPE_NONE;
+}
+
 Vector2D getTileFromIndex(const Tilemap *t, int index) {
     int width = t->source.width / t->size.x;
     int y = index / width;

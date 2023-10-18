@@ -11,6 +11,7 @@
 #include "headers/notification.h"
 #include "headers/warp.h"
 #include "headers/tile.h"
+#include "headers/object.h"
 
 typedef struct {
     Mobile *mob;
@@ -24,18 +25,6 @@ typedef struct {
     int height;
     bool showCollisions;
 } Layer;
-
-typedef struct {
-    Rectangle rect;
-    int tile;
-} Object;
-
-Object *createTileObject(int tile, Rectangle rect) {
-    Object *o = malloc(sizeof(Object));
-    o->tile = tile;
-    o->rect = rect;
-    return o;
-}
 
 typedef struct {
     Tilemap *tilemap;
@@ -54,6 +43,7 @@ typedef struct {
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
+    Chest *chest;
 } Exploration;
 
 Exit *createExit() {

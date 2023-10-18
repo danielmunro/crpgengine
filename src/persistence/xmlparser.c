@@ -3,6 +3,8 @@
 #include <raylib.h>
 #include <libxml/xmlreader.h>
 #include "headers/persistence/db.h"
+#include "headers/exploration.h"
+#include "headers/tile.h"
 
 typedef struct {
     xmlTextReaderPtr reader;
@@ -33,6 +35,7 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
     const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
     static int tileOpen = 0;
     static int tileId = 0;
+    static TilesetType tilesetType = TILESET_TYPE_NONE;
     TileSetNodeType nodeType = getTileSetNodeTypeFromString((const char *) name);
     if (nodeType == TILESET_NODE_TYPE_TILESET) {
         addDebug("process tileset main node :: %s", name);
@@ -56,6 +59,12 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
         }
         tileOpen = 1;
         tileId = getIntAttribute(tilemapXmlReader->reader, "id");
+        char *result = getStringAttribute(tilemapXmlReader->reader, "type");
+        if (result != NULL) {
+            tilesetType = getTilesetTypeFromString(result);
+        } else {
+            tilesetType = TILESET_TYPE_NONE;
+        }
     } else if (nodeType == TILESET_NODE_TYPE_OBJECT) {
         addDebug("process tileset object node :: %s", name);
         Rectangle rect = {
@@ -66,6 +75,10 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
         };
         Object *o = createTileObject(tileId, rect);
         addObject(tilemapXmlReader->exploration, o);
+    } else if (nodeType == TILESET_NODE_TYPE_PROPERTIES) {
+
+    } else if (nodeType == TILESET_NODE_TYPE_PROPERTY) {
+
     }
 }
 

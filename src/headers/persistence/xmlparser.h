@@ -1,8 +1,6 @@
 #ifndef CJRPGENGINE_OBJECT_H
 #define CJRPGENGINE_OBJECT_H
 
-#include "headers/exploration.h"
-
 const char *TileMapNodeTypes[] = {
         "other",
         "tileset",
@@ -73,6 +71,8 @@ const char *TileSetNodeTypes[] = {
         "image",
         "tile",
         "object",
+        "properties",
+        "property",
         "objectgroup",
         "#text",
 };
@@ -83,6 +83,8 @@ typedef enum {
     TILESET_NODE_TYPE_IMAGE,
     TILESET_NODE_TYPE_TILE,
     TILESET_NODE_TYPE_OBJECT,
+    TILESET_NODE_TYPE_PROPERTIES,
+    TILESET_NODE_TYPE_PROPERTY,
     TILESET_NODE_TYPE_OBJECTGROUP,
     TILESET_NODE_TYPE_TEXT,
 
