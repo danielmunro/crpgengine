@@ -8,11 +8,10 @@
 #define MAX_EXITS 64
 #define MAX_ENTRANCES 64
 #define MAX_ARRIVE_AT 64
-
-#define MAX_MOBILES 255
+#define MAX_MOBILES 256
 #define MAX_MOBILE_MOVEMENTS 64
-
-#define MAX_OBJECTS 255
+#define MAX_OBJECTS 256
+#define MAX_TILESETS 1024
 
 #include "exploration.c"
 

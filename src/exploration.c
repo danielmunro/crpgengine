@@ -42,6 +42,8 @@ typedef struct {
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
+    Tile **tiles;
+    int tilesCount;
 } Exploration;
 
 Exit *createExit() {
@@ -78,6 +80,8 @@ Exploration *createExploration() {
     exploration->exitCount = 0;
     exploration->objectCount = 0;
     exploration->arriveAtCount = 0;
+    exploration->tilesCount = 0;
+    exploration->tiles = calloc(MAX_TILESETS, sizeof(Tile));
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         exploration->mobMovements[i] = NULL;
     }
@@ -89,6 +93,11 @@ MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
     mobMovement->mob = mob;
     mobMovement->destination = destination;
     return mobMovement;
+}
+
+void addTile(Exploration *e, Tile *t) {
+    e->tiles[e->tilesCount] = t;
+    e->tilesCount++;
 }
 
 void addMobileMovement(Exploration *e, MobileMovement *mobMovement) {

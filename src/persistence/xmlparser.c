@@ -4,6 +4,7 @@
 #include <libxml/xmlreader.h>
 #include "headers/persistence/db.h"
 #include "headers/tile.h"
+#include "headers/exploration.h"
 
 typedef struct {
     xmlTextReaderPtr reader;
@@ -32,15 +33,15 @@ char *getStringAttribute(xmlTextReaderPtr reader, const char *attribute) {
 
 static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
-    static int tileOpen = 0;
-    static int tileId = 0;
-    TileSetNodeType nodeType = getTileSetNodeTypeFromString((const char *) name);
+    static Tile *tile;
     static TilesetType tilesetType = TILESET_TYPE_NONE;
+    Exploration *e = tilemapXmlReader->exploration;
+    TileSetNodeType nodeType = getTileSetNodeTypeFromString((const char *) name);
     if (nodeType == TILESET_NODE_TYPE_TILESET) {
         addDebug("process tileset main node :: %s", name);
         const int width = getIntAttribute(tilemapXmlReader->reader, "tilewidth");
         const int height = getIntAttribute(tilemapXmlReader->reader, "tileheight");
-        tilemapXmlReader->exploration->tilemap->size = (Vector2D) {width, height};
+        e->tilemap->size = (Vector2D) {width, height};
     } else if (nodeType == TILESET_NODE_TYPE_IMAGE) {
         addDebug("process tileset image node :: %s", name);
         char filePath[MAX_FS_PATH_LENGTH];
@@ -49,21 +50,24 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
                 indexDir,
                 "tilesets",
                 getStringAttribute(tilemapXmlReader->reader, "source"));
-        tilemapXmlReader->exploration->tilemap->source = LoadImage(filePath);
+        e->tilemap->source = LoadImage(filePath);
     } else if (nodeType == TILESET_NODE_TYPE_TILE) {
         addDebug("process tileset tile node :: %s", name);
-        if (tileOpen == 1) {
-            tileOpen = 0;
+        if (tile != NULL) {
+            addDebug("closing");
+            addTile(e, tile);
+            tile = NULL;
             return;
         }
-        tileOpen = 1;
-        tileId = getIntAttribute(tilemapXmlReader->reader, "id");
-        char *result = getStringAttribute(tilemapXmlReader->reader, "type");
-        if (result != NULL) {
-            tilesetType = getTilesetTypeFromString(result);
+        addDebug("opening");
+        int tileId = getIntAttribute(tilemapXmlReader->reader, "id");
+        char *type = getStringAttribute(tilemapXmlReader->reader, "type");
+        if (type != NULL) {
+            tilesetType = getTilesetTypeFromString(type);
         } else {
             tilesetType = TILESET_TYPE_NONE;
         }
+        tile = createTile(tileId, tilesetType);
     } else if (nodeType == TILESET_NODE_TYPE_OBJECT) {
         addDebug("process tileset object node :: %s", name);
         Rectangle rect = {
@@ -72,12 +76,14 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
                 getFloatAttribute(tilemapXmlReader->reader, "width"),
                 getFloatAttribute(tilemapXmlReader->reader, "height"),
         };
-        Object *o = createTileObject(tileId, rect);
-        addObject(tilemapXmlReader->exploration, o);
-    } else if (nodeType == TILESET_NODE_TYPE_PROPERTIES) {
-
+        // @todo remove exploration->object
+        tile->object = createTileObject(tile->id, rect);
+        addObject(tilemapXmlReader->exploration, tile->object);
     } else if (nodeType == TILESET_NODE_TYPE_PROPERTY) {
-
+        Property *property = createProperty();
+        property->name = getStringAttribute(tilemapXmlReader->reader, "name");
+        property->value = getStringAttribute(tilemapXmlReader->reader, "value");
+        addProperty(tile, property);
     }
 }
 
@@ -112,7 +118,7 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
     free(tilemapXmlReader);
 }
 
-void parseSceneLayer(Exploration *e, const char *rawData) {
+void parseSceneLayer(const Exploration *e, const char *rawData) {
     addDebug("scene layer %d processing now", e->layerCount - 1);
     char *newRawData = (char *) rawData;
     char *line = strtok_r(newRawData, "\r\n", &newRawData);
@@ -126,7 +132,7 @@ void parseSceneLayer(Exploration *e, const char *rawData) {
     int y = 0;
     int x = 0;
     while (y < it) {
-        char *val = strtok_r(data[y], ",", &data[y]);
+        const char *val = strtok_r(data[y], ",", &data[y]);
         x = 0;
         while (val != NULL) {
             e->layers[e->layerCount - 1]->data[y][x] = TextToInteger(val);
