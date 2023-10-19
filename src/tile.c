@@ -1,6 +1,16 @@
 #include <raylib.h>
 #include "headers/util/util.h"
 
+const char *TilesetTypes[] = {
+        "",
+        "chest",
+};
+
+typedef enum {
+    TILESET_TYPE_NONE,
+    TILESET_TYPE_CHEST,
+} TilesetType;
+
 typedef struct {
     Vector2D size;
     Image source;
@@ -54,7 +64,8 @@ Chest *createChest(Object *object, ItemWithQuantity *iq, int money) {
     return chest;
 }
 
-TilesetType getTilesetTypeFromString(char *type) {
+TilesetType getTilesetTypeFromString(const char *type) {
+    int TilesetTypeCount = sizeof(TilesetTypes) / sizeof(TilesetTypes[0]);
     for (int i = 0; i < TilesetTypeCount; i++) {
         if (strcmp(TilesetTypes[i], type) == 0) {
             return i;
