@@ -73,14 +73,14 @@ typedef struct {
 typedef struct {
     const char *message;
     Rectangle area;
-    FontStyle *font;
+    const FontStyle *font;
     double timeStarted;
     double timeElapsed;
 } Dialog;
 
 UIConfig *ui;
 
-Dialog *createDialog(const char *message, Rectangle area, FontStyle *font) {
+Dialog *createDialog(const char *message, Rectangle area, const FontStyle *font) {
     Dialog *dialog = malloc(sizeof(Dialog));
     dialog->message = message;
     dialog->area = area;
@@ -171,7 +171,7 @@ TextBox *createTextBox(Rectangle area, FontStyle *fontStyle, TextBoxLabel label)
     return textBox;
 }
 
-void drawText(const char *message, Vector2 position, FontStyle *fontStyle) {
+void drawText(const char *message, Vector2 position, const FontStyle *fontStyle) {
     DrawTextEx(
             fontStyle->font,
             message,
@@ -181,7 +181,7 @@ void drawText(const char *message, Vector2 position, FontStyle *fontStyle) {
             fontStyle->color);
 }
 
-void drawLineInArea(const char *message, Rectangle area, int lineNumber, FontStyle *font) {
+void drawLineInArea(const char *message, Rectangle area, int lineNumber, const FontStyle *font) {
     drawText(
             message,
             (Vector2) {
@@ -190,7 +190,7 @@ void drawLineInArea(const char *message, Rectangle area, int lineNumber, FontSty
             }, font);
 }
 
-void drawTextInArea(const char *message, Rectangle area, FontStyle *font) {
+void drawTextInArea(const char *message, Rectangle area, const FontStyle *font) {
     char m[MAX_MESSAGE_BUFFER];
     char buffer[MAX_LINE_BUFFER];
     strcpy(m, message);

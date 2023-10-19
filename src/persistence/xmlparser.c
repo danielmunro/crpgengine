@@ -213,7 +213,6 @@ void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir
     } else if (strcmp(name, "property") == 0) {
         Exploration *e = tilemapXmlReader->exploration;
         char *propName = getStringAttribute(tilemapXmlReader->reader, "name");
-        addDebug("property parsed :: %s", propName);
         if (objectType == OBJECT_TYPE_EXIT) {
             if (strcmp(propName, "scene") == 0) {
                 e->exits[e->exitCount - 1]->scene = getStringAttribute(tilemapXmlReader->reader, "value");

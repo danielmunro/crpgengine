@@ -178,7 +178,7 @@ void drawTile(const Exploration *e, Image layer, int index, int x, int y) {
     }
 }
 
-void drawWarpCollisions(Exploration *e, Image *image) {
+void drawWarpCollisions(const Exploration *e, Image *image) {
     for (int i = 0; i < e->exitCount; i++) {
         ImageDrawRectangle(
                 image,
@@ -231,8 +231,11 @@ void unloadLayers(const Exploration *e) {
     UnloadTexture(e->renderedLayers[FOREGROUND]);
 }
 
-void createMobileLayer(Mobile *mobiles[MAX_MOBILES], Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES], int mobileCount,
-                       int mobsByYPosition[MAX_LAYERS]) {
+void createMobileLayer(
+        Mobile *mobiles[MAX_MOBILES],
+        Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES],
+        int mobileCount,
+        int mobsByYPosition[MAX_LAYERS]) {
     for (int y = 0; y < MAX_LAYERS; y++) {
         for (int i = 0; i < MAX_MOBILES; i++) {
             mobLayer[y][i] = NULL;
@@ -248,7 +251,7 @@ void createMobileLayer(Mobile *mobiles[MAX_MOBILES], Mobile *mobLayer[MAX_LAYERS
     }
 }
 
-void drawExplorationMobiles(Exploration *e, Player *p, Vector2 offset) {
+void drawExplorationMobiles(Exploration *e, const Player *p, Vector2 offset) {
     /**
      * Start by putting mobs on a layer. This is necessary for drawing them in
      * the right order.
@@ -357,7 +360,7 @@ int atExit(const Exploration *e, Player *p) {
     return -1;
 }
 
-void tryToMove(Exploration *e, Player *p, Direction direction, Vector2 pos) {
+void tryToMove(const Exploration *e, Player *p, Direction direction, Vector2 pos) {
     Mobile *mob = getPartyLeader(p);
     const Rectangle *collision = getMobAnimation(mob)->spriteSheet->collision;
     Rectangle rect = {
@@ -380,7 +383,7 @@ void tryToMove(Exploration *e, Player *p, Direction direction, Vector2 pos) {
     }
 }
 
-void evaluateMovement(Exploration *e, Player *p) {
+void evaluateMovement(const Exploration *e, Player *p) {
     const Mobile *mob = getPartyLeader(p);
     if (mob->isBeingMoved) {
         return;
@@ -393,7 +396,7 @@ void evaluateMovement(Exploration *e, Player *p) {
     }
 }
 
-void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROLS], FontStyle *font) {
+void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROLS], const FontStyle *font) {
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (cb[i] == NULL) {
             continue;
