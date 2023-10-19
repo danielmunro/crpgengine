@@ -1,6 +1,3 @@
-#ifndef CJRPGENGINE_ACTION_ENUM_H
-#define CJRPGENGINE_ACTION_ENUM_H
-
 typedef enum {
     ATTACK,
     CAST,
@@ -17,5 +14,3 @@ typedef enum {
     ATTACK_RETURN,
     ACTION_STEP_RUN,
 } ActionStep;
-
-#endif //CJRPGENGINE_ACTION_ENUM_H

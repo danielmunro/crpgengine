@@ -4,6 +4,8 @@
 #include "headers/graphics/ui/ui.h"
 #include "headers/graphics/spritesheet.h"
 
+const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT};
+
 typedef struct {
     const char *name;
     Direction type;
@@ -136,7 +138,8 @@ Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], Direction type) {
 }
 
 char *getAnimationStringFromType(Direction type) {
-    for (int i = 0; i < ANIMATION_TYPE_COUNT; i++) {
+    int count = sizeof(AnimationTypeStrings) / sizeof(AnimationTypeStrings[0]);
+    for (int i = 0; i < count; i++) {
         if (DIRECTIONS[i] == type) {
             char *animationName = malloc(strlen(AnimationTypeStrings[i]));
             sprintf(animationName, "%s", AnimationTypeStrings[i]);
