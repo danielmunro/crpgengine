@@ -1,6 +1,30 @@
-#include "src/headers/graphics/ui/menu_type.h"
 #include "headers/player.h"
 #include "headers/fight.h"
+
+const char *PartyMenuItems[] = {
+        PARTY_MENU_ITEMS,
+        PARTY_MENU_MAGIC,
+        PARTY_MENU_REARRANGE,
+        PARTY_MENU_CONFIG,
+        PARTY_MENU_SAVE,
+        PARTY_MENU_LOAD,
+        PARTY_MENU_QUIT,
+};
+
+const char *QuitMenuItems[] = {
+        QUIT_MENU_NO,
+        QUIT_MENU_YES,
+};
+
+typedef enum {
+    OPEN_MENU,
+    CLOSE_MENU,
+    FIND_TARGET_MENU,
+    DEFEND_SELECTED,
+    RESPONSE_TYPE_RUN,
+    PARTY_MEMBER_SELECTED,
+    NO_OP,
+} MenuSelectResponseType;
 
 typedef struct {
     Spritesheet *sprite;

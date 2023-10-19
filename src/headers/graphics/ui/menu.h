@@ -14,33 +14,8 @@
 #define PARTY_MENU_LOAD "Load"
 #define PARTY_MENU_QUIT "Quit"
 
-char *PartyMenuItems[] = {
-        PARTY_MENU_ITEMS,
-        PARTY_MENU_MAGIC,
-        PARTY_MENU_REARRANGE,
-        PARTY_MENU_CONFIG,
-        PARTY_MENU_SAVE,
-        PARTY_MENU_LOAD,
-        PARTY_MENU_QUIT,
-};
-
 #define QUIT_MENU_YES "Yes"
 #define QUIT_MENU_NO "No"
-
-char *QuitMenuItems[] = {
-        QUIT_MENU_NO,
-        QUIT_MENU_YES,
-};
-
-typedef enum {
-    OPEN_MENU,
-    CLOSE_MENU,
-    FIND_TARGET_MENU,
-    DEFEND_SELECTED,
-    RESPONSE_TYPE_RUN,
-    PARTY_MEMBER_SELECTED,
-    NO_OP,
-} MenuSelectResponseType;
 
 #include "graphics/ui/menu.c"
 
