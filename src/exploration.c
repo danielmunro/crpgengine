@@ -36,7 +36,6 @@ typedef struct {
     int exitCount;
     Entrance *entrances[MAX_ENTRANCES];
     int entranceCount;
-    Object *objects[MAX_OBJECTS];
     int objectCount;
     bool showCollisions;
     Mobile *mobiles[MAX_MOBILES];
@@ -78,7 +77,6 @@ Exploration *createExploration() {
     exploration->mobileCount = 0;
     exploration->entranceCount = 0;
     exploration->exitCount = 0;
-    exploration->objectCount = 0;
     exploration->arriveAtCount = 0;
     exploration->tilesCount = 0;
     exploration->tiles = calloc(MAX_TILESETS, sizeof(Tile));
@@ -119,18 +117,13 @@ Layer *createLayer() {
     return layer;
 }
 
-Object *getObject(Exploration *e, int index) {
-    for (int i = 0; i < e->objectCount; i++) {
-        if (e->objects[i]->tile == index) {
-            return e->objects[i];
+Object *getObject(const Exploration *e, int id) {
+    for (int i = 0; i < e->tilesCount; i++) {
+        if (e->tiles[i]->id == id) {
+            return e->tiles[i]->object;
         }
     }
     return NULL;
-}
-
-void addObject(Exploration *e, Object *o) {
-    e->objects[e->objectCount] = o;
-    e->objectCount++;
 }
 
 Vector2D getTileCount(const Exploration *e) {
@@ -143,7 +136,7 @@ void explorationDebugKeyPressed(Vector2 position) {
     addInfo("player coordinates: %f, %f", position.x, position.y);
 }
 
-void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
+void drawObjectCollision(const Exploration *e, Image layer, int index, int x, int y) {
     const Object *o = getObject(e, index);
     if (o != NULL) {
         Rectangle r = {
@@ -163,7 +156,7 @@ void drawObjectCollision(Exploration *e, Image layer, int index, int x, int y) {
     }
 }
 
-void drawTile(Exploration *e, Image layer, int index, int x, int y) {
+void drawTile(const Exploration *e, Image layer, int index, int x, int y) {
     if (index <= 0) {
         return;
     }
@@ -319,7 +312,7 @@ bool isObjectBlocking(const Exploration *e, const Object *o, Rectangle player, i
     return c.height > 0 || c.width > 0;
 }
 
-bool checkLayerForBlockingObject(Exploration *e, Rectangle player, int layer) {
+bool checkLayerForBlockingObject(const Exploration *e, Rectangle player, int layer) {
     Vector2D tiles = getTileCount(e);
     for (int y = 0; y < tiles.y; y++) {
         for (int x = 0; x < tiles.x; x++) {
@@ -333,7 +326,7 @@ bool checkLayerForBlockingObject(Exploration *e, Rectangle player, int layer) {
     return false;
 }
 
-bool isBlockedByMapObject(Exploration *e, Rectangle player) {
+bool isBlockedByMapObject(const Exploration *e, Rectangle player) {
     for (int l = 0; l < LAYER_COUNT - 1; l++) {
         if (checkLayerForBlockingObject(e, player, l)) {
             return true;
@@ -342,7 +335,7 @@ bool isBlockedByMapObject(Exploration *e, Rectangle player) {
     return false;
 }
 
-Mobile *getBlockingMob(Exploration *e, Rectangle playerRect) {
+Mobile *getBlockingMob(const Exploration *e, Rectangle playerRect) {
     for (int i = 0; i < e->mobileCount; i++) {
         Rectangle c = GetCollisionRec(playerRect, getMobileRectangle(e->mobiles[i]));
         if (c.height > 0 || c.width > 0) {
@@ -352,7 +345,7 @@ Mobile *getBlockingMob(Exploration *e, Rectangle playerRect) {
     return NULL;
 }
 
-int atExit(Exploration *e, Player *p) {
+int atExit(const Exploration *e, Player *p) {
     Mobile *mob = getPartyLeader(p);
     Rectangle rect = getMobileRectangle(mob);
     for (int i = 0; i < e->exitCount; i++) {

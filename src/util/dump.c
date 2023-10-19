@@ -10,10 +10,10 @@ void dumpGame(Game *g) {
                g->animations->library[i]->frameRateCount);
     }
     for (int i = 0; i < g->scenes->count; i++) {
-        printf("\nscene %s objects\n===============\n", g->scenes->scenes[i]->name);
-        for (int o = 0; o < g->scenes->scenes[i]->exploration->objectCount; o++) {
+        printf("\nscene %s tiles\n===============\n", g->scenes->scenes[i]->name);
+        for (int t = 0; t < g->scenes->scenes[i]->exploration->tilesCount; t++) {
             printf("%d\n",
-                   g->scenes->scenes[i]->exploration->objects[o]->tile
+                   g->scenes->scenes[i]->exploration->tiles[t]->id
             );
         }
         printf("\nmobiles\n===============\n");

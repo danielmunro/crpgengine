@@ -76,9 +76,7 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
                 getFloatAttribute(tilemapXmlReader->reader, "width"),
                 getFloatAttribute(tilemapXmlReader->reader, "height"),
         };
-        // @todo remove exploration->object
         tile->object = createTileObject(tile->id, rect);
-        addObject(tilemapXmlReader->exploration, tile->object);
     } else if (nodeType == TILESET_NODE_TYPE_PROPERTY) {
         Property *property = createProperty();
         property->name = getStringAttribute(tilemapXmlReader->reader, "name");
@@ -109,7 +107,7 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
         processTilesetNode(tilemapXmlReader, indexDir);
         ret = xmlTextReaderRead(tilemapXmlReader->reader);
     }
-    addDebug("found %d objects", tilemapXmlReader->exploration->objectCount);
+    addDebug("found %d tiles", tilemapXmlReader->exploration->tilesCount);
     xmlFreeTextReader(tilemapXmlReader->reader);
     if (ret != 0) {
         addError("failed to parse tilemap xml :: %s", filename);
