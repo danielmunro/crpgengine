@@ -1,6 +1,38 @@
 #include "headers/persistence/cyaml.h"
 #include "headers/attributes.h"
 
+const char *ItemTypes[] = {
+        "none",
+        "consumable",
+        "equipment",
+        "crafting material",
+        "quest",
+};
+
+typedef enum {
+    ITEM_TYPE_NONE,
+    ITEM_TYPE_CONSUMABLE,
+    ITEM_TYPE_EQUIPMENT,
+    ITEM_TYPE_CRAFTING_MATERIAL,
+    ITEM_TYPE_QUEST,
+} ItemType;
+
+const char *EquipmentPositions[] = {
+        "none",
+        "weapon",
+        "torso",
+        "wrist",
+        "accessory",
+};
+
+typedef enum {
+    POSITION_NONE,
+    POSITION_WEAPON,
+    POSITION_TORSO,
+    POSITION_WRIST,
+    POSITION_ACCESSORY,
+} EquipmentPosition;
+
 typedef struct {
     ItemType type;
     const char *name;
@@ -69,7 +101,7 @@ ItemWithQuantity *createItemWithQuantity(Item *item, int quantity) {
     return iq;
 }
 
-Item *createItemFromData(ItemData *data) {
+Item *createItemFromData(const ItemData *data) {
     return createItem(
             getItemTypeFromString(data->type),
             data->name,
@@ -78,7 +110,7 @@ Item *createItemFromData(ItemData *data) {
             getEquipmentPositionFromString(data->position));
 }
 
-ItemData createItemData(Item *item) {
+ItemData createItemData(const Item *item) {
     return (ItemData) {
             item->name,
             ItemTypes[item->type],
