@@ -15,7 +15,7 @@
 #include "headers/mobile.h"
 #include "headers/scene.h"
 #include "headers/graphics/animation.h"
-#include "headers/draw_fight.h"
+#include "src/headers/graphics/draw_fight.h"
 #include "headers/ui_manager.h"
 
 typedef struct {

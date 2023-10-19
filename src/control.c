@@ -3,6 +3,83 @@
 #include "headers/mobile.h"
 #include "headers/player.h"
 
+const char *conditions[] = {
+        "engaged",
+        "has_story",
+        "not_has_story",
+        "has_item",
+        "not_has_item",
+        "scene_loaded",
+        "arrive_at",
+};
+
+typedef enum {
+    ENGAGED,
+    HAS_STORY,
+    NOT_HAS_STORY,
+    HAS_ITEM,
+    NOT_HAS_ITEM,
+    SCENE_LOADED,
+    ARRIVE_AT,
+} Condition;
+
+#define OUTCOME_DIALOG "dialog"
+
+const char *outcomes[] = {
+        OUTCOME_DIALOG,
+        "move_to",
+        "set_direction",
+        "sprite",
+        "wait",
+        "give_item",
+        "lose_item",
+        "add_story",
+        "set_position",
+        "lock",
+        "unlock",
+        "save",
+};
+
+typedef enum {
+    SPEAK = 0,
+    MOVE_TO,
+    SET_DIRECTION,
+    SPRITE,
+    WAIT,
+    GIVE_ITEM,
+    LOSE_ITEM,
+    ADD_STORY,
+    SET_POSITION,
+    LOCK,
+    UNLOCK,
+    SAVE,
+} Outcome;
+
+typedef enum {
+    EVENT_GAME_LOOP,
+    EVENT_SCENE_LOADED,
+} EventType;
+
+Condition mapCondition(const char *when) {
+    int count = sizeof(conditions) / sizeof(char *);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(conditions[i], when) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+Outcome mapOutcome(const char *then) {
+    int count = sizeof(outcomes) / sizeof(char *);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(outcomes[i], then) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 typedef struct {
     const char *name;
     Rectangle rect;
@@ -98,15 +175,15 @@ ArriveAt *createArriveAt(const char *name, Rectangle rect) {
     return a;
 }
 
-bool hasConditionEngaged(Player *p, Condition condition, Mobile *mobileTrigger) {
+bool hasConditionEngaged(const Player *p, Condition condition, const Mobile *mobileTrigger) {
     return condition == ENGAGED && isSpeakingTo(p, mobileTrigger);
 }
 
-bool hasConditionStory(Player *p, Condition condition, const char *story) {
+bool hasConditionStory(const Player *p, Condition condition, const char *story) {
     return condition == HAS_STORY && hasStory(p, story);
 }
 
-bool hasConditionNoStory(Player *p, Condition condition, const char *story) {
+bool hasConditionNoStory(const Player *p, Condition condition, const char *story) {
     return condition == NOT_HAS_STORY && !hasStory(p, story);
 }
 
@@ -114,7 +191,7 @@ bool isSceneLoaded(Condition condition, EventType eventType) {
     return condition == SCENE_LOADED && eventType == EVENT_SCENE_LOADED;
 }
 
-bool hasArrivedAt(Player *p, Condition condition, ArriveAt *arriveAt) {
+bool hasArrivedAt(const Player *p, Condition condition, const ArriveAt *arriveAt) {
     if (arriveAt != NULL) {
         Rectangle c = GetCollisionRec(getMobileRectangle(getPartyLeader(p)), arriveAt->rect);
         return condition == ARRIVE_AT && (c.height > 0 || c.width > 0);
@@ -122,7 +199,7 @@ bool hasArrivedAt(Player *p, Condition condition, ArriveAt *arriveAt) {
     return false;
 }
 
-bool hasItem(Player *p, Condition condition, ItemWithQuantity *iq) {
+bool hasItem(const Player *p, Condition condition, const ItemWithQuantity *iq) {
     if (iq == NULL) {
         return false;
     }
@@ -138,7 +215,7 @@ bool hasItem(Player *p, Condition condition, ItemWithQuantity *iq) {
     return condition == NOT_HAS_ITEM;
 }
 
-bool isWhenActivated(Player *p, When *when, EventType eventType) {
+bool isWhenActivated(const Player *p, const When *when, EventType eventType) {
     return hasConditionEngaged(p, when->condition, when->trigger)
            || hasConditionStory(p, when->condition, when->story)
            || hasConditionNoStory(p, when->condition, when->story)
@@ -147,7 +224,7 @@ bool isWhenActivated(Player *p, When *when, EventType eventType) {
            || hasItem(p, when->condition, when->item);
 }
 
-bool areConditionsMet(ControlBlock *cb, Player *p, EventType eventType) {
+bool areConditionsMet(const ControlBlock *cb, Player *p, EventType eventType) {
     for (int c = 0; c < cb->whenCount; c++) {
         if (!isWhenActivated(p, cb->when[c], eventType)) {
             addDebug("conditions not met");
@@ -162,7 +239,7 @@ bool needsToRemoveActiveControlBlock(const ControlBlock *control) {
     return control != NULL && control->progress >= control->thenCount;
 }
 
-bool isMovingAndAtDestination(ControlBlock *cb) {
+bool isMovingAndAtDestination(const ControlBlock *cb) {
     return cb->then[cb->progress]->outcome == MOVE_TO &&
            vector2DEquals(
                    vector2DFromVect(cb->then[cb->progress]->target->position),
@@ -170,35 +247,35 @@ bool isMovingAndAtDestination(ControlBlock *cb) {
            );
 }
 
-bool isAddStoryOutcome(Then *then) {
+bool isAddStoryOutcome(const Then *then) {
     return then->outcome == ADD_STORY;
 }
 
-bool isFaceDirectionOutcome(Then *then) {
+bool isFaceDirectionOutcome(const Then *then) {
     return then->outcome == SET_DIRECTION;
 }
 
-bool isSpeakOutcome(Then *then) {
+bool isSpeakOutcome(const Then *then) {
     return then->outcome == SPEAK;
 }
 
-bool needsToChangePosition(Then *then) {
+bool needsToChangePosition(const Then *then) {
     return then->outcome == SET_POSITION;
 }
 
-bool needsToStartMoving(Then *then) {
+bool needsToStartMoving(const Then *then) {
     return then->outcome == MOVE_TO && !isMoving(then->target);
 }
 
-bool needsToWait(Then *then) {
+bool needsToWait(const Then *then) {
     return then->outcome == WAIT;
 }
 
-bool needsToLock(Then *then) {
+bool needsToLock(const Then *then) {
     return then->outcome == LOCK;
 }
 
-bool needsToUnlock(Then *then) {
+bool needsToUnlock(const Then *then) {
     return then->outcome == UNLOCK;
 }
 
@@ -206,14 +283,14 @@ bool hasAmountProperty(ThenData thenData) {
     return strcmp(thenData.action, outcomes[WAIT]) == 0;
 }
 
-bool needsToSave(Then *then) {
+bool needsToSave(const Then *then) {
     return then->outcome == SAVE;
 }
 
-bool needsToReceiveItem(Then *then, Mobile *playerMob) {
+bool needsToReceiveItem(const Then *then, const Mobile *playerMob) {
     return then->outcome == GIVE_ITEM && then->target == playerMob;
 }
 
-bool needsToLoseItem(Then *then, Mobile *playerMob) {
+bool needsToLoseItem(const Then *then, const Mobile *playerMob) {
     return then->outcome == LOSE_ITEM && then->target == playerMob;
 }
