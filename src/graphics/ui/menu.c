@@ -1,4 +1,4 @@
-#include "headers/menu_type.h"
+#include "src/headers/graphics/ui/menu_type.h"
 #include "headers/player.h"
 #include "headers/fight.h"
 

@@ -1,6 +1,22 @@
 #include "headers/attributes.h"
 #include "headers/intent.h"
 
+const char *Spells[] = {
+        "cure",
+        "fire",
+        "lightning",
+        "ice",
+        "energy",
+};
+
+typedef enum {
+    SPELL_CURE,
+    SPELL_FIRE,
+    SPELL_LIGHTNING,
+    SPELL_ICE,
+    SPELL_ENERGY,
+} SpellType;
+
 typedef struct {
     SpellType type;
     const char *name;
@@ -38,7 +54,7 @@ Spell *createSpellFromData(SpellData data) {
     return s;
 }
 
-SpellData createDataFromSpell(Spell *spell) {
+SpellData createDataFromSpell(const Spell *spell) {
     return (SpellData) {
             (char *) Spells[spell->type],
             (char *) Intents[spell->intent],

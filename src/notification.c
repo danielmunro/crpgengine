@@ -1,5 +1,15 @@
 #include "headers/graphics/ui/ui.h"
 
+typedef enum {
+    RECEIVE_QUEST_ITEM,
+    LOSE_QUEST_ITEM,
+    RECEIVE_EXPERIENCE,
+    RECEIVE_GOLD,
+    LOSE_GOLD,
+    SAVED,
+    FIGHT_ACTION,
+} NotificationType;
+
 typedef struct {
     NotificationType type;
     const char *message;

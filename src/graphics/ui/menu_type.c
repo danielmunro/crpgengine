@@ -1,6 +1,3 @@
-#ifndef CJRPGENGINE_MENU_TYPE_H
-#define CJRPGENGINE_MENU_TYPE_H
-
 const char *MenuStyles[] = {
         "verticalGradient",
 };
@@ -27,5 +24,3 @@ typedef enum {
     MAGIC_FIGHT_MENU,
     ITEMS_FIGHT_MENU,
 } MenuType;
-
-#endif //CJRPGENGINE_MENU_TYPE_H
