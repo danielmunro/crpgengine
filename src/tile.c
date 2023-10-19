@@ -28,3 +28,37 @@ Rectangle getRectForTile(const Tilemap *t, int index) {
     };
 }
 
+typedef struct {
+    Rectangle rect;
+    int tile;
+} Object;
+
+Object *createTileObject(int tile, Rectangle rect) {
+    Object *o = malloc(sizeof(Object));
+    o->tile = tile;
+    o->rect = rect;
+    return o;
+}
+
+typedef struct {
+    Object *object;
+    ItemWithQuantity *iq;
+    int money;
+} Chest;
+
+Chest *createChest(Object *object, ItemWithQuantity *iq, int money) {
+    Chest *chest = malloc(sizeof(Chest));
+    chest->object = object;
+    chest->iq = iq;
+    chest->money = money;
+    return chest;
+}
+
+TilesetType getTilesetTypeFromString(char *type) {
+    for (int i = 0; i < TilesetTypeCount; i++) {
+        if (strcmp(TilesetTypes[i], type) == 0) {
+            return i;
+        }
+    }
+    return TILESET_TYPE_NONE;
+}
