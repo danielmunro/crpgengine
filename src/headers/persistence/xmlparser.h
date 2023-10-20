@@ -99,7 +99,7 @@ TileSetNodeType getTileSetNodeTypeFromString(const char *tileSetNodeType) {
             return i;
         }
     }
-    addDebug("tileset type not found :: %s", tileSetNodeType);
+    addDebug("tileset node type not found :: %s", tileSetNodeType);
     return TILESET_NODE_TYPE_OTHER;
 }
 

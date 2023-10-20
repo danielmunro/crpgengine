@@ -7,6 +7,7 @@
 #include "headers/mobile_manager.h"
 #include "headers/persistence/db.h"
 #include "headers/persistence/xmlparser.h"
+#include "headers/persistence/scene_xml.h"
 
 void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *file) {
     addInfo("load animations file: %s", file);
@@ -162,8 +163,9 @@ Scene *loadScene(
     char tilemapFilePath[MAX_FS_PATH_LENGTH];
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
     TiledXmlReader *tilemapXmlReader = createTilemapXmlReader(scene->exploration, tilemapFilePath);
+    TilemapXml *sceneXml = createTilemapXml(tilemapFilePath);
     addDebug("create scene '%s' tilemap", sceneName);
-    parseSceneXml(tilemapXmlReader, mapDirectory);
+    parseSceneXml(tilemapXmlReader, sceneXml, mapDirectory);
 
     // load mobiles
     loadMobiles(mm, scene, sceneDirectory);
