@@ -162,10 +162,9 @@ Scene *loadScene(
     sprintf(mapDirectory, "%s/map", sceneDirectory);
     char tilemapFilePath[MAX_FS_PATH_LENGTH];
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
-    TiledXmlReader *tilemapXmlReader = createTilemapXmlReader(scene->exploration, tilemapFilePath);
-    TilemapXml *sceneXml = createTilemapXml(tilemapFilePath);
+    TilemapXml *tilemapXml = createTilemapXml(tilemapFilePath);
     addDebug("create scene '%s' tilemap", sceneName);
-    parseSceneXml(tilemapXmlReader, sceneXml, mapDirectory);
+    parseSceneXml(scene->exploration, tilemapXml, mapDirectory);
 
     // load mobiles
     loadMobiles(mm, scene, sceneDirectory);
@@ -174,7 +173,6 @@ Scene *loadScene(
         loadEncounters(beastiary, scene, sceneData->encounters, config->indexDir);
     }
 
-    free(tilemapXmlReader);
     addDebug("done parsing scene %s", sceneName);
 
     return scene;
@@ -271,7 +269,7 @@ SpritesheetManager *loadSpritesheetManager() {
 }
 
 void loadAllItems(ItemManager *itemManager) {
-    ItemsData *itemsData = loadItemYaml();
+    const ItemsData *itemsData = loadItemYaml();
     itemManager->items = calloc(itemsData->items_count, sizeof(ItemData));
     for (int i = 0; i < itemsData->items_count; i++) {
         itemManager->items[i] = createItemFromData(&itemsData->items[i]);
