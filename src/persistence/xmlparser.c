@@ -9,11 +9,11 @@
 typedef struct {
     xmlTextReaderPtr reader;
     Exploration *exploration;
-} TilemapXmlReader;
+} TiledXmlReader;
 
-TilemapXmlReader *createTilemapXmlReader(Exploration *exploration, const char *sceneFile) {
+TiledXmlReader *createTilemapXmlReader(Exploration *exploration, const char *sceneFile) {
     addDebug("attempting to load scene file :: %s", sceneFile);
-    TilemapXmlReader *reader = malloc(sizeof(TilemapXmlReader));
+    TiledXmlReader *reader = malloc(sizeof(TiledXmlReader));
     reader->exploration = exploration;
     reader->reader = xmlReaderForFile(sceneFile, NULL, 0);
     return reader;
@@ -31,7 +31,7 @@ char *getStringAttribute(xmlTextReaderPtr reader, const char *attribute) {
     return (char *) xmlTextReaderGetAttribute(reader, (const xmlChar *) attribute);
 }
 
-static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
+static void processTilesetNode(TiledXmlReader *tilemapXmlReader, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(tilemapXmlReader->reader);
     static Tile *tile;
     static TilesetType tilesetType = TILESET_TYPE_NONE;
@@ -93,7 +93,7 @@ void parseTilemapXml(Exploration *e, const char *indexDir, const char *filename)
             "tilesets",
             filename);
     addInfo("component path calculated to :: %s", filePath);
-    TilemapXmlReader *tilemapXmlReader = createTilemapXmlReader(e, filePath);
+    TiledXmlReader *tilemapXmlReader = createTilemapXmlReader(e, filePath);
     if (tilemapXmlReader->reader == NULL) {
         addError("unable to parse tilemap xml :: %s", filename);
         exit(ConfigurationErrorMapResourcesUnreadable);
@@ -139,7 +139,7 @@ void parseSceneLayer(const Exploration *e, const char *rawData) {
     e->layers[e->layerCount - 1]->height = y;
 }
 
-void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
+void processTilemapNode(TiledXmlReader *tilemapXmlReader, const char *indexDir) {
     const char *name = (const char *) xmlTextReaderConstName(tilemapXmlReader->reader);
     static int dataOpen = 0;
     static int layerOpen = 0;
@@ -224,7 +224,7 @@ void processTilemapNode(TilemapXmlReader *tilemapXmlReader, const char *indexDir
     }
 }
 
-void parseSceneXml(TilemapXmlReader *tilemapXmlReader, const char *indexDir) {
+void parseSceneXml(TiledXmlReader *tilemapXmlReader, const char *indexDir) {
     int ret;
     if (tilemapXmlReader->reader == NULL) {
         addError("unable to find map resources for scene :: %s", indexDir);
