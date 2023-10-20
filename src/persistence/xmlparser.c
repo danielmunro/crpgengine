@@ -73,8 +73,6 @@ static void processTilesetNode(Exploration *e, TilesetXml *tilesetXml, const cha
 
 TilesetXml *parseTileset(Exploration *e, const char *indexDir, const char *filename) {
     addDebug("parsing xml tileset at %s/%s", indexDir, filename);
-    Tilemap *tilemap = malloc(sizeof(Tilemap));
-    e->tilemap = tilemap;
     int ret;
     char filePath[MAX_FS_PATH_LENGTH];
     getComponentPath(

@@ -80,6 +80,7 @@ Exploration *createExploration() {
     exploration->arriveAtCount = 0;
     exploration->tilesCount = 0;
     exploration->tiles = calloc(MAX_TILESETS, sizeof(Tile));
+    exploration->tilemap = malloc(sizeof(Tilemap));
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         exploration->mobMovements[i] = NULL;
     }
