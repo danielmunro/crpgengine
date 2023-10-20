@@ -11,6 +11,7 @@
 #include "headers/notification.h"
 #include "headers/warp.h"
 #include "headers/tile.h"
+#include "headers/persistence/scene_xml.h"
 
 typedef struct {
     Mobile *mob;

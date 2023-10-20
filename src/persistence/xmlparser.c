@@ -19,7 +19,7 @@ char *getStringAttribute(xmlTextReaderPtr reader, const char *attribute) {
     return (char *) xmlTextReaderGetAttribute(reader, (const xmlChar *) attribute);
 }
 
-static void processTilesetNode(Exploration *e, TilesetXml *tilesetXml, const char *indexDir) {
+static void processTilesetNode(TilesetXml *tilesetXml, const char *indexDir) {
     const xmlChar *name = xmlTextReaderConstName(tilesetXml->reader);
     static Tile *tile;
     static TilesetType tilesetType = TILESET_TYPE_NONE;
@@ -28,7 +28,7 @@ static void processTilesetNode(Exploration *e, TilesetXml *tilesetXml, const cha
         addDebug("process tileset main node :: %s", name);
         const int width = getIntAttribute(tilesetXml->reader, "tilewidth");
         const int height = getIntAttribute(tilesetXml->reader, "tileheight");
-        e->tilemap->size = (Vector2D) {width, height};
+        tilesetXml->tilemap->size = (Vector2D) {width, height};
     } else if (nodeType == TILESET_NODE_TYPE_IMAGE) {
         addDebug("process tileset image node :: %s", name);
         char filePath[MAX_FS_PATH_LENGTH];
@@ -37,12 +37,10 @@ static void processTilesetNode(Exploration *e, TilesetXml *tilesetXml, const cha
                 indexDir,
                 "tilesets",
                 getStringAttribute(tilesetXml->reader, "source"));
-        e->tilemap->source = LoadImage(filePath);
+        tilesetXml->tilemap->source = LoadImage(filePath);
     } else if (nodeType == TILESET_NODE_TYPE_TILE) {
         addDebug("process tileset tile node :: %s", name);
         if (tile != NULL) {
-            addDebug("closing node");
-            addTile(e, tile);
             tilesetXml->tiles[tilesetXml->tilesCount] = tile;
             tilesetXml->tilesCount++;
             tile = NULL;
@@ -71,7 +69,7 @@ static void processTilesetNode(Exploration *e, TilesetXml *tilesetXml, const cha
     }
 }
 
-TilesetXml *parseTileset(Exploration *e, const char *indexDir, const char *filename) {
+TilesetXml *parseTileset(const char *indexDir, const char *filename) {
     addDebug("parsing xml tileset at %s/%s", indexDir, filename);
     int ret;
     char filePath[MAX_FS_PATH_LENGTH];
@@ -84,10 +82,7 @@ TilesetXml *parseTileset(Exploration *e, const char *indexDir, const char *filen
     TilesetXml *ts = createTilesetXml(filePath);
     ret = xmlTextReaderRead(ts->reader);
     while (ret == 1) {
-        processTilesetNode(
-                e,
-                ts,
-                indexDir);
+        processTilesetNode(ts, indexDir);
         ret = xmlTextReaderRead(ts->reader);
     }
     addDebug("found %d tiles", ts->tilesCount);
@@ -135,7 +130,7 @@ void processTilemapNode(Exploration *e, TilemapXml *tilemapXml, const char *inde
     if (nodeType == TILEMAP_NODE_TYPE_TILESET) {
         addDebug("process tileset xml node :: %s", name);
         char *source = getStringAttribute(tilemapXml->reader, "source");
-        tilemapXml->tilesetXml = parseTileset(e, indexDir, source);
+        tilemapXml->tilesetXml = parseTileset(indexDir, source);
     } else if (nodeType == TILEMAP_NODE_TYPE_LAYER) {
         if (layerOpen == 1) {
             layerOpen = 0;
@@ -209,7 +204,8 @@ void processTilemapNode(Exploration *e, TilemapXml *tilemapXml, const char *inde
     }
 }
 
-void parseSceneXml(Exploration *e, TilemapXml *tilemapXml, const char *indexDir) {
+TilemapXml *parseTilemapXml(Exploration *e, const char *filePath, const char *indexDir) {
+    TilemapXml *tilemapXml = createTilemapXml(filePath);
     int ret;
     if (tilemapXml->reader == NULL) {
         addError("unable to find map resources for scene :: %s", indexDir);
@@ -225,4 +221,5 @@ void parseSceneXml(Exploration *e, TilemapXml *tilemapXml, const char *indexDir)
         addError("failed to read scene :: %s", indexDir);
         exit(ConfigurationErrorMapResourcesUnreadable);
     }
+    return tilemapXml;
 }
