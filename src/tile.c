@@ -19,11 +19,6 @@ typedef struct {
 } Tilemap;
 
 typedef struct {
-    Rectangle rect;
-    int tile;
-} Object;
-
-typedef struct {
     const char *name;
     const char *value;
 } Property;
@@ -77,20 +72,13 @@ Rectangle getRectForTile(const Tilemap *t, int index) {
     };
 }
 
-Object *createTileObject(int tile, Rectangle rect) {
-    Object *o = malloc(sizeof(Object));
-    o->tile = tile;
-    o->rect = rect;
-    return o;
-}
-
 typedef struct {
-    Object *object;
+    Rectangle *object;
     ItemWithQuantity *iq;
     int money;
 } Chest;
 
-Chest *createChest(Object *object, ItemWithQuantity *iq, int money) {
+Chest *createChest(Rectangle *object, ItemWithQuantity *iq, int money) {
     Chest *chest = malloc(sizeof(Chest));
     chest->object = object;
     chest->iq = iq;
