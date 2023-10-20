@@ -29,7 +29,7 @@ typedef struct {
 } Property;
 
 typedef struct {
-    Object *object;
+    Rectangle *object;
     Property **properties;
     int propertyCount;
     TilesetType type;

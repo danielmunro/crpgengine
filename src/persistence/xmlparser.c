@@ -54,12 +54,10 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
     } else if (nodeType == TILESET_NODE_TYPE_TILE) {
         addDebug("process tileset tile node :: %s", name);
         if (tile != NULL) {
-            addDebug("closing");
             addTile(e, tile);
             tile = NULL;
             return;
         }
-        addDebug("opening");
         int tileId = getIntAttribute(tilemapXmlReader->reader, "id");
         char *type = getStringAttribute(tilemapXmlReader->reader, "type");
         if (type != NULL) {
@@ -70,13 +68,11 @@ static void processTilesetNode(TilemapXmlReader *tilemapXmlReader, const char *i
         tile = createTile(tileId, tilesetType);
     } else if (nodeType == TILESET_NODE_TYPE_OBJECT) {
         addDebug("process tileset object node :: %s", name);
-        Rectangle rect = {
-                getFloatAttribute(tilemapXmlReader->reader, "x"),
-                getFloatAttribute(tilemapXmlReader->reader, "y"),
-                getFloatAttribute(tilemapXmlReader->reader, "width"),
-                getFloatAttribute(tilemapXmlReader->reader, "height"),
-        };
-        tile->object = createTileObject(tile->id, rect);
+        tile->object = malloc(sizeof(Rectangle));
+        tile->object->x = getFloatAttribute(tilemapXmlReader->reader, "x");
+        tile->object->y = getFloatAttribute(tilemapXmlReader->reader, "y");
+        tile->object->width = getFloatAttribute(tilemapXmlReader->reader, "width");
+        tile->object->height = getFloatAttribute(tilemapXmlReader->reader, "height");
     } else if (nodeType == TILESET_NODE_TYPE_PROPERTY) {
         Property *property = createProperty();
         property->name = getStringAttribute(tilemapXmlReader->reader, "name");

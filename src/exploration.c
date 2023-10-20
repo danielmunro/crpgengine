@@ -117,7 +117,7 @@ Layer *createLayer() {
     return layer;
 }
 
-Object *getObject(const Exploration *e, int id) {
+Rectangle *getObject(const Exploration *e, int id) {
     for (int i = 0; i < e->tilesCount; i++) {
         if (e->tiles[i]->id == id) {
             return e->tiles[i]->object;
@@ -137,13 +137,13 @@ void explorationDebugKeyPressed(Vector2 position) {
 }
 
 void drawObjectCollision(const Exploration *e, Image layer, int index, int x, int y) {
-    const Object *o = getObject(e, index);
+    const Rectangle *o = getObject(e, index);
     if (o != NULL) {
         Rectangle r = {
-                (float) (e->tilemap->size.x * x) + o->rect.x,
-                (float) (e->tilemap->size.y * y) + o->rect.y,
-                o->rect.width,
-                o->rect.height,
+                (float) (e->tilemap->size.x * x) + o->x,
+                (float) (e->tilemap->size.y * y) + o->y,
+                o->width,
+                o->height,
         };
         ImageDrawRectangle(
                 &layer,
@@ -300,16 +300,16 @@ void drawExplorationMobiles(Exploration *e, const Player *p, Vector2 offset) {
     }
 }
 
-Rectangle getObjectSize(const Exploration *e, const Object *o, int x, int y) {
+Rectangle getObjectSize(const Exploration *e, const Rectangle *o, int x, int y) {
     return (Rectangle) {
-            (float) (e->tilemap->size.x * x) + o->rect.x,
-            (float) (e->tilemap->size.y * y) + o->rect.y,
-            o->rect.width,
-            o->rect.height,
+            (float) (e->tilemap->size.x * x) + o->x,
+            (float) (e->tilemap->size.y * y) + o->y,
+            o->width,
+            o->height,
     };
 }
 
-bool isObjectBlocking(const Exploration *e, const Object *o, Rectangle player, int x, int y) {
+bool isObjectBlocking(const Exploration *e, const Rectangle *o, Rectangle player, int x, int y) {
     Rectangle objRect = getObjectSize(e, o, x, y);
     Rectangle c = GetCollisionRec(player, objRect);
     return c.height > 0 || c.width > 0;
@@ -320,7 +320,7 @@ bool checkLayerForBlockingObject(const Exploration *e, Rectangle player, int lay
     for (int y = 0; y < tiles.y; y++) {
         for (int x = 0; x < tiles.x; x++) {
             int index = e->layers[layer]->data[y][x];
-            const Object *o = getObject(e, index - 1);
+            const Rectangle *o = getObject(e, index - 1);
             if (o != NULL && isObjectBlocking(e, o, player, x, y)) {
                 return true;
             }
