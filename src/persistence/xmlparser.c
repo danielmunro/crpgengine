@@ -71,7 +71,7 @@ static void processTilesetNode(Exploration *e, TilesetXml *tilesetXml, const cha
     }
 }
 
-void parseTileset(Exploration *e, TilemapXml *tilemapXml, const char *indexDir, const char *filename) {
+TilesetXml *parseTileset(Exploration *e, const char *indexDir, const char *filename) {
     addDebug("parsing xml tileset at %s/%s", indexDir, filename);
     Tilemap *tilemap = malloc(sizeof(Tilemap));
     e->tilemap = tilemap;
@@ -83,21 +83,22 @@ void parseTileset(Exploration *e, TilemapXml *tilemapXml, const char *indexDir, 
             "tilesets",
             filename);
     addInfo("component path calculated to :: %s", filePath);
-    tilemapXml->tilesetXml = createTilesetXml(filePath);
-    ret = xmlTextReaderRead(tilemapXml->tilesetXml->reader);
+    TilesetXml *ts = createTilesetXml(filePath);
+    ret = xmlTextReaderRead(ts->reader);
     while (ret == 1) {
         processTilesetNode(
                 e,
-                tilemapXml->tilesetXml,
+                ts,
                 indexDir);
-        ret = xmlTextReaderRead(tilemapXml->tilesetXml->reader);
+        ret = xmlTextReaderRead(ts->reader);
     }
-    addDebug("found %d tiles", tilemapXml->tilesetXml->tilesCount);
-    xmlFreeTextReader(tilemapXml->tilesetXml->reader);
+    addDebug("found %d tiles", ts->tilesCount);
+    xmlFreeTextReader(ts->reader);
     if (ret != 0) {
         addError("failed to parse tilemap xml :: %s", filename);
         exit(ConfigurationErrorMapResourcesUnreadable);
     }
+    return ts;
 }
 
 void parseSceneLayer(const Exploration *e, const char *rawData) {
@@ -136,7 +137,7 @@ void processTilemapNode(Exploration *e, TilemapXml *tilemapXml, const char *inde
     if (nodeType == TILEMAP_NODE_TYPE_TILESET) {
         addDebug("process tileset xml node :: %s", name);
         char *source = getStringAttribute(tilemapXml->reader, "source");
-        parseTileset(e, tilemapXml, indexDir, source);
+        tilemapXml->tilesetXml = parseTileset(e, indexDir, source);
     } else if (nodeType == TILEMAP_NODE_TYPE_LAYER) {
         if (layerOpen == 1) {
             layerOpen = 0;
