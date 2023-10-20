@@ -9,19 +9,12 @@
 
 typedef struct {
     Exploration *exploration;
-//    Layer layers[MAX_LAYERS];
-//    Entrance entrances[MAX_ENTRANCES];
-//    Exit exits[MAX_EXITS];
-//    Tile **tiles;
-//    int tilesCount;
 } TiledXmlReader;
 
 TiledXmlReader *createTilemapXmlReader(Exploration *exploration, const char *sceneFile) {
     addDebug("attempting to load scene file :: %s", sceneFile);
     TiledXmlReader *reader = malloc(sizeof(TiledXmlReader));
     reader->exploration = exploration;
-//    reader->tiles = calloc(MAX_TILES, sizeof(Tile));
-//    reader->tilesCount = 0;
     return reader;
 }
 
