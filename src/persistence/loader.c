@@ -167,6 +167,9 @@ Scene *loadScene(
     scene->exploration->tilemap = tilemapXml->tilesetXml->tilemap;
     scene->exploration->tiles = tilemapXml->tilesetXml->tiles;
     scene->exploration->tilesCount = tilemapXml->tilesetXml->tilesCount;
+    for (int i = 0; i < MAX_LAYERS; i++) {
+        scene->exploration->layers[i] = tilemapXml->layers[i];
+    }
     free(tilemapXml);
 
     // load mobiles

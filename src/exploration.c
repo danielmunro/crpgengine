@@ -19,16 +19,8 @@ typedef struct {
 } MobileMovement;
 
 typedef struct {
-    LayerType type;
-    int data[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
-    int width;
-    int height;
-    bool showCollisions;
-} Layer;
-
-typedef struct {
     Tilemap *tilemap;
-    Layer *layers[LAYER_COUNT];
+    Layer **layers;
     int layerCount;
     Texture2D renderedLayers[LAYER_COUNT];
     ArriveAt *arriveAt[MAX_ARRIVE_AT];
@@ -74,6 +66,7 @@ Entrance *findEntrance(Exploration *e, const char *name) {
 
 Exploration *createExploration() {
     Exploration *exploration = malloc(sizeof(Exploration));
+    exploration->layers = calloc(MAX_LAYERS, sizeof(Layer));
     exploration->layerCount = 0;
     exploration->mobileCount = 0;
     exploration->entranceCount = 0;
@@ -93,11 +86,6 @@ MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
     mobMovement->mob = mob;
     mobMovement->destination = destination;
     return mobMovement;
-}
-
-void addTile(Exploration *e, Tile *t) {
-    e->tiles[e->tilesCount] = t;
-    e->tilesCount++;
 }
 
 void addMobileMovement(Exploration *e, MobileMovement *mobMovement) {

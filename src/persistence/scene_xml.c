@@ -2,6 +2,14 @@
 #include <libxml/xmlreader.h>
 
 typedef struct {
+    LayerType type;
+    int data[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
+    int width;
+    int height;
+    bool showCollisions;
+} Layer;
+
+typedef struct {
     Vector2D size;
     Image source;
 } Tilemap;
@@ -17,6 +25,8 @@ typedef struct {
     const char *filePath;
     xmlTextReaderPtr reader;
     TilesetXml *tilesetXml;
+    Layer **layers;
+    int layerCount;
 } TilemapXml;
 
 TilemapXml *createTilemapXml(const char *filePath) {
@@ -24,6 +34,8 @@ TilemapXml *createTilemapXml(const char *filePath) {
     t->filePath = filePath;
     t->reader = xmlReaderForFile(filePath, NULL, 0);
     t->tilesetXml = NULL;
+    t->layers = calloc(MAX_LAYERS, sizeof(Layer));
+    t->layerCount = 0;
     return t;
 }
 

@@ -94,8 +94,8 @@ TilesetXml *parseTileset(const char *indexDir, const char *filename) {
     return ts;
 }
 
-void parseSceneLayer(const Exploration *e, const char *rawData) {
-    addDebug("scene layer %d processing now", e->layerCount - 1);
+void parseSceneLayer(const TilemapXml *t, const char *rawData) {
+    addDebug("scene layer %d processing now", t->layerCount - 1);
     char *newRawData = (char *) rawData;
     char *line = strtok_r(newRawData, "\r\n", &newRawData);
     char *data[MAX_DATA_SIZE];
@@ -111,14 +111,14 @@ void parseSceneLayer(const Exploration *e, const char *rawData) {
         const char *val = strtok_r(data[y], ",", &data[y]);
         x = 0;
         while (val != NULL) {
-            e->layers[e->layerCount - 1]->data[y][x] = TextToInteger(val);
+            t->layers[t->layerCount - 1]->data[y][x] = TextToInteger(val);
             val = strtok_r(data[y], ",", &data[y]);
             x++;
         }
         y++;
     }
-    e->layers[e->layerCount - 1]->width = x;
-    e->layers[e->layerCount - 1]->height = y;
+    t->layers[t->layerCount - 1]->width = x;
+    t->layers[t->layerCount - 1]->height = y;
 }
 
 void processTilemapNode(Exploration *e, TilemapXml *tilemapXml, const char *indexDir) {
@@ -141,7 +141,7 @@ void processTilemapNode(Exploration *e, TilemapXml *tilemapXml, const char *inde
         char *layerName = getStringAttribute(tilemapXml->reader, "name");
         addDebug("create new layer :: %s", layerName);
         layer->type = getLayerTypeFromString(layerName);
-        e->layers[e->layerCount] = layer;
+        tilemapXml->layers[tilemapXml->layerCount] = layer;
     } else if (nodeType == TILEMAP_NODE_TYPE_DATA) {
         if (dataOpen == 1) {
             dataOpen = 0;
@@ -149,8 +149,8 @@ void processTilemapNode(Exploration *e, TilemapXml *tilemapXml, const char *inde
         }
         dataOpen = 1;
         xmlChar *data = xmlTextReaderReadString(tilemapXml->reader);
-        e->layerCount++;
-        parseSceneLayer(e, (const char *) data);
+        tilemapXml->layerCount++;
+        parseSceneLayer(tilemapXml, (const char *) data);
     } else if (nodeType == TILEMAP_NODE_TYPE_OBJECT) {
         objectType = getObjectTypeFromString(getStringAttribute(tilemapXml->reader, "type"));
         addDebug("evaluate object type :: %d", objectType);
