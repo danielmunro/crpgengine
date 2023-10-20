@@ -12,7 +12,7 @@ overrideStartScene: ""
 #   * info -- default
 #   * warn -- misconfigurations or edge cases that should not stop game execution
 #   * error -- almost always a fatal error
-logLevel: debug
+logLevel: info
 
 # The save file to use when loading up. If the save file doesn't exist, a
 # default start will happen based on the start scene and it's configuration.
