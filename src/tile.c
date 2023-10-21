@@ -69,12 +69,12 @@ void addProperty(Tile *tile, Property *property) {
 }
 
 typedef struct {
-    Rectangle *object;
+    Rectangle object;
     ItemWithQuantity *iq;
     int money;
 } Chest;
 
-Chest *createChest(Rectangle *object, ItemWithQuantity *iq, int money) {
+Chest *createChest(Rectangle object, ItemWithQuantity *iq, int money) {
     Chest *chest = malloc(sizeof(Chest));
     chest->object = object;
     chest->iq = iq;
@@ -128,6 +128,8 @@ typedef struct {
     int exitCount;
     ArriveAt **arriveAt;
     int arriveAtCount;
+    Chest **chests;
+    int chestCount;
 } Tilemap;
 
 Tilemap *createTilemap(const char *filePath) {
@@ -143,6 +145,8 @@ Tilemap *createTilemap(const char *filePath) {
     t->exitCount = 0;
     t->arriveAt = calloc(MAX_ARRIVE_AT, sizeof(ArriveAt));
     t->arriveAtCount = 0;
+    t->chests = calloc(MAX_CHESTS, sizeof(Chest));
+    t->chestCount = 0;
     return t;
 }
 
