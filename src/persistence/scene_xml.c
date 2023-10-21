@@ -25,7 +25,7 @@ typedef struct {
     int layerCount;
 } Tilemap;
 
-Tilemap *createTilemapXml(const char *filePath) {
+Tilemap *createTilemap(const char *filePath) {
     Tilemap *t = malloc(sizeof(Tilemap));
     t->filePath = filePath;
     t->reader = xmlReaderForFile(filePath, NULL, 0);
@@ -35,7 +35,7 @@ Tilemap *createTilemapXml(const char *filePath) {
     return t;
 }
 
-Tileset *createTilesetXml(const char *filePath) {
+Tileset *createTileset(const char *filePath) {
     Tileset *t = malloc(sizeof(Tileset));
     t->reader = xmlReaderForFile(filePath, NULL, 0);
     t->tiles = calloc(MAX_TILES, sizeof(Tile));

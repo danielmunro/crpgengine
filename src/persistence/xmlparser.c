@@ -79,7 +79,7 @@ Tileset *parseTileset(const char *indexDir, const char *filename) {
             "tilesets",
             filename);
     addInfo("component path calculated to :: %s", filePath);
-    Tileset *ts = createTilesetXml(filePath);
+    Tileset *ts = createTileset(filePath);
     ret = xmlTextReaderRead(ts->reader);
     while (ret == 1) {
         processTilesetNode(ts, indexDir);
@@ -205,7 +205,7 @@ void processTilemapNode(Exploration *e, Tilemap *tilemap, const char *indexDir) 
 }
 
 Tilemap *parseTilemapXml(Exploration *e, const char *filePath, const char *indexDir) {
-    Tilemap *tilemapXml = createTilemapXml(filePath);
+    Tilemap *tilemapXml = createTilemap(filePath);
     int ret;
     if (tilemapXml->reader == NULL) {
         addError("unable to find map resources for scene :: %s", indexDir);
