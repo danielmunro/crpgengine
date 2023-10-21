@@ -163,28 +163,7 @@ Scene *loadScene(
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
     addDebug("create scene '%s' tilemap", sceneName);
     Tilemap *tilemap = parseTilemapXml(tilemapFilePath, mapDirectory);
-    scene->map->tileset = tilemap->tileset;
-    if (tilemap->tileset != NULL) {
-        scene->map->tilesCount = tilemap->tileset->tilesCount;
-    }
-    for (int i = 0; i < tilemap->tileset->tilesCount; i++) {
-        scene->map->tiles[i] = tilemap->tileset->tiles[i];
-    }
-    for (int i = 0; i < MAX_LAYERS; i++) {
-        scene->map->layers[i] = tilemap->layers[i];
-    }
-    for (int i = 0; i < tilemap->entranceCount; i++) {
-        scene->map->entrances[i] = tilemap->entrances[i];
-    }
-    scene->map->entranceCount = tilemap->entranceCount;
-    for (int i = 0; i < tilemap->exitCount; i++) {
-        scene->map->exits[i] = tilemap->exits[i];
-    }
-    scene->map->exitCount = tilemap->exitCount;
-    for (int i = 0; i < tilemap->arriveAtCount; i++) {
-        scene->map->arriveAt[i] = tilemap->arriveAt[i];
-    }
-    scene->map->arriveAtCount = tilemap->arriveAtCount;
+    scene->map = createMapFromTilemap(tilemap);
     free(tilemap);
 
     // load mobiles
