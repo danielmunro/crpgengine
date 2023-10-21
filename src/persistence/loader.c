@@ -7,7 +7,6 @@
 #include "headers/mobile_manager.h"
 #include "headers/persistence/db.h"
 #include "headers/persistence/xmlparser.h"
-#include "headers/persistence/scene_xml.h"
 
 void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *file) {
     addInfo("load animations file: %s", file);
@@ -163,16 +162,30 @@ Scene *loadScene(
     char tilemapFilePath[MAX_FS_PATH_LENGTH];
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
     addDebug("create scene '%s' tilemap", sceneName);
-    Tilemap *tilemapXml = parseTilemapXml(scene->exploration, tilemapFilePath, mapDirectory);
-    scene->exploration->tileset = tilemapXml->tileset;
-    scene->exploration->tilesCount = tilemapXml->tileset->tilesCount;
-    for (int i = 0; i < tilemapXml->tileset->tilesCount; i++) {
-        scene->exploration->tiles[i] = tilemapXml->tileset->tiles[i];
+    Tilemap *tilemap = parseTilemapXml(tilemapFilePath, mapDirectory);
+    scene->exploration->tileset = tilemap->tileset;
+    if (tilemap->tileset != NULL) {
+        scene->exploration->tilesCount = tilemap->tileset->tilesCount;
+    }
+    for (int i = 0; i < tilemap->tileset->tilesCount; i++) {
+        scene->exploration->tiles[i] = tilemap->tileset->tiles[i];
     }
     for (int i = 0; i < MAX_LAYERS; i++) {
-        scene->exploration->layers[i] = tilemapXml->layers[i];
+        scene->exploration->layers[i] = tilemap->layers[i];
     }
-    free(tilemapXml);
+    for (int i = 0; i < tilemap->entranceCount; i++) {
+        scene->exploration->entrances[i] = tilemap->entrances[i];
+    }
+    scene->exploration->entranceCount = tilemap->entranceCount;
+    for (int i = 0; i < tilemap->exitCount; i++) {
+        scene->exploration->exits[i] = tilemap->exits[i];
+    }
+    scene->exploration->exitCount = tilemap->exitCount;
+    for (int i = 0; i < tilemap->arriveAtCount; i++) {
+        scene->exploration->arriveAt[i] = tilemap->arriveAt[i];
+    }
+    scene->exploration->arriveAtCount = tilemap->arriveAtCount;
+    free(tilemap);
 
     // load mobiles
     loadMobiles(mm, scene, sceneDirectory);

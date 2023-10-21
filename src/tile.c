@@ -14,6 +14,28 @@ typedef enum {
     TILESET_TYPE_CHEST,
 } TilesetType;
 
+typedef enum {
+    BACKGROUND = 0,
+    MIDGROUND,
+    FOREGROUND,
+} LayerType;
+
+const char *LayerTypes[] = {
+        "background",
+        "midground",
+        "foreground",
+};
+
+LayerType getLayerTypeFromString(const char *layerType) {
+    for (int i = 0; i < LAYER_COUNT; i++) {
+        if (strcmp(LayerTypes[i], layerType) == 0) {
+            return i;
+        }
+    }
+    addError("layer type not found :: %s", layerType);
+    exit(ConfigurationErrorLayerTypeNotFound);
+}
+
 typedef struct {
     const char *name;
     const char *value;
@@ -78,6 +100,14 @@ typedef struct {
     bool showCollisions;
 } Layer;
 
+Layer *createLayer() {
+    Layer *layer = malloc(sizeof(Layer));
+    layer->type = -1;
+    layer->width = 0;
+    layer->height = 0;
+    return layer;
+}
+
 typedef struct {
     Tile **tiles;
     int tilesCount;
@@ -92,7 +122,12 @@ typedef struct {
     Tileset *tileset;
     Layer **layers;
     int layerCount;
-
+    Entrance **entrances;
+    int entranceCount;
+    Exit **exits;
+    int exitCount;
+    ArriveAt **arriveAt;
+    int arriveAtCount;
 } Tilemap;
 
 Tilemap *createTilemap(const char *filePath) {
@@ -102,6 +137,12 @@ Tilemap *createTilemap(const char *filePath) {
     t->tileset = NULL;
     t->layers = calloc(MAX_LAYERS, sizeof(Layer));
     t->layerCount = 0;
+    t->entrances = calloc(MAX_ENTRANCES, sizeof(Entrance));
+    t->entranceCount = 0;
+    t->exits = calloc(MAX_EXITS, sizeof(Exit));
+    t->exitCount = 0;
+    t->arriveAt = calloc(MAX_ARRIVE_AT, sizeof(ArriveAt));
+    t->arriveAtCount = 0;
     return t;
 }
 

@@ -2,6 +2,9 @@
 #define CJRPGENGINE_TILE_H
 
 #define MAX_PROPERTIES 256
+#define MAX_LAYERS 1024
+#define MAX_LAYER_SIZE 1024
+#define LAYER_COUNT 3
 
 #include "tile.c"
 

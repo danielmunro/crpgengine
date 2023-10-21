@@ -7,11 +7,9 @@
 #include "headers/graphics/animation.h"
 #include "headers/control.h"
 #include "headers/graphics/ui/ui.h"
-#include "headers/layer.h"
 #include "headers/notification.h"
 #include "headers/warp.h"
 #include "headers/tile.h"
-#include "headers/persistence/scene_xml.h"
 
 typedef struct {
     Mobile *mob;
@@ -37,22 +35,6 @@ typedef struct {
     Tile **tiles;
     int tilesCount;
 } Exploration;
-
-Exit *createExit() {
-    Exit *e = malloc(sizeof(Exit));
-    e->to = "";
-    e->scene = "";
-    e->area = (Rectangle) {0, 0, 0, 0};
-    return e;
-}
-
-Entrance *createEntrance(char *name, Rectangle area) {
-    Entrance *e = malloc(sizeof(Entrance));
-    e->name = &name[0];
-    e->direction = DIRECTION_DOWN;
-    e->area = area;
-    return e;
-}
 
 Entrance *findEntrance(Exploration *e, const char *name) {
     for (int i = 0; i < e->entranceCount; i++) {
@@ -97,14 +79,6 @@ void addMobileMovement(Exploration *e, MobileMovement *mobMovement) {
             return;
         }
     }
-}
-
-Layer *createLayer() {
-    Layer *layer = malloc(sizeof(Layer));
-    layer->type = -1;
-    layer->width = 0;
-    layer->height = 0;
-    return layer;
 }
 
 Rectangle *getObject(const Exploration *e, int id) {
