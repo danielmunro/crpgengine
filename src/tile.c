@@ -49,48 +49,13 @@ typedef struct {
     int id;
 } Tile;
 
-Property *createProperty() {
-    Property *p = malloc(sizeof(Property));
-    return p;
-}
-
-Tile *createTile(int id, TilesetType type) {
-    Tile *t = malloc(sizeof(Tile));
-    t->id = id;
-    t->type = type;
-    t->properties = calloc(MAX_PROPERTIES, sizeof(Property));
-    t->propertyCount = 0;
-    return t;
-}
-
-void addProperty(Tile *tile, Property *property) {
-    tile->properties[tile->propertyCount] = property;
-    tile->propertyCount++;
-}
-
 typedef struct {
-    Rectangle object;
-    ItemWithQuantity *iq;
-    int money;
-} Chest;
-
-Chest *createChest(Rectangle object, ItemWithQuantity *iq, int money) {
-    Chest *chest = malloc(sizeof(Chest));
-    chest->object = object;
-    chest->iq = iq;
-    chest->money = money;
-    return chest;
-}
-
-TilesetType getTilesetTypeFromString(const char *type) {
-    int TilesetTypeCount = sizeof(TilesetTypes) / sizeof(TilesetTypes[0]);
-    for (int i = 0; i < TilesetTypeCount; i++) {
-        if (strcmp(TilesetTypes[i], type) == 0) {
-            return i;
-        }
-    }
-    return TILESET_TYPE_NONE;
-}
+    Tile **tiles;
+    int tilesCount;
+    xmlTextReaderPtr reader;
+    Vector2D size;
+    Image source;
+} Tileset;
 
 typedef struct {
     LayerType type;
@@ -100,21 +65,11 @@ typedef struct {
     bool showCollisions;
 } Layer;
 
-Layer *createLayer() {
-    Layer *layer = malloc(sizeof(Layer));
-    layer->type = -1;
-    layer->width = 0;
-    layer->height = 0;
-    return layer;
-}
-
 typedef struct {
-    Tile **tiles;
-    int tilesCount;
-    xmlTextReaderPtr reader;
-    Vector2D size;
-    Image source;
-} Tileset;
+    Rectangle object;
+    ItemWithQuantity *iq;
+    int money;
+} Chest;
 
 typedef struct {
     const char *filePath;
@@ -131,6 +86,28 @@ typedef struct {
     Chest **chests;
     int chestCount;
 } Tilemap;
+
+Property *createProperty() {
+    Property *p = malloc(sizeof(Property));
+    return p;
+}
+
+Tile *createTile(int id, TilesetType type) {
+    Tile *t = malloc(sizeof(Tile));
+    t->id = id;
+    t->type = type;
+    t->properties = calloc(MAX_PROPERTIES, sizeof(Property));
+    t->propertyCount = 0;
+    return t;
+}
+
+Layer *createLayer() {
+    Layer *layer = malloc(sizeof(Layer));
+    layer->type = -1;
+    layer->width = 0;
+    layer->height = 0;
+    return layer;
+}
 
 Tilemap *createTilemap(const char *filePath) {
     Tilemap *t = malloc(sizeof(Tilemap));
@@ -156,6 +133,29 @@ Tileset *createTileset(const char *filePath) {
     t->tiles = calloc(MAX_TILES, sizeof(Tile));
     t->tilesCount = 0;
     return t;
+}
+
+Chest *createChest(Rectangle object, ItemWithQuantity *iq, int money) {
+    Chest *chest = malloc(sizeof(Chest));
+    chest->object = object;
+    chest->iq = iq;
+    chest->money = money;
+    return chest;
+}
+
+void addProperty(Tile *tile, Property *property) {
+    tile->properties[tile->propertyCount] = property;
+    tile->propertyCount++;
+}
+
+TilesetType getTilesetTypeFromString(const char *type) {
+    int TilesetTypeCount = sizeof(TilesetTypes) / sizeof(TilesetTypes[0]);
+    for (int i = 0; i < TilesetTypeCount; i++) {
+        if (strcmp(TilesetTypes[i], type) == 0) {
+            return i;
+        }
+    }
+    return TILESET_TYPE_NONE;
 }
 
 Vector2D getTileFromIndex(const Tileset *t, int index) {
