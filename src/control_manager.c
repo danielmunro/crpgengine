@@ -46,7 +46,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
     } else if (needsToStartMoving(then)) {
         addInfo("mob needs to start moving");
         addMobileMovement(
-                cm->scene->exploration,
+                cm->scene->map,
                 createMobileMovement(
                         then->target,
                         then->position
@@ -133,7 +133,7 @@ int controlThenCheckAllActive(ControlManager *cm) {
 }
 
 void checkControls(ControlManager *cm) {
-    addDebug("exploration -- check %d control blocks",
+    addDebug("map -- check %d control blocks",
              cm->scene->controlBlockCount);
     controlWhenCheck(cm->scene, cm->player, EVENT_GAME_LOOP);
     controlThenCheckAllActive(cm);
@@ -167,7 +167,7 @@ When *mapWhen(ControlManager *cm, const Scene *s, WhenData wd) {
         addDebug("mobile trigger is '%s'", trigger->name);
     }
     if (wd.arriveAt != NULL) {
-        const Map *e = s->exploration;
+        const Map *e = s->map;
         for (int i = 0; i < e->arriveAtCount; i++) {
             if (strcmp(e->arriveAt[i]->name, wd.arriveAt) == 0) {
                 arriveAt = e->arriveAt[i];

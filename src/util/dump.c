@@ -11,14 +11,14 @@ void dumpGame(Game *g) {
     }
     for (int i = 0; i < g->scenes->count; i++) {
         printf("\nscene %s tiles\n===============\n", g->scenes->scenes[i]->name);
-        for (int t = 0; t < g->scenes->scenes[i]->exploration->tilesCount; t++) {
+        for (int t = 0; t < g->scenes->scenes[i]->map->tilesCount; t++) {
             printf("%d\n",
-                   g->scenes->scenes[i]->exploration->tiles[t]->id
+                   g->scenes->scenes[i]->map->tiles[t]->id
             );
         }
         printf("\nmobiles\n===============\n");
-        for (int j = 0; j < g->scenes->scenes[i]->exploration->mobileCount; j++) {
-            printf("%s\n", g->scenes->scenes[i]->exploration->mobiles[j]->name);
+        for (int j = 0; j < g->scenes->scenes[i]->map->mobileCount; j++) {
+            printf("%s\n", g->scenes->scenes[i]->map->mobiles[j]->name);
         }
         printf("\ncontrols\n==============\n");
         for (int j = 0; j < g->scenes->scenes[i]->controlBlockCount; j++) {

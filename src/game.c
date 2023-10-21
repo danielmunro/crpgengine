@@ -56,21 +56,21 @@ void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
 }
 
 void evaluateExits(Game *g) {
-    addDebug("exploration -- evaluate exits");
-    Map *e = g->scenes->current->exploration;
-    int ex = atExit(e, g->player);
+    addDebug("map -- evaluate exits");
+    const Map *m = g->scenes->current->map;
+    int ex = atExit(m, g->player);
     if (ex < 0) {
         return;
     }
     addDebug("player at exit");
-    char *sceneName = e->exits[ex]->scene;
-    char *entranceName = e->exits[ex]->to;
+    char *sceneName = m->exits[ex]->scene;
+    char *entranceName = m->exits[ex]->to;
     for (int i = 0; i < g->scenes->count; i++) {
         if (strcmp(sceneName, g->scenes->scenes[i]->name) == 0) {
             attemptToUseExit(
                     g,
                     g->scenes->scenes[i],
-                    findEntrance(g->scenes->scenes[i]->exploration, entranceName)
+                    findEntrance(g->scenes->scenes[i]->map, entranceName)
             );
             return;
         }
@@ -79,7 +79,7 @@ void evaluateExits(Game *g) {
             sceneName, entranceName);
 }
 
-void explorationMenuKeyPressed(Game *g) {
+void mapMenuKeyPressed(Game *g) {
     g->ui->menuContext = createMenuContext(
             g->fights->fight,
             g->player,
@@ -91,14 +91,14 @@ void explorationMenuKeyPressed(Game *g) {
     addMenu(g->menus, findMenu(g->ui->menus, PARTY_MENU));
 }
 
-void checkExplorationInput(Game *g) {
+void checkMapInput(Game *g) {
     Mobile *mob = getPartyLeader(g->player);
-    addDebug("exploration -- check player input");
+    addDebug("map -- check player input");
     resetMoving(mob);
     if (!canPlayerMove(mob)) {
         return;
     }
-    explorationCheckMoveKeys(g->player);
+    mapCheckMoveKeys(g->player);
     if (IsKeyPressed(KEY_C)) {
         mapDebugKeyPressed(mob->position);
     }
@@ -106,7 +106,7 @@ void checkExplorationInput(Game *g) {
         mapSpaceKeyPressed(g->player, g->scenes->current->activeControlBlocks);
     }
     if (IsKeyPressed(KEY_M)) {
-        explorationMenuKeyPressed(g);
+        mapMenuKeyPressed(g);
     }
     if (IsKeyPressed(KEY_T)) {
         addInfo("player play time :: %ds", g->player->secondsPlayed);
@@ -152,7 +152,7 @@ bool canTriggerFight(Game *g, const Player *p) {
 }
 
 void checkFights(Game *g, const Scene *s) {
-    addDebug("exploration -- check for fight");
+    addDebug("map -- check for fight");
     if (!canTriggerFight(g, g->player)) {
         return;
     }
@@ -176,16 +176,16 @@ void checkFights(Game *g, const Scene *s) {
 
 void doExplorationLoop(Game *g) {
     Scene *s = g->scenes->current;
-    checkExplorationInput(g);
+    checkMapInput(g);
     drawMapView(
-            s->exploration,
+            s->map,
             g->player,
             g->notifications,
             s->activeControlBlocks,
             g->ui->fonts->default_);
-    doMobileMovementUpdates(s->exploration);
+    doMobileMovementUpdates(s->map);
     processAnimations(g->animations);
-    evaluateMovement(s->exploration, g->player);
+    evaluateMovement(s->map, g->player);
     evaluateExits(g);
     checkControls(g->controls);
     checkFights(g, s);

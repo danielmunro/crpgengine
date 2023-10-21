@@ -52,7 +52,7 @@ void loadMobiles(MobileManager *mm, Scene *scene, const char *sceneDirectory) {
         loadAnimationsByName(mm->animationManager, mobData->animations, animations);
         Mobile *mob = createMobileFromData(mm, mobData, animations);
         addMobileToManager(mm, mob);
-        addMobileToExploration(scene->exploration, mob);
+        addMobileToExploration(scene->map, mob);
         free(filePath);
         free(mobData);
     }
@@ -163,28 +163,28 @@ Scene *loadScene(
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
     addDebug("create scene '%s' tilemap", sceneName);
     Tilemap *tilemap = parseTilemapXml(tilemapFilePath, mapDirectory);
-    scene->exploration->tileset = tilemap->tileset;
+    scene->map->tileset = tilemap->tileset;
     if (tilemap->tileset != NULL) {
-        scene->exploration->tilesCount = tilemap->tileset->tilesCount;
+        scene->map->tilesCount = tilemap->tileset->tilesCount;
     }
     for (int i = 0; i < tilemap->tileset->tilesCount; i++) {
-        scene->exploration->tiles[i] = tilemap->tileset->tiles[i];
+        scene->map->tiles[i] = tilemap->tileset->tiles[i];
     }
     for (int i = 0; i < MAX_LAYERS; i++) {
-        scene->exploration->layers[i] = tilemap->layers[i];
+        scene->map->layers[i] = tilemap->layers[i];
     }
     for (int i = 0; i < tilemap->entranceCount; i++) {
-        scene->exploration->entrances[i] = tilemap->entrances[i];
+        scene->map->entrances[i] = tilemap->entrances[i];
     }
-    scene->exploration->entranceCount = tilemap->entranceCount;
+    scene->map->entranceCount = tilemap->entranceCount;
     for (int i = 0; i < tilemap->exitCount; i++) {
-        scene->exploration->exits[i] = tilemap->exits[i];
+        scene->map->exits[i] = tilemap->exits[i];
     }
-    scene->exploration->exitCount = tilemap->exitCount;
+    scene->map->exitCount = tilemap->exitCount;
     for (int i = 0; i < tilemap->arriveAtCount; i++) {
-        scene->exploration->arriveAt[i] = tilemap->arriveAt[i];
+        scene->map->arriveAt[i] = tilemap->arriveAt[i];
     }
-    scene->exploration->arriveAtCount = tilemap->arriveAtCount;
+    scene->map->arriveAtCount = tilemap->arriveAtCount;
     free(tilemap);
 
     // load mobiles

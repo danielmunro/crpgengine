@@ -20,7 +20,7 @@ typedef struct {
     int controlBlockCount;
     ControlBlock *activeControlBlocks[MAX_ACTIVE_CONTROLS];
     Encounters *encounters;
-    Map *exploration;
+    Map *map;
 } Scene;
 
 typedef struct {
@@ -52,7 +52,7 @@ Scene *createScene() {
     Scene *scene = malloc(sizeof(Scene));
     scene->storylineCount = 0;
     scene->encounters = createEncounters();
-    scene->exploration = createMap();
+    scene->map = createMap();
     scene->controlBlockCount = 0;
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         scene->activeControlBlocks[i] = NULL;

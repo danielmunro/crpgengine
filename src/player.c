@@ -149,7 +149,7 @@ void clearDialog(Player *p) {
     p->dialog = NULL;
 }
 
-void explorationCheckMoveKeys(const Player *player) {
+void mapCheckMoveKeys(const Player *player) {
     for (int i = 0; i < DIRECTION_COUNT; i++) {
         checkMoveKey(player, MOVE_KEYS[i], DIRECTIONS[i]);
     }

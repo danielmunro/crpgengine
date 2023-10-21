@@ -24,7 +24,7 @@ SceneManager *createSceneManager(ControlManager *cm, AnimationManager *anManager
 void setScene(SceneManager *sm, Scene *scene, const Player *player, const char *entranceName) {
     addInfo("setting scene to '%s'", scene->name);
     if (sm->current != NULL) {
-        unloadLayers(sm->current->exploration);
+        unloadLayers(sm->current->map);
     }
     sm->current = scene;
     sm->controlManager->scene = scene;
@@ -32,9 +32,9 @@ void setScene(SceneManager *sm, Scene *scene, const Player *player, const char *
     Mobile *mob = getPartyLeader(player);
     addAllAnimations(sm->animationManager, mob->animations);
     if (entranceName != NULL) {
-        useEntrance(mob, findEntrance(scene->exploration, entranceName));
+        useEntrance(mob, findEntrance(scene->map, entranceName));
     }
-    renderExplorationLayers(sm->current->exploration);
+    renderExplorationLayers(sm->current->map);
     playMusic(sm->audioManager, sm->current->music);
     proceedControlsUntilDone(sm->controlManager);
 }
