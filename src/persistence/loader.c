@@ -162,9 +162,10 @@ Scene *loadScene(
     char tilemapFilePath[MAX_FS_PATH_LENGTH];
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
     addDebug("create scene '%s' tilemap", sceneName);
-    Tilemap *tilemap = parseTilemapXml(tilemapFilePath, mapDirectory);
-    scene->map = createMapFromTilemap(tilemap);
-    free(tilemap);
+    scene->map = parseTilemapDoc(tilemapFilePath, mapDirectory);
+//    scene->map = createMapFromTilemap(tilemap);
+//    free(tilemap);
+    exit(1);
 
     // load mobiles
     loadMobiles(mm, scene, sceneDirectory);

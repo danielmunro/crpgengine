@@ -17,6 +17,11 @@ typedef struct {
 } MobileMovement;
 
 typedef struct {
+    Vector2D tileSize;
+} MapConfig;
+
+typedef struct {
+    MapConfig *config;
     Tileset *tileset;
     Layer **layers;
     int layerCount;
@@ -48,6 +53,8 @@ Entrance *findEntrance(Map *m, const char *name) {
 
 Map *createMap() {
     Map *map = malloc(sizeof(Map));
+    map->config = malloc(sizeof(MapConfig));
+    map->config->tileSize = (Vector2D) {0, 0};
     map->layers = calloc(MAX_LAYERS, sizeof(Layer));
     map->layerCount = 0;
     map->mobileCount = 0;
