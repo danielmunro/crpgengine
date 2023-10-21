@@ -10,45 +10,40 @@ typedef struct {
 } Layer;
 
 typedef struct {
-    Vector2D size;
-    Image source;
-} Tilemap;
-
-typedef struct {
     Tile **tiles;
     int tilesCount;
     xmlTextReaderPtr reader;
-    Tilemap *tilemap;
-} TilesetXml;
+    Vector2D size;
+    Image source;
+} Tileset;
 
 typedef struct {
     const char *filePath;
     xmlTextReaderPtr reader;
-    TilesetXml *tilesetXml;
+    Tileset *tileset;
     Layer **layers;
     int layerCount;
-} TilemapXml;
+} Tilemap;
 
-TilemapXml *createTilemapXml(const char *filePath) {
-    TilemapXml *t = malloc(sizeof(TilemapXml));
+Tilemap *createTilemapXml(const char *filePath) {
+    Tilemap *t = malloc(sizeof(Tilemap));
     t->filePath = filePath;
     t->reader = xmlReaderForFile(filePath, NULL, 0);
-    t->tilesetXml = NULL;
+    t->tileset = NULL;
     t->layers = calloc(MAX_LAYERS, sizeof(Layer));
     t->layerCount = 0;
     return t;
 }
 
-TilesetXml *createTilesetXml(const char *filePath) {
-    TilesetXml *t = malloc(sizeof(TilesetXml));
+Tileset *createTilesetXml(const char *filePath) {
+    Tileset *t = malloc(sizeof(Tileset));
     t->reader = xmlReaderForFile(filePath, NULL, 0);
     t->tiles = calloc(MAX_TILES, sizeof(Tile));
     t->tilesCount = 0;
-    t->tilemap = malloc(sizeof(Tilemap));
     return t;
 }
 
-Vector2D getTileFromIndex(const Tilemap *t, int index) {
+Vector2D getTileFromIndex(const Tileset *t, int index) {
     int width = t->source.width / t->size.x;
     int y = index / width;
     int x = (index % width);
@@ -60,7 +55,7 @@ Vector2D getTileFromIndex(const Tilemap *t, int index) {
     return pos;
 }
 
-Rectangle getRectForTile(const Tilemap *t, int index) {
+Rectangle getRectForTile(const Tileset *t, int index) {
     Vector2D tile = getTileFromIndex(t, index);
     return (Rectangle) {
             (float) (tile.x * t->size.x),

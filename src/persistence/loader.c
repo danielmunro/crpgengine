@@ -163,10 +163,12 @@ Scene *loadScene(
     char tilemapFilePath[MAX_FS_PATH_LENGTH];
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
     addDebug("create scene '%s' tilemap", sceneName);
-    TilemapXml *tilemapXml = parseTilemapXml(scene->exploration, tilemapFilePath, mapDirectory);
-    scene->exploration->tilemap = tilemapXml->tilesetXml->tilemap;
-    scene->exploration->tiles = tilemapXml->tilesetXml->tiles;
-    scene->exploration->tilesCount = tilemapXml->tilesetXml->tilesCount;
+    Tilemap *tilemapXml = parseTilemapXml(scene->exploration, tilemapFilePath, mapDirectory);
+    scene->exploration->tileset = tilemapXml->tileset;
+    scene->exploration->tilesCount = tilemapXml->tileset->tilesCount;
+    for (int i = 0; i < tilemapXml->tileset->tilesCount; i++) {
+        scene->exploration->tiles[i] = tilemapXml->tileset->tiles[i];
+    }
     for (int i = 0; i < MAX_LAYERS; i++) {
         scene->exploration->layers[i] = tilemapXml->layers[i];
     }

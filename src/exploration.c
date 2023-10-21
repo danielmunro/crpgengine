@@ -19,7 +19,7 @@ typedef struct {
 } MobileMovement;
 
 typedef struct {
-    Tilemap *tilemap;
+    Tileset *tileset;
     Layer **layers;
     int layerCount;
     Texture2D renderedLayers[LAYER_COUNT];
@@ -74,7 +74,7 @@ Exploration *createExploration() {
     exploration->arriveAtCount = 0;
     exploration->tilesCount = 0;
     exploration->tiles = calloc(MAX_TILESETS, sizeof(Tile));
-    exploration->tilemap = malloc(sizeof(Tilemap));
+    exploration->tileset = malloc(sizeof(Tileset));
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         exploration->mobMovements[i] = NULL;
     }
@@ -117,8 +117,8 @@ Rectangle *getObject(const Exploration *e, int id) {
 }
 
 Vector2D getTileCount(const Exploration *e) {
-    int x = ui->screen->width / e->tilemap->size.x + 1;
-    int y = ui->screen->height / e->tilemap->size.y + 2;
+    int x = ui->screen->width / e->tileset->size.x + 1;
+    int y = ui->screen->height / e->tileset->size.y + 2;
     return (Vector2D) {x, y};
 }
 
@@ -130,8 +130,8 @@ void drawObjectCollision(const Exploration *e, Image layer, int index, int x, in
     const Rectangle *o = getObject(e, index);
     if (o != NULL) {
         Rectangle r = {
-                (float) (e->tilemap->size.x * x) + o->x,
-                (float) (e->tilemap->size.y * y) + o->y,
+                (float) (e->tileset->size.x * x) + o->x,
+                (float) (e->tileset->size.y * y) + o->y,
                 o->width,
                 o->height,
         };
@@ -150,15 +150,15 @@ void drawTile(const Exploration *e, Image layer, int index, int x, int y) {
     if (index <= 0) {
         return;
     }
-    Vector2D sz = e->tilemap->size;
+    Vector2D sz = e->tileset->size;
     Vector2 pos = {
             (float) (sz.x * x),
             (float) (sz.y * y),
     };
-    Rectangle rect = getRectForTile(e->tilemap, index);
+    Rectangle rect = getRectForTile(e->tileset, index);
     ImageDraw(
             &layer,
-            e->tilemap->source,
+            e->tileset->source,
             rect,
             (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
             WHITE
@@ -190,7 +190,7 @@ void drawWarpCollisions(const Exploration *e, Image *image) {
 }
 
 void renderExplorationLayer(Exploration *e, LayerType layer) {
-    Vector2D sz = e->tilemap->size;
+    Vector2D sz = e->tileset->size;
     int width = ui->screen->width / sz.x;
     int height = ui->screen->height / sz.y;
     Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
@@ -292,8 +292,8 @@ void drawExplorationMobiles(Exploration *e, const Player *p, Vector2 offset) {
 
 Rectangle getObjectSize(const Exploration *e, const Rectangle *o, int x, int y) {
     return (Rectangle) {
-            (float) (e->tilemap->size.x * x) + o->x,
-            (float) (e->tilemap->size.y * y) + o->y,
+            (float) (e->tileset->size.x * x) + o->x,
+            (float) (e->tileset->size.y * y) + o->y,
             o->width,
             o->height,
     };
