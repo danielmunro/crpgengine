@@ -1,5 +1,5 @@
 #include "headers/audio.h"
-#include "headers/exploration.h"
+#include "headers/map.h"
 #include "headers/control_manager.h"
 
 typedef struct {

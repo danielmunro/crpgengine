@@ -2,7 +2,7 @@
 #include <mm_malloc.h>
 #include <unistd.h>
 #include "headers/util/log.h"
-#include "headers/exploration.h"
+#include "headers/map.h"
 #include "headers/fight.h"
 
 typedef struct {
@@ -20,7 +20,7 @@ typedef struct {
     int controlBlockCount;
     ControlBlock *activeControlBlocks[MAX_ACTIVE_CONTROLS];
     Encounters *encounters;
-    Exploration *exploration;
+    Map *exploration;
 } Scene;
 
 typedef struct {
@@ -52,7 +52,7 @@ Scene *createScene() {
     Scene *scene = malloc(sizeof(Scene));
     scene->storylineCount = 0;
     scene->encounters = createEncounters();
-    scene->exploration = createExploration();
+    scene->exploration = createMap();
     scene->controlBlockCount = 0;
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         scene->activeControlBlocks[i] = NULL;

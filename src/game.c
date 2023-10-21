@@ -2,7 +2,7 @@
 #include <string.h>
 #include "headers/util/log.h"
 #include "headers/scene_manager.h"
-#include "headers/exploration.h"
+#include "headers/map.h"
 #include "headers/graphics/ui/menu.h"
 #include "headers/fight_manager.h"
 #include "headers/timing.h"
@@ -57,7 +57,7 @@ void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
 
 void evaluateExits(Game *g) {
     addDebug("exploration -- evaluate exits");
-    Exploration *e = g->scenes->current->exploration;
+    Map *e = g->scenes->current->exploration;
     int ex = atExit(e, g->player);
     if (ex < 0) {
         return;
@@ -100,10 +100,10 @@ void checkExplorationInput(Game *g) {
     }
     explorationCheckMoveKeys(g->player);
     if (IsKeyPressed(KEY_C)) {
-        explorationDebugKeyPressed(mob->position);
+        mapDebugKeyPressed(mob->position);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        explorationSpaceKeyPressed(g->player, g->scenes->current->activeControlBlocks);
+        mapSpaceKeyPressed(g->player, g->scenes->current->activeControlBlocks);
     }
     if (IsKeyPressed(KEY_M)) {
         explorationMenuKeyPressed(g);
@@ -177,7 +177,7 @@ void checkFights(Game *g, const Scene *s) {
 void doExplorationLoop(Game *g) {
     Scene *s = g->scenes->current;
     checkExplorationInput(g);
-    drawExplorationView(
+    drawMapView(
             s->exploration,
             g->player,
             g->notifications,

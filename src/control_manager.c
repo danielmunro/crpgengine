@@ -1,5 +1,5 @@
 #include "headers/util/log.h"
-#include "headers/exploration.h"
+#include "headers/map.h"
 #include "headers/notification.h"
 #include "headers/control.h"
 #include "headers/item.h"
@@ -167,7 +167,7 @@ When *mapWhen(ControlManager *cm, const Scene *s, WhenData wd) {
         addDebug("mobile trigger is '%s'", trigger->name);
     }
     if (wd.arriveAt != NULL) {
-        const Exploration *e = s->exploration;
+        const Map *e = s->exploration;
         for (int i = 0; i < e->arriveAtCount; i++) {
             if (strcmp(e->arriveAt[i]->name, wd.arriveAt) == 0) {
                 arriveAt = e->arriveAt[i];

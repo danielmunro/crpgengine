@@ -34,33 +34,33 @@ typedef struct {
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
     Tile **tiles;
     int tilesCount;
-} Exploration;
+} Map;
 
-Entrance *findEntrance(Exploration *e, const char *name) {
-    for (int i = 0; i < e->entranceCount; i++) {
-        if (strcmp(e->entrances[i]->name, name) == 0) {
-            return e->entrances[i];
+Entrance *findEntrance(Map *m, const char *name) {
+    for (int i = 0; i < m->entranceCount; i++) {
+        if (strcmp(m->entrances[i]->name, name) == 0) {
+            return m->entrances[i];
         }
     }
     addError("entrance not found :: %s", name);
     exit(RuntimeErrorUnknownEntrance);
 }
 
-Exploration *createExploration() {
-    Exploration *exploration = malloc(sizeof(Exploration));
-    exploration->layers = calloc(MAX_LAYERS, sizeof(Layer));
-    exploration->layerCount = 0;
-    exploration->mobileCount = 0;
-    exploration->entranceCount = 0;
-    exploration->exitCount = 0;
-    exploration->arriveAtCount = 0;
-    exploration->tilesCount = 0;
-    exploration->tiles = calloc(MAX_TILESETS, sizeof(Tile));
-    exploration->tileset = malloc(sizeof(Tileset));
+Map *createMap() {
+    Map *map = malloc(sizeof(Map));
+    map->layers = calloc(MAX_LAYERS, sizeof(Layer));
+    map->layerCount = 0;
+    map->mobileCount = 0;
+    map->entranceCount = 0;
+    map->exitCount = 0;
+    map->arriveAtCount = 0;
+    map->tilesCount = 0;
+    map->tiles = calloc(MAX_TILESETS, sizeof(Tile));
+    map->tileset = malloc(sizeof(Tileset));
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
-        exploration->mobMovements[i] = NULL;
+        map->mobMovements[i] = NULL;
     }
-    return exploration;
+    return map;
 }
 
 MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
@@ -70,42 +70,42 @@ MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
     return mobMovement;
 }
 
-void addMobileMovement(Exploration *e, MobileMovement *mobMovement) {
+void addMobileMovement(Map *m, MobileMovement *mobMovement) {
     addInfo("add mob movement, %s target to %f, %f",
             mobMovement->mob->name, mobMovement->destination.x, mobMovement->destination.y);
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
-        if (e->mobMovements[i] == NULL) {
-            e->mobMovements[i] = mobMovement;
+        if (m->mobMovements[i] == NULL) {
+            m->mobMovements[i] = mobMovement;
             return;
         }
     }
 }
 
-Rectangle *getObject(const Exploration *e, int id) {
-    for (int i = 0; i < e->tilesCount; i++) {
-        if (e->tiles[i]->id == id) {
-            return e->tiles[i]->object;
+Rectangle *getObject(const Map *m, int id) {
+    for (int i = 0; i < m->tilesCount; i++) {
+        if (m->tiles[i]->id == id) {
+            return m->tiles[i]->object;
         }
     }
     return NULL;
 }
 
-Vector2D getTileCount(const Exploration *e) {
-    int x = ui->screen->width / e->tileset->size.x + 1;
-    int y = ui->screen->height / e->tileset->size.y + 2;
+Vector2D getTileCount(const Map *m) {
+    int x = ui->screen->width / m->tileset->size.x + 1;
+    int y = ui->screen->height / m->tileset->size.y + 2;
     return (Vector2D) {x, y};
 }
 
-void explorationDebugKeyPressed(Vector2 position) {
+void mapDebugKeyPressed(Vector2 position) {
     addInfo("player coordinates: %f, %f", position.x, position.y);
 }
 
-void drawObjectCollision(const Exploration *e, Image layer, int index, int x, int y) {
-    const Rectangle *o = getObject(e, index);
+void drawObjectCollision(const Map *m, Image layer, int index, int x, int y) {
+    const Rectangle *o = getObject(m, index);
     if (o != NULL) {
         Rectangle r = {
-                (float) (e->tileset->size.x * x) + o->x,
-                (float) (e->tileset->size.y * y) + o->y,
+                (float) (m->tileset->size.x * x) + o->x,
+                (float) (m->tileset->size.y * y) + o->y,
                 o->width,
                 o->height,
         };
@@ -120,79 +120,79 @@ void drawObjectCollision(const Exploration *e, Image layer, int index, int x, in
     }
 }
 
-void drawTile(const Exploration *e, Image layer, int index, int x, int y) {
+void drawTile(const Map *m, Image layer, int index, int x, int y) {
     if (index <= 0) {
         return;
     }
-    Vector2D sz = e->tileset->size;
+    Vector2D sz = m->tileset->size;
     Vector2 pos = {
             (float) (sz.x * x),
             (float) (sz.y * y),
     };
-    Rectangle rect = getRectForTile(e->tileset, index);
+    Rectangle rect = getRectForTile(m->tileset, index);
     ImageDraw(
             &layer,
-            e->tileset->source,
+            m->tileset->source,
             rect,
             (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
             WHITE
     );
     if (config->showCollisions->objects) {
-        drawObjectCollision(e, layer, index - 1, x, y);
+        drawObjectCollision(m, layer, index - 1, x, y);
     }
 }
 
-void drawWarpCollisions(const Exploration *e, Image *image) {
-    for (int i = 0; i < e->exitCount; i++) {
+void drawWarpCollisions(const Map *m, Image *image) {
+    for (int i = 0; i < m->exitCount; i++) {
         ImageDrawRectangle(
                 image,
-                (int) (e->exits[i]->area.x),
-                (int) (e->exits[i]->area.y),
-                (int) (e->exits[i]->area.width),
-                (int) (e->exits[i]->area.height),
+                (int) (m->exits[i]->area.x),
+                (int) (m->exits[i]->area.y),
+                (int) (m->exits[i]->area.width),
+                (int) (m->exits[i]->area.height),
                 WHITE);
     }
-    for (int i = 0; i < e->entranceCount; i++) {
+    for (int i = 0; i < m->entranceCount; i++) {
         ImageDrawRectangle(
                 image,
-                (int) (e->entrances[i]->area.x),
-                (int) (e->entrances[i]->area.y),
-                (int) (e->entrances[i]->area.width),
-                (int) (e->entrances[i]->area.height),
+                (int) (m->entrances[i]->area.x),
+                (int) (m->entrances[i]->area.y),
+                (int) (m->entrances[i]->area.width),
+                (int) (m->entrances[i]->area.height),
                 BLACK);
     }
 }
 
-void renderExplorationLayer(Exploration *e, LayerType layer) {
-    Vector2D sz = e->tileset->size;
+void renderMapLayer(Map *m, LayerType layer) {
+    Vector2D sz = m->tileset->size;
     int width = ui->screen->width / sz.x;
     int height = ui->screen->height / sz.y;
     Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
     for (int y = -1; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            if (x >= e->layers[layer]->width || y >= e->layers[layer]->height) {
+            if (x >= m->layers[layer]->width || y >= m->layers[layer]->height) {
                 continue;
             }
             drawTile(
-                    e,
+                    m,
                     renderedLayer,
-                    e->layers[layer]->data[y][x],
+                    m->layers[layer]->data[y][x],
                     x,
                     y
             );
         }
     }
     if (config->showCollisions->warps) {
-        drawWarpCollisions(e, &renderedLayer);
+        drawWarpCollisions(m, &renderedLayer);
     }
-    e->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
+    m->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
     UnloadImage(renderedLayer);
 }
 
-void unloadLayers(const Exploration *e) {
-    UnloadTexture(e->renderedLayers[BACKGROUND]);
-    UnloadTexture(e->renderedLayers[MIDGROUND]);
-    UnloadTexture(e->renderedLayers[FOREGROUND]);
+void unloadLayers(const Map *m) {
+    UnloadTexture(m->renderedLayers[BACKGROUND]);
+    UnloadTexture(m->renderedLayers[MIDGROUND]);
+    UnloadTexture(m->renderedLayers[FOREGROUND]);
 }
 
 void createMobileLayer(
@@ -215,14 +215,14 @@ void createMobileLayer(
     }
 }
 
-void drawExplorationMobiles(Exploration *e, const Player *p, Vector2 offset) {
+void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
     /**
      * Start by putting mobs on a layer. This is necessary for drawing them in
      * the right order.
      */
     Mobile *mobLayer[MAX_LAYERS][MAX_MOBILES];
     int mobsByYPosition[MAX_LAYERS];
-    createMobileLayer(e->mobiles, mobLayer, e->mobileCount, mobsByYPosition);
+    createMobileLayer(m->mobiles, mobLayer, m->mobileCount, mobsByYPosition);
 
     /**
      * The player goes on the layer too.
@@ -235,15 +235,15 @@ void drawExplorationMobiles(Exploration *e, const Player *p, Vector2 offset) {
      * Now go through the layer and draw mobs in order.
      */
     for (int y = 0; y < MAX_LAYERS; y++) {
-        for (int m = 0; m < MAX_MOBILES; m++) {
-            if (mobLayer[y][m] == NULL) {
+        for (int n = 0; n < MAX_MOBILES; n++) {
+            if (mobLayer[y][n] == NULL) {
                 break;
             }
             drawAnimation(
-                    getMobAnimation(mobLayer[y][m]),
+                    getMobAnimation(mobLayer[y][n]),
                     (Vector2) {
-                            mobLayer[y][m]->position.x + offset.x,
-                            floorf(mobLayer[y][m]->position.y + offset.y),
+                            mobLayer[y][n]->position.x + offset.x,
+                            floorf(mobLayer[y][n]->position.y + offset.y),
                     }
             );
         }
@@ -264,28 +264,28 @@ void drawExplorationMobiles(Exploration *e, const Player *p, Vector2 offset) {
     }
 }
 
-Rectangle getObjectSize(const Exploration *e, const Rectangle *o, int x, int y) {
+Rectangle getObjectSize(const Map *m, const Rectangle *o, int x, int y) {
     return (Rectangle) {
-            (float) (e->tileset->size.x * x) + o->x,
-            (float) (e->tileset->size.y * y) + o->y,
+            (float) (m->tileset->size.x * x) + o->x,
+            (float) (m->tileset->size.y * y) + o->y,
             o->width,
             o->height,
     };
 }
 
-bool isObjectBlocking(const Exploration *e, const Rectangle *o, Rectangle player, int x, int y) {
-    Rectangle objRect = getObjectSize(e, o, x, y);
+bool isObjectBlocking(const Map *m, const Rectangle *o, Rectangle player, int x, int y) {
+    Rectangle objRect = getObjectSize(m, o, x, y);
     Rectangle c = GetCollisionRec(player, objRect);
     return c.height > 0 || c.width > 0;
 }
 
-bool checkLayerForBlockingObject(const Exploration *e, Rectangle player, int layer) {
-    Vector2D tiles = getTileCount(e);
+bool checkLayerForBlockingObject(const Map *m, Rectangle player, int layer) {
+    Vector2D tiles = getTileCount(m);
     for (int y = 0; y < tiles.y; y++) {
         for (int x = 0; x < tiles.x; x++) {
-            int index = e->layers[layer]->data[y][x];
-            const Rectangle *o = getObject(e, index - 1);
-            if (o != NULL && isObjectBlocking(e, o, player, x, y)) {
+            int index = m->layers[layer]->data[y][x];
+            const Rectangle *o = getObject(m, index - 1);
+            if (o != NULL && isObjectBlocking(m, o, player, x, y)) {
                 return true;
             }
         }
@@ -293,30 +293,30 @@ bool checkLayerForBlockingObject(const Exploration *e, Rectangle player, int lay
     return false;
 }
 
-bool isBlockedByMapObject(const Exploration *e, Rectangle player) {
+bool isBlockedByMapObject(const Map *m, Rectangle player) {
     for (int l = 0; l < LAYER_COUNT - 1; l++) {
-        if (checkLayerForBlockingObject(e, player, l)) {
+        if (checkLayerForBlockingObject(m, player, l)) {
             return true;
         }
     }
     return false;
 }
 
-Mobile *getBlockingMob(const Exploration *e, Rectangle playerRect) {
-    for (int i = 0; i < e->mobileCount; i++) {
-        Rectangle c = GetCollisionRec(playerRect, getMobileRectangle(e->mobiles[i]));
+Mobile *getBlockingMob(const Map *m, Rectangle playerRect) {
+    for (int i = 0; i < m->mobileCount; i++) {
+        Rectangle c = GetCollisionRec(playerRect, getMobileRectangle(m->mobiles[i]));
         if (c.height > 0 || c.width > 0) {
-            return e->mobiles[i];
+            return m->mobiles[i];
         }
     }
     return NULL;
 }
 
-int atExit(const Exploration *e, Player *p) {
+int atExit(const Map *m, Player *p) {
     Mobile *mob = getPartyLeader(p);
     Rectangle rect = getMobileRectangle(mob);
-    for (int i = 0; i < e->exitCount; i++) {
-        Rectangle c = GetCollisionRec(e->exits[i]->area, rect);
+    for (int i = 0; i < m->exitCount; i++) {
+        Rectangle c = GetCollisionRec(m->exits[i]->area, rect);
         if (c.height > 0 || c.width > 0) {
             return i;
         }
@@ -324,7 +324,7 @@ int atExit(const Exploration *e, Player *p) {
     return -1;
 }
 
-void tryToMove(const Exploration *e, Player *p, Direction direction, Vector2 pos) {
+void tryToMove(const Map *m, Player *p, Direction direction, Vector2 pos) {
     Mobile *mob = getPartyLeader(p);
     const Rectangle *collision = getMobAnimation(mob)->spriteSheet->collision;
     Rectangle rect = {
@@ -334,11 +334,11 @@ void tryToMove(const Exploration *e, Player *p, Direction direction, Vector2 pos
             collision->height,
     };
     if (mob->moving[direction]) {
-        if (isBlockedByMapObject(e, rect)) {
+        if (isBlockedByMapObject(m, rect)) {
             p->blockedBy = NULL;
             return;
         }
-        p->blockedBy = getBlockingMob(e, rect);
+        p->blockedBy = getBlockingMob(m, rect);
         if (p->blockedBy != NULL) {
             return;
         }
@@ -347,16 +347,16 @@ void tryToMove(const Exploration *e, Player *p, Direction direction, Vector2 pos
     }
 }
 
-void evaluateMovement(const Exploration *e, Player *p) {
+void evaluateMovement(const Map *m, Player *p) {
     const Mobile *mob = getPartyLeader(p);
     if (mob->isBeingMoved) {
         return;
     }
-    addDebug("exploration -- evaluate movement -- %f, %f",
+    addDebug("map -- evaluate movement -- %f, %f",
              mob->position.x,
              mob->position.y);
     for (int i = 0; i < DIRECTION_COUNT; i++) {
-        tryToMove(e, p, DIRECTIONS[i], getMoveFor(mob, DIRECTIONS[i]));
+        tryToMove(m, p, DIRECTIONS[i], getMoveFor(mob, DIRECTIONS[i]));
     }
 }
 
@@ -382,13 +382,13 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
     }
 }
 
-void drawExplorationView(
-        Exploration *e,
+void drawMapView(
+        Map *m,
         Player *p,
         NotificationManager *nm,
         ControlBlock *c[MAX_ACTIVE_CONTROLS],
         FontStyle *font) {
-    addDebug("exploration -- draw");
+    addDebug("map -- draw");
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();
     ClearBackground(BLACK);
@@ -396,10 +396,10 @@ void drawExplorationView(
             ((float) ui->screen->width / 2) - mob->position.x,
             ((float) ui->screen->height / 2) - mob->position.y
     };
-    DrawTextureEx(e->renderedLayers[BACKGROUND], offset, 0, ui->screen->scale, WHITE);
-    DrawTextureEx(e->renderedLayers[MIDGROUND], offset, 0, ui->screen->scale, WHITE);
-    drawExplorationMobiles(e, p, offset);
-    DrawTextureEx(e->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
+    DrawTextureEx(m->renderedLayers[BACKGROUND], offset, 0, ui->screen->scale, WHITE);
+    DrawTextureEx(m->renderedLayers[MIDGROUND], offset, 0, ui->screen->scale, WHITE);
+    drawExplorationMobiles(m, p, offset);
+    DrawTextureEx(m->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);
     if (config->showFPS) {
@@ -408,17 +408,17 @@ void drawExplorationView(
     EndDrawing();
 }
 
-void addMobileToExploration(Exploration *exploration, Mobile *mob) {
-    exploration->mobiles[exploration->mobileCount] = mob;
-    exploration->mobileCount++;
+void addMobileToExploration(Map *m, Mobile *mob) {
+    m->mobiles[m->mobileCount] = mob;
+    m->mobileCount++;
 }
 
-void renderExplorationLayers(Exploration *e) {
+void renderExplorationLayers(Map *m) {
     ClearBackground(BLACK);
-    renderExplorationLayer(e, BACKGROUND);
-    renderExplorationLayer(e, MIDGROUND);
-    renderExplorationLayer(e, FOREGROUND);
-    addDebug("exploration successfully rendered");
+    renderMapLayer(m, BACKGROUND);
+    renderMapLayer(m, MIDGROUND);
+    renderMapLayer(m, FOREGROUND);
+    addDebug("map successfully rendered");
 }
 
 void dialogEngaged(const Player *player, ControlBlock *controlBlock) {
@@ -429,8 +429,8 @@ void dialogEngaged(const Player *player, ControlBlock *controlBlock) {
     }
 }
 
-void explorationSpaceKeyPressed(Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
-    addInfo("exploration space key pressed");
+void mapSpaceKeyPressed(Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
+    addInfo("map space key pressed");
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (controlBlocks[i] != NULL
             && player->engaged
@@ -445,17 +445,17 @@ void explorationSpaceKeyPressed(Player *player, ControlBlock *controlBlocks[MAX_
     }
 }
 
-void doMobileMovementUpdates(Exploration *exploration) {
+void doMobileMovementUpdates(Map *m) {
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
-        if (exploration->mobMovements[i] == NULL) {
+        if (m->mobMovements[i] == NULL) {
             continue;
         }
-        Mobile *mob = exploration->mobMovements[i]->mob;
-        bool moved = moveMob(mob, exploration->mobMovements[i]->destination);
+        Mobile *mob = m->mobMovements[i]->mob;
+        bool moved = moveMob(mob, m->mobMovements[i]->destination);
         if (!moved) {
             addInfo("mob done moving -- %s",
-                    exploration->mobMovements[i]->mob->name);
-            exploration->mobMovements[i] = NULL;
+                    m->mobMovements[i]->mob->name);
+            m->mobMovements[i] = NULL;
             mob->isBeingMoved = false;
         }
     }

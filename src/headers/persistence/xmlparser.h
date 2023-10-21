@@ -1,7 +1,7 @@
 #ifndef CJRPGENGINE_OBJECT_H
 #define CJRPGENGINE_OBJECT_H
 
-#include "headers/exploration.h"
+#include "headers/map.h"
 
 const char *TileMapNodeTypes[] = {
         "other",

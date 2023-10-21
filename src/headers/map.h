@@ -1,0 +1,14 @@
+#ifndef CJRPGENGINE_MAP_H
+#define CJRPGENGINE_MAP_H
+
+#define MAX_EXITS 64
+#define MAX_ENTRANCES 64
+#define MAX_ARRIVE_AT 64
+#define MAX_MOBILES 256
+#define MAX_MOBILE_MOVEMENTS 64
+#define MAX_TILESETS 256
+#define MAX_TILES 2048
+
+#include "map.c"
+
+#endif //CJRPGENGINE_MAP_H
