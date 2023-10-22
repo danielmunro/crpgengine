@@ -163,15 +163,31 @@ void parseSceneLayer(const Tilemap *t, const char *rawData) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef struct {
+    const char *name;
+    const char *value;
+} Property2;
+
+typedef struct {
+    Property2 **properties;
+    int propertyCount;
     Rectangle object;
     int id;
     const char *type;
 } Tile2;
 
+Property2 *createProperty2(const char *name, const char *value) {
+    Property2 *p = malloc(sizeof(Property2));
+    p->name = name;
+    p->value = value;
+    return p;
+}
+
 Tile2 *createTile2(int id, const char *type) {
     Tile2 *t = malloc(sizeof(Tile2));
     t->id = id;
     t->type = type;
+    t->properties = calloc(MAX_PROPERTIES, sizeof(Property));
+    t->propertyCount = 0;
     return t;
 }
 
@@ -211,13 +227,15 @@ Rectangle parseTileObjectGroupNode(xmlNodePtr cur) {
     exit(ConfigurationErrorObjectNotFound);
 }
 
-void parseTileProperties(xmlNodePtr cur, const Tile2 *t) {
+void parseTileProperties(xmlNodePtr cur, Tile2 *t) {
     while (cur != NULL) {
         const char *name = (char *) cur->name;
         addInfo("tile property node :: %s", name);
         if (strcmp(name, "property") == 0) {
             const char *propName = xmlString(cur, "name");
             const char *propValue = xmlString(cur, "value");
+            t->properties[t->propertyCount] = createProperty2(propName, propValue);
+            t->propertyCount++;
             addInfo("prop :: %s, %s", propName, propValue);
         }
         cur = cur->next;
@@ -279,7 +297,7 @@ void parseLayerNode() {
     addInfo("TBD");
 }
 
-void parseObjectGroupNode() {
+void parseTilemapObjectGroupNode() {
     addInfo("TBD");
 }
 
@@ -294,7 +312,7 @@ Map *parseMapNode(xmlNodePtr node) {
         } else if (strcmp(name, "layer") == 0) {
             parseLayerNode();
         } else if (strcmp(name, "objectgroup") == 0) {
-            parseObjectGroupNode();
+            parseTilemapObjectGroupNode();
         }
         node->children = node->children->next;
     }
