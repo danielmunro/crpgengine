@@ -66,6 +66,14 @@ typedef struct {
 } Layer;
 
 typedef struct {
+    const char *name;
+    int data[MAX_LAYER_SIZE][MAX_LAYER_SIZE];
+    int width;
+    int height;
+    bool showCollisions;
+} Layer2;
+
+typedef struct {
     Rectangle object;
     ItemWithQuantity *iq;
     int money;
@@ -86,6 +94,14 @@ typedef struct {
     Chest **chests;
     int chestCount;
 } Tilemap;
+
+Layer2 *createLayer2(const char *name) {
+    Layer2 *layer = malloc(sizeof(Layer2));
+    layer->name = name;
+    layer->width = 0;
+    layer->height = 0;
+    return layer;
+}
 
 Property *createProperty() {
     Property *p = malloc(sizeof(Property));
@@ -156,26 +172,4 @@ TilesetType getTilesetTypeFromString(const char *type) {
         }
     }
     return TILESET_TYPE_NONE;
-}
-
-Vector2D getTileFromIndex(const Tileset *t, int index) {
-    int width = t->source.width / t->size.x;
-    int y = index / width;
-    int x = (index % width);
-    if (x - 1 < 0) {
-        y--;
-        x = width;
-    }
-    Vector2D pos = {x - 1, y};
-    return pos;
-}
-
-Rectangle getRectForTile(const Tileset *t, int index) {
-    Vector2D tile = getTileFromIndex(t, index);
-    return (Rectangle) {
-            (float) (tile.x * t->size.x),
-            (float) (tile.y * t->size.y),
-            (float) t->size.x,
-            (float) t->size.y,
-    };
 }

@@ -133,8 +133,10 @@ Tileset *parseTileset(const char *indexDir, const char *filename) {
     return ts;
 }
 
-void parseSceneLayer(const Tilemap *t, const char *rawData) {
-    addDebug("scene layer %d processing now", t->layerCount - 1);
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void parseLayerRawData(const Map *m, const char *rawData) {
+    addDebug("scene layer %d processing now", m->layers2Count - 1);
     char *newRawData = (char *) rawData;
     char *line = strtok_r(newRawData, "\r\n", &newRawData);
     char *data[MAX_DATA_SIZE];
@@ -150,17 +152,15 @@ void parseSceneLayer(const Tilemap *t, const char *rawData) {
         const char *val = strtok_r(data[y], ",", &data[y]);
         x = 0;
         while (val != NULL) {
-            t->layers[t->layerCount - 1]->data[y][x] = TextToInteger(val);
+            m->layers2[m->layers2Count - 1]->data[y][x] = TextToInteger(val);
             val = strtok_r(data[y], ",", &data[y]);
             x++;
         }
         y++;
     }
-    t->layers[t->layerCount - 1]->width = x;
-    t->layers[t->layerCount - 1]->height = y;
+    m->layers2[m->layers2Count - 1]->width = x;
+    m->layers2[m->layers2Count - 1]->height = y;
 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef struct {
     const char *name;
@@ -281,7 +281,7 @@ void parseTilesetNode(xmlNodePtr node, Tileset *tileset) {
         } else if (strcmp(name, "image") == 0) {
             addInfo("image");
             char imagePath[MAX_FS_PATH_LENGTH];
-            getComponentPath(imagePath, "", "tilesets", xmlString(node, "source"));
+            getComponentPath(imagePath, "", "tilesets", xmlString(cur, "source"));
             tileset->source = LoadImage(imagePath);
         } else if (strcmp(name, "tile") == 0) {
             addInfo("tile");
@@ -293,8 +293,19 @@ void parseTilesetNode(xmlNodePtr node, Tileset *tileset) {
     xmlFreeDoc(doc);
 }
 
-void parseLayerNode() {
-    addInfo("TBD");
+void parseLayerNode(xmlNodePtr cur, Map *map) {
+    const char *layerName = xmlString(cur, "name");
+    cur = cur->children;
+    while (cur != NULL) {
+        const char *name = (const char *) cur->name;
+        addInfo("layer node :: %s", name);
+        if (strcmp(name, "data") == 0) {
+            map->layers2[map->layers2Count] = createLayer2(layerName);
+            map->layers2Count++;
+            parseLayerRawData(map, (char *) xmlNodeGetContent(cur));
+        }
+        cur = cur->next;
+    }
 }
 
 void parseTilemapObjectGroupNode() {
@@ -310,7 +321,7 @@ Map *parseMapNode(xmlNodePtr node) {
         if (strcmp(name, "tileset") == 0) {
             parseTilesetNode(node->children, map->tileset);
         } else if (strcmp(name, "layer") == 0) {
-            parseLayerNode();
+            parseLayerNode(node->children, map);
         } else if (strcmp(name, "objectgroup") == 0) {
             parseTilemapObjectGroupNode();
         }

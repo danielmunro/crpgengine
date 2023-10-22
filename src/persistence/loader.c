@@ -165,7 +165,7 @@ Scene *loadScene(
     scene->map = parseTilemapDoc(tilemapFilePath, mapDirectory);
 //    scene->map = createMapFromTilemap(tilemap);
 //    free(tilemap);
-    exit(1);
+//    exit(1);
 
     // load mobiles
     loadMobiles(mm, scene, sceneDirectory);
