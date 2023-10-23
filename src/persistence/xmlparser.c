@@ -7,7 +7,7 @@
 #include "headers/warp.h"
 
 void parseLayerRawData(const Map *m, const char *rawData) {
-    addDebug("scene layer %d processing now", m->layers2Count - 1);
+    addDebug("scene layer %d processing now", m->layersCount - 1);
     char *newRawData = (char *) rawData;
     char *line = strtok_r(newRawData, "\r\n", &newRawData);
     char *data[MAX_DATA_SIZE];
@@ -23,14 +23,14 @@ void parseLayerRawData(const Map *m, const char *rawData) {
         const char *val = strtok_r(data[y], ",", &data[y]);
         x = 0;
         while (val != NULL) {
-            m->layers2[m->layers2Count - 1]->data[y][x] = TextToInteger(val);
+            m->layers[m->layersCount - 1]->data[y][x] = TextToInteger(val);
             val = strtok_r(data[y], ",", &data[y]);
             x++;
         }
         y++;
     }
-    m->layers2[m->layers2Count - 1]->width = x;
-    m->layers2[m->layers2Count - 1]->height = y;
+    m->layers[m->layersCount - 1]->width = x;
+    m->layers[m->layersCount - 1]->height = y;
 }
 
 int xmlInt(const xmlNode *node, const char *propName) {
@@ -71,14 +71,14 @@ Object *parseTileObjectGroupNode(int tileId, xmlNodePtr cur) {
     exit(ConfigurationErrorObjectNotFound);
 }
 
-void parseTileProperties(xmlNodePtr cur, Tile2 *t) {
+void parseTileProperties(xmlNodePtr cur, Tile *t) {
     while (cur != NULL) {
         const char *name = (char *) cur->name;
         addInfo("tile property node :: %s", name);
         if (strcmp(name, "property") == 0) {
             const char *propName = xmlString(cur, "name");
             const char *propValue = xmlString(cur, "value");
-            t->properties[t->propertyCount] = createProperty2(propName, propValue);
+            t->properties[t->propertyCount] = createProperty(propName, propValue);
             t->propertyCount++;
             addInfo("prop :: %s, %s", propName, propValue);
         }
@@ -86,10 +86,10 @@ void parseTileProperties(xmlNodePtr cur, Tile2 *t) {
     }
 }
 
-Tile2 *parseTileNode(xmlNodePtr node) {
+Tile *parseTileNode(xmlNodePtr node) {
     int id = xmlInt(node, "id");
     const char *type = xmlString(node, "type");
-    Tile2 *t = createTile2(id, type);
+    Tile *t = createTile(id, type);
     xmlNodePtr cur = node->children;
     while (cur != NULL) {
         const char *name = (const char *) cur->name;
@@ -146,8 +146,8 @@ void parseLayerNode(xmlNodePtr cur, Map *map) {
         const char *name = (const char *) cur->name;
         addInfo("layer node :: %s", name);
         if (strcmp(name, "data") == 0) {
-            map->layers2[map->layers2Count] = createLayer2(layerName);
-            map->layers2Count++;
+            map->layers[map->layersCount] = createLayer(layerName);
+            map->layersCount++;
             parseLayerRawData(map, (char *) xmlNodeGetContent(cur));
         }
         cur = cur->next;

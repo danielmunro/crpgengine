@@ -24,9 +24,7 @@ typedef struct {
     MapConfig *config;
     Tileset *tileset;
     Layer **layers;
-    int layerCount;
-    Layer2 **layers2;
-    int layers2Count;
+    int layersCount;
     Texture2D renderedLayers[LAYER_COUNT];
     ArriveAt *arriveAt[MAX_ARRIVE_AT];
     int arriveAtCount;
@@ -55,9 +53,7 @@ Map *createMap() {
     map->config = malloc(sizeof(MapConfig));
     map->config->tileSize = (Vector2D) {0, 0};
     map->layers = calloc(MAX_LAYERS, sizeof(Layer));
-    map->layerCount = 0;
-    map->layers2 = calloc(MAX_LAYERS, sizeof(Layer2));
-    map->layers2Count = 0;
+    map->layersCount = 0;
     map->mobileCount = 0;
     map->entranceCount = 0;
     map->exitCount = 0;
@@ -198,13 +194,13 @@ void renderMapLayer(Map *m, LayerType layer) {
     Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
     for (int y = -1; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            if (x >= m->layers2[layer]->width || y >= m->layers2[layer]->height) {
+            if (x >= m->layers[layer]->width || y >= m->layers[layer]->height) {
                 continue;
             }
             drawTile(
                     m,
                     renderedLayer,
-                    m->layers2[layer]->data[y][x],
+                    m->layers[layer]->data[y][x],
                     x,
                     y
             );
@@ -311,7 +307,7 @@ bool checkLayerForBlockingObject(const Map *m, Rectangle player, int layer) {
     Vector2D tiles = getTileCount(m);
     for (int y = 0; y < tiles.y; y++) {
         for (int x = 0; x < tiles.x; x++) {
-            int index = m->layers2[layer]->data[y][x];
+            int index = m->layers[layer]->data[y][x];
             const Object *o = getObject(m, index - 1);
             if (o != NULL && isObjectBlocking(m, o, player, x, y)) {
                 return true;
