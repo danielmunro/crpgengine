@@ -74,35 +74,6 @@ Map *createMap() {
     return map;
 }
 
-Map *createMapFromTilemap(Tilemap *tilemap) {
-    Map *map = createMap();
-    map->tileset = tilemap->tileset;
-    if (tilemap->tileset != NULL) {
-        map->tilesCount = tilemap->tileset->tilesCount;
-    }
-    if (tilemap->tileset != NULL) {
-        for (int i = 0; i < tilemap->tileset->tilesCount; i++) {
-            map->tiles[i] = tilemap->tileset->tiles[i];
-        }
-    }
-    for (int i = 0; i < MAX_LAYERS; i++) {
-        map->layers[i] = tilemap->layers[i];
-    }
-    for (int i = 0; i < tilemap->entranceCount; i++) {
-        map->entrances[i] = tilemap->entrances[i];
-    }
-    map->entranceCount = tilemap->entranceCount;
-    for (int i = 0; i < tilemap->exitCount; i++) {
-        map->exits[i] = tilemap->exits[i];
-    }
-    map->exitCount = tilemap->exitCount;
-    for (int i = 0; i < tilemap->arriveAtCount; i++) {
-        map->arriveAt[i] = tilemap->arriveAt[i];
-    }
-    map->arriveAtCount = tilemap->arriveAtCount;
-    return map;
-}
-
 MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
     MobileMovement *mobMovement = malloc(sizeof(MobileMovement));
     mobMovement->mob = mob;
