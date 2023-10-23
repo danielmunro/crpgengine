@@ -34,13 +34,10 @@ typedef struct {
     int exitCount;
     Entrance *entrances[MAX_ENTRANCES];
     int entranceCount;
-    int objectCount;
     bool showCollisions;
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
-    Tile **tiles;
-    int tilesCount;
 } Map;
 
 Entrance *findEntrance(Map *m, const char *name) {
@@ -65,9 +62,7 @@ Map *createMap() {
     map->entranceCount = 0;
     map->exitCount = 0;
     map->arriveAtCount = 0;
-    map->tilesCount = 0;
-    map->tiles = calloc(MAX_TILESETS, sizeof(Tile));
-    map->tileset = malloc(sizeof(Tileset));
+    map->tileset = createTileset();
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         map->mobMovements[i] = NULL;
     }
@@ -92,10 +87,10 @@ void addMobileMovement(Map *m, MobileMovement *mobMovement) {
     }
 }
 
-Rectangle *getObject(const Map *m, int id) {
-    for (int i = 0; i < m->tilesCount; i++) {
-        if (m->tiles[i]->id == id) {
-            return m->tiles[i]->object;
+Object *getObject(const Map *m, int id) {
+    for (int i = 0; i < m->tileset->tilesCount; i++) {
+        if (m->tileset->tiles[i]->object->id == id) {
+            return m->tileset->tiles[i]->object;
         }
     }
     return NULL;
@@ -112,13 +107,13 @@ void mapDebugKeyPressed(Vector2 position) {
 }
 
 void drawObjectCollision(const Map *m, Image layer, int index, int x, int y) {
-    const Rectangle *o = getObject(m, index);
+    const Object *o = getObject(m, index);
     if (o != NULL) {
         Rectangle r = {
-                (float) (m->tileset->size.x * x) + o->x,
-                (float) (m->tileset->size.y * y) + o->y,
-                o->width,
-                o->height,
+                (float) (m->tileset->size.x * x) + o->area.x,
+                (float) (m->tileset->size.y * y) + o->area.y,
+                o->area.width,
+                o->area.height,
         };
         ImageDrawRectangle(
                 &layer,
@@ -297,16 +292,16 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
     }
 }
 
-Rectangle getObjectSize(const Map *m, const Rectangle *o, int x, int y) {
+Rectangle getObjectSize(const Map *m, const Object *o, int x, int y) {
     return (Rectangle) {
-            (float) (m->tileset->size.x * x) + o->x,
-            (float) (m->tileset->size.y * y) + o->y,
-            o->width,
-            o->height,
+            (float) (m->tileset->size.x * x) + o->area.x,
+            (float) (m->tileset->size.y * y) + o->area.y,
+            o->area.width,
+            o->area.height,
     };
 }
 
-bool isObjectBlocking(const Map *m, const Rectangle *o, Rectangle player, int x, int y) {
+bool isObjectBlocking(const Map *m, const Object *o, Rectangle player, int x, int y) {
     Rectangle objRect = getObjectSize(m, o, x, y);
     Rectangle c = GetCollisionRec(player, objRect);
     return c.height > 0 || c.width > 0;
@@ -317,7 +312,7 @@ bool checkLayerForBlockingObject(const Map *m, Rectangle player, int layer) {
     for (int y = 0; y < tiles.y; y++) {
         for (int x = 0; x < tiles.x; x++) {
             int index = m->layers2[layer]->data[y][x];
-            const Rectangle *o = getObject(m, index - 1);
+            const Object *o = getObject(m, index - 1);
             if (o != NULL && isObjectBlocking(m, o, player, x, y)) {
                 return true;
             }

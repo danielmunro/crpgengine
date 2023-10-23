@@ -42,7 +42,12 @@ typedef struct {
 } Property;
 
 typedef struct {
-    Rectangle *object;
+    int id;
+    Rectangle area;
+} Object;
+
+typedef struct {
+    Object *object;
     Property **properties;
     int propertyCount;
     TilesetType type;
@@ -50,7 +55,20 @@ typedef struct {
 } Tile;
 
 typedef struct {
-    Tile **tiles;
+    const char *name;
+    const char *value;
+} Property2;
+
+typedef struct {
+    Property2 **properties;
+    int propertyCount;
+    Object *object;
+    int id;
+    const char *type;
+} Tile2;
+
+typedef struct {
+    Tile2 **tiles;
     int tilesCount;
     xmlTextReaderPtr reader;
     Vector2D size;
@@ -73,27 +91,12 @@ typedef struct {
     bool showCollisions;
 } Layer2;
 
-typedef struct {
-    Rectangle object;
-    ItemWithQuantity *iq;
-    int money;
-} Chest;
-
-typedef struct {
-    const char *filePath;
-    xmlTextReaderPtr reader;
-    Tileset *tileset;
-    Layer **layers;
-    int layerCount;
-    Entrance **entrances;
-    int entranceCount;
-    Exit **exits;
-    int exitCount;
-    ArriveAt **arriveAt;
-    int arriveAtCount;
-    Chest **chests;
-    int chestCount;
-} Tilemap;
+Property2 *createProperty2(const char *name, const char *value) {
+    Property2 *p = malloc(sizeof(Property2));
+    p->name = name;
+    p->value = value;
+    return p;
+}
 
 Layer2 *createLayer2(const char *name) {
     Layer2 *layer = malloc(sizeof(Layer2));
@@ -103,13 +106,8 @@ Layer2 *createLayer2(const char *name) {
     return layer;
 }
 
-Property *createProperty() {
-    Property *p = malloc(sizeof(Property));
-    return p;
-}
-
-Tile *createTile(int id, TilesetType type) {
-    Tile *t = malloc(sizeof(Tile));
+Tile2 *createTile2(int id, const char *type) {
+    Tile2 *t = malloc(sizeof(Tile2));
     t->id = id;
     t->type = type;
     t->properties = calloc(MAX_PROPERTIES, sizeof(Property));
@@ -117,59 +115,17 @@ Tile *createTile(int id, TilesetType type) {
     return t;
 }
 
-Layer *createLayer() {
-    Layer *layer = malloc(sizeof(Layer));
-    layer->type = -1;
-    layer->width = 0;
-    layer->height = 0;
-    return layer;
+Object *createObject(int id, Rectangle area) {
+    Object *o = malloc(sizeof(Object));
+    o->id = id;
+    o->area = area;
+    return o;
 }
 
-Tilemap *createTilemap(const char *filePath) {
-    Tilemap *t = malloc(sizeof(Tilemap));
-    t->filePath = filePath;
-    t->reader = xmlReaderForFile(filePath, NULL, 0);
-    t->tileset = NULL;
-    t->layers = calloc(MAX_LAYERS, sizeof(Layer));
-    t->layerCount = 0;
-    t->entrances = calloc(MAX_ENTRANCES, sizeof(Entrance));
-    t->entranceCount = 0;
-    t->exits = calloc(MAX_EXITS, sizeof(Exit));
-    t->exitCount = 0;
-    t->arriveAt = calloc(MAX_ARRIVE_AT, sizeof(ArriveAt));
-    t->arriveAtCount = 0;
-    t->chests = calloc(MAX_CHESTS, sizeof(Chest));
-    t->chestCount = 0;
-    return t;
-}
-
-Tileset *createTileset(const char *filePath) {
+Tileset *createTileset() {
     Tileset *t = malloc(sizeof(Tileset));
-    t->reader = xmlReaderForFile(filePath, NULL, 0);
-    t->tiles = calloc(MAX_TILES, sizeof(Tile));
+    t->reader = NULL;
+    t->tiles = calloc(MAX_TILES, sizeof(Tile2));
     t->tilesCount = 0;
     return t;
-}
-
-Chest *createChest(Rectangle object, ItemWithQuantity *iq, int money) {
-    Chest *chest = malloc(sizeof(Chest));
-    chest->object = object;
-    chest->iq = iq;
-    chest->money = money;
-    return chest;
-}
-
-void addProperty(Tile *tile, Property *property) {
-    tile->properties[tile->propertyCount] = property;
-    tile->propertyCount++;
-}
-
-TilesetType getTilesetTypeFromString(const char *type) {
-    int TilesetTypeCount = sizeof(TilesetTypes) / sizeof(TilesetTypes[0]);
-    for (int i = 0; i < TilesetTypeCount; i++) {
-        if (strcmp(TilesetTypes[i], type) == 0) {
-            return i;
-        }
-    }
-    return TILESET_TYPE_NONE;
 }

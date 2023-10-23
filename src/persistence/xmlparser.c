@@ -33,35 +33,6 @@ void parseLayerRawData(const Map *m, const char *rawData) {
     m->layers2[m->layers2Count - 1]->height = y;
 }
 
-typedef struct {
-    const char *name;
-    const char *value;
-} Property2;
-
-typedef struct {
-    Property2 **properties;
-    int propertyCount;
-    Rectangle object;
-    int id;
-    const char *type;
-} Tile2;
-
-Property2 *createProperty2(const char *name, const char *value) {
-    Property2 *p = malloc(sizeof(Property2));
-    p->name = name;
-    p->value = value;
-    return p;
-}
-
-Tile2 *createTile2(int id, const char *type) {
-    Tile2 *t = malloc(sizeof(Tile2));
-    t->id = id;
-    t->type = type;
-    t->properties = calloc(MAX_PROPERTIES, sizeof(Property));
-    t->propertyCount = 0;
-    return t;
-}
-
 int xmlInt(const xmlNode *node, const char *propName) {
     return TextToInteger((const char *) xmlGetProp(node, (const xmlChar *) propName));
 }
@@ -81,16 +52,18 @@ const char *xmlString(const xmlNode *node, const char *propName) {
     return (const char *) xmlGetProp(node, (const xmlChar *) propName);
 }
 
-Rectangle parseTileObjectGroupNode(xmlNodePtr cur) {
+Object *parseTileObjectGroupNode(int tileId, xmlNodePtr cur) {
     while (cur != NULL) {
         if (strcmp((const char *) cur->name, "object") == 0) {
             addInfo("object group child :: %s", (char *) cur->name);
-            return (Rectangle) {
-                    xmlFloat(cur, "x"),
-                    xmlFloat(cur, "y"),
-                    xmlFloat(cur, "width"),
-                    xmlFloat(cur, "height"),
-            };
+            return createObject(
+                    tileId,
+                    (Rectangle) {
+                            xmlFloat(cur, "x"),
+                            xmlFloat(cur, "y"),
+                            xmlFloat(cur, "width"),
+                            xmlFloat(cur, "height"),
+                    });
         }
         cur = cur->next;
     }
@@ -122,7 +95,7 @@ Tile2 *parseTileNode(xmlNodePtr node) {
         const char *name = (const char *) cur->name;
         if (strcmp(name, "objectgroup") == 0) {
             addInfo("object group");
-            t->object = parseTileObjectGroupNode(cur->children);
+            t->object = parseTileObjectGroupNode(id, cur->children);
         } else if (strcmp(name, "properties") == 0) {
             addInfo("properties");
             parseTileProperties(cur->children, t);
@@ -132,7 +105,7 @@ Tile2 *parseTileNode(xmlNodePtr node) {
     return t;
 }
 
-void parseTilesetNode(xmlNodePtr node, Tileset *tileset) {
+void parseTilesetNode(xmlNodePtr node, Tileset *t) {
     const char *source = (const char *) xmlGetProp(node, (const xmlChar *) "source");
     char filePath[MAX_FS_PATH_LENGTH];
     getComponentPath(filePath, config->indexDir, "tilesets", source);
@@ -146,17 +119,19 @@ void parseTilesetNode(xmlNodePtr node, Tileset *tileset) {
         const char *name = (const char *) cur->name;
         if (strcmp(name, "tileset") == 0) {
             addInfo("tileset");
-            tileset->size.x = xmlInt(cur, "tilewidth");
-            tileset->size.y = xmlInt(cur, "tileheight");
+            t->size.x = xmlInt(cur, "tilewidth");
+            t->size.y = xmlInt(cur, "tileheight");
             cur = cur->children;
         } else if (strcmp(name, "image") == 0) {
             addInfo("image");
             char imagePath[MAX_FS_PATH_LENGTH];
             getComponentPath(imagePath, "", "tilesets", xmlString(cur, "source"));
-            tileset->source = LoadImage(imagePath);
+            t->reader = xmlReaderForFile(filePath, NULL, 0);
+            t->source = LoadImage(imagePath);
         } else if (strcmp(name, "tile") == 0) {
             addInfo("tile");
-            parseTileNode(cur);
+            t->tiles[t->tilesCount] = parseTileNode(cur);
+            t->tilesCount++;
         }
         cur = cur->next;
     }
