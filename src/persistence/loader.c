@@ -21,7 +21,7 @@ void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *fi
         const SliceData *s = &animation->slices[i];
         am->library[i] = createAnimation(
                 animation->name,
-                getDirectionFromName(s->name),
+                getDirectionFromString(s->name),
                 sp,
                 s->frameStart,
                 s->frameEnd,

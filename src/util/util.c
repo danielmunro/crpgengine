@@ -66,21 +66,6 @@ int getFilesInDirectory(const char *dir, char **files) {
     return i;
 }
 
-int getDirectionFromString(const char *value) {
-    if (strcmp(value, "up") == 0) {
-        return DIRECTION_UP;
-    } else if (strcmp(value, "down") == 0) {
-        return DIRECTION_DOWN;
-    } else if (strcmp(value, "left") == 0) {
-        return DIRECTION_LEFT;
-    } else if (strcmp(value, "right") == 0) {
-        return DIRECTION_RIGHT;
-    } else {
-        fprintf(stderr, "invalid direction: %s\n", value);
-        return 0;
-    }
-}
-
 int min(int a, int b) {
     if (a > b) {
         return b;

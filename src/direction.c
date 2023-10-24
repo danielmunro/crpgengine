@@ -1,3 +1,5 @@
+#include <string.h>
+
 typedef enum {
     DIRECTION_UP,
     DIRECTION_DOWN,
@@ -21,14 +23,19 @@ const Direction DIRECTIONS[] = {
 
 #define DIRECTION_COUNT sizeof(DIRECTIONS) / sizeof(DIRECTIONS[0])
 
-Direction getDirectionFromName(const char *name) {
-    for (int i = 0; i < DIRECTION_COUNT; i++) {
-        if (strcmp(AnimationTypeStrings[i], name) == 0) {
-            return DIRECTIONS[i];
-        }
+Direction getDirectionFromString(const char *value) {
+    if (strcmp(value, "up") == 0) {
+        return DIRECTION_UP;
+    } else if (strcmp(value, "down") == 0) {
+        return DIRECTION_DOWN;
+    } else if (strcmp(value, "left") == 0) {
+        return DIRECTION_LEFT;
+    } else if (strcmp(value, "right") == 0) {
+        return DIRECTION_RIGHT;
+    } else {
+        fprintf(stderr, "invalid direction: %s\n", value);
+        return 0;
     }
-    addError("no direction for name :: %s", name);
-    exit(ConfigurationErrorNoDirectionForName);
 }
 
 Direction getOppositeDirection(Direction direction) {
