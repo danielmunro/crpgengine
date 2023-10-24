@@ -83,10 +83,10 @@ void addMobileMovement(Map *m, MobileMovement *mobMovement) {
     }
 }
 
-Object *getObject(const Map *m, int id) {
+Tile *getTile(const Map *m, int index) {
     for (int i = 0; i < m->tileset->tilesCount; i++) {
-        if (m->tileset->tiles[i]->object->id == id) {
-            return m->tileset->tiles[i]->object;
+        if (m->tileset->tiles[i]->id == index) {
+            return m->tileset->tiles[i];
         }
     }
     return NULL;
@@ -103,13 +103,19 @@ void mapDebugKeyPressed(Vector2 position) {
 }
 
 void drawObjectCollision(const Map *m, Image layer, int index, int x, int y) {
-    const Object *o = getObject(m, index);
-    if (o != NULL) {
+    const Tile *t = getTile(m, index);
+    if (t == NULL) {
+        return;
+    }
+    for (int i = 0; i < t->objectCount; i++) {
+        if (t->objects[i] == NULL) {
+            return;
+        }
         Rectangle r = {
-                (float) (m->tileset->size.x * x) + o->area.x,
-                (float) (m->tileset->size.y * y) + o->area.y,
-                o->area.width,
-                o->area.height,
+                (float) (m->tileset->size.x * x) + t->objects[i]->area.x,
+                (float) (m->tileset->size.y * y) + t->objects[i]->area.y,
+                t->objects[i]->area.width,
+                t->objects[i]->area.height,
         };
         ImageDrawRectangle(
                 &layer,
@@ -308,9 +314,16 @@ bool checkLayerForBlockingObject(const Map *m, Rectangle player, int layer) {
     for (int y = 0; y < tiles.y; y++) {
         for (int x = 0; x < tiles.x; x++) {
             int index = m->layers[layer]->data[y][x];
-            const Object *o = getObject(m, index - 1);
-            if (o != NULL && isObjectBlocking(m, o, player, x, y)) {
-                return true;
+            const Tile *t = getTile(m, index - 1);
+            if (t == NULL) {
+                continue;
+            }
+            for (int i = 0; i < t->objectCount; i++) {
+                if (t->objects[i] == NULL) {
+                    break;
+                } else if (isObjectBlocking(m, t->objects[i], player, x, y)) {
+                    return true;
+                }
             }
         }
     }

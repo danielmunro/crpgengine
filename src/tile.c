@@ -21,7 +21,8 @@ typedef struct {
 typedef struct {
     Property **properties;
     int propertyCount;
-    Object *object;
+    Object **objects;
+    int objectCount;
     int id;
     const char *type;
 } Tile;
@@ -63,6 +64,8 @@ Tile *createTile(int id, const char *type) {
     t->type = type;
     t->properties = calloc(MAX_PROPERTIES, sizeof(Property));
     t->propertyCount = 0;
+    t->objects = calloc(MAX_OBJECTS, sizeof(Object));
+    t->objectCount = 0;
     return t;
 }
 

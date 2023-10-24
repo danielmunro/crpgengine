@@ -52,23 +52,22 @@ const char *xmlString(const xmlNode *node, const char *propName) {
     return (const char *) xmlGetProp(node, (const xmlChar *) propName);
 }
 
-Object *parseTileObjectGroupNode(int tileId, xmlNodePtr cur) {
+void parseTileObjectGroupNode(Tile *t, xmlNodePtr cur) {
     while (cur != NULL) {
         if (strcmp((const char *) cur->name, "object") == 0) {
             addInfo("object group child :: %s", (char *) cur->name);
-            return createObject(
-                    tileId,
+            t->objects[t->objectCount] = createObject(
+                    xmlInt(cur, "id"),
                     (Rectangle) {
                             xmlFloat(cur, "x"),
                             xmlFloat(cur, "y"),
                             xmlFloat(cur, "width"),
                             xmlFloat(cur, "height"),
                     });
+            t->objectCount++;
         }
         cur = cur->next;
     }
-    addError("object not found in object group");
-    exit(ConfigurationErrorObjectNotFound);
 }
 
 void parseTileProperties(xmlNodePtr cur, Tile *t) {
@@ -95,7 +94,7 @@ Tile *parseTileNode(xmlNodePtr node) {
         const char *name = (const char *) cur->name;
         if (strcmp(name, "objectgroup") == 0) {
             addInfo("object group");
-            t->object = parseTileObjectGroupNode(id, cur->children);
+            parseTileObjectGroupNode(t, cur->children);
         } else if (strcmp(name, "properties") == 0) {
             addInfo("properties");
             parseTileProperties(cur->children, t);
