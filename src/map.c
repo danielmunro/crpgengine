@@ -309,20 +309,27 @@ bool isObjectBlocking(const Map *m, const Object *o, Rectangle player, int x, in
     return c.height > 0 || c.width > 0;
 }
 
+bool checkTileForBlockingObject(const Map *m, Rectangle player, int layer, int x, int y) {
+    const Tile *t = getTile(m, m->layers[layer]->data[y][x]);
+    if (t == NULL) {
+        return false;
+    }
+    for (int i = 0; i < t->objectCount; i++) {
+        if (t->objects[i] == NULL) {
+            break;
+        } else if (isObjectBlocking(m, t->objects[i], player, x, y)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool checkLayerForBlockingObject(const Map *m, Rectangle player, int layer) {
     Vector2D tiles = getTileCount(m);
     for (int y = 0; y < tiles.y; y++) {
         for (int x = 0; x < tiles.x; x++) {
-            const Tile *t = getTile(m, m->layers[layer]->data[y][x]);
-            if (t == NULL) {
-                continue;
-            }
-            for (int i = 0; i < t->objectCount; i++) {
-                if (t->objects[i] == NULL) {
-                    break;
-                } else if (isObjectBlocking(m, t->objects[i], player, x, y)) {
-                    return true;
-                }
+            if (checkTileForBlockingObject(m, player, layer, x, y)) {
+                return true;
             }
         }
     }
