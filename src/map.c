@@ -83,9 +83,9 @@ void addMobileMovement(Map *m, MobileMovement *mobMovement) {
     }
 }
 
-Tile *getTile(const Map *m, int index) {
+Tile *getTile(const Map *m, int tileNumber) {
     for (int i = 0; i < m->tileset->tilesCount; i++) {
-        if (m->tileset->tiles[i]->id == index) {
+        if (m->tileset->tiles[i]->id == tileNumber - 1) {
             return m->tileset->tiles[i];
         }
     }
@@ -102,8 +102,8 @@ void mapDebugKeyPressed(Vector2 position) {
     addInfo("player coordinates: %f, %f", position.x, position.y);
 }
 
-void drawObjectCollision(const Map *m, Image layer, int index, int x, int y) {
-    const Tile *t = getTile(m, index);
+void drawObjectCollision(const Map *m, Image layer, int tileNumber, int x, int y) {
+    const Tile *t = getTile(m, tileNumber);
     if (t == NULL) {
         return;
     }
@@ -168,7 +168,7 @@ void drawTile(const Map *m, Image layer, int index, int x, int y) {
             WHITE
     );
     if (config->showCollisions->objects) {
-        drawObjectCollision(m, layer, index - 1, x, y);
+        drawObjectCollision(m, layer, index, x, y);
     }
 }
 
@@ -313,8 +313,7 @@ bool checkLayerForBlockingObject(const Map *m, Rectangle player, int layer) {
     Vector2D tiles = getTileCount(m);
     for (int y = 0; y < tiles.y; y++) {
         for (int x = 0; x < tiles.x; x++) {
-            int index = m->layers[layer]->data[y][x];
-            const Tile *t = getTile(m, index - 1);
+            const Tile *t = getTile(m, m->layers[layer]->data[y][x]);
             if (t == NULL) {
                 continue;
             }
