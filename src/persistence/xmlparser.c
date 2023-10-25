@@ -53,18 +53,22 @@ const char *xmlString(const xmlNode *node, const char *propName) {
     return (const char *) xmlGetProp(node, (const xmlChar *) propName);
 }
 
+Rectangle parseRectangle(const xmlNode *node) {
+    return (Rectangle) {
+            xmlFloat(node, "x"),
+            xmlFloat(node, "y"),
+            xmlFloat(node, "width"),
+            xmlFloat(node, "height"),
+    };
+}
+
 void parseTileObjectGroupNode(Tile *t, xmlNodePtr cur) {
     while (cur != NULL) {
         if (strcmp((const char *) cur->name, "object") == 0) {
             addInfo("object group child :: %s", (char *) cur->name);
             t->objects[t->objectCount] = createObject(
                     xmlInt(cur, "id"),
-                    (Rectangle) {
-                            xmlFloat(cur, "x"),
-                            xmlFloat(cur, "y"),
-                            xmlFloat(cur, "width"),
-                            xmlFloat(cur, "height"),
-                    });
+                    parseRectangle(cur));
             t->objectCount++;
         }
         cur = cur->next;
@@ -118,18 +122,15 @@ void parseTilesetNode(xmlNodePtr node, Tileset *t) {
     while (cur != NULL) {
         const char *name = (const char *) cur->name;
         if (strcmp(name, "tileset") == 0) {
-            addInfo("tileset");
             t->size.x = xmlInt(cur, "tilewidth");
             t->size.y = xmlInt(cur, "tileheight");
             cur = cur->children;
         } else if (strcmp(name, "image") == 0) {
-            addInfo("image");
             char imagePath[MAX_FS_PATH_LENGTH];
             getComponentPath(imagePath, "", "tilesets", xmlString(cur, "source"));
             t->reader = xmlReaderForFile(filePath, NULL, 0);
             t->source = LoadImage(imagePath);
         } else if (strcmp(name, "tile") == 0) {
-            addInfo("tile");
             t->tiles[t->tilesCount] = parseTileNode(cur);
             t->tilesCount++;
         }
@@ -144,7 +145,7 @@ void parseLayerNode(xmlNodePtr cur, Map *map) {
     cur = cur->children;
     while (cur != NULL) {
         const char *name = (const char *) cur->name;
-        addInfo("layer node :: %s", name);
+        addDebug("parse layer node :: %s", name);
         if (strcmp(name, "data") == 0) {
             map->layers[map->layersCount] = createLayer(layerName);
             map->layersCount++;
@@ -170,43 +171,44 @@ Property *parseProperty(xmlNodePtr node, const char *propName) {
     return NULL;
 }
 
+void parseExit(xmlNodePtr node, Map *m) {
+    int id = xmlInt(node, "id");
+    const Property *to = parseProperty(node, "to");
+    const Property *scene = parseProperty(node, "scene");
+    if (to == NULL || scene == NULL) {
+        addWarning("malformed exit, object id :: %d", id);
+    } else {
+        m->exits[m->exitCount] = createExit(
+                id,
+                to->value,
+                scene->value,
+                parseRectangle(node));
+        m->exitCount++;
+    }
+}
+
+void parseEntrance(xmlNodePtr node, Map *m) {
+    int id = xmlInt(node, "id");
+    const char *objectName = xmlString(node, "name");
+    const Property *direction = parseProperty(node, "direction");
+    m->entrances[m->entranceCount] = createEntrance(
+            id,
+            objectName,
+            getDirectionFromString(direction != NULL ? direction->value : "down"),
+            parseRectangle(node));
+    m->entranceCount++;
+}
+
 void parseTilemapObjectGroupWarpsNode(xmlNodePtr node, Map *m) {
     xmlNodePtr cur = node->children;
     while (cur != NULL) {
         const char *name = (const char *) cur->name;
         if (strcmp(name, "object") == 0) {
-            int id = xmlInt(cur, "id");
             const char *type = xmlString(cur, "type");
-            const char *objectName = xmlString(cur, "name");
-            Rectangle area = (Rectangle) {
-                xmlFloat(cur, "x"),
-                xmlFloat(cur, "y"),
-                xmlFloat(cur, "width"),
-                xmlFloat(cur, "height"),
-            };
             if (strcmp(type, "exit") == 0) {
-                const Property *to = parseProperty(cur, "to");
-                const Property *scene = parseProperty(cur, "scene");
-                if (to == NULL || scene == NULL) {
-                    addWarning("malformed exit, object id :: %d", id);
-                } else {
-                    m->exits[m->exitCount] = createExit(
-                            id,
-                            to->value,
-                            scene->value,
-                            area
-                    );
-                    m->exitCount++;
-                }
+                parseExit(cur, m);
             } else if (strcmp(type, "entrance") == 0) {
-                const Property *direction = parseProperty(cur, "direction");
-                m->entrances[m->entranceCount] = createEntrance(
-                        id,
-                        objectName,
-                        getDirectionFromString(direction != NULL ? direction->value : "down"),
-                        area
-                );
-                m->entranceCount++;
+                parseEntrance(cur, m);
             }
         }
         cur = cur->next;
@@ -223,12 +225,7 @@ void parseTilemapObjectGroupArriveAtNode(xmlNodePtr node, Map *m) {
             m->arriveAt[m->arriveAtCount] = createArriveAt(
                     id,
                     objectName,
-                    (Rectangle) {
-                            xmlFloat(cur, "x"),
-                            xmlFloat(cur, "y"),
-                            xmlFloat(cur, "width"),
-                            xmlFloat(cur, "height"),
-                    });
+                    parseRectangle(cur));
             m->arriveAtCount++;
         }
         cur = cur->next;
