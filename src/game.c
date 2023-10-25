@@ -36,7 +36,7 @@ typedef struct {
     SpellManager *spells;
 } Game;
 
-void attemptToUseExit(Game *game, Scene *scene, Entrance *entrance) {
+void attemptToUseExit(Game *game, Scene *scene, const Entrance *entrance) {
     if (entrance == NULL) {
         addWarning("no entrance found for '%s' scene", scene->name);
         return;
@@ -63,8 +63,8 @@ void evaluateExits(Game *g) {
         return;
     }
     addDebug("player at exit");
-    char *sceneName = m->exits[ex]->scene;
-    char *entranceName = m->exits[ex]->to;
+    const char *sceneName = m->exits[ex]->scene;
+    const char *entranceName = m->exits[ex]->to;
     for (int i = 0; i < g->scenes->count; i++) {
         if (strcmp(sceneName, g->scenes->scenes[i]->name) == 0) {
             attemptToUseExit(
@@ -75,8 +75,8 @@ void evaluateExits(Game *g) {
             return;
         }
     }
-    addWarning("warp not found :: %s, %s",
-            sceneName, entranceName);
+    addWarning("exit not found :: id: %d, scene: %s, entrance: %s",
+               m->exits[ex]->id, sceneName, entranceName);
 }
 
 void mapMenuKeyPressed(Game *g) {

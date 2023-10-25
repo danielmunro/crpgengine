@@ -170,7 +170,9 @@ void engageWithMobile(Player *p) {
 void disengageWithMobile(Player *p) {
     p->engaged = false;
     clearDialog(p);
-    updateDirection(p->blockedBy, p->blockedBy->previousDirection);
+    if (p->blockedBy != NULL) {
+        updateDirection(p->blockedBy, p->blockedBy->previousDirection);
+    }
 }
 
 SaveData *createSaveData(const Player *player, const char *scene, const char *saveName) {

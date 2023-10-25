@@ -173,10 +173,10 @@ void getComponentPath(
     sprintf(dest, "%s/%s", moduleIndexDir, filename);
     const char *baseFile = basename((char *) filename);
     sprintf(dest, "%s/%s", moduleIndexDir, baseFile);
-    addInfo("check for module component :: %s, %s", componentName, dest);
+    addDebug("check for module component :: %s, %s", componentName, dest);
     if (access(dest, F_OK) != 0) {
         sprintf(dest, "%s/%s/%s", config->indexDir, componentName, baseFile);
-        addInfo("check for global component :: %s, %s", componentName, dest);
+        addDebug("check for global component :: %s, %s", componentName, dest);
         if (access(dest, F_OK) != 0) {
             addError("no component exists with filename :: %s", baseFile);
             exit(ConfigurationErrorMissingComponent);
