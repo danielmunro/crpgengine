@@ -37,9 +37,9 @@ void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *fi
 void loadMobiles(MobileManager *mm, Scene *scene, const char *sceneDirectory) {
     char directory[MAX_FS_PATH_LENGTH];
     sprintf(directory, "%s/mobiles", sceneDirectory);
-    addInfo("load mobiles from %s", directory);
+    addDebug("load mobiles from %s", directory);
     if (!FileExists(directory)) {
-        addInfo("mobiles directory does not exist, skipping -- %s", directory);
+        addDebug("mobiles directory does not exist, skipping -- %s", directory);
         return;
     }
     char **mobFiles = calloc(MAX_FILES, sizeof(char *));
@@ -62,7 +62,7 @@ void loadMobiles(MobileManager *mm, Scene *scene, const char *sceneDirectory) {
 void loadPlayerMobiles(MobileManager *mm) {
     char directory[MAX_FS_PATH_LENGTH];
     sprintf(directory, "%s/player/mobiles", config->indexDir);
-    addInfo("load player mobiles from %s", directory);
+    addDebug("load player mobiles from %s", directory);
     if (!FileExists(directory)) {
         addError("player mobiles directory does not exist :: %s", directory);
         exit(ConfigurationErrorPlayerMobilesDirectoryDoesNotExist);
@@ -136,7 +136,7 @@ void loadStorylines(Scene *s, const char *sceneDirectory) {
         }
     }
     free(storylineFiles);
-    addInfo("added storylines to game :: %d", count);
+    addDebug("added storylines to game :: %d", count);
 }
 
 Scene *loadScene(
@@ -180,15 +180,14 @@ void loadScenes(
         SceneManager *sm,
         MobileManager *mm,
         Beastiary *beastiary,
-        char *scenes[MAX_SCENES],
-        char *sceneDirectories[MAX_SCENES]) {
+        SceneLoader *sl) {
     addDebug("attempting to load scenes");
     for (int i = 0; i < sm->count; i++) {
         sm->scenes[i] = loadScene(
                 mm,
                 beastiary,
-                scenes[i],
-                sceneDirectories[i]);
+                sl->scenes[i],
+                sl->sceneFiles[i]);
         addDebug("scene loaded :: %s (%d)", sm->scenes[i]->name, i);
     }
     for (int i = 0; i < sm->count; i++) {
@@ -209,13 +208,17 @@ void loadScenesFromFiles(
     SceneLoader *sl = createSceneLoader(config->indexDir);
     addDebug("get scene directories :: %s", sl->sceneDirectory);
     sl->count = getFilesInDirectory(sl->sceneDirectory, sl->scenes);
-    addDebug("top level count :: %d", sl->count);
     buildSceneFilesList(sl);
     sm->count = addSubsceneFiles(sl);
+    addDebug("scene loader found scenes :: %d", sm->count);
     for (int i = 0; i < sm->count; i++) {
-        addInfo("found scene: %s, %s", sl->scenes[i], sl->sceneFiles[i]);
+        addDebug("scene :: %s (%s)", sl->scenes[i], sl->sceneFiles[i]);
     }
-    loadScenes(sm, mobileManager, beastiary, sl->scenes, sl->sceneFiles);
+    loadScenes(
+            sm,
+            mobileManager,
+            beastiary,
+            sl);
     free(sl);
 }
 

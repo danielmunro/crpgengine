@@ -54,7 +54,7 @@ void processAnimations(AnimationManager *am) {
 }
 
 void addAnimation(AnimationManager *am, Animation *a) {
-    addInfo("add animation to manager :: %s, %s, %d",
+    addDebug("add animation to manager :: %s, %s, %d",
             a->name, a->spriteSheet->name, am->animationCount);
     am->animations[am->animationCount] = a;
     am->animationCount++;
