@@ -83,3 +83,12 @@ Tileset *createTileset() {
     t->tilesCount = 0;
     return t;
 }
+
+Property *findProperty(const Tile *t, const char *propertyName) {
+    for (int i = 0; i < t->propertyCount; i++) {
+        if (strcmp(t->properties[i]->name, propertyName) == 0) {
+            return t->properties[i];
+        }
+    }
+    return NULL;
+}

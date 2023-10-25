@@ -285,7 +285,7 @@ Game *createGame() {
             g->notifications,
             g->mobiles);
     g->scenes = createSceneManager(g->controls, g->animations, g->audio);
-    loadScenesFromFiles(g->scenes, g->mobiles, g->beastiary);
+    loadScenesFromFiles(g->scenes, g->mobiles, g->items, g->beastiary);
     setSceneBasedOnSave(g->scenes, g->player, save);
     addDebug("done creating game object");
     free(save);

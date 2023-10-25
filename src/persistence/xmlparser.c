@@ -254,7 +254,7 @@ Map *parseMapNode(xmlNodePtr node) {
     return map;
 }
 
-Map *parseTilemapDoc(const char *filePath, const char *indexDir) {
+Map *parseTilemapDoc(ItemManager *im, const char *filePath, const char *indexDir) {
     xmlDocPtr doc = xmlParseFile(filePath);
     xmlNodePtr cur = xmlDocGetRootElement(doc);
     if (cur == NULL) {
@@ -263,5 +263,15 @@ Map *parseTilemapDoc(const char *filePath, const char *indexDir) {
     }
     Map *map = parseMapNode(cur);
     xmlFreeNode(cur);
+    for (int i = 0; i < map->tileset->tilesCount; i++) {
+        Tile *t = map->tileset->tiles[i];
+        if (t->type != NULL && strcmp(t->type, "chest") == 0) {
+            map->chests[map->chestCount] = createChest(
+                    createItemWithQuantity(
+                            findItemFromName(im, findProperty(t, "item")->value),
+                            TextToInteger(findProperty(t, "quantity")->value)));
+            map->chestCount++;
+        }
+    }
     return map;
 }
