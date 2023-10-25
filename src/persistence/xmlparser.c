@@ -177,14 +177,14 @@ void parseExit(xmlNodePtr node, Map *m) {
     const Property *scene = parseProperty(node, "scene");
     if (to == NULL || scene == NULL) {
         addWarning("malformed exit, object id :: %d", id);
-    } else {
-        m->exits[m->exitCount] = createExit(
-                id,
-                to->value,
-                scene->value,
-                parseRectangle(node));
-        m->exitCount++;
+        return;
     }
+    m->exits[m->exitCount] = createExit(
+            id,
+            to->value,
+            scene->value,
+            parseRectangle(node));
+    m->exitCount++;
 }
 
 void parseEntrance(xmlNodePtr node, Map *m) {
@@ -232,6 +232,15 @@ void parseTilemapObjectGroupArriveAtNode(xmlNodePtr node, Map *m) {
     }
 }
 
+void parseTilemapObjectGroup(xmlNodePtr node, Map *m) {
+    const char *groupName = (const char *) xmlString(node, "name");
+    if (strcmp(groupName, "warps") == 0) {
+        parseTilemapObjectGroupWarpsNode(node, m);
+    } else if (strcmp(groupName, "arrive_at") == 0) {
+        parseTilemapObjectGroupArriveAtNode(node, m);
+    }
+}
+
 Map *parseMapNode(xmlNodePtr node) {
     Map *map = createMap();
     map->config->tileSize.x = xmlInt(node, "tilewidth");
@@ -243,12 +252,7 @@ Map *parseMapNode(xmlNodePtr node) {
         } else if (strcmp(name, "layer") == 0) {
             parseLayerNode(node->children, map);
         } else if (strcmp(name, "objectgroup") == 0) {
-            const char *groupName = (const char *) xmlString(node->children, "name");
-            if (strcmp(groupName, "warps") == 0) {
-                parseTilemapObjectGroupWarpsNode(node->children, map);
-            } else if (strcmp(groupName, "arrive_at") == 0) {
-                parseTilemapObjectGroupArriveAtNode(node->children, map);
-            }
+            parseTilemapObjectGroup(node->children, map);
         }
         node->children = node->children->next;
     }
