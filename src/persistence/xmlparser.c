@@ -65,7 +65,6 @@ Rectangle parseRectangle(const xmlNode *node) {
 void parseTileObjectGroupNode(Tile *t, xmlNodePtr cur) {
     while (cur != NULL) {
         if (strcmp((const char *) cur->name, "object") == 0) {
-            addInfo("object group child :: %s", (char *) cur->name);
             t->objects[t->objectCount] = createObject(
                     xmlInt(cur, "id"),
                     parseRectangle(cur));
@@ -78,13 +77,11 @@ void parseTileObjectGroupNode(Tile *t, xmlNodePtr cur) {
 void parseTileProperties(xmlNodePtr cur, Tile *t) {
     while (cur != NULL) {
         const char *name = (char *) cur->name;
-        addInfo("tile property node :: %s", name);
         if (strcmp(name, "property") == 0) {
             const char *propName = xmlString(cur, "name");
             const char *propValue = xmlString(cur, "value");
             t->properties[t->propertyCount] = createProperty(propName, propValue);
             t->propertyCount++;
-            addInfo("prop :: %s, %s", propName, propValue);
         }
         cur = cur->next;
     }
@@ -98,10 +95,8 @@ Tile *parseTileNode(xmlNodePtr node) {
     while (cur != NULL) {
         const char *name = (const char *) cur->name;
         if (strcmp(name, "objectgroup") == 0) {
-            addInfo("object group");
             parseTileObjectGroupNode(t, cur->children);
         } else if (strcmp(name, "properties") == 0) {
-            addInfo("properties");
             parseTileProperties(cur->children, t);
         }
         cur = cur->next;
@@ -145,7 +140,7 @@ void parseLayerNode(xmlNodePtr cur, Map *map) {
     cur = cur->children;
     while (cur != NULL) {
         const char *name = (const char *) cur->name;
-        addDebug("parse layer node :: %s", name);
+        addDebug("parse layer node :: %s, %s", layerName, name);
         if (strcmp(name, "data") == 0) {
             map->layers[map->layersCount] = createLayer(layerName);
             map->layersCount++;
@@ -176,7 +171,7 @@ void parseExit(xmlNodePtr node, Map *m) {
     const Property *to = parseProperty(node, "to");
     const Property *scene = parseProperty(node, "scene");
     if (to == NULL || scene == NULL) {
-        addWarning("malformed exit, object id :: %d", id);
+        addWarning("malformed exit :: id: %d, name: %s", id, xmlString(node, "name"));
         return;
     }
     m->exits[m->exitCount] = createExit(
