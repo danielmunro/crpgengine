@@ -98,14 +98,14 @@ bool isAlreadyAdded(ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS], const Cont
     return false;
 }
 
-void controlWhenCheck(Scene *s, Player *p, EventType eventType) {
+void controlWhenCheck(Scene *s, const Player *p, EventType eventType) {
     addDebug("control when check");
     for (int i = 0; i < s->controlBlockCount; i++) {
         ControlBlock *cb = s->controlBlocks[i];
         if (areConditionsMet(cb, p, eventType) && !isAlreadyAdded(s->activeControlBlocks, cb)) {
             addDebug("ready to set");
             addActiveControl(s, cb);
-            addInfo("set active control block %d", i);
+            addInfo("set active control block :: eventType: %d, progress: %d, i: %d", eventType, cb->progress, i);
             return;
         }
     }

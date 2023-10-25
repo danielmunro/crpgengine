@@ -9,7 +9,7 @@
 #include "headers/persistence/xmlparser.h"
 
 void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *file) {
-    addInfo("load animations file: %s", file);
+    addDebug("load animations file: %s", file);
     AnimationData *animation = loadAnimationYaml(file);
     Spritesheet *sp = findSpritesheetByName(sm, animation->sprite->name);
     if (sp == NULL) {
@@ -105,7 +105,7 @@ void loadEncounters(const Beastiary *beastiary, Scene *scene, const EncountersDa
             exit(ConfigurationErrorUnknownBeast);
         }
     }
-    addInfo("done loading encounters for scene %s with beast count %d",
+    addDebug("done loading encounters for scene :: scene: %s, beasts: %d",
             scene->name,
             scene->encounters->beastEncountersCount);
 }
@@ -115,7 +115,7 @@ void loadStorylines(Scene *s, const char *sceneDirectory) {
     sprintf(storylinesDirectory, "%s/storylines", sceneDirectory);
     addDebug("storylines directory :: %s", storylinesDirectory);
     if (access(storylinesDirectory, F_OK) != 0) {
-        addInfo("scene has no storylines :: %s", s->name);
+        addDebug("scene has no storylines :: %s", s->name);
         return;
     }
     char **storylineFiles = calloc(MAX_FILES, sizeof(char *));
@@ -144,7 +144,7 @@ Scene *loadScene(
         const Beastiary *beastiary,
         char *sceneName,
         const char *sceneDirectory) {
-    addInfo("create scene '%s'", sceneName);
+    addDebug("create scene :: %s", sceneName);
     const SceneData *sceneData = loadSceneYaml(sceneDirectory);
     Scene *scene = createScene();
 
@@ -223,15 +223,15 @@ void loadScenesFromFiles(
 }
 
 AudioManager *loadAudioManager() {
-    addInfo("load audio manager from dir '%s'", config->indexDir);
+    addDebug("load audio manager from dir '%s'", config->indexDir);
     AudioManager *am = createAudioManager();
     assignAudioManagerValues(am);
-    addInfo("audio manager loaded %d songs", am->musicCount);
+    addDebug("audio manager loaded %d songs", am->musicCount);
     return am;
 }
 
 SpritesheetManager *loadSpritesheetManager() {
-    addInfo("load spritesheet manager :: %s", config->indexDir);
+    addDebug("load spritesheet manager :: %s", config->indexDir);
     Spritesheet *spritesheets[MAX_SPRITESHEETS];
     char directory[MAX_FS_PATH_LENGTH];
     sprintf(directory, "%s/spritesheets", config->indexDir);
@@ -245,7 +245,7 @@ SpritesheetManager *loadSpritesheetManager() {
             SpritesheetData *data = loadSpritesheetYaml(dataFilePath);
             char imageFilePath[MAX_FS_PATH_LENGTH];
             sprintf(imageFilePath, "%s/%s", directory, data->filename);
-            addInfo("spritesheet :: %s, %s", data->name, imageFilePath);
+            addDebug("spritesheet :: %s, %s", data->name, imageFilePath);
             Rectangle *collision = malloc(sizeof(Rectangle));
             if (data->collide != NULL) {
                 collision->width = (float) data->collide->width;
@@ -265,7 +265,7 @@ SpritesheetManager *loadSpritesheetManager() {
         }
     }
     free(files);
-    addInfo("spritesheet count :: %d", count);
+    addDebug("final spritesheet count :: %d", count);
     return createSpriteSheetManager(spritesheets, count);
 }
 

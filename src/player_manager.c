@@ -2,12 +2,11 @@
 #include "headers/attributes.h"
 #include "headers/spell_manager.h"
 #include "headers/player.h"
-#include "headers/graphics/ui/ui.h"
 #include "headers/mobile_manager.h"
 
 Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *save) {
     Mobile *mobs[MAX_PARTY_SIZE];
-    addInfo("save file party count :: %d", save->player->party_count);
+    addDebug("save file party count :: %d", save->player->party_count);
     for (int i = 0; i < save->player->party_count; i++) {
         Animation *animations[MAX_ANIMATIONS];
         MobileData mob = save->player->party[i];

@@ -35,16 +35,16 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
     if (then == NULL) {
         return 0;
     } else if (isSpeakOutcome(then) && !cm->player->engaged) {
-        addInfo("is speak outcome");
+        addDebug("is speak outcome");
         progress++;
     } else if (isMovingAndAtDestination(cb)) {
-        addInfo("mob at destination, control block proceeding :: %s", then->target->name);
+        addDebug("mob at destination, control block proceeding :: %s", then->target->name);
         progress++;
     } else if (isAddStoryOutcome(then)) {
         addStory(cm->player, then->story);
         progress++;
     } else if (needsToStartMoving(then)) {
-        addInfo("mob needs to start moving");
+        addDebug("mob needs to start moving");
         addMobileMovement(
                 cm->scene->map,
                 createMobileMovement(
@@ -55,20 +55,20 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         disengageWithMobile(cm->player);
         getPartyLeader(cm->player)->isBeingMoved = true;
     } else if (isFaceDirectionOutcome(then)) {
-        addInfo("set direction for mob :: %s, %s", then->target->name, then->direction);
+        addDebug("set direction for mob :: %s, %s", then->target->name, then->direction);
         then->target->direction =
                 getDirectionFromString(then->direction);
         progress++;
     } else if (needsToChangePosition(then)) {
         Mobile *target = then->target;
         target->position = then->position;
-        addInfo("change position for mob :: %s, %f, %f",
+        addDebug("change position for mob :: %s, %f, %f",
                 target->name, target->position.x, target->position.y);
         progress++;
     } else if (needsToWait(then)) {
         Mobile *target = then->target;
         if (target->waitTimer == -1) {
-            addInfo("setting initial wait timer");
+            addDebug("setting initial wait timer");
             target->waitTimer = then->amount;
         }
         struct timeval update;
@@ -77,7 +77,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
             target->lastTimerUpdate = update;
             target->waitTimer--;
             if (target->waitTimer == 0) {
-                addInfo("timer done");
+                addDebug("timer done");
                 target->waitTimer = -1;
                 progress++;
             }
@@ -93,13 +93,14 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         resetMoving(mob);
         progress++;
     } else if (needsToSave(then)) {
+        addDebug("save player game :: scene: %s", cm->scene->name);
         save(cm->player, cm->scene->name);
         addNotification(
                 cm->notificationManager,
                 createNotification(SAVED, "Your game has been saved."));
         progress++;
     } else if (needsToReceiveItem(then, getPartyLeader(cm->player))) {
-        addInfo("player receiving item: %s", then->item->name);
+        addDebug("player received item :: %s", then->item->name);
         for (int i = 0; i < then->item->quantity; i++) {
             addItem(cm->player, findItemFromName(cm->itemManager, then->item->name));
         }
@@ -111,6 +112,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         progress++;
     } else if (needsToLoseItem(then, getPartyLeader(cm->player))
             && losesItemQuantity(cm->player, then->item)) {
+        addDebug("player lost item :: %s", then->item->name);
         const char *message = malloc(MAX_NOTIFICATION_LENGTH);
         sprintf((char *) message, "you lost:\n%s", then->item->name);
         addNotification(
