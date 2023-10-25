@@ -5,6 +5,7 @@
 #define MAX_LAYERS 1024
 #define MAX_LAYER_SIZE 1024
 #define LAYER_COUNT 3
+#define MAX_OBJECTS 32
 
 #include "tile.c"
 

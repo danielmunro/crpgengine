@@ -3,29 +3,33 @@
 #include "headers/direction.h"
 
 typedef struct {
+    int id;
     Rectangle area;
-    char *to;
-    char *scene;
+    const char *to;
+    const char *scene;
 } Exit;
 
 typedef struct {
-    char *name;
+    int id;
+    const char *name;
     Rectangle area;
     Direction direction;
 } Entrance;
 
-Exit *createExit() {
+Exit *createExit(int id, const char *to, const char *scene, Rectangle area) {
     Exit *e = malloc(sizeof(Exit));
-    e->to = "";
-    e->scene = "";
-    e->area = (Rectangle) {0, 0, 0, 0};
+    e->id = id;
+    e->to = to;
+    e->scene = scene;
+    e->area = area;
     return e;
 }
 
-Entrance *createEntrance(char *name, Rectangle area) {
+Entrance *createEntrance(int id, const char *name, Direction direction, Rectangle area) {
     Entrance *e = malloc(sizeof(Entrance));
-    e->name = &name[0];
-    e->direction = DIRECTION_DOWN;
+    e->id = id;
+    e->name = name;
+    e->direction = direction;
     e->area = area;
     return e;
 }

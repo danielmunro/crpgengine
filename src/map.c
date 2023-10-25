@@ -17,9 +17,14 @@ typedef struct {
 } MobileMovement;
 
 typedef struct {
+    Vector2D tileSize;
+} MapConfig;
+
+typedef struct {
+    MapConfig *config;
     Tileset *tileset;
     Layer **layers;
-    int layerCount;
+    int layersCount;
     Texture2D renderedLayers[LAYER_COUNT];
     ArriveAt *arriveAt[MAX_ARRIVE_AT];
     int arriveAtCount;
@@ -27,13 +32,10 @@ typedef struct {
     int exitCount;
     Entrance *entrances[MAX_ENTRANCES];
     int entranceCount;
-    int objectCount;
     bool showCollisions;
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
-    Tile **tiles;
-    int tilesCount;
 } Map;
 
 Entrance *findEntrance(Map *m, const char *name) {
@@ -48,47 +50,18 @@ Entrance *findEntrance(Map *m, const char *name) {
 
 Map *createMap() {
     Map *map = malloc(sizeof(Map));
+    map->config = malloc(sizeof(MapConfig));
+    map->config->tileSize = (Vector2D) {0, 0};
     map->layers = calloc(MAX_LAYERS, sizeof(Layer));
-    map->layerCount = 0;
+    map->layersCount = 0;
     map->mobileCount = 0;
     map->entranceCount = 0;
     map->exitCount = 0;
     map->arriveAtCount = 0;
-    map->tilesCount = 0;
-    map->tiles = calloc(MAX_TILESETS, sizeof(Tile));
-    map->tileset = malloc(sizeof(Tileset));
+    map->tileset = createTileset();
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         map->mobMovements[i] = NULL;
     }
-    return map;
-}
-
-Map *createMapFromTilemap(Tilemap *tilemap) {
-    Map *map = createMap();
-    map->tileset = tilemap->tileset;
-    if (tilemap->tileset != NULL) {
-        map->tilesCount = tilemap->tileset->tilesCount;
-    }
-    if (tilemap->tileset != NULL) {
-        for (int i = 0; i < tilemap->tileset->tilesCount; i++) {
-            map->tiles[i] = tilemap->tileset->tiles[i];
-        }
-    }
-    for (int i = 0; i < MAX_LAYERS; i++) {
-        map->layers[i] = tilemap->layers[i];
-    }
-    for (int i = 0; i < tilemap->entranceCount; i++) {
-        map->entrances[i] = tilemap->entrances[i];
-    }
-    map->entranceCount = tilemap->entranceCount;
-    for (int i = 0; i < tilemap->exitCount; i++) {
-        map->exits[i] = tilemap->exits[i];
-    }
-    map->exitCount = tilemap->exitCount;
-    for (int i = 0; i < tilemap->arriveAtCount; i++) {
-        map->arriveAt[i] = tilemap->arriveAt[i];
-    }
-    map->arriveAtCount = tilemap->arriveAtCount;
     return map;
 }
 
@@ -110,10 +83,10 @@ void addMobileMovement(Map *m, MobileMovement *mobMovement) {
     }
 }
 
-Rectangle *getObject(const Map *m, int id) {
-    for (int i = 0; i < m->tilesCount; i++) {
-        if (m->tiles[i]->id == id) {
-            return m->tiles[i]->object;
+Tile *getTile(const Map *m, int tileNumber) {
+    for (int i = 0; i < m->tileset->tilesCount; i++) {
+        if (m->tileset->tiles[i]->id == tileNumber - 1) {
+            return m->tileset->tiles[i];
         }
     }
     return NULL;
@@ -129,14 +102,20 @@ void mapDebugKeyPressed(Vector2 position) {
     addInfo("player coordinates: %f, %f", position.x, position.y);
 }
 
-void drawObjectCollision(const Map *m, Image layer, int index, int x, int y) {
-    const Rectangle *o = getObject(m, index);
-    if (o != NULL) {
+void drawObjectCollision(const Map *m, Image layer, int tileNumber, int x, int y) {
+    const Tile *t = getTile(m, tileNumber);
+    if (t == NULL) {
+        return;
+    }
+    for (int i = 0; i < t->objectCount; i++) {
+        if (t->objects[i] == NULL) {
+            return;
+        }
         Rectangle r = {
-                (float) (m->tileset->size.x * x) + o->x,
-                (float) (m->tileset->size.y * y) + o->y,
-                o->width,
-                o->height,
+                (float) (m->tileset->size.x * x) + t->objects[i]->area.x,
+                (float) (m->tileset->size.y * y) + t->objects[i]->area.y,
+                t->objects[i]->area.width,
+                t->objects[i]->area.height,
         };
         ImageDrawRectangle(
                 &layer,
@@ -149,16 +128,38 @@ void drawObjectCollision(const Map *m, Image layer, int index, int x, int y) {
     }
 }
 
+Vector2D getTileFromIndex(const Map *m, int index) {
+    int width = m->tileset->source.width / m->tileset->size.x;
+    int y = index / width;
+    int x = (index % width);
+    if (x - 1 < 0) {
+        y--;
+        x = width;
+    }
+    Vector2D pos = {x - 1, y};
+    return pos;
+}
+
+Rectangle getRectForTile(const Map *m, int index) {
+    Vector2D tile = getTileFromIndex(m, index);
+    return (Rectangle) {
+            (float) (tile.x * m->config->tileSize.x),
+            (float) (tile.y * m->config->tileSize.y),
+            (float) m->config->tileSize.x,
+            (float) m->config->tileSize.y,
+    };
+}
+
 void drawTile(const Map *m, Image layer, int index, int x, int y) {
     if (index <= 0) {
         return;
     }
-    Vector2D sz = m->tileset->size;
+    Vector2D sz = m->config->tileSize;
     Vector2 pos = {
             (float) (sz.x * x),
             (float) (sz.y * y),
     };
-    Rectangle rect = getRectForTile(m->tileset, index);
+    Rectangle rect = getRectForTile(m, index);
     ImageDraw(
             &layer,
             m->tileset->source,
@@ -167,7 +168,7 @@ void drawTile(const Map *m, Image layer, int index, int x, int y) {
             WHITE
     );
     if (config->showCollisions->objects) {
-        drawObjectCollision(m, layer, index - 1, x, y);
+        drawObjectCollision(m, layer, index, x, y);
     }
 }
 
@@ -293,28 +294,41 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
     }
 }
 
-Rectangle getObjectSize(const Map *m, const Rectangle *o, int x, int y) {
+Rectangle getObjectSize(const Map *m, const Object *o, int x, int y) {
     return (Rectangle) {
-            (float) (m->tileset->size.x * x) + o->x,
-            (float) (m->tileset->size.y * y) + o->y,
-            o->width,
-            o->height,
+            (float) (m->tileset->size.x * x) + o->area.x,
+            (float) (m->tileset->size.y * y) + o->area.y,
+            o->area.width,
+            o->area.height,
     };
 }
 
-bool isObjectBlocking(const Map *m, const Rectangle *o, Rectangle player, int x, int y) {
+bool isObjectBlocking(const Map *m, const Object *o, Rectangle player, int x, int y) {
     Rectangle objRect = getObjectSize(m, o, x, y);
     Rectangle c = GetCollisionRec(player, objRect);
     return c.height > 0 || c.width > 0;
+}
+
+bool checkTileForBlockingObject(const Map *m, Rectangle player, int layer, int x, int y) {
+    const Tile *t = getTile(m, m->layers[layer]->data[y][x]);
+    if (t == NULL) {
+        return false;
+    }
+    for (int i = 0; i < t->objectCount; i++) {
+        if (t->objects[i] == NULL) {
+            break;
+        } else if (isObjectBlocking(m, t->objects[i], player, x, y)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool checkLayerForBlockingObject(const Map *m, Rectangle player, int layer) {
     Vector2D tiles = getTileCount(m);
     for (int y = 0; y < tiles.y; y++) {
         for (int x = 0; x < tiles.x; x++) {
-            int index = m->layers[layer]->data[y][x];
-            const Rectangle *o = getObject(m, index - 1);
-            if (o != NULL && isObjectBlocking(m, o, player, x, y)) {
+            if (checkTileForBlockingObject(m, player, layer, x, y)) {
                 return true;
             }
         }

@@ -1,6 +1,8 @@
 #ifndef CJRPGENGINE_OBJECT_H
 #define CJRPGENGINE_OBJECT_H
 
+#define MAX_NODES 4096
+
 #include "headers/map.h"
 
 const char *TileMapNodeTypes[] = {

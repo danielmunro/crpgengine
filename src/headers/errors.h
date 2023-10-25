@@ -34,6 +34,7 @@ typedef enum {
     ConfigurationErrorMissingComponent = 410,
     ConfigurationErrorUnknownFontStyleType = 411,
     ConfigurationErrorNoDirectionForName = 412,
+    ConfigurationErrorObjectNotFound = 413,
 
     // Yaml loading/saving
     CyamlErrorGeneric = 500,

@@ -5,96 +5,10 @@
 #include "headers/persistence/db.h"
 #include "headers/tile.h"
 #include "headers/warp.h"
+#include "headers/control.h"
 
-int getIntAttribute(xmlTextReaderPtr reader, const char *attribute) {
-    return TextToInteger((char *) xmlTextReaderGetAttribute(reader, (const xmlChar *) attribute));
-}
-
-float getFloatAttribute(xmlTextReaderPtr reader, const char *attribute) {
-    return strtof((char *) xmlTextReaderGetAttribute(reader, (const xmlChar *) attribute), NULL);
-}
-
-char *getStringAttribute(xmlTextReaderPtr reader, const char *attribute) {
-    return (char *) xmlTextReaderGetAttribute(reader, (const xmlChar *) attribute);
-}
-
-static void processTilesetNode(Tileset *tileset, const char *indexDir) {
-    const xmlChar *name = xmlTextReaderConstName(tileset->reader);
-    static Tile *tile;
-    static TilesetType tilesetType = TILESET_TYPE_NONE;
-    TileSetNodeType nodeType = getTileSetNodeTypeFromString((const char *) name);
-    if (nodeType == TILESET_NODE_TYPE_TILESET) {
-        addDebug("process tileset main node :: %s", name);
-        const int width = getIntAttribute(tileset->reader, "tilewidth");
-        const int height = getIntAttribute(tileset->reader, "tileheight");
-        tileset->size = (Vector2D) {width, height};
-    } else if (nodeType == TILESET_NODE_TYPE_IMAGE) {
-        addDebug("process tileset image node :: %s", name);
-        char filePath[MAX_FS_PATH_LENGTH];
-        getComponentPath(
-                filePath,
-                indexDir,
-                "tilesets",
-                getStringAttribute(tileset->reader, "source"));
-        tileset->source = LoadImage(filePath);
-    } else if (nodeType == TILESET_NODE_TYPE_TILE) {
-        addDebug("process tileset tile node :: %s", name);
-        if (tile != NULL) {
-            tileset->tiles[tileset->tilesCount] = tile;
-            tileset->tilesCount++;
-            tile = NULL;
-            return;
-        }
-        int tileId = getIntAttribute(tileset->reader, "id");
-        char *type = getStringAttribute(tileset->reader, "type");
-        if (type != NULL) {
-            tilesetType = getTilesetTypeFromString(type);
-        } else {
-            tilesetType = TILESET_TYPE_NONE;
-        }
-        tile = createTile(tileId, tilesetType);
-    } else if (nodeType == TILESET_NODE_TYPE_OBJECT) {
-        addDebug("process tileset object node :: %s", name);
-        tile->object = malloc(sizeof(Rectangle));
-        tile->object->x = getFloatAttribute(tileset->reader, "x");
-        tile->object->y = getFloatAttribute(tileset->reader, "y");
-        tile->object->width = getFloatAttribute(tileset->reader, "width");
-        tile->object->height = getFloatAttribute(tileset->reader, "height");
-    } else if (nodeType == TILESET_NODE_TYPE_PROPERTY) {
-        Property *property = createProperty();
-        property->name = getStringAttribute(tileset->reader, "name");
-        property->value = getStringAttribute(tileset->reader, "value");
-        addProperty(tile, property);
-    }
-}
-
-Tileset *parseTileset(const char *indexDir, const char *filename) {
-    addDebug("parsing xml tileset at %s/%s", indexDir, filename);
-    int ret;
-    char filePath[MAX_FS_PATH_LENGTH];
-    getComponentPath(
-            filePath,
-            indexDir,
-            "tilesets",
-            filename);
-    addInfo("component path calculated to :: %s", filePath);
-    Tileset *ts = createTileset(filePath);
-    ret = xmlTextReaderRead(ts->reader);
-    while (ret == 1) {
-        processTilesetNode(ts, indexDir);
-        ret = xmlTextReaderRead(ts->reader);
-    }
-    addDebug("found %d tiles", ts->tilesCount);
-    xmlFreeTextReader(ts->reader);
-    if (ret != 0) {
-        addError("failed to parse tilemap xml :: %s", filename);
-        exit(ConfigurationErrorMapResourcesUnreadable);
-    }
-    return ts;
-}
-
-void parseSceneLayer(const Tilemap *t, const char *rawData) {
-    addDebug("scene layer %d processing now", t->layerCount - 1);
+void parseLayerRawData(const Map *m, const char *rawData) {
+    addDebug("scene layer %d processing now", m->layersCount - 1);
     char *newRawData = (char *) rawData;
     char *line = strtok_r(newRawData, "\r\n", &newRawData);
     char *data[MAX_DATA_SIZE];
@@ -110,115 +24,248 @@ void parseSceneLayer(const Tilemap *t, const char *rawData) {
         const char *val = strtok_r(data[y], ",", &data[y]);
         x = 0;
         while (val != NULL) {
-            t->layers[t->layerCount - 1]->data[y][x] = TextToInteger(val);
+            m->layers[m->layersCount - 1]->data[y][x] = TextToInteger(val);
             val = strtok_r(data[y], ",", &data[y]);
             x++;
         }
         y++;
     }
-    t->layers[t->layerCount - 1]->width = x;
-    t->layers[t->layerCount - 1]->height = y;
+    m->layers[m->layersCount - 1]->width = x;
+    m->layers[m->layersCount - 1]->height = y;
 }
 
-void processTilemapNode(Tilemap *tilemap, const char *indexDir) {
-    const char *name = (const char *) xmlTextReaderConstName(tilemap->reader);
-    static int dataOpen = 0;
-    static int layerOpen = 0;
-    static ObjectType objectType;
-    TileMapNodeType nodeType = getTileMapNodeTypeFromString(name);
-    if (nodeType == TILEMAP_NODE_TYPE_TILESET) {
-        addDebug("process tileset xml node :: %s", name);
-        char *source = getStringAttribute(tilemap->reader, "source");
-        tilemap->tileset = parseTileset(indexDir, source);
-    } else if (nodeType == TILEMAP_NODE_TYPE_LAYER) {
-        if (layerOpen == 1) {
-            layerOpen = 0;
-            return;
-        }
-        layerOpen = 1;
-        Layer *layer = createLayer();
-        char *layerName = getStringAttribute(tilemap->reader, "name");
-        addDebug("create new layer :: %s", layerName);
-        layer->type = getLayerTypeFromString(layerName);
-        tilemap->layers[tilemap->layerCount] = layer;
-    } else if (nodeType == TILEMAP_NODE_TYPE_DATA) {
-        if (dataOpen == 1) {
-            dataOpen = 0;
-            return;
-        }
-        dataOpen = 1;
-        xmlChar *data = xmlTextReaderReadString(tilemap->reader);
-        tilemap->layerCount++;
-        parseSceneLayer(tilemap, (const char *) data);
-    } else if (nodeType == TILEMAP_NODE_TYPE_OBJECT) {
-        objectType = getObjectTypeFromString(getStringAttribute(tilemap->reader, "type"));
-        addDebug("evaluate object type :: %d", objectType);
-        if (objectType == OBJECT_TYPE_ENTRANCE) {
-            Rectangle rect = {
-                    getFloatAttribute(tilemap->reader, "x"),
-                    getFloatAttribute(tilemap->reader, "y"),
-                    getFloatAttribute(tilemap->reader, "width"),
-                    getFloatAttribute(tilemap->reader, "height")
-            };
-            tilemap->entrances[tilemap->entranceCount] = createEntrance(
-                    getStringAttribute(tilemap->reader, "name"),
-                    rect);
-            tilemap->entranceCount++;
-        } else if (objectType == OBJECT_TYPE_EXIT) {
-            tilemap->exits[tilemap->exitCount] = createExit();
-            tilemap->exits[tilemap->exitCount]->area = (Rectangle) {
-                    getFloatAttribute(tilemap->reader, "x"),
-                    getFloatAttribute(tilemap->reader, "y"),
-                    getFloatAttribute(tilemap->reader, "width"),
-                    getFloatAttribute(tilemap->reader, "height")
-            };
-            tilemap->exitCount++;
-        } else if (objectType == OBJECT_TYPE_ARRIVE_AT) {
-            tilemap->arriveAt[tilemap->arriveAtCount] = createArriveAt(
-                    getStringAttribute(tilemap->reader, "name"),
+int xmlInt(const xmlNode *node, const char *propName) {
+    return TextToInteger((const char *) xmlGetProp(node, (const xmlChar *) propName));
+}
+
+float xmlFloat(const xmlNode *node, const char *propName) {
+    char *ptr;
+    const char *value = (const char *) xmlGetProp(node, (const xmlChar *) propName);
+    float f = strtof(value, &ptr);
+    if (strcmp(ptr, "") != 0) {
+        addError("error parsing xml value :: %s, %s, %s", (const char *) node->name, propName, value);
+    }
+    free((char *) value);
+    return f;
+}
+
+const char *xmlString(const xmlNode *node, const char *propName) {
+    return (const char *) xmlGetProp(node, (const xmlChar *) propName);
+}
+
+void parseTileObjectGroupNode(Tile *t, xmlNodePtr cur) {
+    while (cur != NULL) {
+        if (strcmp((const char *) cur->name, "object") == 0) {
+            addInfo("object group child :: %s", (char *) cur->name);
+            t->objects[t->objectCount] = createObject(
+                    xmlInt(cur, "id"),
                     (Rectangle) {
-                            getFloatAttribute(tilemap->reader, "x"),
-                            getFloatAttribute(tilemap->reader, "y"),
-                            getFloatAttribute(tilemap->reader, "width"),
-                            getFloatAttribute(tilemap->reader, "height")
+                            xmlFloat(cur, "x"),
+                            xmlFloat(cur, "y"),
+                            xmlFloat(cur, "width"),
+                            xmlFloat(cur, "height"),
                     });
-            tilemap->arriveAtCount++;
-        } else if (objectType == OBJECT_TYPE_CHEST) {
-            addInfo("chest object found");
+            t->objectCount++;
         }
-    } else if (strcmp(name, "property") == 0) {
-        char *propName = getStringAttribute(tilemap->reader, "name");
-        if (objectType == OBJECT_TYPE_EXIT) {
-            if (strcmp(propName, "scene") == 0) {
-                tilemap->exits[tilemap->exitCount - 1]->scene = getStringAttribute(tilemap->reader, "value");
-            } else if (strcmp(propName, "to") == 0) {
-                tilemap->exits[tilemap->exitCount - 1]->to = getStringAttribute(tilemap->reader, "value");
-            }
-        } else if (objectType == OBJECT_TYPE_ENTRANCE) {
-            if (strcmp(propName, "direction") == 0) {
-                tilemap->entrances[tilemap->entranceCount - 1]->direction =
-                        getDirectionFromString(getStringAttribute(tilemap->reader, "value"));
-            }
-        }
+        cur = cur->next;
     }
 }
 
-Tilemap *parseTilemapXml(const char *filePath, const char *indexDir) {
-    Tilemap *tilemap = createTilemap(filePath);
-    int ret;
-    if (tilemap->reader == NULL) {
+void parseTileProperties(xmlNodePtr cur, Tile *t) {
+    while (cur != NULL) {
+        const char *name = (char *) cur->name;
+        addInfo("tile property node :: %s", name);
+        if (strcmp(name, "property") == 0) {
+            const char *propName = xmlString(cur, "name");
+            const char *propValue = xmlString(cur, "value");
+            t->properties[t->propertyCount] = createProperty(propName, propValue);
+            t->propertyCount++;
+            addInfo("prop :: %s, %s", propName, propValue);
+        }
+        cur = cur->next;
+    }
+}
+
+Tile *parseTileNode(xmlNodePtr node) {
+    int id = xmlInt(node, "id");
+    const char *type = xmlString(node, "type");
+    Tile *t = createTile(id, type);
+    xmlNodePtr cur = node->children;
+    while (cur != NULL) {
+        const char *name = (const char *) cur->name;
+        if (strcmp(name, "objectgroup") == 0) {
+            addInfo("object group");
+            parseTileObjectGroupNode(t, cur->children);
+        } else if (strcmp(name, "properties") == 0) {
+            addInfo("properties");
+            parseTileProperties(cur->children, t);
+        }
+        cur = cur->next;
+    }
+    return t;
+}
+
+void parseTilesetNode(xmlNodePtr node, Tileset *t) {
+    const char *source = (const char *) xmlGetProp(node, (const xmlChar *) "source");
+    char filePath[MAX_FS_PATH_LENGTH];
+    getComponentPath(filePath, config->indexDir, "tilesets", source);
+    xmlDocPtr doc = xmlParseFile(filePath);
+    xmlNodePtr cur = xmlDocGetRootElement(doc);
+    if (cur == NULL) {
+        addError("unable to find tileset :: %s", source);
+        exit(ConfigurationErrorMapResourcesMissing);
+    }
+    while (cur != NULL) {
+        const char *name = (const char *) cur->name;
+        if (strcmp(name, "tileset") == 0) {
+            addInfo("tileset");
+            t->size.x = xmlInt(cur, "tilewidth");
+            t->size.y = xmlInt(cur, "tileheight");
+            cur = cur->children;
+        } else if (strcmp(name, "image") == 0) {
+            addInfo("image");
+            char imagePath[MAX_FS_PATH_LENGTH];
+            getComponentPath(imagePath, "", "tilesets", xmlString(cur, "source"));
+            t->reader = xmlReaderForFile(filePath, NULL, 0);
+            t->source = LoadImage(imagePath);
+        } else if (strcmp(name, "tile") == 0) {
+            addInfo("tile");
+            t->tiles[t->tilesCount] = parseTileNode(cur);
+            t->tilesCount++;
+        }
+        cur = cur->next;
+    }
+    xmlFreeNode(cur);
+    xmlFreeDoc(doc);
+}
+
+void parseLayerNode(xmlNodePtr cur, Map *map) {
+    const char *layerName = xmlString(cur, "name");
+    cur = cur->children;
+    while (cur != NULL) {
+        const char *name = (const char *) cur->name;
+        addInfo("layer node :: %s", name);
+        if (strcmp(name, "data") == 0) {
+            map->layers[map->layersCount] = createLayer(layerName);
+            map->layersCount++;
+            parseLayerRawData(map, (char *) xmlNodeGetContent(cur));
+        }
+        cur = cur->next;
+    }
+}
+
+Property *parseProperty(xmlNodePtr node, const char *propName) {
+    xmlNodePtr cur = node->children;
+    while (cur != NULL) {
+        const char *nodeName = (const char *) cur->name;
+        if (strcmp(nodeName, "properties") == 0) {
+            cur = cur->children;
+        }
+        const char *name = xmlString(cur, "name");
+        if (name != NULL && strcmp(name, propName) == 0) {
+            return createProperty(propName, xmlString(cur, "value"));
+        }
+        cur = cur->next;
+    }
+    return NULL;
+}
+
+void parseTilemapObjectGroupWarpsNode(xmlNodePtr node, Map *m) {
+    xmlNodePtr cur = node->children;
+    while (cur != NULL) {
+        const char *name = (const char *) cur->name;
+        if (strcmp(name, "object") == 0) {
+            int id = xmlInt(cur, "id");
+            const char *type = xmlString(cur, "type");
+            const char *objectName = xmlString(cur, "name");
+            Rectangle area = (Rectangle) {
+                xmlFloat(cur, "x"),
+                xmlFloat(cur, "y"),
+                xmlFloat(cur, "width"),
+                xmlFloat(cur, "height"),
+            };
+            if (strcmp(type, "exit") == 0) {
+                const Property *to = parseProperty(cur, "to");
+                const Property *scene = parseProperty(cur, "scene");
+                if (to == NULL || scene == NULL) {
+                    addWarning("malformed exit, object id :: %d", id);
+                } else {
+                    m->exits[m->exitCount] = createExit(
+                            id,
+                            to->value,
+                            scene->value,
+                            area
+                    );
+                    m->exitCount++;
+                }
+            } else if (strcmp(type, "entrance") == 0) {
+                const Property *direction = parseProperty(cur, "direction");
+                m->entrances[m->entranceCount] = createEntrance(
+                        id,
+                        objectName,
+                        getDirectionFromString(direction != NULL ? direction->value : "down"),
+                        area
+                );
+                m->entranceCount++;
+            }
+        }
+        cur = cur->next;
+    }
+}
+
+void parseTilemapObjectGroupArriveAtNode(xmlNodePtr node, Map *m) {
+    xmlNodePtr cur = node->children;
+    while (cur != NULL) {
+        const char *name = (const char *) cur->name;
+        if (strcmp(name, "object") == 0) {
+            int id = xmlInt(cur, "id");
+            const char *objectName = xmlString(cur, "name");
+            m->arriveAt[m->arriveAtCount] = createArriveAt(
+                    id,
+                    objectName,
+                    (Rectangle) {
+                            xmlFloat(cur, "x"),
+                            xmlFloat(cur, "y"),
+                            xmlFloat(cur, "width"),
+                            xmlFloat(cur, "height"),
+                    });
+            m->arriveAtCount++;
+        }
+        cur = cur->next;
+    }
+}
+
+Map *parseMapNode(xmlNodePtr node) {
+    Map *map = createMap();
+    map->config->tileSize.x = xmlInt(node, "tilewidth");
+    map->config->tileSize.y = xmlInt(node,  "tileheight");
+    while (node->children != NULL) {
+        const char *name = (const char *) node->children->name;
+        if (strcmp(name, "tileset") == 0) {
+            parseTilesetNode(node->children, map->tileset);
+        } else if (strcmp(name, "layer") == 0) {
+            parseLayerNode(node->children, map);
+        } else if (strcmp(name, "objectgroup") == 0) {
+            const char *groupName = (const char *) xmlString(node->children, "name");
+            if (strcmp(groupName, "warps") == 0) {
+                parseTilemapObjectGroupWarpsNode(node->children, map);
+            } else if (strcmp(groupName, "arrive_at") == 0) {
+                parseTilemapObjectGroupArriveAtNode(node->children, map);
+            }
+        }
+        node->children = node->children->next;
+    }
+    return map;
+}
+
+Map *parseTilemapDoc(const char *filePath, const char *indexDir) {
+    xmlDocPtr doc = xmlParseFile(filePath);
+    xmlNodePtr cur = xmlDocGetRootElement(doc);
+    if (cur == NULL) {
         addError("unable to find map resources for scene :: %s", indexDir);
         exit(ConfigurationErrorMapResourcesMissing);
     }
-    ret = xmlTextReaderRead(tilemap->reader);
-    while (ret == 1) {
-        processTilemapNode(tilemap, indexDir);
-        ret = xmlTextReaderRead(tilemap->reader);
-    }
-    xmlFreeTextReader(tilemap->reader);
-    if (ret != 0) {
-        addError("failed to read scene :: %s", indexDir);
-        exit(ConfigurationErrorMapResourcesUnreadable);
-    }
-    return tilemap;
+    Map *map = parseMapNode(cur);
+    xmlFreeNode(cur);
+    return map;
 }

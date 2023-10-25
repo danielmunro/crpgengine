@@ -11,9 +11,9 @@ void dumpGame(Game *g) {
     }
     for (int i = 0; i < g->scenes->count; i++) {
         printf("\nscene %s tiles\n===============\n", g->scenes->scenes[i]->name);
-        for (int t = 0; t < g->scenes->scenes[i]->map->tilesCount; t++) {
+        for (int t = 0; t < g->scenes->scenes[i]->map->tileset->tilesCount; t++) {
             printf("%d\n",
-                   g->scenes->scenes[i]->map->tiles[t]->id
+                   g->scenes->scenes[i]->map->tileset->tiles[t]->id
             );
         }
         printf("\nmobiles\n===============\n");

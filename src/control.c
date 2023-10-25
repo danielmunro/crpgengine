@@ -81,6 +81,7 @@ Outcome mapOutcome(const char *then) {
 }
 
 typedef struct {
+    int id;
     const char *name;
     Rectangle rect;
 } ArriveAt;
@@ -168,8 +169,9 @@ Then *createThen(
     return then;
 }
 
-ArriveAt *createArriveAt(const char *name, Rectangle rect) {
+ArriveAt *createArriveAt(int id, const char *name, Rectangle rect) {
     ArriveAt *a = malloc(sizeof(ArriveAt));
+    a->id = id;
     a->name = name;
     a->rect = rect;
     return a;
