@@ -226,7 +226,7 @@ bool isWhenActivated(const Player *p, const When *when, EventType eventType) {
            || hasItem(p, when->condition, when->item);
 }
 
-bool areConditionsMet(const ControlBlock *cb, Player *p, EventType eventType) {
+bool areConditionsMet(const ControlBlock *cb, const Player *p, EventType eventType) {
     for (int c = 0; c < cb->whenCount; c++) {
         if (!isWhenActivated(p, cb->when[c], eventType)) {
             addDebug("conditions not met");
