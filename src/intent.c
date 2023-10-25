@@ -1,3 +1,5 @@
+#include <string.h>
+
 const char *Intents[] = {
         "harm",
         "help",

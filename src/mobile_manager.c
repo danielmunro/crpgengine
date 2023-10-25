@@ -2,7 +2,7 @@
 #include "headers/util/util.h"
 #include "headers/attributes.h"
 #include "headers/spell_manager.h"
-#include "headers/graphics/ui/ui.h"
+#include "headers/graphics/avatar.h"
 
 typedef struct {
     SpellManager *spellManager;
