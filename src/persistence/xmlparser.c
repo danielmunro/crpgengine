@@ -227,16 +227,34 @@ void parseTilemapObjectGroupArriveAtNode(xmlNodePtr node, Map *m) {
     }
 }
 
-void parseTilemapObjectGroup(xmlNodePtr node, Map *m) {
-    const char *groupName = (const char *) xmlString(node, "name");
-    if (strcmp(groupName, "warps") == 0) {
-        parseTilemapObjectGroupWarpsNode(node, m);
-    } else if (strcmp(groupName, "arrive_at") == 0) {
-        parseTilemapObjectGroupArriveAtNode(node, m);
+void parseTilemapObjectGroupTreasureNode(xmlNodePtr node, ItemManager *im, Map *m) {
+    while (node != NULL) {
+        const char *name = (const char *) node->name;
+        if (strcmp(name, "object") == 0) {
+            const Property *item = parseProperty(node, "item");
+            const Property *quantity = parseProperty(node, "quantity");
+            m->chests[m->chestCount] = createChest(
+                    createItemWithQuantity(
+                            findItemFromName(im, item->value),
+                            TextToInteger(quantity->value)));
+            m->chestCount++;
+        }
+        node = node->next;
     }
 }
 
-Map *parseMapNode(xmlNodePtr node) {
+void parseTilemapObjectGroupNode(xmlNodePtr node, ItemManager *im, Map *m) {
+    const char *groupName = (const char *) xmlString(node, "name");
+    if (strcmp(groupName, "warps") == 0) {
+        parseTilemapObjectGroupWarpsNode(node->children, m);
+    } else if (strcmp(groupName, "arrive_at") == 0) {
+        parseTilemapObjectGroupArriveAtNode(node->children, m);
+    } else if (strcmp(groupName, "treasures") == 0) {
+        parseTilemapObjectGroupTreasureNode(node->children, im, m);
+    }
+}
+
+Map *parseMapNode(xmlNodePtr node, ItemManager *im) {
     Map *map = createMap();
     map->config->tileSize.x = xmlInt(node, "tilewidth");
     map->config->tileSize.y = xmlInt(node,  "tileheight");
@@ -247,7 +265,7 @@ Map *parseMapNode(xmlNodePtr node) {
         } else if (strcmp(name, "layer") == 0) {
             parseLayerNode(node->children, map);
         } else if (strcmp(name, "objectgroup") == 0) {
-            parseTilemapObjectGroup(node->children, map);
+            parseTilemapObjectGroupNode(node->children, im, map);
         }
         node->children = node->children->next;
     }
@@ -261,17 +279,7 @@ Map *parseTilemapDoc(ItemManager *im, const char *filePath, const char *indexDir
         addError("unable to find map resources for scene :: %s", indexDir);
         exit(ConfigurationErrorMapResourcesMissing);
     }
-    Map *map = parseMapNode(cur);
+    Map *map = parseMapNode(cur, im);
     xmlFreeNode(cur);
-    for (int i = 0; i < map->tileset->tilesCount; i++) {
-        Tile *t = map->tileset->tiles[i];
-        if (t->type != NULL && strcmp(t->type, "chest") == 0) {
-            map->chests[map->chestCount] = createChest(
-                    createItemWithQuantity(
-                            findItemFromName(im, findProperty(t, "item")->value),
-                            TextToInteger(findProperty(t, "quantity")->value)));
-            map->chestCount++;
-        }
-    }
     return map;
 }
