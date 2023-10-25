@@ -5,6 +5,7 @@
 #include "headers/persistence/db.h"
 #include "headers/tile.h"
 #include "headers/warp.h"
+#include "headers/control.h"
 
 void parseLayerRawData(const Map *m, const char *rawData) {
     addDebug("scene layer %d processing now", m->layersCount - 1);
@@ -213,14 +214,24 @@ void parseTilemapObjectGroupWarpsNode(xmlNodePtr node, Map *m) {
 }
 
 void parseTilemapObjectGroupArriveAtNode(xmlNodePtr node, Map *m) {
-    while (node != NULL) {
-        const char *name = (const char *) node->name;
+    xmlNodePtr cur = node->children;
+    while (cur != NULL) {
+        const char *name = (const char *) cur->name;
         if (strcmp(name, "object") == 0) {
-            int id = xmlInt(node, "id");
-            const char *objectName = xmlString(node, "name");
-//            if (strcmp(objectName, ""))
+            int id = xmlInt(cur, "id");
+            const char *objectName = xmlString(cur, "name");
+            m->arriveAt[m->arriveAtCount] = createArriveAt(
+                    id,
+                    objectName,
+                    (Rectangle) {
+                            xmlFloat(cur, "x"),
+                            xmlFloat(cur, "y"),
+                            xmlFloat(cur, "width"),
+                            xmlFloat(cur, "height"),
+                    });
+            m->arriveAtCount++;
         }
-        node = node->next;
+        cur = cur->next;
     }
 }
 
