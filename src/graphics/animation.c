@@ -143,16 +143,3 @@ Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], Direction type) {
     }
     return NULL;
 }
-
-char *getAnimationStringFromType(Direction type) {
-    int count = sizeof(AnimationTypeStrings) / sizeof(AnimationTypeStrings[0]);
-    for (int i = 0; i < count; i++) {
-        if (DIRECTIONS[i] == type) {
-            char *animationName = malloc(strlen(AnimationTypeStrings[i]));
-            sprintf(animationName, "%s", AnimationTypeStrings[i]);
-            return animationName;
-        }
-    }
-    printf("no animation name for type: %d\n", type);
-    exit(1);
-}

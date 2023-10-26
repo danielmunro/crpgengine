@@ -36,6 +36,7 @@ typedef enum {
     ConfigurationErrorNoDirectionForName = 412,
     ConfigurationErrorObjectNotFound = 413,
     ConfigurationErrorPropertyNotFound = 414,
+    ConfigurationErrorAnimationTypeNotFound = 415,
 
     // Yaml loading/saving
     CyamlErrorGeneric = 500,
