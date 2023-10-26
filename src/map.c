@@ -333,7 +333,8 @@ bool checkTileForBlockingObject(const Map *m, Rectangle player, int layer, int x
     for (int i = 0; i < t->objectCount; i++) {
         if (t->objects[i] == NULL) {
             break;
-        } else if (isObjectBlocking(m, t->objects[i], player, x, y)) {
+        }
+        if (isObjectBlocking(m, t->objects[i], player, x, y)) {
             return true;
         }
     }
