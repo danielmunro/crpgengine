@@ -341,18 +341,14 @@
    <object id="1" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
- <tile id="130" type="empty_chest">
+ <tile id="130" type="chest_empty">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="16"/>
+   <object id="2" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
- <tile id="131" type="chest">
-  <properties>
-   <property name="item" value="a potion"/>
-   <property name="quantity" type="int" value="1"/>
-  </properties>
+ <tile id="131" type="chest_full">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="16"/>
+   <object id="5" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
 </tileset>

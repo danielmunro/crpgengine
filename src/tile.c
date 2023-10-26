@@ -2,6 +2,78 @@
 #include <libxml/xmlreader.h>
 #include "headers/util/util.h"
 
+const char *ObjectTypes[] = {
+        "other",
+        "exit",
+        "entrance",
+};
+
+typedef enum {
+    OBJECT_TYPE_OTHER,
+    OBJECT_TYPE_EXIT,
+    OBJECT_TYPE_ENTRANCE,
+} ObjectType;
+
+const char *NodeNames[] = {
+        "other",
+        "object",
+        "properties",
+        "property",
+        "objectgroup",
+        "data",
+};
+
+typedef enum {
+    NODE_NAME_OTHER,
+    NODE_NAME_OBJECT,
+    NODE_NAME_PROPERTIES,
+    NODE_NAME_PROPERTY,
+    NODE_NAME_OBJECT_GROUP,
+    NODE_NAME_DATA,
+} NodeName;
+
+const char *TilemapObjectGroupNames[] = {
+        "other",
+        "warps",
+        "arrive_at",
+        "treasures",
+};
+
+typedef enum {
+    TILEMAP_OBJECT_GROUP_OTHER,
+    TILEMAP_OBJECT_GROUP_WARPS,
+    TILEMAP_OBJECT_GROUP_ARRIVE_AT,
+    TILEMAP_OBJECT_GROUP_TREASURES,
+} TilemapObjectGroupName;
+
+const char *TilemapNodeTypes[] = {
+        "other",
+        "tileset",
+        "layer",
+        "objectgroup",
+};
+
+typedef enum {
+    TILEMAP_NODE_TYPE_OTHER,
+    TILEMAP_NODE_TYPE_TILESET,
+    TILEMAP_NODE_TYPE_LAYER,
+    TILEMAP_NODE_TYPE_OBJECTGROUP,
+} TilemapNodeType;
+
+const char *TileSetNodeTypes[] = {
+        "other",
+        "tileset",
+        "image",
+        "tile",
+};
+
+typedef enum {
+    TILESET_NODE_TYPE_OTHER,
+    TILESET_NODE_TYPE_TILESET,
+    TILESET_NODE_TYPE_IMAGE,
+    TILESET_NODE_TYPE_TILE,
+} TilesetNodeType;
+
 typedef enum {
     BACKGROUND = 0,
     MIDGROUND,
@@ -43,6 +115,61 @@ typedef struct {
     bool showCollisions;
 } Layer;
 
+ObjectType getObjectTypeFromString(const char *type) {
+    int count = sizeof(ObjectTypes) / sizeof(const char *);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(ObjectTypes[i], type) == 0) {
+            return i;
+        }
+    }
+    addDebug("object type not found :: %s", type);
+    return OBJECT_TYPE_OTHER;
+}
+
+NodeName getNodeNameFromString(const char *name) {
+    int count = sizeof(NodeNames) / sizeof(const char *);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(NodeNames[i], name) == 0) {
+            return i;
+        }
+    }
+    addDebug("node name not found :: %s", name);
+    return NODE_NAME_OTHER;
+}
+
+TilemapObjectGroupName getTilemapObjectGroupNameFromString(const char *groupName) {
+    int count = sizeof(TilemapObjectGroupNames) / sizeof(const char *);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(TilemapObjectGroupNames[i], groupName) == 0) {
+            return i;
+        }
+    }
+    addDebug("tile map object group name not found :: %s", groupName);
+    return TILEMAP_OBJECT_GROUP_OTHER;
+}
+
+TilemapNodeType getTileMapNodeTypeFromString(const char *nodeType) {
+    int count = sizeof(TilemapNodeTypes) / sizeof(const char *);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(TilemapNodeTypes[i], nodeType) == 0) {
+            return i;
+        }
+    }
+    addDebug("tile map node type not found :: %s", nodeType);
+    return TILEMAP_NODE_TYPE_OTHER;
+}
+
+TilesetNodeType getTilesetNodeTypeFromString(const char *tileSetNodeType) {
+    int count = sizeof(TileSetNodeTypes) / sizeof(const char *);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(TileSetNodeTypes[i], tileSetNodeType) == 0) {
+            return i;
+        }
+    }
+    addDebug("tileset node type not found :: %s", tileSetNodeType);
+    return TILESET_NODE_TYPE_OTHER;
+}
+
 Property *createProperty(const char *name, const char *value) {
     Property *p = malloc(sizeof(Property));
     p->name = name;
@@ -82,4 +209,13 @@ Tileset *createTileset() {
     t->tiles = calloc(MAX_TILES, sizeof(Tile));
     t->tilesCount = 0;
     return t;
+}
+
+Property *findProperty(const Tile *t, const char *propertyName) {
+    for (int i = 0; i < t->propertyCount; i++) {
+        if (strcmp(t->properties[i]->name, propertyName) == 0) {
+            return t->properties[i];
+        }
+    }
+    return NULL;
 }

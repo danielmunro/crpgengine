@@ -12,6 +12,11 @@
 #include "headers/tile.h"
 
 typedef struct {
+    ItemWithQuantity *iq;
+    int opened;
+} Chest;
+
+typedef struct {
     Mobile *mob;
     Vector2 destination;
 } MobileMovement;
@@ -36,16 +41,15 @@ typedef struct {
     Mobile *mobiles[MAX_MOBILES];
     int mobileCount;
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
+    Chest **chests;
+    int chestCount;
 } Map;
 
-Entrance *findEntrance(Map *m, const char *name) {
-    for (int i = 0; i < m->entranceCount; i++) {
-        if (strcmp(m->entrances[i]->name, name) == 0) {
-            return m->entrances[i];
-        }
-    }
-    addError("entrance not found :: %s", name);
-    exit(RuntimeErrorUnknownEntrance);
+Chest *createChest(ItemWithQuantity *iq) {
+    Chest *chest = malloc(sizeof(Chest));
+    chest->iq = iq;
+    chest->opened = false;
+    return chest;
 }
 
 Map *createMap() {
@@ -59,6 +63,8 @@ Map *createMap() {
     map->exitCount = 0;
     map->arriveAtCount = 0;
     map->tileset = createTileset();
+    map->chests = calloc(MAX_CHESTS, sizeof(Chest));
+    map->chestCount = 0;
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         map->mobMovements[i] = NULL;
     }
@@ -70,6 +76,16 @@ MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
     mobMovement->mob = mob;
     mobMovement->destination = destination;
     return mobMovement;
+}
+
+Entrance *findEntrance(Map *m, const char *name) {
+    for (int i = 0; i < m->entranceCount; i++) {
+        if (strcmp(m->entrances[i]->name, name) == 0) {
+            return m->entrances[i];
+        }
+    }
+    addError("entrance not found :: %s", name);
+    exit(RuntimeErrorUnknownEntrance);
 }
 
 void addMobileMovement(Map *m, MobileMovement *mobMovement) {
@@ -317,7 +333,8 @@ bool checkTileForBlockingObject(const Map *m, Rectangle player, int layer, int x
     for (int i = 0; i < t->objectCount; i++) {
         if (t->objects[i] == NULL) {
             break;
-        } else if (isObjectBlocking(m, t->objects[i], player, x, y)) {
+        }
+        if (isObjectBlocking(m, t->objects[i], player, x, y)) {
             return true;
         }
     }
