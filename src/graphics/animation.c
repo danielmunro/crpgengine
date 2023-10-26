@@ -26,6 +26,13 @@ typedef struct {
     int animationCount;
 } AnimationManager;
 
+const char *AnimationTypeStrings[] = {
+        "up",
+        "down",
+        "left",
+        "right",
+};
+
 AnimationManager *createAnimationManager() {
     AnimationManager *animationManager = malloc(sizeof(AnimationManager));
     animationManager->animationCount = 0;

@@ -195,7 +195,7 @@ void parseEntrance(xmlNodePtr node, Map *m) {
     m->entrances[m->entranceCount] = createEntrance(
             id,
             objectName,
-            getDirectionFromString(direction != NULL ? direction->value : "down"),
+            getDirectionFromString(direction != NULL ? direction->value : DOWN),
             parseRectangle(node));
     m->entranceCount++;
     free((Property *) direction);
