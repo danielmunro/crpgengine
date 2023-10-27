@@ -104,11 +104,11 @@ typedef struct {
 } Property;
 
 typedef struct {
+    int id;
     Property **properties;
     int propertyCount;
     Object **objects;
     int objectCount;
-    int id;
     TileType type;
 } Tile;
 
