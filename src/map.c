@@ -313,41 +313,43 @@ bool isObjectBlocking(const Map *m, const Object *o, Rectangle player, int x, in
     return c.height > 0 || c.width > 0;
 }
 
-bool checkTileForBlockingObject(const Map *m, Rectangle player, int layer, int x, int y) {
+const Tile *getBlockingTile(const Map *m, Rectangle player, int layer, int x, int y) {
     const Tile *t = getTile(m, m->layers[layer]->data[y][x]);
     if (t == NULL) {
-        return false;
+        return NULL;
     }
     for (int i = 0; i < t->objectCount; i++) {
         if (t->objects[i] == NULL) {
             break;
         }
         if (isObjectBlocking(m, t->objects[i], player, x, y)) {
-            return true;
+            return t;
         }
     }
-    return false;
+    return NULL;
 }
 
-bool checkLayerForBlockingObject(const Map *m, Rectangle player, int layer) {
+const Tile *getLayerBlockingObject(const Map *m, Rectangle player, int layer) {
     Vector2D tiles = getTileCount(m);
     for (int y = 0; y < tiles.y; y++) {
         for (int x = 0; x < tiles.x; x++) {
-            if (checkTileForBlockingObject(m, player, layer, x, y)) {
-                return true;
+            const Tile *t = getBlockingTile(m, player, layer, x, y);
+            if (t != NULL) {
+                return t;
             }
         }
     }
-    return false;
+    return NULL;
 }
 
-bool isBlockedByMapObject(const Map *m, Rectangle player) {
+const Tile *getBlockingMapTile(const Map *m, Rectangle player) {
     for (int l = 0; l < LAYER_COUNT - 1; l++) {
-        if (checkLayerForBlockingObject(m, player, l)) {
-            return true;
+        const Tile *t = getLayerBlockingObject(m, player, l);
+        if (t != NULL) {
+            return t;
         }
     }
-    return false;
+    return NULL;
 }
 
 Mobile *getBlockingMob(const Map *m, Rectangle playerRect) {
@@ -382,12 +384,16 @@ void tryToMove(const Map *m, Player *p, Direction direction, Vector2 pos) {
             collision->height,
     };
     if (mob->moving[direction]) {
-        if (isBlockedByMapObject(m, rect)) {
+        const Tile *t = getBlockingMapTile(m, rect);
+        if (t != NULL) {
             p->blockedBy = NULL;
+            setBlockedByTile(p, t);
             return;
         }
-        p->blockedBy = getBlockingMob(m, rect);
-        if (p->blockedBy != NULL) {
+        Mobile *blockingMob = getBlockingMob(m, rect);
+        if (blockingMob != NULL) {
+            p->blockedBy = blockingMob;
+            setBlockedByMob(p, p->blockedBy);
             return;
         }
         mob->position = pos;

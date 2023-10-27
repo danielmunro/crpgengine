@@ -10,6 +10,13 @@
 #include "headers/spell.h"
 #include "headers/persistence/db.h"
 #include "headers/graphics/ui/ui.h"
+#include "headers/tile.h"
+
+typedef struct {
+    Mobile *mob;
+    const Chest *chest;
+    const Tile *tile;
+} Blocking;
 
 typedef struct {
     Mobile **party;
@@ -18,6 +25,7 @@ typedef struct {
     Item **items;
     SaveFiles *saveFiles;
     Mobile *blockedBy;
+    Blocking *blocking;
     Mobile *engageable;
     Dialog *dialog;
     bool engaged;
@@ -31,31 +39,13 @@ typedef struct {
     int storylineCount;
 } Player;
 
-void addItem(Player *player, Item *item) {
-    player->items[player->itemCount] = item;
-    player->itemCount++;
-}
-
-void removeItem(Player *player, const Item *item) {
-    addInfo("remove item :: %s\n", item->name);
-    bool foundItem = false;
-    for (int i = 0; i < player->itemCount; i++) {
-        if (player->items[i] == item) {
-            foundItem = true;
-        }
-        if (foundItem) {
-            player->items[i] = player->items[i + 1];
-        }
-    }
-    player->itemCount--;
-}
-
 Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
                      int coins, int experience, int level, int secondsPlayed,
                      const char **storylines, int storylineCount,
                      Item **items, int itemCount) {
     Player *player = malloc(sizeof(Player));
     player->blockedBy = NULL;
+    player->blocking = malloc(sizeof(Blocking));
     player->engageable = NULL;
     player->engaged = false;
     player->storylineCount = storylineCount;
@@ -79,6 +69,43 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
     player->onDeck = calloc(MAX_PARTY_SIZE, sizeof(Mobile));
     player->dialog = NULL;
     return player;
+}
+
+void addItem(Player *player, Item *item) {
+    player->items[player->itemCount] = item;
+    player->itemCount++;
+}
+
+void removeItem(Player *player, const Item *item) {
+    addInfo("remove item :: %s\n", item->name);
+    bool foundItem = false;
+    for (int i = 0; i < player->itemCount; i++) {
+        if (player->items[i] == item) {
+            foundItem = true;
+        }
+        if (foundItem) {
+            player->items[i] = player->items[i + 1];
+        }
+    }
+    player->itemCount--;
+}
+
+void setBlockedByTile(Player *p, const Tile *t) {
+    p->blocking->mob = NULL;
+    p->blocking->chest = NULL;
+    p->blocking->tile = t;
+}
+
+void setBlockedByMob(Player *p, Mobile *mob) {
+    p->blocking->mob = mob;
+    p->blocking->chest = NULL;
+    p->blocking->tile = NULL;
+}
+
+void setNoBlocking(Player *p) {
+    p->blocking->mob = NULL;
+    p->blocking->chest = NULL;
+    p->blocking->tile = NULL;
 }
 
 Mobile *getPartyLeader(const Player *p) {
@@ -170,6 +197,9 @@ void engageWithMobile(Player *p) {
 void disengageWithMobile(Player *p) {
     p->engaged = false;
     clearDialog(p);
+    if (p->blocking->mob != NULL) {
+        updateDirection(p->blockedBy, p->blockedBy->previousDirection);
+    }
     if (p->blockedBy != NULL) {
         updateDirection(p->blockedBy, p->blockedBy->previousDirection);
     }
