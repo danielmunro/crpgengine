@@ -386,14 +386,12 @@ void tryToMove(const Map *m, Player *p, Direction direction, Vector2 pos) {
     if (mob->moving[direction]) {
         const Tile *t = getBlockingMapTile(m, rect);
         if (t != NULL) {
-            p->blockedBy = NULL;
             setBlockedByTile(p, t);
             return;
         }
         Mobile *blockingMob = getBlockingMob(m, rect);
         if (blockingMob != NULL) {
-            p->blockedBy = blockingMob;
-            setBlockedByMob(p, p->blockedBy);
+            setBlockedByMob(p, blockingMob);
             return;
         }
         mob->position = pos;
@@ -494,7 +492,7 @@ void mapSpaceKeyPressed(Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_C
             return;
         }
     }
-    if (player->blockedBy != NULL) {
+    if (player->blocking->mob != NULL) {
         engageWithMobile(player);
     }
 }

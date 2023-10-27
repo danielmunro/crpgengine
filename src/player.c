@@ -24,7 +24,6 @@ typedef struct {
     const char **storylines;
     Item **items;
     SaveFiles *saveFiles;
-    Mobile *blockedBy;
     Blocking *blocking;
     Mobile *engageable;
     Dialog *dialog;
@@ -44,7 +43,6 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
                      const char **storylines, int storylineCount,
                      Item **items, int itemCount) {
     Player *player = malloc(sizeof(Player));
-    player->blockedBy = NULL;
     player->blocking = malloc(sizeof(Blocking));
     player->engageable = NULL;
     player->engaged = false;
@@ -98,12 +96,6 @@ void setBlockedByTile(Player *p, const Tile *t) {
 
 void setBlockedByMob(Player *p, Mobile *mob) {
     p->blocking->mob = mob;
-    p->blocking->chest = NULL;
-    p->blocking->tile = NULL;
-}
-
-void setNoBlocking(Player *p) {
-    p->blocking->mob = NULL;
     p->blocking->chest = NULL;
     p->blocking->tile = NULL;
 }
@@ -187,9 +179,9 @@ bool isSpeakingTo(const Player *p, const Mobile *target) {
 }
 
 void engageWithMobile(Player *p) {
-    p->engageable = p->blockedBy;
+    p->engageable = p->blocking->mob;
     addInfo("updating mob direction to: %d", getOppositeDirection(getPartyLeader(p)->direction));
-    updateDirection(p->blockedBy, getOppositeDirection(getPartyLeader(p)->direction));
+    updateDirection(p->blocking->mob, getOppositeDirection(getPartyLeader(p)->direction));
     addInfo("engaging with %s", p->engageable->name);
     p->engaged = true;
 }
@@ -198,10 +190,7 @@ void disengageWithMobile(Player *p) {
     p->engaged = false;
     clearDialog(p);
     if (p->blocking->mob != NULL) {
-        updateDirection(p->blockedBy, p->blockedBy->previousDirection);
-    }
-    if (p->blockedBy != NULL) {
-        updateDirection(p->blockedBy, p->blockedBy->previousDirection);
+        updateDirection(p->blocking->mob, p->blocking->mob->previousDirection);
     }
 }
 
