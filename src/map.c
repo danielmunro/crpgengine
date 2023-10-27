@@ -12,11 +12,6 @@
 #include "headers/tile.h"
 
 typedef struct {
-    ItemWithQuantity *iq;
-    int opened;
-} Chest;
-
-typedef struct {
     Mobile *mob;
     Vector2 destination;
 } MobileMovement;
@@ -44,13 +39,6 @@ typedef struct {
     Chest **chests;
     int chestCount;
 } Map;
-
-Chest *createChest(ItemWithQuantity *iq) {
-    Chest *chest = malloc(sizeof(Chest));
-    chest->iq = iq;
-    chest->opened = false;
-    return chest;
-}
 
 Map *createMap() {
     Map *map = malloc(sizeof(Map));

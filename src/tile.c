@@ -115,6 +115,11 @@ typedef struct {
     bool showCollisions;
 } Layer;
 
+typedef struct {
+    ItemWithQuantity *iq;
+    int opened;
+} Chest;
+
 ObjectType getObjectTypeFromString(const char *type) {
     int count = sizeof(ObjectTypes) / sizeof(const char *);
     for (int i = 0; i < count; i++) {
@@ -211,11 +216,9 @@ Tileset *createTileset() {
     return t;
 }
 
-Property *findProperty(const Tile *t, const char *propertyName) {
-    for (int i = 0; i < t->propertyCount; i++) {
-        if (strcmp(t->properties[i]->name, propertyName) == 0) {
-            return t->properties[i];
-        }
-    }
-    return NULL;
+Chest *createChest(ItemWithQuantity *iq) {
+    Chest *chest = malloc(sizeof(Chest));
+    chest->iq = iq;
+    chest->opened = false;
+    return chest;
 }
