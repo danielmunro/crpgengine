@@ -103,7 +103,10 @@ void checkMapInput(Game *g) {
         mapDebugKeyPressed(mob->position);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        mapSpaceKeyPressed(g->player, g->scenes->current->activeControlBlocks);
+        mapSpaceKeyPressed(
+                g->scenes->current->map,
+                g->player,
+                g->scenes->current->activeControlBlocks);
     }
     if (IsKeyPressed(KEY_M)) {
         mapMenuKeyPressed(g);

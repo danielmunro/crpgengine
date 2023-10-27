@@ -21,6 +21,7 @@ typedef struct {
 } MapConfig;
 
 typedef struct {
+    const char *sceneName;
     MapConfig *config;
     Tileset *tileset;
     Layer **layers;
@@ -40,8 +41,9 @@ typedef struct {
     int chestCount;
 } Map;
 
-Map *createMap() {
+Map *createMap(const char *sceneName) {
     Map *map = malloc(sizeof(Map));
+    map->sceneName = sceneName;
     map->config = malloc(sizeof(MapConfig));
     map->config->tileSize = (Vector2D) {0, 0};
     map->layers = calloc(MAX_LAYERS, sizeof(Layer));
@@ -362,6 +364,16 @@ Mobile *getBlockingMob(const Map *m, Rectangle playerRect) {
     return NULL;
 }
 
+Chest *getBlockingChest(const Map *m, Rectangle playerRect) {
+    for (int i = 0; i < m->chestCount; i++) {
+        Rectangle c = GetCollisionRec(playerRect, m->chests[i]->area);
+        if (c.height > 0 || c.width > 0) {
+            return m->chests[i];
+        }
+    }
+    return NULL;
+}
+
 int atExit(const Map *m, Player *p) {
     Mobile *mob = getPartyLeader(p);
     Rectangle rect = getMobileRectangle(mob);
@@ -384,6 +396,11 @@ void tryToMove(const Map *m, Player *p, Direction direction, Vector2 pos) {
             collision->height,
     };
     if (mob->moving[direction]) {
+        const Chest *c = getBlockingChest(m, rect);
+        if (c != NULL) {
+            setBlockedByChest(p, c);
+            return;
+        }
         const Tile *t = getBlockingMapTile(m, rect);
         if (t != NULL) {
             setBlockedByTile(p, t);
@@ -481,7 +498,7 @@ void dialogEngaged(const Player *player, ControlBlock *controlBlock) {
     }
 }
 
-void mapSpaceKeyPressed(Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
+void mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
     addInfo("map space key pressed");
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (controlBlocks[i] != NULL
@@ -494,6 +511,22 @@ void mapSpaceKeyPressed(Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_C
     }
     if (player->blocking->mob != NULL) {
         engageWithMobile(player);
+    }
+    const Chest *chest = player->blocking->chest;
+    if (chest != NULL) {
+        char key[64];
+        sprintf(key, "%s:%d", m->sceneName, chest->id);
+        for (int i = 0; i < player->openedChestCount; i++) {
+            if (strcmp(player->openedChests[i], key) == 0) {
+                return;
+            }
+        }
+        addInfo("chest opened :: %s", chest->iq->item->name);
+        for (int i = 0; i < chest->iq->quantity; i++) {
+            addItem(player, chest->iq->item);
+        }
+        player->openedChests[player->openedChestCount] = key;
+        player->openedChestCount++;
     }
 }
 

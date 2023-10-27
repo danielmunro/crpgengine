@@ -27,6 +27,7 @@ typedef struct {
     Blocking *blocking;
     Mobile *engageable;
     Dialog *dialog;
+    const char **openedChests;
     bool engaged;
     int coins;
     int secondsPlayed;
@@ -36,6 +37,7 @@ typedef struct {
     int itemCount;
     int onDeckCount;
     int storylineCount;
+    int openedChestCount;
 } Player;
 
 Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
@@ -66,6 +68,7 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
     player->items = items;
     player->onDeck = calloc(MAX_PARTY_SIZE, sizeof(Mobile));
     player->dialog = NULL;
+    player->openedChests = calloc(MAX_CHESTS, sizeof(const char *));
     return player;
 }
 
@@ -97,6 +100,12 @@ void setBlockedByTile(Player *p, const Tile *t) {
 void setBlockedByMob(Player *p, Mobile *mob) {
     p->blocking->mob = mob;
     p->blocking->chest = NULL;
+    p->blocking->tile = NULL;
+}
+
+void setBlockedByChest(Player *p, const Chest *chest) {
+    p->blocking->mob = NULL;
+    p->blocking->chest = chest;
     p->blocking->tile = NULL;
 }
 

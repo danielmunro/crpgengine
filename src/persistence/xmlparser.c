@@ -91,7 +91,7 @@ void parseTileProperties(xmlNodePtr node, Tile *t) {
 
 Tile *parseTileNode(xmlNodePtr node) {
     int id = xmlInt(node, PROP_ID);
-    const char *type = xmlString(node, PROP_TYPE);
+    TileType type = getTileTypeFromString(xmlString(node, PROP_TYPE));
     Tile *t = createTile(id, type);
     xmlNodePtr cur = node->children;
     while (cur != NULL) {
@@ -240,9 +240,11 @@ void parseTilemapObjectGroupTreasureNode(xmlNodePtr node, ItemManager *im, Map *
             const Property *item = parseProperty(node, PROP_ITEM);
             const Property *quantity = parseProperty(node, PROP_QUANTITY);
             m->chests[m->chestCount] = createChest(
+                    xmlInt(node, "id"),
                     createItemWithQuantity(
                             findItemFromName(im, item->value),
-                            TextToInteger(quantity->value)));
+                            TextToInteger(quantity->value)),
+                            parseRectangle(node));
             m->chestCount++;
             free((Property *) item);
             free((Property *) quantity);
@@ -263,8 +265,8 @@ void parseTilemapObjectGroupNode(xmlNodePtr node, ItemManager *im, Map *m) {
     }
 }
 
-Map *parseTilemapRootNode(xmlNodePtr node, ItemManager *im) {
-    Map *map = createMap();
+Map *parseTilemapRootNode(const char *name, xmlNodePtr node, ItemManager *im) {
+    Map *map = createMap(name);
     map->config->tileSize.x = xmlInt(node, PROP_TILE_WIDTH);
     map->config->tileSize.y = xmlInt(node, PROP_TILE_HEIGHT);
     while (node->children != NULL) {
@@ -288,7 +290,7 @@ Map *parseTilemapDoc(ItemManager *im, const char *filePath, const char *indexDir
         addError("unable to find map resources for scene :: %s", indexDir);
         exit(ConfigurationErrorMapResourcesMissing);
     }
-    Map *map = parseTilemapRootNode(cur, im);
+    Map *map = parseTilemapRootNode(doc->name, cur, im);
     xmlFreeNode(cur);
     return map;
 }
