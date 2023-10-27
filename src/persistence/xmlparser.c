@@ -95,7 +95,7 @@ Tile *parseTileNode(xmlNodePtr node) {
     Tile *t = createTile(id, type);
     xmlNodePtr cur = node->children;
     while (cur != NULL) {
-        const NodeName name = getNodeNameFromString((const char *) node->name);
+        const NodeName name = getNodeNameFromString((const char *) cur->name);
         if (name == NODE_NAME_OBJECT_GROUP) {
             parseTileObjectGroupNode(cur->children, t);
         } else if (name == NODE_NAME_PROPERTIES) {
