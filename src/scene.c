@@ -6,8 +6,8 @@
 #include "headers/fight.h"
 
 typedef enum {
-    TOWN,
-    DUNGEON,
+    SCENE_TYPE_TOWN,
+    SCENE_TYPE_DUNGEON,
 } SceneType;
 
 typedef struct {
@@ -16,8 +16,8 @@ typedef struct {
 } SceneTypeEntry;
 
 const SceneTypeEntry sceneTypes[] = {
-        {TOWN,    "town"},
-        {DUNGEON, "dungeon"},
+        {SCENE_TYPE_TOWN,    "town"},
+        {SCENE_TYPE_DUNGEON, "dungeon"},
 };
 
 typedef struct {
