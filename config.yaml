@@ -39,7 +39,7 @@ logMemoryUsage: false
 purgeSaves: false
 
 # Show FPS in the game.
-showFPS: true
+showFPS: false
 
 # Options to enable various object collision overlays. Useful for debugging
 # unexpected collision behavior.
