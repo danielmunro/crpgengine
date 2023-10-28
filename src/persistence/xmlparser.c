@@ -90,7 +90,7 @@ void parseTileProperties(xmlNodePtr node, Tile *t) {
 }
 
 Tile *parseTileNode(xmlNodePtr node) {
-    int id = xmlInt(node, PROP_ID) + 1;
+    int id = xmlInt(node, PROP_ID);
     TileType type = getTileTypeFromString(xmlString(node, PROP_TYPE));
     if (type == TILE_TYPE_CHEST_EMPTY) {
         addInfo("tile id :: %d", id);

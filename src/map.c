@@ -318,7 +318,7 @@ void drawChests(const Map *m, const Player *p, Vector2 offset) {
         if (isChestOpened(p, chestKey)) {
             DrawTextureRec(
                     m->tileset->sourceTexture,
-                    getRectForTile(m, chestEmpty->id),
+                    getRectForTile(m, chestEmpty->id + 1),
                     (Vector2) {
                             m->chests[i]->area.x + offset.x,
                             m->chests[i]->area.y + offset.y,
