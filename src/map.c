@@ -306,6 +306,29 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
     }
 }
 
+void drawChests(const Map *m, const Player *p, Vector2 offset) {
+    Tile *chestEmpty;
+    for (int i = 0; i < m->tileset->tilesCount; i++) {
+        if (m->tileset->tiles[i]->type == TILE_TYPE_CHEST_EMPTY) {
+            chestEmpty = m->tileset->tiles[i];
+        }
+    }
+    for (int i = 0; i < m->chestCount; i++) {
+        const char *chestKey = createChestKey(m, m->chests[i]);
+        if (isChestOpened(p, chestKey)) {
+            DrawTextureRec(
+                    m->tileset->sourceTexture,
+                    getRectForTile(m, chestEmpty->id),
+                    (Vector2) {
+                            m->chests[i]->area.x + offset.x,
+                            m->chests[i]->area.y + offset.y,
+                    },
+                    WHITE
+            );
+        }
+    }
+}
+
 Rectangle getObjectSize(const Map *m, const Object *o, int x, int y) {
     return (Rectangle) {
             (float) (m->tileset->size.x * x) + o->area.x,
@@ -474,6 +497,7 @@ void drawMapView(
     DrawTextureEx(m->renderedLayers[BACKGROUND], offset, 0, ui->screen->scale, WHITE);
     DrawTextureEx(m->renderedLayers[MIDGROUND], offset, 0, ui->screen->scale, WHITE);
     drawExplorationMobiles(m, p, offset);
+    drawChests(m, p, offset);
     DrawTextureEx(m->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);

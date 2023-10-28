@@ -315,6 +315,15 @@ bool hasStory(const Player *p, const char *story) {
     return false;
 }
 
+bool isChestOpened(const Player *p, const char *key) {
+    for (int i = 0; i < p->openedChestCount; i++) {
+        if (strcmp(p->openedChests[i], key) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void loadAllPlayerItems(ItemManager *im, Player *p) {
     ItemsReferenceData *itemsData = loadItemsReferenceData();
     for (int i = 0; i < itemsData->items_count; i++) {

@@ -90,8 +90,11 @@ void parseTileProperties(xmlNodePtr node, Tile *t) {
 }
 
 Tile *parseTileNode(xmlNodePtr node) {
-    int id = xmlInt(node, PROP_ID);
+    int id = xmlInt(node, PROP_ID) + 1;
     TileType type = getTileTypeFromString(xmlString(node, PROP_TYPE));
+    if (type == TILE_TYPE_CHEST_EMPTY) {
+        addInfo("tile id :: %d", id);
+    }
     Tile *t = createTile(id, type);
     xmlNodePtr cur = node->children;
     while (cur != NULL) {
@@ -127,6 +130,7 @@ void parseTilesetRootNode(xmlNodePtr node, Tileset *t) {
             getComponentPath(imagePath, "", "tilesets", xmlString(cur, "source"));
             t->reader = xmlReaderForFile(filePath, NULL, 0);
             t->source = LoadImage(imagePath);
+            t->sourceTexture = LoadTextureFromImage(t->source);
         } else if (type == TILESET_NODE_TYPE_TILE) {
             t->tiles[t->tilesCount] = parseTileNode(cur);
             t->tilesCount++;

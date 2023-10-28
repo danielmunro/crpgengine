@@ -118,6 +118,7 @@ typedef struct {
     xmlTextReaderPtr reader;
     Vector2D size;
     Image source;
+    Texture sourceTexture;
 } Tileset;
 
 typedef struct {
