@@ -11,7 +11,7 @@ typedef struct {
 } SceneType;
 
 typedef struct {
-    int type;
+    SceneType type;
     const char *name;
     const char *music;
     StorylineData *storylines[MAX_STORIES];
@@ -35,21 +35,22 @@ const SceneType sceneTypes[] = {
         {SCENE_TYPE_DUNGEON, "dungeon"},
 };
 
-void setSceneTypeFromString(Scene *s, const char *sceneType) {
+SceneType getSceneTypeFromString(const char *sceneType) {
     int count = sizeof(sceneTypes) / sizeof(SceneType);
     for (int i = 0; i < count; i++) {
         if (strcmp(sceneTypes[i].scene, sceneType) == 0) {
-            s->type = sceneTypes[i].code;
-            addDebug("scene '%s' type set to '%s'", s->name, sceneType);
-            return;
+            return sceneTypes[i];
         }
     }
     addError("unknown scene type :: %s", sceneType);
-    exit(ConfigurationErrorUnknownScene);
+    exit(ConfigurationErrorUnknownSceneType);
 }
 
-Scene *createScene() {
+Scene *createScene(const char *name, SceneType type, const char *music) {
     Scene *scene = malloc(sizeof(Scene));
+    scene->name = name;
+    scene->type = type;
+    scene->music = music;
     scene->storylineCount = 0;
     scene->encounters = createEncounters();
     scene->controlBlockCount = 0;
@@ -70,7 +71,7 @@ SceneLoader *createSceneLoader(const char *indexDir) {
 }
 
 bool isDungeon(Scene *s) {
-    return s->type == SCENE_TYPE_DUNGEON;
+    return s->type.code == SCENE_TYPE_DUNGEON;
 }
 
 void addActiveControl(Scene *s, ControlBlock *cb) {

@@ -30,7 +30,7 @@ typedef enum {
     ConfigurationErrorUnknownSpriteSheet = 406,
     ConfigurationErrorMenuStyleNotDefined = 407,
     ConfigurationErrorUnknownWarp = 408,
-    ConfigurationErrorUnknownScene = 409,
+    ConfigurationErrorUnknownSceneType = 409,
     ConfigurationErrorMissingComponent = 410,
     ConfigurationErrorUnknownFontStyleType = 411,
     ConfigurationErrorNoDirectionForName = 412,

@@ -147,12 +147,10 @@ Scene *loadScene(
         const char *sceneDirectory) {
     addDebug("create scene :: %s", sceneName);
     const SceneData *sceneData = loadSceneYaml(sceneDirectory);
-    Scene *scene = createScene();
-
-    // scene properties
-    scene->name = &sceneName[0];
-    setSceneTypeFromString(scene, sceneData->type);
-    scene->music = &sceneData->music[0];
+    Scene *scene = createScene(
+            sceneName,
+            getSceneTypeFromString(sceneData->type),
+            sceneData->music);
 
     // storylines
     loadStorylines(scene, sceneDirectory);
