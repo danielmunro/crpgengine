@@ -311,6 +311,7 @@ void drawChests(const Map *m, const Player *p, Vector2 offset) {
     for (int i = 0; i < m->tileset->tilesCount; i++) {
         if (m->tileset->tiles[i]->type == TILE_TYPE_CHEST_EMPTY) {
             chestEmpty = m->tileset->tiles[i];
+            break;
         }
     }
     for (int i = 0; i < m->chestCount; i++) {
