@@ -176,6 +176,32 @@ Scene *loadScene(
     return scene;
 }
 
+void validateNoDuplicateSceneIds(SceneManager *sm) {
+    for (int i = 0; i < sm->count; i++) {
+        for (int j = i + 1; j < sm->count; j++) {
+            if (sm->scenes[i]->id == sm->scenes[j]->id) {
+                addError("duplicate scene IDs defined :: id: %d, first: %s, second: %s",
+                         sm->scenes[i]->id,
+                         sm->scenes[i]->name,
+                         sm->scenes[j]->name);
+                exit(ConfigurationErrorSceneIdCollision);
+            }
+        }
+    }
+}
+
+void mapStorylinesToControlBlocks(SceneManager *sm) {
+    for (int i = 0; i < sm->count; i++) {
+        addDebug("map storylines to control blocks :: scene name: %s, storyline count: %d",
+                 sm->scenes[i]->name, sm->scenes[i]->storylineCount);
+        for (int c = 0; c < sm->scenes[i]->storylineCount; c++) {
+            sm->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(
+                    sm->controlManager, sm->scenes[i], sm->scenes[i]->storylines[c]);
+            sm->scenes[i]->controlBlockCount++;
+        }
+    }
+}
+
 void loadScenes(
         SceneManager *sm,
         MobileManager *mm,
@@ -192,15 +218,8 @@ void loadScenes(
                 sl->sceneFiles[i]);
         addDebug("scene loaded :: %s (%d)", sm->scenes[i]->name, i);
     }
-    for (int i = 0; i < sm->count; i++) {
-        addDebug("scene storyline count :: %s -- %d",
-                 sm->scenes[i]->name, sm->scenes[i]->storylineCount);
-        for (int c = 0; c < sm->scenes[i]->storylineCount; c++) {
-            sm->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(
-                    sm->controlManager, sm->scenes[i], sm->scenes[i]->storylines[c]);
-            sm->scenes[i]->controlBlockCount++;
-        }
-    }
+    validateNoDuplicateSceneIds(sm);
+    mapStorylinesToControlBlocks(sm);
 }
 
 void loadScenesFromFiles(

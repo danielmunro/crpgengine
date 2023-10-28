@@ -21,7 +21,7 @@ typedef enum {
     GameEngineErrorCannotAddMoreActiveControls = 303,
 
     // Configuration errors
-    ConfigurationErrorUndefinedTextArea = 400,
+    ConfigurationErrorSceneIdCollision = 400,
     ConfigurationErrorMapResourcesMissing = 401,
     ConfigurationErrorMapResourcesUnreadable = 402,
     ConfigurationErrorLayerTypeNotFound = 403,
