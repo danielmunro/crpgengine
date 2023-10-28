@@ -31,6 +31,12 @@ Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *sa
     for (int i = 0; i < save->player->items_count; i++) {
         items[i] = createItemFromData(&save->player->items[i]);
     }
+    OpenedChest **openedChests = calloc(MAX_CHESTS, sizeof(OpenedChest));
+    for (int i = 0; i < save->player->openedChests_count; i++) {
+        openedChests[i] = createOpenedChest(
+                save->player->openedChests[i].sceneId,
+                save->player->openedChests[i].chestId);
+    }
     return createPlayer(
             mobs,
             save->player->coins,
@@ -40,7 +46,9 @@ Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *sa
             save->player->storylines,
             save->player->storylines_count,
             items,
-            save->player->items_count);
+            save->player->items_count,
+            openedChests,
+            save->player->openedChests_count);
 }
 
 Player *createNewPlayer(MobileManager *mm, ItemManager *im) {
@@ -60,6 +68,7 @@ Player *createNewPlayer(MobileManager *mm, ItemManager *im) {
     }
     const char **storylines = malloc(sizeof(char **));
     Item **items = calloc(MAX_ITEMS, sizeof(Item));
+    OpenedChest **openedChests = calloc(MAX_CHESTS, sizeof(OpenedChest));
     Player *p = createPlayer(
             mobiles,
             0,
@@ -69,6 +78,8 @@ Player *createNewPlayer(MobileManager *mm, ItemManager *im) {
             storylines,
             0,
             items,
+            0,
+            openedChests,
             0);
     loadAllPlayerItems(im, p);
     return p;

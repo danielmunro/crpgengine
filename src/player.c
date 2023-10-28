@@ -32,7 +32,7 @@ typedef struct {
     Blocking *blocking;
     Mobile *engageable;
     Dialog *dialog;
-    const OpenedChest **openedChests;
+    OpenedChest **openedChests;
     int openedChestsCount;
     bool engaged;
     int coins;
@@ -45,10 +45,18 @@ typedef struct {
     int storylineCount;
 } Player;
 
+OpenedChest *createOpenedChest(int sceneId, int chestId) {
+    OpenedChest *o = malloc(sizeof(OpenedChest));
+    o->sceneId = sceneId;
+    o->chestId = chestId;
+    return o;
+}
+
 Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
                      int coins, int experience, int level, int secondsPlayed,
                      const char **storylines, int storylineCount,
-                     Item **items, int itemCount) {
+                     Item **items, int itemCount,
+                     OpenedChest **openedChests, int openedChestsCount) {
     Player *player = malloc(sizeof(Player));
     player->blocking = malloc(sizeof(Blocking));
     player->engageable = NULL;
@@ -73,16 +81,9 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
     player->items = items;
     player->onDeck = calloc(MAX_PARTY_SIZE, sizeof(Mobile));
     player->dialog = NULL;
-    player->openedChests = calloc(MAX_CHESTS, sizeof(OpenedChest));
-    player->openedChestsCount = 0;
+    player->openedChests = openedChests;
+    player->openedChestsCount = openedChestsCount;
     return player;
-}
-
-OpenedChest *createOpenedChest(int sceneId, int chestId) {
-    OpenedChest *o = malloc(sizeof(OpenedChest));
-    o->sceneId = sceneId;
-    o->chestId = chestId;
-    return o;
 }
 
 void addItem(Player *player, Item *item) {
@@ -142,6 +143,13 @@ MobileData createMobDataFromMob(Mobile *mob) {
     };
 }
 
+OpenedChestData createOpenedChestDataFromOpenedChest(const OpenedChest *o) {
+    return (OpenedChestData) {
+        o->sceneId,
+        o->chestId,
+    };
+}
+
 PlayerData *createPlayerData(const Player *p) {
     addDebug("create player data");
     PlayerData *pd = malloc(sizeof(PlayerData));
@@ -156,6 +164,7 @@ PlayerData *createPlayerData(const Player *p) {
     pd->items = (ItemData *) malloc(p->itemCount * sizeof(ItemData));
     pd->party = (MobileData *) malloc(p->partyCount * sizeof(MobileData));
     pd->onDeck = (MobileData *) malloc(p->onDeckCount * sizeof(MobileData));
+    pd->openedChests = (OpenedChestData *) malloc(p->openedChestsCount * sizeof(OpenedChestData));
     pd->storylines = calloc(p->storylineCount, sizeof(char *));
     for (int i = 0; i < p->storylineCount; i++) {
         pd->storylines[i] = &p->storylines[i][0];
@@ -169,6 +178,10 @@ PlayerData *createPlayerData(const Player *p) {
     for (int i = 0; i < p->onDeckCount; i++) {
         pd->onDeck[i] = createMobDataFromMob(p->onDeck[i]);
     }
+    for (int i = 0; i < p->openedChestsCount; i++) {
+        pd->openedChests[i] = createOpenedChestDataFromOpenedChest(p->openedChests[i]);
+    }
+    pd->openedChests_count = p->openedChestsCount;
     return pd;
 }
 
