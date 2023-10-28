@@ -19,6 +19,11 @@ typedef struct {
 } Blocking;
 
 typedef struct {
+    int chestId;
+    int sceneId;
+} OpenedChest;
+
+typedef struct {
     Mobile **party;
     Mobile **onDeck;
     const char **storylines;
@@ -27,7 +32,8 @@ typedef struct {
     Blocking *blocking;
     Mobile *engageable;
     Dialog *dialog;
-    const char **openedChests;
+    const OpenedChest **openedChests;
+    int openedChestsCount;
     bool engaged;
     int coins;
     int secondsPlayed;
@@ -37,7 +43,6 @@ typedef struct {
     int itemCount;
     int onDeckCount;
     int storylineCount;
-    int openedChestCount;
 } Player;
 
 Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
@@ -68,8 +73,16 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
     player->items = items;
     player->onDeck = calloc(MAX_PARTY_SIZE, sizeof(Mobile));
     player->dialog = NULL;
-    player->openedChests = calloc(MAX_CHESTS, sizeof(const char *));
+    player->openedChests = calloc(MAX_CHESTS, sizeof(OpenedChest));
+    player->openedChestsCount = 0;
     return player;
+}
+
+OpenedChest *createOpenedChest(int sceneId, int chestId) {
+    OpenedChest *o = malloc(sizeof(OpenedChest));
+    o->sceneId = sceneId;
+    o->chestId = chestId;
+    return o;
 }
 
 void addItem(Player *player, Item *item) {
@@ -315,9 +328,10 @@ bool hasStory(const Player *p, const char *story) {
     return false;
 }
 
-bool isChestOpened(const Player *p, const char *key) {
-    for (int i = 0; i < p->openedChestCount; i++) {
-        if (strcmp(p->openedChests[i], key) == 0) {
+bool isChestOpened(const Player *p, int sceneId, int chestId) {
+    for (int i = 0; i < p->openedChestsCount; i++) {
+        if (p->openedChests[i]->sceneId == sceneId
+                && p->openedChests[i]->chestId == chestId) {
             return true;
         }
     }

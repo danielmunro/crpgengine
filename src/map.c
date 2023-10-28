@@ -318,8 +318,7 @@ void drawChests(const Map *m, const Player *p, Vector2 offset) {
         }
     }
     for (int i = 0; i < m->chestCount; i++) {
-        const char *chestKey = createChestKey(m, m->chests[i]);
-        if (isChestOpened(p, chestKey)) {
+        if (isChestOpened(p, m->id, m->chests[i]->id)) {
             DrawTextureRec(
                     m->tileset->sourceTexture,
                     getRectForTile(m, chestEmpty->id + 1),
@@ -548,9 +547,9 @@ void mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlock
     }
     const Chest *chest = player->blocking->chest;
     if (chest != NULL) {
-        const char *key = createChestKey(m, chest);
-        for (int i = 0; i < player->openedChestCount; i++) {
-            if (strcmp(player->openedChests[i], key) == 0) {
+        for (int i = 0; i < player->openedChestsCount; i++) {
+            if (player->openedChests[i]->chestId == chest->id
+                    && player->openedChests[i]->sceneId == m->id) {
                 return;
             }
         }
@@ -558,8 +557,8 @@ void mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlock
         for (int i = 0; i < chest->iq->quantity; i++) {
             addItem(player, chest->iq->item);
         }
-        player->openedChests[player->openedChestCount] = key;
-        player->openedChestCount++;
+        player->openedChests[player->openedChestsCount] = createOpenedChest(m->id, chest->id);
+        player->openedChestsCount++;
     }
 }
 
