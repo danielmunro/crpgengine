@@ -5,10 +5,20 @@
 #include "headers/map.h"
 #include "headers/fight.h"
 
-typedef struct {
-    int code;
-    const char *scene;
+typedef enum {
+    TOWN,
+    DUNGEON,
 } SceneType;
+
+typedef struct {
+    SceneType type;
+    const char *scene;
+} SceneTypeEntry;
+
+const SceneTypeEntry sceneTypes[] = {
+        {TOWN,    "town"},
+        {DUNGEON, "dungeon"},
+};
 
 typedef struct {
     SceneType type;
@@ -30,16 +40,11 @@ typedef struct {
     int count;
 } SceneLoader;
 
-const SceneType sceneTypes[] = {
-        {SCENE_TYPE_TOWN,    "town"},
-        {SCENE_TYPE_DUNGEON, "dungeon"},
-};
-
 SceneType getSceneTypeFromString(const char *sceneType) {
-    int count = sizeof(sceneTypes) / sizeof(SceneType);
+    int count = sizeof(sceneTypes) / sizeof(SceneTypeEntry);
     for (int i = 0; i < count; i++) {
         if (strcmp(sceneTypes[i].scene, sceneType) == 0) {
-            return sceneTypes[i];
+            return sceneTypes[i].type;
         }
     }
     addError("unknown scene type :: %s", sceneType);
@@ -70,8 +75,8 @@ SceneLoader *createSceneLoader(const char *indexDir) {
     return sceneLoader;
 }
 
-bool isDungeon(Scene *s) {
-    return s->type.code == SCENE_TYPE_DUNGEON;
+bool isDungeon(const Scene *s) {
+    return s->type == SCENE_TYPE_DUNGEON;
 }
 
 void addActiveControl(Scene *s, ControlBlock *cb) {
