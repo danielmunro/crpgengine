@@ -89,6 +89,12 @@ void addMobileMovement(Map *m, MobileMovement *mobMovement) {
     }
 }
 
+const char *createChestKey(const Map *m, const Chest *c) {
+    char *key = malloc(MAX_CHEST_KEY_LENGTH);
+    sprintf(key, "%s:%d", m->sceneName, c->id);
+    return key;
+}
+
 Tile *getTile(const Map *m, int tileNumber) {
     for (int i = 0; i < m->tileset->tilesCount; i++) {
         if (m->tileset->tiles[i]->id == tileNumber - 1) {
@@ -514,8 +520,7 @@ void mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlock
     }
     const Chest *chest = player->blocking->chest;
     if (chest != NULL) {
-        char key[64];
-        sprintf(key, "%s:%d", m->sceneName, chest->id);
+        const char *key = createChestKey(m, chest);
         for (int i = 0; i < player->openedChestCount; i++) {
             if (strcmp(player->openedChests[i], key) == 0) {
                 return;
