@@ -307,6 +307,7 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
 }
 
 void drawChests(const Map *m, const Player *p, Vector2 offset) {
+    // @todo move this loop to a setup function
     Tile *chestEmpty;
     for (int i = 0; i < m->tileset->tilesCount; i++) {
         if (m->tileset->tiles[i]->type == TILE_TYPE_CHEST_EMPTY) {
