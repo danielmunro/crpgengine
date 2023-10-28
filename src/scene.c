@@ -21,6 +21,7 @@ const SceneTypeEntry sceneTypes[] = {
 };
 
 typedef struct {
+    int id;
     SceneType type;
     const char *name;
     const char *music;
@@ -51,8 +52,9 @@ SceneType getSceneTypeFromString(const char *sceneType) {
     exit(ConfigurationErrorUnknownSceneType);
 }
 
-Scene *createScene(const char *name, SceneType type, const char *music) {
+Scene *createScene(const int id, const char *name, SceneType type, const char *music) {
     Scene *scene = malloc(sizeof(Scene));
+    scene->id = id;
     scene->name = name;
     scene->type = type;
     scene->music = music;

@@ -148,6 +148,7 @@ Scene *loadScene(
     addDebug("create scene :: %s", sceneName);
     const SceneData *sceneData = loadSceneYaml(sceneDirectory);
     Scene *scene = createScene(
+            sceneData->id,
             sceneName,
             getSceneTypeFromString(sceneData->type),
             sceneData->music);
@@ -161,7 +162,7 @@ Scene *loadScene(
     char tilemapFilePath[MAX_FS_PATH_LENGTH];
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
     addDebug("create scene '%s' tilemap", sceneName);
-    scene->map = parseTilemapDoc(im, tilemapFilePath, mapDirectory);
+    scene->map = parseTilemapDoc(scene->id, im, tilemapFilePath, mapDirectory);
 
     // load mobiles
     loadMobiles(mm, scene, sceneDirectory);

@@ -269,8 +269,8 @@ void parseTilemapObjectGroupNode(xmlNodePtr node, ItemManager *im, Map *m) {
     }
 }
 
-Map *parseTilemapRootNode(const char *name, xmlNodePtr node, ItemManager *im) {
-    Map *map = createMap(name);
+Map *parseTilemapRootNode(int id, const char *name, xmlNodePtr node, ItemManager *im) {
+    Map *map = createMap(id, name);
     map->config->tileSize.x = xmlInt(node, PROP_TILE_WIDTH);
     map->config->tileSize.y = xmlInt(node, PROP_TILE_HEIGHT);
     while (node->children != NULL) {
@@ -287,14 +287,14 @@ Map *parseTilemapRootNode(const char *name, xmlNodePtr node, ItemManager *im) {
     return map;
 }
 
-Map *parseTilemapDoc(ItemManager *im, const char *filePath, const char *indexDir) {
+Map *parseTilemapDoc(int id, ItemManager *im, const char *filePath, const char *indexDir) {
     const xmlDoc *doc = xmlParseFile(filePath);
     xmlNodePtr cur = xmlDocGetRootElement(doc);
     if (cur == NULL) {
         addError("unable to find map resources for scene :: %s", indexDir);
         exit(ConfigurationErrorMapResourcesMissing);
     }
-    Map *map = parseTilemapRootNode(doc->name, cur, im);
+    Map *map = parseTilemapRootNode(id, doc->name, cur, im);
     xmlFreeNode(cur);
     return map;
 }
