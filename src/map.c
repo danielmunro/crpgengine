@@ -43,9 +43,9 @@ typedef struct {
     Tile *openedChest;
 } Map;
 
-Map *createMap(int id, const char *sceneName) {
+Map *createMap(int sceneId, const char *sceneName) {
     Map *map = malloc(sizeof(Map));
-    map->sceneId = id;
+    map->sceneId = sceneId;
     map->sceneName = sceneName;
     map->config = malloc(sizeof(MapConfig));
     map->config->tileSize = (Vector2D) {0, 0};
