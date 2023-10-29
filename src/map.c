@@ -40,6 +40,7 @@ typedef struct {
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
     Chest **chests;
     int chestCount;
+    Tile *openedChest;
 } Map;
 
 Map *createMap(int id, const char *sceneName) {
@@ -60,6 +61,7 @@ Map *createMap(int id, const char *sceneName) {
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         map->mobMovements[i] = NULL;
     }
+    map->openedChest = NULL;
     return map;
 }
 
@@ -89,12 +91,6 @@ void addMobileMovement(Map *m, MobileMovement *mobMovement) {
             return;
         }
     }
-}
-
-const char *createChestKey(const Map *m, const Chest *c) {
-    char *key = malloc(MAX_CHEST_KEY_LENGTH);
-    sprintf(key, "%s:%d", m->sceneName, c->id);
-    return key;
 }
 
 Tile *getTile(const Map *m, int tileNumber) {
@@ -309,19 +305,11 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
 }
 
 void drawChests(const Map *m, const Player *p, Vector2 offset) {
-    // @todo move this loop to a setup function
-    Tile *chestEmpty;
-    for (int i = 0; i < m->tileset->tilesCount; i++) {
-        if (m->tileset->tiles[i]->type == TILE_TYPE_CHEST_EMPTY) {
-            chestEmpty = m->tileset->tiles[i];
-            break;
-        }
-    }
     for (int i = 0; i < m->chestCount; i++) {
         if (isChestOpened(p, m->sceneId, m->chests[i]->id)) {
             DrawTextureRec(
                     m->tileset->sourceTexture,
-                    getRectForTile(m, chestEmpty->id + 1),
+                    getRectForTile(m, m->openedChest->id + 1),
                     (Vector2) {
                             m->chests[i]->area.x + offset.x,
                             m->chests[i]->area.y + offset.y,

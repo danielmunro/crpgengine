@@ -269,6 +269,15 @@ void parseTilemapObjectGroupNode(xmlNodePtr node, ItemManager *im, Map *m) {
     }
 }
 
+void assignOpenedChestTile(Map *m) {
+    for (int i = 0; i < m->tileset->tilesCount; i++) {
+        if (m->tileset->tiles[i]->type == TILE_TYPE_CHEST_EMPTY) {
+            m->openedChest = m->tileset->tiles[i];
+            break;
+        }
+    }
+}
+
 Map *parseTilemapRootNode(int id, const char *name, xmlNodePtr node, ItemManager *im) {
     Map *map = createMap(id, name);
     map->config->tileSize.x = xmlInt(node, PROP_TILE_WIDTH);
@@ -284,6 +293,7 @@ Map *parseTilemapRootNode(int id, const char *name, xmlNodePtr node, ItemManager
         }
         node->children = node->children->next;
     }
+    assignOpenedChestTile(map);
     return map;
 }
 
