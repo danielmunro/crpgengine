@@ -132,6 +132,7 @@ typedef struct {
 typedef struct {
     int id;
     ItemWithQuantity *iq;
+    int coins;
     int opened;
     Rectangle area;
 } Chest;

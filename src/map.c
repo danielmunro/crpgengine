@@ -519,6 +519,25 @@ void dialogEngaged(const Player *player, ControlBlock *controlBlock) {
     }
 }
 
+void openChest(Player *p, int sceneId) {
+    const Chest *c = p->blocking->chest;
+    for (int i = 0; i < p->openedChestsCount; i++) {
+        if (p->openedChests[i]->chestId == c->id
+            && p->openedChests[i]->sceneId == sceneId) {
+            return;
+        }
+    }
+    addInfo("chest opened :: %s", c->iq->item->name);
+    for (int i = 0; i < c->iq->quantity; i++) {
+        addItem(p, c->iq->item);
+    }
+    p->coins += c->coins;
+    p->openedChests[p->openedChestsCount] = createOpenedChest(
+            sceneId,
+            c->id);
+    p->openedChestsCount++;
+}
+
 void mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
     addInfo("map space key pressed");
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
@@ -533,22 +552,8 @@ void mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlock
     if (player->blocking->mob != NULL) {
         engageWithMobile(player);
     }
-    const Chest *chest = player->blocking->chest;
-    if (chest != NULL) {
-        for (int i = 0; i < player->openedChestsCount; i++) {
-            if (player->openedChests[i]->chestId == chest->id
-                    && player->openedChests[i]->sceneId == m->sceneId) {
-                return;
-            }
-        }
-        addInfo("chest opened :: %s", chest->iq->item->name);
-        for (int i = 0; i < chest->iq->quantity; i++) {
-            addItem(player, chest->iq->item);
-        }
-        player->openedChests[player->openedChestsCount] = createOpenedChest(
-                m->sceneId,
-                chest->id);
-        player->openedChestsCount++;
+    if (player->blocking->chest != NULL) {
+        openChest(player, m->sceneId);
     }
 }
 
