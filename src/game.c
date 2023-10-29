@@ -148,12 +148,9 @@ bool isExploring(Game *g) {
 }
 
 bool canTriggerFight(const Game *g, const Player *p) {
-    if (!isDungeon(g->scenes->current)
-            || isFighting(g->fights) ||
-            !isMoving(getPartyLeader(p))) {
-        return false;
-    }
-    return true;
+    return isDungeon(g->scenes->current)
+            && !isFighting(g->fights)
+            && isMoving(getPartyLeader(p));
 }
 
 void checkFights(Game *g, const Scene *s) {
