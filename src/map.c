@@ -21,6 +21,7 @@ typedef struct {
 } MapConfig;
 
 typedef struct {
+    NotificationManager *notifications;
     int sceneId;
     const char *sceneName;
     MapConfig *config;
@@ -43,8 +44,9 @@ typedef struct {
     Tile *openedChest;
 } Map;
 
-Map *createMap(int sceneId, const char *sceneName) {
+Map *createMap(NotificationManager *nm, int sceneId, const char *sceneName) {
     Map *map = malloc(sizeof(Map));
+    map->notifications = nm;
     map->sceneId = sceneId;
     map->sceneName = sceneName;
     map->config = malloc(sizeof(MapConfig));
@@ -519,7 +521,7 @@ void dialogEngaged(const Player *player, ControlBlock *controlBlock) {
     }
 }
 
-void openChest(Player *p, int sceneId) {
+void openChest(const Map *m, Player *p, int sceneId) {
     const Chest *c = p->blocking->chest;
     for (int i = 0; i < p->openedChestsCount; i++) {
         if (p->openedChests[i]->chestId == c->id
@@ -528,6 +530,13 @@ void openChest(Player *p, int sceneId) {
         }
     }
     addInfo("chest opened :: %s", c->iq->item->name);
+    char *message = malloc(MAX_NOTIFICATION_LENGTH);
+    sprintf(message, "You got:\n(%d) %s and %d coins", c->iq->quantity, c->iq->item->name, c->coins);
+    addNotification(
+            m->notifications,
+            createNotification(
+                    OPENED_CHEST,
+                    message));
     for (int i = 0; i < c->iq->quantity; i++) {
         addItem(p, c->iq->item);
     }
@@ -553,7 +562,7 @@ void mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlock
         engageWithMobile(player);
     }
     if (player->blocking->chest != NULL) {
-        openChest(player, m->sceneId);
+        openChest(m, player, m->sceneId);
     }
 }
 

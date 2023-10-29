@@ -140,6 +140,7 @@ void loadStorylines(Scene *s, const char *sceneDirectory) {
 }
 
 Scene *loadScene(
+        NotificationManager *nm,
         MobileManager *mm,
         ItemManager *im,
         const Beastiary *beastiary,
@@ -162,7 +163,7 @@ Scene *loadScene(
     char tilemapFilePath[MAX_FS_PATH_LENGTH];
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
     addDebug("create scene '%s' tilemap", sceneName);
-    scene->map = parseTilemapDoc(scene->id, im, tilemapFilePath, mapDirectory);
+    scene->map = parseTilemapDoc(nm, im, scene->id, tilemapFilePath, mapDirectory);
 
     // load mobiles
     loadMobiles(mm, scene, sceneDirectory);
@@ -203,6 +204,7 @@ void mapStorylinesToControlBlocks(SceneManager *sm) {
 }
 
 void loadScenes(
+        NotificationManager *nm,
         SceneManager *sm,
         MobileManager *mm,
         ItemManager *im,
@@ -211,6 +213,7 @@ void loadScenes(
     addDebug("attempting to load scenes");
     for (int i = 0; i < sm->count; i++) {
         sm->scenes[i] = loadScene(
+                nm,
                 mm,
                 im,
                 beastiary,
@@ -223,6 +226,7 @@ void loadScenes(
 }
 
 void loadScenesFromFiles(
+        NotificationManager *nm,
         SceneManager *sm,
         MobileManager *mm,
         ItemManager *im,
@@ -237,6 +241,7 @@ void loadScenesFromFiles(
         addDebug("scene :: %s (%s)", sl->scenes[i], sl->sceneFiles[i]);
     }
     loadScenes(
+            nm,
             sm,
             mm,
             im,

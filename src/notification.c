@@ -8,6 +8,7 @@ typedef enum {
     LOSE_GOLD,
     SAVED,
     FIGHT_ACTION,
+    OPENED_CHEST,
 } NotificationType;
 
 typedef struct {
