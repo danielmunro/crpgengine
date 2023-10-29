@@ -94,6 +94,7 @@
  <objectgroup id="5" name="chests">
   <object id="5" name="potion chest" type="chest" x="368" y="64" width="16" height="16">
    <properties>
+    <property name="coins" type="int" value="1"/>
     <property name="item" value="potion"/>
     <property name="quantity" value="1"/>
    </properties>

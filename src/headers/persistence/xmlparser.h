@@ -8,6 +8,7 @@
 #define PROP_VALUE "value"
 #define PROP_ITEM "item"
 #define PROP_QUANTITY "quantity"
+#define PROP_COINS "coins"
 #define PROP_TYPE "type"
 #define PROP_DIRECTION "direction"
 #define PROP_TO "to"

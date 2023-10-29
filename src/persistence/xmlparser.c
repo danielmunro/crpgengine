@@ -243,12 +243,14 @@ void parseTilemapObjectGroupChestNode(xmlNodePtr node, ItemManager *im, Map *m) 
         if (name == NODE_NAME_OBJECT) {
             const Property *item = parseProperty(node, PROP_ITEM);
             const Property *quantity = parseProperty(node, PROP_QUANTITY);
+            const Property *coins = parseProperty(node, PROP_COINS);
             m->chests[m->chestCount] = createChest(
                     xmlInt(node, "id"),
                     createItemWithQuantity(
                             findItemFromName(im, item->value),
                             TextToInteger(quantity->value)),
-                            parseRectangle(node));
+                    coins != NULL ? TextToInteger(coins->value) : 0,
+                    parseRectangle(node));
             m->chestCount++;
             free((Property *) item);
             free((Property *) quantity);

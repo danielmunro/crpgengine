@@ -133,7 +133,6 @@ typedef struct {
     int id;
     ItemWithQuantity *iq;
     int coins;
-    int opened;
     Rectangle area;
 } Chest;
 
@@ -247,11 +246,11 @@ Tileset *createTileset() {
     return t;
 }
 
-Chest *createChest(int id, ItemWithQuantity *iq, Rectangle area) {
+Chest *createChest(int id, ItemWithQuantity *iq, int coins, Rectangle area) {
     Chest *chest = malloc(sizeof(Chest));
     chest->id = id;
     chest->iq = iq;
-    chest->opened = false;
+    chest->coins = coins;
     chest->area = area;
     return chest;
 }
