@@ -21,7 +21,7 @@ typedef struct {
 } MapConfig;
 
 typedef struct {
-    int id;
+    int sceneId;
     const char *sceneName;
     MapConfig *config;
     Tileset *tileset;
@@ -44,7 +44,7 @@ typedef struct {
 
 Map *createMap(int id, const char *sceneName) {
     Map *map = malloc(sizeof(Map));
-    map->id = id;
+    map->sceneId = id;
     map->sceneName = sceneName;
     map->config = malloc(sizeof(MapConfig));
     map->config->tileSize = (Vector2D) {0, 0};
@@ -318,7 +318,7 @@ void drawChests(const Map *m, const Player *p, Vector2 offset) {
         }
     }
     for (int i = 0; i < m->chestCount; i++) {
-        if (isChestOpened(p, m->id, m->chests[i]->id)) {
+        if (isChestOpened(p, m->sceneId, m->chests[i]->id)) {
             DrawTextureRec(
                     m->tileset->sourceTexture,
                     getRectForTile(m, chestEmpty->id + 1),
@@ -549,7 +549,7 @@ void mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlock
     if (chest != NULL) {
         for (int i = 0; i < player->openedChestsCount; i++) {
             if (player->openedChests[i]->chestId == chest->id
-                    && player->openedChests[i]->sceneId == m->id) {
+                    && player->openedChests[i]->sceneId == m->sceneId) {
                 return;
             }
         }
@@ -557,7 +557,9 @@ void mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlock
         for (int i = 0; i < chest->iq->quantity; i++) {
             addItem(player, chest->iq->item);
         }
-        player->openedChests[player->openedChestsCount] = createOpenedChest(m->id, chest->id);
+        player->openedChests[player->openedChestsCount] = createOpenedChest(
+                m->sceneId,
+                chest->id);
         player->openedChestsCount++;
     }
 }
