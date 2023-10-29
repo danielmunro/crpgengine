@@ -46,6 +46,20 @@ void addNotification(NotificationManager *nm, Notification *n) {
     nm->count++;
 }
 
+void slideDownNotifications(NotificationManager *nm) {
+    float amount = (float) (nm->timeSinceUpdateInMs / 100);
+    nm->slideDown -= amount;
+    if (nm->slideDown < 0) {
+        nm->slideDown = 0;
+        if (nm->notifications[0] == NULL && nm->notifications[1]) {
+            for (int i = 1; i < nm->count + 1; i++) {
+                nm->notifications[i - 1] = nm->notifications[i];
+            }
+            nm->count--;
+        }
+    }
+}
+
 void decayNotifications(NotificationManager *nm, double timeInterval) {
     nm->timeSinceUpdateInMs = timeInterval;
     if (nm->timeSinceUpdateInMs > MILLISECONDS_IN_SECOND) {
@@ -60,17 +74,7 @@ void decayNotifications(NotificationManager *nm, double timeInterval) {
         nm->timeSinceUpdateInMs -= MILLISECONDS_IN_SECOND;
     }
     if (nm->slideDown > 0) {
-        float amount = (float) (nm->timeSinceUpdateInMs / 100);
-        nm->slideDown -= amount;
-        if (nm->slideDown < 0) {
-            nm->slideDown = 0;
-            if (nm->notifications[0] == NULL && nm->notifications[1]) {
-                for (int i = 1; i < nm->count + 1; i++) {
-                    nm->notifications[i - 1] = nm->notifications[i];
-                }
-                nm->count--;
-            }
-        }
+        slideDownNotifications(nm);
     }
 }
 
