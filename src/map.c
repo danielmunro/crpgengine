@@ -304,7 +304,7 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
     }
 }
 
-void drawChests(const Map *m, const Player *p, Vector2 offset) {
+void drawOpenedChests(const Map *m, const Player *p, Vector2 offset) {
     for (int i = 0; i < m->chestCount; i++) {
         if (isChestOpened(p, m->sceneId, m->chests[i]->id)) {
             DrawTextureRec(
@@ -488,7 +488,7 @@ void drawMapView(
     DrawTextureEx(m->renderedLayers[BACKGROUND], offset, 0, ui->screen->scale, WHITE);
     DrawTextureEx(m->renderedLayers[MIDGROUND], offset, 0, ui->screen->scale, WHITE);
     drawExplorationMobiles(m, p, offset);
-    drawChests(m, p, offset);
+    drawOpenedChests(m, p, offset);
     DrawTextureEx(m->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);
