@@ -91,6 +91,20 @@ void mapMenuKeyPressed(Game *g) {
     addMenu(g->menus, findMenu(g->ui->menus, PARTY_MENU));
 }
 
+void evaluateResponse(const Game *g, const Response *r) {
+    if (r->actionTaken == ACTION_TAKEN_OPENED_CHEST) {
+        const Chest *c = r->chest;
+        char *message = malloc(MAX_NOTIFICATION_LENGTH);
+        sprintf(message, "You got:\n(%d) %s and %d coins",
+                c->iq->quantity, c->iq->item->name, c->coins);
+        addNotification(
+                g->notifications,
+                createNotification(
+                        OPENED_CHEST,
+                        message));
+    }
+}
+
 void checkMapInput(Game *g) {
     Mobile *mob = getPartyLeader(g->player);
     addDebug("map -- check player input");
@@ -103,10 +117,14 @@ void checkMapInput(Game *g) {
         mapDebugKeyPressed(mob->position);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        mapSpaceKeyPressed(
+        const Response *r = mapSpaceKeyPressed(
                 g->scenes->current->map,
                 g->player,
                 g->scenes->current->activeControlBlocks);
+        if (r->actionTaken != ACTION_TAKEN_NONE) {
+            evaluateResponse(g, r);
+        }
+        free((Response *) r);
     }
     if (IsKeyPressed(KEY_M)) {
         mapMenuKeyPressed(g);
@@ -288,7 +306,6 @@ Game *createGame() {
             g->mobiles);
     g->scenes = createSceneManager(g->controls, g->animations, g->audio);
     loadScenesFromFiles(
-            g->notifications,
             g->scenes,
             g->mobiles,
             g->items,

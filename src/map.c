@@ -11,6 +11,17 @@
 #include "headers/warp.h"
 #include "headers/tile.h"
 
+typedef enum {
+  ACTION_TAKEN_NONE,
+  ACTION_TAKEN_ENGAGE_DIALOG,
+  ACTION_TAKEN_OPENED_CHEST,
+} ActionTaken;
+
+typedef struct {
+    ActionTaken actionTaken;
+    const Chest *chest;
+} Response;
+
 typedef struct {
     Mobile *mob;
     Vector2 destination;
@@ -21,7 +32,6 @@ typedef struct {
 } MapConfig;
 
 typedef struct {
-    NotificationManager *notifications;
     int sceneId;
     const char *sceneName;
     MapConfig *config;
@@ -44,9 +54,8 @@ typedef struct {
     Tile *openedChest;
 } Map;
 
-Map *createMap(NotificationManager *nm, int sceneId, const char *sceneName) {
+Map *createMap(int sceneId, const char *sceneName) {
     Map *map = malloc(sizeof(Map));
-    map->notifications = nm;
     map->sceneId = sceneId;
     map->sceneName = sceneName;
     map->config = malloc(sizeof(MapConfig));
@@ -72,6 +81,13 @@ MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
     mobMovement->mob = mob;
     mobMovement->destination = destination;
     return mobMovement;
+}
+
+Response *createResponse(ActionTaken actionTaken) {
+    Response *a = malloc(sizeof(ActionTaken));
+    a->actionTaken = actionTaken;
+    a->chest = NULL;
+    return a;
 }
 
 Entrance *findEntrance(Map *m, const char *name) {
@@ -521,7 +537,7 @@ void dialogEngaged(const Player *player, ControlBlock *controlBlock) {
     }
 }
 
-void openChest(const Map *m, Player *p, int sceneId) {
+void openChest(Player *p, int sceneId) {
     const Chest *c = p->blocking->chest;
     for (int i = 0; i < p->openedChestsCount; i++) {
         if (p->openedChests[i]->chestId == c->id
@@ -530,13 +546,6 @@ void openChest(const Map *m, Player *p, int sceneId) {
         }
     }
     addInfo("chest opened :: %s", c->iq->item->name);
-    char *message = malloc(MAX_NOTIFICATION_LENGTH);
-    sprintf(message, "You got:\n(%d) %s and %d coins", c->iq->quantity, c->iq->item->name, c->coins);
-    addNotification(
-            m->notifications,
-            createNotification(
-                    OPENED_CHEST,
-                    message));
     for (int i = 0; i < c->iq->quantity; i++) {
         addItem(p, c->iq->item);
     }
@@ -547,7 +556,7 @@ void openChest(const Map *m, Player *p, int sceneId) {
     p->openedChestsCount++;
 }
 
-void mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
+Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
     addInfo("map space key pressed");
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (controlBlocks[i] != NULL
@@ -555,15 +564,22 @@ void mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlock
             && isSpeakOutcome(controlBlocks[i]->then[controlBlocks[i]->progress])) {
             clearDialog(player);
             dialogEngaged(player, controlBlocks[i]);
-            return;
+            Response *r = createResponse(ACTION_TAKEN_ENGAGE_DIALOG);
+            return r;
         }
     }
     if (player->blocking->mob != NULL) {
         engageWithMobile(player);
+        Response *r = createResponse(ACTION_TAKEN_ENGAGE_DIALOG);
+        return r;
     }
     if (player->blocking->chest != NULL) {
-        openChest(m, player, m->sceneId);
+        openChest(player, m->sceneId);
+        Response *r = createResponse(ACTION_TAKEN_OPENED_CHEST);
+        r->chest = player->blocking->chest;
+        return r;
     }
+    return createResponse(ACTION_TAKEN_NONE);
 }
 
 void doMobileMovementUpdates(Map *m) {
