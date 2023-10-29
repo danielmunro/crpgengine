@@ -179,7 +179,7 @@ void parseExit(xmlNodePtr node, Map *m) {
     if (to == NULL || scene == NULL) {
         free((Property *) to);
         free((Property *) scene);
-        addWarning("malformed exit :: id: %d, name: %s", id, xmlString(node, PROP_NAME));
+        addWarning("malformed exit, skipping :: id: %d, name: %s", id, xmlString(node, PROP_NAME));
         return;
     }
     m->exits[m->exitCount] = createExit(
