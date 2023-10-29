@@ -163,7 +163,7 @@ Scene *loadScene(
     char tilemapFilePath[MAX_FS_PATH_LENGTH];
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
     addDebug("create scene '%s' tilemap", sceneName);
-    scene->map = parseTilemapDoc(nm, im, scene->id, tilemapFilePath, mapDirectory);
+    scene->map = parseTilemapDocToMap(nm, im, scene->id, tilemapFilePath, mapDirectory);
 
     // load mobiles
     loadMobiles(mm, scene, sceneDirectory);
