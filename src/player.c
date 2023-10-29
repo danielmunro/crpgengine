@@ -10,6 +10,18 @@
 #include "headers/spell.h"
 #include "headers/persistence/db.h"
 #include "headers/graphics/ui/ui.h"
+#include "headers/tile.h"
+
+typedef struct {
+    Mobile *mob;
+    const Chest *chest;
+    const Tile *tile;
+} Blocking;
+
+typedef struct {
+    int chestId;
+    int sceneId;
+} OpenedChest;
 
 typedef struct {
     Mobile **party;
@@ -17,9 +29,11 @@ typedef struct {
     const char **storylines;
     Item **items;
     SaveFiles *saveFiles;
-    Mobile *blockedBy;
+    Blocking *blocking;
     Mobile *engageable;
     Dialog *dialog;
+    OpenedChest **openedChests;
+    int openedChestsCount;
     bool engaged;
     int coins;
     int secondsPlayed;
@@ -31,31 +45,20 @@ typedef struct {
     int storylineCount;
 } Player;
 
-void addItem(Player *player, Item *item) {
-    player->items[player->itemCount] = item;
-    player->itemCount++;
-}
-
-void removeItem(Player *player, const Item *item) {
-    addInfo("remove item :: %s\n", item->name);
-    bool foundItem = false;
-    for (int i = 0; i < player->itemCount; i++) {
-        if (player->items[i] == item) {
-            foundItem = true;
-        }
-        if (foundItem) {
-            player->items[i] = player->items[i + 1];
-        }
-    }
-    player->itemCount--;
+OpenedChest *createOpenedChest(int sceneId, int chestId) {
+    OpenedChest *o = malloc(sizeof(OpenedChest));
+    o->sceneId = sceneId;
+    o->chestId = chestId;
+    return o;
 }
 
 Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
                      int coins, int experience, int level, int secondsPlayed,
                      const char **storylines, int storylineCount,
-                     Item **items, int itemCount) {
+                     Item **items, int itemCount,
+                     OpenedChest **openedChests, int openedChestsCount) {
     Player *player = malloc(sizeof(Player));
-    player->blockedBy = NULL;
+    player->blocking = malloc(sizeof(Blocking));
     player->engageable = NULL;
     player->engaged = false;
     player->storylineCount = storylineCount;
@@ -78,7 +81,46 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
     player->items = items;
     player->onDeck = calloc(MAX_PARTY_SIZE, sizeof(Mobile));
     player->dialog = NULL;
+    player->openedChests = openedChests;
+    player->openedChestsCount = openedChestsCount;
     return player;
+}
+
+void addItem(Player *player, Item *item) {
+    player->items[player->itemCount] = item;
+    player->itemCount++;
+}
+
+void removeItem(Player *player, const Item *item) {
+    addInfo("remove item :: %s\n", item->name);
+    bool foundItem = false;
+    for (int i = 0; i < player->itemCount; i++) {
+        if (player->items[i] == item) {
+            foundItem = true;
+        }
+        if (foundItem) {
+            player->items[i] = player->items[i + 1];
+        }
+    }
+    player->itemCount--;
+}
+
+void setBlockedByTile(Player *p, const Tile *t) {
+    p->blocking->mob = NULL;
+    p->blocking->chest = NULL;
+    p->blocking->tile = t;
+}
+
+void setBlockedByMob(Player *p, Mobile *mob) {
+    p->blocking->mob = mob;
+    p->blocking->chest = NULL;
+    p->blocking->tile = NULL;
+}
+
+void setBlockedByChest(Player *p, const Chest *chest) {
+    p->blocking->mob = NULL;
+    p->blocking->chest = chest;
+    p->blocking->tile = NULL;
 }
 
 Mobile *getPartyLeader(const Player *p) {
@@ -101,6 +143,13 @@ MobileData createMobDataFromMob(Mobile *mob) {
     };
 }
 
+OpenedChestData createOpenedChestDataFromOpenedChest(const OpenedChest *o) {
+    return (OpenedChestData) {
+        o->sceneId,
+        o->chestId,
+    };
+}
+
 PlayerData *createPlayerData(const Player *p) {
     addDebug("create player data");
     PlayerData *pd = malloc(sizeof(PlayerData));
@@ -115,6 +164,7 @@ PlayerData *createPlayerData(const Player *p) {
     pd->items = (ItemData *) malloc(p->itemCount * sizeof(ItemData));
     pd->party = (MobileData *) malloc(p->partyCount * sizeof(MobileData));
     pd->onDeck = (MobileData *) malloc(p->onDeckCount * sizeof(MobileData));
+    pd->openedChests = (OpenedChestData *) malloc(p->openedChestsCount * sizeof(OpenedChestData));
     pd->storylines = calloc(p->storylineCount, sizeof(char *));
     for (int i = 0; i < p->storylineCount; i++) {
         pd->storylines[i] = &p->storylines[i][0];
@@ -128,6 +178,10 @@ PlayerData *createPlayerData(const Player *p) {
     for (int i = 0; i < p->onDeckCount; i++) {
         pd->onDeck[i] = createMobDataFromMob(p->onDeck[i]);
     }
+    for (int i = 0; i < p->openedChestsCount; i++) {
+        pd->openedChests[i] = createOpenedChestDataFromOpenedChest(p->openedChests[i]);
+    }
+    pd->openedChests_count = p->openedChestsCount;
     return pd;
 }
 
@@ -160,9 +214,9 @@ bool isSpeakingTo(const Player *p, const Mobile *target) {
 }
 
 void engageWithMobile(Player *p) {
-    p->engageable = p->blockedBy;
+    p->engageable = p->blocking->mob;
     addInfo("updating mob direction to: %d", getOppositeDirection(getPartyLeader(p)->direction));
-    updateDirection(p->blockedBy, getOppositeDirection(getPartyLeader(p)->direction));
+    updateDirection(p->blocking->mob, getOppositeDirection(getPartyLeader(p)->direction));
     addInfo("engaging with %s", p->engageable->name);
     p->engaged = true;
 }
@@ -170,8 +224,8 @@ void engageWithMobile(Player *p) {
 void disengageWithMobile(Player *p) {
     p->engaged = false;
     clearDialog(p);
-    if (p->blockedBy != NULL) {
-        updateDirection(p->blockedBy, p->blockedBy->previousDirection);
+    if (p->blocking->mob != NULL) {
+        updateDirection(p->blocking->mob, p->blocking->mob->previousDirection);
     }
 }
 
@@ -284,6 +338,16 @@ bool hasStory(const Player *p, const char *story) {
         }
     }
     addDebug("player does not have story: %s", story);
+    return false;
+}
+
+bool isChestOpened(const Player *p, int sceneId, int chestId) {
+    for (int i = 0; i < p->openedChestsCount; i++) {
+        if (p->openedChests[i]->sceneId == sceneId
+                && p->openedChests[i]->chestId == chestId) {
+            return true;
+        }
+    }
     return false;
 }
 

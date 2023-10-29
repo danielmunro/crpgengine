@@ -5,13 +5,24 @@
 #include "headers/map.h"
 #include "headers/fight.h"
 
-typedef struct {
-    int code;
-    const char *scene;
+typedef enum {
+    SCENE_TYPE_TOWN,
+    SCENE_TYPE_DUNGEON,
 } SceneType;
 
 typedef struct {
-    int type;
+    SceneType type;
+    const char *scene;
+} SceneTypeEntry;
+
+const SceneTypeEntry sceneTypes[] = {
+        {SCENE_TYPE_TOWN,    "town"},
+        {SCENE_TYPE_DUNGEON, "dungeon"},
+};
+
+typedef struct {
+    int id;
+    SceneType type;
     const char *name;
     const char *music;
     StorylineData *storylines[MAX_STORIES];
@@ -30,26 +41,23 @@ typedef struct {
     int count;
 } SceneLoader;
 
-const SceneType sceneTypes[] = {
-        {SCENE_TYPE_TOWN,    "town"},
-        {SCENE_TYPE_DUNGEON, "dungeon"},
-};
-
-void setSceneTypeFromString(Scene *s, const char *sceneType) {
-    int count = sizeof(sceneTypes) / sizeof(SceneType);
+SceneType getSceneTypeFromString(const char *sceneType) {
+    int count = sizeof(sceneTypes) / sizeof(SceneTypeEntry);
     for (int i = 0; i < count; i++) {
         if (strcmp(sceneTypes[i].scene, sceneType) == 0) {
-            s->type = sceneTypes[i].code;
-            addDebug("scene '%s' type set to '%s'", s->name, sceneType);
-            return;
+            return sceneTypes[i].type;
         }
     }
     addError("unknown scene type :: %s", sceneType);
-    exit(ConfigurationErrorUnknownScene);
+    exit(ConfigurationErrorUnknownSceneType);
 }
 
-Scene *createScene() {
+Scene *createScene(const int id, const char *name, SceneType type, const char *music) {
     Scene *scene = malloc(sizeof(Scene));
+    scene->id = id;
+    scene->name = name;
+    scene->type = type;
+    scene->music = music;
     scene->storylineCount = 0;
     scene->encounters = createEncounters();
     scene->controlBlockCount = 0;
@@ -69,7 +77,7 @@ SceneLoader *createSceneLoader(const char *indexDir) {
     return sceneLoader;
 }
 
-bool isDungeon(Scene *s) {
+bool isDungeon(const Scene *s) {
     return s->type == SCENE_TYPE_DUNGEON;
 }
 

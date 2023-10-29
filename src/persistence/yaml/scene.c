@@ -12,6 +12,7 @@ typedef struct {
 } EncountersData;
 
 typedef struct {
+    int id;
     const char *type;
     const char *music;
     EncountersData *encounters;
@@ -38,6 +39,8 @@ static const cyaml_schema_field_t encountersFieldSchema[] = {
 };
 
 static const cyaml_schema_field_t sceneTopMappingField[] = {
+        CYAML_FIELD_INT(
+                "id", CYAML_FLAG_POINTER, SceneData, id),
         CYAML_FIELD_STRING_PTR(
                 "type", CYAML_FLAG_POINTER, SceneData, type, 0, CYAML_UNLIMITED),
         CYAML_FIELD_MAPPING_PTR(

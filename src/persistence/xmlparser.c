@@ -91,7 +91,10 @@ void parseTileProperties(xmlNodePtr node, Tile *t) {
 
 Tile *parseTileNode(xmlNodePtr node) {
     int id = xmlInt(node, PROP_ID);
-    const char *type = xmlString(node, PROP_TYPE);
+    TileType type = getTileTypeFromString(xmlString(node, PROP_TYPE));
+    if (type == TILE_TYPE_CHEST_EMPTY) {
+        addInfo("tile id :: %d", id);
+    }
     Tile *t = createTile(id, type);
     xmlNodePtr cur = node->children;
     while (cur != NULL) {
@@ -127,6 +130,7 @@ void parseTilesetRootNode(xmlNodePtr node, Tileset *t) {
             getComponentPath(imagePath, "", "tilesets", xmlString(cur, "source"));
             t->reader = xmlReaderForFile(filePath, NULL, 0);
             t->source = LoadImage(imagePath);
+            t->sourceTexture = LoadTextureFromImage(t->source);
         } else if (type == TILESET_NODE_TYPE_TILE) {
             t->tiles[t->tilesCount] = parseTileNode(cur);
             t->tilesCount++;
@@ -233,16 +237,20 @@ void parseTilemapObjectGroupArriveAtNode(xmlNodePtr node, Map *m) {
     }
 }
 
-void parseTilemapObjectGroupTreasureNode(xmlNodePtr node, ItemManager *im, Map *m) {
+void parseTilemapObjectGroupChestNode(xmlNodePtr node, ItemManager *im, Map *m) {
     while (node != NULL) {
         const NodeName name = getNodeNameFromString((const char *) node->name);
         if (name == NODE_NAME_OBJECT) {
             const Property *item = parseProperty(node, PROP_ITEM);
             const Property *quantity = parseProperty(node, PROP_QUANTITY);
+            const Property *coins = parseProperty(node, PROP_COINS);
             m->chests[m->chestCount] = createChest(
+                    xmlInt(node, "id"),
                     createItemWithQuantity(
                             findItemFromName(im, item->value),
-                            TextToInteger(quantity->value)));
+                            TextToInteger(quantity->value)),
+                    coins != NULL ? TextToInteger(coins->value) : 0,
+                    parseRectangle(node));
             m->chestCount++;
             free((Property *) item);
             free((Property *) quantity);
@@ -258,13 +266,21 @@ void parseTilemapObjectGroupNode(xmlNodePtr node, ItemManager *im, Map *m) {
         parseTilemapObjectGroupWarpsNode(node->children, m);
     } else if (groupName == TILEMAP_OBJECT_GROUP_ARRIVE_AT) {
         parseTilemapObjectGroupArriveAtNode(node->children, m);
-    } else if (groupName == TILEMAP_OBJECT_GROUP_TREASURES) {
-        parseTilemapObjectGroupTreasureNode(node->children, im, m);
+    } else if (groupName == TILEMAP_OBJECT_GROUP_CHESTS) {
+        parseTilemapObjectGroupChestNode(node->children, im, m);
     }
 }
 
-Map *parseTilemapRootNode(xmlNodePtr node, ItemManager *im) {
-    Map *map = createMap();
+void assignOpenedChestTile(Map *m) {
+    for (int i = 0; i < m->tileset->tilesCount; i++) {
+        if (m->tileset->tiles[i]->type == TILE_TYPE_CHEST_EMPTY) {
+            m->openedChest = m->tileset->tiles[i];
+            break;
+        }
+    }
+}
+
+void parseTilemapRootNode(Map *map, xmlNodePtr node, ItemManager *im) {
     map->config->tileSize.x = xmlInt(node, PROP_TILE_WIDTH);
     map->config->tileSize.y = xmlInt(node, PROP_TILE_HEIGHT);
     while (node->children != NULL) {
@@ -278,17 +294,23 @@ Map *parseTilemapRootNode(xmlNodePtr node, ItemManager *im) {
         }
         node->children = node->children->next;
     }
-    return map;
+    assignOpenedChestTile(map);
 }
 
-Map *parseTilemapDoc(ItemManager *im, const char *filePath, const char *indexDir) {
+Map *parseTilemapDocToMap(
+        NotificationManager *nm,
+        ItemManager *im,
+        int id,
+        const char *filePath,
+        const char *indexDir) {
     const xmlDoc *doc = xmlParseFile(filePath);
     xmlNodePtr cur = xmlDocGetRootElement(doc);
     if (cur == NULL) {
         addError("unable to find map resources for scene :: %s", indexDir);
         exit(ConfigurationErrorMapResourcesMissing);
     }
-    Map *map = parseTilemapRootNode(cur, im);
+    Map *map = createMap(nm, id, doc->name);
+    parseTilemapRootNode(map, cur, im);
     xmlFreeNode(cur);
     return map;
 }

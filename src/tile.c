@@ -2,6 +2,19 @@
 #include <libxml/xmlreader.h>
 #include "headers/util/util.h"
 
+const char *TileTypes[] = {
+        "other",
+        "chest_full",
+        "chest_empty",
+};
+
+typedef enum {
+    TILE_TYPE_OTHER,
+    TILE_TYPE_CHEST_FULL,
+    TILE_TYPE_CHEST_EMPTY,
+    TILE_TYPE_NONE,
+} TileType;
+
 const char *ObjectTypes[] = {
         "other",
         "exit",
@@ -36,14 +49,14 @@ const char *TilemapObjectGroupNames[] = {
         "other",
         "warps",
         "arrive_at",
-        "treasures",
+        "chests",
 };
 
 typedef enum {
     TILEMAP_OBJECT_GROUP_OTHER,
     TILEMAP_OBJECT_GROUP_WARPS,
     TILEMAP_OBJECT_GROUP_ARRIVE_AT,
-    TILEMAP_OBJECT_GROUP_TREASURES,
+    TILEMAP_OBJECT_GROUP_CHESTS,
 } TilemapObjectGroupName;
 
 const char *TilemapNodeTypes[] = {
@@ -91,12 +104,12 @@ typedef struct {
 } Property;
 
 typedef struct {
+    int id;
     Property **properties;
     int propertyCount;
     Object **objects;
     int objectCount;
-    int id;
-    const char *type;
+    TileType type;
 } Tile;
 
 typedef struct {
@@ -105,6 +118,7 @@ typedef struct {
     xmlTextReaderPtr reader;
     Vector2D size;
     Image source;
+    Texture sourceTexture;
 } Tileset;
 
 typedef struct {
@@ -116,9 +130,25 @@ typedef struct {
 } Layer;
 
 typedef struct {
+    int id;
     ItemWithQuantity *iq;
-    int opened;
+    int coins;
+    Rectangle area;
 } Chest;
+
+TileType getTileTypeFromString(const char *type) {
+    if (type == NULL) {
+        return TILE_TYPE_NONE;
+    }
+    int count = sizeof(TileTypes) / sizeof(const char *);
+    for (int i = 0; i < count; i++) {
+        if (strcmp(TileTypes[i], type) == 0) {
+            return i;
+        }
+    }
+    addDebug("object type not found :: %s", type);
+    return TILE_TYPE_OTHER;
+}
 
 ObjectType getObjectTypeFromString(const char *type) {
     int count = sizeof(ObjectTypes) / sizeof(const char *);
@@ -190,7 +220,7 @@ Layer *createLayer(const char *name) {
     return layer;
 }
 
-Tile *createTile(int id, const char *type) {
+Tile *createTile(int id, TileType type) {
     Tile *t = malloc(sizeof(Tile));
     t->id = id;
     t->type = type;
@@ -216,9 +246,11 @@ Tileset *createTileset() {
     return t;
 }
 
-Chest *createChest(ItemWithQuantity *iq) {
+Chest *createChest(int id, ItemWithQuantity *iq, int coins, Rectangle area) {
     Chest *chest = malloc(sizeof(Chest));
+    chest->id = id;
     chest->iq = iq;
-    chest->opened = false;
+    chest->coins = coins;
+    chest->area = area;
     return chest;
 }

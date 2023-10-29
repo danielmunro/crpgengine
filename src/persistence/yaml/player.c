@@ -1,8 +1,15 @@
 #include "headers/persistence/cyaml.h"
 
 typedef struct {
+    int sceneId;
+    int chestId;
+} OpenedChestData;
+
+typedef struct {
     const char **storylines;
     int storylines_count;
+    OpenedChestData *openedChests;
+    int openedChests_count;
     ItemData *items;
     int items_count;
     MobileData *party;
@@ -21,6 +28,18 @@ static const cyaml_schema_value_t playerStorylinesEntry = {
 
 static const cyaml_schema_value_t partySchema = {
         CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT, MobileData, mobileTopMappingField),
+};
+
+static const cyaml_schema_field_t openedChestFieldSchema[] = {
+        CYAML_FIELD_INT(
+                "sceneId", CYAML_FLAG_OPTIONAL, OpenedChestData, sceneId),
+        CYAML_FIELD_INT(
+                "chestId", CYAML_FLAG_OPTIONAL, OpenedChestData, chestId),
+        CYAML_FIELD_END
+};
+
+static const cyaml_schema_value_t openedChestSchema = {
+        CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT, OpenedChestData, openedChestFieldSchema),
 };
 
 static const cyaml_schema_field_t playerTopMappingField[] = {
@@ -44,6 +63,9 @@ static const cyaml_schema_field_t playerTopMappingField[] = {
         CYAML_FIELD_SEQUENCE(
                 "onDeck", CYAML_FLAG_POINTER, PlayerData, onDeck,
                 &partySchema, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_SEQUENCE(
+                "openedChests", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, PlayerData, openedChests,
+                &openedChestSchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 

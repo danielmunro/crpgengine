@@ -21,6 +21,9 @@ typedef struct {
 } MapConfig;
 
 typedef struct {
+    NotificationManager *notifications;
+    int sceneId;
+    const char *sceneName;
     MapConfig *config;
     Tileset *tileset;
     Layer **layers;
@@ -38,10 +41,14 @@ typedef struct {
     MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
     Chest **chests;
     int chestCount;
+    Tile *openedChest;
 } Map;
 
-Map *createMap() {
+Map *createMap(NotificationManager *nm, int sceneId, const char *sceneName) {
     Map *map = malloc(sizeof(Map));
+    map->notifications = nm;
+    map->sceneId = sceneId;
+    map->sceneName = sceneName;
     map->config = malloc(sizeof(MapConfig));
     map->config->tileSize = (Vector2D) {0, 0};
     map->layers = calloc(MAX_LAYERS, sizeof(Layer));
@@ -56,6 +63,7 @@ Map *createMap() {
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         map->mobMovements[i] = NULL;
     }
+    map->openedChest = NULL;
     return map;
 }
 
@@ -298,6 +306,22 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
     }
 }
 
+void drawOpenedChests(const Map *m, const Player *p, Vector2 offset) {
+    for (int i = 0; i < m->chestCount; i++) {
+        if (isChestOpened(p, m->sceneId, m->chests[i]->id)) {
+            DrawTextureRec(
+                    m->tileset->sourceTexture,
+                    getRectForTile(m, m->openedChest->id + 1),
+                    (Vector2) {
+                            m->chests[i]->area.x + offset.x,
+                            m->chests[i]->area.y + offset.y,
+                    },
+                    WHITE
+            );
+        }
+    }
+}
+
 Rectangle getObjectSize(const Map *m, const Object *o, int x, int y) {
     return (Rectangle) {
             (float) (m->tileset->size.x * x) + o->area.x,
@@ -313,41 +337,43 @@ bool isObjectBlocking(const Map *m, const Object *o, Rectangle player, int x, in
     return c.height > 0 || c.width > 0;
 }
 
-bool checkTileForBlockingObject(const Map *m, Rectangle player, int layer, int x, int y) {
+const Tile *getBlockingTile(const Map *m, Rectangle player, int layer, int x, int y) {
     const Tile *t = getTile(m, m->layers[layer]->data[y][x]);
     if (t == NULL) {
-        return false;
+        return NULL;
     }
     for (int i = 0; i < t->objectCount; i++) {
         if (t->objects[i] == NULL) {
             break;
         }
         if (isObjectBlocking(m, t->objects[i], player, x, y)) {
-            return true;
+            return t;
         }
     }
-    return false;
+    return NULL;
 }
 
-bool checkLayerForBlockingObject(const Map *m, Rectangle player, int layer) {
+const Tile *getLayerBlockingObject(const Map *m, Rectangle player, int layer) {
     Vector2D tiles = getTileCount(m);
     for (int y = 0; y < tiles.y; y++) {
         for (int x = 0; x < tiles.x; x++) {
-            if (checkTileForBlockingObject(m, player, layer, x, y)) {
-                return true;
+            const Tile *t = getBlockingTile(m, player, layer, x, y);
+            if (t != NULL) {
+                return t;
             }
         }
     }
-    return false;
+    return NULL;
 }
 
-bool isBlockedByMapObject(const Map *m, Rectangle player) {
+const Tile *getBlockingMapTile(const Map *m, Rectangle player) {
     for (int l = 0; l < LAYER_COUNT - 1; l++) {
-        if (checkLayerForBlockingObject(m, player, l)) {
-            return true;
+        const Tile *t = getLayerBlockingObject(m, player, l);
+        if (t != NULL) {
+            return t;
         }
     }
-    return false;
+    return NULL;
 }
 
 Mobile *getBlockingMob(const Map *m, Rectangle playerRect) {
@@ -355,6 +381,16 @@ Mobile *getBlockingMob(const Map *m, Rectangle playerRect) {
         Rectangle c = GetCollisionRec(playerRect, getMobileRectangle(m->mobiles[i]));
         if (c.height > 0 || c.width > 0) {
             return m->mobiles[i];
+        }
+    }
+    return NULL;
+}
+
+Chest *getBlockingChest(const Map *m, Rectangle playerRect) {
+    for (int i = 0; i < m->chestCount; i++) {
+        Rectangle c = GetCollisionRec(playerRect, m->chests[i]->area);
+        if (c.height > 0 || c.width > 0) {
+            return m->chests[i];
         }
     }
     return NULL;
@@ -382,12 +418,19 @@ void tryToMove(const Map *m, Player *p, Direction direction, Vector2 pos) {
             collision->height,
     };
     if (mob->moving[direction]) {
-        if (isBlockedByMapObject(m, rect)) {
-            p->blockedBy = NULL;
+        const Chest *c = getBlockingChest(m, rect);
+        if (c != NULL) {
+            setBlockedByChest(p, c);
             return;
         }
-        p->blockedBy = getBlockingMob(m, rect);
-        if (p->blockedBy != NULL) {
+        const Tile *t = getBlockingMapTile(m, rect);
+        if (t != NULL) {
+            setBlockedByTile(p, t);
+            return;
+        }
+        Mobile *blockingMob = getBlockingMob(m, rect);
+        if (blockingMob != NULL) {
+            setBlockedByMob(p, blockingMob);
             return;
         }
         mob->position = pos;
@@ -447,6 +490,7 @@ void drawMapView(
     DrawTextureEx(m->renderedLayers[BACKGROUND], offset, 0, ui->screen->scale, WHITE);
     DrawTextureEx(m->renderedLayers[MIDGROUND], offset, 0, ui->screen->scale, WHITE);
     drawExplorationMobiles(m, p, offset);
+    drawOpenedChests(m, p, offset);
     DrawTextureEx(m->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);
@@ -477,7 +521,33 @@ void dialogEngaged(const Player *player, ControlBlock *controlBlock) {
     }
 }
 
-void mapSpaceKeyPressed(Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
+void openChest(const Map *m, Player *p, int sceneId) {
+    const Chest *c = p->blocking->chest;
+    for (int i = 0; i < p->openedChestsCount; i++) {
+        if (p->openedChests[i]->chestId == c->id
+            && p->openedChests[i]->sceneId == sceneId) {
+            return;
+        }
+    }
+    addInfo("chest opened :: %s", c->iq->item->name);
+    char *message = malloc(MAX_NOTIFICATION_LENGTH);
+    sprintf(message, "You got:\n(%d) %s and %d coins", c->iq->quantity, c->iq->item->name, c->coins);
+    addNotification(
+            m->notifications,
+            createNotification(
+                    OPENED_CHEST,
+                    message));
+    for (int i = 0; i < c->iq->quantity; i++) {
+        addItem(p, c->iq->item);
+    }
+    p->coins += c->coins;
+    p->openedChests[p->openedChestsCount] = createOpenedChest(
+            sceneId,
+            c->id);
+    p->openedChestsCount++;
+}
+
+void mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_CONTROLS]) {
     addInfo("map space key pressed");
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (controlBlocks[i] != NULL
@@ -488,8 +558,11 @@ void mapSpaceKeyPressed(Player *player, ControlBlock *controlBlocks[MAX_ACTIVE_C
             return;
         }
     }
-    if (player->blockedBy != NULL) {
+    if (player->blocking->mob != NULL) {
         engageWithMobile(player);
+    }
+    if (player->blocking->chest != NULL) {
+        openChest(m, player, m->sceneId);
     }
 }
 

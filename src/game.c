@@ -103,7 +103,10 @@ void checkMapInput(Game *g) {
         mapDebugKeyPressed(mob->position);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        mapSpaceKeyPressed(g->player, g->scenes->current->activeControlBlocks);
+        mapSpaceKeyPressed(
+                g->scenes->current->map,
+                g->player,
+                g->scenes->current->activeControlBlocks);
     }
     if (IsKeyPressed(KEY_M)) {
         mapMenuKeyPressed(g);
@@ -144,11 +147,10 @@ bool isExploring(Game *g) {
     return !isFighting(g->fights) && !getCurrentMenu(g->menus);
 }
 
-bool canTriggerFight(Game *g, const Player *p) {
-    if (!isDungeon(g->scenes->current) || isFighting(g->fights) || !isMoving(getPartyLeader(p))) {
-        return false;
-    }
-    return true;
+bool canTriggerFight(const Game *g, const Player *p) {
+    return isDungeon(g->scenes->current)
+            && !isFighting(g->fights)
+            && isMoving(getPartyLeader(p));
 }
 
 void checkFights(Game *g, const Scene *s) {
@@ -285,7 +287,12 @@ Game *createGame() {
             g->notifications,
             g->mobiles);
     g->scenes = createSceneManager(g->controls, g->animations, g->audio);
-    loadScenesFromFiles(g->scenes, g->mobiles, g->items, g->beastiary);
+    loadScenesFromFiles(
+            g->notifications,
+            g->scenes,
+            g->mobiles,
+            g->items,
+            g->beastiary);
     setSceneBasedOnSave(g->scenes, g->player, save);
     addDebug("done creating game object");
     free(save);

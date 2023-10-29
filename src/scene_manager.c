@@ -22,7 +22,7 @@ SceneManager *createSceneManager(ControlManager *cm, AnimationManager *anManager
 }
 
 void setScene(SceneManager *sm, Scene *scene, const Player *player, const char *entranceName) {
-    addInfo("setting scene to '%s'", scene->name);
+    addInfo("set scene :: %s, %d", scene->name, scene->type);
     if (sm->current != NULL) {
         unloadLayers(sm->current->map);
     }

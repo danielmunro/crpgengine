@@ -140,6 +140,7 @@ void loadStorylines(Scene *s, const char *sceneDirectory) {
 }
 
 Scene *loadScene(
+        NotificationManager *nm,
         MobileManager *mm,
         ItemManager *im,
         const Beastiary *beastiary,
@@ -147,12 +148,11 @@ Scene *loadScene(
         const char *sceneDirectory) {
     addDebug("create scene :: %s", sceneName);
     const SceneData *sceneData = loadSceneYaml(sceneDirectory);
-    Scene *scene = createScene();
-
-    // scene properties
-    scene->name = &sceneName[0];
-    setSceneTypeFromString(scene, sceneData->type);
-    scene->music = &sceneData->music[0];
+    Scene *scene = createScene(
+            sceneData->id,
+            sceneName,
+            getSceneTypeFromString(sceneData->type),
+            sceneData->music);
 
     // storylines
     loadStorylines(scene, sceneDirectory);
@@ -163,7 +163,7 @@ Scene *loadScene(
     char tilemapFilePath[MAX_FS_PATH_LENGTH];
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
     addDebug("create scene '%s' tilemap", sceneName);
-    scene->map = parseTilemapDoc(im, tilemapFilePath, mapDirectory);
+    scene->map = parseTilemapDocToMap(nm, im, scene->id, tilemapFilePath, mapDirectory);
 
     // load mobiles
     loadMobiles(mm, scene, sceneDirectory);
@@ -177,24 +177,23 @@ Scene *loadScene(
     return scene;
 }
 
-void loadScenes(
-        SceneManager *sm,
-        MobileManager *mm,
-        ItemManager *im,
-        Beastiary *beastiary,
-        SceneLoader *sl) {
-    addDebug("attempting to load scenes");
+void validateNoDuplicateSceneIds(SceneManager *sm) {
     for (int i = 0; i < sm->count; i++) {
-        sm->scenes[i] = loadScene(
-                mm,
-                im,
-                beastiary,
-                sl->scenes[i],
-                sl->sceneFiles[i]);
-        addDebug("scene loaded :: %s (%d)", sm->scenes[i]->name, i);
+        for (int j = i + 1; j < sm->count; j++) {
+            if (sm->scenes[i]->id == sm->scenes[j]->id) {
+                addError("duplicate scene IDs defined :: id: %d, first: %s, second: %s",
+                         sm->scenes[i]->id,
+                         sm->scenes[i]->name,
+                         sm->scenes[j]->name);
+                exit(ConfigurationErrorSceneIdCollision);
+            }
+        }
     }
+}
+
+void mapStorylinesToControlBlocks(SceneManager *sm) {
     for (int i = 0; i < sm->count; i++) {
-        addDebug("scene storyline count :: %s -- %d",
+        addDebug("map storylines to control blocks :: scene name: %s, storyline count: %d",
                  sm->scenes[i]->name, sm->scenes[i]->storylineCount);
         for (int c = 0; c < sm->scenes[i]->storylineCount; c++) {
             sm->scenes[i]->controlBlocks[c] = mapStorylineToControlBlock(
@@ -204,7 +203,30 @@ void loadScenes(
     }
 }
 
+void loadScenes(
+        NotificationManager *nm,
+        SceneManager *sm,
+        MobileManager *mm,
+        ItemManager *im,
+        Beastiary *beastiary,
+        SceneLoader *sl) {
+    addDebug("attempting to load scenes");
+    for (int i = 0; i < sm->count; i++) {
+        sm->scenes[i] = loadScene(
+                nm,
+                mm,
+                im,
+                beastiary,
+                sl->scenes[i],
+                sl->sceneFiles[i]);
+        addDebug("scene loaded :: %s (%d)", sm->scenes[i]->name, i);
+    }
+    validateNoDuplicateSceneIds(sm);
+    mapStorylinesToControlBlocks(sm);
+}
+
 void loadScenesFromFiles(
+        NotificationManager *nm,
         SceneManager *sm,
         MobileManager *mm,
         ItemManager *im,
@@ -219,6 +241,7 @@ void loadScenesFromFiles(
         addDebug("scene :: %s (%s)", sl->scenes[i], sl->sceneFiles[i]);
     }
     loadScenes(
+            nm,
             sm,
             mm,
             im,
