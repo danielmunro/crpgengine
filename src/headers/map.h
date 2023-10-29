@@ -6,10 +6,8 @@
 #define MAX_ARRIVE_AT 64
 #define MAX_MOBILES 256
 #define MAX_MOBILE_MOVEMENTS 64
-#define MAX_TILESETS 256
 #define MAX_TILES 2048
 #define MAX_CHESTS 256
-#define MAX_CHEST_KEY_LENGTH 64
 
 #include "map.c"
 
