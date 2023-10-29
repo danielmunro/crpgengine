@@ -1,12 +1,22 @@
 #include "headers/util/log.h"
 
+bool doesExitHaveEntrance(const Game *g, const Exit *e) {
+    for (int i = 0; i < g->scenes->count; i++) {
+        for (int j = 0; j < g->scenes->scenes[i]->map->entranceCount; j++) {
+            if (strcmp(e->to, g->scenes->scenes[i]->map->entrances[j]->name) == 0) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void validateExits(Game *g) {
     for (int i = 0; i < g->scenes->count; i++) {
         addDebug("scene exit count :: %s - %d",
                  g->scenes->scenes[i]->name,
                  g->scenes->scenes[i]->map->exitCount);
         for (int j = 0; j < g->scenes->scenes[i]->map->exitCount; j++) {
-            int found = false;
             Exit *ex = g->scenes->scenes[i]->map->exits[j];
             if (strcmp(ex->to, "") == 0) {
                 addWarning(
@@ -14,15 +24,7 @@ void validateExits(Game *g) {
                         g->scenes->scenes[i]->name);
                 continue;
             }
-            for (int q = 0; q < g->scenes->count; q++) {
-                for (int e = 0; e < g->scenes->scenes[q]->map->entranceCount; e++) {
-                    if (strcmp(ex->to, g->scenes->scenes[q]->map->entrances[e]->name) == 0) {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            if (!found) {
+            if (!doesExitHaveEntrance(g, ex)) {
                 addError("exit for scene does not exist :: %s, %s",
                          ex->to,
                          g->scenes->scenes[i]->name);
