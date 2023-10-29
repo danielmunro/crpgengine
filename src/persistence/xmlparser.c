@@ -237,7 +237,7 @@ void parseTilemapObjectGroupArriveAtNode(xmlNodePtr node, Map *m) {
     }
 }
 
-void parseTilemapObjectGroupTreasureNode(xmlNodePtr node, ItemManager *im, Map *m) {
+void parseTilemapObjectGroupChestNode(xmlNodePtr node, ItemManager *im, Map *m) {
     while (node != NULL) {
         const NodeName name = getNodeNameFromString((const char *) node->name);
         if (name == NODE_NAME_OBJECT) {
@@ -264,8 +264,8 @@ void parseTilemapObjectGroupNode(xmlNodePtr node, ItemManager *im, Map *m) {
         parseTilemapObjectGroupWarpsNode(node->children, m);
     } else if (groupName == TILEMAP_OBJECT_GROUP_ARRIVE_AT) {
         parseTilemapObjectGroupArriveAtNode(node->children, m);
-    } else if (groupName == TILEMAP_OBJECT_GROUP_TREASURES) {
-        parseTilemapObjectGroupTreasureNode(node->children, im, m);
+    } else if (groupName == TILEMAP_OBJECT_GROUP_CHESTS) {
+        parseTilemapObjectGroupChestNode(node->children, im, m);
     }
 }
 

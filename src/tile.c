@@ -49,14 +49,14 @@ const char *TilemapObjectGroupNames[] = {
         "other",
         "warps",
         "arrive_at",
-        "treasures",
+        "chests",
 };
 
 typedef enum {
     TILEMAP_OBJECT_GROUP_OTHER,
     TILEMAP_OBJECT_GROUP_WARPS,
     TILEMAP_OBJECT_GROUP_ARRIVE_AT,
-    TILEMAP_OBJECT_GROUP_TREASURES,
+    TILEMAP_OBJECT_GROUP_CHESTS,
 } TilemapObjectGroupName;
 
 const char *TilemapNodeTypes[] = {
