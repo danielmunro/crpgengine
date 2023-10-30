@@ -59,6 +59,9 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
                      OpenedChest **openedChests, int openedChestsCount) {
     Player *player = malloc(sizeof(Player));
     player->blocking = malloc(sizeof(Blocking));
+    player->blocking->mob = NULL;
+    player->blocking->chest = NULL;
+    player->blocking->tile = NULL;
     player->engageable = NULL;
     player->engaged = false;
     player->storylineCount = storylineCount;
