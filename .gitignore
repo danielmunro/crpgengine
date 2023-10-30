@@ -15,4 +15,3 @@ Makefile
 CPackConfig.cmake
 CPackSourceConfig.cmake
 cmake_install.cmake
-config.yaml
