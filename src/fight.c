@@ -96,7 +96,7 @@ void cancelFight(Fight *fight) {
 }
 
 int isFightDone(const Fight *fight) {
-    return fight->beastCount == 0;
+    return fight->beastCount == 0 || fight->cancelled;
 }
 
 Vector2 getFightPlayerPosition(int playerNumber, int mobileHeight) {

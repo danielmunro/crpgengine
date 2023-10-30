@@ -86,6 +86,7 @@ void checkRemoveFight(FightManager *f) {
         for (int i = 0; i < p->partyCount; i++) {
             p->party[i]->actionGauge = 0;
             p->party[i]->isFleeing = false;
+            p->party[i]->step = STEP_NONE;
         }
         f->fight = NULL;
         free(f->fight);
@@ -425,9 +426,6 @@ void fightUpdate(FightManager *fm) {
     double end = getTimeInMS();
     double interval = end - fight->time;
     if (fight->cancelled) {
-        if (end - FIGHT_END_TIMEOUT_MS > fight->cancelledAt) {
-            fight->beastCount = 0;
-        }
         return;
     }
     raiseBeastsActionGauge(fm, interval);
