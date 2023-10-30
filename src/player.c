@@ -333,11 +333,9 @@ void addStory(Player *p, const char *story) {
 bool hasStory(const Player *p, const char *story) {
     for (int j = 0; j < p->storylineCount; j++) {
         if (strcmp(story, p->storylines[j]) == 0) {
-            addDebug("player has story: %s", story);
             return true;
         }
     }
-    addDebug("player does not have story: %s", story);
     return false;
 }
 

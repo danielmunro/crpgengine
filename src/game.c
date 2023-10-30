@@ -56,13 +56,11 @@ void attemptToUseExit(Game *game, Scene *scene, const Entrance *entrance) {
 }
 
 void evaluateExits(Game *g) {
-    addDebug("map -- evaluate exits");
     const Map *m = g->scenes->current->map;
     int ex = atExit(m, g->player);
     if (ex < 0) {
         return;
     }
-    addDebug("player at exit");
     const char *sceneName = m->exits[ex]->scene;
     const char *entranceName = m->exits[ex]->to;
     for (int i = 0; i < g->scenes->count; i++) {
@@ -107,7 +105,6 @@ void evaluateResponse(const Game *g, const Response *r) {
 
 void checkMapInput(Game *g) {
     Mobile *mob = getPartyLeader(g->player);
-    addDebug("map -- check player input");
     resetMoving(mob);
     if (!canPlayerMove(mob)) {
         return;
@@ -172,7 +169,6 @@ bool canTriggerFight(const Game *g, const Player *p) {
 }
 
 void checkFights(Game *g, const Scene *s) {
-    addDebug("map -- check for fight");
     if (!canTriggerFight(g, g->player)) {
         return;
     }

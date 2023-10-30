@@ -35,7 +35,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
     if (then == NULL) {
         return 0;
     } else if (isSpeakOutcome(then) && !cm->player->engaged) {
-        addDebug("is speak outcome");
+        addDebug("dialog with mob :: %s", then->target->name);
         progress++;
     } else if (isMovingAndAtDestination(cb)) {
         addDebug("mob at destination, control block proceeding :: %s", then->target->name);
@@ -135,8 +135,6 @@ int controlThenCheckAllActive(ControlManager *cm) {
 }
 
 void checkControls(ControlManager *cm) {
-    addDebug("map -- check %d control blocks",
-             cm->scene->controlBlockCount);
     controlWhenCheck(cm->scene, cm->player, EVENT_GAME_LOOP);
     controlThenCheckAllActive(cm);
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {

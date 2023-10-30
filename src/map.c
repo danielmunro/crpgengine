@@ -459,9 +459,6 @@ void evaluateMovement(const Map *m, Player *p) {
     if (mob->isBeingMoved) {
         return;
     }
-    addDebug("map -- evaluate movement -- %f, %f",
-             mob->position.x,
-             mob->position.y);
     for (int i = 0; i < DIRECTION_COUNT; i++) {
         tryToMove(m, p, DirectionEnums[i], getMoveFor(mob, DirectionEnums[i]));
     }
@@ -495,7 +492,6 @@ void drawMapView(
         NotificationManager *nm,
         ControlBlock *c[MAX_ACTIVE_CONTROLS],
         FontStyle *font) {
-    addDebug("map -- draw");
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();
     ClearBackground(BLACK);

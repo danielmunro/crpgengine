@@ -146,7 +146,7 @@ void parseLayerNode(xmlNodePtr node, Map *map) {
     node = node->children;
     while (node != NULL) {
         const NodeName name = getNodeNameFromString((const char *) node->name);
-        addDebug("parse layer node :: %s, %s", layerName, name);
+        addDebug("parse layer node :: %s, %d", layerName, name);
         if (name == NODE_NAME_DATA) {
             map->layers[map->layersCount] = createLayer(layerName);
             map->layersCount++;
