@@ -1,11 +1,6 @@
 #include <stdbool.h>
 
 typedef struct {
-    bool dumpState;
-    bool exit;
-} AfterLoadData;
-
-typedef struct {
     bool objects;
     bool player;
     bool warps;
@@ -21,17 +16,9 @@ typedef struct {
     bool logMemoryUsage;
     bool purgeSaves;
     bool showFPS;
-    AfterLoadData *afterLoad;
+    bool exit;
     ShowCollisionsData *showCollisions;
 } ConfigData;
-
-static const cyaml_schema_field_t afterLoadFieldSchema[] = {
-        CYAML_FIELD_BOOL(
-                "dumpState", CYAML_BOOL, AfterLoadData, dumpState),
-        CYAML_FIELD_BOOL(
-                "exit", CYAML_BOOL, AfterLoadData, exit),
-        CYAML_FIELD_END
-};
 
 static const cyaml_schema_field_t showCollisionsFieldSchema[] = {
         CYAML_FIELD_BOOL(
@@ -62,8 +49,8 @@ static const cyaml_schema_field_t configTopMappingField[] = {
                 "purgeSaves", CYAML_BOOL, ConfigData, purgeSaves),
         CYAML_FIELD_BOOL(
                 "showFPS", CYAML_BOOL, ConfigData, showFPS),
-        CYAML_FIELD_MAPPING_PTR(
-                "afterLoad", CYAML_FLAG_POINTER, ConfigData, afterLoad, afterLoadFieldSchema),
+        CYAML_FIELD_BOOL(
+                "exit", CYAML_BOOL, ConfigData, exit),
         CYAML_FIELD_MAPPING_PTR(
                 "showCollisions", CYAML_FLAG_POINTER, ConfigData, showCollisions, showCollisionsFieldSchema),
         CYAML_FIELD_END

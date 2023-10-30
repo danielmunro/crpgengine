@@ -18,18 +18,12 @@ logLevel: info
 # default start will happen based on the start scene, and it's configuration.
 saveFile: autosave.yaml
 
-# Debugging options for after the game fully loads, but before gameplay starts.
-afterLoad:
-
-  # Dumps internal game state for manual inspection.
-  dumpState: false
-
-  # Exit the game immediately after loading. Useful for debugging startup
-  # problems.
-  exit: false
+# Exit the game immediately after loading. Useful for debugging startup
+# problems.
+exit: false
 
 # Ignore the autosave.yaml file if it exists
-forceNewGame: false
+forceNewGame: true
 
 # Log memory usage in regular intervals. Useful for tracking memory leaks.
 logMemoryUsage: false

@@ -3,11 +3,6 @@
 #include "headers/persistence/cyaml.h"
 
 typedef struct {
-    bool dumpState;
-    bool exit;
-} AfterLoad;
-
-typedef struct {
     bool objects;
     bool player;
     bool warps;
@@ -23,7 +18,7 @@ typedef struct {
     bool logMemoryUsage;
     bool purgeSaves;
     bool showFPS;
-    AfterLoad *afterLoad;
+    bool exit;
     ShowCollisions *showCollisions;
 } Config;
 
@@ -31,7 +26,6 @@ Config *config;
 
 Config *createConfigFromData(const ConfigData *data) {
     config = malloc(sizeof(Config));
-    config->afterLoad = malloc(sizeof(AfterLoad));
     config->showCollisions = malloc(sizeof(ShowCollisions));
     config->logLevel = getLogLevelFromString(data->logLevel);
     config->indexDir = data->indexDir;
@@ -42,8 +36,7 @@ Config *createConfigFromData(const ConfigData *data) {
     config->logMemoryUsage = data->logMemoryUsage;
     config->purgeSaves = data->purgeSaves;
     config->showFPS = data->showFPS;
-    config->afterLoad->dumpState = data->afterLoad->dumpState;
-    config->afterLoad->exit = data->afterLoad->exit;
+    config->exit = data->exit;
     config->showCollisions->objects = data->showCollisions->objects;
     config->showCollisions->player = data->showCollisions->player;
     config->showCollisions->warps = data->showCollisions->warps;

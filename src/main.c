@@ -6,9 +6,7 @@ int main() {
     validateGameData(g);
     if (config->purgeSaves) {
         purgeSaves(config->indexDir);
-    } else if (config->afterLoad->dumpState) {
-        dumpGame(g);
-    } else if (!config->afterLoad->exit) {
+    } else if (!config->exit) {
         run(g);
     }
     return 0;
