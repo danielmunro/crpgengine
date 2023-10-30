@@ -23,7 +23,7 @@ saveFile: autosave.yaml
 exit: false
 
 # Ignore the autosave.yaml file if it exists
-forceNewGame: true
+forceNewGame: false
 
 # Log memory usage in regular intervals. Useful for tracking memory leaks.
 logMemoryUsage: false
