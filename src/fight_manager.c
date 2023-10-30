@@ -488,7 +488,6 @@ void tryToggleTargetMenus(FightManager *fm) {
 }
 
 void checkFightInput(FightManager *fm) {
-    addDebug("fight -- check player input");
     if (IsKeyPressed(KEY_ESCAPE)) {
         const Menu *m = getCurrentMenu(fm->menus);
         if (m->type == MOBILE_SELECT_FIGHT_MENU) {
