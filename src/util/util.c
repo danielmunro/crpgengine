@@ -101,14 +101,6 @@ bool vector2DEquals(Vector2D a, Vector2D b) {
     return a.x == b.x && a.y == b.y;
 }
 
-float normalize(float a, float b) {
-    int a1 = (int) a;
-    int b1 = (int) b;
-    if (a1 > b1) return -1;
-    if (a1 < b1) return 1;
-    return 0;
-}
-
 const char *getFilenameExt(const char *filename) {
     const char *dot = strrchr(filename, '.');
     if (!dot || dot == filename) return "";
