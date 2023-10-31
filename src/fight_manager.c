@@ -173,6 +173,7 @@ void attackMobile(const FightManager *fm, Action *act) {
     mob->hp -= act->initiator->mob != NULL
                ? calculateMobileAttributes(act->initiator->mob).strength
                : calculateBeastAttributes(act->initiator->beast).strength;
+    normalizeVitalsForMobile(mob);
     mob->hitAnimationTimer = HIT_ANIMATION_TIMER_MS;
 }
 
@@ -423,11 +424,11 @@ void reduceHitAnimationTimer(const FightManager *fm, double interval) {
 
 void fightUpdate(FightManager *fm) {
     Fight *fight = fm->fight;
-    double end = getTimeInMS();
-    double interval = end - fight->time;
     if (fight->cancelled) {
         return;
     }
+    double end = getTimeInMS();
+    double interval = end - fight->time;
     raiseBeastsActionGauge(fm, interval);
     raiseMobsActionGauge(fm, interval);
     if (fight->actionCount > 0) {

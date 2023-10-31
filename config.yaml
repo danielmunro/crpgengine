@@ -22,6 +22,9 @@ saveFile: autosave.yaml
 # problems.
 exit: false
 
+# Cannot die
+immortal: false
+
 # Ignore the autosave.yaml file if it exists
 forceNewGame: false
 

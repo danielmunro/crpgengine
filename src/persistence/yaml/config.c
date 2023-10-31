@@ -13,10 +13,11 @@ typedef struct {
     const char *logLevel;
     const char *saveFile;
     bool forceNewGame;
+    bool exit;
+    bool immortal;
     bool logMemoryUsage;
     bool purgeSaves;
     bool showFPS;
-    bool exit;
     ShowCollisionsData *showCollisions;
 } ConfigData;
 
@@ -42,6 +43,10 @@ static const cyaml_schema_field_t configTopMappingField[] = {
         CYAML_FIELD_STRING_PTR(
                 "saveFile", CYAML_FLAG_POINTER, ConfigData, saveFile, 0, CYAML_UNLIMITED),
         CYAML_FIELD_BOOL(
+                "exit", CYAML_BOOL, ConfigData, exit),
+        CYAML_FIELD_BOOL(
+                "immortal", CYAML_BOOL, ConfigData, immortal),
+        CYAML_FIELD_BOOL(
                 "forceNewGame", CYAML_BOOL, ConfigData, forceNewGame),
         CYAML_FIELD_BOOL(
                 "logMemoryUsage", CYAML_BOOL, ConfigData, logMemoryUsage),
@@ -49,8 +54,6 @@ static const cyaml_schema_field_t configTopMappingField[] = {
                 "purgeSaves", CYAML_BOOL, ConfigData, purgeSaves),
         CYAML_FIELD_BOOL(
                 "showFPS", CYAML_BOOL, ConfigData, showFPS),
-        CYAML_FIELD_BOOL(
-                "exit", CYAML_BOOL, ConfigData, exit),
         CYAML_FIELD_MAPPING_PTR(
                 "showCollisions", CYAML_FLAG_POINTER, ConfigData, showCollisions, showCollisionsFieldSchema),
         CYAML_FIELD_END

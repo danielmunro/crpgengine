@@ -185,8 +185,8 @@ void normalizeVitalsForMobile(Mobile *mob) {
     if (mob->hp > calculated.hp) {
         mob->hp = calculated.hp;
     }
-    if (mob->hp < 0) {
-        mob->hp = 0;
+     if (mob->hp <= 0) {
+        mob->hp = config->immortal ? 1 : 0;
     }
     if (mob->mana > calculated.mana) {
         mob->mana = calculated.mana;

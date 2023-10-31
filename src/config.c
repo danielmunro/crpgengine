@@ -14,11 +14,12 @@ typedef struct {
     const char *startScene;
     const char *overrideStartScene;
     const char *saveFile;
+    bool exit;
+    bool immortal;
     bool forceNewGame;
     bool logMemoryUsage;
     bool purgeSaves;
     bool showFPS;
-    bool exit;
     ShowCollisions *showCollisions;
 } Config;
 
@@ -32,11 +33,12 @@ Config *createConfigFromData(const ConfigData *data) {
     config->startScene = data->startScene;
     config->overrideStartScene = data->overrideStartScene;
     config->saveFile = data->saveFile;
+    config->exit = data->exit;
+    config->immortal = data->immortal;
     config->forceNewGame = data->forceNewGame;
     config->logMemoryUsage = data->logMemoryUsage;
     config->purgeSaves = data->purgeSaves;
     config->showFPS = data->showFPS;
-    config->exit = data->exit;
     config->showCollisions->objects = data->showCollisions->objects;
     config->showCollisions->player = data->showCollisions->player;
     config->showCollisions->warps = data->showCollisions->warps;

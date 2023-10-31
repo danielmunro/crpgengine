@@ -162,14 +162,14 @@ bool isExploring(Game *g) {
     return !isFighting(g->fights) && !getCurrentMenu(g->menus);
 }
 
-bool canTriggerFight(const Game *g, const Player *p) {
-    return isDungeon(g->scenes->current)
-            && !isFighting(g->fights)
+bool canTriggerFight(const FightManager *fm, const Scene *s, const Player *p) {
+    return isDungeon(s)
+            && !isFighting(fm)
             && isMoving(getPartyLeader(p));
 }
 
 void checkFights(Game *g, const Scene *s) {
-    if (!canTriggerFight(g, g->player)) {
+    if (!canTriggerFight(g->fights, s, g->player)) {
         return;
     }
     if (GetRandomValue(1, 100) == 1) {
@@ -210,9 +210,11 @@ void doExplorationLoop(Game *g) {
 void doFightLoop(Game *g) {
     Scene *s = g->scenes->current;
     fightUpdate(g->fights);
-    checkFightInput(g->fights);
-    drawFightView(s->encounters, g->fights);
-    checkControls(g->controls);
+    if (!isFightDone(g->fights->fight)) {
+        checkFightInput(g->fights);
+        drawFightView(s->encounters, g->fights);
+        checkControls(g->controls);
+    }
     checkRemoveFight(g->fights);
 }
 
