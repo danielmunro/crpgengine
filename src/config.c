@@ -16,6 +16,7 @@ typedef struct {
     const char *saveFile;
     bool exit;
     bool immortal;
+    bool randomEncounters;
     bool forceNewGame;
     bool logMemoryUsage;
     bool purgeSaves;
@@ -35,6 +36,7 @@ Config *createConfigFromData(const ConfigData *data) {
     config->saveFile = data->saveFile;
     config->exit = data->exit;
     config->immortal = data->immortal;
+    config->randomEncounters = data->randomEncounters;
     config->forceNewGame = data->forceNewGame;
     config->logMemoryUsage = data->logMemoryUsage;
     config->purgeSaves = data->purgeSaves;

@@ -15,6 +15,7 @@ typedef struct {
     bool forceNewGame;
     bool exit;
     bool immortal;
+    bool randomEncounters;
     bool logMemoryUsage;
     bool purgeSaves;
     bool showFPS;
@@ -46,6 +47,8 @@ static const cyaml_schema_field_t configTopMappingField[] = {
                 "exit", CYAML_BOOL, ConfigData, exit),
         CYAML_FIELD_BOOL(
                 "immortal", CYAML_BOOL, ConfigData, immortal),
+        CYAML_FIELD_BOOL(
+                "randomEncounters", CYAML_BOOL, ConfigData, randomEncounters),
         CYAML_FIELD_BOOL(
                 "forceNewGame", CYAML_BOOL, ConfigData, forceNewGame),
         CYAML_FIELD_BOOL(

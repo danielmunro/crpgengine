@@ -22,8 +22,11 @@ saveFile: autosave.yaml
 # problems.
 exit: false
 
-# Cannot die
+# Player mobs can still take damage, but they cannot die
 immortal: false
+
+# Enable or disable random encounters in dungeons
+randomEncounters: true
 
 # Ignore the autosave.yaml file if it exists
 forceNewGame: false

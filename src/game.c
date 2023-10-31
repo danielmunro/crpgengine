@@ -165,7 +165,8 @@ bool isExploring(Game *g) {
 bool canTriggerFight(const FightManager *fm, const Scene *s, const Player *p) {
     return isDungeon(s)
             && !isFighting(fm)
-            && isMoving(getPartyLeader(p));
+            && isMoving(getPartyLeader(p))
+            && config->randomEncounters;
 }
 
 void checkFights(Game *g, const Scene *s) {
