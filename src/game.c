@@ -200,8 +200,8 @@ void doExplorationLoop(Game *g) {
             g->notifications,
             s->activeControlBlocks,
             g->ui->fonts->default_);
-    doMobileMovementUpdates(s->map);
     processAnimations(g->animations);
+    doMobileMovementUpdates(s->map);
     evaluateMovement(s->map, g->player);
     evaluateExits(g);
     checkControls(g->controls);
