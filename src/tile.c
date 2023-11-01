@@ -117,6 +117,7 @@ typedef struct {
     int tilesCount;
     xmlTextReaderPtr reader;
     Vector2D size;
+    const char *sourcePath;
     Image source;
     Texture sourceTexture;
 } Tileset;

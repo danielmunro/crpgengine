@@ -24,8 +24,9 @@ SceneManager *createSceneManager(ControlManager *cm, AnimationManager *anManager
 void setScene(SceneManager *sm, Scene *scene, const Player *player, const char *entranceName) {
     addInfo("set scene :: %s, %d", scene->name, scene->type);
     if (sm->current != NULL) {
-        unloadLayers(sm->current->map);
+        unloadMap(sm->current->map);
     }
+    loadMap(scene->map);
     sm->current = scene;
     sm->controlManager->scene = scene;
     clearAnimations(sm->animationManager);

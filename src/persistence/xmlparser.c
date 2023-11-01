@@ -126,11 +126,10 @@ void parseTilesetRootNode(xmlNodePtr node, Tileset *t) {
             t->size.y = xmlInt(cur, PROP_TILE_HEIGHT);
             cur = cur->children;
         } else if (type == TILESET_NODE_TYPE_IMAGE) {
-            char imagePath[MAX_FS_PATH_LENGTH];
+            char *imagePath = malloc(MAX_FS_PATH_LENGTH);
             getComponentPath(imagePath, "", "tilesets", xmlString(cur, "source"));
             t->reader = xmlReaderForFile(filePath, NULL, 0);
-            t->source = LoadImage(imagePath);
-            t->sourceTexture = LoadTextureFromImage(t->source);
+            t->sourcePath = imagePath;
         } else if (type == TILESET_NODE_TYPE_TILE) {
             t->tiles[t->tilesCount] = parseTileNode(cur);
             t->tilesCount++;

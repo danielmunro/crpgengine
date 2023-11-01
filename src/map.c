@@ -247,10 +247,17 @@ void renderMapLayer(Map *m, LayerType layer) {
     UnloadImage(renderedLayer);
 }
 
-void unloadLayers(const Map *m) {
+void unloadMap(const Map *m) {
     UnloadTexture(m->renderedLayers[BACKGROUND]);
     UnloadTexture(m->renderedLayers[MIDGROUND]);
     UnloadTexture(m->renderedLayers[FOREGROUND]);
+    UnloadTexture(m->tileset->sourceTexture);
+    UnloadImage(m->tileset->source);
+}
+
+void loadMap(const Map *m) {
+    m->tileset->source = LoadImage(m->tileset->sourcePath);
+    m->tileset->sourceTexture = LoadTextureFromImage(m->tileset->source);
 }
 
 void createMobileLayer(
