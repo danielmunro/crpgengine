@@ -136,6 +136,7 @@ void parseTilesetRootNode(xmlNodePtr node, Tileset *t) {
         }
         cur = cur->next;
     }
+    free((char *) source);
     xmlFreeNode(cur);
     xmlFreeDoc(doc);
 }
@@ -166,6 +167,7 @@ Property *parseProperty(xmlNodePtr node, const char *propName) {
         if (name != NULL && strcmp(name, propName) == 0) {
             return createProperty(propName, xmlString(cur, PROP_VALUE));
         }
+        free((char *) name);
         cur = cur->next;
     }
     return NULL;
@@ -253,6 +255,7 @@ void parseTilemapObjectGroupChestNode(xmlNodePtr node, ItemManager *im, Map *m) 
             m->chestCount++;
             free((Property *) item);
             free((Property *) quantity);
+            free((Property *) coins);
         }
         node = node->next;
     }
@@ -301,7 +304,7 @@ Map *parseTilemapDocToMap(
         int id,
         const char *filePath,
         const char *indexDir) {
-    const xmlDoc *doc = xmlParseFile(filePath);
+    xmlDocPtr doc = xmlParseFile(filePath);
     xmlNodePtr cur = xmlDocGetRootElement(doc);
     if (cur == NULL) {
         addError("unable to find map resources for scene :: %s", indexDir);
