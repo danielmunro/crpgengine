@@ -300,8 +300,8 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
             drawAnimation(
                     getMobAnimation(mobLayer[y][n]),
                     (Vector2) {
-                            mobLayer[y][n]->position.x + offset.x,
-                            floorf(mobLayer[y][n]->position.y + offset.y),
+                            ((mobLayer[y][n]->position.x * ui->screen->scale) + offset.x),
+                            (floorf((mobLayer[y][n]->position.y * ui->screen->scale) + offset.y)),
                     }
             );
         }
@@ -325,15 +325,19 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
 void drawOpenedChests(const Map *m, const Player *p, Vector2 offset) {
     for (int i = 0; i < m->chestCount; i++) {
         if (isChestOpened(p, m->sceneId, m->chests[i]->id)) {
-            DrawTextureRec(
+            Rectangle dest = {
+                    (m->chests[i]->area.x * ui->screen->scale) + offset.x,
+                    (m->chests[i]->area.y * ui->screen->scale) + offset.y,
+                    (float) m->tileset->size.x * ui->screen->scale,
+                    (float) m->tileset->size.y * ui->screen->scale };
+            Vector2 origin = { 0.0f, 0.0f };
+            DrawTexturePro(
                     m->tileset->sourceTexture,
                     getRectForTile(m, m->openedChest->id + 1),
-                    (Vector2) {
-                            m->chests[i]->area.x + offset.x,
-                            m->chests[i]->area.y + offset.y,
-                    },
-                    WHITE
-            );
+                    dest,
+                    origin,
+                    0.0f,
+                    WHITE);
         }
     }
 }
@@ -496,13 +500,13 @@ void drawMapView(
     BeginDrawing();
     ClearBackground(BLACK);
     Vector2 offset = {
-            ((float) ui->screen->width / 2) - mob->position.x,
-            ((float) ui->screen->height / 2) - mob->position.y
+            ((float) ui->screen->width / 2) - (mob->position.x * ui->screen->scale),
+            ((float) ui->screen->height / 2) - (mob->position.y * ui->screen->scale),
     };
     DrawTextureEx(m->renderedLayers[BACKGROUND], offset, 0, ui->screen->scale, WHITE);
     DrawTextureEx(m->renderedLayers[MIDGROUND], offset, 0, ui->screen->scale, WHITE);
-    drawExplorationMobiles(m, p, offset);
     drawOpenedChests(m, p, offset);
+    drawExplorationMobiles(m, p, offset);
     DrawTextureEx(m->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);

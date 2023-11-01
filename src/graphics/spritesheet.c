@@ -65,10 +65,11 @@ void drawImageFromSprite(const Spritesheet *s, Vector2 position, int imageIndex)
             (float) s->frameWidth,
             (float) s->frameHeight,
     };
-    DrawTextureRec(
-            s->source,
-            rect,
-            position,
-            WHITE
-    );
+    Rectangle dest = {
+            position.x,
+            position.y,
+            (float) abs(s->frameWidth) * ui->screen->scale,
+            (float) abs(s->frameHeight) * ui->screen->scale };
+    Vector2 origin = { 0.0f, 0.0f };
+    DrawTexturePro(s->source, rect, dest, origin, 0.0f, WHITE);
 }
