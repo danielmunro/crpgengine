@@ -74,12 +74,12 @@
 </data>
  </layer>
  <objectgroup id="4" name="warps">
-  <object id="1" name="from_tinytown" type="entrance" x="271.716" y="161.302" width="16.8118" height="14.0855">
+  <object id="1" name="from_tinytown" type="entrance" x="272" y="160" width="16" height="16">
    <properties>
     <property name="direction" value="up"/>
    </properties>
   </object>
-  <object id="3" name="start" type="entrance" x="272.17" y="127.134" width="14.5399" height="14.5399">
+  <object id="3" name="start" type="entrance" x="272" y="128" width="16" height="16">
    <properties>
     <property name="direction" value="up"/>
    </properties>

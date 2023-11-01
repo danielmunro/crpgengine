@@ -79,15 +79,15 @@
     <property name="to" value="from_tinytown"/>
    </properties>
   </object>
-  <object id="2" name="to_building3" type="exit" x="320.953" y="208.98" width="13.3038" height="14.4124"/>
-  <object id="3" name="to_building2" type="exit" x="192.35" y="289.911" width="13.8581" height="13.3038"/>
-  <object id="4" name="to_house1" type="exit" x="560.647" y="304.835" width="13.8581" height="13.8581">
+  <object id="2" name="to_building3" type="exit" x="320" y="208" width="16" height="16"/>
+  <object id="3" name="to_building2" type="exit" x="192" y="288" width="16" height="16"/>
+  <object id="4" name="to_house1" type="exit" x="560" y="304" width="16" height="16">
    <properties>
     <property name="scene" value="house1"/>
     <property name="to" value="from_tinytown"/>
    </properties>
   </object>
-  <object id="6" name="start" type="entrance" x="429.756" y="252.481" width="33.246" height="33.8003">
+  <object id="6" name="start" type="entrance" x="432" y="256" width="32" height="32">
    <properties>
     <property name="direction" value="down"/>
    </properties>
@@ -97,9 +97,9 @@
     <property name="direction" value="left"/>
    </properties>
   </object>
-  <object id="12" name="from_building3" type="entrance" x="321.09" y="226.429" width="13.6312" height="20.4468"/>
-  <object id="13" name="from_building2" type="entrance" x="192.351" y="308.217" width="14.3885" height="15.9031"/>
-  <object id="14" name="from_house1" type="entrance" x="560.257" y="321.635" width="15.9031" height="13.6312"/>
+  <object id="12" name="from_building3" type="entrance" x="320" y="224" width="16" height="16"/>
+  <object id="13" name="from_building2" type="entrance" x="192" y="304" width="16" height="16"/>
+  <object id="14" name="from_house1" type="entrance" x="560" y="320" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="7" name="arrive_at">
   <object id="15" name="demo_wait" type="arrive_at" x="543.83" y="112.048" width="15.9953" height="15.9646"/>
