@@ -9,7 +9,7 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
     FontStyle *defaultFont = menuContext->fonts->default_;
     for (int i = 0; i < menuContext->player->partyCount; i++) {
         Mobile *mob = menuContext->player->party[i];
-        float column1 = (float) mob->avatar->image.width + (ui->menu->padding * 2);
+        float column1 = ((float) mob->avatar->image.width * ui->screen->scale) + (ui->menu->padding * 2);
         float y = ui->menu->padding + ((float) ui->screen->height / 4) * (float) i;
         drawAvatar(mob->avatar, (Vector2) {ui->menu->padding, y});
         drawText(
@@ -37,7 +37,11 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
             ui->textAreas->right);
     drawMenuRect(textBox->area);
     for (int i = 0; i < count; i++) {
-        drawInMenu(textBox, PartyMenuItems[i]);
+        if (i == menuContext->cursorLine) {
+            drawInMenuWithStyle(textBox, menuContext->fonts->highlight, PartyMenuItems[i]);
+        } else {
+            drawInMenu(textBox, PartyMenuItems[i]);
+        }
     }
     float scale = ui->screen->scale - 1;
     float w = (float) menuContext->uiSprite->sprite->frameWidth * scale;

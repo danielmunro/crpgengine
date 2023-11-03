@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <stdio.h>
 #include "headers/config.h"
+#include "headers/graphics/ui/ui.h"
 
 typedef struct {
     Texture image;
@@ -19,7 +20,9 @@ Avatar *createAvatar(const char *filename) {
 }
 
 void drawAvatar(const Avatar *a, Vector2 position) {
-    DrawTextureRec(
+    Vector2 origin = { 0.0f, 0.0f };
+    float rotation = 0.0f;
+    DrawTexturePro(
             a->image,
             (Rectangle) {
                     0,
@@ -27,6 +30,13 @@ void drawAvatar(const Avatar *a, Vector2 position) {
                     (float) a->image.width,
                     (float) a->image.height,
             },
-            position,
+            (Rectangle) {
+                position.x,
+                position.y,
+                (float) a->image.width * ui->screen->scale,
+                (float) a->image.height * ui->screen->scale,
+            },
+            origin,
+            rotation,
             WHITE);
 }
