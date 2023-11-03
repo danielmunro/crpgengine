@@ -248,17 +248,17 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
 }
 
 void drawRightCursor(const UISprite *sprites, Vector2 position) {
-    drawImageFromSprite(sprites->sprite, (Vector2) {
-            position.x + FIGHT_CURSOR_X_OFFSET,
-            position.y + FIGHT_CURSOR_Y_OFFSET,
-    }, sprites->config->sprite->cursors->right);
+    drawImageFromSprite(
+            sprites->sprite,
+            position,
+            sprites->config->sprite->cursors->right);
 }
 
 void drawDownCursor(const UISprite *sprites, Vector2 position) {
-    drawImageFromSprite(sprites->sprite, (Vector2) {
-            position.x + FIGHT_CURSOR_X_OFFSET,
-            position.y + FIGHT_CURSOR_Y_OFFSET,
-    }, sprites->config->sprite->cursors->down);
+    drawImageFromSprite(
+            sprites->sprite,
+            position,
+            sprites->config->sprite->cursors->down);
 }
 
 void drawAllMenus(MenuContext *mc, Menu **menus) {
