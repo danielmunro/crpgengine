@@ -21,12 +21,28 @@ SceneManager *createSceneManager(ControlManager *cm, AnimationManager *anManager
     return sceneManager;
 }
 
+void unloadScene(const Scene *s) {
+    unloadMap(s->map);
+    if (isDungeon(s)) {
+        UnloadTexture(s->encounters->background);
+    }
+}
+
+void initScene(const Scene *s) {
+    loadMap(s->map);
+    if (isDungeon(s)) {
+        Image im = LoadImage(s->encounters->backgroundFilePath);
+        s->encounters->background = LoadTextureFromImage(im);
+        UnloadImage(im);
+    }
+}
+
 void setScene(SceneManager *sm, Scene *scene, const Player *player, const char *entranceName) {
     addInfo("set scene :: %s, %d", scene->name, scene->type);
     if (sm->current != NULL) {
-        unloadMap(sm->current->map);
+        unloadScene(sm->current);
     }
-    loadMap(scene->map);
+    initScene(scene);
     sm->current = scene;
     sm->controlManager->scene = scene;
     clearAnimations(sm->animationManager);
@@ -35,7 +51,6 @@ void setScene(SceneManager *sm, Scene *scene, const Player *player, const char *
     if (entranceName != NULL) {
         useEntrance(mob, findEntrance(scene->map, entranceName));
     }
-    renderExplorationLayers(sm->current->map);
     playMusic(sm->audioManager, sm->current->music);
     proceedControlsUntilDone(sm->controlManager);
 }

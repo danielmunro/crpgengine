@@ -83,9 +83,9 @@ void loadPlayerMobiles(MobileManager *mm) {
 }
 
 void loadEncounters(const Beastiary *beastiary, Scene *scene, const EncountersData *data, const char *indexDir) {
-    char filePath[MAX_FS_PATH_LENGTH];
+    char *filePath = malloc(MAX_FS_PATH_LENGTH);
     sprintf(filePath, "%s/images/%s", indexDir, data->background);
-    scene->encounters->background = LoadTextureFromImage(LoadImage(filePath));
+    scene->encounters->backgroundFilePath = filePath;
     addDebug("beast count: %d, beastiary count: %d", data->beasts_count, beastiary->count);
     for (int i = 0; i < data->beasts_count; i++) {
         for (int b = 0; b < beastiary->count; b++) {
@@ -139,11 +139,21 @@ void loadStorylines(Scene *s, const char *sceneDirectory) {
     addDebug("added storylines to game :: %d", count);
 }
 
+void mapStorylinesToControlBlocks(ControlManager *cm, Scene *s) {
+    addDebug("map storylines to control blocks :: scene name: %s, storyline count: %d",
+             s->name, s->storylineCount);
+    for (int c = 0; c < s->storylineCount; c++) {
+        s->controlBlocks[c] = mapStorylineToControlBlock(cm, s, s->storylines[c]);
+        s->controlBlockCount++;
+    }
+}
+
 Scene *loadScene(
         MobileManager *mm,
         ItemManager *im,
+        ControlManager *cm,
         const Beastiary *beastiary,
-        char *sceneName,
+        const char *sceneName,
         const char *sceneDirectory) {
     addDebug("create scene :: %s", sceneName);
     const SceneData *sceneData = loadSceneYaml(sceneDirectory);
@@ -171,6 +181,7 @@ Scene *loadScene(
         loadEncounters(beastiary, scene, sceneData->encounters, config->indexDir);
     }
 
+    mapStorylinesToControlBlocks(cm, scene);
     addDebug("done parsing scene %s", sceneName);
 
     return scene;
@@ -190,15 +201,6 @@ void validateNoDuplicateSceneIds(SceneManager *sm) {
     }
 }
 
-void mapStorylinesToControlBlocks(ControlManager *cm, Scene *s) {
-    addDebug("map storylines to control blocks :: scene name: %s, storyline count: %d",
-             s->name, s->storylineCount);
-    for (int c = 0; c < s->storylineCount; c++) {
-        s->controlBlocks[c] = mapStorylineToControlBlock(cm, s, s->storylines[c]);
-        s->controlBlockCount++;
-    }
-}
-
 void loadScenes(
         SceneManager *sm,
         MobileManager *mm,
@@ -206,18 +208,20 @@ void loadScenes(
         Beastiary *beastiary,
         SceneLoader *sl) {
     addDebug("attempting to load scenes");
-    for (int i = 0; i < sm->count; i++) {
-        Scene *s = loadScene(
+    for (int i = 0; i < sl->count; i++) {
+        sm->scenes[i] = loadScene(
                 mm,
                 im,
+                sm->controlManager,
                 beastiary,
                 sl->scenes[i],
                 sl->sceneFiles[i]);
-        mapStorylinesToControlBlocks(sm->controlManager, s);
-        sm->scenes[i] = s;
         addDebug("scene loaded :: %s (%d)", sm->scenes[i]->name, i);
     }
-    validateNoDuplicateSceneIds(sm);
+    sm->count = sl->count;
+    if (config->validate) {
+        validateNoDuplicateSceneIds(sm);
+    }
 }
 
 void loadScenesFromFiles(
@@ -225,15 +229,7 @@ void loadScenesFromFiles(
         MobileManager *mm,
         ItemManager *im,
         Beastiary *beastiary) {
-    SceneLoader *sl = createSceneLoader(config->indexDir);
-    addDebug("get scene directories :: %s", sl->sceneDirectory);
-    sl->count = getFilesInDirectory(sl->sceneDirectory, sl->scenes);
-    buildSceneFilesList(sl);
-    sm->count = addSubsceneFiles(sl);
-    addDebug("scene loader found scenes :: %d", sm->count);
-    for (int i = 0; i < sm->count; i++) {
-        addDebug("scene :: %s (%s)", sl->scenes[i], sl->sceneFiles[i]);
-    }
+    SceneLoader *sl = createSceneLoader();
     loadScenes(
             sm,
             mm,

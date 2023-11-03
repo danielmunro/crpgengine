@@ -34,7 +34,6 @@ typedef struct {
 typedef struct {
     const char *scene;
     Player *player;
-    SaveFiles *saveFiles;
     const char *indexDir;
     int cursorLine;
     Fonts *fonts;
@@ -246,13 +245,6 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
         }
     }
     return response;
-}
-
-void drawUpCursor(const UISprite *sprites, Vector2 position) {
-    drawImageFromSprite(sprites->sprite, (Vector2) {
-            position.x + FIGHT_CURSOR_X_OFFSET,
-            position.y + FIGHT_CURSOR_Y_OFFSET,
-    }, sprites->config->sprite->cursors->up);
 }
 
 void drawRightCursor(const UISprite *sprites, Vector2 position) {

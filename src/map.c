@@ -157,7 +157,7 @@ void drawObjectCollision(const Map *m, Image layer, int tileNumber, int x, int y
 }
 
 Vector2D getTileFromIndex(const Map *m, int index) {
-    int width = m->tileset->source.width / m->tileset->size.x;
+    int width = m->tileset->sourceTexture.width / m->tileset->size.x;
     int y = index / width;
     int x = (index % width);
     if (x - 1 < 0) {
@@ -247,17 +247,26 @@ void renderMapLayer(Map *m, LayerType layer) {
     UnloadImage(renderedLayer);
 }
 
+void renderExplorationLayers(Map *m) {
+    ClearBackground(BLACK);
+    renderMapLayer(m, BACKGROUND);
+    renderMapLayer(m, MIDGROUND);
+    renderMapLayer(m, FOREGROUND);
+    addDebug("map successfully rendered");
+}
+
+void loadMap(Map *m) {
+    m->tileset->source = LoadImage(m->tileset->sourcePath);
+    m->tileset->sourceTexture = LoadTextureFromImage(m->tileset->source);
+    UnloadImage(m->tileset->source);
+    renderExplorationLayers(m);
+}
+
 void unloadMap(const Map *m) {
     UnloadTexture(m->renderedLayers[BACKGROUND]);
     UnloadTexture(m->renderedLayers[MIDGROUND]);
     UnloadTexture(m->renderedLayers[FOREGROUND]);
     UnloadTexture(m->tileset->sourceTexture);
-    UnloadImage(m->tileset->source);
-}
-
-void loadMap(const Map *m) {
-    m->tileset->source = LoadImage(m->tileset->sourcePath);
-    m->tileset->sourceTexture = LoadTextureFromImage(m->tileset->source);
 }
 
 void createMobileLayer(
@@ -526,14 +535,6 @@ void drawMapView(
 void addMobileToExploration(Map *m, Mobile *mob) {
     m->mobiles[m->mobileCount] = mob;
     m->mobileCount++;
-}
-
-void renderExplorationLayers(Map *m) {
-    ClearBackground(BLACK);
-    renderMapLayer(m, BACKGROUND);
-    renderMapLayer(m, MIDGROUND);
-    renderMapLayer(m, FOREGROUND);
-    addDebug("map successfully rendered");
 }
 
 void dialogEngaged(const Player *player, ControlBlock *controlBlock) {

@@ -28,6 +28,9 @@ immortal: false
 # Enable or disable random encounters in dungeons
 randomEncounters: true
 
+# Whether to validate game data after loading
+validate: true
+
 # Ignore the autosave.yaml file if it exists
 forceNewGame: false
 

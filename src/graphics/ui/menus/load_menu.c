@@ -1,7 +1,7 @@
 #include "headers/graphics/ui/menu.h"
 
 int getLoadCursorLength(const MenuContext *menuContext) {
-    return menuContext->saveFiles->count;
+    return menuContext->player->saveFiles->count;
 }
 
 void drawLoadMenuScreen(MenuContext *menuContext) {
@@ -10,8 +10,9 @@ void drawLoadMenuScreen(MenuContext *menuContext) {
             menuContext,
             LOAD_BOX,
             ui->textAreas->small);
-    for (int i = 0; i < menuContext->saveFiles->count; i++) {
-        drawInMenu(b, menuContext->saveFiles->saveNames[i]);
+    drawMenuRect(b->area);
+    for (int i = 0; i < menuContext->player->saveFiles->count; i++) {
+        drawInMenu(b, menuContext->player->saveFiles->saves[i]->saveName);
     }
     drawRightCursor(
             menuContext->uiSprite,
@@ -21,7 +22,6 @@ void drawLoadMenuScreen(MenuContext *menuContext) {
                     + ui->menu->padding
                     + line(menuContext->cursorLine, defaultFont->lineHeight),
             });
-    free(b);
 }
 
 MenuSelectResponse *loadMenuItemSelected() {

@@ -67,13 +67,50 @@ Scene *createScene(const int id, const char *name, SceneType type, const char *m
     return scene;
 }
 
-SceneLoader *createSceneLoader(const char *indexDir) {
+int addSubsceneFiles(SceneLoader *sl) {
+    for (int i = 0; i < sl->count; i++) {
+        char subSceneDir[MAX_FS_PATH_LENGTH];
+        sprintf(subSceneDir, "%s/%s/scenes", sl->sceneDirectory, sl->scenes[i]);
+        if (access(subSceneDir, F_OK) == 0) {
+            char **subScenes = calloc(MAX_SCENES, sizeof(char *));
+            int subCount = getFilesInDirectory(subSceneDir, subScenes);
+            for (int j = 0; j < subCount; j++) {
+                sl->scenes[sl->count] = subScenes[j];
+                char subSceneFile[MAX_FS_PATH_LENGTH];
+                sprintf(subSceneFile, "%s/%s", subSceneDir, subScenes[j]);
+                sl->sceneFiles[sl->count] = (char *) malloc(strlen(subSceneFile));
+                strcpy(sl->sceneFiles[sl->count], subSceneFile);
+                sl->count++;
+            }
+            free(subScenes);
+        }
+    }
+    return sl->count;
+}
+
+void buildSceneFilesList(SceneLoader *sl) {
+    for (int i = 0; i < sl->count; i++) {
+        char *sceneFile = malloc(MAX_FS_PATH_LENGTH);
+        sprintf(sceneFile, "%s/%s", sl->sceneDirectory, sl->scenes[i]);
+        sl->sceneFiles[i] = &sceneFile[0];
+    }
+}
+
+SceneLoader *createSceneLoader() {
     const char *dir = "/scenes";
     SceneLoader *sceneLoader = malloc(sizeof(SceneLoader));
-    sceneLoader->sceneDirectory = (char *) malloc(strlen(indexDir) + strlen(dir));
-    sprintf(sceneLoader->sceneDirectory, "%s%s", indexDir, dir);
+    sceneLoader->sceneDirectory = (char *) malloc(strlen(config->indexDir) + strlen(dir));
+    sprintf(sceneLoader->sceneDirectory, "%s%s", config->indexDir, dir);
     sceneLoader->scenes = calloc(MAX_SCENES, sizeof(char *));
     sceneLoader->sceneFiles = calloc(MAX_SCENES, sizeof(char *));
+    addDebug("get scene directories :: %s", sceneLoader->sceneDirectory);
+    sceneLoader->count = getFilesInDirectory(sceneLoader->sceneDirectory, sceneLoader->scenes);
+    buildSceneFilesList(sceneLoader);
+    addSubsceneFiles(sceneLoader);
+    addDebug("scene loader found scenes :: %d", sceneLoader->count);
+    for (int i = 0; i < sceneLoader->count; i++) {
+        addDebug("scene :: %s (%s)", sceneLoader->scenes[i], sceneLoader->sceneFiles[i]);
+    }
     return sceneLoader;
 }
 
@@ -114,34 +151,5 @@ void controlWhenCheck(Scene *s, const Player *p, EventType eventType) {
             addInfo("set active control block :: eventType: %d, progress: %d, i: %d", eventType, cb->progress, i);
             return;
         }
-    }
-}
-
-int addSubsceneFiles(SceneLoader *sl) {
-    for (int i = 0; i < sl->count; i++) {
-        char subSceneDir[MAX_FS_PATH_LENGTH];
-        sprintf(subSceneDir, "%s/%s/scenes", sl->sceneDirectory, sl->scenes[i]);
-        if (access(subSceneDir, F_OK) == 0) {
-            char **subScenes = calloc(MAX_SCENES, sizeof(char *));
-            int subCount = getFilesInDirectory(subSceneDir, subScenes);
-            for (int j = 0; j < subCount; j++) {
-                sl->scenes[sl->count] = subScenes[j];
-                char subSceneFile[MAX_FS_PATH_LENGTH];
-                sprintf(subSceneFile, "%s/%s", subSceneDir, subScenes[j]);
-                sl->sceneFiles[sl->count] = (char *) malloc(strlen(subSceneFile));
-                strcpy(sl->sceneFiles[sl->count], subSceneFile);
-                sl->count++;
-            }
-            free(subScenes);
-        }
-    }
-    return sl->count;
-}
-
-void buildSceneFilesList(SceneLoader *sl) {
-    for (int i = 0; i < sl->count; i++) {
-        char *sceneFile = malloc(MAX_FS_PATH_LENGTH);
-        sprintf(sceneFile, "%s/%s", sl->sceneDirectory, sl->scenes[i]);
-        sl->sceneFiles[i] = &sceneFile[0];
     }
 }

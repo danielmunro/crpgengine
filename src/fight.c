@@ -12,6 +12,7 @@ typedef struct {
 
 typedef struct {
     Texture2D background;
+    const char *backgroundFilePath;
     BeastEncounter *beastEncounters[MAX_BEASTS];
     int beastEncountersCount;
 } Encounters;
@@ -34,6 +35,7 @@ typedef struct {
 Encounters *createEncounters() {
     Encounters *e = malloc(sizeof(Encounters));
     e->beastEncountersCount = 0;
+    e->backgroundFilePath = NULL;
     return e;
 }
 

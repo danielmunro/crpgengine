@@ -12,6 +12,8 @@ Avatar *createAvatar(const char *filename) {
     sprintf(path, "%s/images/%s", config->indexDir, filename);
     Avatar *a = malloc(sizeof(Avatar));
     a->filename = filename;
-    a->image = LoadTextureFromImage(LoadImage(path));
+    Image im = LoadImage(path);
+    a->image = LoadTextureFromImage(im);
+    UnloadImage(im);
     return a;
 }

@@ -33,7 +33,9 @@ Beast *createBeastFromData(BeastData *data) {
     beast->actionGauge = 0;
     char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/images/%s", config->indexDir, data->image);
-    beast->image = LoadTextureFromImage(LoadImage(filePath));
+    Image im = LoadImage(filePath);
+    beast->image = LoadTextureFromImage(im);
+    UnloadImage(im);
     beast->attributes = createAttributesFromData(data->attributes);
     beast->position = (Rectangle) {0, 0, 0, 0};
     beast->step = STEP_NONE;

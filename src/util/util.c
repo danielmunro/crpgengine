@@ -18,12 +18,6 @@ typedef struct {
     int y;
 } Vector2D;
 
-typedef struct {
-    int count;
-    const char **filenames;
-    const char **saveNames;
-} SaveFiles;
-
 char *trim(char *str) {
     char *end;
 

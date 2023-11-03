@@ -24,6 +24,17 @@ typedef struct {
 } OpenedChest;
 
 typedef struct {
+    const char *filename;
+    const char *saveName;
+    unsigned long created;
+} SaveFile;
+
+typedef struct {
+    int count;
+    SaveFile **saves;
+} SaveFiles;
+
+typedef struct {
     Mobile **party;
     Mobile **onDeck;
     const char **storylines;
@@ -50,6 +61,22 @@ OpenedChest *createOpenedChest(int sceneId, int chestId) {
     o->sceneId = sceneId;
     o->chestId = chestId;
     return o;
+}
+
+
+SaveFile *createSaveFile(const char *filename, const char *saveName, unsigned long created) {
+    SaveFile *sf = malloc(sizeof(SaveFile));
+    sf->filename = filename;
+    sf->saveName = saveName;
+    sf->created = created;
+    return sf;
+}
+
+SaveFiles *createSaveFiles() {
+    SaveFiles *sf = malloc(sizeof(SaveFiles));
+    sf->saves = calloc(MAX_SAVE_FILES, sizeof(SaveFile));
+    sf->count = 0;
+    return sf;
 }
 
 Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
@@ -237,7 +264,7 @@ SaveData *createSaveData(const Player *player, const char *scene, const char *sa
     SaveData *save = malloc(sizeof(SaveData));
     save->name = saveName;
     save->player = createPlayerData(player);
-    save->scene = &scene[0];
+    save->scene = scene;
     save->time = (unsigned long) time(NULL);
     return save;
 }
@@ -249,13 +276,24 @@ void saveFile(const SaveData *save, const char *indexDir, const char *filename) 
     saveSaveData(save, filePathAuto);
 }
 
+void sortSaveFiles(const SaveFiles *sf) {
+    for (int i = 0; i < sf->count; i++) {
+        for (int j = 0; j < sf->count; j++) {
+            if (sf->saves[i]->created > sf->saves[j]->created) {
+                SaveFile *tmp = sf->saves[i];
+                sf->saves[i] = sf->saves[j];
+                sf->saves[j] = tmp;
+            }
+        }
+    }
+}
+
 SaveFiles *getSaveFiles() {
     const char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
     sprintf((char *) savesDirectory, "%s/_saves", config->indexDir);
     char **files = calloc(MAX_SAVE_FILES, sizeof(char *));
-    const char **names = calloc(MAX_SAVE_FILES, sizeof(char *));
-    unsigned long created[MAX_SAVE_FILES];
     int count = getFilesInDirectory(savesDirectory, files);
+    SaveFiles *sf = createSaveFiles();
     for (int i = 0; i < count; i++) {
         char *filePath = malloc(MAX_FS_PATH_LENGTH);
         sprintf(filePath, "%s/%s", savesDirectory, files[i]);
@@ -263,39 +301,31 @@ SaveFiles *getSaveFiles() {
         if (strcmp(files[i], "autosave.yaml") == 0) {
             char *name = malloc(MAX_SAVE_NAME);
             sprintf(name, "(autosave) %s", s->name);
-            names[i] = name;
-            created[i] = s->time + 1;
+            sf->saves[sf->count] =  createSaveFile(
+                    filePath,
+                    name,
+                    s->time + 1);
+            sf->count++;
             free(name);
         } else {
-            names[i] = s->name;
-            created[i] = s->time;
+            sf->saves[sf->count] =  createSaveFile(
+                    filePath,
+                    s->name,
+                    s->time);
+            sf->count++;
         }
         free(filePath);
         free(s);
     }
-    for (int i = 0; i < count; i++) {
-        for (int j = 0; j < count; j++) {
-            if (created[i] > created[j]) {
-                char *s = &files[i][0];
-                files[i] = files[j];
-                files[j] = &s[0];
-                unsigned long c = created[i];
-                created[i] = created[j];
-                created[j] = c;
-                const char *n = &names[i][0];
-                names[i] = names[j];
-                names[j] = n;
-            }
-        }
-    }
-    SaveFiles *sf = malloc(sizeof(SaveFiles));
-    sf->count = count;
-    sf->filenames = (const char **) files;
-    sf->saveNames = names;
-    free(names);
-    free(files);
+    sortSaveFiles(sf);
     free((char *) savesDirectory);
     return sf;
+}
+
+void addSaveFile(SaveFiles *sf, SaveFile *f) {
+    sf->saves[sf->count] = f;
+    sf->count++;
+    sortSaveFiles(sf);
 }
 
 void save(Player *player, const char *sceneName) {
@@ -321,11 +351,10 @@ void save(Player *player, const char *sceneName) {
     sprintf(filename, "save-%lu.yaml", (unsigned long) time(NULL));
     saveFile(save, config->indexDir, filename);
 
+    addSaveFile(
+            player->saveFiles,
+            createSaveFile(filename, save->name, save->time));
     free(date);
-    free(name);
-    free(save);
-    free(player->saveFiles);
-    player->saveFiles = getSaveFiles();
 }
 
 void addStory(Player *p, const char *story) {

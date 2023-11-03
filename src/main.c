@@ -3,7 +3,9 @@
 int main() {
     globalSetup();
     Game *g = createGame();
-    validateGameData(g);
+    if (config->validate) {
+        validateGameData(g);
+    }
     if (config->purgeSaves) {
         purgeSaves(config->indexDir);
     } else if (!config->exit) {
