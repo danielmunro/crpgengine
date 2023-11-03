@@ -11,7 +11,7 @@ void drawPartySelectMenuScreen(MenuContext *menuContext) {
         Mobile *mob = menuContext->player->party[i];
         float column1 = (float) mob->avatar->image.width + (ui->menu->padding * 2);
         float y = ui->menu->padding + ((float) ui->screen->height / 4) * (float) i;
-        drawAvatar(mob, (Vector2) {ui->menu->padding, y});
+        drawAvatar(mob->avatar, (Vector2) {ui->menu->padding, y});
         drawText(
                 mob->name,
                 (Vector2) {column1, y},

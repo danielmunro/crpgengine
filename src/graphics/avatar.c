@@ -17,3 +17,16 @@ Avatar *createAvatar(const char *filename) {
     UnloadImage(im);
     return a;
 }
+
+void drawAvatar(const Avatar *a, Vector2 position) {
+    DrawTextureRec(
+            a->image,
+            (Rectangle) {
+                    0,
+                    0,
+                    (float) a->image.width,
+                    (float) a->image.height,
+            },
+            position,
+            WHITE);
+}

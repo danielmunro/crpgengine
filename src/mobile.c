@@ -228,19 +228,6 @@ void applyConsumable(Mobile *mob, const Item *item) {
     normalizeVitalsForMobile(mob);
 }
 
-void drawAvatar(const Mobile *mob, Vector2 position) {
-    DrawTextureRec(
-            mob->avatar->image,
-            (Rectangle) {
-                    0,
-                    0,
-                    (float) mob->avatar->image.width,
-                    (float) mob->avatar->image.height,
-            },
-            position,
-            WHITE);
-}
-
 void executeSpellOnMobile(Mobile *mob, const Spell *spell) {
     mob->hp += getSpellAttributeAmount(spell, spell->impact->hp);
     mob->mana += getSpellAttributeAmount(spell, spell->impact->mana);
