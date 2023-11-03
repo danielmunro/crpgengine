@@ -39,11 +39,16 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
     for (int i = 0; i < count; i++) {
         drawInMenu(textBox, PartyMenuItems[i]);
     }
+    float scale = ui->screen->scale - 1;
+    float w = (float) menuContext->uiSprite->sprite->frameWidth * scale;
+    float h = (float) menuContext->uiSprite->sprite->frameHeight * scale;
     drawRightCursor(
             menuContext->uiSprite,
             (Vector2) {
-                    (float) ui->screen->width - PARTY_MENU_WIDTH,
-                    line(menuContext->cursorLine, defaultFont->lineHeight)
+                    (float) ui->screen->width
+                            - PARTY_MENU_WIDTH
+                            - w,
+                    line(menuContext->cursorLine, defaultFont->lineHeight) - (h / 2)
             });
 }
 
