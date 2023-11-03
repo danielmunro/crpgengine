@@ -19,6 +19,14 @@ Avatar *createAvatar(const char *filename) {
     return a;
 }
 
+float getAvatarWidth(const Avatar *a) {
+    return (float) a->image.width * ui->screen->scale;
+}
+
+float getAvatarHeight(const Avatar *a) {
+    return (float) a->image.height * ui->screen->scale;
+}
+
 void drawAvatar(const Avatar *a, Vector2 position) {
     Vector2 origin = { 0.0f, 0.0f };
     float rotation = 0.0f;
@@ -33,8 +41,8 @@ void drawAvatar(const Avatar *a, Vector2 position) {
             (Rectangle) {
                 position.x,
                 position.y,
-                (float) a->image.width * ui->screen->scale,
-                (float) a->image.height * ui->screen->scale,
+                getAvatarWidth(a),
+                getAvatarHeight(a),
             },
             origin,
             rotation,
