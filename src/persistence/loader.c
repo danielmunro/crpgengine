@@ -167,11 +167,11 @@ Scene *loadScene(
     loadStorylines(scene, sceneDirectory);
 
     // create scene reader for reading tiled xml
-    char mapDirectory[MAX_FS_PATH_LENGTH];
+    char *mapDirectory = malloc(MAX_FS_PATH_LENGTH);
     sprintf(mapDirectory, "%s/map", sceneDirectory);
-    char tilemapFilePath[MAX_FS_PATH_LENGTH];
+    char *tilemapFilePath = malloc(MAX_FS_PATH_LENGTH);
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
-    addDebug("create scene '%s' tilemap", sceneName);
+    addDebug("parse scene tilemap :: %s", sceneName);
     scene->map = parseTilemapDocToMap(im, scene->id, tilemapFilePath, mapDirectory);
 
     // load mobiles

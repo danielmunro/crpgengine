@@ -3,6 +3,7 @@
 #include "headers/errors.h"
 
 void loadYamlFile(const char *filePath, cyaml_schema_value_t schema, cyaml_data_t **dataOut) {
+    addDebug("load yaml file :: %s", filePath);
     cyaml_err_t err = cyaml_load_file(filePath, &cyamlConfig,
                                       &schema, dataOut, NULL);
     if (err != CYAML_OK) {
