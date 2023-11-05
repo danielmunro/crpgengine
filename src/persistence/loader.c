@@ -5,6 +5,7 @@
 #include "headers/fight.h"
 #include "headers/control_manager.h"
 #include "headers/mobile_manager.h"
+#include "headers/shop.h"
 #include "headers/persistence/db.h"
 #include "headers/persistence/xmlparser.h"
 
@@ -110,6 +111,25 @@ void loadEncounters(const Beastiary *beastiary, Scene *scene, const EncountersDa
             scene->encounters->beastEncountersCount);
 }
 
+void loadShops(Scene *s, const char *sceneDirectory) {
+    char shopsDirectory[MAX_FS_PATH_LENGTH];
+    sprintf(shopsDirectory, "%s/shops", sceneDirectory);
+    if (access(shopsDirectory, F_OK) != 0) {
+        addDebug("scene has no shops :: %s", s->name);
+        return;
+    }
+    char **shopFiles = calloc(MAX_FILES, sizeof(char *));
+    int fileCount = getFilesInDirectory(shopsDirectory, shopFiles);
+    for (int i = 0; i < fileCount; i++) {
+        char shopFilePath[MAX_FS_PATH_LENGTH];
+        sprintf(shopFilePath, "%s/shops/%s", sceneDirectory, shopFiles[i]);
+        ShopData *data = loadShopYaml(shopFilePath);
+        if (data != NULL) {
+
+        }
+    }
+}
+
 void loadStorylines(Scene *s, const char *sceneDirectory) {
     char storylinesDirectory[MAX_FS_PATH_LENGTH];
     sprintf(storylinesDirectory, "%s/storylines", sceneDirectory);
@@ -165,6 +185,9 @@ Scene *loadScene(
 
     // storylines
     loadStorylines(scene, sceneDirectory);
+
+    // shops
+    loadShops(scene, sceneDirectory);
 
     // create scene reader for reading tiled xml
     char *mapDirectory = malloc(MAX_FS_PATH_LENGTH);
