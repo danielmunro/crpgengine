@@ -129,3 +129,9 @@ ItemsReferenceData *loadItemsReferenceData() {
     loadYamlFile(filePath, itemsReferenceSchema, (cyaml_data_t **) &items);
     return items;
 }
+
+ShopData *loadShopYaml(const char *filePath) {
+    ShopData *shop = malloc(sizeof(ShopData));
+    loadYamlFile(filePath, shopTopSchema, (cyaml_data_t **) &shop);
+    return shop;
+}

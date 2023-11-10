@@ -1,0 +1,4 @@
+coins: 400
+inventory:
+  - item: a potion
+    cost: 20

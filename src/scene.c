@@ -4,6 +4,7 @@
 #include "headers/util/log.h"
 #include "headers/map.h"
 #include "headers/fight.h"
+#include "headers/shop.h"
 
 typedef enum {
     SCENE_TYPE_TOWN,
@@ -32,6 +33,7 @@ typedef struct {
     ControlBlock *activeControlBlocks[MAX_ACTIVE_CONTROLS];
     Encounters *encounters;
     Map *map;
+    Shop *shops[MAX_SHOPS];
 } Scene;
 
 typedef struct {
