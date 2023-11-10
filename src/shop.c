@@ -1,9 +1,11 @@
+#include "headers/item.h"
+
 typedef struct {
     int coins;
-    Item **items;
+    ItemWithMarkup **items;
 } Shop;
 
-Shop *createShop(Item **items, int coins) {
+Shop *createShop(ItemWithMarkup **items, int coins) {
     Shop *s = malloc(sizeof(Shop));
     s->items = items;
     s->coins = coins;

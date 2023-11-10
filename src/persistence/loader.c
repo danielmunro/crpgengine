@@ -111,7 +111,7 @@ void loadEncounters(const Beastiary *beastiary, Scene *scene, const EncountersDa
             scene->encounters->beastEncountersCount);
 }
 
-void loadShops(Scene *s, const char *sceneDirectory) {
+void loadShops(ItemManager *im, Scene *s, const char *sceneDirectory) {
     char shopsDirectory[MAX_FS_PATH_LENGTH];
     sprintf(shopsDirectory, "%s/shops", sceneDirectory);
     if (access(shopsDirectory, F_OK) != 0) {
@@ -120,14 +120,24 @@ void loadShops(Scene *s, const char *sceneDirectory) {
     }
     char **shopFiles = calloc(MAX_FILES, sizeof(char *));
     int fileCount = getFilesInDirectory(shopsDirectory, shopFiles);
-    for (int i = 0; i < fileCount; i++) {
+    for (int f = 0; f < fileCount; f++) {
         char shopFilePath[MAX_FS_PATH_LENGTH];
-        sprintf(shopFilePath, "%s/shops/%s", sceneDirectory, shopFiles[i]);
-        ShopData *data = loadShopYaml(shopFilePath);
-        if (data != NULL) {
-
+        sprintf(shopFilePath, "%s/shops/%s", sceneDirectory, shopFiles[f]);
+        const ShopData *data = loadShopYaml(shopFilePath);
+        if (data == NULL) {
+            addError("shop data is null :: %s", shopFilePath);
+            exit(ConfigurationErrorBadShopData);
         }
+        ItemWithMarkup **items = calloc(MAX_SHOPS, sizeof(Item));
+        for (int i = 0; i < data->items_count; i++) {
+            items[i] = createItemWithMarkup(
+                    findItemFromName(im, data->items[i].item),
+                    data->items[i].cost);
+        }
+        s->shops[f] = createShop(items, data->coins);
+        free((ShopData *) data);
     }
+    free(shopFiles);
 }
 
 void loadStorylines(Scene *s, const char *sceneDirectory) {
@@ -187,7 +197,7 @@ Scene *loadScene(
     loadStorylines(scene, sceneDirectory);
 
     // shops
-    loadShops(scene, sceneDirectory);
+    loadShops(im, scene, sceneDirectory);
 
     // create scene reader for reading tiled xml
     char *mapDirectory = malloc(MAX_FS_PATH_LENGTH);

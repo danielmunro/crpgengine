@@ -34,7 +34,7 @@ typedef enum {
     ConfigurationErrorMissingComponent = 410,
     ConfigurationErrorUnknownFontStyleType = 411,
     ConfigurationErrorNoDirectionForName = 412,
-    ConfigurationErrorObjectNotFound = 413,
+    ConfigurationErrorBadShopData = 413,
     ConfigurationErrorPropertyNotFound = 414,
     ConfigurationErrorAnimationTypeNotFound = 415,
 

@@ -56,6 +56,11 @@ typedef struct {
     int quantity;
 } ItemWithQuantity;
 
+typedef struct {
+    Item *item;
+    int worth;
+} ItemWithMarkup;
+
 ItemType getItemTypeFromString(const char *type) {
     int count = sizeof(ItemTypes) / sizeof(ItemTypes[0]);
     for (int i = 0; i < count; i++) {
@@ -99,6 +104,13 @@ ItemWithQuantity *createItemWithQuantity(Item *item, int quantity) {
     iq->item = item;
     iq->quantity = quantity;
     return iq;
+}
+
+ItemWithMarkup *createItemWithMarkup(Item *item, int worth) {
+    ItemWithMarkup *im = malloc(sizeof(ItemWithMarkup));
+    im->item = item;
+    im->worth = worth;
+    return im;
 }
 
 Item *createItemFromData(const ItemData *data) {
