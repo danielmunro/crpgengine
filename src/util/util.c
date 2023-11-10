@@ -169,3 +169,10 @@ void getComponentPath(
         }
     }
 }
+
+Texture loadImageTexture(const char *filePath) {
+    Image im = LoadImage(filePath);
+    Texture tex = LoadTextureFromImage(im);
+    UnloadImage(im);
+    return tex;
+}
