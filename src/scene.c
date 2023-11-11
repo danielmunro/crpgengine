@@ -34,6 +34,7 @@ typedef struct {
     Encounters *encounters;
     Map *map;
     Shop *shops[MAX_SHOPS];
+    int shopCount;
 } Scene;
 
 typedef struct {
