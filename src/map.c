@@ -15,6 +15,7 @@ typedef enum {
   ACTION_TAKEN_NONE,
   ACTION_TAKEN_ENGAGE_DIALOG,
   ACTION_TAKEN_OPENED_CHEST,
+  ACTION_TAKEN_START_SHOPPING,
 } ActionTaken;
 
 typedef struct {
@@ -52,6 +53,8 @@ typedef struct {
     Chest **chests;
     int chestCount;
     Tile *openedChest;
+    ShopTile *shopTiles[MAX_SHOP_TILES];
+    int shopTileCount;
 } Map;
 
 Map *createMap(int sceneId, const char *sceneName) {
@@ -66,6 +69,7 @@ Map *createMap(int sceneId, const char *sceneName) {
     map->entranceCount = 0;
     map->exitCount = 0;
     map->arriveAtCount = 0;
+    map->shopTileCount = 0;
     map->tileset = createTileset();
     map->chests = calloc(MAX_CHESTS, sizeof(Chest));
     map->chestCount = 0;
@@ -221,6 +225,19 @@ void drawWarpCollisions(const Map *m, Image *image) {
     }
 }
 
+void drawShopCollisions(const Map *m, Image *image) {
+    for (int i = 0; i < m->shopTileCount; i++) {
+        Rectangle area = m->shopTiles[i]->object->area;
+        ImageDrawRectangle(
+                image,
+                (int) area.x,
+                (int) area.y,
+                (int) area.width,
+                (int) area.height,
+                GRAY);
+    }
+}
+
 void renderMapLayer(Map *m, LayerType layer) {
     Vector2D sz = m->tileset->size;
     int width = ui->screen->width / sz.x;
@@ -242,6 +259,9 @@ void renderMapLayer(Map *m, LayerType layer) {
     }
     if (config->showCollisions->warps) {
         drawWarpCollisions(m, &renderedLayer);
+    }
+    if (config->showCollisions->objects) {
+        drawShopCollisions(m, &renderedLayer);
     }
     m->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
     UnloadImage(renderedLayer);
@@ -324,16 +344,16 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
     }
 
     if (config->showCollisions->player) {
-        Rectangle *collision = getMobAnimation(mob)->spriteSheet->collision;
-        if (collision == NULL) {
-            addWarning("configured to show player collision but collision data not set in mob spritesheet");
-            return;
-        }
+        Rectangle collision = getPlayerCollisionArea(p);
+        Vector2 position = (Vector2) {
+                ((mob->position.x * ui->screen->scale) + offset.x),
+                ((mob->position.y * ui->screen->scale) + offset.y),
+        };
         DrawRectangle(
-                (int) (mob->position.x + offset.x + collision->x),
-                (int) (mob->position.y + offset.y + collision->y),
-                (int) collision->width,
-                (int) collision->height,
+                (int) (position.x + collision.x),
+                (int) (position.y + collision.y),
+                (int) collision.width,
+                (int) collision.height,
                 GREEN);
     }
 }
@@ -586,6 +606,20 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
         Response *r = createResponse(ACTION_TAKEN_OPENED_CHEST);
         r->chest = player->blocking->chest;
         return r;
+    }
+    for (int i = 0; i < m->shopTileCount; i++) {
+        Mobile *mob = getPartyLeader(player);
+        Rectangle c = GetCollisionRec(
+                (Rectangle) {
+                    mob->position.x,
+                    mob->position.y,
+                    (float) m->tileset->size.x,
+                    (float) m->tileset->size.y,
+                    },
+                m->shopTiles[i]->object->area);
+        if (c.height > 0 || c.width > 0) {
+            return createResponse(ACTION_TAKEN_START_SHOPPING);
+        }
     }
     return createResponse(ACTION_TAKEN_NONE);
 }

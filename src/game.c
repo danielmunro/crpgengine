@@ -101,6 +101,9 @@ void evaluateResponse(const Game *g, const Response *r) {
                         OPENED_CHEST,
                         message));
     }
+    else if (r->actionTaken == ACTION_TAKEN_START_SHOPPING) {
+        addNotification(g->notifications, createNotification(SAVED, "yolo"));
+    }
 }
 
 void checkMapInput(Game *g) {

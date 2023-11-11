@@ -261,6 +261,19 @@ void parseTilemapObjectGroupChestNode(xmlNodePtr node, ItemManager *im, Map *m) 
     }
 }
 
+void parseTilemapObjectGroupShopNode(xmlNodePtr node, Map *m) {
+    while (node != NULL) {
+        const NodeName name = getNodeNameFromString((const char *) node->name);
+        if (name == NODE_NAME_OBJECT) {
+            const Property *propName = parseProperty(node, PROP_NAME);
+            Object *o = createObject(xmlInt(node, "id"), parseRectangle(node));
+            m->shopTiles[m->shopTileCount] = createShopTile(propName->value, o);
+            m->shopTileCount++;
+        }
+        node = node->next;
+    }
+}
+
 void parseTilemapObjectGroupNode(xmlNodePtr node, ItemManager *im, Map *m) {
     const TilemapObjectGroupName groupName = getTilemapObjectGroupNameFromString(
             xmlString(node, PROP_NAME));
@@ -270,6 +283,8 @@ void parseTilemapObjectGroupNode(xmlNodePtr node, ItemManager *im, Map *m) {
         parseTilemapObjectGroupArriveAtNode(node->children, m);
     } else if (groupName == TILEMAP_OBJECT_GROUP_CHESTS) {
         parseTilemapObjectGroupChestNode(node->children, im, m);
+    } else if (groupName == TILEMAP_OBJECT_GROUP_SHOPS) {
+        parseTilemapObjectGroupShopNode(node->children, m);
     }
 }
 
