@@ -344,16 +344,12 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
     }
 
     if (config->showCollisions->player) {
-        Rectangle collision = getPlayerCollisionArea(p);
-        Vector2 position = (Vector2) {
-                ((mob->position.x * ui->screen->scale) + offset.x),
-                ((mob->position.y * ui->screen->scale) + offset.y),
-        };
+        Rectangle rect = getMobileRectangle(getPartyLeader(p));
         DrawRectangle(
-                (int) (position.x + collision.x),
-                (int) (position.y + collision.y),
-                (int) collision.width,
-                (int) collision.height,
+                (int) ((rect.x * ui->screen->scale) + offset.x),
+                (int) ((rect.y * ui->screen->scale) + offset.y),
+                (int) (rect.width * ui->screen->scale),
+                (int) (rect.height * ui->screen->scale),
                 GREEN);
     }
 }

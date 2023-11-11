@@ -442,13 +442,3 @@ bool losesItemQuantity(Player *player, const ItemReferenceData *ird) {
     addWarning("player didn't have enough items to give :: %d remaining", ird->quantity);
     return false;
 }
-
-Rectangle getPlayerCollisionArea(const Player *p) {
-    Rectangle collision = *getMobAnimation(getPartyLeader(p))->spriteSheet->collision;
-    return (Rectangle) {
-            collision.x * ui->screen->scale,
-            collision.y * ui->screen->scale,
-            collision.width * ui->screen->scale,
-            collision.height * ui->screen->scale,
-    };
-}
