@@ -55,8 +55,8 @@ void slideDownNotifications(NotificationManager *nm) {
             for (int i = 1; i < nm->count + 1; i++) {
                 nm->notifications[i - 1] = nm->notifications[i];
             }
-            nm->count--;
         }
+        nm->count--;
     }
 }
 
