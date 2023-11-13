@@ -47,6 +47,6 @@ showFPS: false
 # Options to enable various object collision overlays. Useful for debugging
 # unexpected collision behavior.
 showCollisions:
-  objects: false
-  player: false
-  warps: false
+  objects: true
+  player: true
+  warps: true
