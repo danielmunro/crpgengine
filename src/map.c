@@ -10,6 +10,7 @@
 #include "headers/notification.h"
 #include "headers/warp.h"
 #include "headers/tile.h"
+#include "headers/shop.h"
 
 typedef enum {
   ACTION_TAKEN_NONE,
@@ -21,6 +22,7 @@ typedef enum {
 typedef struct {
     ActionTaken actionTaken;
     const Chest *chest;
+    const ShopTile *shop;
 } Response;
 
 typedef struct {
@@ -91,6 +93,7 @@ Response *createResponse(ActionTaken actionTaken) {
     Response *a = malloc(sizeof(ActionTaken));
     a->actionTaken = actionTaken;
     a->chest = NULL;
+    a->shop = NULL;
     return a;
 }
 

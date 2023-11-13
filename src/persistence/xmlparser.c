@@ -266,8 +266,12 @@ void parseTilemapObjectGroupShopNode(xmlNodePtr node, Map *m) {
         const NodeName name = getNodeNameFromString((const char *) node->name);
         if (name == NODE_NAME_OBJECT) {
             const Property *propName = parseProperty(node, PROP_NAME);
+            const Property *propId = parseProperty(node, PROP_ID);
             Object *o = createObject(xmlInt(node, "id"), parseRectangle(node));
-            m->shopTiles[m->shopTileCount] = createShopTile(propName->value, o);
+            m->shopTiles[m->shopTileCount] = createShopTile(
+                    TextToInteger(propId->value),
+                    propName->value,
+                    o);
             m->shopTileCount++;
         }
         node = node->next;

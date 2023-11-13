@@ -140,6 +140,7 @@ typedef struct {
 } Chest;
 
 typedef struct {
+    int id;
     const char *name;
     Object *object;
 } ShopTile;
@@ -263,8 +264,9 @@ Chest *createChest(int id, ItemWithQuantity *iq, int coins, Rectangle area) {
     return chest;
 }
 
-ShopTile *createShopTile(const char *name, Object *object) {
+ShopTile *createShopTile(int id, const char *name, Object *object) {
     ShopTile *shop = malloc(sizeof(ShopTile));
+    shop->id = id;
     shop->name = name;
     shop->object = object;
     return shop;
