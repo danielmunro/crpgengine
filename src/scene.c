@@ -65,6 +65,9 @@ Scene *createScene(const int id, const char *name, SceneType type, const char *m
     scene->encounters = createEncounters();
     scene->controlBlockCount = 0;
     scene->shopCount = 0;
+    for (int i = 0; i < MAX_SHOPS; i++) {
+        scene->shops[i] = NULL;
+    }
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         scene->activeControlBlocks[i] = NULL;
     }

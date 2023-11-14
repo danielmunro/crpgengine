@@ -75,6 +75,9 @@ Map *createMap(int sceneId, const char *sceneName) {
     map->tileset = createTileset();
     map->chests = calloc(MAX_CHESTS, sizeof(Chest));
     map->chestCount = 0;
+    for (int i = 0; i < MAX_SHOP_TILES; i++) {
+        map->shopTiles[i] = NULL;
+    }
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         map->mobMovements[i] = NULL;
     }
