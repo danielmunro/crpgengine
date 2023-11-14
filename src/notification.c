@@ -51,7 +51,7 @@ void slideDownNotifications(NotificationManager *nm) {
     nm->slideDown -= amount;
     if (nm->slideDown < 0) {
         nm->slideDown = 0;
-        if (nm->notifications[0] == NULL && nm->notifications[1]) {
+        if (nm->notifications[0] == NULL && nm->notifications[1] != NULL) {
             for (int i = 1; i < nm->count + 1; i++) {
                 nm->notifications[i - 1] = nm->notifications[i];
             }
