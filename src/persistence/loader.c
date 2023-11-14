@@ -128,7 +128,7 @@ void loadShops(ItemManager *im, Scene *s, const char *sceneDirectory) {
             addError("shop data is null :: %s", shopFilePath);
             exit(ConfigurationErrorBadShopData);
         }
-        ItemWithMarkup **items = calloc(MAX_SHOPS, sizeof(Item));
+        ItemWithMarkup **items = calloc(MAX_ITEMS, sizeof(ItemWithMarkup));
         for (int i = 0; i < data->items_count; i++) {
             items[i] = createItemWithMarkup(
                     findItemFromName(im, data->items[i].item),
