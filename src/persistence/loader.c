@@ -112,6 +112,7 @@ void loadEncounters(const Beastiary *beastiary, Scene *scene, const EncountersDa
 }
 
 void loadShops(ItemManager *im, Scene *s, const char *sceneDirectory) {
+    return;
     char shopsDirectory[MAX_FS_PATH_LENGTH];
     sprintf(shopsDirectory, "%s/shops", sceneDirectory);
     if (access(shopsDirectory, F_OK) != 0) {
