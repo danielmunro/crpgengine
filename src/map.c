@@ -10,16 +10,19 @@
 #include "headers/notification.h"
 #include "headers/warp.h"
 #include "headers/tile.h"
+#include "headers/shop.h"
 
 typedef enum {
   ACTION_TAKEN_NONE,
   ACTION_TAKEN_ENGAGE_DIALOG,
   ACTION_TAKEN_OPENED_CHEST,
+  ACTION_TAKEN_START_SHOPPING,
 } ActionTaken;
 
 typedef struct {
     ActionTaken actionTaken;
     const Chest *chest;
+    const ShopTile *shop;
 } Response;
 
 typedef struct {
@@ -52,6 +55,8 @@ typedef struct {
     Chest **chests;
     int chestCount;
     Tile *openedChest;
+    ShopTile *shopTiles[MAX_SHOP_TILES];
+    int shopTileCount;
 } Map;
 
 Map *createMap(int sceneId, const char *sceneName) {
@@ -66,9 +71,13 @@ Map *createMap(int sceneId, const char *sceneName) {
     map->entranceCount = 0;
     map->exitCount = 0;
     map->arriveAtCount = 0;
+    map->shopTileCount = 0;
     map->tileset = createTileset();
     map->chests = calloc(MAX_CHESTS, sizeof(Chest));
     map->chestCount = 0;
+    for (int i = 0; i < MAX_SHOP_TILES; i++) {
+        map->shopTiles[i] = NULL;
+    }
     for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
         map->mobMovements[i] = NULL;
     }
@@ -84,10 +93,11 @@ MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
 }
 
 Response *createResponse(ActionTaken actionTaken) {
-    Response *a = malloc(sizeof(ActionTaken));
-    a->actionTaken = actionTaken;
-    a->chest = NULL;
-    return a;
+    Response *response = malloc(sizeof(Response));
+    response->actionTaken = actionTaken;
+    response->chest = NULL;
+    response->shop = NULL;
+    return response;
 }
 
 Entrance *findEntrance(Map *m, const char *name) {
@@ -221,6 +231,19 @@ void drawWarpCollisions(const Map *m, Image *image) {
     }
 }
 
+void drawShopCollisions(const Map *m, Image *image) {
+    for (int i = 0; i < m->shopTileCount; i++) {
+        Rectangle area = m->shopTiles[i]->object->area;
+        ImageDrawRectangle(
+                image,
+                (int) area.x,
+                (int) area.y,
+                (int) area.width,
+                (int) area.height,
+                GRAY);
+    }
+}
+
 void renderMapLayer(Map *m, LayerType layer) {
     Vector2D sz = m->tileset->size;
     int width = ui->screen->width / sz.x;
@@ -242,6 +265,9 @@ void renderMapLayer(Map *m, LayerType layer) {
     }
     if (config->showCollisions->warps) {
         drawWarpCollisions(m, &renderedLayer);
+    }
+    if (config->showCollisions->objects) {
+        drawShopCollisions(m, &renderedLayer);
     }
     m->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
     UnloadImage(renderedLayer);
@@ -324,16 +350,12 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
     }
 
     if (config->showCollisions->player) {
-        Rectangle *collision = getMobAnimation(mob)->spriteSheet->collision;
-        if (collision == NULL) {
-            addWarning("configured to show player collision but collision data not set in mob spritesheet");
-            return;
-        }
+        Rectangle rect = getMobileRectangle(getPartyLeader(p));
         DrawRectangle(
-                (int) (mob->position.x + offset.x + collision->x),
-                (int) (mob->position.y + offset.y + collision->y),
-                (int) collision->width,
-                (int) collision->height,
+                (int) ((rect.x * ui->screen->scale) + offset.x),
+                (int) ((rect.y * ui->screen->scale) + offset.y),
+                (int) (rect.width * ui->screen->scale),
+                (int) (rect.height * ui->screen->scale),
                 GREEN);
     }
 }
@@ -485,6 +507,11 @@ void evaluateMovement(const Map *m, Player *p) {
 }
 
 void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROLS], const FontStyle *font) {
+    if (player->dialog) {
+        drawMenuRect(ui->textAreas->bottom);
+        drawDialog(player->dialog);
+        return;
+    }
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (cb[i] == NULL) {
             continue;
@@ -576,6 +603,11 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
             return r;
         }
     }
+    if (player->dialog) {
+        clearDialog(player);
+        player->engaged = false;
+        return createResponse(ACTION_TAKEN_NONE);
+    }
     if (player->blocking->mob != NULL) {
         engageWithMobile(player);
         Response *r = createResponse(ACTION_TAKEN_ENGAGE_DIALOG);
@@ -586,6 +618,22 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
         Response *r = createResponse(ACTION_TAKEN_OPENED_CHEST);
         r->chest = player->blocking->chest;
         return r;
+    }
+    for (int i = 0; i < m->shopTileCount; i++) {
+        Mobile *mob = getPartyLeader(player);
+        Rectangle c = GetCollisionRec(
+                (Rectangle) {
+                    mob->position.x,
+                    mob->position.y,
+                    (float) m->tileset->size.x,
+                    (float) m->tileset->size.y,
+                    },
+                m->shopTiles[i]->object->area);
+        if (c.height > 0 || c.width > 0) {
+            Response *r = createResponse(ACTION_TAKEN_START_SHOPPING);
+            r->shop = m->shopTiles[i];
+            return r;
+        }
     }
     return createResponse(ACTION_TAKEN_NONE);
 }

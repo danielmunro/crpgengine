@@ -34,6 +34,7 @@ typedef struct {
     Encounters *encounters;
     Map *map;
     Shop *shops[MAX_SHOPS];
+    int shopsCount;
 } Scene;
 
 typedef struct {
@@ -63,6 +64,10 @@ Scene *createScene(const int id, const char *name, SceneType type, const char *m
     scene->storylineCount = 0;
     scene->encounters = createEncounters();
     scene->controlBlockCount = 0;
+    scene->shopsCount = 0;
+    for (int i = 0; i < MAX_SHOPS; i++) {
+        scene->shops[i] = NULL;
+    }
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         scene->activeControlBlocks[i] = NULL;
     }
@@ -78,8 +83,6 @@ int addSubsceneFiles(SceneLoader *sl) {
             int subCount = getFilesInDirectory(subSceneDir, subScenes);
             for (int j = 0; j < subCount; j++) {
                 sl->scenes[sl->count] = subScenes[j];
-//                char *subSceneFile = malloc(MAX_FS_PATH_LENGTH);
-//                sprintf(subSceneFile, "%s/%s", subSceneDir, subScenes[j]);
                 sl->sceneFiles[sl->count] = malloc(MAX_FS_PATH_LENGTH);
                 sprintf(sl->sceneFiles[sl->count], "%s/%s", subSceneDir, subScenes[j]);
                 sl->count++;

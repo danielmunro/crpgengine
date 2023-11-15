@@ -50,6 +50,7 @@ const char *TilemapObjectGroupNames[] = {
         "warps",
         "arrive_at",
         "chests",
+        "shops",
 };
 
 typedef enum {
@@ -57,6 +58,7 @@ typedef enum {
     TILEMAP_OBJECT_GROUP_WARPS,
     TILEMAP_OBJECT_GROUP_ARRIVE_AT,
     TILEMAP_OBJECT_GROUP_CHESTS,
+    TILEMAP_OBJECT_GROUP_SHOPS,
 } TilemapObjectGroupName;
 
 const char *TilemapNodeTypes[] = {
@@ -136,6 +138,12 @@ typedef struct {
     int coins;
     Rectangle area;
 } Chest;
+
+typedef struct {
+    int id;
+    const char *name;
+    Object *object;
+} ShopTile;
 
 TileType getTileTypeFromString(const char *type) {
     if (type == NULL) {
@@ -254,4 +262,12 @@ Chest *createChest(int id, ItemWithQuantity *iq, int coins, Rectangle area) {
     chest->coins = coins;
     chest->area = area;
     return chest;
+}
+
+ShopTile *createShopTile(int id, const char *name, Object *object) {
+    ShopTile *shop = malloc(sizeof(ShopTile));
+    shop->id = id;
+    shop->name = name;
+    shop->object = object;
+    return shop;
 }
