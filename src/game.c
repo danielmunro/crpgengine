@@ -106,10 +106,10 @@ void evaluateResponse(const Game *g, const Response *r) {
                 ui->textAreas->bottom,
                 g->ui->fonts->default_);
         const Scene *s = g->scenes->current;
+        g->player->engaged = true;
         for (int i = 0; i < s->shopsCount; i++) {
             if (s->shops[i]->id == r->shop->id) {
                 g->player->shop = s->shops[i];
-                g->player->engaged = true;
                 break;
             }
         }
