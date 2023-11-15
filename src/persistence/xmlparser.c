@@ -262,7 +262,6 @@ void parseTilemapObjectGroupChestNode(xmlNodePtr node, ItemManager *im, Map *m) 
 }
 
 void parseTilemapObjectGroupShopNode(xmlNodePtr node, Map *m) {
-    return;
     while (node != NULL) {
         const NodeName name = getNodeNameFromString((const char *) node->name);
         if (name == NODE_NAME_OBJECT) {
