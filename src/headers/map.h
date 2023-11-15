@@ -8,6 +8,7 @@
 #define MAX_MOBILE_MOVEMENTS 64
 #define MAX_TILES 2048
 #define MAX_CHESTS 256
+#define MAX_SHOP_TILES 8
 
 #include "map.c"
 
