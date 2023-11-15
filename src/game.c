@@ -101,18 +101,18 @@ void evaluateResponse(const Game *g, const Response *r) {
                         OPENED_CHEST,
                         message));
     } else if (r->actionTaken == ACTION_TAKEN_START_SHOPPING) {
-//        g->player->dialog = createDialog(
-//                "Welcome to the item shop, what can I get you?",
-//                ui->textAreas->bottom,
-//                g->ui->fonts->default_);
-//        const Scene *s = g->scenes->current;
-//        for (int i = 0; i < s->shopCount; i++) {
-//            if (s->shops[i]->id == r->shop->id) {
-//                g->player->shop = s->shops[i];
-//                g->player->engaged = true;
-//                break;
-//            }
-//        }
+        g->player->dialog = createDialog(
+                "Welcome to the item shop, what can I get you?",
+                ui->textAreas->bottom,
+                g->ui->fonts->default_);
+        const Scene *s = g->scenes->current;
+        for (int i = 0; i < s->shopsCount; i++) {
+            if (s->shops[i]->id == r->shop->id) {
+                g->player->shop = s->shops[i];
+                g->player->engaged = true;
+                break;
+            }
+        }
     }
 }
 

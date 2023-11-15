@@ -34,7 +34,7 @@ typedef struct {
     Encounters *encounters;
     Map *map;
     Shop *shops[MAX_SHOPS];
-    int shopCount;
+    int shopsCount;
 } Scene;
 
 typedef struct {
@@ -64,7 +64,7 @@ Scene *createScene(const int id, const char *name, SceneType type, const char *m
     scene->storylineCount = 0;
     scene->encounters = createEncounters();
     scene->controlBlockCount = 0;
-    scene->shopCount = 0;
+    scene->shopsCount = 0;
     for (int i = 0; i < MAX_SHOPS; i++) {
         scene->shops[i] = NULL;
     }

@@ -136,7 +136,7 @@ void loadShops(ItemManager *im, Scene *s, const char *sceneDirectory) {
                     data->items[i].cost);
         }
         s->shops[f] = createShop(data->id, items, data->coins);
-        s->shopCount++;
+        s->shopsCount++;
         free((ShopData *) data);
     }
     free(shopFiles);

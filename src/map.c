@@ -93,11 +93,11 @@ MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
 }
 
 Response *createResponse(ActionTaken actionTaken) {
-    Response *a = malloc(sizeof(ActionTaken));
-    a->actionTaken = actionTaken;
-    a->chest = NULL;
-    a->shop = NULL;
-    return a;
+    Response *response = malloc(sizeof(Response));
+    response->actionTaken = actionTaken;
+    response->chest = NULL;
+    response->shop = NULL;
+    return response;
 }
 
 Entrance *findEntrance(Map *m, const char *name) {
@@ -507,11 +507,11 @@ void evaluateMovement(const Map *m, Player *p) {
 }
 
 void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROLS], const FontStyle *font) {
-//    if (player->dialog) {
-//        drawMenuRect(ui->textAreas->bottom);
-//        drawDialog(player->dialog);
-//        return;
-//    }
+    if (player->dialog) {
+        drawMenuRect(ui->textAreas->bottom);
+        drawDialog(player->dialog);
+        return;
+    }
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
         if (cb[i] == NULL) {
             continue;
@@ -603,11 +603,11 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
             return r;
         }
     }
-//    if (player->dialog) {
-//        clearDialog(player);
-//        player->engaged = false;
-//        return createResponse(ACTION_TAKEN_NONE);
-//    }
+    if (player->dialog) {
+        clearDialog(player);
+        player->engaged = false;
+        return createResponse(ACTION_TAKEN_NONE);
+    }
     if (player->blocking->mob != NULL) {
         engageWithMobile(player);
         Response *r = createResponse(ACTION_TAKEN_ENGAGE_DIALOG);
@@ -619,22 +619,22 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
         r->chest = player->blocking->chest;
         return r;
     }
-//    for (int i = 0; i < m->shopTileCount; i++) {
-//        Mobile *mob = getPartyLeader(player);
-//        Rectangle c = GetCollisionRec(
-//                (Rectangle) {
-//                    mob->position.x,
-//                    mob->position.y,
-//                    (float) m->tileset->size.x,
-//                    (float) m->tileset->size.y,
-//                    },
-//                m->shopTiles[i]->object->area);
-//        if (c.height > 0 || c.width > 0) {
-//            Response *r = createResponse(ACTION_TAKEN_START_SHOPPING);
-//            r->shop = m->shopTiles[i];
-//            return r;
-//        }
-//    }
+    for (int i = 0; i < m->shopTileCount; i++) {
+        Mobile *mob = getPartyLeader(player);
+        Rectangle c = GetCollisionRec(
+                (Rectangle) {
+                    mob->position.x,
+                    mob->position.y,
+                    (float) m->tileset->size.x,
+                    (float) m->tileset->size.y,
+                    },
+                m->shopTiles[i]->object->area);
+        if (c.height > 0 || c.width > 0) {
+            Response *r = createResponse(ACTION_TAKEN_START_SHOPPING);
+            r->shop = m->shopTiles[i];
+            return r;
+        }
+    }
     return createResponse(ACTION_TAKEN_NONE);
 }
 
