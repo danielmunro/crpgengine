@@ -1,4 +1,5 @@
+id: 1
 coins: 400
-inventory:
-  - item: a potion
-    cost: 20
+items:
+  - item: potion
+    cost: 50

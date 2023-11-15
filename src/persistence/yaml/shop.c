@@ -4,9 +4,10 @@ typedef struct {
 } InventoryData;
 
 typedef struct {
+    int id;
     int coins;
-    InventoryData inventory[MAX_ITEMS];
-    int inventory_count;
+    InventoryData *items;
+    int items_count;
 } ShopData;
 
 static const cyaml_schema_field_t inventoryFieldSchema[] = {
@@ -25,9 +26,11 @@ static const cyaml_schema_value_t inventorySchema = {
 
 static const cyaml_schema_field_t shopTopMappingField[] = {
         CYAML_FIELD_INT(
+                "id", CYAML_FLAG_POINTER, ShopData, id),
+        CYAML_FIELD_INT(
                 "coins", CYAML_FLAG_POINTER, ShopData, coins),
         CYAML_FIELD_SEQUENCE(
-                "inventory", CYAML_FLAG_POINTER, ShopData, inventory,
+                "items", CYAML_FLAG_POINTER, ShopData, items,
                 &inventorySchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
