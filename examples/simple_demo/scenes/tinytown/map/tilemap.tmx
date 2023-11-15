@@ -82,7 +82,7 @@
   <object id="2" name="to_building3" type="exit" x="320" y="208" width="16" height="16"/>
   <object id="3" name="to_shop" type="exit" x="192" y="288" width="16" height="16">
    <properties>
-    <property name="scene" value="shop"/>
+    <property name="scene" value="item_shop"/>
     <property name="to" value="from_tinytown"/>
    </properties>
   </object>

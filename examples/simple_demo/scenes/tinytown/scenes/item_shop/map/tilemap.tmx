@@ -49,24 +49,25 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="5" name="shops">
+   <object id="10" name="item_shop" type="shop" x="240" y="128" width="16" height="16">
+    <properties>
+     <property name="id" type="int" value="1"/>
+     <property name="name" value="item_shop"/>
+    </properties>
+   </object>
+  </objectgroup>
  <objectgroup id="4" name="warps">
-  <object id="3" name="start" type="entrance" x="240" y="176" width="16" height="16"/>
-  <object id="7" name="from_tinytown" type="entrance" x="240" y="192" width="16" height="16">
+  <object id="3" name="start" type="entrance" x="240" y="160" width="16" height="16"/>
+  <object id="7" name="from_tinytown" type="entrance" x="240" y="176" width="16" height="16">
    <properties>
     <property name="direction" value="up"/>
    </properties>
   </object>
-  <object id="9" name="to_tinytown" type="exit" x="240" y="208" width="16" height="16">
+  <object id="9" name="to_tinytown" type="exit" x="240" y="224" width="16" height="16">
    <properties>
     <property name="scene" value="tinytown"/>
     <property name="to" value="from_shop"/>
-   </properties>
-  </object>
- </objectgroup>
- <objectgroup id="5" name="shops">
-  <object id="10" name="foo" type="shop" x="240" y="128" width="16" height="16">
-   <properties>
-    <property name="name" value="tinytown_items"/>
    </properties>
   </object>
  </objectgroup>
