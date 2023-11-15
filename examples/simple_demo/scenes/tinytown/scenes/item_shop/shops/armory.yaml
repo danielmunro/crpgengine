@@ -1,3 +1,6 @@
 id: 2
+messages:
+  welcome: "Welcome to Goran's implements of destruction."
+  goodbye: "May you smite your enemies."
 coins: 1000
 items: []

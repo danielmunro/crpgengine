@@ -1,5 +1,8 @@
 id: 1
 coins: 400
+messages:
+  welcome: "Check out the finest items this side of Halbarad."
+  goodbye: "Come again."
 items:
   - item: potion
     cost: 50

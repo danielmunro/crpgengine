@@ -105,7 +105,7 @@ void evaluateResponse(const Game *g, const Response *r) {
         for (int i = 0; i < s->shopsCount; i++) {
             if (s->shops[i]->id == r->shop->id) {
                 g->player->dialog = createDialog(
-                        "Welcome to the item shop, what can I get you?",
+                        s->shops[i]->messages->welcome,
                         ui->textAreas->bottom,
                         g->ui->fonts->default_);
                 g->player->engaged = true;
