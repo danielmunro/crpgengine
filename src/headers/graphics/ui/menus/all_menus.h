@@ -16,5 +16,6 @@
 #include "graphics/ui/menus/fight/magic_select_menu.c"
 #include "headers/graphics/ui/menus/fight/mobile_select_menu.h"
 #include "graphics/ui/menus/fight/mobile_target_menu.c"
+#include "graphics/ui/menus/shop_menu.c"
 
 #endif //CJRPGENGINE_ALL_MENUS_H

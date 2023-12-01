@@ -89,6 +89,14 @@ void mapMenuKeyPressed(Game *g) {
     addMenu(g->menus, findMenu(g->ui->menus, PARTY_MENU));
 }
 
+void evaluateShopBuyKeyPressed() {
+
+}
+
+void evaluateShopSellKeyPressed() {
+
+}
+
 void evaluateResponse(const Game *g, const Response *r) {
     if (r->actionTaken == ACTION_TAKEN_OPENED_CHEST) {
         const Chest *c = r->chest;
@@ -110,10 +118,23 @@ void evaluateResponse(const Game *g, const Response *r) {
                         g->ui->fonts->default_);
                 g->player->engaged = true;
                 g->player->shop = s->shops[i];
+                g->player->shopStep = SHOP_STEP_WELCOME;
                 return;
             }
         }
         addError("shop not found :: %d", r->shop->id);
+    } else if (r->actionTaken == ACTION_TAKEN_SHOP_BUY) {
+        g->player->shopStep = SHOP_STEP_GOODBYE;
+        g->player->dialog = createDialog(
+                g->player->shop->messages->goodbye,
+                ui->textAreas->bottom,
+                g->ui->fonts->default_);
+    } else if (r->actionTaken == ACTION_TAKEN_SHOP_SELL) {
+        g->player->shopStep = SHOP_STEP_GOODBYE;
+        g->player->dialog = createDialog(
+                g->player->shop->messages->goodbye,
+                ui->textAreas->bottom,
+                g->ui->fonts->default_);
     }
 }
 
@@ -210,6 +231,7 @@ void doExplorationLoop(Game *g) {
     checkMapInput(g);
     drawMapView(
             s->map,
+            g->ui,
             g->player,
             g->notifications,
             s->activeControlBlocks,

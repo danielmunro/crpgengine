@@ -11,12 +11,15 @@
 #include "headers/warp.h"
 #include "headers/tile.h"
 #include "headers/shop.h"
+#include "headers/ui_manager.h"
 
 typedef enum {
   ACTION_TAKEN_NONE,
   ACTION_TAKEN_ENGAGE_DIALOG,
   ACTION_TAKEN_OPENED_CHEST,
   ACTION_TAKEN_START_SHOPPING,
+  ACTION_TAKEN_SHOP_BUY,
+  ACTION_TAKEN_SHOP_SELL,
 } ActionTaken;
 
 typedef struct {
@@ -533,8 +536,30 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
     }
 }
 
+void drawShopWindow() {
+    float width = (float) (ui->screen->width * 0.8);
+    float height = (float) (ui->screen->height * 0.8);
+    drawMenuRect((Rectangle) {
+            (float) (ui->screen->width * 0.1),
+            (float) (ui->screen->height * 0.1),
+            width,
+            height,
+    });
+}
+
+void drawShopBuyDialog(const Player *p, const Menu *m) {
+    drawShopWindow();
+    drawMenuRect(ui->textAreas->full);
+//    m->draw(p->menuContext);
+}
+
+void drawShopSellDialog() {
+    drawShopWindow();
+}
+
 void drawMapView(
         Map *m,
+        UIManager *uiManager,
         Player *p,
         NotificationManager *nm,
         ControlBlock *c[MAX_ACTIVE_CONTROLS],
@@ -553,6 +578,11 @@ void drawMapView(
     DrawTextureEx(m->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);
+    if (p->shopStep == SHOP_STEP_BUY) {
+        drawShopBuyDialog(p, findMenu(uiManager->menus, SHOP_MENU));
+    } else if (p->shopStep == SHOP_STEP_SELL) {
+        drawShopSellDialog();
+    }
     if (config->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }
@@ -602,6 +632,21 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
             Response *r = createResponse(ACTION_TAKEN_ENGAGE_DIALOG);
             return r;
         }
+    }
+    if (player->shopStep == SHOP_STEP_WELCOME) {
+        clearDialog(player);
+        player->shopStep = SHOP_STEP_BUY;
+        return createResponse(ACTION_TAKEN_NONE);
+    } else if (player->shopStep == SHOP_STEP_BUY) {
+        return createResponse(ACTION_TAKEN_SHOP_BUY);
+    } else if (player->shopStep == SHOP_STEP_SELL) {
+        return createResponse(ACTION_TAKEN_SHOP_SELL);
+    } else if (player->shopStep == SHOP_STEP_GOODBYE) {
+        clearDialog(player);
+        player->engaged = false;
+        player->shop = NULL;
+        player->shopStep = SHOP_STEP_NONE;
+        return createResponse(ACTION_TAKEN_NONE);
     }
     if (player->dialog) {
         clearDialog(player);

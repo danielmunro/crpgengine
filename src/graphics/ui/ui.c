@@ -229,9 +229,15 @@ void updateDialog(Dialog *dialog) {
 
 void drawDialog(Dialog *dialog) {
     int amount = (int) ceil(dialog->timeElapsed / 5);
+    if (amount == 0) {
+        return;
+    }
+    int len = (int) strlen(dialog->message);
+    if (amount > len) {
+        amount = len;
+    }
     char message[MAX_MESSAGE_BUFFER] = "";
     memcpy(message, &dialog->message[0], amount);
-    int len = (int) strlen(dialog->message);
     while (dialog->message[amount - 1] != ' ' && amount < len) {
         strcat(message, "\t");
         amount++;

@@ -23,4 +23,5 @@ typedef enum {
     ACTION_SELECT_FIGHT_MENU,
     MAGIC_FIGHT_MENU,
     ITEMS_FIGHT_MENU,
+    SHOP_MENU,
 } MenuType;

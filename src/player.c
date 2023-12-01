@@ -35,6 +35,14 @@ typedef struct {
     SaveFile **saves;
 } SaveFiles;
 
+typedef enum {
+    SHOP_STEP_NONE,
+    SHOP_STEP_WELCOME,
+    SHOP_STEP_BUY,
+    SHOP_STEP_SELL,
+    SHOP_STEP_GOODBYE,
+} ShopStep;
+
 typedef struct {
     Mobile **party;
     Mobile **onDeck;
@@ -46,6 +54,7 @@ typedef struct {
     Dialog *dialog;
     OpenedChest **openedChests;
     Shop *shop;
+    ShopStep shopStep;
     int openedChestsCount;
     bool engaged;
     int coins;
