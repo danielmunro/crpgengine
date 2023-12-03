@@ -98,7 +98,6 @@ Menu *createMenu(
 }
 
 MenuContext *createMenuContext(
-        Fight *fight,
         Player *player,
         Fonts *fonts,
         UISprite *uiSprite,
@@ -106,7 +105,7 @@ MenuContext *createMenuContext(
         const char *scene,
         int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
-    context->fight = fight;
+    context->fight = NULL;
     context->player = player;
     context->scene = scene;
     context->cursorLine = cursorLine;

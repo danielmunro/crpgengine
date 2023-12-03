@@ -132,16 +132,22 @@ int getMenuList(UIManager *uiMan) {
     return count;
 }
 
-UIManager *createUIManager(UIData *uiConfig, UISprite *uiSprite) {
+Fonts *createFonts(UIData *uiConfig) {
+    Fonts *fonts = malloc(sizeof(Fonts));
+    fonts->default_ = createFontFromData(uiConfig->fonts->default_);
+    fonts->disable = createFontFromData(uiConfig->fonts->disable);
+    fonts->highlight = createFontFromData(uiConfig->fonts->highlight);
+    fonts->warning = createFontFromData(uiConfig->fonts->warning);
+    fonts->danger = createFontFromData(uiConfig->fonts->danger);
+    return fonts;
+}
+
+UIManager *createUIManager(UIData *uiConfig, UISprite *uiSprite, Fonts *fonts, MenuContext *menuContext) {
     UIManager *uiMan = malloc(sizeof(UIManager));
-    uiMan->fonts = malloc(sizeof(Fonts));
-    uiMan->fonts->default_ = createFontFromData(uiConfig->fonts->default_);
-    uiMan->fonts->disable = createFontFromData(uiConfig->fonts->disable);
-    uiMan->fonts->highlight = createFontFromData(uiConfig->fonts->highlight);
-    uiMan->fonts->warning = createFontFromData(uiConfig->fonts->warning);
-    uiMan->fonts->danger = createFontFromData(uiConfig->fonts->danger);
+    uiMan->fonts = fonts;
     uiMan->menuCount = getMenuList(uiMan);
     uiMan->uiSprite = uiSprite;
     uiMan->config = uiConfig;
+    uiMan->menuContext = menuContext;
     return uiMan;
 }

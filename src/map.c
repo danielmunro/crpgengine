@@ -547,10 +547,10 @@ void drawShopWindow() {
     });
 }
 
-void drawShopBuyDialog(const Player *p, const Menu *m) {
-    drawShopWindow();
-    drawMenuRect(ui->textAreas->full);
-//    m->draw(p->menuContext);
+void drawShopBuyDialog(const Menu *m, MenuContext *mc) {
+//    drawShopWindow();
+//    drawMenuRect(ui->textAreas->full);
+    m->draw(mc);
 }
 
 void drawShopSellDialog() {
@@ -579,7 +579,7 @@ void drawMapView(
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);
     if (p->shopStep == SHOP_STEP_BUY) {
-        drawShopBuyDialog(p, findMenu(uiManager->menus, SHOP_MENU));
+        drawShopBuyDialog(findMenu(uiManager->menus, SHOP_MENU), uiManager->menuContext);
     } else if (p->shopStep == SHOP_STEP_SELL) {
         drawShopSellDialog();
     }

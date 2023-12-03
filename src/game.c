@@ -78,14 +78,6 @@ void evaluateExits(Game *g) {
 }
 
 void mapMenuKeyPressed(Game *g) {
-    g->ui->menuContext = createMenuContext(
-            g->fights->fight,
-            g->player,
-            g->ui->fonts,
-            g->ui->uiSprite,
-            g->spells->spells,
-            g->scenes->current->name,
-            0);
     addMenu(g->menus, findMenu(g->ui->menus, PARTY_MENU));
 }
 
@@ -171,11 +163,7 @@ void checkMapInput(Game *g) {
 
 void checkMenuInput(Game *g) {
     if (IsKeyPressed(KEY_ESCAPE)) {
-        int menuCount = removeMenu(g->menus);
-        if (menuCount == 0) {
-            free(g->ui->menuContext);
-            g->ui->menuContext = NULL;
-        }
+        removeMenu(g->menus);
     }
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *menu = getCurrentMenu(g->menus);
@@ -215,14 +203,7 @@ void checkFights(Game *g, const Scene *s) {
                 g->player);
         Animation *animation = findAnimation(getPartyLeader(g->player)->animations, DIRECTION_LEFT);
         animation->currentFrame = animation->firstFrame;
-        g->ui->menuContext = createMenuContext(
-                g->fights->fight,
-                g->player,
-                g->ui->fonts,
-                g->ui->uiSprite,
-                g->spells->spells,
-                NULL,
-                0);
+        g->ui->menuContext->fight = g->fights->fight;
     }
 }
 
@@ -318,11 +299,6 @@ Game *createGame() {
     Game *g = malloc(sizeof(Game));
     g->sprites = loadSpritesheetManager();
     UIData *uiData = loadUIData();
-    g->ui = createUIManager(
-            uiData,
-            createUISprite(
-                    findSpritesheetByName(g->sprites, uiData->sprite->name),
-                    uiData));
     g->animations = createAnimationManager();
     loadAllAnimations(g->animations, g->sprites);
     g->audio = loadAudioManager();
@@ -349,6 +325,20 @@ Game *createGame() {
     addDebug("done creating game object");
     free(save);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
+    Fonts *fonts = createFonts(uiData);
+    UISprite *uiSprite = createUISprite(findSpritesheetByName(g->sprites, uiData->sprite->name), uiData);
+    MenuContext *menuContext = createMenuContext(
+            g->player,
+            fonts,
+            uiSprite,
+            g->spells->spells,
+            g->scenes->current->name,
+            0);
+    g->ui = createUIManager(
+            uiData,
+            uiSprite,
+            fonts,
+            menuContext);
     g->fights = createFightManager(g->ui, g->spells, g->notifications);
     return g;
 }
