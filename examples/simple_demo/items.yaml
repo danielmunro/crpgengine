@@ -4,6 +4,9 @@ items:
   worth: 30
   attributes:
     hp: 20
+- name: raise
+  type: consumable
+  worth: 80
 - name: iron sword
   type: equipment
   position: weapon

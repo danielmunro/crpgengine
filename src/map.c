@@ -578,11 +578,11 @@ void drawMapView(
     DrawTextureEx(m->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);
-    if (p->shopStep == SHOP_STEP_BUY) {
-        drawShopBuyDialog(findMenu(uiManager->menus, SHOP_MENU), uiManager->menuContext);
-    } else if (p->shopStep == SHOP_STEP_SELL) {
-        drawShopSellDialog();
-    }
+//    if (p->shopStep == SHOP_STEP_BUY) {
+//        drawShopBuyDialog(findMenu(uiManager->menus, SHOP_MENU), uiManager->menuContext);
+//    } else if (p->shopStep == SHOP_STEP_SELL) {
+//        drawShopSellDialog();
+//    }
     if (config->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }

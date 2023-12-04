@@ -51,7 +51,10 @@ typedef enum {
     IN_GAME_MENU_BOX,
     PARTY_BOX,
     QUIT_BOX,
-    SHOP_BOX,
+    SHOP_WELCOME_BOX,
+    SHOP_BUY_BOX,
+    SHOP_SELL_BOX,
+    SHOP_GOODBYE_BOX,
 
     // fight
     MOBILE_SELECT_BOX,

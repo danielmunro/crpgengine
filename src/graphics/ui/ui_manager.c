@@ -118,12 +118,19 @@ int getMenuList(UIManager *uiMan) {
                     getDefaultNextOption,
                     &itemSelectMenuItemSelected),
             createMenu(
-                    SHOP_MENU,
-                    &getShopCursorLength,
-                    drawShopMenuScreen,
+                    SHOP_WELCOME_MENU,
+                    &getShopWelcomeCursorLength,
+                    drawShopWelcomeMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
-                    &shopMenuItemSelected),
+                    &shopWelcomeMenuItemSelected),
+            createMenu(
+                    SHOP_BUY_MENU,
+                    &getShopBuyCursorLength,
+                    drawShopBuyMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
+                    &shopBuyMenuItemSelected),
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {

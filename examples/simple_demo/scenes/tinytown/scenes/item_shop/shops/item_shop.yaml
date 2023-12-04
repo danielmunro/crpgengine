@@ -6,3 +6,5 @@ messages:
 items:
   - item: potion
     cost: 50
+  - item: raise
+    cost: 300

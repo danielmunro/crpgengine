@@ -101,32 +101,19 @@ void evaluateResponse(const Game *g, const Response *r) {
                         OPENED_CHEST,
                         message));
     } else if (r->actionTaken == ACTION_TAKEN_START_SHOPPING) {
+        if (g->player->shop != NULL) {
+            g->player->shop = NULL;
+            return;
+        }
         const Scene *s = g->scenes->current;
         for (int i = 0; i < s->shopsCount; i++) {
             if (s->shops[i]->id == r->shop->id) {
-                g->player->dialog = createDialog(
-                        s->shops[i]->messages->welcome,
-                        ui->textAreas->bottom,
-                        g->ui->fonts->default_);
-                g->player->engaged = true;
                 g->player->shop = s->shops[i];
-                g->player->shopStep = SHOP_STEP_WELCOME;
+                addMenu(g->menus, findMenu(g->ui->menus, SHOP_WELCOME_MENU));
                 return;
             }
         }
         addError("shop not found :: %d", r->shop->id);
-    } else if (r->actionTaken == ACTION_TAKEN_SHOP_BUY) {
-        g->player->shopStep = SHOP_STEP_GOODBYE;
-        g->player->dialog = createDialog(
-                g->player->shop->messages->goodbye,
-                ui->textAreas->bottom,
-                g->ui->fonts->default_);
-    } else if (r->actionTaken == ACTION_TAKEN_SHOP_SELL) {
-        g->player->shopStep = SHOP_STEP_GOODBYE;
-        g->player->dialog = createDialog(
-                g->player->shop->messages->goodbye,
-                ui->textAreas->bottom,
-                g->ui->fonts->default_);
     }
 }
 

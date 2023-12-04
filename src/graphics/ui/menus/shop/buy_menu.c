@@ -1,17 +1,17 @@
 #include "headers/graphics/ui/menu.h"
 
-int getShopCursorLength(const MenuContext *mc) {
+int getShopBuyCursorLength(const MenuContext *mc) {
     return mc->player->shop->itemCount;
 }
 
-void drawShopMenuScreen(MenuContext *menuContext) {
+void drawShopBuyMenuScreen(MenuContext *menuContext) {
     const FontStyle *defaultFont = menuContext->fonts->default_;
     TextBox *b = findOrCreateTextBox(
             menuContext,
-            SHOP_BOX,
+            SHOP_BUY_BOX,
             ui->textAreas->medium);
     drawMenuRect(b->area);
-    for (int i = 0; i < getShopCursorLength(menuContext); i++) {
+    for (int i = 0; i < getShopBuyCursorLength(menuContext); i++) {
         drawInMenu(b, menuContext->player->shop->items[i]->item->name);
     }
     drawRightCursor(
@@ -22,6 +22,6 @@ void drawShopMenuScreen(MenuContext *menuContext) {
             });
 }
 
-MenuSelectResponse *shopMenuItemSelected() {
-    return createMenuSelectResponse(CLOSE_MENU, SAVE_MENU);
+MenuSelectResponse *shopBuyMenuItemSelected() {
+    return createMenuSelectResponse(CLOSE_MENU, SHOP_BUY_MENU);
 }
