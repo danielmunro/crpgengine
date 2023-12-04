@@ -1,7 +1,7 @@
 #include "headers/graphics/ui/menu.h"
 
 int getShopCursorLength(const MenuContext *mc) {
-    return sizeof(mc->player->shop->items) / sizeof(ItemWithMarkup);
+    return mc->player->shop->itemCount;
 }
 
 void drawShopMenuScreen(MenuContext *menuContext) {
@@ -18,7 +18,7 @@ void drawShopMenuScreen(MenuContext *menuContext) {
             menuContext->uiSprite,
             (Vector2) {
                     b->area.x,
-                    b->area.y + line(4 + menuContext->cursorLine, defaultFont->lineHeight)
+                    b->area.y + line(menuContext->cursorLine, defaultFont->lineHeight)
             });
 }
 
