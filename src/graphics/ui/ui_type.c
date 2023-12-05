@@ -53,6 +53,7 @@ typedef enum {
     QUIT_BOX,
     SHOP_WELCOME_BOX,
     SHOP_BUY_BOX,
+    SHOP_COSTS_BOX,
     SHOP_SELL_BOX,
     SHOP_GOODBYE_BOX,
 

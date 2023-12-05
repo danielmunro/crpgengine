@@ -10,9 +10,25 @@ void drawShopBuyMenuScreen(MenuContext *menuContext) {
             menuContext,
             SHOP_BUY_BOX,
             ui->textAreas->medium);
+    TextBox *b2 = findOrCreateTextBox(
+            menuContext,
+            SHOP_COSTS_BOX,
+            ui->textAreas->mediumRight);
     drawMenuRect(b->area);
     for (int i = 0; i < getShopBuyCursorLength(menuContext); i++) {
-        drawInMenu(b, menuContext->shop->items[i]->item->name);
+        const ItemWithMarkup *item = menuContext->shop->items[i];
+        const FontStyle *fs;
+        if (item->worth > menuContext->player->coins) {
+            fs = menuContext->fonts->disable;
+        } else if (menuContext->cursorLine == i) {
+            fs = menuContext->fonts->highlight;
+        } else {
+            fs = menuContext->fonts->default_;
+        }
+        drawInMenuWithStyle(b, fs, item->item->name);
+        char cost[4];
+        sprintf(cost, "%d", item->worth);
+        drawInMenuWithStyle(b2, fs, cost);
     }
     drawRightCursor(
             menuContext->uiSprite,

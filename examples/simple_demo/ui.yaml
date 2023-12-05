@@ -47,6 +47,11 @@ textAreas:
     y: .2
     width: .6
     height: .6
+  mediumRight:
+    x: .6
+    y: .2
+    width: .2
+    height: .6
   full:
     x: 0
     y: 0

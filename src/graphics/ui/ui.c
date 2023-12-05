@@ -49,6 +49,7 @@ typedef struct {
     Rectangle bottomMidRight;
     Rectangle bottomMid;
     Rectangle midRight;
+    Rectangle mediumRight;
 } TextAreasConfig;
 
 typedef struct {
@@ -152,6 +153,7 @@ void createUIConfig(UIData *data) {
     ui->textAreas = malloc(sizeof(TextAreasConfig));
     ui->textAreas->small = getScreenRectangle(data->textAreas->small);
     ui->textAreas->medium = getScreenRectangle(data->textAreas->medium);
+    ui->textAreas->mediumRight = getScreenRectangle(data->textAreas->mediumRight);
     ui->textAreas->full = getScreenRectangle(data->textAreas->full);
     ui->textAreas->bottom = getScreenRectangle(data->textAreas->bottom);
     ui->textAreas->left = getScreenRectangle(data->textAreas->left);
@@ -273,7 +275,7 @@ float line(int line, float lineHeight) {
     return (float) line * lineHeight;
 }
 
-void drawScrollableInMenuWithStyle(TextBox *tb, FontStyle *fs, const char *text, int menuCursor) {
+void drawScrollableInMenuWithStyle(TextBox *tb, const FontStyle *fs, const char *text, int menuCursor) {
     float offset = getScrollOffset(fs->lineHeight, menuCursor, tb->area.height);
     float y = tb->area.y
               + line(tb->cursor, fs->lineHeight)
@@ -288,7 +290,7 @@ void drawScrollableInMenuWithStyle(TextBox *tb, FontStyle *fs, const char *text,
     tb->cursor++;
 }
 
-void drawInMenuWithStyle(TextBox *tb, FontStyle *fs, const char *text) {
+void drawInMenuWithStyle(TextBox *tb, const FontStyle *fs, const char *text) {
     drawScrollableInMenuWithStyle(tb, fs, text, 0);
 }
 

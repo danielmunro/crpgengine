@@ -6,7 +6,12 @@ items:
     hp: 20
 - name: raise
   type: consumable
-  worth: 80
+  worth: 150
+- name: ether
+  type: consumable
+  worth: 100
+  attributes:
+    mana: 20
 - name: iron sword
   type: equipment
   position: weapon
