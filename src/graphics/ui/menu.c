@@ -49,6 +49,7 @@ typedef struct {
     Beast *targetBeast;
     Mobile *targetMob;
     ActionType actionType;
+    Shop *shop;
     int scrollOffset;
 } MenuContext;
 
@@ -119,6 +120,7 @@ MenuContext *createMenuContext(
     context->targetBeast = NULL;
     context->targetMob = NULL;
     context->actionType = NONE;
+    context->shop = NULL;
     context->scrollOffset = 0;
     return context;
 }

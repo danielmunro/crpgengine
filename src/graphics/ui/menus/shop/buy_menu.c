@@ -1,7 +1,7 @@
 #include "headers/graphics/ui/menu.h"
 
 int getShopBuyCursorLength(const MenuContext *mc) {
-    return mc->player->shop->itemCount;
+    return mc->shop->itemCount;
 }
 
 void drawShopBuyMenuScreen(MenuContext *menuContext) {
@@ -12,7 +12,7 @@ void drawShopBuyMenuScreen(MenuContext *menuContext) {
             ui->textAreas->medium);
     drawMenuRect(b->area);
     for (int i = 0; i < getShopBuyCursorLength(menuContext); i++) {
-        drawInMenu(b, menuContext->player->shop->items[i]->item->name);
+        drawInMenu(b, menuContext->shop->items[i]->item->name);
     }
     drawRightCursor(
             menuContext->uiSprite,

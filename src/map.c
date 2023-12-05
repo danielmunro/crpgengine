@@ -633,21 +633,6 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
             return r;
         }
     }
-    if (player->shopStep == SHOP_STEP_WELCOME) {
-        clearDialog(player);
-        player->shopStep = SHOP_STEP_BUY;
-        return createResponse(ACTION_TAKEN_NONE);
-    } else if (player->shopStep == SHOP_STEP_BUY) {
-        return createResponse(ACTION_TAKEN_SHOP_BUY);
-    } else if (player->shopStep == SHOP_STEP_SELL) {
-        return createResponse(ACTION_TAKEN_SHOP_SELL);
-    } else if (player->shopStep == SHOP_STEP_GOODBYE) {
-        clearDialog(player);
-        player->engaged = false;
-        player->shop = NULL;
-        player->shopStep = SHOP_STEP_NONE;
-        return createResponse(ACTION_TAKEN_NONE);
-    }
     if (player->dialog) {
         clearDialog(player);
         player->engaged = false;

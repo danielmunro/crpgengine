@@ -101,14 +101,14 @@ void evaluateResponse(const Game *g, const Response *r) {
                         OPENED_CHEST,
                         message));
     } else if (r->actionTaken == ACTION_TAKEN_START_SHOPPING) {
-        if (g->player->shop != NULL) {
-            g->player->shop = NULL;
+        if (g->ui->menuContext->shop != NULL) {
+            g->ui->menuContext->shop = NULL;
             return;
         }
         const Scene *s = g->scenes->current;
         for (int i = 0; i < s->shopsCount; i++) {
             if (s->shops[i]->id == r->shop->id) {
-                g->player->shop = s->shops[i];
+                g->ui->menuContext->shop = s->shops[i];
                 addMenu(g->menus, findMenu(g->ui->menus, SHOP_WELCOME_MENU));
                 return;
             }

@@ -35,14 +35,6 @@ typedef struct {
     SaveFile **saves;
 } SaveFiles;
 
-typedef enum {
-    SHOP_STEP_NONE,
-    SHOP_STEP_WELCOME,
-    SHOP_STEP_BUY,
-    SHOP_STEP_SELL,
-    SHOP_STEP_GOODBYE,
-} ShopStep;
-
 typedef struct {
     Mobile **party;
     Mobile **onDeck;
@@ -53,8 +45,6 @@ typedef struct {
     Mobile *engageable;
     Dialog *dialog;
     OpenedChest **openedChests;
-    Shop *shop;
-    ShopStep shopStep;
     int openedChestsCount;
     bool engaged;
     int coins;
@@ -118,7 +108,6 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
         player->party[i] = mobs[i];
         player->partyCount = i + 1;
     }
-    player->shop = NULL;
     player->itemCount = itemCount;
     player->items = items;
     player->onDeck = calloc(MAX_PARTY_SIZE, sizeof(Mobile));
