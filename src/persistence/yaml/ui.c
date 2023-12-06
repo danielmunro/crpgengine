@@ -82,6 +82,7 @@ typedef struct {
 } TextAreaData;
 
 typedef struct {
+    TextAreaData *alert;
     TextAreaData *small;
     TextAreaData *medium;
     TextAreaData *full;
@@ -251,6 +252,8 @@ static const cyaml_schema_field_t textAreaFieldSchema[] = {
 };
 
 static const cyaml_schema_field_t textAreasFieldSchema[] = {
+        CYAML_FIELD_MAPPING_PTR(
+                "alert", CYAML_FLAG_POINTER, TextAreasData, alert, textAreaFieldSchema),
         CYAML_FIELD_MAPPING_PTR(
                 "small", CYAML_FLAG_POINTER, TextAreasData, small, textAreaFieldSchema),
         CYAML_FIELD_MAPPING_PTR(

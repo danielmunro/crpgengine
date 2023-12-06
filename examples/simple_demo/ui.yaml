@@ -37,6 +37,11 @@ fightMenu:
     width: 100
 
 textAreas:
+  alert:
+    x: .25
+    y: .3
+    width: .5
+    height: .2
   small:
     x: .1
     y: .1

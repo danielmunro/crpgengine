@@ -27,4 +27,5 @@ typedef enum {
     SHOP_BUY_MENU,
     SHOP_SELL_MENU,
     SHOP_GOODBYE_MENU,
+    SHOP_CANNOT_AFFORD_MENU,
 } MenuType;
