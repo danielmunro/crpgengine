@@ -38,12 +38,11 @@ void drawShopBuyMenuScreen(MenuContext *menuContext) {
             });
 }
 
-MenuSelectResponse *shopBuyMenuItemSelected(const MenuContext *mc) {
-    const ItemWithMarkup *item = mc->shop->items[mc->cursorLine];
+MenuSelectResponse *shopBuyMenuItemSelected(MenuContext *mc) {
+    ItemWithMarkup *item = mc->shop->items[mc->cursorLine];
     if (mc->player->coins < item->worth) {
         return createMenuSelectResponse(OPEN_MENU, SHOP_CANNOT_AFFORD_MENU);
     }
-    addItem(mc->player, item->item);
-    mc->player->coins -= item->worth;
-    return createMenuSelectResponse(NO_OP, SHOP_BUY_MENU);
+    mc->itemToBuy = item;
+    return createMenuSelectResponse(OPEN_MENU, SHOP_QUANTITY_SELECT_MENU);
 }

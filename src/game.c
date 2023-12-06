@@ -81,14 +81,6 @@ void mapMenuKeyPressed(Game *g) {
     addMenu(g->menus, findMenu(g->ui->menus, PARTY_MENU));
 }
 
-void evaluateShopBuyKeyPressed() {
-
-}
-
-void evaluateShopSellKeyPressed() {
-
-}
-
 void evaluateResponse(const Game *g, const Response *r) {
     if (r->actionTaken == ACTION_TAKEN_OPENED_CHEST) {
         const Chest *c = r->chest;
@@ -148,17 +140,31 @@ void checkMapInput(Game *g) {
     }
 }
 
+bool isQuantizedMenu(MenuType type) {
+    return type == SHOP_QUANTITY_SELECT_MENU;
+}
+
 void checkMenuInput(Game *g) {
     if (IsKeyPressed(KEY_ESCAPE)) {
         removeMenu(g->menus);
     }
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *menu = getCurrentMenu(g->menus);
+        if (isQuantizedMenu(menu->type)
+                && g->ui->menuContext->quantity > 1) {
+            g->ui->menuContext->quantity -= 1;
+            return;
+        }
         menu->cursor = menu->getNextOption(g->ui->menuContext);
         normalizeMenuCursor(menu, g->ui->menuContext);
     }
     if (IsKeyPressed(KEY_UP)) {
         Menu *menu = getCurrentMenu(g->menus);
+        if (isQuantizedMenu(menu->type)
+                && menu->getCursorLength(g->ui->menuContext) > g->ui->menuContext->quantity) {
+            g->ui->menuContext->quantity += 1;
+            return;
+        }
         menu->cursor = menu->getPreviousOption(g->ui->menuContext);
         normalizeMenuCursor(menu, g->ui->menuContext);
     }

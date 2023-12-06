@@ -138,6 +138,13 @@ int getMenuList(UIManager *uiMan) {
                     getDefaultPreviousOption,
                     getDefaultNextOption,
                     &cannotAffordMenuItemSelected),
+            createMenu(
+                    SHOP_QUANTITY_SELECT_MENU,
+                    &getQuantitySelectCursorLength,
+                    drawQuantitySelectMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
+                    &quantitySelectMenuItemSelected),
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {

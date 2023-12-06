@@ -23,6 +23,7 @@ typedef enum {
     DEFEND_SELECTED,
     RESPONSE_TYPE_RUN,
     PARTY_MEMBER_SELECTED,
+    ITEM_SOLD_RESPONSE_TYPE,
     NO_OP,
 } MenuSelectResponseType;
 
@@ -50,6 +51,8 @@ typedef struct {
     Mobile *targetMob;
     ActionType actionType;
     Shop *shop;
+    ItemWithMarkup *itemToBuy;
+    int quantity;
     int scrollOffset;
 } MenuContext;
 
@@ -121,6 +124,8 @@ MenuContext *createMenuContext(
     context->targetMob = NULL;
     context->actionType = NONE;
     context->shop = NULL;
+    context->itemToBuy = NULL;
+    context->quantity = 1;
     context->scrollOffset = 0;
     return context;
 }
@@ -244,6 +249,7 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
         if (strcmp(PartyMenuItems[partyMenu->cursor], PARTY_MENU_MAGIC) == 0) {
             addMenu(menus, findMenu(allMenus, MAGIC_MENU));
         }
+//    } else if (response->type == )
     }
     return response;
 }
