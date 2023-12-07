@@ -22,10 +22,11 @@ void drawConfirmPurchaseMenuScreen(MenuContext *mc) {
     drawInMenu(b, purchaseText2);
 }
 
-MenuSelectResponse *confirmPurchaseMenuItemSelected(const MenuContext *mc) {
+MenuSelectResponse *confirmPurchaseMenuItemSelected(MenuContext *mc) {
     for (int i = 0; i < mc->quantity; i++) {
         addItem(mc->player, mc->itemToBuy->item);
     }
     mc->player->coins -= mc->itemToBuy->worth * mc->quantity;
+    mc->quantity = 1;
     return createMenuSelectResponse(CLOSE_MENU, SHOP_QUANTITY_SELECT_MENU);
 }

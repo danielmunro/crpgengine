@@ -19,10 +19,6 @@ void drawQuantitySelectMenuScreen(MenuContext *menuContext) {
     drawInMenu(b, costText);
 }
 
-MenuSelectResponse *quantitySelectMenuItemSelected(const MenuContext *mc) {
-    for (int i = 0; i < mc->quantity; i++) {
-        addItem(mc->player, mc->itemToBuy->item);
-    }
-    mc->player->coins -= mc->itemToBuy->worth * mc->quantity;
+MenuSelectResponse *quantitySelectMenuItemSelected(MenuContext *mc) {
     return createMenuSelectResponse(OPEN_MENU, SHOP_CONFIRM_PURCHASE_MENU);
 }

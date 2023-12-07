@@ -472,7 +472,7 @@ void fightSpaceKeyPressed(FightManager *fm) {
 void tryToggleTargetMenus(FightManager *fm) {
     const Menu *current = getCurrentMenu(fm->menus);
     if (current->type == BEAST_TARGET_FIGHT_MENU) {
-        removeMenu(fm->menus);
+        removeLastMenu(fm->menus);
         Menu *m = findMenu(fm->ui->menus, MOBILE_TARGET_FIGHT_MENU);
         const Mobile *mob = fm->fight->player->party[m->cursor];
         if (mob->hp <= 0) {
@@ -481,7 +481,7 @@ void tryToggleTargetMenus(FightManager *fm) {
         }
         addMenu(fm->menus, m);
     } else if (current->type == MOBILE_TARGET_FIGHT_MENU) {
-        removeMenu(fm->menus);
+        removeLastMenu(fm->menus);
         addMenu(fm->menus, findMenu(fm->ui->menus, BEAST_TARGET_FIGHT_MENU));
     }
 }
@@ -492,7 +492,7 @@ void checkFightInput(FightManager *fm) {
         if (m->type == MOBILE_SELECT_FIGHT_MENU) {
             return;
         }
-        removeMenu(fm->menus);
+        removeLastMenu(fm->menus);
     }
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *m = getCurrentMenu(fm->menus);

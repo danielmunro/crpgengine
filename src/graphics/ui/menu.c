@@ -184,7 +184,23 @@ Menu *getCurrentMenu(Menu **menus) {
     return menus[MAX_MENUS - 1];
 }
 
-int removeMenu(Menu **menus) {
+int removeMenu(Menu **menus, MenuType menuType) {
+    bool startRemoving = false;
+    for (int i = 0; i < MAX_MENUS; i++) {
+        if (menus[i] == NULL) {
+            return i - 1;
+        }
+        if (menus[i]->type == menuType) {
+            startRemoving = true;
+        }
+        if (startRemoving) {
+            menus[i] = NULL;
+        }
+    }
+    return -1;
+}
+
+int removeLastMenu(Menu **menus) {
     for (int i = 0; i < MAX_MENUS; i++) {
         if (menus[i] == NULL) {
             if (i > 0) {
@@ -243,13 +259,12 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
     if (response->type == OPEN_MENU) {
         addMenu(menus, findMenu(allMenus, response->menuType));
     } else if (response->type == CLOSE_MENU) {
-        removeMenu(menus);
+        removeMenu(menus, response->menuType);
     } else if (response->type == PARTY_MEMBER_SELECTED) {
         Menu *partyMenu = findMenu(menus, PARTY_MENU);
         if (strcmp(PartyMenuItems[partyMenu->cursor], PARTY_MENU_MAGIC) == 0) {
             addMenu(menus, findMenu(allMenus, MAGIC_MENU));
         }
-//    } else if (response->type == )
     }
     return response;
 }

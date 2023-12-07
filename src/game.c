@@ -146,7 +146,7 @@ bool isQuantizedMenu(MenuType type) {
 
 void checkMenuInput(Game *g) {
     if (IsKeyPressed(KEY_ESCAPE)) {
-        removeMenu(g->menus);
+        removeLastMenu(g->menus);
     }
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *menu = getCurrentMenu(g->menus);

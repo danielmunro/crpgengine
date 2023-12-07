@@ -4,26 +4,32 @@ int getShopBuyCursorLength(const MenuContext *mc) {
     return mc->shop->itemCount;
 }
 
-void drawShopBuyMenuScreen(MenuContext *menuContext) {
-    const FontStyle *defaultFont = menuContext->fonts->default_;
+void drawShopBuyMenuScreen(MenuContext *mc) {
+    const FontStyle *defaultFont = mc->fonts->default_;
     TextBox *b = findOrCreateTextBox(
-            menuContext,
+            mc,
             SHOP_BUY_BOX,
             ui->textAreas->medium);
     TextBox *b2 = findOrCreateTextBox(
-            menuContext,
+            mc,
             SHOP_COSTS_BOX,
             ui->textAreas->mediumRight);
     drawMenuRect(b->area);
-    for (int i = 0; i < getShopBuyCursorLength(menuContext); i++) {
-        const ItemWithMarkup *item = menuContext->shop->items[i];
+    char coinsAmount[64];
+    sprintf(coinsAmount, "You have %d coins", mc->player->coins);
+    drawInMenu(b, coinsAmount);
+    drawInMenu(b, "");
+    drawInMenu(b2, "");
+    drawInMenu(b2, "");
+    for (int i = 0; i < getShopBuyCursorLength(mc); i++) {
+        const ItemWithMarkup *item = mc->shop->items[i];
         const FontStyle *fs;
-        if (item->worth > menuContext->player->coins) {
-            fs = menuContext->fonts->disable;
-        } else if (menuContext->cursorLine == i) {
-            fs = menuContext->fonts->highlight;
+        if (item->worth > mc->player->coins) {
+            fs = mc->fonts->disable;
+        } else if (mc->cursorLine == i) {
+            fs = mc->fonts->highlight;
         } else {
-            fs = menuContext->fonts->default_;
+            fs = mc->fonts->default_;
         }
         drawInMenuWithStyle(b, fs, item->item->name);
         char cost[4];
@@ -31,10 +37,10 @@ void drawShopBuyMenuScreen(MenuContext *menuContext) {
         drawInMenuWithStyle(b2, fs, cost);
     }
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
                     b->area.x,
-                    b->area.y + line(menuContext->cursorLine, defaultFont->lineHeight)
+                    b->area.y + line(mc->cursorLine + 2, defaultFont->lineHeight)
             });
 }
 
