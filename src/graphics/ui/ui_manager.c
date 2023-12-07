@@ -145,6 +145,13 @@ int getMenuList(UIManager *uiMan) {
                     getDefaultPreviousOption,
                     getDefaultNextOption,
                     &quantitySelectMenuItemSelected),
+            createMenu(
+                    SHOP_CONFIRM_PURCHASE_MENU,
+                    &getConfirmPurchaseCursorLength,
+                    drawConfirmPurchaseMenuScreen,
+                    getDefaultPreviousOption,
+                    getDefaultNextOption,
+                    &confirmPurchaseMenuItemSelected),
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {

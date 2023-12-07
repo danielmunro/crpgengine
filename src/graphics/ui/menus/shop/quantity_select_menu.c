@@ -24,5 +24,5 @@ MenuSelectResponse *quantitySelectMenuItemSelected(const MenuContext *mc) {
         addItem(mc->player, mc->itemToBuy->item);
     }
     mc->player->coins -= mc->itemToBuy->worth * mc->quantity;
-    return createMenuSelectResponse(CLOSE_MENU, SHOP_QUANTITY_SELECT_MENU);
+    return createMenuSelectResponse(OPEN_MENU, SHOP_CONFIRM_PURCHASE_MENU);
 }
