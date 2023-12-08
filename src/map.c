@@ -11,7 +11,6 @@
 #include "headers/warp.h"
 #include "headers/tile.h"
 #include "headers/shop.h"
-#include "headers/ui_manager.h"
 
 typedef enum {
   ACTION_TAKEN_NONE,
@@ -547,23 +546,7 @@ void drawShopWindow() {
     });
 }
 
-void drawShopBuyDialog(const Menu *m, MenuContext *mc) {
-//    drawShopWindow();
-//    drawMenuRect(ui->textAreas->full);
-    m->draw(mc);
-}
-
-void drawShopSellDialog() {
-    drawShopWindow();
-}
-
-void drawMapView(
-        Map *m,
-        UIManager *uiManager,
-        Player *p,
-        NotificationManager *nm,
-        ControlBlock *c[MAX_ACTIVE_CONTROLS],
-        FontStyle *font) {
+void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64], FontStyle *font) {
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();
     ClearBackground(BLACK);
@@ -578,11 +561,6 @@ void drawMapView(
     DrawTextureEx(m->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font);
-//    if (p->shopStep == SHOP_STEP_BUY) {
-//        drawShopBuyDialog(findMenu(uiManager->menus, SHOP_MENU), uiManager->menuContext);
-//    } else if (p->shopStep == SHOP_STEP_SELL) {
-//        drawShopSellDialog();
-//    }
     if (config->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }

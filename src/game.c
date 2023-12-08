@@ -205,7 +205,6 @@ void doExplorationLoop(Game *g) {
     checkMapInput(g);
     drawMapView(
             s->map,
-            g->ui,
             g->player,
             g->notifications,
             s->activeControlBlocks,
