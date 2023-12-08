@@ -1,7 +1,7 @@
 #include "headers/graphics/ui/menu.h"
 
 int getConfirmPurchaseCursorLength() {
-    return 1;
+    return 0;
 }
 
 void drawConfirmPurchaseMenuScreen(MenuContext *mc) {
