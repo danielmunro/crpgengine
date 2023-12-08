@@ -19,6 +19,6 @@ void drawQuantitySelectMenuScreen(MenuContext *menuContext) {
     drawInMenu(b, costText);
 }
 
-MenuSelectResponse *quantitySelectMenuItemSelected(MenuContext *mc) {
+MenuSelectResponse *quantitySelectMenuItemSelected() {
     return createMenuSelectResponse(OPEN_MENU, SHOP_CONFIRM_PURCHASE_MENU);
 }
