@@ -276,7 +276,10 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
 void drawRightCursor(const UISprite *sprites, Vector2 position) {
     drawImageFromSprite(
             sprites->sprite,
-            position,
+            (Vector2) {
+                position.x - 8,
+                position.y + 14,
+            },
             sprites->config->sprite->cursors->right);
 }
 
