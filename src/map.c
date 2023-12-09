@@ -16,7 +16,7 @@ typedef enum {
   ACTION_TAKEN_NONE,
   ACTION_TAKEN_ENGAGE_DIALOG,
   ACTION_TAKEN_OPENED_CHEST,
-  ACTION_TAKEN_START_SHOPPING,
+  ACTION_TAKEN_SHOPPING,
 } ActionTaken;
 
 typedef struct {
@@ -533,12 +533,18 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
     }
 }
 
-void drawMapView(
-        Map *m,
-        Player *p,
-        NotificationManager *nm,
-        ControlBlock *c[MAX_ACTIVE_CONTROLS],
-        FontStyle *font) {
+void drawShopWindow() {
+    float width = (float) (ui->screen->width * 0.8);
+    float height = (float) (ui->screen->height * 0.8);
+    drawMenuRect((Rectangle) {
+            (float) (ui->screen->width * 0.1),
+            (float) (ui->screen->height * 0.1),
+            width,
+            height,
+    });
+}
+
+void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64], FontStyle *font) {
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();
     ClearBackground(BLACK);
@@ -630,7 +636,7 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
                     },
                 m->shopTiles[i]->object->area);
         if (c.height > 0 || c.width > 0) {
-            Response *r = createResponse(ACTION_TAKEN_START_SHOPPING);
+            Response *r = createResponse(ACTION_TAKEN_SHOPPING);
             r->shop = m->shopTiles[i];
             return r;
         }

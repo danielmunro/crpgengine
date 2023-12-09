@@ -10,6 +10,10 @@ const char *ItemTypes[] = {
 };
 
 typedef enum {
+    ITEM_AFFECT_RAISE,
+} ItemAffect;
+
+typedef enum {
     ITEM_TYPE_NONE,
     ITEM_TYPE_CONSUMABLE,
     ITEM_TYPE_EQUIPMENT,

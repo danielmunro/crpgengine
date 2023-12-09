@@ -23,6 +23,7 @@ typedef enum {
     DEFEND_SELECTED,
     RESPONSE_TYPE_RUN,
     PARTY_MEMBER_SELECTED,
+    ITEM_SOLD_RESPONSE_TYPE,
     NO_OP,
 } MenuSelectResponseType;
 
@@ -49,6 +50,9 @@ typedef struct {
     Beast *targetBeast;
     Mobile *targetMob;
     ActionType actionType;
+    Shop *shop;
+    ItemWithMarkup *itemToBuy;
+    int quantity;
     int scrollOffset;
 } MenuContext;
 
@@ -98,7 +102,6 @@ Menu *createMenu(
 }
 
 MenuContext *createMenuContext(
-        Fight *fight,
         Player *player,
         Fonts *fonts,
         UISprite *uiSprite,
@@ -106,7 +109,7 @@ MenuContext *createMenuContext(
         const char *scene,
         int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
-    context->fight = fight;
+    context->fight = NULL;
     context->player = player;
     context->scene = scene;
     context->cursorLine = cursorLine;
@@ -120,8 +123,15 @@ MenuContext *createMenuContext(
     context->targetBeast = NULL;
     context->targetMob = NULL;
     context->actionType = NONE;
+    context->shop = NULL;
+    context->itemToBuy = NULL;
+    context->quantity = 1;
     context->scrollOffset = 0;
     return context;
+}
+
+void resetMenuContext(MenuContext *mc) {
+    mc->quantity = 1;
 }
 
 void resetItemList(MenuContext *mc) {
@@ -178,7 +188,23 @@ Menu *getCurrentMenu(Menu **menus) {
     return menus[MAX_MENUS - 1];
 }
 
-int removeMenu(Menu **menus) {
+int removeMenu(Menu **menus, MenuType menuType) {
+    bool startRemoving = false;
+    for (int i = 0; i < MAX_MENUS; i++) {
+        if (menus[i] == NULL) {
+            return i - 1;
+        }
+        if (menus[i]->type == menuType) {
+            startRemoving = true;
+        }
+        if (startRemoving) {
+            menus[i] = NULL;
+        }
+    }
+    return -1;
+}
+
+int removeLastMenu(Menu **menus) {
     for (int i = 0; i < MAX_MENUS; i++) {
         if (menus[i] == NULL) {
             if (i > 0) {
@@ -237,7 +263,7 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
     if (response->type == OPEN_MENU) {
         addMenu(menus, findMenu(allMenus, response->menuType));
     } else if (response->type == CLOSE_MENU) {
-        removeMenu(menus);
+        removeMenu(menus, response->menuType);
     } else if (response->type == PARTY_MEMBER_SELECTED) {
         Menu *partyMenu = findMenu(menus, PARTY_MENU);
         if (strcmp(PartyMenuItems[partyMenu->cursor], PARTY_MENU_MAGIC) == 0) {

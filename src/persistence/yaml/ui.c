@@ -82,6 +82,8 @@ typedef struct {
 } TextAreaData;
 
 typedef struct {
+    TextAreaData *alert;
+    TextAreaData *alertRight;
     TextAreaData *small;
     TextAreaData *medium;
     TextAreaData *full;
@@ -92,6 +94,7 @@ typedef struct {
     TextAreaData *bottomMidRight;
     TextAreaData *bottomMid;
     TextAreaData *midRight;
+    TextAreaData *mediumRight;
 } TextAreasData;
 
 typedef struct {
@@ -251,9 +254,15 @@ static const cyaml_schema_field_t textAreaFieldSchema[] = {
 
 static const cyaml_schema_field_t textAreasFieldSchema[] = {
         CYAML_FIELD_MAPPING_PTR(
+                "alert", CYAML_FLAG_POINTER, TextAreasData, alert, textAreaFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "alertRight", CYAML_FLAG_POINTER, TextAreasData, alertRight, textAreaFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
                 "small", CYAML_FLAG_POINTER, TextAreasData, small, textAreaFieldSchema),
         CYAML_FIELD_MAPPING_PTR(
                 "medium", CYAML_FLAG_POINTER, TextAreasData, medium, textAreaFieldSchema),
+        CYAML_FIELD_MAPPING_PTR(
+                "mediumRight", CYAML_FLAG_POINTER, TextAreasData, mediumRight, textAreaFieldSchema),
         CYAML_FIELD_MAPPING_PTR(
                 "full", CYAML_FLAG_POINTER, TextAreasData, full, textAreaFieldSchema),
         CYAML_FIELD_MAPPING_PTR(

@@ -45,7 +45,6 @@ typedef struct {
     Mobile *engageable;
     Dialog *dialog;
     OpenedChest **openedChests;
-    Shop *shop;
     int openedChestsCount;
     bool engaged;
     int coins;
@@ -109,7 +108,6 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
         player->party[i] = mobs[i];
         player->partyCount = i + 1;
     }
-    player->shop = NULL;
     player->itemCount = itemCount;
     player->items = items;
     player->onDeck = calloc(MAX_PARTY_SIZE, sizeof(Mobile));

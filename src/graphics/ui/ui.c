@@ -39,6 +39,8 @@ typedef struct {
 } MenuConfig;
 
 typedef struct {
+    Rectangle alert;
+    Rectangle alertRight;
     Rectangle small;
     Rectangle medium;
     Rectangle full;
@@ -49,6 +51,7 @@ typedef struct {
     Rectangle bottomMidRight;
     Rectangle bottomMid;
     Rectangle midRight;
+    Rectangle mediumRight;
 } TextAreasConfig;
 
 typedef struct {
@@ -150,8 +153,11 @@ void createUIConfig(UIData *data) {
     };
 
     ui->textAreas = malloc(sizeof(TextAreasConfig));
+    ui->textAreas->alert = getScreenRectangle(data->textAreas->alert);
+    ui->textAreas->alertRight = getScreenRectangle(data->textAreas->alertRight);
     ui->textAreas->small = getScreenRectangle(data->textAreas->small);
     ui->textAreas->medium = getScreenRectangle(data->textAreas->medium);
+    ui->textAreas->mediumRight = getScreenRectangle(data->textAreas->mediumRight);
     ui->textAreas->full = getScreenRectangle(data->textAreas->full);
     ui->textAreas->bottom = getScreenRectangle(data->textAreas->bottom);
     ui->textAreas->left = getScreenRectangle(data->textAreas->left);
@@ -229,9 +235,15 @@ void updateDialog(Dialog *dialog) {
 
 void drawDialog(Dialog *dialog) {
     int amount = (int) ceil(dialog->timeElapsed / 5);
+    if (amount == 0) {
+        return;
+    }
+    int len = (int) strlen(dialog->message);
+    if (amount > len) {
+        amount = len;
+    }
     char message[MAX_MESSAGE_BUFFER] = "";
     memcpy(message, &dialog->message[0], amount);
-    int len = (int) strlen(dialog->message);
     while (dialog->message[amount - 1] != ' ' && amount < len) {
         strcat(message, "\t");
         amount++;
@@ -267,7 +279,7 @@ float line(int line, float lineHeight) {
     return (float) line * lineHeight;
 }
 
-void drawScrollableInMenuWithStyle(TextBox *tb, FontStyle *fs, const char *text, int menuCursor) {
+void drawScrollableInMenuWithStyle(TextBox *tb, const FontStyle *fs, const char *text, int menuCursor) {
     float offset = getScrollOffset(fs->lineHeight, menuCursor, tb->area.height);
     float y = tb->area.y
               + line(tb->cursor, fs->lineHeight)
@@ -282,7 +294,7 @@ void drawScrollableInMenuWithStyle(TextBox *tb, FontStyle *fs, const char *text,
     tb->cursor++;
 }
 
-void drawInMenuWithStyle(TextBox *tb, FontStyle *fs, const char *text) {
+void drawInMenuWithStyle(TextBox *tb, const FontStyle *fs, const char *text) {
     drawScrollableInMenuWithStyle(tb, fs, text, 0);
 }
 

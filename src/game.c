@@ -78,14 +78,6 @@ void evaluateExits(Game *g) {
 }
 
 void mapMenuKeyPressed(Game *g) {
-    g->ui->menuContext = createMenuContext(
-            g->fights->fight,
-            g->player,
-            g->ui->fonts,
-            g->ui->uiSprite,
-            g->spells->spells,
-            g->scenes->current->name,
-            0);
     addMenu(g->menus, findMenu(g->ui->menus, PARTY_MENU));
 }
 
@@ -100,16 +92,16 @@ void evaluateResponse(const Game *g, const Response *r) {
                 createNotification(
                         OPENED_CHEST,
                         message));
-    } else if (r->actionTaken == ACTION_TAKEN_START_SHOPPING) {
+    } else if (r->actionTaken == ACTION_TAKEN_SHOPPING) {
+        if (g->ui->menuContext->shop != NULL) {
+            g->ui->menuContext->shop = NULL;
+            return;
+        }
         const Scene *s = g->scenes->current;
         for (int i = 0; i < s->shopsCount; i++) {
             if (s->shops[i]->id == r->shop->id) {
-                g->player->dialog = createDialog(
-                        s->shops[i]->messages->welcome,
-                        ui->textAreas->bottom,
-                        g->ui->fonts->default_);
-                g->player->engaged = true;
-                g->player->shop = s->shops[i];
+                g->ui->menuContext->shop = s->shops[i];
+                addMenu(g->menus, findMenu(g->ui->menus, SHOP_WELCOME_MENU));
                 return;
             }
         }
@@ -148,21 +140,32 @@ void checkMapInput(Game *g) {
     }
 }
 
+bool isQuantizedMenu(MenuType type) {
+    return type == SHOP_QUANTITY_SELECT_MENU;
+}
+
 void checkMenuInput(Game *g) {
     if (IsKeyPressed(KEY_ESCAPE)) {
-        int menuCount = removeMenu(g->menus);
-        if (menuCount == 0) {
-            free(g->ui->menuContext);
-            g->ui->menuContext = NULL;
-        }
+        removeLastMenu(g->menus);
+        resetMenuContext(g->ui->menuContext);
     }
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *menu = getCurrentMenu(g->menus);
+        if (isQuantizedMenu(menu->type)
+                && g->ui->menuContext->quantity > 1) {
+            g->ui->menuContext->quantity -= 1;
+            return;
+        }
         menu->cursor = menu->getNextOption(g->ui->menuContext);
         normalizeMenuCursor(menu, g->ui->menuContext);
     }
     if (IsKeyPressed(KEY_UP)) {
         Menu *menu = getCurrentMenu(g->menus);
+        if (isQuantizedMenu(menu->type)
+                && menu->getCursorLength(g->ui->menuContext) > g->ui->menuContext->quantity) {
+            g->ui->menuContext->quantity += 1;
+            return;
+        }
         menu->cursor = menu->getPreviousOption(g->ui->menuContext);
         normalizeMenuCursor(menu, g->ui->menuContext);
     }
@@ -194,14 +197,7 @@ void checkFights(Game *g, const Scene *s) {
                 g->player);
         Animation *animation = findAnimation(getPartyLeader(g->player)->animations, DIRECTION_LEFT);
         animation->currentFrame = animation->firstFrame;
-        g->ui->menuContext = createMenuContext(
-                g->fights->fight,
-                g->player,
-                g->ui->fonts,
-                g->ui->uiSprite,
-                g->spells->spells,
-                NULL,
-                0);
+        g->ui->menuContext->fight = g->fights->fight;
     }
 }
 
@@ -296,11 +292,6 @@ Game *createGame() {
     Game *g = malloc(sizeof(Game));
     g->sprites = loadSpritesheetManager();
     UIData *uiData = loadUIData();
-    g->ui = createUIManager(
-            uiData,
-            createUISprite(
-                    findSpritesheetByName(g->sprites, uiData->sprite->name),
-                    uiData));
     g->animations = createAnimationManager();
     loadAllAnimations(g->animations, g->sprites);
     g->audio = loadAudioManager();
@@ -327,6 +318,20 @@ Game *createGame() {
     addDebug("done creating game object");
     free(save);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
+    Fonts *fonts = createFonts(uiData);
+    UISprite *uiSprite = createUISprite(findSpritesheetByName(g->sprites, uiData->sprite->name), uiData);
+    MenuContext *menuContext = createMenuContext(
+            g->player,
+            fonts,
+            uiSprite,
+            g->spells->spells,
+            g->scenes->current->name,
+            0);
+    g->ui = createUIManager(
+            uiData,
+            uiSprite,
+            fonts,
+            menuContext);
     g->fights = createFightManager(g->ui, g->spells, g->notifications);
     return g;
 }

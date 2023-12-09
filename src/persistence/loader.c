@@ -137,6 +137,7 @@ void loadShops(ItemManager *im, Scene *s, const char *sceneDirectory) {
         s->shops[f] = createShop(
                 data->id,
                 items,
+                data->items_count,
                 data->coins,
                 createMessagesFromData(data->messages));
         s->shopsCount++;

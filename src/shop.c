@@ -9,6 +9,7 @@ typedef struct {
     int id;
     int coins;
     ItemWithMarkup **items;
+    int itemCount;
     Messages *messages;
 } Shop;
 
@@ -19,10 +20,11 @@ Messages *createMessagesFromData(const MessageData *data) {
     return m;
 }
 
-Shop *createShop(int id, ItemWithMarkup **items, int coins, Messages *messages) {
+Shop *createShop(int id, ItemWithMarkup **items, int itemCount, int coins, Messages *messages) {
     Shop *s = malloc(sizeof(Shop));
     s->id = id;
     s->items = items;
+    s->itemCount = itemCount;
     s->coins = coins;
     s->messages = messages;
     return s;
