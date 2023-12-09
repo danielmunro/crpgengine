@@ -4,19 +4,24 @@ int getQuantitySelectCursorLength(const MenuContext *mc) {
     return mc->player->coins / mc->itemToBuy->worth;
 }
 
-void drawQuantitySelectMenuScreen(MenuContext *menuContext) {
+void drawQuantitySelectMenuScreen(MenuContext *mc) {
     TextBox *b = findOrCreateTextBox(
-            menuContext,
+            mc,
             QUANTITY_SELECT_BOX,
             ui->textAreas->alert);
     drawMenuRect(b->area);
     drawInMenu(b, "How many would you like to buy?");
     char amount[24];
-    sprintf(amount, "Amount: %d", menuContext->quantity);
+    sprintf(amount, "%s x %d", mc->itemToBuy->item->name, mc->quantity);
     drawInMenu(b, amount);
+    TextBox *b2 = findOrCreateTextBox(
+            mc,
+            SHOP_QUANTITY_COSTS_BOX,
+            ui->textAreas->alertRight);
     char costText[24];
-    sprintf(costText, "Total cost: %d", (menuContext->quantity) * menuContext->itemToBuy->worth);
-    drawInMenu(b, costText);
+    sprintf(costText, "= %d", (mc->quantity) * mc->itemToBuy->worth);
+    drawInMenu(b2, "");
+    drawInMenu(b2, costText);
 }
 
 MenuSelectResponse *quantitySelectMenuItemSelected() {

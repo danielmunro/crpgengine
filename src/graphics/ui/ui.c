@@ -40,6 +40,7 @@ typedef struct {
 
 typedef struct {
     Rectangle alert;
+    Rectangle alertRight;
     Rectangle small;
     Rectangle medium;
     Rectangle full;
@@ -153,6 +154,7 @@ void createUIConfig(UIData *data) {
 
     ui->textAreas = malloc(sizeof(TextAreasConfig));
     ui->textAreas->alert = getScreenRectangle(data->textAreas->alert);
+    ui->textAreas->alertRight = getScreenRectangle(data->textAreas->alertRight);
     ui->textAreas->small = getScreenRectangle(data->textAreas->small);
     ui->textAreas->medium = getScreenRectangle(data->textAreas->medium);
     ui->textAreas->mediumRight = getScreenRectangle(data->textAreas->mediumRight);

@@ -130,6 +130,10 @@ MenuContext *createMenuContext(
     return context;
 }
 
+void resetMenuContext(MenuContext *mc) {
+    mc->quantity = 1;
+}
+
 void resetItemList(MenuContext *mc) {
     free(mc->itemList);
     mc->itemList = NULL;
