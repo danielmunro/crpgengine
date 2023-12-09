@@ -145,35 +145,24 @@ bool isQuantizedMenu(MenuType type) {
 }
 
 void checkMenuInput(Game *g) {
-    // add call here
     Menu *menu = getCurrentMenu(g->menus);
-    menu->keyPressed(g->ui->menuContext);
-
-    if (IsKeyPressed(KEY_ESCAPE)) {
+    const MenuKeyPressedResponse *keyPressed = menu->keyPressed(g->ui->menuContext);
+    if (keyPressed->type == KEY_PRESSED_CLOSE_MENU) {
         removeLastMenu(g->menus);
         resetMenuContext(g->ui->menuContext);
-    }
-    if (IsKeyPressed(KEY_DOWN)) {
-        if (isQuantizedMenu(menu->type)
-                && g->ui->menuContext->quantity > 1) {
-            g->ui->menuContext->quantity -= 1;
-            return;
-        }
+    } else if (keyPressed->type == KEY_PRESSED_INCREMENT_CURSOR) {
         menu->cursor = menu->getNextOption(g->ui->menuContext);
         normalizeMenuCursor(menu, g->ui->menuContext);
-    }
-    if (IsKeyPressed(KEY_UP)) {
-        if (isQuantizedMenu(menu->type)
-                && menu->getCursorLength(g->ui->menuContext) > g->ui->menuContext->quantity) {
-            g->ui->menuContext->quantity += 1;
-            return;
-        }
+    } else if (keyPressed->type == KEY_PRESSED_DECREMENT_CURSOR) {
         menu->cursor = menu->getPreviousOption(g->ui->menuContext);
         normalizeMenuCursor(menu, g->ui->menuContext);
-    }
-    if (IsKeyPressed(KEY_SPACE)) {
+    } else if (keyPressed->type == KEY_PRESSED_EXECUTE) {
         MenuSelectResponse *response = menuItemSelected(g->menus, g->ui->menus, g->ui->menuContext);
         free(response);
+    } else if (keyPressed->type == KEY_PRESSED_INCREMENT_QUANTITY) {
+        g->ui->menuContext->quantity += 1;
+    } else if (keyPressed->type == KEY_PRESSED_DECREMENT_QUANTITY) {
+        g->ui->menuContext->quantity -= 1;
     }
 }
 

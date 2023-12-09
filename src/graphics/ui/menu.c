@@ -27,7 +27,13 @@ typedef enum {
 } MenuSelectResponseType;
 
 typedef enum {
-    NOTHING_TO_DO,
+    KEY_PRESSED_CLOSE_MENU,
+    KEY_PRESSED_DECREMENT_CURSOR,
+    KEY_PRESSED_INCREMENT_CURSOR,
+    KEY_PRESSED_EXECUTE,
+    KEY_PRESSED_DECREMENT_QUANTITY,
+    KEY_PRESSED_INCREMENT_QUANTITY,
+    KEY_PRESSED_NOTHING_TO_DO,
 } MenuKeyPressedResponseType;
 
 typedef struct {
@@ -80,7 +86,7 @@ typedef struct {
 
     int (*getPreviousOption)(const MenuContext *);
 
-    MenuKeyPressedResponse *(*keyPressed)(MenuContext *);
+    MenuKeyPressedResponse *(*keyPressed)(const MenuContext *);
 
     MenuSelectResponse *(*selected)(MenuContext *menuContext);
 } Menu;
@@ -104,7 +110,7 @@ Menu *createMenu(
         void (*draw)(MenuContext *),
         int (*getPreviousOption)(const MenuContext *),
         int (*getNextOption)(const MenuContext *),
-        MenuKeyPressedResponse *(*keyPressed)(MenuContext *),
+        MenuKeyPressedResponse *(*keyPressed)(const MenuContext *),
         MenuSelectResponse *(*selected)()) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;
@@ -271,8 +277,17 @@ int getDefaultPreviousOption(const MenuContext *mc) {
     return mc->cursorLine - 1;
 }
 
-MenuKeyPressedResponse *menuKeyPressed(MenuContext *mc) {
-    return createMenuKeyPressedResponse(NOTHING_TO_DO);
+MenuKeyPressedResponse *menuKeyPressed(const MenuContext *mc) {
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        return createMenuKeyPressedResponse(KEY_PRESSED_CLOSE_MENU);
+    } else if (IsKeyPressed(KEY_DOWN)) {
+        return createMenuKeyPressedResponse(KEY_PRESSED_INCREMENT_CURSOR);
+    } else if (IsKeyPressed(KEY_UP)) {
+        return createMenuKeyPressedResponse(KEY_PRESSED_DECREMENT_CURSOR);
+    } else if (IsKeyPressed(KEY_SPACE)) {
+        return createMenuKeyPressedResponse(KEY_PRESSED_EXECUTE);
+    }
+    return createMenuKeyPressedResponse(KEY_PRESSED_NOTHING_TO_DO);
 }
 
 MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext *menuContext) {

@@ -172,7 +172,7 @@ int getMenuList(UIManager *uiMan) {
                     drawQuantitySelectMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
-                    &menuKeyPressed,
+                    &quantitySelectKeyPressed,
                     &quantitySelectMenuItemSelected),
             createMenu(
                     SHOP_CONFIRM_PURCHASE_MENU,

@@ -282,7 +282,7 @@ float line(int line, float lineHeight) {
 void drawScrollableInMenuWithStyle(TextBox *tb, const FontStyle *fs, const char *text, int menuCursor) {
     float offset = getScrollOffset(fs->lineHeight, menuCursor, tb->area.height);
     float y = tb->area.y
-              + line(tb->cursor, fs->lineHeight)
+              + line(menuCursor, fs->lineHeight)
               + ui->menu->padding
               - offset;
     if (y >= tb->area.y) {
@@ -295,7 +295,7 @@ void drawScrollableInMenuWithStyle(TextBox *tb, const FontStyle *fs, const char 
 }
 
 void drawInMenuWithStyle(TextBox *tb, const FontStyle *fs, const char *text) {
-    drawScrollableInMenuWithStyle(tb, fs, text, 0);
+    drawScrollableInMenuWithStyle(tb, fs, text, tb->cursor);
 }
 
 void drawScrollableInMenu(TextBox *textBox, const char *text, int cursorLine) {
