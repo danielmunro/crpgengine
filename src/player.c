@@ -32,7 +32,7 @@ typedef struct {
 
 typedef struct {
     int count;
-    SaveFile **saves;
+    const SaveFile **saves;
 } SaveFiles;
 
 typedef struct {
@@ -283,7 +283,7 @@ void sortSaveFiles(const SaveFiles *sf) {
     for (int i = 0; i < sf->count; i++) {
         for (int j = 0; j < sf->count; j++) {
             if (sf->saves[i]->created > sf->saves[j]->created) {
-                SaveFile *tmp = sf->saves[i];
+                const SaveFile *tmp = sf->saves[i];
                 sf->saves[i] = sf->saves[j];
                 sf->saves[j] = tmp;
             }
@@ -325,7 +325,7 @@ SaveFiles *getSaveFiles() {
     return sf;
 }
 
-void addSaveFile(SaveFiles *sf, SaveFile *f) {
+void addSaveFile(SaveFiles *sf, const SaveFile *f) {
     sf->saves[sf->count] = f;
     sf->count++;
     sortSaveFiles(sf);
@@ -354,10 +354,11 @@ void save(Player *player, const char *sceneName) {
     sprintf(filename, "save-%lu.yaml", (unsigned long) time(NULL));
     saveFile(save, config->indexDir, filename);
 
-    addSaveFile(
-            player->saveFiles,
-            createSaveFile(filename, save->name, save->time));
+    const SaveFile *saveFile = createSaveFile(filename, save->name, save->time);
+    addSaveFile(player->saveFiles, saveFile);
     free(date);
+    free((SaveFile *)saveFile);
+    free(save);
 }
 
 void addStory(Player *p, const char *story) {
