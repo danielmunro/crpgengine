@@ -44,6 +44,8 @@ FightInScene *createFightInScene() {
     fightInScene->e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
     UIManager *uiMan = createUIManager(
             loadUIData(),
+            NULL,
+            NULL,
             NULL);
     SpellManager *sm = loadSpellManager();
     fightInScene->fm = createFightManager(uiMan, sm, NULL);
