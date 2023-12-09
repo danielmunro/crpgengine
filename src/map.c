@@ -16,9 +16,7 @@ typedef enum {
   ACTION_TAKEN_NONE,
   ACTION_TAKEN_ENGAGE_DIALOG,
   ACTION_TAKEN_OPENED_CHEST,
-  ACTION_TAKEN_START_SHOPPING,
-  ACTION_TAKEN_SHOP_BUY,
-  ACTION_TAKEN_SHOP_SELL,
+  ACTION_TAKEN_SHOPPING,
 } ActionTaken;
 
 typedef struct {
@@ -638,7 +636,7 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
                     },
                 m->shopTiles[i]->object->area);
         if (c.height > 0 || c.width > 0) {
-            Response *r = createResponse(ACTION_TAKEN_START_SHOPPING);
+            Response *r = createResponse(ACTION_TAKEN_SHOPPING);
             r->shop = m->shopTiles[i];
             return r;
         }

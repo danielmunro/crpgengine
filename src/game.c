@@ -92,7 +92,7 @@ void evaluateResponse(const Game *g, const Response *r) {
                 createNotification(
                         OPENED_CHEST,
                         message));
-    } else if (r->actionTaken == ACTION_TAKEN_START_SHOPPING) {
+    } else if (r->actionTaken == ACTION_TAKEN_SHOPPING) {
         if (g->ui->menuContext->shop != NULL) {
             g->ui->menuContext->shop = NULL;
             return;
