@@ -145,12 +145,15 @@ bool isQuantizedMenu(MenuType type) {
 }
 
 void checkMenuInput(Game *g) {
+    // add call here
+    Menu *menu = getCurrentMenu(g->menus);
+    menu->keyPressed(g->ui->menuContext);
+
     if (IsKeyPressed(KEY_ESCAPE)) {
         removeLastMenu(g->menus);
         resetMenuContext(g->ui->menuContext);
     }
     if (IsKeyPressed(KEY_DOWN)) {
-        Menu *menu = getCurrentMenu(g->menus);
         if (isQuantizedMenu(menu->type)
                 && g->ui->menuContext->quantity > 1) {
             g->ui->menuContext->quantity -= 1;
@@ -160,7 +163,6 @@ void checkMenuInput(Game *g) {
         normalizeMenuCursor(menu, g->ui->menuContext);
     }
     if (IsKeyPressed(KEY_UP)) {
-        Menu *menu = getCurrentMenu(g->menus);
         if (isQuantizedMenu(menu->type)
                 && menu->getCursorLength(g->ui->menuContext) > g->ui->menuContext->quantity) {
             g->ui->menuContext->quantity += 1;

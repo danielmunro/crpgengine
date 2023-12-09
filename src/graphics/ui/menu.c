@@ -26,6 +26,10 @@ typedef enum {
     NO_OP,
 } MenuSelectResponseType;
 
+typedef enum {
+    NOTHING_TO_DO,
+} MenuKeyPressedResponseType;
+
 typedef struct {
     Spritesheet *sprite;
     UIData *config;
@@ -61,18 +65,22 @@ typedef struct {
 } MenuSelectResponse;
 
 typedef struct {
+    MenuKeyPressedResponseType type;
+} MenuKeyPressedResponse;
+
+typedef struct {
     MenuType type;
     int cursor;
 
     int (*getCursorLength)(const MenuContext *);
 
-    void (*draw)(const MenuContext *);
+    void (*draw)(MenuContext *);
 
     int (*getNextOption)(const MenuContext *);
 
     int (*getPreviousOption)(const MenuContext *);
 
-    void (*keyPressed)(const MenuContext *);
+    MenuKeyPressedResponse *(*keyPressed)(MenuContext *);
 
     MenuSelectResponse *(*selected)(MenuContext *menuContext);
 } Menu;
@@ -84,13 +92,19 @@ MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuTy
     return response;
 }
 
+MenuKeyPressedResponse *createMenuKeyPressedResponse(MenuKeyPressedResponseType type) {
+    MenuKeyPressedResponse *response = malloc(sizeof(MenuKeyPressedResponse ));
+    response->type = type;
+    return response;
+}
+
 Menu *createMenu(
         MenuType type,
         int (getCursorLength)(const MenuContext *),
-        void (draw)(const MenuContext *),
+        void (*draw)(MenuContext *),
         int (*getPreviousOption)(const MenuContext *),
         int (*getNextOption)(const MenuContext *),
-        void (*keyPressed)(const MenuContext *),
+        MenuKeyPressedResponse *(*keyPressed)(MenuContext *),
         MenuSelectResponse *(*selected)()) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;
@@ -255,6 +269,10 @@ int getDefaultNextOption(const MenuContext *mc) {
 
 int getDefaultPreviousOption(const MenuContext *mc) {
     return mc->cursorLine - 1;
+}
+
+MenuKeyPressedResponse *menuKeyPressed(MenuContext *mc) {
+    return createMenuKeyPressedResponse(NOTHING_TO_DO);
 }
 
 MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext *menuContext) {

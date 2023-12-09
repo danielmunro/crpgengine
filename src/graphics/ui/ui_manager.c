@@ -25,9 +25,10 @@ int getMenuList(UIManager *uiMan) {
             createMenu(
                     PARTY_MENU,
                     &getPartyMenuCursorLength,
-                    drawPartyMenuScreen,
+                    &drawPartyMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &partyMenuItemSelected),
             createMenu(
                     PARTY_SELECT_MENU,
@@ -35,6 +36,7 @@ int getMenuList(UIManager *uiMan) {
                     drawPartySelectMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &partySelectMenuItemSelected),
             createMenu(
                     MAGIC_MENU,
@@ -42,6 +44,7 @@ int getMenuList(UIManager *uiMan) {
                     drawMagicMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &magicMenuItemSelected),
             createMenu(
                     ITEMS_MENU,
@@ -49,6 +52,7 @@ int getMenuList(UIManager *uiMan) {
                     drawItemsMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &itemMenuItemSelected),
             createMenu(
                     LOAD_MENU,
@@ -56,6 +60,7 @@ int getMenuList(UIManager *uiMan) {
                     drawLoadMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &loadMenuItemSelected),
             createMenu(
                     QUIT_MENU,
@@ -63,6 +68,7 @@ int getMenuList(UIManager *uiMan) {
                     drawQuitMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &quitMenuItemSelected),
             createMenu(
                     ACKNOWLEDGE_MENU,
@@ -70,6 +76,7 @@ int getMenuList(UIManager *uiMan) {
                     drawAcknowledgeMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &acknowledgeMenuItemSelected),
             createMenu(
                     MOBILE_SELECT_FIGHT_MENU,
@@ -77,6 +84,7 @@ int getMenuList(UIManager *uiMan) {
                     drawMobileSelectMenuScreen,
                     getPreviousMobileSelectCursorPosition,
                     getNextMobileSelectCursorPosition,
+                    &menuKeyPressed,
                     &mobileSelectMenuItemSelected),
             createMenu(
                     BEAST_LIST_FIGHT_MENU,
@@ -84,6 +92,7 @@ int getMenuList(UIManager *uiMan) {
                     drawBeastSelectMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &beastSelectMenuItemSelected),
             createMenu(
                     ACTION_SELECT_FIGHT_MENU,
@@ -91,6 +100,7 @@ int getMenuList(UIManager *uiMan) {
                     drawActionSelectMenuScreen,
                     getPreviousActionSelectCursorPosition,
                     getNextActionSelectCursorPosition,
+                    &menuKeyPressed,
                     &actionSelectMenuItemSelected),
             createMenu(
                     BEAST_TARGET_FIGHT_MENU,
@@ -98,6 +108,7 @@ int getMenuList(UIManager *uiMan) {
                     drawBeastTargetMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &beastTargetMenuItemSelected),
             createMenu(
                     MAGIC_FIGHT_MENU,
@@ -105,6 +116,7 @@ int getMenuList(UIManager *uiMan) {
                     drawMagicSelectMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &magicSelectMenuItemSelected),
             createMenu(
                     MOBILE_TARGET_FIGHT_MENU,
@@ -112,6 +124,7 @@ int getMenuList(UIManager *uiMan) {
                     drawMobileTargetMenuScreen,
                     getPreviousMobileTargetCursorPosition,
                     getNextMobileTargetCursorPosition,
+                    &menuKeyPressed,
                     &mobileTargetMenuItemSelected),
             createMenu(
                     PARTY_APPLY_MENU,
@@ -119,6 +132,7 @@ int getMenuList(UIManager *uiMan) {
                     drawPartyApplyMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &partyApplyMenuItemSelected),
             createMenu(
                     ITEMS_FIGHT_MENU,
@@ -126,6 +140,7 @@ int getMenuList(UIManager *uiMan) {
                     drawItemSelectMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &itemSelectMenuItemSelected),
             createMenu(
                     SHOP_WELCOME_MENU,
@@ -133,6 +148,7 @@ int getMenuList(UIManager *uiMan) {
                     drawShopWelcomeMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &shopWelcomeMenuItemSelected),
             createMenu(
                     SHOP_BUY_MENU,
@@ -140,6 +156,7 @@ int getMenuList(UIManager *uiMan) {
                     drawShopBuyMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &shopBuyMenuItemSelected),
             createMenu(
                     SHOP_CANNOT_AFFORD_MENU,
@@ -147,6 +164,7 @@ int getMenuList(UIManager *uiMan) {
                     drawCannotAffordMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &cannotAffordMenuItemSelected),
             createMenu(
                     SHOP_QUANTITY_SELECT_MENU,
@@ -154,6 +172,7 @@ int getMenuList(UIManager *uiMan) {
                     drawQuantitySelectMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &quantitySelectMenuItemSelected),
             createMenu(
                     SHOP_CONFIRM_PURCHASE_MENU,
@@ -161,6 +180,7 @@ int getMenuList(UIManager *uiMan) {
                     drawConfirmPurchaseMenuScreen,
                     getDefaultPreviousOption,
                     getDefaultNextOption,
+                    &menuKeyPressed,
                     &confirmPurchaseMenuItemSelected),
     };
     int count = sizeof(list) / sizeof(list[0]);
@@ -170,7 +190,11 @@ int getMenuList(UIManager *uiMan) {
     return count;
 }
 
-UIManager *createUIManager(UIData *uiConfig, UISprite *uiSprite, Fonts *fonts, MenuContext *menuContext) {
+UIManager *createUIManager(
+        UIData *uiConfig,
+        UISprite *uiSprite,
+        Fonts *fonts,
+        MenuContext *menuContext) {
     UIManager *uiMan = malloc(sizeof(UIManager));
     uiMan->fonts = fonts;
     uiMan->menuCount = getMenuList(uiMan);
