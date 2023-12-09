@@ -10,6 +10,16 @@ typedef struct {
     UIData *config;
 } UIManager;
 
+Fonts *createFonts(UIData *uiConfig) {
+    Fonts *fonts = malloc(sizeof(Fonts));
+    fonts->default_ = createFontFromData(uiConfig->fonts->default_);
+    fonts->disable = createFontFromData(uiConfig->fonts->disable);
+    fonts->highlight = createFontFromData(uiConfig->fonts->highlight);
+    fonts->warning = createFontFromData(uiConfig->fonts->warning);
+    fonts->danger = createFontFromData(uiConfig->fonts->danger);
+    return fonts;
+}
+
 int getMenuList(UIManager *uiMan) {
     Menu *list[] = {
             createMenu(
@@ -158,16 +168,6 @@ int getMenuList(UIManager *uiMan) {
         uiMan->menus[i] = list[i];
     }
     return count;
-}
-
-Fonts *createFonts(UIData *uiConfig) {
-    Fonts *fonts = malloc(sizeof(Fonts));
-    fonts->default_ = createFontFromData(uiConfig->fonts->default_);
-    fonts->disable = createFontFromData(uiConfig->fonts->disable);
-    fonts->highlight = createFontFromData(uiConfig->fonts->highlight);
-    fonts->warning = createFontFromData(uiConfig->fonts->warning);
-    fonts->danger = createFontFromData(uiConfig->fonts->danger);
-    return fonts;
 }
 
 UIManager *createUIManager(UIData *uiConfig, UISprite *uiSprite, Fonts *fonts, MenuContext *menuContext) {

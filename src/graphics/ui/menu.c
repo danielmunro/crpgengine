@@ -23,7 +23,6 @@ typedef enum {
     DEFEND_SELECTED,
     RESPONSE_TYPE_RUN,
     PARTY_MEMBER_SELECTED,
-    ITEM_SOLD_RESPONSE_TYPE,
     NO_OP,
 } MenuSelectResponseType;
 
@@ -67,11 +66,13 @@ typedef struct {
 
     int (*getCursorLength)(const MenuContext *);
 
-    void (*draw)(MenuContext *);
+    void (*draw)(const MenuContext *);
 
     int (*getNextOption)(const MenuContext *);
 
     int (*getPreviousOption)(const MenuContext *);
+
+    void (*keyPressed)(const MenuContext *);
 
     MenuSelectResponse *(*selected)(MenuContext *menuContext);
 } Menu;
@@ -86,9 +87,10 @@ MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuTy
 Menu *createMenu(
         MenuType type,
         int (getCursorLength)(const MenuContext *),
-        void (draw)(MenuContext *),
+        void (draw)(const MenuContext *),
         int (*getPreviousOption)(const MenuContext *),
         int (*getNextOption)(const MenuContext *),
+        void (*keyPressed)(const MenuContext *),
         MenuSelectResponse *(*selected)()) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;
@@ -97,6 +99,7 @@ Menu *createMenu(
     menu->draw = draw;
     menu->getPreviousOption = getPreviousOption;
     menu->getNextOption = getNextOption;
+    menu->keyPressed = keyPressed;
     menu->selected = selected;
     return menu;
 }
