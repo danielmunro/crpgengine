@@ -82,9 +82,9 @@ typedef struct {
 
     void (*draw)(MenuContext *);
 
-    int (*getNextOption)(const MenuContext *);
+    int (*getNextOption)(const MenuContext *, const int maxCursorLine);
 
-    int (*getPreviousOption)(const MenuContext *);
+    int (*getPreviousOption)(const MenuContext *, const int maxCursorLine);
 
     MenuKeyPressedResponse *(*keyPressed)(const MenuContext *);
 
@@ -108,8 +108,8 @@ Menu *createMenu(
         MenuType type,
         int (getCursorLength)(const MenuContext *),
         void (*draw)(MenuContext *),
-        int (*getPreviousOption)(const MenuContext *),
-        int (*getNextOption)(const MenuContext *),
+        int (*getPreviousOption)(const MenuContext *, const int maxCursorLine),
+        int (*getNextOption)(const MenuContext *, const int maxCursorLine),
         MenuKeyPressedResponse *(*keyPressed)(const MenuContext *),
         MenuSelectResponse *(*selected)()) {
     Menu *menu = malloc(sizeof(Menu));
@@ -168,15 +168,6 @@ UISprite *createUISprite(Spritesheet *sprite, UIData *uiData) {
     uiSprite->sprite = sprite;
     uiSprite->config = uiData;
     return uiSprite;
-}
-
-void normalizeMenuCursor(Menu *menu, const MenuContext *menuContext) {
-    if (menu->cursor >= menu->getCursorLength(menuContext)) {
-        menu->cursor = 0;
-    }
-    if (menu->cursor < 0) {
-        menu->cursor = menu->getCursorLength(menuContext) - 1;
-    }
 }
 
 int addMenu(Menu **menus, Menu *m) {
@@ -269,15 +260,21 @@ TextBox *findOrCreateTextBox(MenuContext *mc, TextBoxLabel label, Rectangle area
     exit(GameEngineErrorTextBoxNotFound);
 }
 
-int getDefaultNextOption(const MenuContext *mc) {
+int getDefaultNextOption(const MenuContext *mc, const int maxCursorLine) {
+    if (mc->cursorLine + 1 == maxCursorLine) {
+        return 0;
+    }
     return mc->cursorLine + 1;
 }
 
-int getDefaultPreviousOption(const MenuContext *mc) {
+int getDefaultPreviousOption(const MenuContext *mc, const int maxCursorLine) {
+    if (mc->cursorLine == 0) {
+        return maxCursorLine - 1;
+    }
     return mc->cursorLine - 1;
 }
 
-MenuKeyPressedResponse *menuKeyPressed(const MenuContext *mc) {
+MenuKeyPressedResponse *menuKeyPressed() {
     if (IsKeyPressed(KEY_ESCAPE)) {
         return createMenuKeyPressedResponse(KEY_PRESSED_CLOSE_MENU);
     } else if (IsKeyPressed(KEY_DOWN)) {

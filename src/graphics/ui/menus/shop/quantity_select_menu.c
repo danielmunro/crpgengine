@@ -59,5 +59,5 @@ MenuKeyPressedResponse *quantitySelectKeyPressed(const MenuContext *mc) {
     } else if (IsKeyPressed(KEY_RIGHT)) {
         return createMenuKeyPressedResponse(KEY_PRESSED_INCREMENT_CURSOR);
     }
-    return menuKeyPressed(mc);
+    return menuKeyPressed();
 }

@@ -54,7 +54,7 @@ bool canGoToIndex(const Mobile *mob, int index) {
     return true;
 }
 
-int getNextActionSelectCursorPosition(const MenuContext *mc) {
+int getNextActionSelectCursorPosition(const MenuContext *mc, const int maxCursorLine) {
     for (int i = mc->cursorLine + 1; i < getActionSelectCursorLength(); i++) {
         if (canGoToIndex(mc->selectedMob, i)) {
             return i;
@@ -68,7 +68,7 @@ int getNextActionSelectCursorPosition(const MenuContext *mc) {
     return mc->cursorLine;
 }
 
-int getPreviousActionSelectCursorPosition(const MenuContext *mc) {
+int getPreviousActionSelectCursorPosition(const MenuContext *mc, const int maxCursorLine) {
     for (int i = mc->cursorLine - 1; i >= 0; i--) {
         if (canGoToIndex(mc->selectedMob, i)) {
             return i;
