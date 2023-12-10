@@ -33,9 +33,6 @@ void drawQuantitySelectMenuScreen(MenuContext *mc) {
 }
 
 MenuSelectResponse *quantitySelectMenuItemSelected(const MenuContext *mc) {
-    if (mc->cursorLine == 1) {
-        return createMenuSelectResponse(CLOSE_MENU, SHOP_QUANTITY_SELECT_MENU);
-    }
     return createMenuSelectResponse(OPEN_MENU, SHOP_CONFIRM_PURCHASE_MENU);
 }
 
@@ -58,6 +55,8 @@ MenuKeyPressedResponse *quantitySelectKeyPressed(const MenuContext *mc) {
         return createMenuKeyPressedResponse(KEY_PRESSED_DECREMENT_CURSOR);
     } else if (IsKeyPressed(KEY_RIGHT)) {
         return createMenuKeyPressedResponse(KEY_PRESSED_INCREMENT_CURSOR);
+    } else if (IsKeyPressed(KEY_SPACE) && mc->cursorLine == 1) {
+        return createMenuKeyPressedResponse(KEY_PRESSED_CLOSE_MENU);
     }
     return menuKeyPressed();
 }
