@@ -22,8 +22,18 @@ void drawQuantitySelectMenuScreen(MenuContext *mc) {
     sprintf(costText, "= %d", (mc->quantity) * mc->itemToBuy->worth);
     drawInMenu(b2, "");
     drawInMenu(b2, costText);
-    drawScrollableInMenuWithStyle(b, mc->cursorLine == 1 ? mc->fonts->highlight : mc->fonts->default_, "                 cancel", 3);
-    drawScrollableInMenuWithStyle(b, mc->cursorLine == 0 ? mc->fonts->highlight : mc->fonts->default_, "confirm", 3);
+    drawScrollableInMenuWithStyle(
+            b,
+            mc->cursorLine == 1 ? mc->fonts->highlight : mc->fonts->default_,
+            "                 cancel",
+            0,
+            2);
+    drawScrollableInMenuWithStyle(
+            b,
+            mc->cursorLine == 0 ? mc->fonts->highlight : mc->fonts->default_,
+            "confirm",
+            0,
+            2);
     drawRightCursor(
             mc->uiSprite,
             (Vector2) {
