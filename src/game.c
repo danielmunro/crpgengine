@@ -140,38 +140,27 @@ void checkMapInput(Game *g) {
     }
 }
 
-bool isQuantizedMenu(MenuType type) {
-    return type == SHOP_QUANTITY_SELECT_MENU;
-}
-
 void checkMenuInput(Game *g) {
-    if (IsKeyPressed(KEY_ESCAPE)) {
+    Menu *menu = getCurrentMenu(g->menus);
+    MenuContext *mc = g->ui->menuContext;
+    const MenuKeyPressedType keyPressed = menu->keyPressed(mc);
+    if (keyPressed == KEY_PRESSED_CLOSE_MENU) {
         removeLastMenu(g->menus);
-        resetMenuContext(g->ui->menuContext);
-    }
-    if (IsKeyPressed(KEY_DOWN)) {
-        Menu *menu = getCurrentMenu(g->menus);
-        if (isQuantizedMenu(menu->type)
-                && g->ui->menuContext->quantity > 1) {
-            g->ui->menuContext->quantity -= 1;
-            return;
-        }
-        menu->cursor = menu->getNextOption(g->ui->menuContext);
-        normalizeMenuCursor(menu, g->ui->menuContext);
-    }
-    if (IsKeyPressed(KEY_UP)) {
-        Menu *menu = getCurrentMenu(g->menus);
-        if (isQuantizedMenu(menu->type)
-                && menu->getCursorLength(g->ui->menuContext) > g->ui->menuContext->quantity) {
-            g->ui->menuContext->quantity += 1;
-            return;
-        }
-        menu->cursor = menu->getPreviousOption(g->ui->menuContext);
-        normalizeMenuCursor(menu, g->ui->menuContext);
-    }
-    if (IsKeyPressed(KEY_SPACE)) {
-        MenuSelectResponse *response = menuItemSelected(g->menus, g->ui->menus, g->ui->menuContext);
+        resetMenuContext(mc);
+    } else if (keyPressed == KEY_PRESSED_INCREMENT_CURSOR) {
+        menu->cursor = menu->getNextOption(mc, menu->getCursorLength(mc));
+    } else if (keyPressed == KEY_PRESSED_DECREMENT_CURSOR) {
+        menu->cursor = menu->getPreviousOption(mc, menu->getCursorLength(mc));
+    } else if (keyPressed == KEY_PRESSED_EXECUTE) {
+        MenuSelectResponse *response = menuItemSelected(
+                g->menus,
+                g->ui->menus,
+                mc);
         free(response);
+    } else if (keyPressed == KEY_PRESSED_INCREMENT_QUANTITY) {
+        mc->quantity += 1;
+    } else if (keyPressed == KEY_PRESSED_DECREMENT_QUANTITY) {
+        mc->quantity -= 1;
     }
 }
 

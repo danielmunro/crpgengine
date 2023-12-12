@@ -23,9 +23,18 @@ typedef enum {
     DEFEND_SELECTED,
     RESPONSE_TYPE_RUN,
     PARTY_MEMBER_SELECTED,
-    ITEM_SOLD_RESPONSE_TYPE,
     NO_OP,
 } MenuSelectResponseType;
+
+typedef enum {
+    KEY_PRESSED_CLOSE_MENU,
+    KEY_PRESSED_DECREMENT_CURSOR,
+    KEY_PRESSED_INCREMENT_CURSOR,
+    KEY_PRESSED_EXECUTE,
+    KEY_PRESSED_DECREMENT_QUANTITY,
+    KEY_PRESSED_INCREMENT_QUANTITY,
+    KEY_PRESSED_NOTHING_TO_DO,
+} MenuKeyPressedType;
 
 typedef struct {
     Spritesheet *sprite;
@@ -69,9 +78,11 @@ typedef struct {
 
     void (*draw)(MenuContext *);
 
-    int (*getNextOption)(const MenuContext *);
+    int (*getNextOption)(const MenuContext *, const int maxCursorLine);
 
-    int (*getPreviousOption)(const MenuContext *);
+    int (*getPreviousOption)(const MenuContext *, const int maxCursorLine);
+
+    MenuKeyPressedType (*keyPressed)(const MenuContext *);
 
     MenuSelectResponse *(*selected)(MenuContext *menuContext);
 } Menu;
@@ -86,9 +97,10 @@ MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuTy
 Menu *createMenu(
         MenuType type,
         int (getCursorLength)(const MenuContext *),
-        void (draw)(MenuContext *),
-        int (*getPreviousOption)(const MenuContext *),
-        int (*getNextOption)(const MenuContext *),
+        void (*draw)(MenuContext *),
+        int (*getPreviousOption)(const MenuContext *, const int maxCursorLine),
+        int (*getNextOption)(const MenuContext *, const int maxCursorLine),
+        MenuKeyPressedType (*keyPressed)(const MenuContext *),
         MenuSelectResponse *(*selected)()) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;
@@ -97,6 +109,7 @@ Menu *createMenu(
     menu->draw = draw;
     menu->getPreviousOption = getPreviousOption;
     menu->getNextOption = getNextOption;
+    menu->keyPressed = keyPressed;
     menu->selected = selected;
     return menu;
 }
@@ -145,15 +158,6 @@ UISprite *createUISprite(Spritesheet *sprite, UIData *uiData) {
     uiSprite->sprite = sprite;
     uiSprite->config = uiData;
     return uiSprite;
-}
-
-void normalizeMenuCursor(Menu *menu, const MenuContext *menuContext) {
-    if (menu->cursor >= menu->getCursorLength(menuContext)) {
-        menu->cursor = 0;
-    }
-    if (menu->cursor < 0) {
-        menu->cursor = menu->getCursorLength(menuContext) - 1;
-    }
 }
 
 int addMenu(Menu **menus, Menu *m) {
@@ -246,12 +250,31 @@ TextBox *findOrCreateTextBox(MenuContext *mc, TextBoxLabel label, Rectangle area
     exit(GameEngineErrorTextBoxNotFound);
 }
 
-int getDefaultNextOption(const MenuContext *mc) {
+int getDefaultNextOption(const MenuContext *mc, const int maxCursorLine) {
+    if (mc->cursorLine + 1 == maxCursorLine) {
+        return 0;
+    }
     return mc->cursorLine + 1;
 }
 
-int getDefaultPreviousOption(const MenuContext *mc) {
+int getDefaultPreviousOption(const MenuContext *mc, const int maxCursorLine) {
+    if (mc->cursorLine == 0) {
+        return maxCursorLine - 1;
+    }
     return mc->cursorLine - 1;
+}
+
+MenuKeyPressedType menuKeyPressed() {
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        return KEY_PRESSED_CLOSE_MENU;
+    } else if (IsKeyPressed(KEY_DOWN)) {
+        return KEY_PRESSED_INCREMENT_CURSOR;
+    } else if (IsKeyPressed(KEY_UP)) {
+        return KEY_PRESSED_DECREMENT_CURSOR;
+    } else if (IsKeyPressed(KEY_SPACE)) {
+        return KEY_PRESSED_EXECUTE;
+    }
+    return KEY_PRESSED_NOTHING_TO_DO;
 }
 
 MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext *menuContext) {

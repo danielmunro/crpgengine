@@ -117,7 +117,7 @@ MenuSelectResponse *mobileSelectMenuItemSelected(MenuContext *menuContext) {
     return createMenuSelectResponse(OPEN_MENU, ACTION_SELECT_FIGHT_MENU);
 }
 
-int getNextMobileSelectCursorPosition(const MenuContext *mc) {
+int getNextMobileSelectCursorPosition(const MenuContext *mc, const int maxCursorLine) {
     const Player *p = mc->player;
     for (int i = mc->cursorLine + 1; i < mc->player->partyCount; i++) {
         if (isReadyForAction(p->party[i])) {
@@ -132,7 +132,7 @@ int getNextMobileSelectCursorPosition(const MenuContext *mc) {
     return mc->cursorLine;
 }
 
-int getPreviousMobileSelectCursorPosition(const MenuContext *mc) {
+int getPreviousMobileSelectCursorPosition(const MenuContext *mc, const int maxCursorLine) {
     const Player *p = mc->player;
     for (int i = mc->cursorLine - 1; i >= 0; i--) {
         if (isReadyForAction(p->party[i])) {

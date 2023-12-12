@@ -442,8 +442,9 @@ void fightUpdate(FightManager *fm) {
 void removeMenusUntilMobileSelect(FightManager *fm) {
     const Menu *currentMenu = getCurrentMenu(fm->menus);
     Menu *menu = removeMenusTo(fm->menus, MOBILE_SELECT_FIGHT_MENU);
-    fm->ui->menuContext->cursorLine = menu->cursor;
-    menu->cursor = currentMenu->getNextOption(fm->ui->menuContext);
+    MenuContext *mc = fm->ui->menuContext;
+    mc->cursorLine = menu->cursor;
+    menu->cursor = currentMenu->getNextOption(mc, currentMenu->getCursorLength(mc));
 }
 
 void fightSpaceKeyPressed(FightManager *fm) {
@@ -476,8 +477,9 @@ void tryToggleTargetMenus(FightManager *fm) {
         Menu *m = findMenu(fm->ui->menus, MOBILE_TARGET_FIGHT_MENU);
         const Mobile *mob = fm->fight->player->party[m->cursor];
         if (mob->hp <= 0) {
-            fm->ui->menuContext->cursorLine = m->cursor;
-            m->cursor = m->getNextOption(fm->ui->menuContext);
+            MenuContext *mc = fm->ui->menuContext;
+            mc->cursorLine = m->cursor;
+            m->cursor = m->getNextOption(mc, m->getCursorLength(mc));
         }
         addMenu(fm->menus, m);
     } else if (current->type == MOBILE_TARGET_FIGHT_MENU) {
@@ -497,14 +499,12 @@ void checkFightInput(FightManager *fm) {
     if (IsKeyPressed(KEY_DOWN)) {
         Menu *m = getCurrentMenu(fm->menus);
         const MenuContext *mc = fm->ui->menuContext;
-        m->cursor = m->getNextOption(mc);
-        normalizeMenuCursor(m, mc);
+        m->cursor = m->getNextOption(mc, m->getCursorLength(mc));
     }
     if (IsKeyPressed(KEY_UP)) {
         Menu *m = getCurrentMenu(fm->menus);
         const MenuContext *mc = fm->ui->menuContext;
-        m->cursor = m->getPreviousOption(mc);
-        normalizeMenuCursor(m, mc);
+        m->cursor = m->getPreviousOption(mc, m->getCursorLength(mc));
     }
     if (IsKeyPressed(KEY_SPACE)) {
         fightSpaceKeyPressed(fm);
