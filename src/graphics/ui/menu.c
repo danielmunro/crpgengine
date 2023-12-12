@@ -34,7 +34,7 @@ typedef enum {
     KEY_PRESSED_DECREMENT_QUANTITY,
     KEY_PRESSED_INCREMENT_QUANTITY,
     KEY_PRESSED_NOTHING_TO_DO,
-} MenuKeyPressedResponseType;
+} MenuKeyPressedType;
 
 typedef struct {
     Spritesheet *sprite;
@@ -71,10 +71,6 @@ typedef struct {
 } MenuSelectResponse;
 
 typedef struct {
-    MenuKeyPressedResponseType type;
-} MenuKeyPressedResponse;
-
-typedef struct {
     MenuType type;
     int cursor;
 
@@ -86,7 +82,7 @@ typedef struct {
 
     int (*getPreviousOption)(const MenuContext *, const int maxCursorLine);
 
-    MenuKeyPressedResponse *(*keyPressed)(const MenuContext *);
+    MenuKeyPressedType (*keyPressed)(const MenuContext *);
 
     MenuSelectResponse *(*selected)(MenuContext *menuContext);
 } Menu;
@@ -98,19 +94,13 @@ MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuTy
     return response;
 }
 
-MenuKeyPressedResponse *createMenuKeyPressedResponse(MenuKeyPressedResponseType type) {
-    MenuKeyPressedResponse *response = malloc(sizeof(MenuKeyPressedResponse ));
-    response->type = type;
-    return response;
-}
-
 Menu *createMenu(
         MenuType type,
         int (getCursorLength)(const MenuContext *),
         void (*draw)(MenuContext *),
         int (*getPreviousOption)(const MenuContext *, const int maxCursorLine),
         int (*getNextOption)(const MenuContext *, const int maxCursorLine),
-        MenuKeyPressedResponse *(*keyPressed)(const MenuContext *),
+        MenuKeyPressedType (*keyPressed)(const MenuContext *),
         MenuSelectResponse *(*selected)()) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;
@@ -274,17 +264,17 @@ int getDefaultPreviousOption(const MenuContext *mc, const int maxCursorLine) {
     return mc->cursorLine - 1;
 }
 
-MenuKeyPressedResponse *menuKeyPressed() {
+MenuKeyPressedType menuKeyPressed() {
     if (IsKeyPressed(KEY_ESCAPE)) {
-        return createMenuKeyPressedResponse(KEY_PRESSED_CLOSE_MENU);
+        return KEY_PRESSED_CLOSE_MENU;
     } else if (IsKeyPressed(KEY_DOWN)) {
-        return createMenuKeyPressedResponse(KEY_PRESSED_INCREMENT_CURSOR);
+        return KEY_PRESSED_INCREMENT_CURSOR;
     } else if (IsKeyPressed(KEY_UP)) {
-        return createMenuKeyPressedResponse(KEY_PRESSED_DECREMENT_CURSOR);
+        return KEY_PRESSED_DECREMENT_CURSOR;
     } else if (IsKeyPressed(KEY_SPACE)) {
-        return createMenuKeyPressedResponse(KEY_PRESSED_EXECUTE);
+        return KEY_PRESSED_EXECUTE;
     }
-    return createMenuKeyPressedResponse(KEY_PRESSED_NOTHING_TO_DO);
+    return KEY_PRESSED_NOTHING_TO_DO;
 }
 
 MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext *menuContext) {

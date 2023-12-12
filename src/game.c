@@ -143,26 +143,25 @@ void checkMapInput(Game *g) {
 void checkMenuInput(Game *g) {
     Menu *menu = getCurrentMenu(g->menus);
     MenuContext *mc = g->ui->menuContext;
-    const MenuKeyPressedResponse *keyPressed = menu->keyPressed(mc);
-    if (keyPressed->type == KEY_PRESSED_CLOSE_MENU) {
+    const MenuKeyPressedType keyPressed = menu->keyPressed(mc);
+    if (keyPressed == KEY_PRESSED_CLOSE_MENU) {
         removeLastMenu(g->menus);
         resetMenuContext(mc);
-    } else if (keyPressed->type == KEY_PRESSED_INCREMENT_CURSOR) {
+    } else if (keyPressed == KEY_PRESSED_INCREMENT_CURSOR) {
         menu->cursor = menu->getNextOption(mc, menu->getCursorLength(mc));
-    } else if (keyPressed->type == KEY_PRESSED_DECREMENT_CURSOR) {
+    } else if (keyPressed == KEY_PRESSED_DECREMENT_CURSOR) {
         menu->cursor = menu->getPreviousOption(mc, menu->getCursorLength(mc));
-    } else if (keyPressed->type == KEY_PRESSED_EXECUTE) {
+    } else if (keyPressed == KEY_PRESSED_EXECUTE) {
         MenuSelectResponse *response = menuItemSelected(
                 g->menus,
                 g->ui->menus,
                 mc);
         free(response);
-    } else if (keyPressed->type == KEY_PRESSED_INCREMENT_QUANTITY) {
+    } else if (keyPressed == KEY_PRESSED_INCREMENT_QUANTITY) {
         mc->quantity += 1;
-    } else if (keyPressed->type == KEY_PRESSED_DECREMENT_QUANTITY) {
+    } else if (keyPressed == KEY_PRESSED_DECREMENT_QUANTITY) {
         mc->quantity -= 1;
     }
-    free((MenuKeyPressedResponse *) keyPressed);
 }
 
 bool isExploring(Game *g) {

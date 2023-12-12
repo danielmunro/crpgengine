@@ -50,23 +50,23 @@ int getMaxQuantity(const MenuContext *mc) {
     return mc->player->coins / mc->itemToBuy->worth;
 }
 
-MenuKeyPressedResponse *quantitySelectKeyPressed(const MenuContext *mc) {
+MenuKeyPressedType quantitySelectKeyPressed(const MenuContext *mc) {
     if (IsKeyPressed(KEY_UP)) {
         if (getMaxQuantity(mc) > mc->quantity) {
-            return createMenuKeyPressedResponse(KEY_PRESSED_INCREMENT_QUANTITY);
+            return KEY_PRESSED_INCREMENT_QUANTITY;
         }
-        return createMenuKeyPressedResponse(KEY_PRESSED_NOTHING_TO_DO);
+        return KEY_PRESSED_NOTHING_TO_DO;
     } else if (IsKeyPressed(KEY_DOWN)) {
         if (mc->quantity > 1) {
-            return createMenuKeyPressedResponse(KEY_PRESSED_DECREMENT_QUANTITY);
+            return KEY_PRESSED_DECREMENT_QUANTITY;
         }
-        return createMenuKeyPressedResponse(KEY_PRESSED_NOTHING_TO_DO);
+        return KEY_PRESSED_NOTHING_TO_DO;
     } else if (IsKeyPressed(KEY_LEFT)) {
-        return createMenuKeyPressedResponse(KEY_PRESSED_DECREMENT_CURSOR);
+        return KEY_PRESSED_DECREMENT_CURSOR;
     } else if (IsKeyPressed(KEY_RIGHT)) {
-        return createMenuKeyPressedResponse(KEY_PRESSED_INCREMENT_CURSOR);
+        return KEY_PRESSED_INCREMENT_CURSOR;
     } else if (IsKeyPressed(KEY_SPACE) && mc->cursorLine == 1) {
-        return createMenuKeyPressedResponse(KEY_PRESSED_CLOSE_MENU);
+        return KEY_PRESSED_CLOSE_MENU;
     }
     return menuKeyPressed();
 }
