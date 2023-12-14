@@ -1,6 +1,23 @@
 #include "headers/persistence/cyaml.h"
 #include "headers/attributes.h"
 
+#define MAX_ITEM_AFFECTS 32
+
+const char *ItemAffects[] = {
+        "none",
+        "raise",
+};
+
+typedef enum {
+    ITEM_AFFECT_NONE,
+    ITEM_AFFECT_RAISE,
+} ItemAffect;
+
+const ItemAffect ItemAffectsEnum[] = {
+        ITEM_AFFECT_NONE,
+        ITEM_AFFECT_RAISE,
+};
+
 const char *ItemTypes[] = {
         "none",
         "consumable",
@@ -8,10 +25,6 @@ const char *ItemTypes[] = {
         "crafting material",
         "quest",
 };
-
-typedef enum {
-    ITEM_AFFECT_RAISE,
-} ItemAffect;
 
 typedef enum {
     ITEM_TYPE_NONE,
@@ -43,6 +56,8 @@ typedef struct {
     int worth;
     Attributes *attributes;
     EquipmentPosition position;
+    ItemAffect *affects;
+    int affectsCount;
 } Item;
 
 typedef struct {
@@ -64,6 +79,27 @@ typedef struct {
     Item *item;
     int worth;
 } ItemWithMarkup;
+
+ItemAffect *mapStringsToItemAffects(const char **affectStrings, int count) {
+    ItemAffect *affects = calloc(count, sizeof(ItemAffect));
+    int totalAffectCount = sizeof(ItemAffects) / sizeof(ItemAffects[0]);
+    for (int i = 0; i < count; i++) {
+        for (int j = 0; j < totalAffectCount; j++) {
+            if (strcmp(ItemAffects[j], affectStrings[i]) == 0) {
+                affects[i] = j;
+            }
+        }
+    }
+    return affects;
+}
+
+const char **mapItemAffectsToStrings(const ItemAffect *affects, int count) {
+    const char **affectStrings = calloc(count, sizeof(char *));
+    for (int i = 0; i < count; i++) {
+        affectStrings[i] = ItemAffects[affects[i]];
+    }
+    return affectStrings;
+}
 
 ItemType getItemTypeFromString(const char *type) {
     int count = sizeof(ItemTypes) / sizeof(ItemTypes[0]);
@@ -93,13 +129,20 @@ Item *createItem(
         const char *name,
         int worth,
         Attributes *attributes,
-        EquipmentPosition position) {
+        EquipmentPosition position,
+        const ItemAffect *affects,
+        int affectsCount) {
     Item *item = malloc(sizeof(Item));
     item->type = type;
     item->name = name;
     item->worth = worth;
     item->attributes = attributes;
     item->position = position;
+    item->affects = calloc(MAX_ITEM_AFFECTS, sizeof (ItemAffect));
+    for (int i = 0; i < affectsCount; i++) {
+        item->affects[i] = affects[i];
+    }
+    item->affectsCount = affectsCount;
     return item;
 }
 
@@ -118,20 +161,28 @@ ItemWithMarkup *createItemWithMarkup(Item *item, int worth) {
 }
 
 Item *createItemFromData(const ItemData *data) {
-    return createItem(
+    ItemAffect *affects = mapStringsToItemAffects(data->affects, data->affects_count);
+    Item *item = createItem(
             getItemTypeFromString(data->type),
             data->name,
             data->worth,
             createAttributesFromData(data->attributes),
-            getEquipmentPositionFromString(data->position));
+            getEquipmentPositionFromString(data->position),
+            affects,
+            data->affects_count);
+    free(affects);
+    return item;
 }
 
 ItemData createItemData(const Item *item) {
+    const char **itemAffects = mapItemAffectsToStrings(item->affects, item->affectsCount);
     return (ItemData) {
             item->name,
             ItemTypes[item->type],
             EquipmentPositions[item->position],
             item->worth,
             createDataFromAttributes(item->attributes),
+            itemAffects,
+            item->affectsCount,
     };
 }

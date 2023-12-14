@@ -6,12 +6,18 @@ typedef struct {
     const char *position;
     int worth;
     AttributesData *attributes;
+    const char **affects;
+    int affects_count;
 } ItemData;
 
 typedef struct {
     ItemData *items;
     int items_count;
 } ItemsData;
+
+static const cyaml_schema_value_t affectsSchema = {
+        CYAML_VALUE_STRING(CYAML_FLAG_POINTER, char, 0, CYAML_UNLIMITED),
+};
 
 static const cyaml_schema_field_t itemFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
@@ -25,6 +31,9 @@ static const cyaml_schema_field_t itemFieldSchema[] = {
         CYAML_FIELD_MAPPING_PTR(
                 "attributes", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
                 ItemData, attributes, attributesFieldSchema),
+        CYAML_FIELD_SEQUENCE(
+                "affects", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, ItemData, affects,
+                &affectsSchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 
