@@ -68,5 +68,5 @@ MenuKeyPressedType quantitySelectKeyPressed(const MenuContext *mc) {
     } else if (IsKeyPressed(KEY_SPACE) && mc->cursorLine == 1) {
         return KEY_PRESSED_CLOSE_MENU;
     }
-    return menuKeyPressed();
+    return menuKeyPressed(mc);
 }

@@ -143,6 +143,7 @@ void checkMapInput(Game *g) {
 void checkMenuInput(Game *g) {
     Menu *menu = getCurrentMenu(g->menus);
     MenuContext *mc = g->ui->menuContext;
+    mc->menuType = menu->type;
     const MenuKeyPressedType keyPressed = menu->keyPressed(mc);
     if (keyPressed == KEY_PRESSED_CLOSE_MENU) {
         removeLastMenu(g->menus);
@@ -292,6 +293,7 @@ void initializeGameForPlayer(Game *g) {
             g->beastiary);
     setSceneBasedOnSave(g->scenes, g->player, save);
     g->timing->player = g->player;
+    g->ui->menuContext->player = g->player;
     addDebug("done initializing game for player");
     free(save);
 }

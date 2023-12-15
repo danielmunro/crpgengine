@@ -45,6 +45,7 @@ typedef struct {
 } UISprite;
 
 typedef struct {
+    MenuType menuType;
     const char *scene;
     Player *player;
     const char *indexDir;
@@ -267,8 +268,8 @@ int getDefaultPreviousOption(const MenuContext *mc, const int maxCursorLine) {
     return mc->cursorLine - 1;
 }
 
-MenuKeyPressedType menuKeyPressed() {
-    if (IsKeyPressed(KEY_ESCAPE)) {
+MenuKeyPressedType menuKeyPressed(const MenuContext *mc) {
+    if (IsKeyPressed(KEY_ESCAPE) && mc->menuType != MAIN_MENU) {
         return KEY_PRESSED_CLOSE_MENU;
     } else if (IsKeyPressed(KEY_DOWN)) {
         return KEY_PRESSED_INCREMENT_CURSOR;

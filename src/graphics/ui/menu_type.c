@@ -8,6 +8,7 @@ typedef enum {
 
 typedef enum {
     MAIN_MENU,
+    SETTINGS_MENU,
     PARTY_MENU,
     ITEMS_MENU,
     MAGIC_MENU,
