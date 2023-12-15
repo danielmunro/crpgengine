@@ -186,8 +186,8 @@ int getMenuList(UIManager *uiMan) {
                     MAIN_MENU,
                     &getMainMenuCursorLength,
                     &drawMainMenuScreen,
-                    &getDefaultPreviousOption,
-                    &getDefaultNextOption,
+                    &getPreviousMainMenuCursorPosition,
+                    &getNextMainMenuCursorPosition,
                     &menuKeyPressed,
                     &mainMenuItemSelected),
     };

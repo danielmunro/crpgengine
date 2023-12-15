@@ -25,6 +25,8 @@ typedef enum {
     RESPONSE_TYPE_PARTY_MEMBER_SELECTED,
     RESPONSE_TYPE_NONE,
     RESPONSE_TYPE_EXIT,
+    RESPONSE_TYPE_NEW_GAME,
+    RESPONSE_TYPE_CONTINUE_GAME,
 } MenuSelectResponseType;
 
 typedef enum {
@@ -294,8 +296,14 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
             addMenu(menus, findMenu(allMenus, MAGIC_MENU));
         }
     } else if (response->type == RESPONSE_TYPE_EXIT) {
-        addDebug("player requests to exit game");
+        addDebug("player exiting game");
         exit(0);
+    } else if (response->type == RESPONSE_TYPE_NEW_GAME) {
+        config->forceNewGame = true;
+        removeMenu(menus, response->menuType);
+    } else if (response->type == RESPONSE_TYPE_CONTINUE_GAME) {
+        config->forceNewGame = false;
+        removeMenu(menus, response->menuType);
     }
     return response;
 }
