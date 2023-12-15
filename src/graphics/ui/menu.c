@@ -17,13 +17,14 @@ const char *QuitMenuItems[] = {
 };
 
 typedef enum {
-    OPEN_MENU,
-    CLOSE_MENU,
-    FIND_TARGET_MENU,
-    DEFEND_SELECTED,
+    RESPONSE_TYPE_OPEN_MENU,
+    RESPONSE_TYPE_CLOSE_MENU,
+    RESPONSE_TYPE_FIND_TARGET_MENU,
+    RESPONSE_TYPE_DEFEND_SELECTED,
     RESPONSE_TYPE_RUN,
-    PARTY_MEMBER_SELECTED,
-    NO_OP,
+    RESPONSE_TYPE_PARTY_MEMBER_SELECTED,
+    RESPONSE_TYPE_NONE,
+    RESPONSE_TYPE_EXIT,
 } MenuSelectResponseType;
 
 typedef enum {
@@ -283,15 +284,18 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
     if (response == NULL) {
         return NULL;
     }
-    if (response->type == OPEN_MENU) {
+    if (response->type == RESPONSE_TYPE_OPEN_MENU) {
         addMenu(menus, findMenu(allMenus, response->menuType));
-    } else if (response->type == CLOSE_MENU) {
+    } else if (response->type == RESPONSE_TYPE_CLOSE_MENU) {
         removeMenu(menus, response->menuType);
-    } else if (response->type == PARTY_MEMBER_SELECTED) {
+    } else if (response->type == RESPONSE_TYPE_PARTY_MEMBER_SELECTED) {
         Menu *partyMenu = findMenu(menus, PARTY_MENU);
         if (strcmp(PartyMenuItems[partyMenu->cursor], PARTY_MENU_MAGIC) == 0) {
             addMenu(menus, findMenu(allMenus, MAGIC_MENU));
         }
+    } else if (response->type == RESPONSE_TYPE_EXIT) {
+        addDebug("player requests to exit game");
+        exit(0);
     }
     return response;
 }

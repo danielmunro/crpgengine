@@ -47,8 +47,8 @@ void drawShopBuyMenuScreen(MenuContext *mc) {
 MenuSelectResponse *shopBuyMenuItemSelected(MenuContext *mc) {
     ItemWithMarkup *item = mc->shop->items[mc->cursorLine];
     if (mc->player->coins < item->worth) {
-        return createMenuSelectResponse(OPEN_MENU, SHOP_CANNOT_AFFORD_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, SHOP_CANNOT_AFFORD_MENU);
     }
     mc->itemToBuy = item;
-    return createMenuSelectResponse(OPEN_MENU, SHOP_QUANTITY_SELECT_MENU);
+    return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, SHOP_QUANTITY_SELECT_MENU);
 }

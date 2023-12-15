@@ -14,5 +14,5 @@ void drawCannotAffordMenuScreen(MenuContext *menuContext) {
 }
 
 MenuSelectResponse *cannotAffordMenuItemSelected() {
-    return createMenuSelectResponse(CLOSE_MENU, SHOP_CANNOT_AFFORD_MENU);
+    return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, SHOP_CANNOT_AFFORD_MENU);
 }

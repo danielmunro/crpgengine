@@ -1,5 +1,5 @@
-int getMainMenuCursorLength(const MenuContext *menuContext) {
-    return 3;
+int getMainMenuCursorLength() {
+    return 4;
 }
 
 void drawMainMenuScreen(MenuContext *menuContext) {
@@ -10,6 +10,7 @@ void drawMainMenuScreen(MenuContext *menuContext) {
     drawMenuRect(t->area);
     drawInMenu(t, "new");
     drawInMenu(t, "load");
+    drawInMenu(t, "settings");
     drawInMenu(t, "exit");
     drawRightCursor(
             menuContext->uiSprite,
@@ -21,6 +22,9 @@ void drawMainMenuScreen(MenuContext *menuContext) {
             });
 }
 
-MenuSelectResponse *mainMenuItemSelected(MenuContext *menuContext) {
-    return createMenuSelectResponse(NO_OP, MAIN_MENU);
+MenuSelectResponse *mainMenuItemSelected(MenuContext *mc) {
+    if (mc->cursorLine == 4) {
+        return createMenuSelectResponse(RESPONSE_TYPE_EXIT, MAIN_MENU);
+    }
+    return createMenuSelectResponse(RESPONSE_TYPE_NONE, MAIN_MENU);
 }

@@ -455,10 +455,10 @@ void fightSpaceKeyPressed(FightManager *fm) {
                 fm->menus,
                 fm->ui->menus,
                 fm->ui->menuContext);
-        if (response->type == FIND_TARGET_MENU) {
+        if (response->type == RESPONSE_TYPE_FIND_TARGET_MENU) {
             queueMobFightAction(fm);
             removeMenusUntilMobileSelect(fm);
-        } else if (response->type == DEFEND_SELECTED) {
+        } else if (response->type == RESPONSE_TYPE_DEFEND_SELECTED) {
             startDefending(fm->ui->menuContext);
             removeMenusUntilMobileSelect(fm);
         } else if (response->type == RESPONSE_TYPE_RUN) {

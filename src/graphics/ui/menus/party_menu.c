@@ -59,16 +59,16 @@ int getPartyMenuCursorLength() {
 MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext) {
     int c = menuContext->cursorLine;
     if (strcmp(PartyMenuItems[c], PARTY_MENU_ITEMS) == 0) {
-        return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, ITEMS_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_MAGIC) == 0) {
-        return createMenuSelectResponse(OPEN_MENU, PARTY_SELECT_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, PARTY_SELECT_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_SAVE) == 0) {
         save(menuContext->player, menuContext->scene);
-        return createMenuSelectResponse(OPEN_MENU, ACKNOWLEDGE_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, ACKNOWLEDGE_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_QUIT) == 0) {
-        return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, QUIT_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_LOAD) == 0) {
-        return createMenuSelectResponse(OPEN_MENU, LOAD_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, LOAD_MENU);
     }
     addError("menu type not found :: %d", c);
     exit(GameEngineErrorMenuNotDefined);
