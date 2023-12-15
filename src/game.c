@@ -322,5 +322,6 @@ Game *createGame() {
             fonts,
             menuContext);
     g->fights = createFightManager(g->ui, g->spells, g->notifications);
+    addMenu(g->menus, findMenu(g->ui->menus, MAIN_MENU));
     return g;
 }

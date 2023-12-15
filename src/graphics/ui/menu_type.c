@@ -7,6 +7,7 @@ typedef enum {
 } MenuStyle;
 
 typedef enum {
+    MAIN_MENU,
     PARTY_MENU,
     ITEMS_MENU,
     MAGIC_MENU,
