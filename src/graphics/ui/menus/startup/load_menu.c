@@ -24,5 +24,5 @@ void drawLoadMenuScreen(MenuContext *menuContext) {
 }
 
 MenuSelectResponse *loadMenuItemSelected() {
-    return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, LOAD_MENU);
+    return createMenuSelectResponse(RESPONSE_TYPE_LOAD_GAME, LOAD_MENU);
 }

@@ -28,6 +28,7 @@ typedef enum {
     RESPONSE_TYPE_NEW_GAME,
     RESPONSE_TYPE_CONTINUE_GAME,
     RESPONSE_TYPE_SAVE_GAME,
+    RESPONSE_TYPE_LOAD_GAME,
 } MenuSelectResponseType;
 
 typedef enum {
