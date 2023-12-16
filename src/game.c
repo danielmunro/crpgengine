@@ -145,24 +145,15 @@ void checkMapInput(Game *g) {
 
 SaveData *initializePlayer(Game *g) {
     char saveFilePath[MAX_FS_PATH_LENGTH];
-    if (config->saveFile != NULL) {
-        sprintf((char *) saveFilePath, "%s/_saves/%s", config->indexDir, config->saveFile);
-    } else {
-        strcpy(saveFilePath, getAutosaveFile(config->indexDir));
-    }
+    getSaveFilePathToLoad(saveFilePath);
     SaveData *save = NULL;
-    if (FileExists(saveFilePath) && !config->forceNewGame) {
+    if (isLoadingFromSave(saveFilePath)) {
         save = loadSaveData(saveFilePath);
         g->player = mapSaveDataToPlayer(g->spells, g->animations, save);
     } else {
         g->player = createNewPlayer(g->mobiles, g->items);
     }
-    for (int i = 0; i < MAX_PARTY_SIZE; i++) {
-        if (g->player->party[i] == NULL) {
-            break;
-        }
-        addMobileToManager(g->mobiles, g->player->party[i]);
-    }
+    addMobilesToMobileManager(g->mobiles, g->player->party);
     return save;
 }
 
@@ -189,7 +180,8 @@ void checkMenuInput(Game *g) {
             addMenu(g->menus, findMenu(g->ui->menus, ACKNOWLEDGE_SAVE_MENU));
         } else if (response->type == RESPONSE_TYPE_LOAD_GAME) {
             config->saveFile = g->saveFiles->saves[mc->cursorLine]->saveName;
-            initializePlayer(g);
+            SaveData *save = initializePlayer(g);
+            free(save);
             removeMenu(g->menus, MAIN_MENU);
         }
         free(response);
