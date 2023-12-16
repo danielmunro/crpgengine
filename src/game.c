@@ -186,7 +186,7 @@ void checkMenuInput(Game *g) {
         if (response->type == RESPONSE_TYPE_SAVE_GAME) {
             const SaveFile *s = save(g->player, g->scenes->current->name);
             addSaveFile(g->saveFiles, s);
-            addMenu(g->menus, findMenu(g->ui->menus, ACKNOWLEDGE_MENU));
+            addMenu(g->menus, findMenu(g->ui->menus, ACKNOWLEDGE_SAVE_MENU));
         } else if (response->type == RESPONSE_TYPE_LOAD_GAME) {
             config->saveFile = g->saveFiles->saves[mc->cursorLine]->saveName;
             initializePlayer(g);

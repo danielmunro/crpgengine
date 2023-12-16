@@ -63,11 +63,11 @@ MenuSelectResponse *partyMenuItemSelected(const MenuContext *menuContext) {
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_MAGIC) == 0) {
         return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, PARTY_SELECT_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_SAVE) == 0) {
-        return createMenuSelectResponse(RESPONSE_TYPE_SAVE_GAME, ACKNOWLEDGE_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_SAVE_GAME, ACKNOWLEDGE_SAVE_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_QUIT) == 0) {
-        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, QUIT_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, QUIT_GAME_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_LOAD) == 0) {
-        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, LOAD_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, LOAD_SAVE_MENU);
     }
     addError("menu type not found :: %d", c);
     exit(GameEngineErrorMenuNotDefined);

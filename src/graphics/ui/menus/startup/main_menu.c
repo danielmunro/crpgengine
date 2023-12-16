@@ -67,7 +67,7 @@ MenuSelectResponse *mainMenuItemSelected(const MenuContext *mc) {
     } else if (mc->cursorLine == MAIN_MENU_CONTINUE_GAME) {
         return createMenuSelectResponse(RESPONSE_TYPE_CONTINUE_GAME, MAIN_MENU);
     } else if (mc->cursorLine == MAIN_MENU_LOAD_GAME) {
-        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, LOAD_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, LOAD_SAVE_MENU);
     } else if (mc->cursorLine == MAIN_MENU_SETTINGS) {
         return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, SETTINGS_MENU);
     } else if (mc->cursorLine == MAIN_MENU_EXIT) {
