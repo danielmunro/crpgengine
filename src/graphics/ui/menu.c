@@ -27,6 +27,7 @@ typedef enum {
     RESPONSE_TYPE_EXIT,
     RESPONSE_TYPE_NEW_GAME,
     RESPONSE_TYPE_CONTINUE_GAME,
+    RESPONSE_TYPE_SAVE_GAME,
 } MenuSelectResponseType;
 
 typedef enum {
@@ -65,6 +66,7 @@ typedef struct {
     ActionType actionType;
     Shop *shop;
     ItemWithMarkup *itemToBuy;
+    SaveFiles *saveFiles;
     int quantity;
     int scrollOffset;
 } MenuContext;
@@ -123,6 +125,7 @@ MenuContext *createMenuContext(
         Fonts *fonts,
         UISprite *uiSprite,
         Spell **spells,
+        SaveFiles *saveFiles,
         const char *scene,
         int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
@@ -142,6 +145,7 @@ MenuContext *createMenuContext(
     context->actionType = NONE;
     context->shop = NULL;
     context->itemToBuy = NULL;
+    context->saveFiles = saveFiles;
     context->quantity = 1;
     context->scrollOffset = 0;
     return context;

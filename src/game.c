@@ -15,8 +15,9 @@
 #include "headers/mobile.h"
 #include "headers/scene.h"
 #include "headers/graphics/animation.h"
-#include "src/headers/graphics/draw_fight.h"
+#include "headers/graphics/draw_fight.h"
 #include "headers/ui_manager.h"
+#include "headers/save.h"
 
 typedef struct {
     SceneManager *scenes;
@@ -34,6 +35,7 @@ typedef struct {
     FightManager *fights;
     Menu **menus;
     SpellManager *spells;
+    SaveFiles *saveFiles;
 } Game;
 
 void attemptToUseExit(Game *game, Scene *scene, const Entrance *entrance) {
@@ -136,7 +138,8 @@ void checkMapInput(Game *g) {
         addInfo("player play time :: %ds", g->player->secondsPlayed);
     }
     if (IsKeyPressed(KEY_S)) {
-        save(g->player, g->scenes->current->name);
+        const SaveFile *s = save(g->player, g->scenes->current->name);
+        addSaveFile(g->saveFiles, s);
     }
 }
 
@@ -157,6 +160,10 @@ void checkMenuInput(Game *g) {
                 g->menus,
                 g->ui->menus,
                 mc);
+        if (response->type == RESPONSE_TYPE_SAVE_GAME) {
+            const SaveFile *s = save(g->player, g->scenes->current->name);
+            addSaveFile(g->saveFiles, s);
+        }
         free(response);
     } else if (keyPressed == KEY_PRESSED_INCREMENT_QUANTITY) {
         mc->quantity += 1;
@@ -263,7 +270,6 @@ SaveData *initializePlayer(Game *g) {
     } else {
         g->player = createNewPlayer(g->mobiles, g->items);
     }
-    g->player->saveFiles = getSaveFiles();
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         if (g->player->party[i] == NULL) {
             break;
@@ -284,7 +290,8 @@ void initializeGameForPlayer(Game *g) {
             g->player,
             g->items,
             g->notifications,
-            g->mobiles);
+            g->mobiles,
+            g->saveFiles);
     g->scenes = createSceneManager(g->controls, g->animations, g->audio);
     loadScenesFromFiles(
             g->scenes,
@@ -313,6 +320,7 @@ Game *createGame() {
     g->notifications = createNotificationManager();
     g->timing = createTiming(g->notifications, g->player);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
+    g->saveFiles = getSaveFiles();
     Fonts *fonts = createFonts(uiData);
     UISprite *uiSprite = createUISprite(findSpritesheetByName(g->sprites, uiData->sprite->name), uiData);
     MenuContext *menuContext = createMenuContext(
@@ -320,6 +328,7 @@ Game *createGame() {
             fonts,
             uiSprite,
             g->spells->spells,
+            g->saveFiles,
             NULL,
             0);
     g->ui = createUIManager(

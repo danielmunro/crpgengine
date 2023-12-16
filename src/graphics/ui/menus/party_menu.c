@@ -56,15 +56,14 @@ int getPartyMenuCursorLength() {
     return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
 }
 
-MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext) {
+MenuSelectResponse *partyMenuItemSelected(const MenuContext *menuContext) {
     int c = menuContext->cursorLine;
     if (strcmp(PartyMenuItems[c], PARTY_MENU_ITEMS) == 0) {
         return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, ITEMS_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_MAGIC) == 0) {
         return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, PARTY_SELECT_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_SAVE) == 0) {
-        save(menuContext->player, menuContext->scene);
-        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, ACKNOWLEDGE_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_SAVE_GAME, ACKNOWLEDGE_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_QUIT) == 0) {
         return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, QUIT_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_LOAD) == 0) {
