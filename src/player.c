@@ -1,5 +1,4 @@
 #include <math.h>
-#include <time.h>
 
 #include "headers/util/util.h"
 #include "headers/util/log.h"
@@ -8,11 +7,9 @@
 #include "headers/graphics/animation.h"
 #include "headers/mobile.h"
 #include "headers/spell.h"
-#include "headers/persistence/db.h"
 #include "headers/graphics/ui/ui.h"
 #include "headers/tile.h"
 #include "headers/shop.h"
-#include "headers/save.h"
 
 typedef struct {
     Mobile *mob;
@@ -231,45 +228,6 @@ void disengageWithMobile(Player *p) {
     if (p->blocking->mob != NULL) {
         updateDirection(p->blocking->mob, p->blocking->mob->previousDirection);
     }
-}
-
-SaveData *createSaveData(const Player *player, const char *scene, const char *saveName) {
-    addDebug("create save data");
-    SaveData *save = malloc(sizeof(SaveData));
-    save->name = saveName;
-    save->player = createPlayerData(player);
-    save->scene = scene;
-    save->time = (unsigned long) time(NULL);
-    return save;
-}
-
-SaveFile *save(Player *player, const char *sceneName) {
-    addInfo("save player progress");
-    time_t t = time(NULL);
-    struct tm result;
-    struct tm tm = *localtime_r(&t, &result);
-    char *date = malloc(MAX_DATETIME_LENGTH);
-    sprintf(date, "%d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min,
-            tm.tm_sec);
-    char *name = malloc(MAX_SAVE_NAME);
-    sprintf(name, "%s - %s - %s", date, getPartyLeader(player)->name, sceneName);
-    SaveData *save = createSaveData(
-            player,
-            sceneName,
-            name);
-
-    // auto save
-    saveFile(save, config->indexDir, "autosave.yaml");
-    char filename[MAX_FS_PATH_LENGTH];
-
-    // point-in-time save
-    sprintf(filename, "save-%lu.yaml", (unsigned long) time(NULL));
-    saveFile(save, config->indexDir, filename);
-
-    SaveFile *s = createSaveFile(filename, save->name, save->time);
-    free(date);
-    free(save);
-    return s;
 }
 
 void addStory(Player *p, const char *story) {
