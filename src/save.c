@@ -74,7 +74,6 @@ SaveFiles *getSaveFiles() {
                     s->time);
             sf->count++;
         }
-        free(filePath);
         free(s);
     }
     sortSaveFiles(sf);
