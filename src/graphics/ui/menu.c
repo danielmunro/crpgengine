@@ -304,12 +304,6 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
     } else if (response->type == RESPONSE_TYPE_EXIT) {
         addDebug("player exiting game");
         exit(0);
-    } else if (response->type == RESPONSE_TYPE_NEW_GAME) {
-        config->forceNewGame = true;
-        removeMenu(menus, response->menuType);
-    } else if (response->type == RESPONSE_TYPE_CONTINUE_GAME) {
-        config->forceNewGame = false;
-        removeMenu(menus, response->menuType);
     }
     return response;
 }

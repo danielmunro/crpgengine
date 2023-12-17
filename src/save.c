@@ -125,15 +125,3 @@ SaveFile *save(const Player *player, const char *sceneName) {
     free(save);
     return s;
 }
-
-void getSaveFilePathToLoad(char saveFilePath[MAX_FS_PATH_LENGTH]) {
-    if (config->saveFile != NULL) {
-        sprintf(saveFilePath, "%s/_saves/%s", config->indexDir, config->saveFile);
-    } else {
-        strcpy(saveFilePath, getAutosaveFile(config->indexDir));
-    }
-}
-
-bool isLoadingFromSave(const char saveFilePath[MAX_FS_PATH_LENGTH]) {
-    return FileExists(saveFilePath) && !config->forceNewGame;
-}
