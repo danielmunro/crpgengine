@@ -55,7 +55,7 @@ int getMenuList(UIManager *uiMan) {
                     &menuKeyPressed,
                     &itemMenuItemSelected),
             createMenu(
-                    LOAD_MENU,
+                    LOAD_SAVE_MENU,
                     &getLoadCursorLength,
                     &drawLoadMenuScreen,
                     &getDefaultPreviousOption,
@@ -63,7 +63,7 @@ int getMenuList(UIManager *uiMan) {
                     &menuKeyPressed,
                     &loadMenuItemSelected),
             createMenu(
-                    QUIT_MENU,
+                    QUIT_GAME_MENU,
                     &getQuitCursorLength,
                     drawQuitMenuScreen,
                     getDefaultPreviousOption,
@@ -71,7 +71,7 @@ int getMenuList(UIManager *uiMan) {
                     &menuKeyPressed,
                     &quitMenuItemSelected),
             createMenu(
-                    ACKNOWLEDGE_MENU,
+                    ACKNOWLEDGE_SAVE_MENU,
                     &getAcknowledgeCursorLength,
                     &drawAcknowledgeMenuScreen,
                     &getDefaultPreviousOption,
@@ -182,6 +182,22 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultNextOption,
                     &menuKeyPressed,
                     &confirmPurchaseMenuItemSelected),
+            createMenu(
+                    MAIN_MENU,
+                    &getMainMenuCursorLength,
+                    &drawMainMenuScreen,
+                    &getPreviousMainMenuCursorPosition,
+                    &getNextMainMenuCursorPosition,
+                    &menuKeyPressed,
+                    &mainMenuItemSelected),
+            createMenu(
+                    SETTINGS_MENU,
+                    &getSettingsMenuCursorLength,
+                    &drawSettingsMenuScreen,
+                    &getDefaultPreviousOption,
+                    &getDefaultNextOption,
+                    &menuKeyPressed,
+                    &settingsMenuItemSelected),
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {

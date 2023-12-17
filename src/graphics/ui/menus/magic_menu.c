@@ -46,7 +46,7 @@ MenuSelectResponse *magicMenuItemSelected(MenuContext *menuContext) {
     Spell *spell = menuContext->selectedMob->spells[menuContext->cursorLine];
     if (spell->intent == INTENT_HELP) {
         menuContext->selectedSpell = spell;
-        return createMenuSelectResponse(OPEN_MENU, PARTY_APPLY_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, PARTY_APPLY_MENU);
     }
     return NULL;
 }

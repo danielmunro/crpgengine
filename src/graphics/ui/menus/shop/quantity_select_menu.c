@@ -43,7 +43,7 @@ void drawQuantitySelectMenuScreen(MenuContext *mc) {
 }
 
 MenuSelectResponse *quantitySelectMenuItemSelected(const MenuContext *mc) {
-    return createMenuSelectResponse(OPEN_MENU, SHOP_CONFIRM_PURCHASE_MENU);
+    return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, SHOP_CONFIRM_PURCHASE_MENU);
 }
 
 int getMaxQuantity(const MenuContext *mc) {
@@ -68,5 +68,5 @@ MenuKeyPressedType quantitySelectKeyPressed(const MenuContext *mc) {
     } else if (IsKeyPressed(KEY_SPACE) && mc->cursorLine == 1) {
         return KEY_PRESSED_CLOSE_MENU;
     }
-    return menuKeyPressed();
+    return menuKeyPressed(mc);
 }

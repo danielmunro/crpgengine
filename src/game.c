@@ -15,8 +15,9 @@
 #include "headers/mobile.h"
 #include "headers/scene.h"
 #include "headers/graphics/animation.h"
-#include "src/headers/graphics/draw_fight.h"
+#include "headers/graphics/draw_fight.h"
 #include "headers/ui_manager.h"
+#include "headers/save.h"
 
 typedef struct {
     SceneManager *scenes;
@@ -34,6 +35,7 @@ typedef struct {
     FightManager *fights;
     Menu **menus;
     SpellManager *spells;
+    SaveFiles *saveFiles;
 } Game;
 
 void attemptToUseExit(Game *game, Scene *scene, const Entrance *entrance) {
@@ -136,13 +138,29 @@ void checkMapInput(Game *g) {
         addInfo("player play time :: %ds", g->player->secondsPlayed);
     }
     if (IsKeyPressed(KEY_S)) {
-        save(g->player, g->scenes->current->name);
+        const SaveFile *s = save(g->player, g->scenes->current->name);
+        addSaveFile(g->saveFiles, s);
     }
+}
+
+SaveData *initializePlayer(Game *g) {
+    char saveFilePath[MAX_FS_PATH_LENGTH];
+    getSaveFilePathToLoad(saveFilePath);
+    SaveData *save = NULL;
+    if (isLoadingFromSave(saveFilePath)) {
+        save = loadSaveData(saveFilePath);
+        g->player = mapSaveDataToPlayer(g->spells, g->animations, save);
+    } else {
+        g->player = createNewPlayer(g->mobiles, g->items);
+    }
+    addMobilesToMobileManager(g->mobiles, g->player->party);
+    return save;
 }
 
 void checkMenuInput(Game *g) {
     Menu *menu = getCurrentMenu(g->menus);
     MenuContext *mc = g->ui->menuContext;
+    mc->menuType = menu->type;
     const MenuKeyPressedType keyPressed = menu->keyPressed(mc);
     if (keyPressed == KEY_PRESSED_CLOSE_MENU) {
         removeLastMenu(g->menus);
@@ -156,6 +174,16 @@ void checkMenuInput(Game *g) {
                 g->menus,
                 g->ui->menus,
                 mc);
+        if (response->type == RESPONSE_TYPE_SAVE_GAME) {
+            const SaveFile *s = save(g->player, g->scenes->current->name);
+            addSaveFile(g->saveFiles, s);
+            addMenu(g->menus, findMenu(g->ui->menus, ACKNOWLEDGE_SAVE_MENU));
+        } else if (response->type == RESPONSE_TYPE_LOAD_GAME) {
+            config->saveFile = g->saveFiles->saves[mc->cursorLine]->saveName;
+            SaveData *save = initializePlayer(g);
+            free(save);
+            removeMenu(g->menus, MAIN_MENU);
+        }
         free(response);
     } else if (keyPressed == KEY_PRESSED_INCREMENT_QUANTITY) {
         mc->quantity += 1;
@@ -248,33 +276,30 @@ void run(Game *g) {
     }
 }
 
-SaveData *initializePlayer(Game *g) {
-    char saveFilePath[MAX_FS_PATH_LENGTH];
-    if (config->saveFile != NULL) {
-        sprintf((char *) saveFilePath, "%s/_saves/%s", config->indexDir, config->saveFile);
-    } else {
-        strcpy(saveFilePath, getAutosaveFile(config->indexDir));
-    }
-    SaveData *save = NULL;
-    if (FileExists(saveFilePath) && !config->forceNewGame) {
-        save = loadSaveData(saveFilePath);
-        g->player = mapSaveDataToPlayer(g->spells, g->animations, save);
-    } else {
-        g->player = createNewPlayer(g->mobiles, g->items);
-    }
-    g->player->saveFiles = getSaveFiles();
-    for (int i = 0; i < MAX_PARTY_SIZE; i++) {
-        if (g->player->party[i] == NULL) {
-            break;
-        }
-        addMobileToManager(g->mobiles, g->player->party[i]);
-    }
-    return save;
-}
-
 void loadAllMobiles(Game *g) {
     g->mobiles = createMobileManager(g->spells, g->animations);
     loadPlayerMobiles(g->mobiles);
+}
+
+void initializeGameForPlayer(Game *g) {
+    SaveData *save = initializePlayer(g);
+    g->controls = createControlManager(
+            g->player,
+            g->items,
+            g->notifications,
+            g->mobiles,
+            g->saveFiles);
+    g->scenes = createSceneManager(g->controls, g->animations, g->audio);
+    loadScenesFromFiles(
+            g->scenes,
+            g->mobiles,
+            g->items,
+            g->beastiary);
+    setSceneBasedOnSave(g->scenes, g->player, save);
+    g->timing->player = g->player;
+    g->ui->menuContext->player = g->player;
+    addDebug("done initializing game for player");
+    free(save);
 }
 
 Game *createGame() {
@@ -289,32 +314,19 @@ Game *createGame() {
     loadAllItems(g->items);
     g->spells = loadSpellManager();
     loadAllMobiles(g);
-    SaveData *save = initializePlayer(g);
     g->notifications = createNotificationManager();
     g->timing = createTiming(g->notifications, g->player);
-    g->controls = createControlManager(
-            g->player,
-            g->items,
-            g->notifications,
-            g->mobiles);
-    g->scenes = createSceneManager(g->controls, g->animations, g->audio);
-    loadScenesFromFiles(
-            g->scenes,
-            g->mobiles,
-            g->items,
-            g->beastiary);
-    setSceneBasedOnSave(g->scenes, g->player, save);
-    addDebug("done creating game object");
-    free(save);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
+    g->saveFiles = getSaveFiles();
     Fonts *fonts = createFonts(uiData);
     UISprite *uiSprite = createUISprite(findSpritesheetByName(g->sprites, uiData->sprite->name), uiData);
     MenuContext *menuContext = createMenuContext(
-            g->player,
+            NULL,
             fonts,
             uiSprite,
             g->spells->spells,
-            g->scenes->current->name,
+            g->saveFiles,
+            NULL,
             0);
     g->ui = createUIManager(
             uiData,
@@ -322,5 +334,7 @@ Game *createGame() {
             fonts,
             menuContext);
     g->fights = createFightManager(g->ui, g->spells, g->notifications);
+    addDebug("done creating game object");
+    addMenu(g->menus, findMenu(g->ui->menus, MAIN_MENU));
     return g;
 }

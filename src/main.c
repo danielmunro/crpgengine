@@ -3,6 +3,13 @@
 int main() {
     globalSetup();
     Game *g = createGame();
+    while (getCurrentMenu(g->menus) != NULL) {
+        doInGameMenuLoop(g);
+        if (WindowShouldClose()) {
+            exit(0);
+        }
+    }
+    initializeGameForPlayer(g);
     if (config->validate) {
         validateGameData(g);
     }

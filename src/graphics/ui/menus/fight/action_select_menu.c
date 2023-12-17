@@ -85,17 +85,17 @@ int getPreviousActionSelectCursorPosition(const MenuContext *mc, const int maxCu
 MenuSelectResponse *actionSelectMenuItemSelected(MenuContext *menuContext) {
     if (menuContext->cursorLine == ACTION_ATTACK) {
         menuContext->actionType = ATTACK;
-        return createMenuSelectResponse(OPEN_MENU, BEAST_TARGET_FIGHT_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, BEAST_TARGET_FIGHT_MENU);
     } else if (menuContext->cursorLine == ACTION_MAGIC) {
         menuContext->actionType = CAST;
-        return createMenuSelectResponse(OPEN_MENU, MAGIC_FIGHT_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, MAGIC_FIGHT_MENU);
     } else if (menuContext->cursorLine == ACTION_ITEMS) {
         menuContext->actionType = ITEM;
-        return createMenuSelectResponse(OPEN_MENU, ITEMS_FIGHT_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, ITEMS_FIGHT_MENU);
     } else if (menuContext->cursorLine == ACTION_DEFEND) {
-        return createMenuSelectResponse(DEFEND_SELECTED, ACTION_SELECT_FIGHT_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_DEFEND_SELECTED, ACTION_SELECT_FIGHT_MENU);
     } else if (menuContext->cursorLine == ACTION_RUN) {
         return createMenuSelectResponse(RESPONSE_TYPE_RUN, ACTION_SELECT_FIGHT_MENU);
     }
-    return createMenuSelectResponse(CLOSE_MENU, ACTION_SELECT_FIGHT_MENU);
+    return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, ACTION_SELECT_FIGHT_MENU);
 }

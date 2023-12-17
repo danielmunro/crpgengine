@@ -17,13 +17,18 @@ const char *QuitMenuItems[] = {
 };
 
 typedef enum {
-    OPEN_MENU,
-    CLOSE_MENU,
-    FIND_TARGET_MENU,
-    DEFEND_SELECTED,
+    RESPONSE_TYPE_OPEN_MENU,
+    RESPONSE_TYPE_CLOSE_MENU,
+    RESPONSE_TYPE_FIND_TARGET_MENU,
+    RESPONSE_TYPE_DEFEND_SELECTED,
     RESPONSE_TYPE_RUN,
-    PARTY_MEMBER_SELECTED,
-    NO_OP,
+    RESPONSE_TYPE_PARTY_MEMBER_SELECTED,
+    RESPONSE_TYPE_NONE,
+    RESPONSE_TYPE_EXIT,
+    RESPONSE_TYPE_NEW_GAME,
+    RESPONSE_TYPE_CONTINUE_GAME,
+    RESPONSE_TYPE_SAVE_GAME,
+    RESPONSE_TYPE_LOAD_GAME,
 } MenuSelectResponseType;
 
 typedef enum {
@@ -42,6 +47,7 @@ typedef struct {
 } UISprite;
 
 typedef struct {
+    MenuType menuType;
     const char *scene;
     Player *player;
     const char *indexDir;
@@ -61,6 +67,7 @@ typedef struct {
     ActionType actionType;
     Shop *shop;
     ItemWithMarkup *itemToBuy;
+    SaveFiles *saveFiles;
     int quantity;
     int scrollOffset;
 } MenuContext;
@@ -119,6 +126,7 @@ MenuContext *createMenuContext(
         Fonts *fonts,
         UISprite *uiSprite,
         Spell **spells,
+        SaveFiles *saveFiles,
         const char *scene,
         int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
@@ -138,6 +146,7 @@ MenuContext *createMenuContext(
     context->actionType = NONE;
     context->shop = NULL;
     context->itemToBuy = NULL;
+    context->saveFiles = saveFiles;
     context->quantity = 1;
     context->scrollOffset = 0;
     return context;
@@ -264,8 +273,8 @@ int getDefaultPreviousOption(const MenuContext *mc, const int maxCursorLine) {
     return mc->cursorLine - 1;
 }
 
-MenuKeyPressedType menuKeyPressed() {
-    if (IsKeyPressed(KEY_ESCAPE)) {
+MenuKeyPressedType menuKeyPressed(const MenuContext *mc) {
+    if (IsKeyPressed(KEY_ESCAPE) && mc->menuType != MAIN_MENU) {
         return KEY_PRESSED_CLOSE_MENU;
     } else if (IsKeyPressed(KEY_DOWN)) {
         return KEY_PRESSED_INCREMENT_CURSOR;
@@ -283,15 +292,24 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
     if (response == NULL) {
         return NULL;
     }
-    if (response->type == OPEN_MENU) {
+    if (response->type == RESPONSE_TYPE_OPEN_MENU) {
         addMenu(menus, findMenu(allMenus, response->menuType));
-    } else if (response->type == CLOSE_MENU) {
+    } else if (response->type == RESPONSE_TYPE_CLOSE_MENU) {
         removeMenu(menus, response->menuType);
-    } else if (response->type == PARTY_MEMBER_SELECTED) {
+    } else if (response->type == RESPONSE_TYPE_PARTY_MEMBER_SELECTED) {
         Menu *partyMenu = findMenu(menus, PARTY_MENU);
         if (strcmp(PartyMenuItems[partyMenu->cursor], PARTY_MENU_MAGIC) == 0) {
             addMenu(menus, findMenu(allMenus, MAGIC_MENU));
         }
+    } else if (response->type == RESPONSE_TYPE_EXIT) {
+        addDebug("player exiting game");
+        exit(0);
+    } else if (response->type == RESPONSE_TYPE_NEW_GAME) {
+        config->forceNewGame = true;
+        removeMenu(menus, response->menuType);
+    } else if (response->type == RESPONSE_TYPE_CONTINUE_GAME) {
+        config->forceNewGame = false;
+        removeMenu(menus, response->menuType);
     }
     return response;
 }

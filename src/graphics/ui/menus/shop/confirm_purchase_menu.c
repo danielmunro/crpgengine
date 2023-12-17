@@ -28,5 +28,5 @@ MenuSelectResponse *confirmPurchaseMenuItemSelected(MenuContext *mc) {
     }
     mc->player->coins -= mc->itemToBuy->worth * mc->quantity;
     mc->quantity = 1;
-    return createMenuSelectResponse(CLOSE_MENU, SHOP_QUANTITY_SELECT_MENU);
+    return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, SHOP_QUANTITY_SELECT_MENU);
 }

@@ -59,6 +59,8 @@ typedef enum {
     SHOP_GOODBYE_BOX,
     CANNOT_AFFORD_BOX,
     QUANTITY_SELECT_BOX,
+    MAIN_MENU_BOX,
+    SETTINGS_BOX,
 
     // fight
     MOBILE_SELECT_BOX,

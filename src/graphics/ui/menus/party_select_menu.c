@@ -46,5 +46,5 @@ int getPartySelectMenuCursorLength(const MenuContext *menuContext) {
 
 MenuSelectResponse *partySelectMenuItemSelected(MenuContext *menuContext) {
     menuContext->selectedMob = menuContext->player->party[menuContext->cursorLine];
-    return createMenuSelectResponse(PARTY_MEMBER_SELECTED, PARTY_SELECT_MENU);
+    return createMenuSelectResponse(RESPONSE_TYPE_PARTY_MEMBER_SELECTED, PARTY_SELECT_MENU);
 }

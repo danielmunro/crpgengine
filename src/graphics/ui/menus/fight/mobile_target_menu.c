@@ -27,7 +27,7 @@ void drawMobileTargetMenuScreen(MenuContext *menuContext) {
 
 MenuSelectResponse *mobileTargetMenuItemSelected(MenuContext *menuContext) {
     menuContext->targetMob = menuContext->player->party[menuContext->cursorLine];
-    return createMenuSelectResponse(FIND_TARGET_MENU, MOBILE_TARGET_FIGHT_MENU);
+    return createMenuSelectResponse(RESPONSE_TYPE_FIND_TARGET_MENU, MOBILE_TARGET_FIGHT_MENU);
 }
 
 int getNextMobileTargetCursorPosition(const MenuContext *mc, const int maxCursorLine) {

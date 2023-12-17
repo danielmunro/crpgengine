@@ -58,7 +58,7 @@ void drawPartyApplyMenuScreen(MenuContext *mc) {
 MenuSelectResponse *partyApplyMenuItemSelected(MenuContext *mc) {
     if (mc->selectedSpell != NULL) {
         if (!applyCastCost(mc->selectedMob, mc->selectedSpell->cost)) {
-            return createMenuSelectResponse(NO_OP, PARTY_APPLY_MENU);
+            return createMenuSelectResponse(RESPONSE_TYPE_NONE, PARTY_APPLY_MENU);
         }
         executeSpellOnMobile(mc->player->party[mc->cursorLine], mc->selectedSpell);
     } else {
@@ -72,5 +72,5 @@ MenuSelectResponse *partyApplyMenuItemSelected(MenuContext *mc) {
             }
         }
     }
-    return createMenuSelectResponse(CLOSE_MENU, PARTY_APPLY_MENU);
+    return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, PARTY_APPLY_MENU);
 }

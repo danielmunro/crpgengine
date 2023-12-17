@@ -56,19 +56,18 @@ int getPartyMenuCursorLength() {
     return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
 }
 
-MenuSelectResponse *partyMenuItemSelected(MenuContext *menuContext) {
+MenuSelectResponse *partyMenuItemSelected(const MenuContext *menuContext) {
     int c = menuContext->cursorLine;
     if (strcmp(PartyMenuItems[c], PARTY_MENU_ITEMS) == 0) {
-        return createMenuSelectResponse(OPEN_MENU, ITEMS_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, ITEMS_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_MAGIC) == 0) {
-        return createMenuSelectResponse(OPEN_MENU, PARTY_SELECT_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, PARTY_SELECT_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_SAVE) == 0) {
-        save(menuContext->player, menuContext->scene);
-        return createMenuSelectResponse(OPEN_MENU, ACKNOWLEDGE_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_SAVE_GAME, ACKNOWLEDGE_SAVE_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_QUIT) == 0) {
-        return createMenuSelectResponse(OPEN_MENU, QUIT_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, QUIT_GAME_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_LOAD) == 0) {
-        return createMenuSelectResponse(OPEN_MENU, LOAD_MENU);
+        return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, LOAD_SAVE_MENU);
     }
     addError("menu type not found :: %d", c);
     exit(GameEngineErrorMenuNotDefined);

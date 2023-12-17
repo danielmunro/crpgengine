@@ -30,5 +30,5 @@ MenuSelectResponse *quitMenuItemSelected(const MenuContext *menuContext) {
     if (strcmp(QuitMenuItems[menuContext->cursorLine], QUIT_MENU_YES) == 0) {
         exit(0);
     }
-    return createMenuSelectResponse(CLOSE_MENU, QUIT_MENU);
+    return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, QUIT_GAME_MENU);
 }

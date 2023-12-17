@@ -65,3 +65,12 @@ Mobile *createMobileFromData(MobileManager *mm, MobileData *data, Animation *ani
     }
     return mob;
 }
+
+void addMobilesToMobileManager(MobileManager *mm, Mobile **mobs) {
+    for (int i = 0; i < MAX_PARTY_SIZE; i++) {
+        if (mobs[i] == NULL) {
+            return;
+        }
+        addMobileToManager(mm, mobs[i]);
+    }
+}
