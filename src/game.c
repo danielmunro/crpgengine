@@ -282,6 +282,27 @@ void loadAllMobiles(Game *g) {
     loadPlayerMobiles(g->mobiles);
 }
 
+UIManager *initializeUIManager(Game *g) {
+    UIData *uiData = loadUIData();
+    Fonts *fonts = createFonts(uiData);
+    UISprite *uiSprite = createUISprite(
+            findSpritesheetByName(g->sprites, uiData->sprite->name),
+            uiData);
+    MenuContext *mc = createMenuContext(
+            NULL,
+            fonts,
+            uiSprite,
+            g->spells->spells,
+            g->saveFiles,
+            NULL,
+            0);
+    return createUIManager(
+            uiData,
+            uiSprite,
+            fonts,
+            mc);
+}
+
 void initializeGameForPlayer(Game *g) {
     g->controls = createControlManager(
             g->player,
@@ -296,16 +317,15 @@ void initializeGameForPlayer(Game *g) {
             g->items,
             g->beastiary);
     setSceneBasedOnSave(g->scenes, g->player, g->saveToLoad);
-    g->timing->player = g->player;
-    g->ui->menuContext->player = g->player;
     free(g->saveToLoad);
-    addDebug("done initializing game for player");
+    g->timing = createTiming(g->notifications, g->player);
+    g->ui->menuContext->player = g->player;
+    addDebug("game initialized for player");
 }
 
 Game *createGame() {
     Game *g = malloc(sizeof(Game));
     g->sprites = loadSpritesheetManager();
-    UIData *uiData = loadUIData();
     g->animations = createAnimationManager();
     loadAllAnimations(g->animations, g->sprites);
     g->audio = loadAudioManager();
@@ -315,27 +335,13 @@ Game *createGame() {
     g->spells = loadSpellManager();
     loadAllMobiles(g);
     g->notifications = createNotificationManager();
-    g->timing = createTiming(g->notifications, g->player);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
     g->saveFiles = getSaveFiles();
     g->saveToLoad = NULL;
-    Fonts *fonts = createFonts(uiData);
-    UISprite *uiSprite = createUISprite(findSpritesheetByName(g->sprites, uiData->sprite->name), uiData);
-    MenuContext *menuContext = createMenuContext(
-            NULL,
-            fonts,
-            uiSprite,
-            g->spells->spells,
-            g->saveFiles,
-            NULL,
-            0);
-    g->ui = createUIManager(
-            uiData,
-            uiSprite,
-            fonts,
-            menuContext);
+    g->timing = NULL;
+    g->ui = initializeUIManager(g);
     g->fights = createFightManager(g->ui, g->spells, g->notifications);
-    addDebug("done creating game object");
     addMenu(g->menus, findMenu(g->ui->menus, MAIN_MENU));
+    addDebug("game object created");
     return g;
 }
