@@ -7,7 +7,6 @@ typedef struct {
     double elapsedTime;
     double timeInterval;
     NotificationManager *notificationManager;
-    Player *player;
 } Timing;
 
 Timing *createTiming(NotificationManager *nm) {
