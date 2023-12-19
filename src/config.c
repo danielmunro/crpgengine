@@ -18,7 +18,6 @@ typedef struct {
     bool immortal;
     bool validate;
     bool randomEncounters;
-    bool forceNewGame;
     bool logMemoryUsage;
     bool purgeSaves;
     bool showFPS;
@@ -34,12 +33,10 @@ Config *createConfigFromData(const ConfigData *data) {
     config->indexDir = data->indexDir;
     config->startScene = data->startScene;
     config->overrideStartScene = data->overrideStartScene;
-    config->saveFile = data->saveFile;
     config->exit = data->exit;
     config->immortal = data->immortal;
     config->validate = data->validate;
     config->randomEncounters = data->randomEncounters;
-    config->forceNewGame = data->forceNewGame;
     config->logMemoryUsage = data->logMemoryUsage;
     config->purgeSaves = data->purgeSaves;
     config->showFPS = data->showFPS;

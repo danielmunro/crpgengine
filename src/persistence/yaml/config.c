@@ -11,8 +11,6 @@ typedef struct {
     const char *startScene;
     const char *overrideStartScene;
     const char *logLevel;
-    const char *saveFile;
-    bool forceNewGame;
     bool exit;
     bool immortal;
     bool validate;
@@ -42,8 +40,6 @@ static const cyaml_schema_field_t configTopMappingField[] = {
                 "overrideStartScene", CYAML_FLAG_POINTER, ConfigData, overrideStartScene, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "logLevel", CYAML_FLAG_POINTER, ConfigData, logLevel, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_STRING_PTR(
-                "saveFile", CYAML_FLAG_POINTER, ConfigData, saveFile, 0, CYAML_UNLIMITED),
         CYAML_FIELD_BOOL(
                 "exit", CYAML_BOOL, ConfigData, exit),
         CYAML_FIELD_BOOL(
@@ -52,8 +48,6 @@ static const cyaml_schema_field_t configTopMappingField[] = {
                 "validate", CYAML_BOOL, ConfigData, validate),
         CYAML_FIELD_BOOL(
                 "randomEncounters", CYAML_BOOL, ConfigData, randomEncounters),
-        CYAML_FIELD_BOOL(
-                "forceNewGame", CYAML_BOOL, ConfigData, forceNewGame),
         CYAML_FIELD_BOOL(
                 "logMemoryUsage", CYAML_BOOL, ConfigData, logMemoryUsage),
         CYAML_FIELD_BOOL(

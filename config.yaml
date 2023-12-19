@@ -14,10 +14,6 @@ overrideStartScene: ""
 #   * error -- almost always a fatal error
 logLevel: info
 
-# The save file to use when loading up. If the save file doesn't exist, a
-# default start will happen based on the start scene, and it's configuration.
-saveFile: autosave.yaml
-
 # Exit the game immediately after loading. Useful for debugging startup
 # problems.
 exit: false
@@ -30,9 +26,6 @@ randomEncounters: true
 
 # Whether to validate game data after loading
 validate: true
-
-# Ignore the autosave.yaml file if it exists
-forceNewGame: false
 
 # Log memory usage in regular intervals. Useful for tracking memory leaks.
 logMemoryUsage: false

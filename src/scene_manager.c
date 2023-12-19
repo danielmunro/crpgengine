@@ -11,7 +11,10 @@ typedef struct {
     AudioManager *audioManager;
 } SceneManager;
 
-SceneManager *createSceneManager(ControlManager *cm, AnimationManager *anManager, AudioManager *auManager) {
+SceneManager *createSceneManager(
+        ControlManager *cm,
+        AnimationManager *anManager,
+        AudioManager *auManager) {
     SceneManager *sceneManager = malloc(sizeof(SceneManager));
     sceneManager->current = NULL;
     sceneManager->scenes = calloc(MAX_SCENES, sizeof(Scene));

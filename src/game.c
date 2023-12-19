@@ -36,6 +36,7 @@ typedef struct {
     Menu **menus;
     SpellManager *spells;
     SaveFiles *saveFiles;
+    SaveData *saveToLoad;
 } Game;
 
 void attemptToUseExit(Game *game, Scene *scene, const Entrance *entrance) {
@@ -143,18 +144,14 @@ void checkMapInput(Game *g) {
     }
 }
 
-SaveData *initializePlayer(Game *g) {
-    char saveFilePath[MAX_FS_PATH_LENGTH];
-    getSaveFilePathToLoad(saveFilePath);
-    SaveData *save = NULL;
-    if (isLoadingFromSave(saveFilePath)) {
-        save = loadSaveData(saveFilePath);
-        g->player = mapSaveDataToPlayer(g->spells, g->animations, save);
-    } else {
+void initializePlayer(Game *g, const char *saveFilePath) {
+    if (saveFilePath == NULL) {
         g->player = createNewPlayer(g->mobiles, g->items);
+    } else {
+        g->saveToLoad = loadSaveData(saveFilePath);
+        g->player = mapSaveDataToPlayer(g->spells, g->animations, g->saveToLoad);
     }
     addMobilesToMobileManager(g->mobiles, g->player->party);
-    return save;
 }
 
 void checkMenuInput(Game *g) {
@@ -179,9 +176,13 @@ void checkMenuInput(Game *g) {
             addSaveFile(g->saveFiles, s);
             addMenu(g->menus, findMenu(g->ui->menus, ACKNOWLEDGE_SAVE_MENU));
         } else if (response->type == RESPONSE_TYPE_LOAD_GAME) {
-            config->saveFile = g->saveFiles->saves[mc->cursorLine]->saveName;
-            SaveData *save = initializePlayer(g);
-            free(save);
+            initializePlayer(g, g->saveFiles->saves[mc->cursorLine]->filename);
+            removeMenu(g->menus, MAIN_MENU);
+        } else if (response->type == RESPONSE_TYPE_CONTINUE_GAME) {
+            initializePlayer(g, g->saveFiles->saves[0]->filename);
+            removeMenu(g->menus, MAIN_MENU);
+        } else if (response->type == RESPONSE_TYPE_NEW_GAME) {
+            initializePlayer(g, NULL);
             removeMenu(g->menus, MAIN_MENU);
         }
         free(response);
@@ -272,7 +273,10 @@ void run(Game *g) {
         if (g->player->dialog != NULL) {
             updateDialog(g->player->dialog);
         }
-        stopTiming(g->timing);
+        int seconds = stopTiming(g->timing);
+        if (seconds > 0) {
+            g->player->secondsPlayed += seconds;
+        }
     }
 }
 
@@ -281,8 +285,28 @@ void loadAllMobiles(Game *g) {
     loadPlayerMobiles(g->mobiles);
 }
 
+UIManager *initializeUIManager(Game *g) {
+    UIData *uiData = loadUIData();
+    Fonts *fonts = createFonts(uiData);
+    UISprite *uiSprite = createUISprite(
+            findSpritesheetByName(g->sprites, uiData->sprite->name),
+            uiData);
+    MenuContext *mc = createMenuContext(
+            NULL,
+            fonts,
+            uiSprite,
+            g->spells->spells,
+            g->saveFiles,
+            NULL,
+            0);
+    return createUIManager(
+            uiData,
+            uiSprite,
+            fonts,
+            mc);
+}
+
 void initializeGameForPlayer(Game *g) {
-    SaveData *save = initializePlayer(g);
     g->controls = createControlManager(
             g->player,
             g->items,
@@ -295,17 +319,15 @@ void initializeGameForPlayer(Game *g) {
             g->mobiles,
             g->items,
             g->beastiary);
-    setSceneBasedOnSave(g->scenes, g->player, save);
-    g->timing->player = g->player;
+    setSceneBasedOnSave(g->scenes, g->player, g->saveToLoad);
+    free(g->saveToLoad);
     g->ui->menuContext->player = g->player;
-    addDebug("done initializing game for player");
-    free(save);
+    addDebug("game initialized for player");
 }
 
 Game *createGame() {
     Game *g = malloc(sizeof(Game));
     g->sprites = loadSpritesheetManager();
-    UIData *uiData = loadUIData();
     g->animations = createAnimationManager();
     loadAllAnimations(g->animations, g->sprites);
     g->audio = loadAudioManager();
@@ -315,26 +337,13 @@ Game *createGame() {
     g->spells = loadSpellManager();
     loadAllMobiles(g);
     g->notifications = createNotificationManager();
-    g->timing = createTiming(g->notifications, g->player);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
     g->saveFiles = getSaveFiles();
-    Fonts *fonts = createFonts(uiData);
-    UISprite *uiSprite = createUISprite(findSpritesheetByName(g->sprites, uiData->sprite->name), uiData);
-    MenuContext *menuContext = createMenuContext(
-            NULL,
-            fonts,
-            uiSprite,
-            g->spells->spells,
-            g->saveFiles,
-            NULL,
-            0);
-    g->ui = createUIManager(
-            uiData,
-            uiSprite,
-            fonts,
-            menuContext);
+    g->saveToLoad = NULL;
+    g->timing = createTiming(g->notifications);
+    g->ui = initializeUIManager(g);
     g->fights = createFightManager(g->ui, g->spells, g->notifications);
-    addDebug("done creating game object");
     addMenu(g->menus, findMenu(g->ui->menus, MAIN_MENU));
+    addDebug("game object created");
     return g;
 }
