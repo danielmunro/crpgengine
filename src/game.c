@@ -273,7 +273,10 @@ void run(Game *g) {
         if (g->player->dialog != NULL) {
             updateDialog(g->player->dialog);
         }
-        stopTiming(g->timing);
+        int seconds = stopTiming(g->timing);
+        if (seconds > 0) {
+            g->player->secondsPlayed += seconds;
+        }
     }
 }
 
@@ -318,7 +321,6 @@ void initializeGameForPlayer(Game *g) {
             g->beastiary);
     setSceneBasedOnSave(g->scenes, g->player, g->saveToLoad);
     free(g->saveToLoad);
-    g->timing = createTiming(g->notifications, g->player);
     g->ui->menuContext->player = g->player;
     addDebug("game initialized for player");
 }
@@ -338,7 +340,7 @@ Game *createGame() {
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
     g->saveFiles = getSaveFiles();
     g->saveToLoad = NULL;
-    g->timing = NULL;
+    g->timing = createTiming(g->notifications);
     g->ui = initializeUIManager(g);
     g->fights = createFightManager(g->ui, g->spells, g->notifications);
     addMenu(g->menus, findMenu(g->ui->menus, MAIN_MENU));
