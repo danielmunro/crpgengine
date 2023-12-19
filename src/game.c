@@ -18,6 +18,7 @@
 #include "headers/graphics/draw_fight.h"
 #include "headers/ui_manager.h"
 #include "headers/save.h"
+#include "headers/user_config.h"
 
 typedef struct {
     SceneManager *scenes;
@@ -37,6 +38,7 @@ typedef struct {
     SpellManager *spells;
     SaveFiles *saveFiles;
     SaveData *saveToLoad;
+    UserConfig *userConfig;
 } Game;
 
 void attemptToUseExit(Game *game, Scene *scene, const Entrance *entrance) {
@@ -343,6 +345,7 @@ Game *createGame() {
     g->timing = createTiming(g->notifications);
     g->ui = initializeUIManager(g);
     g->fights = createFightManager(g->ui, g->spells, g->notifications);
+    g->userConfig = createUserConfigFromData(loadUserConfigYaml());
     addMenu(g->menus, findMenu(g->ui->menus, MAIN_MENU));
     addDebug("game object created");
     return g;

@@ -135,3 +135,11 @@ ShopData *loadShopYaml(const char *filePath) {
     loadYamlFile(filePath, shopTopSchema, (cyaml_data_t **) &shop);
     return shop;
 }
+
+UserConfigData *loadUserConfigYaml() {
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/user_config.yaml", config->indexDir);
+    UserConfigData *cfg = malloc(sizeof(UserConfigData));
+    loadYamlFile(filePath, userConfigTopSchema, (cyaml_data_t **) &cfg);
+    return cfg;
+}
