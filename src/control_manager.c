@@ -28,6 +28,7 @@ ControlManager *createControlManager(
     cm->itemManager = itemManager;
     cm->notificationManager = notificationManager;
     cm->mobileManager = mobileManager;
+    cm->saveFiles = saveFiles;
     cm->scene = NULL;
     return cm;
 }
