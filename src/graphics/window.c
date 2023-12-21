@@ -13,7 +13,4 @@ void initWindow(const char *title, const UIData *ui) {
     }
     HideCursor();
     SetExitKey(0);
-    if (ui->screen->full) {
-        ToggleFullscreen();
-    }
 }

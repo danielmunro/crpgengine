@@ -143,3 +143,15 @@ UserConfigData *loadUserConfigYaml() {
     loadYamlFile(filePath, userConfigTopSchema, (cyaml_data_t **) &cfg);
     return cfg;
 }
+
+void saveUserConfigData(const UserConfigData *userConfig) {
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/user_config.yaml", config->indexDir);
+    cyaml_err_t err = cyaml_save_file(filePath, &cyamlConfig,
+                                      &userConfigTopSchema, userConfig, 0);
+    if (err != CYAML_OK) {
+        addError("error saving user config data :: %s, %s",
+                 filePath, cyaml_strerror(err));
+        exit(CyamlSavePlayer);
+    }
+}

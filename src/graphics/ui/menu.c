@@ -1,5 +1,6 @@
 #include "headers/player.h"
 #include "headers/fight.h"
+#include "headers/user_config.h"
 
 const char *PartyMenuItems[] = {
         PARTY_MENU_ITEMS,
@@ -68,6 +69,7 @@ typedef struct {
     Shop *shop;
     ItemWithMarkup *itemToBuy;
     SaveFiles *saveFiles;
+    UserConfig *userConfig;
     int quantity;
     int scrollOffset;
 } MenuContext;
@@ -127,6 +129,7 @@ MenuContext *createMenuContext(
         UISprite *uiSprite,
         Spell **spells,
         SaveFiles *saveFiles,
+        UserConfig *userConfig,
         const char *scene,
         int cursorLine) {
     MenuContext *context = malloc(sizeof(MenuContext));
@@ -147,6 +150,7 @@ MenuContext *createMenuContext(
     context->shop = NULL;
     context->itemToBuy = NULL;
     context->saveFiles = saveFiles;
+    context->userConfig = userConfig;
     context->quantity = 1;
     context->scrollOffset = 0;
     return context;

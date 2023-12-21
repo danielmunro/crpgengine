@@ -38,3 +38,19 @@ UserConfig *createUserConfigFromData(UserConfigData *data) {
     }
     return userConfig;
 }
+
+UserConfigData *createUserConfigData(const UserConfig *cfg) {
+    UserConfigData *data = malloc(sizeof(UserConfigData));
+    data->fullScreen = cfg->fullScreen;
+    data->resolution = malloc(sizeof(ResolutionData));
+    data->resolution->height = cfg->resolution->height;
+    data->resolution->width = cfg->resolution->width;
+    data->difficulty = Difficulties[cfg->difficulty];
+    return data;
+}
+
+void saveUserConfig(const UserConfig *cfg) {
+    UserConfigData *data = createUserConfigData(cfg);
+    saveUserConfigData(data);
+    free(data);
+}

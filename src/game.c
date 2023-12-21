@@ -299,6 +299,7 @@ UIManager *initializeUIManager(Game *g) {
             uiSprite,
             g->spells->spells,
             g->saveFiles,
+            g->userConfig,
             NULL,
             0);
     return createUIManager(
@@ -327,6 +328,15 @@ void initializeGameForPlayer(Game *g) {
     addDebug("game initialized for player");
 }
 
+void initializeUserConfig(Game *g) {
+    UserConfigData *data = loadUserConfigYaml();
+    g->userConfig = createUserConfigFromData(data);
+    free(data);
+    if (g->userConfig->fullScreen) {
+        ToggleFullscreen();
+    }
+}
+
 Game *createGame() {
     Game *g = malloc(sizeof(Game));
     g->sprites = loadSpritesheetManager();
@@ -343,9 +353,9 @@ Game *createGame() {
     g->saveFiles = getSaveFiles();
     g->saveToLoad = NULL;
     g->timing = createTiming(g->notifications);
+    initializeUserConfig(g);
     g->ui = initializeUIManager(g);
     g->fights = createFightManager(g->ui, g->spells, g->notifications);
-    g->userConfig = createUserConfigFromData(loadUserConfigYaml());
     addMenu(g->menus, findMenu(g->ui->menus, MAIN_MENU));
     addDebug("game object created");
     return g;

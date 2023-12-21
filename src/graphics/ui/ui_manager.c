@@ -198,6 +198,14 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultNextOption,
                     &menuKeyPressed,
                     &settingsMenuItemSelected),
+            createMenu(
+                    SETTINGS_FULL_SCREEN_MENU,
+                    &getSettingsFullScreenMenuCursorLength,
+                    &drawSettingsFullScreenMenuScreen,
+                    &getDefaultPreviousOption,
+                    &getDefaultNextOption,
+                    &menuKeyPressed,
+                    &settingsFullScreenMenuItemSelected),
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {
