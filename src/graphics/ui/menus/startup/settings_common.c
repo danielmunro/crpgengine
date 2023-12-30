@@ -29,15 +29,38 @@ void drawSettingsHeader(MenuContext *mc) {
             });
 }
 
-void drawFullScreenOption(TextBox *tb, const MenuContext *mc) {
+void drawFullScreenOptions(TextBox *tb, const MenuContext *mc) {
     if (mc->userConfig->fullScreen) {
         drawInMenuWithStyle(tb, mc->fonts->highlight, "*Yes");
+        drawInMenuWithStyle(tb, mc->fonts->disable, "No");
     } else {
-        drawInMenuWithStyle(tb, mc->fonts->default_, "Yes");
-    }
-    if (mc->userConfig->fullScreen) {
-        drawInMenuWithStyle(tb, mc->fonts->default_, "No");
-    } else {
+        drawInMenuWithStyle(tb, mc->fonts->disable, "Yes");
         drawInMenuWithStyle(tb, mc->fonts->highlight, "*No");
+    }
+}
+
+void drawDifficultyOptions(TextBox *tb, const MenuContext *mc) {
+    if (mc->userConfig->difficulty == DIFFICULTY_CASUAL) {
+        drawInMenuWithStyle(tb, mc->fonts->highlight, "*Casual");
+        drawInMenuWithStyle(tb, mc->fonts->disable, "Normal");
+        drawInMenuWithStyle(tb, mc->fonts->disable, "Challenge");
+    } else if (mc->userConfig->difficulty == DIFFICULTY_NORMAL) {
+        drawInMenuWithStyle(tb, mc->fonts->disable, "Casual");
+        drawInMenuWithStyle(tb, mc->fonts->highlight, "*Normal");
+        drawInMenuWithStyle(tb, mc->fonts->disable, "Challenge");
+    } else {
+        drawInMenuWithStyle(tb, mc->fonts->disable, "Casual");
+        drawInMenuWithStyle(tb, mc->fonts->disable, "Normal");
+        drawInMenuWithStyle(tb, mc->fonts->highlight, "*Challenge");
+    }
+}
+
+void drawResolutionOptions(TextBox *tb, const MenuContext *mc) {
+    if (mc->userConfig->resolution.width == 800) {
+        drawInMenuWithStyle(tb, mc->fonts->highlight, "*800x600");
+        drawInMenuWithStyle(tb, mc->fonts->disable, "1200x800");
+    } else {
+        drawInMenuWithStyle(tb, mc->fonts->disable, "800x600");
+        drawInMenuWithStyle(tb, mc->fonts->highlight, "*1200x800");
     }
 }

@@ -11,25 +11,22 @@ void drawSettingsMenuScreen(MenuContext *mc) {
             mc,
             SETTINGS_VALUES_BOX,
             ui->textAreas->mediumRight);
-    const FontStyle *highlightFont = mc->fonts->highlight;
-    const FontStyle *disableFont = mc->fonts->disable;
-    drawFullScreenOption(valuesBox, mc);
-    drawInMenuWithStyle(valuesBox, disableFont, "Casual");
-    drawInMenuWithStyle(valuesBox, highlightFont, "Normal");
-    drawInMenuWithStyle(valuesBox, disableFont, "Challenge");
-    drawInMenuWithStyle(valuesBox, highlightFont, "800x600");
+    drawFullScreenOptions(valuesBox, mc);
+    drawDifficultyOptions(valuesBox, mc);
+    drawResolutionOptions(valuesBox, mc);
 }
 
 MenuSelectResponse *settingsMenuItemSelected(const MenuContext *mc) {
+    addInfo("cursorLine %d", mc->cursorLine);
     if (mc->cursorLine == 0) {
         return createMenuSelectResponse(
                 RESPONSE_TYPE_OPEN_MENU,
                 SETTINGS_FULL_SCREEN_MENU);
-    } else if (mc->cursorLine == 2) {
+    } else if (mc->cursorLine == 1) {
         return createMenuSelectResponse(
                 RESPONSE_TYPE_OPEN_MENU,
                 SETTINGS_DIFFICULTY_MENU);
-    } else if (mc->cursorLine == 3) {
+    } else if (mc->cursorLine == 2) {
         return createMenuSelectResponse(
                 RESPONSE_TYPE_OPEN_MENU,
                 SETTINGS_RESOLUTION_MENU);

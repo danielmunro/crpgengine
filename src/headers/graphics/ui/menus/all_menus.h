@@ -11,6 +11,8 @@
 #include "graphics/ui/menus/startup/main_menu.c"
 #include "graphics/ui/menus/startup/load_menu.c"
 #include "graphics/ui/menus/startup/settings_full_screen_menu.c"
+#include "graphics/ui/menus/startup/settings_difficulty_menu.c"
+#include "graphics/ui/menus/startup/settings_resolution_menu.c"
 #include "graphics/ui/menus/startup/settings_menu.c"
 #include "headers/graphics/ui/menus/fight/beast_list_menu.h"
 #include "headers/graphics/ui/menus/fight/mobile_select_menu.h"
