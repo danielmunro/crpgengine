@@ -251,6 +251,7 @@ void doFightLoop(Game *g) {
 
 void doInGameMenuLoop(Game *g) {
     BeginDrawing();
+    ClearBackground(BLACK);
     drawAllMenus(
             g->ui->menuContext,
             g->menus);

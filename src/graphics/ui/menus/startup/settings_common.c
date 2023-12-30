@@ -58,9 +58,9 @@ void drawDifficultyOptions(TextBox *tb, const MenuContext *mc) {
 void drawResolutionOptions(TextBox *tb, const MenuContext *mc) {
     if (mc->userConfig->resolution.width == 800) {
         drawInMenuWithStyle(tb, mc->fonts->highlight, "*800x600");
-        drawInMenuWithStyle(tb, mc->fonts->disable, "1200x800");
+        drawInMenuWithStyle(tb, mc->fonts->disable, "1280x1024");
     } else {
         drawInMenuWithStyle(tb, mc->fonts->disable, "800x600");
-        drawInMenuWithStyle(tb, mc->fonts->highlight, "*1200x800");
+        drawInMenuWithStyle(tb, mc->fonts->highlight, "*1280x1024");
     }
 }

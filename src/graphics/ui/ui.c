@@ -52,6 +52,7 @@ typedef struct {
     Rectangle bottomMid;
     Rectangle midRight;
     Rectangle mediumRight;
+    TextAreasData *textAreaData;
 } TextAreasConfig;
 
 typedef struct {
@@ -104,13 +105,29 @@ MenuStyle getMenuStyleFromString(const char *style) {
     exit(ConfigurationErrorMenuStyleNotDefined);
 }
 
-Rectangle getScreenRectangle(TextAreaData *data, const UserConfig *userConfig) {
+Rectangle getScreenRectangle(TextAreaData *data, Resolution resolution) {
     return (Rectangle) {
-            data->x * (float) userConfig->resolution.width,
-        data->y * (float) userConfig->resolution.height,
-        data->width * (float) userConfig->resolution.width,
-        data->height * (float) userConfig->resolution.height,
+            data->x * (float) resolution.width,
+        data->y * (float) resolution.height,
+        data->width * (float) resolution.width,
+        data->height * (float) resolution.height,
     };
+}
+
+void setTextAreasFromData(Resolution resolution) {
+    ui->textAreas->alert = getScreenRectangle(ui->textAreas->textAreaData->alert, resolution);
+    ui->textAreas->alertRight = getScreenRectangle(ui->textAreas->textAreaData->alertRight, resolution);
+    ui->textAreas->small = getScreenRectangle(ui->textAreas->textAreaData->small, resolution);
+    ui->textAreas->medium = getScreenRectangle(ui->textAreas->textAreaData->medium, resolution);
+    ui->textAreas->mediumRight = getScreenRectangle(ui->textAreas->textAreaData->mediumRight, resolution);
+    ui->textAreas->full = getScreenRectangle(ui->textAreas->textAreaData->full, resolution);
+    ui->textAreas->bottom = getScreenRectangle(ui->textAreas->textAreaData->bottom, resolution);
+    ui->textAreas->left = getScreenRectangle(ui->textAreas->textAreaData->left, resolution);
+    ui->textAreas->right = getScreenRectangle(ui->textAreas->textAreaData->right, resolution);
+    ui->textAreas->bottomLeft = getScreenRectangle(ui->textAreas->textAreaData->bottomLeft, resolution);
+    ui->textAreas->bottomMidRight = getScreenRectangle(ui->textAreas->textAreaData->bottomMidRight, resolution);
+    ui->textAreas->bottomMid = getScreenRectangle(ui->textAreas->textAreaData->bottomMidRight, resolution);
+    ui->textAreas->midRight = getScreenRectangle(ui->textAreas->textAreaData->midRight, resolution);
 }
 
 void createUIConfig(UIData *data, const UserConfig *userConfig) {
@@ -153,19 +170,8 @@ void createUIConfig(UIData *data, const UserConfig *userConfig) {
     };
 
     ui->textAreas = malloc(sizeof(TextAreasConfig));
-    ui->textAreas->alert = getScreenRectangle(data->textAreas->alert, userConfig);
-    ui->textAreas->alertRight = getScreenRectangle(data->textAreas->alertRight, userConfig);
-    ui->textAreas->small = getScreenRectangle(data->textAreas->small, userConfig);
-    ui->textAreas->medium = getScreenRectangle(data->textAreas->medium, userConfig);
-    ui->textAreas->mediumRight = getScreenRectangle(data->textAreas->mediumRight, userConfig);
-    ui->textAreas->full = getScreenRectangle(data->textAreas->full, userConfig);
-    ui->textAreas->bottom = getScreenRectangle(data->textAreas->bottom, userConfig);
-    ui->textAreas->left = getScreenRectangle(data->textAreas->left, userConfig);
-    ui->textAreas->right = getScreenRectangle(data->textAreas->right, userConfig);
-    ui->textAreas->bottomLeft = getScreenRectangle(data->textAreas->bottomLeft, userConfig);
-    ui->textAreas->bottomMidRight = getScreenRectangle(data->textAreas->bottomMidRight, userConfig);
-    ui->textAreas->bottomMid = getScreenRectangle(data->textAreas->bottomMidRight, userConfig);
-    ui->textAreas->midRight = getScreenRectangle(data->textAreas->midRight, userConfig);
+    ui->textAreas->textAreaData = data->textAreas;
+    setTextAreasFromData(userConfig->resolution);
 }
 
 TextBox *createTextBox(Rectangle area, FontStyle *fontStyle, TextBoxLabel label) {

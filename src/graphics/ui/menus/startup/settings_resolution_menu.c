@@ -27,9 +27,11 @@ MenuSelectResponse *settingsResolutionMenuItemSelected(const MenuContext *mc) {
     if (mc->cursorLine == 0) {
         mc->userConfig->resolution = (Resolution) { 800, 600 };
     } else if (mc->cursorLine == 1) {
-        mc->userConfig->resolution = (Resolution) { 1200, 800 };
+        mc->userConfig->resolution = (Resolution) { 1280, 1024 };
     }
-    SetWindowSize(mc->userConfig->resolution.width, mc->userConfig->resolution.width);
+    SetWindowSize(mc->userConfig->resolution.width, mc->userConfig->resolution.height);
+    setTextAreasFromData(mc->userConfig->resolution);
+    clearTextBoxes(mc->textBoxes);
     saveUserConfig(mc->userConfig);
     return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, SETTINGS_RESOLUTION_MENU);
 }

@@ -263,6 +263,12 @@ TextBox *findOrCreateTextBox(MenuContext *mc, TextBoxLabel label, Rectangle area
     exit(GameEngineErrorTextBoxNotFound);
 }
 
+void clearTextBoxes(TextBox **textBoxes) {
+    for (int i = 0; i < MAX_TEXT_BOXES; i++) {
+        textBoxes[i] = NULL;
+    }
+}
+
 int getDefaultNextOption(const MenuContext *mc, const int maxCursorLine) {
     if (mc->cursorLine + 1 == maxCursorLine) {
         return 0;
