@@ -328,16 +328,7 @@ void initializeGameForPlayer(Game *g) {
     addDebug("game initialized for player");
 }
 
-void initializeUserConfig(Game *g) {
-    UserConfigData *data = loadUserConfigYaml();
-    g->userConfig = createUserConfigFromData(data);
-    free(data);
-    if (g->userConfig->fullScreen) {
-        ToggleFullscreen();
-    }
-}
-
-Game *createGame() {
+Game *createGame(UserConfig *userConfig) {
     Game *g = malloc(sizeof(Game));
     g->sprites = loadSpritesheetManager();
     g->animations = createAnimationManager();
@@ -353,7 +344,7 @@ Game *createGame() {
     g->saveFiles = getSaveFiles();
     g->saveToLoad = NULL;
     g->timing = createTiming(g->notifications);
-    initializeUserConfig(g);
+    g->userConfig = userConfig;
     g->ui = initializeUIManager(g);
     g->fights = createFightManager(g->ui, g->spells, g->notifications);
     addMenu(g->menus, findMenu(g->ui->menus, MAIN_MENU));

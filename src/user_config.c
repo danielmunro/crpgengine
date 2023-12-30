@@ -27,7 +27,10 @@ typedef struct {
 UserConfig *createUserConfigFromData(UserConfigData *data) {
     UserConfig *userConfig = malloc(sizeof(UserConfig));
     userConfig->fullScreen = data->fullScreen;
-    userConfig->resolution = (Resolution){ 800, 600 };
+    userConfig->resolution = (Resolution) {
+        data->resolution->width,
+        data->resolution->height,
+    };
     int difficultyCount = sizeof(Difficulties) / sizeof(Difficulties[0]);
     for (int i = 0; i < difficultyCount; i++) {
         if (strcmp(data->difficulty, Difficulties[i]) == 0) {
@@ -52,4 +55,11 @@ void saveUserConfig(const UserConfig *cfg) {
     UserConfigData *data = createUserConfigData(cfg);
     saveUserConfigData(data);
     free(data);
+}
+
+UserConfig *createUserConfig() {
+    UserConfigData *data = loadUserConfigYaml();
+    UserConfig *userConfig = createUserConfigFromData(data);
+    free(data);
+    return userConfig;
 }

@@ -2,10 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "headers/persistence/cyaml.h"
+#include "headers/user_config.h"
 
-void initWindow(const char *title, const UIData *ui) {
+void initWindow(const char *title, const UIData *ui, const UserConfig *userConfig) {
     SetTargetFPS(ui->screen->targetFrameRate);
-    InitWindow(ui->screen->width, ui->screen->height, title);
+    InitWindow(userConfig->resolution.width, userConfig->resolution.height, title);
     InitAudioDevice();
     if (!IsAudioDeviceReady()) {
         printf("not ready");

@@ -152,7 +152,7 @@ void experienceToLevel51Test() {
 }
 
 int main() {
-    globalSetup();
+    globalSetup(createUserConfig());
     plan(106);
     createFightInSceneTest();
     canMoveMobTest();
