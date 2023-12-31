@@ -1,3 +1,4 @@
+#include <raylib.h>
 #include "headers/persistence/cyaml_config.h"
 #include "headers/config.h"
 #include "headers/errors.h"
@@ -136,14 +137,6 @@ ShopData *loadShopYaml(const char *filePath) {
     return shop;
 }
 
-UserConfigData *loadUserConfigYaml() {
-    char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/user_config.yaml", config->indexDir);
-    UserConfigData *cfg = malloc(sizeof(UserConfigData));
-    loadYamlFile(filePath, userConfigTopSchema, (cyaml_data_t **) &cfg);
-    return cfg;
-}
-
 void saveUserConfigData(const UserConfigData *userConfig) {
     char filePath[MAX_FS_PATH_LENGTH];
     sprintf(filePath, "%s/user_config.yaml", config->indexDir);
@@ -154,4 +147,20 @@ void saveUserConfigData(const UserConfigData *userConfig) {
                  filePath, cyaml_strerror(err));
         exit(CyamlSavePlayer);
     }
+}
+
+UserConfigData *loadUserConfigYaml() {
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "%s/user_config.yaml", config->indexDir);
+    if (!FileExists(filePath)) {
+        char templateFilePath[MAX_FS_PATH_LENGTH];
+        sprintf(templateFilePath, "%s/user_config.yaml.template", config->indexDir);
+        UserConfigData *cfg = malloc(sizeof(UserConfigData));
+        loadYamlFile(templateFilePath, userConfigTopSchema, (cyaml_data_t **) &cfg);
+        saveUserConfigData(cfg);
+        return cfg;
+    }
+    UserConfigData *cfg = malloc(sizeof(UserConfigData));
+    loadYamlFile(filePath, userConfigTopSchema, (cyaml_data_t **) &cfg);
+    return cfg;
 }
