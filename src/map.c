@@ -57,12 +57,14 @@ typedef struct {
     Tile *openedChest;
     ShopTile *shopTiles[MAX_SHOP_TILES];
     int shopTileCount;
+    UserConfig *userConfig;
 } Map;
 
-Map *createMap(int sceneId, const char *sceneName) {
+Map *createMap(int sceneId, const char *sceneName, UserConfig *userConfig) {
     Map *map = malloc(sizeof(Map));
     map->sceneId = sceneId;
     map->sceneName = sceneName;
+    map->userConfig = userConfig;
     map->config = malloc(sizeof(MapConfig));
     map->config->tileSize = (Vector2D) {0, 0};
     map->layers = calloc(MAX_LAYERS, sizeof(Layer));
@@ -131,8 +133,8 @@ Tile *getTile(const Map *m, int tileNumber) {
 }
 
 Vector2D getTileCount(const Map *m) {
-    int x = ui->screen->width / m->tileset->size.x + 1;
-    int y = ui->screen->height / m->tileset->size.y + 2;
+    int x = m->userConfig->resolution.width / m->tileset->size.x + 1;
+    int y = m->userConfig->resolution.height / m->tileset->size.y + 2;
     return (Vector2D) {x, y};
 }
 
@@ -246,8 +248,8 @@ void drawShopCollisions(const Map *m, Image *image) {
 
 void renderMapLayer(Map *m, LayerType layer) {
     Vector2D sz = m->tileset->size;
-    int width = ui->screen->width / sz.x;
-    int height = ui->screen->height / sz.y;
+    int width = m->userConfig->resolution.width / sz.x;
+    int height = m->userConfig->resolution.height / sz.y;
     Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
     for (int y = -1; y < height; y++) {
         for (int x = 0; x < width; x++) {
@@ -538,8 +540,8 @@ void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64]
     BeginDrawing();
     ClearBackground(BLACK);
     Vector2 offset = {
-            ((float) ui->screen->width / 2) - (mob->position.x * ui->screen->scale),
-            ((float) ui->screen->height / 2) - (mob->position.y * ui->screen->scale),
+            ((float) m->userConfig->resolution.width / 2) - (mob->position.x * ui->screen->scale),
+            ((float) m->userConfig->resolution.height / 2) - (mob->position.y * ui->screen->scale),
     };
     DrawTextureEx(m->renderedLayers[BACKGROUND], offset, 0, ui->screen->scale, WHITE);
     DrawTextureEx(m->renderedLayers[MIDGROUND], offset, 0, ui->screen->scale, WHITE);

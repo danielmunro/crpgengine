@@ -3,8 +3,6 @@
 #include "headers/util/util.h"
 
 typedef struct {
-    int width;
-    int height;
     float scale;
     int targetFrameRate;
 } ScreenConfig;
@@ -134,8 +132,6 @@ void createUIConfig(UIData *data, const UserConfig *userConfig) {
     ui = malloc(sizeof(UIConfig));
 
     ui->screen = malloc(sizeof(ScreenConfig));
-    ui->screen->height = data->screen->height;
-    ui->screen->width = data->screen->width;
     ui->screen->scale = data->screen->scale;
     ui->screen->targetFrameRate = data->screen->targetFrameRate;
 

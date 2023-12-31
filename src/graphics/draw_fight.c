@@ -1,7 +1,7 @@
 #include <raylib.h>
 
-void drawFightBackground(Encounters *encounters) {
-    float scale = (float) ui->screen->width / (float) encounters->background.width;
+void drawFightBackground(Encounters *encounters, Resolution r) {
+    float scale = (float) r.width / (float) encounters->background.width;
     DrawTextureEx(encounters->background, (Vector2) {0, 0}, 0, scale, WHITE);
 }
 
@@ -33,11 +33,11 @@ void drawFightBeasts(Fight *fight) {
     }
 }
 
-void drawFightPlayer(Player *player) {
+void drawFightPlayer(Player *player, Resolution r) {
     for (int i = 0; i < player->partyCount; i++) {
         Mobile *mob = player->party[i];
         Spritesheet *sprite = mob->animations[0]->spriteSheet;
-        Vector2 position = getFightPlayerPosition(i, sprite->frameHeight);
+        Vector2 position = getFightPlayerPosition(i, sprite->frameHeight, r);
         if (mob->step == ATTACK_STEP_OUT) {
             position.x -= (float) sprite->frameWidth;
         }
@@ -57,12 +57,12 @@ void drawFightMenu(FightManager *fm) {
     drawAllMenus(fm->ui->menuContext, fm->menus);
 }
 
-void drawFightView(Encounters *encounters, FightManager *fights) {
+void drawFightView(Encounters *encounters, FightManager *fights, Resolution r) {
     BeginDrawing();
     ClearBackground(BLACK);
-    drawFightBackground(encounters);
+    drawFightBackground(encounters, r);
     drawFightBeasts(fights->fight);
-    drawFightPlayer(fights->fight->player);
+    drawFightPlayer(fights->fight->player, r);
     drawFightMenu(fights);
     drawNotifications(fights->notifications, fights->ui->fonts->default_);
     if (config->showFPS) {

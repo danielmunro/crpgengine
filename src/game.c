@@ -243,7 +243,7 @@ void doFightLoop(Game *g) {
     fightUpdate(g->fights);
     if (!isFightDone(g->fights->fight)) {
         checkFightInput(g->fights);
-        drawFightView(s->encounters, g->fights);
+        drawFightView(s->encounters, g->fights, g->userConfig->resolution);
         checkControls(g->controls);
     }
     checkRemoveFight(g->fights);
@@ -317,7 +317,11 @@ void initializeGameForPlayer(Game *g) {
             g->notifications,
             g->mobiles,
             g->saveFiles);
-    g->scenes = createSceneManager(g->controls, g->animations, g->audio);
+    g->scenes = createSceneManager(
+            g->controls,
+            g->animations,
+            g->audio,
+            g->userConfig);
     loadScenesFromFiles(
             g->scenes,
             g->mobiles,
@@ -340,7 +344,7 @@ Game *createGame(UserConfig *userConfig) {
     loadAllItems(g->items);
     g->spells = loadSpellManager();
     loadAllMobiles(g);
-    g->notifications = createNotificationManager();
+    g->notifications = createNotificationManager(userConfig);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
     g->saveFiles = getSaveFiles();
     g->saveToLoad = NULL;
