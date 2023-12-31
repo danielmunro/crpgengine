@@ -533,17 +533,6 @@ void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROL
     }
 }
 
-void drawShopWindow() {
-    float width = (float) (ui->screen->width * 0.8);
-    float height = (float) (ui->screen->height * 0.8);
-    drawMenuRect((Rectangle) {
-            (float) (ui->screen->width * 0.1),
-            (float) (ui->screen->height * 0.1),
-            width,
-            height,
-    });
-}
-
 void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64], FontStyle *font) {
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();
