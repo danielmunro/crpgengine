@@ -10,7 +10,7 @@ void drawPartySelectMenuScreen(MenuContext *mc) {
     for (int i = 0; i < mc->player->partyCount; i++) {
         Mobile *mob = mc->player->party[i];
         float column1 = getAvatarWidth(mob->avatar) + (ui->menu->padding * 2);
-        float y = ui->menu->padding + ((float) mc->userConfig->resolution.height / 4) * (float) i;
+        float y = ui->menu->padding + ((float) mc->context->user->resolution.height / 4) * (float) i;
         drawAvatar(mob->avatar, (Vector2) {ui->menu->padding, y});
         drawText(
                 mob->name,
@@ -34,7 +34,7 @@ void drawPartySelectMenuScreen(MenuContext *mc) {
                     mc->uiSprite,
                     (Vector2) {
                             0,
-                            (float) (mc->cursorLine * i) * ((float) mc->userConfig->resolution.height / 4),
+                            (float) (mc->cursorLine * i) * ((float) mc->context->user->resolution.height / 4),
                     });
         }
     }

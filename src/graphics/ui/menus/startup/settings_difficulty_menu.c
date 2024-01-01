@@ -23,14 +23,14 @@ void drawSettingsDifficultyMenuScreen(MenuContext *mc) {
 }
 
 MenuSelectResponse *settingsDifficultyMenuItemSelected(const MenuContext *mc) {
-    addInfo("cursorLine %d", mc->cursorLine);
+    UserConfig *userConfig = mc->context->user;
     if (mc->cursorLine == 0) {
-        mc->userConfig->difficulty = DIFFICULTY_CASUAL;
+        userConfig->difficulty = DIFFICULTY_CASUAL;
     } else if (mc->cursorLine == 1) {
-        mc->userConfig->difficulty = DIFFICULTY_NORMAL;
+        userConfig->difficulty = DIFFICULTY_NORMAL;
     } else if (mc->cursorLine == 2) {
-        mc->userConfig->difficulty = DIFFICULTY_CHALLENGE;
+        userConfig->difficulty = DIFFICULTY_CHALLENGE;
     }
-    saveUserConfig(mc->userConfig);
+    saveUserConfig(userConfig);
     return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, SETTINGS_DIFFICULTY_MENU);
 }

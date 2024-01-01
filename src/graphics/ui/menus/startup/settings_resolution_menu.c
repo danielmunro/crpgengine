@@ -23,15 +23,15 @@ void drawSettingsResolutionMenuScreen(MenuContext *mc) {
 }
 
 MenuSelectResponse *settingsResolutionMenuItemSelected(const MenuContext *mc) {
-    addInfo("resolution cursor %d", mc->cursorLine);
+    UserConfig *userConfig = mc->context->user;
     if (mc->cursorLine == 0) {
-        mc->userConfig->resolution = (Resolution) { 800, 600 };
+        userConfig->resolution = (Resolution) { 800, 600 };
     } else if (mc->cursorLine == 1) {
-        mc->userConfig->resolution = (Resolution) { 1280, 1024 };
+        userConfig->resolution = (Resolution) { 1280, 1024 };
     }
-    SetWindowSize(mc->userConfig->resolution.width, mc->userConfig->resolution.height);
-    setTextAreasFromData(mc->userConfig->resolution);
+    SetWindowSize(userConfig->resolution.width, userConfig->resolution.height);
+    setTextAreasFromData(userConfig->resolution);
     clearTextBoxes(mc->textBoxes);
-    saveUserConfig(mc->userConfig);
+    saveUserConfig(userConfig);
     return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, SETTINGS_RESOLUTION_MENU);
 }

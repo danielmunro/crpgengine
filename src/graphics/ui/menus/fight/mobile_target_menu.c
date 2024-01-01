@@ -17,7 +17,7 @@ void drawMobileTargetMenuScreen(MenuContext *menuContext) {
     Vector2 playerPosition = getFightPlayerPosition(
             menuContext->cursorLine,
             frameHeight,
-            menuContext->userConfig->resolution);
+            menuContext->context->user->resolution);
     drawRightCursor(
             menuContext->uiSprite,
             (Vector2) {

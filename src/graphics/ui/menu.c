@@ -1,6 +1,6 @@
 #include "headers/player.h"
 #include "headers/fight.h"
-#include "headers/user_config.h"
+#include "headers/context.h"
 
 const char *PartyMenuItems[] = {
         PARTY_MENU_ITEMS,
@@ -48,6 +48,7 @@ typedef struct {
 } UISprite;
 
 typedef struct {
+    Context *context;
     MenuType menuType;
     const char *scene;
     Player *player;
@@ -69,7 +70,6 @@ typedef struct {
     Shop *shop;
     ItemWithMarkup *itemToBuy;
     SaveFiles *saveFiles;
-    UserConfig *userConfig;
     int quantity;
     int scrollOffset;
 } MenuContext;
@@ -124,36 +124,36 @@ Menu *createMenu(
 }
 
 MenuContext *createMenuContext(
+        Context *context,
         Player *player,
         Fonts *fonts,
         UISprite *uiSprite,
         Spell **spells,
         SaveFiles *saveFiles,
-        UserConfig *userConfig,
         const char *scene,
         int cursorLine) {
-    MenuContext *context = malloc(sizeof(MenuContext));
-    context->fight = NULL;
-    context->player = player;
-    context->scene = scene;
-    context->cursorLine = cursorLine;
-    context->fonts = fonts;
-    context->uiSprite = uiSprite;
-    context->spells = spells;
-    context->textBoxes = calloc(MAX_TEXT_BOXES, sizeof(TextBox));
-    context->selectedMob = NULL;
-    context->itemList = calloc(MAX_ITEMS, sizeof(ItemList));
-    context->itemListCount = 0;
-    context->targetBeast = NULL;
-    context->targetMob = NULL;
-    context->actionType = NONE;
-    context->shop = NULL;
-    context->itemToBuy = NULL;
-    context->saveFiles = saveFiles;
-    context->userConfig = userConfig;
-    context->quantity = 1;
-    context->scrollOffset = 0;
-    return context;
+    MenuContext *mc = malloc(sizeof(MenuContext));
+    mc->context = context;
+    mc->fight = NULL;
+    mc->player = player;
+    mc->scene = scene;
+    mc->cursorLine = cursorLine;
+    mc->fonts = fonts;
+    mc->uiSprite = uiSprite;
+    mc->spells = spells;
+    mc->textBoxes = calloc(MAX_TEXT_BOXES, sizeof(TextBox));
+    mc->selectedMob = NULL;
+    mc->itemList = calloc(MAX_ITEMS, sizeof(ItemList));
+    mc->itemListCount = 0;
+    mc->targetBeast = NULL;
+    mc->targetMob = NULL;
+    mc->actionType = NONE;
+    mc->shop = NULL;
+    mc->itemToBuy = NULL;
+    mc->saveFiles = saveFiles;
+    mc->quantity = 1;
+    mc->scrollOffset = 0;
+    return mc;
 }
 
 void resetMenuContext(MenuContext *mc) {

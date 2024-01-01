@@ -296,12 +296,12 @@ UIManager *initializeUIManager(Game *g) {
             findSpritesheetByName(g->sprites, uiData->sprite->name),
             uiData);
     MenuContext *mc = createMenuContext(
+            g->context,
             NULL,
             fonts,
             uiSprite,
             g->spells->spells,
             g->saveFiles,
-            g->context->user,
             NULL,
             0);
     return createUIManager(

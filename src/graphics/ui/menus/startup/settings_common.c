@@ -30,7 +30,7 @@ void drawSettingsHeader(MenuContext *mc) {
 }
 
 void drawFullScreenOptions(TextBox *tb, const MenuContext *mc) {
-    if (mc->userConfig->fullScreen) {
+    if (mc->context->user->fullScreen) {
         drawInMenuWithStyle(tb, mc->fonts->highlight, "*Yes");
         drawInMenuWithStyle(tb, mc->fonts->disable, "No");
     } else {
@@ -40,11 +40,11 @@ void drawFullScreenOptions(TextBox *tb, const MenuContext *mc) {
 }
 
 void drawDifficultyOptions(TextBox *tb, const MenuContext *mc) {
-    if (mc->userConfig->difficulty == DIFFICULTY_CASUAL) {
+    if (mc->context->user->difficulty == DIFFICULTY_CASUAL) {
         drawInMenuWithStyle(tb, mc->fonts->highlight, "*Casual");
         drawInMenuWithStyle(tb, mc->fonts->disable, "Normal");
         drawInMenuWithStyle(tb, mc->fonts->disable, "Challenge");
-    } else if (mc->userConfig->difficulty == DIFFICULTY_NORMAL) {
+    } else if (mc->context->user->difficulty == DIFFICULTY_NORMAL) {
         drawInMenuWithStyle(tb, mc->fonts->disable, "Casual");
         drawInMenuWithStyle(tb, mc->fonts->highlight, "*Normal");
         drawInMenuWithStyle(tb, mc->fonts->disable, "Challenge");
@@ -56,7 +56,7 @@ void drawDifficultyOptions(TextBox *tb, const MenuContext *mc) {
 }
 
 void drawResolutionOptions(TextBox *tb, const MenuContext *mc) {
-    if (mc->userConfig->resolution.width == 800) {
+    if (mc->context->user->resolution.width == 800) {
         drawInMenuWithStyle(tb, mc->fonts->highlight, "*800x600");
         drawInMenuWithStyle(tb, mc->fonts->disable, "1280x1024");
     } else {

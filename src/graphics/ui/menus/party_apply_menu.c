@@ -18,7 +18,7 @@ void drawPartyApplyMenuScreen(MenuContext *mc) {
             PARTY_APPLY_BOX,
             ui->textAreas->right);
     drawMenuRect(t->area);
-    float quarter = (float) mc->userConfig->resolution.height / 4;
+    float quarter = (float) mc->context->user->resolution.height / 4;
     FontStyle *f = mc->fonts->default_;
     for (int i = 0; i < mc->player->partyCount; i++) {
         Mobile *mob = mc->player->party[i];

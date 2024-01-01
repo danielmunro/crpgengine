@@ -23,14 +23,15 @@ void drawSettingsFullScreenMenuScreen(MenuContext *mc) {
 }
 
 MenuSelectResponse *settingsFullScreenMenuItemSelected(const MenuContext *mc) {
-    if (mc->cursorLine == 0 && !mc->userConfig->fullScreen) {
+    UserConfig *userConfig = mc->context->user;
+    if (mc->cursorLine == 0 && !userConfig->fullScreen) {
         ToggleFullscreen();
-        mc->userConfig->fullScreen = true;
-        saveUserConfig(mc->userConfig);
-    } else if (mc->cursorLine == 1 && mc->userConfig->fullScreen) {
+        userConfig->fullScreen = true;
+        saveUserConfig(userConfig);
+    } else if (mc->cursorLine == 1 && userConfig->fullScreen) {
         ToggleFullscreen();
-        mc->userConfig->fullScreen = false;
-        saveUserConfig(mc->userConfig);
+        userConfig->fullScreen = false;
+        saveUserConfig(userConfig);
     }
     return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, SETTINGS_FULL_SCREEN_MENU);
 }
