@@ -1,6 +1,7 @@
 #include "headers/graphics/ui/menu.h"
 
 void drawPartySelectMenuScreen(MenuContext *mc) {
+    const UIConfig *ui = mc->context->ui;
     TextBox *inGameMenuBox = findOrCreateTextBox(
             mc,
             PARTY_SELECT_BOX,

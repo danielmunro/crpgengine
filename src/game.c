@@ -349,7 +349,7 @@ Game *createGame(Context *c) {
     loadAllItems(g->items);
     g->spells = loadSpellManager();
     loadAllMobiles(g);
-    g->notifications = createNotificationManager(c->user);
+    g->notifications = createNotificationManager(c);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
     g->saveFiles = getSaveFiles();
     g->saveToLoad = NULL;

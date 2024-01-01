@@ -13,6 +13,7 @@ void drawPartyApplyPlayer(Mobile *mob, Vector2 pos) {
 }
 
 void drawPartyApplyMenuScreen(MenuContext *mc) {
+    const UIConfig *ui = mc->context->ui;
     TextBox *t = findOrCreateTextBox(
             mc,
             PARTY_APPLY_BOX,

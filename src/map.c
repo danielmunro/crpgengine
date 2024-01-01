@@ -344,14 +344,15 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
             drawAnimation(
                     getMobAnimation(mobLayer[y][n]),
                     (Vector2) {
-                            ((mobLayer[y][n]->position.x * ui->screen->scale) + offset.x),
-                            (floorf((mobLayer[y][n]->position.y * ui->screen->scale) + offset.y)),
+                            ((mobLayer[y][n]->position.x * m->context->ui->screen->scale) + offset.x),
+                            (floorf((mobLayer[y][n]->position.y * m->context->ui->screen->scale) + offset.y)),
                     }
             );
         }
     }
 
     if (config->showCollisions->player) {
+        const UIConfig *ui = m->context->ui;
         Rectangle rect = getMobileRectangle(getPartyLeader(p));
         DrawRectangle(
                 (int) ((rect.x * ui->screen->scale) + offset.x),
@@ -363,6 +364,7 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
 }
 
 void drawOpenedChests(const Map *m, const Player *p, Vector2 offset) {
+    const UIConfig *ui = m->context->ui;
     for (int i = 0; i < m->chestCount; i++) {
         if (isChestOpened(p, m->sceneId, m->chests[i]->id)) {
             Rectangle dest = {
@@ -508,7 +510,11 @@ void evaluateMovement(const Map *m, Player *p) {
     }
 }
 
-void drawExplorationControls(Player *player, ControlBlock *cb[MAX_ACTIVE_CONTROLS], const FontStyle *font) {
+void drawExplorationControls(
+        Player *player,
+        ControlBlock *cb[MAX_ACTIVE_CONTROLS],
+        const FontStyle *font,
+        const UIConfig *ui) {
     if (player->dialog) {
         drawMenuRect(ui->textAreas->bottom);
         drawDialog(player->dialog);
@@ -539,6 +545,7 @@ void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64]
     Mobile *mob = getPartyLeader(p);
     BeginDrawing();
     ClearBackground(BLACK);
+    const UIConfig *ui = m->context->ui;
     Vector2 offset = {
             ((float) m->context->user->resolution.width / 2) - (mob->position.x * ui->screen->scale),
             ((float) m->context->user->resolution.height / 2) - (mob->position.y * ui->screen->scale),
@@ -549,7 +556,7 @@ void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64]
     drawExplorationMobiles(m, p, offset);
     DrawTextureEx(m->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);
-    drawExplorationControls(p, c, font);
+    drawExplorationControls(p, c, font, m->context->ui);
     if (config->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }

@@ -19,17 +19,17 @@ typedef struct {
 } Notification;
 
 typedef struct {
+    Context *context;
     Notification **notifications;
     int count;
     double timeSinceUpdateInMs;
     float slideDown;
-    UserConfig *userConfig;
 } NotificationManager;
 
-NotificationManager *createNotificationManager(UserConfig *userConfig) {
+NotificationManager *createNotificationManager(Context *c) {
     NotificationManager *nm = malloc(sizeof(NotificationManager));
+    nm->context = c;
     nm->notifications = calloc(MAX_NOTIFICATIONS, sizeof(Notification));
-    nm->userConfig = userConfig;
     nm->count = 0;
     nm->slideDown = 0;
     return nm;
@@ -70,7 +70,7 @@ void decayNotifications(NotificationManager *nm, double timeInterval) {
             if (nm->notifications[0]->decay == 0) {
                 free(nm->notifications[0]);
                 nm->notifications[0] = NULL;
-                nm->slideDown = NOTIFICATION_HEIGHT + ui->menu->padding;
+                nm->slideDown = NOTIFICATION_HEIGHT + nm->context->ui->menu->padding;
             }
         }
         nm->timeSinceUpdateInMs -= MILLISECONDS_IN_SECOND;
@@ -81,12 +81,13 @@ void decayNotifications(NotificationManager *nm, double timeInterval) {
 }
 
 void drawNotifications(NotificationManager *nm, FontStyle *font) {
+    const UIConfig *ui = nm->context->ui;
     for (int i = 0; i < nm->count; i++) {
         Rectangle rect = (Rectangle) {
-            (float) nm->userConfig->resolution.width
+            (float) nm->context->user->resolution.width
                 - NOTIFICATION_WIDTH
                 - ui->menu->padding,
-            (float) ((float) nm->userConfig->resolution.height
+            (float) ((float) nm->context->user->resolution.height
                 - (ui->menu->padding * (float) (i + 1))
                 - (float) (NOTIFICATION_HEIGHT * (i + 1))),
             NOTIFICATION_WIDTH,
