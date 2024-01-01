@@ -17,7 +17,7 @@ Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *sa
                 getPositionFromString(mob.position),
                 getDirectionFromString(mob.direction),
                 animations,
-                createAvatar(mob.avatar),
+                createAvatar(mob.avatar, am->context->ui->screen->scale),
                 mob.hp,
                 mob.mana,
                 createAttributesFromData(mob.attributes),

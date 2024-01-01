@@ -288,7 +288,7 @@ void run(Game *g) {
 }
 
 void loadAllMobiles(Game *g) {
-    g->mobiles = createMobileManager(g->spells, g->animations);
+    g->mobiles = createMobileManager(g->spells, g->animations, g->context);
     loadPlayerMobiles(g->mobiles);
 }
 

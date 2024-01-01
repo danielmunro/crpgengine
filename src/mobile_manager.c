@@ -5,6 +5,7 @@
 #include "headers/graphics/avatar.h"
 
 typedef struct {
+    Context *context;
     SpellManager *spellManager;
     AnimationManager *animationManager;
     Mobile **mobiles;
@@ -13,8 +14,9 @@ typedef struct {
     int playableMobileCount;
 } MobileManager;
 
-MobileManager *createMobileManager(SpellManager *sm, AnimationManager *am) {
+MobileManager *createMobileManager(SpellManager *sm, AnimationManager *am, Context *c) {
     MobileManager *m = malloc(sizeof(MobileManager));
+    m->context = c;
     m->spellManager = sm;
     m->animationManager = am;
     m->mobiles = calloc(MAX_MOBILES, sizeof(Mobile));
@@ -51,7 +53,7 @@ Mobile *createMobileFromData(MobileManager *mm, MobileData *data, Animation *ani
             getPositionFromString(data->position),
             getDirectionFromString(data->direction),
             animations,
-            createAvatar(data->avatar),
+            createAvatar(data->avatar, mm->context->ui->screen->scale),
             data->hp,
             data->mana,
             createAttributesFromData(data->attributes),

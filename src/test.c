@@ -53,7 +53,8 @@ FightInScene *createFightInScene(Context *c) {
     loadAllItems(fightInScene->im);
     fightInScene->mm = createMobileManager(
             sm,
-            createTestAnimationManager(c));
+            createTestAnimationManager(c),
+            c);
     loadPlayerMobiles(fightInScene->mm);
     return fightInScene;
 }
@@ -91,7 +92,7 @@ void canMoveMobTest(Context *c) {
             start,
             DIRECTION_DOWN,
             animations,
-            createAvatar("fireas.png"),
+            createAvatar("fireas.png", c->ui->screen->scale),
             20,
             20,
             createTestAttributes(),
@@ -120,7 +121,7 @@ void canMobStopMovingTest(Context *c) {
             start,
             DIRECTION_DOWN,
             animations,
-            createAvatar("fireas.png"),
+            createAvatar("fireas.png", c->ui->screen->scale),
             STARTING_HP,
             STARTING_MANA,
             createTestAttributes(),
