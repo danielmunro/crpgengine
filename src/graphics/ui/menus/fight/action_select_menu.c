@@ -21,29 +21,29 @@ int getActionSelectCursorLength() {
     return sizeof(actionMenu) / sizeof(char *);
 }
 
-void drawActionSelectMenuScreen(MenuContext *menuContext) {
+void drawActionSelectMenuScreen(MenuContext *mc) {
     TextBox *t = findOrCreateTextBox(
-            menuContext,
+            mc,
             ACTION_SELECT_BOX,
-            ui->textAreas->bottomMid);
+            mc->context->ui->textAreas->bottomMid);
     drawMenuRect(t->area);
-    drawScrollableInMenu(t, actionMenu[ACTION_ATTACK], menuContext->cursorLine);
+    drawScrollableInMenu(t, actionMenu[ACTION_ATTACK], mc->cursorLine);
     drawScrollableInMenu(
             t,
-            menuContext->selectedMob->spellCount > 0
+            mc->selectedMob->spellCount > 0
             ? actionMenu[ACTION_MAGIC] : "",
-            menuContext->cursorLine);
-    drawScrollableInMenu(t, actionMenu[ACTION_ITEMS], menuContext->cursorLine);
-    drawScrollableInMenu(t, actionMenu[ACTION_DEFEND], menuContext->cursorLine);
-    drawScrollableInMenu(t, actionMenu[ACTION_RUN], menuContext->cursorLine);
-    float h = menuContext->fonts->default_->lineHeight;
+            mc->cursorLine);
+    drawScrollableInMenu(t, actionMenu[ACTION_ITEMS], mc->cursorLine);
+    drawScrollableInMenu(t, actionMenu[ACTION_DEFEND], mc->cursorLine);
+    drawScrollableInMenu(t, actionMenu[ACTION_RUN], mc->cursorLine);
+    float h = mc->fonts->default_->lineHeight;
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
                     t->area.x,
                     t->area.y
-                    + (h * (float) menuContext->cursorLine)
-                    - getScrollOffset(h, menuContext->cursorLine, t->area.height),
+                    + (h * (float) mc->cursorLine)
+                    - getScrollOffset(h, mc->cursorLine, t->area.height),
             });
 }
 

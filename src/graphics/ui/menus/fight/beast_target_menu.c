@@ -4,26 +4,26 @@ int geBeastTargetMenuCursorLength(const MenuContext *menuContext) {
     return getBeastSelectCursorLength(menuContext);
 }
 
-void drawBeastTargetMenuScreen(MenuContext *menuContext) {
-    drawBeastSelectMenuScreen(menuContext);
+void drawBeastTargetMenuScreen(MenuContext *mc) {
+    drawBeastSelectMenuScreen(mc);
     TextBox *t = findOrCreateTextBox(
-            menuContext,
+            mc,
             BEAST_SELECT_BOX,
-            ui->textAreas->bottomLeft);
+            mc->context->ui->textAreas->bottomLeft);
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
                     t->area.x,
                     t->area.y +
-                    menuContext->fonts->default_->lineHeight *
-                    (float) menuContext->cursorLine,
+                    mc->fonts->default_->lineHeight *
+                    (float) mc->cursorLine,
             });
-    if (menuContext->fight->beastCount <= menuContext->cursorLine) {
+    if (mc->fight->beastCount <= mc->cursorLine) {
         return;
     }
-    Rectangle p = menuContext->fight->beasts[menuContext->cursorLine]->position;
+    Rectangle p = mc->fight->beasts[mc->cursorLine]->position;
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
                     p.x - (p.width / 2),
                     p.y - (p.height / 2),

@@ -77,8 +77,8 @@ void drawImageFromSprite(const Spritesheet *s, Vector2 position, int imageIndex)
     Rectangle dest = {
             position.x,
             position.y,
-            (float) abs(s->frameWidth) * ui->screen->scale,
-            (float) abs(s->frameHeight) * ui->screen->scale };
+            (float) abs(s->frameWidth) * s->scale,
+            (float) abs(s->frameHeight) * s->scale };
     Vector2 origin = { 0.0f, 0.0f };
     float rotation = 0.0f;
     DrawTexturePro(s->source, rect, dest, origin, rotation, WHITE);
