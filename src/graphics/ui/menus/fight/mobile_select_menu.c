@@ -51,7 +51,8 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
                 int frameHeight = mob->animations[0]->spriteSheet->frameHeight;
                 Vector2 playerPosition = getFightPlayerPosition(
                         i,
-                        frameHeight);
+                        frameHeight,
+                        mc->userConfig->resolution);
                 drawDownCursor(mc->uiSprite,
                                (Vector2) {
                                        playerPosition.x - 5,

@@ -23,11 +23,13 @@ typedef struct {
     int count;
     double timeSinceUpdateInMs;
     float slideDown;
+    UserConfig *userConfig;
 } NotificationManager;
 
-NotificationManager *createNotificationManager() {
+NotificationManager *createNotificationManager(UserConfig *userConfig) {
     NotificationManager *nm = malloc(sizeof(NotificationManager));
     nm->notifications = calloc(MAX_NOTIFICATIONS, sizeof(Notification));
+    nm->userConfig = userConfig;
     nm->count = 0;
     nm->slideDown = 0;
     return nm;
@@ -81,10 +83,10 @@ void decayNotifications(NotificationManager *nm, double timeInterval) {
 void drawNotifications(NotificationManager *nm, FontStyle *font) {
     for (int i = 0; i < nm->count; i++) {
         Rectangle rect = (Rectangle) {
-            (float) ui->screen->width
+            (float) nm->userConfig->resolution.width
                 - NOTIFICATION_WIDTH
                 - ui->menu->padding,
-            (float) ((float) ui->screen->height
+            (float) ((float) nm->userConfig->resolution.height
                 - (ui->menu->padding * (float) (i + 1))
                 - (float) (NOTIFICATION_HEIGHT * (i + 1))),
             NOTIFICATION_WIDTH,

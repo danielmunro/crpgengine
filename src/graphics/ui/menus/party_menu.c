@@ -1,16 +1,16 @@
 #include "headers/graphics/ui/menu.h"
 
-void drawPartyMenuScreen(MenuContext *menuContext) {
+void drawPartyMenuScreen(MenuContext *mc) {
     TextBox *inGameMenuBox = findOrCreateTextBox(
-            menuContext,
+            mc,
             IN_GAME_MENU_BOX,
             ui->textAreas->full);
     drawMenuRect(inGameMenuBox->area);
-    FontStyle *defaultFont = menuContext->fonts->default_;
-    for (int i = 0; i < menuContext->player->partyCount; i++) {
-        Mobile *mob = menuContext->player->party[i];
+    FontStyle *defaultFont = mc->fonts->default_;
+    for (int i = 0; i < mc->player->partyCount; i++) {
+        Mobile *mob = mc->player->party[i];
         float column1 = getAvatarWidth(mob->avatar) + (ui->menu->padding * 2);
-        float y = ui->menu->padding + ((float) ui->screen->height / 4) * (float) i;
+        float y = ui->menu->padding + ((float) mc->userConfig->resolution.height / 4) * (float) i;
         drawAvatar(mob->avatar, (Vector2) {ui->menu->padding, y});
         drawText(
                 mob->name,
@@ -32,23 +32,23 @@ void drawPartyMenuScreen(MenuContext *menuContext) {
     }
     int count = sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
     TextBox *textBox = findOrCreateTextBox(
-            menuContext,
+            mc,
             PARTY_BOX,
             ui->textAreas->right);
     drawMenuRect(textBox->area);
     for (int i = 0; i < count; i++) {
-        if (i == menuContext->cursorLine) {
-            drawInMenuWithStyle(textBox, menuContext->fonts->highlight, PartyMenuItems[i]);
+        if (i == mc->cursorLine) {
+            drawInMenuWithStyle(textBox, mc->fonts->highlight, PartyMenuItems[i]);
         } else {
             drawInMenu(textBox, PartyMenuItems[i]);
         }
     }
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
-                    (float) ui->screen->width
+                    (float) mc->userConfig->resolution.width
                             - PARTY_MENU_WIDTH,
-                    line(menuContext->cursorLine, defaultFont->lineHeight)
+                    line(mc->cursorLine, defaultFont->lineHeight)
             });
 }
 
@@ -56,8 +56,8 @@ int getPartyMenuCursorLength() {
     return sizeof(PartyMenuItems) / sizeof(PartyMenuItems[0]);
 }
 
-MenuSelectResponse *partyMenuItemSelected(const MenuContext *menuContext) {
-    int c = menuContext->cursorLine;
+MenuSelectResponse *partyMenuItemSelected(const MenuContext *mc) {
+    int c = mc->cursorLine;
     if (strcmp(PartyMenuItems[c], PARTY_MENU_ITEMS) == 0) {
         return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, ITEMS_MENU);
     } else if (strcmp(PartyMenuItems[c], PARTY_MENU_MAGIC) == 0) {

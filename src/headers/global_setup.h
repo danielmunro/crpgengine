@@ -1,0 +1,6 @@
+#ifndef CJRPGENGINE_GLOBAL_SETUP_H
+#define CJRPGENGINE_GLOBAL_SETUP_H
+
+#include "global_setup.c"
+
+#endif //CJRPGENGINE_GLOBAL_SETUP_H

@@ -198,6 +198,30 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultNextOption,
                     &menuKeyPressed,
                     &settingsMenuItemSelected),
+            createMenu(
+                    SETTINGS_FULL_SCREEN_MENU,
+                    &getSettingsFullScreenMenuCursorLength,
+                    &drawSettingsFullScreenMenuScreen,
+                    &getDefaultPreviousOption,
+                    &getDefaultNextOption,
+                    &menuKeyPressed,
+                    &settingsFullScreenMenuItemSelected),
+            createMenu(
+                    SETTINGS_DIFFICULTY_MENU,
+                    &getSettingsDifficultyMenuCursorLength,
+                    &drawSettingsDifficultyMenuScreen,
+                    &getDefaultPreviousOption,
+                    &getDefaultNextOption,
+                    &menuKeyPressed,
+                    &settingsDifficultyMenuItemSelected),
+            createMenu(
+                    SETTINGS_RESOLUTION_MENU,
+                    &getSettingsResolutionMenuCursorLength,
+                    &drawSettingsResolutionMenuScreen,
+                    &getDefaultPreviousOption,
+                    &getDefaultNextOption,
+                    &menuKeyPressed,
+                    &settingsResolutionMenuItemSelected),
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {

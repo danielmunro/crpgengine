@@ -101,9 +101,9 @@ int isFightDone(const Fight *fight) {
     return fight->beastCount == 0 || fight->cancelled;
 }
 
-Vector2 getFightPlayerPosition(int playerNumber, int mobileHeight) {
+Vector2 getFightPlayerPosition(int playerNumber, int mobileHeight, Resolution r) {
     return (Vector2) {
-            (float) (ui->screen->width * 0.8),
+            (float) (r.width * 0.8),
             (float) (FIGHT_PLAYER_Y_MARGIN
                      + (mobileHeight * playerNumber)
                      + (FIGHT_PLAYER_Y_PADDING * playerNumber))

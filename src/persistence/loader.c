@@ -189,6 +189,7 @@ Scene *loadScene(
         ItemManager *im,
         ControlManager *cm,
         const Beastiary *beastiary,
+        UserConfig *userConfig,
         const char *sceneName,
         const char *sceneDirectory) {
     addDebug("create scene :: %s", sceneName);
@@ -211,7 +212,12 @@ Scene *loadScene(
     char *tilemapFilePath = malloc(MAX_FS_PATH_LENGTH);
     sprintf(tilemapFilePath, "%s/tilemap.tmx", mapDirectory);
     addDebug("parse scene tilemap :: %s", sceneName);
-    scene->map = parseTilemapDocToMap(im, scene->id, tilemapFilePath, mapDirectory);
+    scene->map = parseTilemapDocToMap(
+            im,
+            userConfig,
+            scene->id,
+            tilemapFilePath,
+            mapDirectory);
 
     // load mobiles
     loadMobiles(mm, scene, sceneDirectory);
@@ -253,6 +259,7 @@ void loadScenes(
                 im,
                 sm->controlManager,
                 beastiary,
+                sm->userConfig,
                 sl->scenes[i],
                 sl->sceneFiles[i]);
         addDebug("scene loaded :: %s (%d)", sm->scenes[i]->name, i);

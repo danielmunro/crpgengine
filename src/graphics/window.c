@@ -1,11 +1,18 @@
 #include <raylib.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "headers/persistence/cyaml.h"
+#include "headers/user_config.h"
 
-void initWindow(const char *title, const UIData *ui) {
-    SetTargetFPS(ui->screen->targetFrameRate);
-    InitWindow(ui->screen->width, ui->screen->height, title);
+void initWindow(
+        Resolution resolution,
+        bool fullScreen,
+        const char *title,
+        int targetFPS) {
+    SetTargetFPS(targetFPS);
+    InitWindow(
+            resolution.width,
+            resolution.height,
+            title);
     InitAudioDevice();
     if (!IsAudioDeviceReady()) {
         printf("not ready");
@@ -13,7 +20,7 @@ void initWindow(const char *title, const UIData *ui) {
     }
     HideCursor();
     SetExitKey(0);
-    if (ui->screen->full) {
+    if (fullScreen) {
         ToggleFullscreen();
     }
 }
