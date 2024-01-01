@@ -16,7 +16,7 @@ Beast *createTestBeast() {
 
 AnimationManager *createTestAnimationManager(Context *c) {
     AnimationManager *am = createAnimationManager(c);
-    SpritesheetManager *sm = loadSpritesheetManager();
+    SpritesheetManager *sm = loadSpritesheetManager(c);
     loadAllAnimations(am, sm);
     free(sm);
     return am;

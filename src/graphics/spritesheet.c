@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include <mm_malloc.h>
 #include <math.h>
+#include "headers/context.h"
 
 typedef struct {
     const char *name;
@@ -11,11 +12,13 @@ typedef struct {
     int frameHeight;
     int padding;
     Rectangle *collision;
+    float scale;
 } Spritesheet;
 
 typedef struct {
     Spritesheet *spritesheets[MAX_SPRITESHEETS];
     int spritesCount;
+    Context *context;
 } SpritesheetManager;
 
 Spritesheet *createSpriteSheet(
@@ -24,7 +27,8 @@ Spritesheet *createSpriteSheet(
         int width,
         int height,
         int padding,
-        Rectangle *collision) {
+        Rectangle *collision,
+        float scale) {
     Texture2D tex = LoadTexture(filename);
     Spritesheet *sp = malloc(sizeof(Spritesheet));
     sp->name = name;
@@ -34,15 +38,20 @@ Spritesheet *createSpriteSheet(
     sp->frameHeight = height;
     sp->padding = padding;
     sp->collision = collision;
+    sp->scale = scale;
     return sp;
 }
 
-SpritesheetManager *createSpriteSheetManager(Spritesheet *spritesheets[MAX_SPRITESHEETS], int count) {
+SpritesheetManager *createSpriteSheetManager(
+        Spritesheet *spritesheets[MAX_SPRITESHEETS],
+        int count,
+        Context *c) {
     SpritesheetManager *sm = malloc(sizeof(SpritesheetManager));
     for (int i = 0; i < count; i++) {
         sm->spritesheets[i] = spritesheets[i];
     }
     sm->spritesCount = count;
+    sm->context = c;
     return sm;
 }
 

@@ -293,7 +293,7 @@ AudioManager *loadAudioManager() {
     return am;
 }
 
-SpritesheetManager *loadSpritesheetManager() {
+SpritesheetManager *loadSpritesheetManager(Context *c) {
     addDebug("load spritesheet manager :: %s", config->indexDir);
     Spritesheet *spritesheets[MAX_SPRITESHEETS];
     char directory[MAX_FS_PATH_LENGTH];
@@ -322,14 +322,15 @@ SpritesheetManager *loadSpritesheetManager() {
                     data->frame->width,
                     data->frame->height,
                     data->frame->padding,
-                    collision);
+                    collision,
+                    c->ui->screen->scale);
             count++;
             free(data);
         }
     }
     free(files);
     addDebug("final spritesheet count :: %d", count);
-    return createSpriteSheetManager(spritesheets, count);
+    return createSpriteSheetManager(spritesheets, count, c);
 }
 
 void loadAllItems(ItemManager *itemManager) {

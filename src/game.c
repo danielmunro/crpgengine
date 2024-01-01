@@ -340,7 +340,7 @@ void initializeGameForPlayer(Game *g) {
 Game *createGame(Context *c) {
     Game *g = malloc(sizeof(Game));
     g->context = c;
-    g->sprites = loadSpritesheetManager();
+    g->sprites = loadSpritesheetManager(c);
     g->animations = createAnimationManager(c);
     loadAllAnimations(g->animations, g->sprites);
     g->audio = loadAudioManager();
