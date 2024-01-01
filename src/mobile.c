@@ -140,7 +140,7 @@ float normalizeMoveAmount(float a, float b) {
     return 0;
 }
 
-bool moveMob(Mobile *mob, Vector2 destination) {
+bool moveMob(Mobile *mob, Vector2 destination, int targetFPS) {
     resetMoving(mob);
     float x = normalizeMoveAmount(mob->position.x, destination.x);
     float y = normalizeMoveAmount(mob->position.y, destination.y);
@@ -156,7 +156,7 @@ bool moveMob(Mobile *mob, Vector2 destination) {
         else mob->direction = DIRECTION_UP;
         mob->moving[mob->direction] = true;
     }
-    incrementAnimationFrame(animation);
+    incrementAnimationFrame(animation, targetFPS);
     return moved;
 }
 

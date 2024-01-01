@@ -11,6 +11,7 @@
 #include "headers/ui_manager.h"
 
 typedef struct {
+    Context *context;
     UIManager *ui;
     Fight *fight;
     Menu **menus;

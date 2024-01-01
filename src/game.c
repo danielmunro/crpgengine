@@ -244,7 +244,10 @@ void doFightLoop(Game *g) {
     fightUpdate(g->fights);
     if (!isFightDone(g->fights->fight)) {
         checkFightInput(g->fights);
-        drawFightView(s->encounters, g->fights, g->context->user->resolution);
+        drawFightView(
+                s->encounters,
+                g->fights,
+                g->context);
         checkControls(g->controls);
     }
     checkRemoveFight(g->fights);
@@ -319,10 +322,10 @@ void initializeGameForPlayer(Game *g) {
             g->mobiles,
             g->saveFiles);
     g->scenes = createSceneManager(
+            g->context,
             g->controls,
             g->animations,
-            g->audio,
-            g->context->user);
+            g->audio);
     loadScenesFromFiles(
             g->scenes,
             g->mobiles,
@@ -338,7 +341,7 @@ Game *createGame(Context *c) {
     Game *g = malloc(sizeof(Game));
     g->context = c;
     g->sprites = loadSpritesheetManager();
-    g->animations = createAnimationManager();
+    g->animations = createAnimationManager(c);
     loadAllAnimations(g->animations, g->sprites);
     g->audio = loadAudioManager();
     g->beastiary = loadBeastiary();

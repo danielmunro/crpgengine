@@ -46,8 +46,8 @@ Context *globalSetup() {
     initWindow(
             userConfig->resolution,
             userConfig->fullScreen,
-            ui->screen->title,
-            ui->screen->targetFrameRate);
+            uiConfig->screen->title,
+            uiConfig->screen->targetFrameRate);
     return createContext(
             log,
             gameConfig,

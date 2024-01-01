@@ -14,8 +14,8 @@ Beast *createTestBeast() {
     return beast;
 }
 
-AnimationManager *createTestAnimationManager() {
-    AnimationManager *am = createAnimationManager();
+AnimationManager *createTestAnimationManager(Context *c) {
+    AnimationManager *am = createAnimationManager(c);
     SpritesheetManager *sm = loadSpritesheetManager();
     loadAllAnimations(am, sm);
     free(sm);
@@ -37,7 +37,7 @@ typedef struct {
     ItemManager *im;
 } FightInScene;
 
-FightInScene *createFightInScene() {
+FightInScene *createFightInScene(Context *c) {
     FightInScene *fightInScene = malloc(sizeof(FightInScene));
     fightInScene->e = createEncounters();
     fightInScene->e->beastEncountersCount = 1;
@@ -53,7 +53,7 @@ FightInScene *createFightInScene() {
     loadAllItems(fightInScene->im);
     fightInScene->mm = createMobileManager(
             sm,
-            createTestAnimationManager());
+            createTestAnimationManager(c));
     loadPlayerMobiles(fightInScene->mm);
     return fightInScene;
 }
@@ -65,8 +65,8 @@ Fight *createFightFromFightInScene(FightInScene *fightInScene) {
             createNewPlayer(fightInScene->mm, fightInScene->im));
 }
 
-void createFightInSceneTest() {
-    FightInScene *fightInScene = createFightInScene();
+void createFightInSceneTest(Context *c) {
+    FightInScene *fightInScene = createFightInScene(c);
     for (int i = 0; i < 100; i++) {
         createFightFromFightInScene(fightInScene);
         const Fight *f = fightInScene->fm->fight;
@@ -76,12 +76,12 @@ void createFightInSceneTest() {
     }
 }
 
-void canMoveMobTest() {
+void canMoveMobTest(Context *c) {
     // given
     float startX = 100;
     float startY = 100;
     Vector2 start = (Vector2) {startX, startY};
-    AnimationManager *am = createTestAnimationManager();
+    AnimationManager *am = createTestAnimationManager(c);
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
 
@@ -99,19 +99,19 @@ void canMoveMobTest() {
             0);
 
     // when
-    moveMob(mob, (Vector2) {startX + 5, startY + 5});
+    moveMob(mob, (Vector2) {startX + 5, startY + 5}, c->ui->screen->targetFrameRate);
 
     // then
     ok(mob->position.x > startX && mob->position.y > startY, "mob moved as expected");
     ok(mob->direction == DIRECTION_RIGHT, "mob is facing right");
 }
 
-void canMobStopMovingTest() {
+void canMobStopMovingTest(Context *c) {
     // given
     float startX = 100;
     float startY = 100;
     Vector2 start = (Vector2) {startX, startY};
-    AnimationManager *am = createTestAnimationManager();
+    AnimationManager *am = createTestAnimationManager(c);
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
     Mobile *mob = createMobile(
@@ -128,7 +128,7 @@ void canMobStopMovingTest() {
             0);
 
     // when
-    moveMob(mob, start);
+    moveMob(mob, start, c->ui->screen->targetFrameRate);
 
     // then
     ok(mob->position.x == startX && mob->position.y == startY, "mob moved as expected");
@@ -152,11 +152,11 @@ void experienceToLevel51Test() {
 }
 
 int main() {
-    globalSetup();
+    Context *c = globalSetup();
     plan(106);
-    createFightInSceneTest();
-    canMoveMobTest();
-    canMobStopMovingTest();
+    createFightInSceneTest(c);
+    canMoveMobTest(c);
+    canMobStopMovingTest(c);
     experienceToLevel1Test();
     experienceToLevel51Test();
     done_testing();

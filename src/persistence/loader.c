@@ -189,7 +189,7 @@ Scene *loadScene(
         ItemManager *im,
         ControlManager *cm,
         const Beastiary *beastiary,
-        UserConfig *userConfig,
+        Context *c,
         const char *sceneName,
         const char *sceneDirectory) {
     addDebug("create scene :: %s", sceneName);
@@ -214,7 +214,7 @@ Scene *loadScene(
     addDebug("parse scene tilemap :: %s", sceneName);
     scene->map = parseTilemapDocToMap(
             im,
-            userConfig,
+            c,
             scene->id,
             tilemapFilePath,
             mapDirectory);
@@ -259,7 +259,7 @@ void loadScenes(
                 im,
                 sm->controlManager,
                 beastiary,
-                sm->userConfig,
+                sm->context,
                 sl->scenes[i],
                 sl->sceneFiles[i]);
         addDebug("scene loaded :: %s (%d)", sm->scenes[i]->name, i);

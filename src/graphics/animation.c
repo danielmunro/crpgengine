@@ -3,10 +3,12 @@
 #include "headers/util/log.h"
 #include "headers/graphics/ui/ui.h"
 #include "headers/graphics/spritesheet.h"
+#include "headers/context.h"
 
 const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT};
 
 typedef struct {
+    Context *context;
     const char *name;
     Direction type;
     Spritesheet *spriteSheet;
@@ -20,6 +22,7 @@ typedef struct {
 } Animation;
 
 typedef struct {
+    Context *context;
     Animation *library[MAX_ANIMATIONS_IN_GAME];
     int libraryCount;
     Animation *animations[MAX_ANIMATIONS];
@@ -33,16 +36,17 @@ const char *AnimationTypeStrings[] = {
         "right",
 };
 
-AnimationManager *createAnimationManager() {
+AnimationManager *createAnimationManager(Context *c) {
     AnimationManager *animationManager = malloc(sizeof(AnimationManager));
+    animationManager->context = c;
     animationManager->animationCount = 0;
     animationManager->libraryCount = 0;
     return animationManager;
 }
 
-void incrementAnimationFrame(Animation *a) {
+void incrementAnimationFrame(Animation *a, int targetFPS) {
     a->frameRateCount++;
-    if (a->frameRateCount >= (ui->screen->targetFrameRate / a->frameRate)) {
+    if (a->frameRateCount >= (targetFPS / a->frameRate)) {
         a->frameRateCount = 0;
         a->currentFrame++;
         if (a->currentFrame > a->lastFrame) {
@@ -54,7 +58,9 @@ void incrementAnimationFrame(Animation *a) {
 void processAnimations(AnimationManager *am) {
     for (int i = 0; i < am->animationCount; i++) {
         if (am->animations[i]->isPlaying) {
-            incrementAnimationFrame(am->animations[i]);
+            incrementAnimationFrame(
+                    am->animations[i],
+                    am->context->ui->screen->targetFrameRate);
         }
     }
 }

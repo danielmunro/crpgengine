@@ -33,7 +33,7 @@ void drawFightBeasts(Fight *fight) {
     }
 }
 
-void drawFightPlayer(Player *player, Resolution r) {
+void drawFightPlayer(Player *player, Resolution r, int targetFPS) {
     for (int i = 0; i < player->partyCount; i++) {
         Mobile *mob = player->party[i];
         Spritesheet *sprite = mob->animations[0]->spriteSheet;
@@ -47,7 +47,7 @@ void drawFightPlayer(Player *player, Resolution r) {
         Direction animationType = mob->isFleeing ? DIRECTION_RIGHT : DIRECTION_LEFT;
         Animation *animation = findAnimation(mob->animations, animationType);
         if (mob->isFleeing) {
-            incrementAnimationFrame(animation);
+            incrementAnimationFrame(animation, targetFPS);
         }
         drawAnimation(animation, position);
     }
@@ -57,12 +57,18 @@ void drawFightMenu(FightManager *fm) {
     drawAllMenus(fm->ui->menuContext, fm->menus);
 }
 
-void drawFightView(Encounters *encounters, FightManager *fights, Resolution r) {
+void drawFightView(
+        Encounters *encounters,
+        FightManager *fights,
+        Context *c) {
     BeginDrawing();
     ClearBackground(BLACK);
-    drawFightBackground(encounters, r);
+    drawFightBackground(encounters, c->user->resolution);
     drawFightBeasts(fights->fight);
-    drawFightPlayer(fights->fight->player, r);
+    drawFightPlayer(
+            fights->fight->player,
+            c->user->resolution,
+            c->ui->screen->targetFrameRate);
     drawFightMenu(fights);
     drawNotifications(fights->notifications, fights->ui->fonts->default_);
     if (config->showFPS) {

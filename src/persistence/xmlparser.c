@@ -320,7 +320,7 @@ void parseTilemapRootNode(Map *map, xmlNodePtr node, ItemManager *im) {
 
 Map *parseTilemapDocToMap(
         ItemManager *im,
-        UserConfig *userConfig,
+        Context *c,
         int id,
         const char *filePath,
         const char *indexDir) {
@@ -330,7 +330,7 @@ Map *parseTilemapDocToMap(
         addError("unable to find map resources for scene :: %s", indexDir);
         exit(ConfigurationErrorMapResourcesMissing);
     }
-    Map *map = createMap(id, doc->name, userConfig);
+    Map *map = createMap(id, doc->name, c);
     parseTilemapRootNode(map, cur, im);
     xmlFreeNode(cur);
     return map;

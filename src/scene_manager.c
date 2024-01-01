@@ -3,27 +3,27 @@
 #include "headers/control_manager.h"
 
 typedef struct {
+    Context *context;
     Scene **scenes;
     int count;
     Scene *current;
     ControlManager *controlManager;
     AnimationManager *animationManager;
     AudioManager *audioManager;
-    UserConfig *userConfig;
 } SceneManager;
 
 SceneManager *createSceneManager(
+        Context *c,
         ControlManager *cm,
         AnimationManager *anManager,
-        AudioManager *auManager,
-        UserConfig *userConfig) {
+        AudioManager *auManager) {
     SceneManager *sceneManager = malloc(sizeof(SceneManager));
+    sceneManager->context = c;
     sceneManager->current = NULL;
     sceneManager->scenes = calloc(MAX_SCENES, sizeof(Scene));
     sceneManager->controlManager = cm;
     sceneManager->animationManager = anManager;
     sceneManager->audioManager = auManager;
-    sceneManager->userConfig = userConfig;
     return sceneManager;
 }
 
