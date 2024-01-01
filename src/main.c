@@ -1,18 +1,25 @@
 #include "headers/game.h"
 #include "headers/user_config.h"
 
-UserConfig *globalSetup() {
-    createConfigFromData(loadConfigYaml());
+void setupLogging() {
+    // raylib
     SetTraceLogLevel(LOG_WARNING);
+
+    // rpg engine
     createLog(config->logLevel);
-    UserConfig *userConfig = createUserConfig();
-    UIData *uiCfg = loadUIData();
-    createUIConfig(uiCfg, userConfig);
-    initWindow(uiCfg->screen->title, uiCfg, userConfig);
+}
+
+UIData *setupUIConfig(const UserConfig *userConfig) {
+    UIData *uiConfigData = loadUIData();
+    createUIConfig(uiConfigData, userConfig);
+    return uiConfigData;
+}
+
+void setupWindow(const UserConfig *userConfig, const UIData *uiData) {
+    initWindow(uiData->screen->title, uiData, userConfig);
     if (userConfig->fullScreen) {
         ToggleFullscreen();
     }
-    return userConfig;
 }
 
 void mainMenuLoop(Game *g) {
@@ -25,10 +32,7 @@ void mainMenuLoop(Game *g) {
     initializeGameForPlayer(g);
 }
 
-int main() {
-    UserConfig *userConfig = globalSetup();
-    Game *g = createGame(userConfig);
-    mainMenuLoop(g);
+void runGame(Game *g) {
     if (config->validate) {
         validateGameData(g);
     }
@@ -37,5 +41,16 @@ int main() {
     } else if (!config->exit) {
         run(g);
     }
+}
+
+int main() {
+    createConfigFromData(loadConfigYaml());
+    setupLogging();
+    UserConfig *userConfig = createUserConfig();
+    UIData *uiData = setupUIConfig(userConfig);
+    setupWindow(userConfig, uiData);
+    Game *g = createGame(userConfig);
+    mainMenuLoop(g);
+    runGame(g);
     return 0;
 }
