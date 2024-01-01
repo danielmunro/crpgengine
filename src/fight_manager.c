@@ -20,10 +20,12 @@ typedef struct {
 } FightManager;
 
 FightManager *createFightManager(
+        Context *c,
         UIManager *uiMan,
         SpellManager *spells,
         NotificationManager *notifications) {
     FightManager *f = malloc(sizeof(FightManager));
+    f->context = c;
     f->ui = uiMan;
     f->spells = spells;
     f->fight = NULL;
@@ -74,7 +76,7 @@ Fight *createFightFromEncounters(
             created++;
         }
     }
-    Fight *fight = createFight(beasts, player, created);
+    Fight *fight = createFight(f->context, beasts, player, created);
     fight->beastCount = created;
     addDebug("fight encountered with %d opponents", fight->beastCount);
     f->fight = fight;

@@ -355,7 +355,7 @@ Game *createGame(Context *c) {
     g->saveToLoad = NULL;
     g->timing = createTiming(g->notifications);
     g->ui = initializeUIManager(g);
-    g->fights = createFightManager(g->ui, g->spells, g->notifications);
+    g->fights = createFightManager(g->context, g->ui, g->spells, g->notifications);
     addMenu(g->menus, findMenu(g->ui->menus, MAIN_MENU));
     addDebug("game object created");
     return g;

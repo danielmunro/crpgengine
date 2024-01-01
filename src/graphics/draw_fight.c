@@ -29,7 +29,7 @@ void drawFightBeasts(Fight *fight) {
         }
         DrawTextureEx(beast->image,
                       (Vector2) {x, beast->position.y},
-                      0, ui->screen->scale, WHITE);
+                      0, fight->context->ui->screen->scale, WHITE);
     }
 }
 

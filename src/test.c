@@ -48,7 +48,7 @@ FightInScene *createFightInScene(Context *c) {
             NULL,
             NULL);
     SpellManager *sm = loadSpellManager();
-    fightInScene->fm = createFightManager(uiMan, sm, NULL);
+    fightInScene->fm = createFightManager(c, uiMan, sm, NULL);
     fightInScene->im = createItemManager();
     loadAllItems(fightInScene->im);
     fightInScene->mm = createMobileManager(

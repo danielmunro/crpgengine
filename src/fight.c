@@ -18,6 +18,7 @@ typedef struct {
 } Encounters;
 
 typedef struct {
+    Context *context;
     MenuType menu;
     Beast **beasts;
     Player *player;
@@ -51,10 +52,12 @@ BeastEncounter *createBeastEncounterFromData(Beast *beast, BeastEncounterData da
 }
 
 Fight *createFight(
+        Context *c,
         Beast **beasts,
         Player *player,
         int beastCount) {
     Fight *fight = malloc(sizeof(Fight));
+    fight->context = c;
     fight->beastCount = beastCount;
     fight->beasts = calloc(beastCount, sizeof(Beast));
     for (int i = 0; i < beastCount; i++) {
