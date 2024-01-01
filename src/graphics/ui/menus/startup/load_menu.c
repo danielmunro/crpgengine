@@ -4,22 +4,22 @@ int getLoadCursorLength(const MenuContext *menuContext) {
     return menuContext->saveFiles->count;
 }
 
-void drawLoadMenuScreen(MenuContext *menuContext) {
-    const FontStyle *defaultFont = menuContext->fonts->default_;
+void drawLoadMenuScreen(MenuContext *mc) {
+    const FontStyle *defaultFont = mc->fonts->default_;
     TextBox *b = findOrCreateTextBox(
-            menuContext,
+            mc,
             LOAD_BOX,
-            ui->textAreas->small);
+            mc->context->ui->textAreas->small);
     drawMenuRect(b->area);
-    for (int i = 0; i < menuContext->saveFiles->count; i++) {
-        drawInMenu(b, menuContext->saveFiles->saves[i]->saveName);
+    for (int i = 0; i < mc->saveFiles->count; i++) {
+        drawInMenu(b, mc->saveFiles->saves[i]->saveName);
     }
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
                     b->area.x,
                     b->area.y
-                    + line(menuContext->cursorLine, defaultFont->lineHeight),
+                    + line(mc->cursorLine, defaultFont->lineHeight),
             });
 }
 

@@ -1,14 +1,14 @@
-void drawBeastSelectMenuScreen(MenuContext *menuContext) {
+void drawBeastSelectMenuScreen(MenuContext *mc) {
     TextBox *t = findOrCreateTextBox(
-            menuContext,
+            mc,
             BEAST_SELECT_BOX,
-            ui->textAreas->bottomLeft);
+            mc->context->ui->textAreas->bottomLeft);
     drawMenuRect(t->area);
-    int count = menuContext->fight->beastCount > MAX_BEAST_NAMES_IN_FIGHT ?
-                MAX_BEAST_NAMES_IN_FIGHT : menuContext->fight->beastCount;
+    int count = mc->fight->beastCount > MAX_BEAST_NAMES_IN_FIGHT ?
+                MAX_BEAST_NAMES_IN_FIGHT : mc->fight->beastCount;
     for (int i = 0; i < count; i++) {
-        if (t->area.height > (float) i * menuContext->fonts->default_->lineHeight) {
-            drawInMenu(t, menuContext->fight->beasts[i]->name);
+        if (t->area.height > (float) i * mc->fonts->default_->lineHeight) {
+            drawInMenu(t, mc->fight->beasts[i]->name);
         }
     }
 }

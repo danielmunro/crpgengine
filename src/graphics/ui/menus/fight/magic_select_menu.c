@@ -4,26 +4,26 @@ int getMagicSelectCursorLength(const MenuContext *menuContext) {
     return menuContext->selectedMob->spellCount;
 }
 
-void drawMagicSelectMenuScreen(MenuContext *menuContext) {
+void drawMagicSelectMenuScreen(MenuContext *mc) {
     TextBox *t = findOrCreateTextBox(
-            menuContext,
+            mc,
             MAGIC_SELECT_BOX,
-            ui->textAreas->bottomMidRight);
+            mc->context->ui->textAreas->bottomMidRight);
     drawMenuRect(t->area);
-    FontStyle *defaultFont = menuContext->fonts->default_;
-    FontStyle *disabledFont = menuContext->fonts->disable;
-    const Mobile *m = menuContext->selectedMob;
+    FontStyle *defaultFont = mc->fonts->default_;
+    FontStyle *disabledFont = mc->fonts->disable;
+    const Mobile *m = mc->selectedMob;
     for (int i = 0; i < m->spellCount; i++) {
-        FontStyle *fs = canApplyCost(m, menuContext->spells[i]->cost) ? defaultFont : disabledFont;
+        FontStyle *fs = canApplyCost(m, mc->spells[i]->cost) ? defaultFont : disabledFont;
         drawInMenuWithStyle(t, fs, Spells[m->spells[i]->type]);
     }
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
                     t->area.x,
                     t->area.y +
                     defaultFont->lineHeight *
-                    (float) menuContext->cursorLine,
+                    (float) mc->cursorLine,
             });
 }
 

@@ -4,12 +4,12 @@ int getShopWelcomeCursorLength() {
     return 3;
 }
 
-void drawShopWelcomeMenuScreen(MenuContext *menuContext) {
-    const FontStyle *defaultFont = menuContext->fonts->default_;
+void drawShopWelcomeMenuScreen(MenuContext *mc) {
+    const FontStyle *defaultFont = mc->fonts->default_;
     TextBox *b = findOrCreateTextBox(
-            menuContext,
+            mc,
             SHOP_WELCOME_BOX,
-            ui->textAreas->small);
+            mc->context->ui->textAreas->small);
     drawMenuRect(b->area);
     drawInMenu(b, "Welcome! What would you like to do?");
     drawInMenu(b, "");
@@ -17,10 +17,10 @@ void drawShopWelcomeMenuScreen(MenuContext *menuContext) {
     drawInMenu(b, "Sell");
     drawInMenu(b, "Exit");
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
                     b->area.x,
-                    b->area.y + line(menuContext->cursorLine + 2, defaultFont->lineHeight)
+                    b->area.y + line(mc->cursorLine + 2, defaultFont->lineHeight)
             });
 }
 

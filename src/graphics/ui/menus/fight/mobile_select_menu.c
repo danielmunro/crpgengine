@@ -64,6 +64,7 @@ void drawPlayerFightTopLevel(MenuContext *mc, TextBox *textBox, bool doDrawDownC
         Attributes calculated = calculateMobileAttributes(mob);
         char hp[MAX_VITALS_LENGTH];
         getVital(mob->hp, calculated.hp, hp);
+        const UIConfig *ui = mc->context->ui;
         drawText(hp,
                  (Vector2) {
                          textBox->area.x + (ui->fightMenu->columns->hp * textBox->area.width),

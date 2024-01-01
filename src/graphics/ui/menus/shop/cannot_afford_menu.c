@@ -4,11 +4,11 @@ int getCannotAffordCursorLength() {
     return 0;
 }
 
-void drawCannotAffordMenuScreen(MenuContext *menuContext) {
+void drawCannotAffordMenuScreen(MenuContext *mc) {
     TextBox *b = findOrCreateTextBox(
-            menuContext,
+            mc,
             CANNOT_AFFORD_BOX,
-            ui->textAreas->alert);
+            mc->context->ui->textAreas->alert);
     drawMenuRect(b->area);
     drawInMenu(b, "Sorry, you cannot afford that.");
 }

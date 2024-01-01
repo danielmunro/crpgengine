@@ -5,21 +5,21 @@ int getMobileTargetMenuCursorLength(const MenuContext *menuContext) {
     return getMobileSelectMenuCursorLength(menuContext);
 }
 
-void drawMobileTargetMenuScreen(MenuContext *menuContext) {
+void drawMobileTargetMenuScreen(MenuContext *mc) {
     TextBox *t = findOrCreateTextBox(
-            menuContext,
+            mc,
             MOBILE_SELECT_BOX,
-            ui->textAreas->bottomMidRight);
+            mc->context->ui->textAreas->bottomMidRight);
     drawMenuRect(t->area);
-    drawPlayerFightTopLevel(menuContext, t, false);
-    int frameWidth = menuContext->selectedMob->animations[0]->spriteSheet->frameWidth;
-    int frameHeight = menuContext->selectedMob->animations[0]->spriteSheet->frameHeight;
+    drawPlayerFightTopLevel(mc, t, false);
+    int frameWidth = mc->selectedMob->animations[0]->spriteSheet->frameWidth;
+    int frameHeight = mc->selectedMob->animations[0]->spriteSheet->frameHeight;
     Vector2 playerPosition = getFightPlayerPosition(
-            menuContext->cursorLine,
+            mc->cursorLine,
             frameHeight,
-            menuContext->context->user->resolution);
+            mc->context->user->resolution);
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
                     playerPosition.x - (float) frameWidth,
                     (float) (playerPosition.y - frameHeight / 1.5),

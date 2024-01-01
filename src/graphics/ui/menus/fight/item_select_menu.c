@@ -4,17 +4,17 @@ int getItemSelectCursorLength(const MenuContext *menuContext) {
     return menuContext->player->itemCount;
 }
 
-void drawItemSelectMenuScreen(MenuContext *menuContext) {
+void drawItemSelectMenuScreen(MenuContext *mc) {
     TextBox *t = findOrCreateTextBox(
-            menuContext,
+            mc,
             ITEM_SELECT_FIGHT_BOX,
-            ui->textAreas->bottom);
+            mc->context->ui->textAreas->bottom);
     drawMenuRect(t->area);
-    FontStyle *defaultFont = menuContext->fonts->default_;
-    FontStyle *disabledFont = menuContext->fonts->disable;
-    ItemListResult result = createItemList(menuContext->player);
-    menuContext->itemList = result.itemList;
-    menuContext->itemListCount = result.count;
+    FontStyle *defaultFont = mc->fonts->default_;
+    FontStyle *disabledFont = mc->fonts->disable;
+    ItemListResult result = createItemList(mc->player);
+    mc->itemList = result.itemList;
+    mc->itemListCount = result.count;
     for (int i = 0; i < result.count; i++) {
         const Item *item = result.itemList[i].item;
         char buffer[MAX_LINE_BUFFER];
@@ -23,12 +23,12 @@ void drawItemSelectMenuScreen(MenuContext *menuContext) {
         drawInMenuWithStyle(t, fs, buffer);
     }
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
                     t->area.x,
                     t->area.y +
                     defaultFont->lineHeight *
-                    (float) menuContext->cursorLine,
+                    (float) mc->cursorLine,
             });
 }
 

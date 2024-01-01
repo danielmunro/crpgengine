@@ -2,13 +2,13 @@
 #include <limits.h>
 #include "headers/graphics/ui/menu.h"
 
-void drawMagicMenuScreen(MenuContext *menuContext) {
+void drawMagicMenuScreen(MenuContext *mc) {
     TextBox *textBox = findOrCreateTextBox(
-            menuContext,
+            mc,
             MAGIC_BOX,
-            ui->textAreas->midRight);
+            mc->context->ui->textAreas->midRight);
     drawMenuRect(textBox->area);
-    Mobile *m = menuContext->selectedMob;
+    Mobile *m = mc->selectedMob;
     for (int i = 0; i < m->spellCount; i++) {
         char buffer[MAX_LINE_BUFFER] = "";
         sprintf(buffer, "%s", m->spells[i]->name);
@@ -19,9 +19,9 @@ void drawMagicMenuScreen(MenuContext *menuContext) {
         char spellMana[MAX_VITALS_LENGTH] = "";
         sprintf(spellMana, "%d mp", m->spells[i]->cost->mana);
         strcat(buffer, spellMana);
-        FontStyle *fs = menuContext->fonts->default_;
+        FontStyle *fs = mc->fonts->default_;
         if (m->spells[i]->intent != INTENT_HELP || !canApplyCost(m, m->spells[i]->cost)) {
-            fs = menuContext->fonts->disable;
+            fs = mc->fonts->disable;
         }
         drawInMenuWithStyle(
                 textBox,
@@ -29,12 +29,12 @@ void drawMagicMenuScreen(MenuContext *menuContext) {
                 buffer);
     }
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
-                    ui->textAreas->midRight.x,
+                    mc->context->ui->textAreas->midRight.x,
                     line(
-                            menuContext->cursorLine,
-                            menuContext->fonts->default_->lineHeight),
+                            mc->cursorLine,
+                            mc->fonts->default_->lineHeight),
             });
 }
 

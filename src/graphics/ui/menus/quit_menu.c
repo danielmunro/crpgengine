@@ -4,12 +4,12 @@ int getQuitCursorLength() {
     return sizeof(QuitMenuItems) / sizeof(QuitMenuItems[0]);
 }
 
-void drawQuitMenuScreen(MenuContext *menuContext) {
-    const FontStyle *defaultFont = menuContext->fonts->default_;
+void drawQuitMenuScreen(MenuContext *mc) {
+    const FontStyle *defaultFont = mc->fonts->default_;
     TextBox *textBox = findOrCreateTextBox(
-            menuContext,
+            mc,
             QUIT_BOX,
-            ui->textAreas->medium);
+            mc->context->ui->textAreas->medium);
     drawMenuRect(textBox->area);
     drawInMenu(textBox, "Are you sure?");
     drawInMenu(textBox, "");
@@ -18,11 +18,11 @@ void drawQuitMenuScreen(MenuContext *menuContext) {
         drawInMenu(textBox, QuitMenuItems[i]);
     }
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
                     textBox->area.x,
                     textBox->area.y +
-                    line(cursorLength + menuContext->cursorLine, defaultFont->lineHeight),
+                    line(cursorLength + mc->cursorLine, defaultFont->lineHeight),
             });
 }
 

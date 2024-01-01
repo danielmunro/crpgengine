@@ -1,32 +1,32 @@
 #include "headers/graphics/ui/menu.h"
 
-void drawItemsMenuScreen(MenuContext *menuContext) {
-    const FontStyle *defaultFont = menuContext->fonts->default_;
+void drawItemsMenuScreen(MenuContext *mc) {
+    const FontStyle *defaultFont = mc->fonts->default_;
     TextBox *textBox = findOrCreateTextBox(
-            menuContext,
+            mc,
             ITEMS_BOX,
-            ui->textAreas->full);
+            mc->context->ui->textAreas->full);
     drawMenuRect(textBox->area);
-    if (menuContext->itemListCount == 0) {
-        ItemListResult result = createItemList(menuContext->player);
-        menuContext->itemList = result.itemList;
-        menuContext->itemListCount = result.count;
+    if (mc->itemListCount == 0) {
+        ItemListResult result = createItemList(mc->player);
+        mc->itemList = result.itemList;
+        mc->itemListCount = result.count;
     }
-    for (int i = 0; i < menuContext->itemListCount; i++) {
+    for (int i = 0; i < mc->itemListCount; i++) {
         char buffer[MAX_LINE_BUFFER];
-        sprintf(buffer, "(%d) %s", menuContext->itemList[i].amount, menuContext->itemList[i].item->name);
+        sprintf(buffer, "(%d) %s", mc->itemList[i].amount, mc->itemList[i].item->name);
         drawInMenuWithStyle(
                 textBox,
-                menuContext->itemList[i].item->type == ITEM_TYPE_CONSUMABLE
-                ? menuContext->fonts->default_
-                : menuContext->fonts->disable,
+                mc->itemList[i].item->type == ITEM_TYPE_CONSUMABLE
+                ? mc->fonts->default_
+                : mc->fonts->disable,
                 buffer);
     }
     drawRightCursor(
-            menuContext->uiSprite,
+            mc->uiSprite,
             (Vector2) {
                     0,
-                    line(menuContext->cursorLine, defaultFont->lineHeight),
+                    line(mc->cursorLine, defaultFont->lineHeight),
             });
 }
 

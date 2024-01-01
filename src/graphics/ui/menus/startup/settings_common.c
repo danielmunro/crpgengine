@@ -5,7 +5,7 @@ void drawSettingsHeader(MenuContext *mc) {
     TextBox *headersBox = findOrCreateTextBox(
             mc,
             SETTINGS_NAMES_BOX,
-            ui->textAreas->medium);
+            mc->context->ui->textAreas->medium);
     drawMenuRect(headersBox->area);
     drawInMenu(headersBox, "Full screen");
     drawInMenu(headersBox, "");

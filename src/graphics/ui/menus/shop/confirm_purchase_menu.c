@@ -8,7 +8,7 @@ void drawConfirmPurchaseMenuScreen(MenuContext *mc) {
     TextBox *b = findOrCreateTextBox(
             mc,
             QUANTITY_SELECT_BOX,
-            ui->textAreas->alert);
+            mc->context->ui->textAreas->alert);
     drawMenuRect(b->area);
     char purchaseText[64];
     sprintf(
