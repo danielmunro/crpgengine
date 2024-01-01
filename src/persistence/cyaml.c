@@ -165,7 +165,7 @@ UserConfigData *loadUserConfigYaml() {
     return cfg;
 }
 
-ConfigData *loadConfigYaml() {
+ConfigData *loadGameConfigYaml() {
     ConfigData *cfg = malloc(sizeof(ConfigData));
     char filePath[MAX_FS_PATH_LENGTH];
     cyaml_err_t err = cyaml_load_file("config.yaml", &cyamlConfig,

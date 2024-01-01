@@ -1,8 +1,9 @@
 #include "headers/global_setup.h"
+#include "headers/context.h"
 
 int main() {
-    UserConfig *userConfig = globalSetup();
-    Game *g = createGame(userConfig);
+    Context *c = globalSetup();
+    Game *g = createGame(c);
     mainMenuLoop(g);
     runGame(g);
     return 0;

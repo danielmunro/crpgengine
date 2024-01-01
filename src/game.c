@@ -19,8 +19,10 @@
 #include "headers/ui_manager.h"
 #include "headers/save.h"
 #include "headers/user_config.h"
+#include "headers/context.h"
 
 typedef struct {
+    Context *context;
     SceneManager *scenes;
     Player *player;
     AnimationManager *animations;
@@ -38,7 +40,6 @@ typedef struct {
     SpellManager *spells;
     SaveFiles *saveFiles;
     SaveData *saveToLoad;
-    UserConfig *userConfig;
 } Game;
 
 void attemptToUseExit(Game *game, Scene *scene, const Entrance *entrance) {
@@ -243,7 +244,7 @@ void doFightLoop(Game *g) {
     fightUpdate(g->fights);
     if (!isFightDone(g->fights->fight)) {
         checkFightInput(g->fights);
-        drawFightView(s->encounters, g->fights, g->userConfig->resolution);
+        drawFightView(s->encounters, g->fights, g->context->user->resolution);
         checkControls(g->controls);
     }
     checkRemoveFight(g->fights);
@@ -300,7 +301,7 @@ UIManager *initializeUIManager(Game *g) {
             uiSprite,
             g->spells->spells,
             g->saveFiles,
-            g->userConfig,
+            g->context->user,
             NULL,
             0);
     return createUIManager(
@@ -321,7 +322,7 @@ void initializeGameForPlayer(Game *g) {
             g->controls,
             g->animations,
             g->audio,
-            g->userConfig);
+            g->context->user);
     loadScenesFromFiles(
             g->scenes,
             g->mobiles,
@@ -333,8 +334,9 @@ void initializeGameForPlayer(Game *g) {
     addDebug("game initialized for player");
 }
 
-Game *createGame(UserConfig *userConfig) {
+Game *createGame(Context *c) {
     Game *g = malloc(sizeof(Game));
+    g->context = c;
     g->sprites = loadSpritesheetManager();
     g->animations = createAnimationManager();
     loadAllAnimations(g->animations, g->sprites);
@@ -344,12 +346,11 @@ Game *createGame(UserConfig *userConfig) {
     loadAllItems(g->items);
     g->spells = loadSpellManager();
     loadAllMobiles(g);
-    g->notifications = createNotificationManager(userConfig);
+    g->notifications = createNotificationManager(c->user);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
     g->saveFiles = getSaveFiles();
     g->saveToLoad = NULL;
     g->timing = createTiming(g->notifications);
-    g->userConfig = userConfig;
     g->ui = initializeUIManager(g);
     g->fights = createFightManager(g->ui, g->spells, g->notifications);
     addMenu(g->menus, findMenu(g->ui->menus, MAIN_MENU));

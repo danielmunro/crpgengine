@@ -129,7 +129,7 @@ void setTextAreasFromData(Resolution resolution) {
     ui->textAreas->midRight = getScreenRectangle(ui->textAreas->textAreaData->midRight, resolution);
 }
 
-void createUIConfig(UIData *data, Resolution resolution) {
+UIConfig *createUIConfig(UIData *data, Resolution resolution) {
     ui = malloc(sizeof(UIConfig));
 
     ui->screen = malloc(sizeof(ScreenConfig));
@@ -170,6 +170,7 @@ void createUIConfig(UIData *data, Resolution resolution) {
     ui->textAreas = malloc(sizeof(TextAreasConfig));
     ui->textAreas->textAreaData = data->textAreas;
     setTextAreasFromData(resolution);
+    return ui;
 }
 
 TextBox *createTextBox(Rectangle area, FontStyle *fontStyle, TextBoxLabel label) {

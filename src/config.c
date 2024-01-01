@@ -22,12 +22,12 @@ typedef struct {
     bool purgeSaves;
     bool showFPS;
     ShowCollisions *showCollisions;
-} Config;
+} GameConfig;
 
-Config *config;
+GameConfig *config;
 
-Config *createConfigFromData(const ConfigData *data) {
-    config = malloc(sizeof(Config));
+GameConfig *createGameConfigFromData(const ConfigData *data) {
+    config = malloc(sizeof(GameConfig));
     config->showCollisions = malloc(sizeof(ShowCollisions));
     config->logLevel = getLogLevelFromString(data->logLevel);
     config->indexDir = data->indexDir;
