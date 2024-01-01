@@ -1,16 +1,6 @@
 #include "headers/game.h"
 #include "headers/user_config.h"
 
-void mainMenuLoop(Game *g) {
-    while (getCurrentMenu(g->menus) != NULL) {
-        doInGameMenuLoop(g);
-        if (WindowShouldClose()) {
-            exit(0);
-        }
-    }
-    initializeGameForPlayer(g);
-}
-
 UserConfig *globalSetup() {
     createConfigFromData(loadConfigYaml());
     SetTraceLogLevel(LOG_WARNING);
@@ -23,6 +13,16 @@ UserConfig *globalSetup() {
         ToggleFullscreen();
     }
     return userConfig;
+}
+
+void mainMenuLoop(Game *g) {
+    while (getCurrentMenu(g->menus) != NULL) {
+        doInGameMenuLoop(g);
+        if (WindowShouldClose()) {
+            exit(0);
+        }
+    }
+    initializeGameForPlayer(g);
 }
 
 int main() {
