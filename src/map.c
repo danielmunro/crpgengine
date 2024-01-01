@@ -506,7 +506,11 @@ void evaluateMovement(const Map *m, Player *p) {
         return;
     }
     for (int i = 0; i < DIRECTION_COUNT; i++) {
-        tryToMove(m, p, DirectionEnums[i], getMoveFor(mob, DirectionEnums[i]));
+        tryToMove(
+                m,
+                p,
+                DirectionEnums[i],
+                getMoveFor(mob, DirectionEnums[i], (float) m->context->ui->screen->targetFrameRate));
     }
 }
 
@@ -651,7 +655,7 @@ void doMobileMovementUpdates(Map *m) {
         bool moved = moveMob(
                 mob,
                 m->mobMovements[i]->destination,
-                m->context->ui->screen->targetFrameRate);
+                (float) m->context->ui->screen->targetFrameRate);
         if (!moved) {
             addInfo("mob done moving -- %s",
                     m->mobMovements[i]->mob->name);

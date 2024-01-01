@@ -109,21 +109,21 @@ Rectangle getMobileRectangle(Mobile *mob) {
     };
 }
 
-float getMoveAmount() {
-    return 60 / (float) ui->screen->targetFrameRate;
+float getMoveAmount(float fps) {
+    return 60 / fps;
 }
 
-Vector2 getMoveFor(const Mobile *mob, Direction direction) {
+Vector2 getMoveFor(const Mobile *mob, Direction direction, float fps) {
     if (direction == DIRECTION_UP) {
-        return (Vector2) {mob->position.x, mob->position.y - getMoveAmount()};
+        return (Vector2) {mob->position.x, mob->position.y - getMoveAmount(fps)};
     } else if (direction == DIRECTION_DOWN) {
-        return (Vector2) {mob->position.x, mob->position.y + getMoveAmount()};
+        return (Vector2) {mob->position.x, mob->position.y + getMoveAmount(fps)};
     }
     if (direction == DIRECTION_LEFT) {
-        return (Vector2) {mob->position.x - getMoveAmount(), mob->position.y};
+        return (Vector2) {mob->position.x - getMoveAmount(fps), mob->position.y};
     }
     if (direction == DIRECTION_RIGHT) {
-        return (Vector2) {mob->position.x + getMoveAmount(), mob->position.y};
+        return (Vector2) {mob->position.x + getMoveAmount(fps), mob->position.y};
     }
     return mob->position;
 }
@@ -132,18 +132,18 @@ void updateDirection(Mobile *mob, Direction direction) {
     mob->previousDirection = mob->direction;
     mob->direction = direction;
 }
-float normalizeMoveAmount(float a, float b) {
+float normalizeMoveAmount(float a, float b, float fps) {
     int a1 = (int) a;
     int b1 = (int) b;
-    if (a1 > b1) return -getMoveAmount();
-    if (a1 < b1) return getMoveAmount();
+    if (a1 > b1) return -getMoveAmount(fps);
+    if (a1 < b1) return getMoveAmount(fps);
     return 0;
 }
 
-bool moveMob(Mobile *mob, Vector2 destination, int targetFPS) {
+bool moveMob(Mobile *mob, Vector2 destination, float targetFPS) {
     resetMoving(mob);
-    float x = normalizeMoveAmount(mob->position.x, destination.x);
-    float y = normalizeMoveAmount(mob->position.y, destination.y);
+    float x = normalizeMoveAmount(mob->position.x, destination.x, targetFPS);
+    float y = normalizeMoveAmount(mob->position.y, destination.y, targetFPS);
     mob->position.x += x;
     mob->position.y += y;
     bool moved = x != 0 || y != 0;

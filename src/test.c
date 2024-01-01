@@ -100,7 +100,10 @@ void canMoveMobTest(Context *c) {
             0);
 
     // when
-    moveMob(mob, (Vector2) {startX + 5, startY + 5}, c->ui->screen->targetFrameRate);
+    moveMob(
+            mob,
+            (Vector2) {startX + 5, startY + 5},
+            (float) c->ui->screen->targetFrameRate);
 
     // then
     ok(mob->position.x > startX && mob->position.y > startY, "mob moved as expected");
@@ -129,7 +132,7 @@ void canMobStopMovingTest(Context *c) {
             0);
 
     // when
-    moveMob(mob, start, c->ui->screen->targetFrameRate);
+    moveMob(mob, start, (float) c->ui->screen->targetFrameRate);
 
     // then
     ok(mob->position.x == startX && mob->position.y == startY, "mob moved as expected");
