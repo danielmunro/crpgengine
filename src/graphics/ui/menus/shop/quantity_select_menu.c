@@ -8,7 +8,7 @@ void drawQuantitySelectMenuScreen(MenuContext *mc) {
     TextBox *b = findOrCreateTextBox(
             mc,
             QUANTITY_SELECT_BOX,
-            ui->textAreas->alert);
+            mc->context->ui->textAreas->alert);
     drawMenuRect(b->area);
     drawInMenu(b, "How many would you like to buy?");
     char amount[24];
@@ -17,7 +17,7 @@ void drawQuantitySelectMenuScreen(MenuContext *mc) {
     TextBox *b2 = findOrCreateTextBox(
             mc,
             SHOP_QUANTITY_COSTS_BOX,
-            ui->textAreas->alertRight);
+            mc->context->ui->textAreas->alertRight);
     char costText[24];
     sprintf(costText, "= %d", (mc->quantity) * mc->itemToBuy->worth);
     drawInMenu(b2, "");

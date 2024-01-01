@@ -10,7 +10,7 @@ void drawSettingsMenuScreen(MenuContext *mc) {
     TextBox *valuesBox = findOrCreateTextBox(
             mc,
             SETTINGS_VALUES_BOX,
-            ui->textAreas->mediumRight);
+            mc->context->ui->textAreas->mediumRight);
     drawFullScreenOptions(valuesBox, mc);
     drawDifficultyOptions(valuesBox, mc);
     drawResolutionOptions(valuesBox, mc);

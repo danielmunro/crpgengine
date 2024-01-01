@@ -9,11 +9,11 @@ void drawShopBuyMenuScreen(MenuContext *mc) {
     TextBox *b = findOrCreateTextBox(
             mc,
             SHOP_BUY_BOX,
-            ui->textAreas->medium);
+            mc->context->ui->textAreas->medium);
     TextBox *b2 = findOrCreateTextBox(
             mc,
             SHOP_COSTS_BOX,
-            ui->textAreas->mediumRight);
+            mc->context->ui->textAreas->mediumRight);
     drawMenuRect(b->area);
     char coinsAmount[64];
     sprintf(coinsAmount, "You have %d coins", mc->player->coins);

@@ -29,7 +29,7 @@ void drawMainMenuScreen(MenuContext *mc) {
     TextBox *t = findOrCreateTextBox(
             mc,
             MAIN_MENU_BOX,
-            ui->textAreas->full);
+            mc->context->ui->textAreas->full);
     drawMenuRect(t->area);
     drawInMenu(t, "new");
     drawInMenuWithStyle(t, fs, "continue");
@@ -39,7 +39,7 @@ void drawMainMenuScreen(MenuContext *mc) {
     drawRightCursor(
             mc->uiSprite,
             (Vector2) {
-                    ui->textAreas->full.x,
+                    mc->context->ui->textAreas->full.x,
                     line(
                             mc->cursorLine,
                             mc->fonts->default_->lineHeight),

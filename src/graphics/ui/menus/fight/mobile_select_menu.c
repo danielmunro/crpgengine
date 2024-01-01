@@ -102,13 +102,13 @@ int getMobileSelectMenuCursorLength(const MenuContext *menuContext) {
     return menuContext->player->partyCount;
 }
 
-void drawMobileSelectMenuScreen(MenuContext *menuContext) {
+void drawMobileSelectMenuScreen(MenuContext *mc) {
     TextBox *t = findOrCreateTextBox(
-            menuContext,
+            mc,
             MOBILE_SELECT_BOX,
-            ui->textAreas->bottomMidRight);
+            mc->context->ui->textAreas->bottomMidRight);
     drawMenuRect(t->area);
-    drawPlayerFightTopLevel(menuContext, t, true);
+    drawPlayerFightTopLevel(mc, t, true);
 }
 
 MenuSelectResponse *mobileSelectMenuItemSelected(MenuContext *menuContext) {
