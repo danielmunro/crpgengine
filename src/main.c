@@ -1,5 +1,4 @@
 #include "headers/game.h"
-#include "headers/persistence/load_config.h"
 #include "headers/user_config.h"
 
 void mainMenuLoop(Game *g) {
@@ -9,17 +8,27 @@ void mainMenuLoop(Game *g) {
             exit(0);
         }
     }
+    initializeGameForPlayer(g);
 }
 
-int main() {
+UserConfig *globalSetup() {
     createConfigFromData(loadConfigYaml());
     SetTraceLogLevel(LOG_WARNING);
     createLog(config->logLevel);
     UserConfig *userConfig = createUserConfig();
-    globalSetup(userConfig);
+    UIData *uiCfg = loadUIData();
+    createUIConfig(uiCfg, userConfig);
+    initWindow(uiCfg->screen->title, uiCfg, userConfig);
+    if (userConfig->fullScreen) {
+        ToggleFullscreen();
+    }
+    return userConfig;
+}
+
+int main() {
+    UserConfig *userConfig = globalSetup();
     Game *g = createGame(userConfig);
     mainMenuLoop(g);
-    initializeGameForPlayer(g);
     if (config->validate) {
         validateGameData(g);
     }

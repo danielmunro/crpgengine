@@ -4,6 +4,5 @@
 #include "constants.h"
 #include "game.c"
 #include "util/validate.c"
-#include "util/global_setup.c"
 
 #endif //CJRPGENGINE_GAME_H

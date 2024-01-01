@@ -164,3 +164,17 @@ UserConfigData *loadUserConfigYaml() {
     loadYamlFile(filePath, userConfigTopSchema, (cyaml_data_t **) &cfg);
     return cfg;
 }
+
+ConfigData *loadConfigYaml() {
+    ConfigData *cfg = malloc(sizeof(ConfigData));
+    char filePath[MAX_FS_PATH_LENGTH];
+    cyaml_err_t err = cyaml_load_file("config.yaml", &cyamlConfig,
+                                      &configTopSchema, (cyaml_data_t **) &cfg, NULL);
+    if (err != CYAML_OK) {
+        addError("error parsing config yaml :: %s, %s",
+                 filePath,
+                 cyaml_strerror(err));
+        exit(CyamlErrorGeneric);
+    }
+    return cfg;
+}
