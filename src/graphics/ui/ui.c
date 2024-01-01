@@ -5,6 +5,7 @@
 typedef struct {
     float scale;
     int targetFrameRate;
+    const char *title;
 } ScreenConfig;
 
 typedef struct {
@@ -128,12 +129,13 @@ void setTextAreasFromData(Resolution resolution) {
     ui->textAreas->midRight = getScreenRectangle(ui->textAreas->textAreaData->midRight, resolution);
 }
 
-void createUIConfig(UIData *data, const UserConfig *userConfig) {
+void createUIConfig(UIData *data, Resolution resolution) {
     ui = malloc(sizeof(UIConfig));
 
     ui->screen = malloc(sizeof(ScreenConfig));
     ui->screen->scale = data->screen->scale;
     ui->screen->targetFrameRate = data->screen->targetFrameRate;
+    ui->screen->title = data->screen->title;
 
     ui->menu = malloc(sizeof(MenuConfig));
     ui->menu->style = getMenuStyleFromString(data->menu->style);
@@ -167,7 +169,7 @@ void createUIConfig(UIData *data, const UserConfig *userConfig) {
 
     ui->textAreas = malloc(sizeof(TextAreasConfig));
     ui->textAreas->textAreaData = data->textAreas;
-    setTextAreasFromData(userConfig->resolution);
+    setTextAreasFromData(resolution);
 }
 
 TextBox *createTextBox(Rectangle area, FontStyle *fontStyle, TextBoxLabel label) {
