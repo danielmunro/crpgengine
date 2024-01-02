@@ -2,12 +2,12 @@
 #include "headers/user_config.h"
 #include "headers/graphics/ui/ui.h"
 
-Log *setupLogging() {
+Log *setupLogging(LogLevel logLevel) {
     // raylib
     SetTraceLogLevel(LOG_WARNING);
 
     // rpg engine
-    return createLog(config->logLevel);
+    return createLog(logLevel);
 }
 
 UIConfig *setupUIConfig(Resolution resolution) {
@@ -28,6 +28,7 @@ void mainMenuLoop(Game *g) {
 }
 
 void runGame(Game *g) {
+    const GameConfig *config = g->context->game;
     if (config->validate) {
         validateGameData(g);
     }
@@ -40,7 +41,7 @@ void runGame(Game *g) {
 
 Context *globalSetup() {
     const GameConfig *gameConfig = createGameConfigFromData(loadGameConfigYaml());
-    const Log *log = setupLogging();
+    const Log *log = setupLogging(gameConfig->logLevel);
     UserConfig *userConfig = createUserConfig();
     const UIConfig *uiConfig = setupUIConfig(userConfig->resolution);
     initWindow(
