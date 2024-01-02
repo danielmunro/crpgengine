@@ -27,7 +27,7 @@ int stopTiming(Timing *t) {
     if (t->elapsedTime > 1000.0) {
         t->elapsedTime -= 1000.0;
         t->start = end;
-        if (config->logMemoryUsage) {
+        if (t->notificationManager->context->game->logMemoryUsage) {
             reportMaxMemory();
         }
         return 1;

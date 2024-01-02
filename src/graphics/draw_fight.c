@@ -71,7 +71,7 @@ void drawFightView(
             c->ui->screen->targetFrameRate);
     drawFightMenu(fights);
     drawNotifications(fights->notifications, fights->ui->fonts->default_);
-    if (config->showFPS) {
+    if (c->game->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }
     EndDrawing();

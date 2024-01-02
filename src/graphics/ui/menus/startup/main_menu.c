@@ -13,15 +13,15 @@ int getMainMenuCursorLength() {
     return MAIN_MENU_OPTION_COUNT;
 }
 
-bool autosaveExists() {
+bool autosaveExists(const char *indexDir) {
     char saveFilePath[MAX_FS_PATH_LENGTH];
-    strcpy(saveFilePath, getAutosaveFile(config->indexDir));
+    strcpy(saveFilePath, getAutosaveFile(indexDir));
     return FileExists(saveFilePath);
 }
 
 void drawMainMenuScreen(MenuContext *mc) {
     const FontStyle *fs = NULL;
-    if (autosaveExists()) {
+    if (autosaveExists(mc->indexDir)) {
         fs = mc->fonts->default_;
     } else {
         fs = mc->fonts->disable;
@@ -47,14 +47,14 @@ void drawMainMenuScreen(MenuContext *mc) {
 }
 
 int getNextMainMenuCursorPosition(const MenuContext *mc, int maxMenuLength) {
-    if (mc->cursorLine == MAIN_MENU_NEW_GAME && !autosaveExists()) {
+    if (mc->cursorLine == MAIN_MENU_NEW_GAME && !autosaveExists(mc->indexDir)) {
         return mc->cursorLine + 2;
     }
     return getDefaultNextOption(mc, maxMenuLength);
 }
 
 int getPreviousMainMenuCursorPosition(const MenuContext *mc, int maxMenuLength) {
-    if (mc->cursorLine == MAIN_MENU_LOAD_GAME && !autosaveExists()) {
+    if (mc->cursorLine == MAIN_MENU_LOAD_GAME && !autosaveExists(mc->indexDir)) {
         return mc->cursorLine - 2;
     }
 
