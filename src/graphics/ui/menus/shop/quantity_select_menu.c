@@ -9,7 +9,7 @@ void drawQuantitySelectMenuScreen(MenuContext *mc) {
             mc,
             QUANTITY_SELECT_BOX,
             mc->context->ui->textAreas->alert);
-    drawMenuRect(b->area);
+    drawMenuRect(mc->context->ui->menu, b->area);
     drawInMenu(b, "How many would you like to buy?");
     char amount[24];
     sprintf(amount, "%s x %d", mc->itemToBuy->item->name, mc->quantity);

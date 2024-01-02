@@ -9,7 +9,7 @@ void drawConfirmPurchaseMenuScreen(MenuContext *mc) {
             mc,
             QUANTITY_SELECT_BOX,
             mc->context->ui->textAreas->alert);
-    drawMenuRect(b->area);
+    drawMenuRect(mc->context->ui->menu, b->area);
     char purchaseText[64];
     sprintf(
             purchaseText,

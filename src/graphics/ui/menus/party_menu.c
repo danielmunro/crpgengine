@@ -6,7 +6,7 @@ void drawPartyMenuScreen(MenuContext *mc) {
             mc,
             IN_GAME_MENU_BOX,
             ui->textAreas->full);
-    drawMenuRect(inGameMenuBox->area);
+    drawMenuRect(mc->context->ui->menu, inGameMenuBox->area);
     FontStyle *defaultFont = mc->fonts->default_;
     for (int i = 0; i < mc->player->partyCount; i++) {
         Mobile *mob = mc->player->party[i];
@@ -36,7 +36,7 @@ void drawPartyMenuScreen(MenuContext *mc) {
             mc,
             PARTY_BOX,
             ui->textAreas->right);
-    drawMenuRect(textBox->area);
+    drawMenuRect(mc->context->ui->menu, textBox->area);
     for (int i = 0; i < count; i++) {
         if (i == mc->cursorLine) {
             drawInMenuWithStyle(textBox, mc->fonts->highlight, PartyMenuItems[i]);

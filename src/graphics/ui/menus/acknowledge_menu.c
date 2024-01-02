@@ -10,7 +10,8 @@ void drawAcknowledgeMenuScreen(MenuContext *mc) {
             mc,
             ACKNOWLEDGE_BOX,
             mc->context->ui->textAreas->medium);
-    drawMenuRect(b->area);
+    const MenuConfig *c = mc->context->ui->menu;
+    drawMenuRect(c, b->area);
     drawInMenu(b, "Your game has been saved.");
     drawInMenu(b, "Reminder: your progress will save");
     drawInMenu(b, "automatically.");

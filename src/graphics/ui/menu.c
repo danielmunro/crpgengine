@@ -251,7 +251,8 @@ TextBox *findOrCreateTextBox(MenuContext *mc, TextBoxLabel label, Rectangle area
             TextBox *t = createTextBox(
                     area,
                     mc->fonts->default_,
-                    label);
+                    label,
+                    mc->context->ui->menu->padding);
             mc->textBoxes[i] = t;
             return t;
         } else if (mc->textBoxes[i]->label == label) {

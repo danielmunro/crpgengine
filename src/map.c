@@ -520,8 +520,8 @@ void drawExplorationControls(
         const FontStyle *font,
         const UIConfig *ui) {
     if (player->dialog) {
-        drawMenuRect(ui->textAreas->bottom);
-        drawDialog(player->dialog);
+        drawMenuRect(ui->menu, ui->textAreas->bottom);
+        drawDialog(player->dialog, ui->menu->padding);
         return;
     }
     for (int i = 0; i < MAX_ACTIVE_CONTROLS; i++) {
@@ -539,8 +539,8 @@ void drawExplorationControls(
                         area,
                         font);
             }
-            drawMenuRect(area);
-            drawDialog(player->dialog);
+            drawMenuRect(ui->menu, area);
+            drawDialog(player->dialog, ui->menu->padding);
         }
     }
 }

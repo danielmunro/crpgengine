@@ -9,12 +9,12 @@ void drawMagicSelectMenuScreen(MenuContext *mc) {
             mc,
             MAGIC_SELECT_BOX,
             mc->context->ui->textAreas->bottomMidRight);
-    drawMenuRect(t->area);
-    FontStyle *defaultFont = mc->fonts->default_;
-    FontStyle *disabledFont = mc->fonts->disable;
+    drawMenuRect(mc->context->ui->menu, t->area);
+    const FontStyle *defaultFont = mc->fonts->default_;
+    const FontStyle *disabledFont = mc->fonts->disable;
     const Mobile *m = mc->selectedMob;
     for (int i = 0; i < m->spellCount; i++) {
-        FontStyle *fs = canApplyCost(m, mc->spells[i]->cost) ? defaultFont : disabledFont;
+        const FontStyle *fs = canApplyCost(m, mc->spells[i]->cost) ? defaultFont : disabledFont;
         drawInMenuWithStyle(t, fs, Spells[m->spells[i]->type]);
     }
     drawRightCursor(

@@ -10,7 +10,7 @@ void drawShopWelcomeMenuScreen(MenuContext *mc) {
             mc,
             SHOP_WELCOME_BOX,
             mc->context->ui->textAreas->small);
-    drawMenuRect(b->area);
+    drawMenuRect(mc->context->ui->menu, b->area);
     drawInMenu(b, "Welcome! What would you like to do?");
     drawInMenu(b, "");
     drawInMenu(b, "Buy");

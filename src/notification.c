@@ -100,8 +100,8 @@ void drawNotifications(NotificationManager *nm, FontStyle *font) {
             rect.y += NOTIFICATION_HEIGHT + ui->menu->padding - nm->slideDown;
         }
         if (nm->notifications[i] != NULL) {
-            drawMenuRect(rect);
-            drawTextInArea(nm->notifications[i]->message, rect, font);
+            drawMenuRect(ui->menu, rect);
+            drawTextInArea(nm->notifications[i]->message, rect, font, ui->menu->padding);
         }
     }
 }

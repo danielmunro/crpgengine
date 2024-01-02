@@ -9,9 +9,9 @@ void drawItemSelectMenuScreen(MenuContext *mc) {
             mc,
             ITEM_SELECT_FIGHT_BOX,
             mc->context->ui->textAreas->bottom);
-    drawMenuRect(t->area);
-    FontStyle *defaultFont = mc->fonts->default_;
-    FontStyle *disabledFont = mc->fonts->disable;
+    drawMenuRect(mc->context->ui->menu, t->area);
+    const FontStyle *defaultFont = mc->fonts->default_;
+    const FontStyle *disabledFont = mc->fonts->disable;
     ItemListResult result = createItemList(mc->player);
     mc->itemList = result.itemList;
     mc->itemListCount = result.count;
@@ -19,7 +19,7 @@ void drawItemSelectMenuScreen(MenuContext *mc) {
         const Item *item = result.itemList[i].item;
         char buffer[MAX_LINE_BUFFER];
         sprintf(buffer, "(%d) %s", result.itemList[i].amount, item->name);
-        FontStyle *fs = item->type == ITEM_TYPE_CONSUMABLE ? defaultFont : disabledFont;
+        const FontStyle *fs = item->type == ITEM_TYPE_CONSUMABLE ? defaultFont : disabledFont;
         drawInMenuWithStyle(t, fs, buffer);
     }
     drawRightCursor(

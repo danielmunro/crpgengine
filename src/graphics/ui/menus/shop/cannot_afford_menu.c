@@ -9,7 +9,7 @@ void drawCannotAffordMenuScreen(MenuContext *mc) {
             mc,
             CANNOT_AFFORD_BOX,
             mc->context->ui->textAreas->alert);
-    drawMenuRect(b->area);
+    drawMenuRect(mc->context->ui->menu, b->area);
     drawInMenu(b, "Sorry, you cannot afford that.");
 }
 

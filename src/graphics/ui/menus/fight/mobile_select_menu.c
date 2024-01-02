@@ -107,7 +107,7 @@ void drawMobileSelectMenuScreen(MenuContext *mc) {
             mc,
             MOBILE_SELECT_BOX,
             mc->context->ui->textAreas->bottomMidRight);
-    drawMenuRect(t->area);
+    drawMenuRect(mc->context->ui->menu, t->area);
     drawPlayerFightTopLevel(mc, t, true);
 }
 

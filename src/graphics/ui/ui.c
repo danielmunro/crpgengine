@@ -71,6 +71,7 @@ typedef struct {
     FontStyle *fontStyle;
     TextBoxLabel label;
     int cursor;
+    float padding;
 } TextBox;
 
 typedef struct {
@@ -80,8 +81,6 @@ typedef struct {
     double timeStarted;
     double timeElapsed;
 } Dialog;
-
-UIConfig *ui;
 
 Dialog *createDialog(const char *message, Rectangle area, const FontStyle *font) {
     Dialog *dialog = malloc(sizeof(Dialog));
@@ -113,24 +112,24 @@ Rectangle getScreenRectangle(TextAreaData *data, Resolution resolution) {
     };
 }
 
-void setTextAreasFromData(Resolution resolution) {
-    ui->textAreas->alert = getScreenRectangle(ui->textAreas->textAreaData->alert, resolution);
-    ui->textAreas->alertRight = getScreenRectangle(ui->textAreas->textAreaData->alertRight, resolution);
-    ui->textAreas->small = getScreenRectangle(ui->textAreas->textAreaData->small, resolution);
-    ui->textAreas->medium = getScreenRectangle(ui->textAreas->textAreaData->medium, resolution);
-    ui->textAreas->mediumRight = getScreenRectangle(ui->textAreas->textAreaData->mediumRight, resolution);
-    ui->textAreas->full = getScreenRectangle(ui->textAreas->textAreaData->full, resolution);
-    ui->textAreas->bottom = getScreenRectangle(ui->textAreas->textAreaData->bottom, resolution);
-    ui->textAreas->left = getScreenRectangle(ui->textAreas->textAreaData->left, resolution);
-    ui->textAreas->right = getScreenRectangle(ui->textAreas->textAreaData->right, resolution);
-    ui->textAreas->bottomLeft = getScreenRectangle(ui->textAreas->textAreaData->bottomLeft, resolution);
-    ui->textAreas->bottomMidRight = getScreenRectangle(ui->textAreas->textAreaData->bottomMidRight, resolution);
-    ui->textAreas->bottomMid = getScreenRectangle(ui->textAreas->textAreaData->bottomMidRight, resolution);
-    ui->textAreas->midRight = getScreenRectangle(ui->textAreas->textAreaData->midRight, resolution);
+void setTextAreasFromData(TextAreasConfig *t, Resolution resolution) {
+    t->alert = getScreenRectangle(t->textAreaData->alert, resolution);
+    t->alertRight = getScreenRectangle(t->textAreaData->alertRight, resolution);
+    t->small = getScreenRectangle(t->textAreaData->small, resolution);
+    t->medium = getScreenRectangle(t->textAreaData->medium, resolution);
+    t->mediumRight = getScreenRectangle(t->textAreaData->mediumRight, resolution);
+    t->full = getScreenRectangle(t->textAreaData->full, resolution);
+    t->bottom = getScreenRectangle(t->textAreaData->bottom, resolution);
+    t->left = getScreenRectangle(t->textAreaData->left, resolution);
+    t->right = getScreenRectangle(t->textAreaData->right, resolution);
+    t->bottomLeft = getScreenRectangle(t->textAreaData->bottomLeft, resolution);
+    t->bottomMidRight = getScreenRectangle(t->textAreaData->bottomMidRight, resolution);
+    t->bottomMid = getScreenRectangle(t->textAreaData->bottomMidRight, resolution);
+    t->midRight = getScreenRectangle(t->textAreaData->midRight, resolution);
 }
 
 UIConfig *createUIConfig(UIData *data, Resolution resolution) {
-    ui = malloc(sizeof(UIConfig));
+    UIConfig *ui = malloc(sizeof(UIConfig));
 
     ui->screen = malloc(sizeof(ScreenConfig));
     ui->screen->scale = data->screen->scale;
@@ -169,16 +168,17 @@ UIConfig *createUIConfig(UIData *data, Resolution resolution) {
 
     ui->textAreas = malloc(sizeof(TextAreasConfig));
     ui->textAreas->textAreaData = data->textAreas;
-    setTextAreasFromData(resolution);
+    setTextAreasFromData(ui->textAreas, resolution);
     return ui;
 }
 
-TextBox *createTextBox(Rectangle area, FontStyle *fontStyle, TextBoxLabel label) {
+TextBox *createTextBox(Rectangle area, FontStyle *fontStyle, TextBoxLabel label, float padding) {
     TextBox *textBox = malloc(sizeof(TextBox));
     textBox->area = area;
     textBox->fontStyle = fontStyle;
     textBox->label = label;
     textBox->cursor = 0;
+    textBox->padding = padding;
     return textBox;
 }
 
@@ -192,16 +192,25 @@ void drawText(const char *message, Vector2 position, const FontStyle *fontStyle)
             fontStyle->color);
 }
 
-void drawLineInArea(const char *message, Rectangle area, int lineNumber, const FontStyle *font) {
+void drawLineInArea(
+        const char *message,
+        Rectangle area,
+        int lineNumber,
+        float padding,
+        const FontStyle *font) {
     drawText(
             message,
             (Vector2) {
-                    area.x + ui->menu->padding,
-                    area.y + ui->menu->padding + (font->lineHeight * (float) lineNumber)
+                    area.x + padding,
+                    area.y + padding + (font->lineHeight * (float) lineNumber)
             }, font);
 }
 
-void drawTextInArea(const char *message, Rectangle area, const FontStyle *font) {
+void drawTextInArea(
+        const char *message,
+        Rectangle area,
+        const FontStyle *font,
+        float padding) {
     char m[MAX_MESSAGE_BUFFER];
     char buffer[MAX_LINE_BUFFER];
     strcpy(m, message);
@@ -217,8 +226,8 @@ void drawTextInArea(const char *message, Rectangle area, const FontStyle *font) 
         }
         strcat(test, word);
         Vector2 testArea = MeasureTextEx(font->font, test, font->size, 1);
-        if (testArea.x > area.width - ui->menu->padding * 2) {
-            drawLineInArea(buffer, area, line, font);
+        if (testArea.x > area.width - padding * 2) {
+            drawLineInArea(buffer, area, line, padding, font);
             line++;
             strcpy(buffer, word);
         } else {
@@ -227,7 +236,7 @@ void drawTextInArea(const char *message, Rectangle area, const FontStyle *font) 
         word = strtok_r(copy, " ", &copy);
     }
     if (strcmp(buffer, "") != 0) {
-        drawLineInArea(buffer, area, line, font);
+        drawLineInArea(buffer, area, line, padding, font);
     }
     free(word);
 }
@@ -238,7 +247,7 @@ void updateDialog(Dialog *dialog) {
     dialog->timeStarted = end;
 }
 
-void drawDialog(Dialog *dialog) {
+void drawDialog(Dialog *dialog, float padding) {
     int amount = (int) ceil(dialog->timeElapsed / 5);
     if (amount == 0) {
         return;
@@ -253,20 +262,20 @@ void drawDialog(Dialog *dialog) {
         strcat(message, "\t");
         amount++;
     }
-    drawTextInArea(message, dialog->area, dialog->font);
+    drawTextInArea(message, dialog->area, dialog->font, padding);
 }
 
-void drawMenuRect(Rectangle rect) {
-    float t = (float) ui->menu->border->lineThickness;
+void drawMenuRect(const MenuConfig *c, Rectangle rect) {
+    float t = (float) c->border->lineThickness;
     float t2 = t * 2;
-    if (ui->menu->style == VERTICAL_GRADIENT) {
+    if (c->style == VERTICAL_GRADIENT) {
         DrawRectangleGradientV(
                 (int) (rect.x + t),
                 (int) (rect.y + t),
                 (int) (rect.width - t2),
                 (int) (rect.height - t2),
-                ui->menu->verticalGradient->top,
-                ui->menu->verticalGradient->bottom);
+                c->verticalGradient->top,
+                c->verticalGradient->bottom);
     }
     DrawRectangleRoundedLines(
             (Rectangle) {
@@ -274,25 +283,30 @@ void drawMenuRect(Rectangle rect) {
                     rect.y + t,
                     rect.width - t2,
                     rect.height - t2},
-            ui->menu->border->roundness,
+            c->border->roundness,
             4,
             t,
-            ui->menu->border->color);
+            c->border->color);
 }
 
 float line(int line, float lineHeight) {
     return (float) line * lineHeight;
 }
 
-void drawScrollableInMenuWithStyle(TextBox *tb, const FontStyle *fs, const char *text, int menuCursor, int textBoxCursor) {
+void drawScrollableInMenuWithStyle(
+        TextBox *tb,
+        const FontStyle *fs,
+        const char *text,
+        int menuCursor,
+        int textBoxCursor) {
     float offset = getScrollOffset(fs->lineHeight, menuCursor, tb->area.height);
     float y = tb->area.y
               + line(textBoxCursor != -1 ? textBoxCursor : tb->cursor, fs->lineHeight)
-              + ui->menu->padding
+              + tb->padding
               - offset;
     if (y >= tb->area.y) {
         drawText(text, (Vector2) {
-                tb->area.x + ui->menu->padding,
+                tb->area.x + tb->padding,
                 y,
         }, fs);
     }

@@ -7,7 +7,7 @@ void drawMagicMenuScreen(MenuContext *mc) {
             mc,
             MAGIC_BOX,
             mc->context->ui->textAreas->midRight);
-    drawMenuRect(textBox->area);
+    drawMenuRect(mc->context->ui->menu, textBox->area);
     Mobile *m = mc->selectedMob;
     for (int i = 0; i < m->spellCount; i++) {
         char buffer[MAX_LINE_BUFFER] = "";

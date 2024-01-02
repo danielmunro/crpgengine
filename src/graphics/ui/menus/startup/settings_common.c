@@ -6,7 +6,7 @@ void drawSettingsHeader(MenuContext *mc) {
             mc,
             SETTINGS_NAMES_BOX,
             mc->context->ui->textAreas->medium);
-    drawMenuRect(headersBox->area);
+    drawMenuRect(mc->context->ui->menu, headersBox->area);
     drawInMenu(headersBox, "Full screen");
     drawInMenu(headersBox, "");
     drawInMenu(headersBox, "Difficulty");

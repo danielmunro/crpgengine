@@ -10,7 +10,7 @@ void drawQuitMenuScreen(MenuContext *mc) {
             mc,
             QUIT_BOX,
             mc->context->ui->textAreas->medium);
-    drawMenuRect(textBox->area);
+    drawMenuRect(mc->context->ui->menu, textBox->area);
     drawInMenu(textBox, "Are you sure?");
     drawInMenu(textBox, "");
     int cursorLength = getQuitCursorLength();

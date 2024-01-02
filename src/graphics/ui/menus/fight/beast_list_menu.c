@@ -3,7 +3,7 @@ void drawBeastSelectMenuScreen(MenuContext *mc) {
             mc,
             BEAST_SELECT_BOX,
             mc->context->ui->textAreas->bottomLeft);
-    drawMenuRect(t->area);
+    drawMenuRect(mc->context->ui->menu, t->area);
     int count = mc->fight->beastCount > MAX_BEAST_NAMES_IN_FIGHT ?
                 MAX_BEAST_NAMES_IN_FIGHT : mc->fight->beastCount;
     for (int i = 0; i < count; i++) {

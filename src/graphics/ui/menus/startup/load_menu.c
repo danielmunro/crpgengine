@@ -10,7 +10,7 @@ void drawLoadMenuScreen(MenuContext *mc) {
             mc,
             LOAD_BOX,
             mc->context->ui->textAreas->small);
-    drawMenuRect(b->area);
+    drawMenuRect(mc->context->ui->menu, b->area);
     for (int i = 0; i < mc->saveFiles->count; i++) {
         drawInMenu(b, mc->saveFiles->saves[i]->saveName);
     }

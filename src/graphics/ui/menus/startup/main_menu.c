@@ -30,7 +30,7 @@ void drawMainMenuScreen(MenuContext *mc) {
             mc,
             MAIN_MENU_BOX,
             mc->context->ui->textAreas->full);
-    drawMenuRect(t->area);
+    drawMenuRect(mc->context->ui->menu, t->area);
     drawInMenu(t, "new");
     drawInMenuWithStyle(t, fs, "continue");
     drawInMenu(t, "load");

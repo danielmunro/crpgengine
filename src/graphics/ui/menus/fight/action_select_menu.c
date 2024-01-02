@@ -26,7 +26,7 @@ void drawActionSelectMenuScreen(MenuContext *mc) {
             mc,
             ACTION_SELECT_BOX,
             mc->context->ui->textAreas->bottomMid);
-    drawMenuRect(t->area);
+    drawMenuRect(mc->context->ui->menu, t->area);
     drawScrollableInMenu(t, actionMenu[ACTION_ATTACK], mc->cursorLine);
     drawScrollableInMenu(
             t,

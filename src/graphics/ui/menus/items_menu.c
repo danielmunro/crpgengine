@@ -6,7 +6,7 @@ void drawItemsMenuScreen(MenuContext *mc) {
             mc,
             ITEMS_BOX,
             mc->context->ui->textAreas->full);
-    drawMenuRect(textBox->area);
+    drawMenuRect(mc->context->ui->menu, textBox->area);
     if (mc->itemListCount == 0) {
         ItemListResult result = createItemList(mc->player);
         mc->itemList = result.itemList;

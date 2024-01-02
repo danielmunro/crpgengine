@@ -14,7 +14,7 @@ void drawShopBuyMenuScreen(MenuContext *mc) {
             mc,
             SHOP_COSTS_BOX,
             mc->context->ui->textAreas->mediumRight);
-    drawMenuRect(b->area);
+    drawMenuRect(mc->context->ui->menu, b->area);
     char coinsAmount[64];
     sprintf(coinsAmount, "You have %d coins", mc->player->coins);
     drawInMenu(b, coinsAmount);
