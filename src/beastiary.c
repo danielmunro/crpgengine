@@ -22,7 +22,7 @@ typedef struct {
     int count;
 } Beastiary;
 
-Beast *createBeastFromData(BeastData *data) {
+Beast *createBeastFromData(BeastData *data, const char *indexDir) {
     Beast *beast = malloc(sizeof(Beast));
     beast->id = data->id;
     beast->name = data->name;
@@ -32,7 +32,7 @@ Beast *createBeastFromData(BeastData *data) {
     beast->level = data->level;
     beast->actionGauge = 0;
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/images/%s", config->indexDir, data->image);
+    sprintf(filePath, "%s/images/%s", indexDir, data->image);
     beast->image = loadImageTexture(filePath);
     beast->attributes = createAttributesFromData(data->attributes);
     beast->position = (Rectangle) {0, 0, 0, 0};

@@ -343,8 +343,8 @@ Game *createGame(Context *c) {
     g->sprites = loadSpritesheetManager(c);
     g->animations = createAnimationManager(c);
     loadAllAnimations(g->animations, g->sprites);
-    g->audio = loadAudioManager();
-    g->beastiary = loadBeastiary();
+    g->audio = loadAudioManager(c);
+    g->beastiary = loadBeastiary(c->game->indexDir);
     g->items = createItemManager();
     loadAllItems(g->items);
     g->spells = loadSpellManager();

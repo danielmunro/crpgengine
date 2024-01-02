@@ -285,9 +285,9 @@ void loadScenesFromFiles(
     free(sl);
 }
 
-AudioManager *loadAudioManager() {
+AudioManager *loadAudioManager(Context *c) {
     addDebug("load audio manager from dir '%s'", config->indexDir);
-    AudioManager *am = createAudioManager();
+    AudioManager *am = createAudioManager(c);
     assignAudioManagerValues(am);
     addDebug("audio manager loaded %d songs", am->musicCount);
     return am;
@@ -357,12 +357,12 @@ void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm) {
     free(files);
 }
 
-Beastiary *loadBeastiary() {
+Beastiary *loadBeastiary(const char *indexDir) {
     BeastiaryData *data = loadBeastiaryYaml();
     Beastiary *beastiary = malloc(sizeof(Beastiary));
     beastiary->count = data->beasts_count;
     for (int i = 0; i < data->beasts_count; i++) {
-        beastiary->beasts[i] = createBeastFromData(&data->beasts[i]);
+        beastiary->beasts[i] = createBeastFromData(&data->beasts[i], indexDir);
         addDebug("beast '%s' created", beastiary->beasts[i]->id);
     }
     free(data);

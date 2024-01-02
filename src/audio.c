@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include "headers/util/log.h"
 #include "headers/persistence/cyaml.h"
+#include "headers/context.h"
 
 typedef struct {
     Sound sound;
@@ -14,6 +15,7 @@ typedef struct {
 } Music_;
 
 typedef struct {
+    Context *context;
     Sound_ *sounds[MAX_SOUNDS];
     Music_ *music[MAX_MUSIC];
     int soundCount;
@@ -21,8 +23,9 @@ typedef struct {
     int musicIndex;
 } AudioManager;
 
-AudioManager *createAudioManager() {
+AudioManager *createAudioManager(Context *c) {
     AudioManager *s = malloc(sizeof(AudioManager));
+    s->context = c;
     s->soundCount = 0;
     s->musicCount = 0;
     s->musicIndex = -1;
@@ -65,9 +68,10 @@ void playSound(AudioManager *s, const char *name) {
 }
 
 void assignMusicValues(AudioManager *am) {
-    MusicData *music = loadMusicYaml(config->indexDir);
+    const char *indexDir = am->context->game->indexDir;
+    MusicData *music = loadMusicYaml(indexDir);
     char filePath[MAX_FS_PATH_LENGTH] = "";
-    sprintf(filePath, "%s/audio/%s", config->indexDir, music->town);
+    sprintf(filePath, "%s/audio/%s", indexDir, music->town);
 
     Music_ *m = malloc(sizeof(Music_));
     m->name = "town";
@@ -79,7 +83,7 @@ void assignMusicValues(AudioManager *am) {
 }
 
 void assignSoundValues(const AudioManager *am) {
-    SoundData *sound = loadSoundYaml(config->indexDir);
+    SoundData *sound = loadSoundYaml(am->context->game->indexDir);
 
 //    Sound_ *s = malloc(sizeof(Sound_));
 //    s->name = "bump";

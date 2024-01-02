@@ -1,4 +1,5 @@
 #include "headers/util/log.h"
+#include "headers/graphics/ui/ui.h"
 
 typedef struct {
     const Log *log;
