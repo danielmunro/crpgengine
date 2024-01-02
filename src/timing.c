@@ -6,6 +6,7 @@ typedef struct {
     double elapsedTime;
     double timeInterval;
     NotificationManager *notificationManager;
+    bool logMemoryUsage;
 } Timing;
 
 Timing *createTiming(NotificationManager *nm) {
@@ -13,6 +14,7 @@ Timing *createTiming(NotificationManager *nm) {
     t->elapsedTime = 0;
     t->timeInterval = 0;
     t->notificationManager = nm;
+    t->logMemoryUsage = nm->context->game->logMemoryUsage;
     return t;
 }
 
@@ -27,7 +29,7 @@ int stopTiming(Timing *t) {
     if (t->elapsedTime > 1000.0) {
         t->elapsedTime -= 1000.0;
         t->start = end;
-        if (t->notificationManager->context->game->logMemoryUsage) {
+        if (t->logMemoryUsage) {
             reportMaxMemory();
         }
         return 1;
