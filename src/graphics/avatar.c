@@ -9,9 +9,9 @@ typedef struct {
     float scale;
 } Avatar;
 
-Avatar *createAvatar(const char *filename, float scale) {
+Avatar *createAvatar(const char *indexDir, const char *filename, float scale) {
     char path[MAX_FS_PATH_LENGTH];
-    sprintf(path, "%s/images/%s", config->indexDir, filename);
+    sprintf(path, "%s/images/%s", indexDir, filename);
     Avatar *a = malloc(sizeof(Avatar));
     a->filename = filename;
     a->scale = scale;

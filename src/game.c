@@ -200,15 +200,23 @@ bool isExploring(Game *g) {
     return !isFighting(g->fights) && !getCurrentMenu(g->menus);
 }
 
-bool canTriggerFight(const FightManager *fm, const Scene *s, const Player *p) {
+bool canTriggerFight(
+        const FightManager *fm,
+        const Scene *s,
+        const Player *p,
+        bool hasRandomEncounters) {
     return isDungeon(s)
             && !isFighting(fm)
             && isMoving(getPartyLeader(p))
-            && config->randomEncounters;
+            && hasRandomEncounters;
 }
 
 void checkFights(Game *g, const Scene *s) {
-    if (!canTriggerFight(g->fights, s, g->player)) {
+    if (!canTriggerFight(
+            g->fights,
+            s,
+            g->player,
+            g->context->game->randomEncounters)) {
         return;
     }
     if (GetRandomValue(1, 100) == 1) {
@@ -259,7 +267,7 @@ void doInGameMenuLoop(Game *g) {
     drawAllMenus(
             g->ui->menuContext,
             g->menus);
-    if (config->showFPS) {
+    if (g->context->game->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }
     EndDrawing();
@@ -294,7 +302,7 @@ void loadAllMobiles(Game *g) {
 
 UIManager *initializeUIManager(Game *g) {
     UIData *uiData = loadUIData();
-    Fonts *fonts = createFonts(uiData);
+    Fonts *fonts = createFonts(g->context->game->indexDir, uiData);
     UISprite *uiSprite = createUISprite(
             findSpritesheetByName(g->sprites, uiData->sprite->name),
             uiData);

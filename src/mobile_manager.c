@@ -53,7 +53,10 @@ Mobile *createMobileFromData(MobileManager *mm, MobileData *data, Animation *ani
             getPositionFromString(data->position),
             getDirectionFromString(data->direction),
             animations,
-            createAvatar(data->avatar, mm->context->ui->screen->scale),
+            createAvatar(
+                    mm->context->game->indexDir,
+                    data->avatar,
+                    mm->context->ui->screen->scale),
             data->hp,
             data->mana,
             createAttributesFromData(data->attributes),
