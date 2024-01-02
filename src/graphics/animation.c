@@ -44,9 +44,9 @@ AnimationManager *createAnimationManager(Context *c) {
     return animationManager;
 }
 
-void incrementAnimationFrame(Animation *a, int targetFPS) {
+void incrementAnimationFrame(Animation *a, float targetFPS) {
     a->frameRateCount++;
-    if (a->frameRateCount >= (targetFPS / a->frameRate)) {
+    if (a->frameRateCount >= ((int) targetFPS / a->frameRate)) {
         a->frameRateCount = 0;
         a->currentFrame++;
         if (a->currentFrame > a->lastFrame) {
