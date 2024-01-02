@@ -61,7 +61,8 @@ Mobile *createMobileFromData(MobileManager *mm, MobileData *data, Animation *ani
             data->mana,
             createAttributesFromData(data->attributes),
             mapDataToSpells(mm->spellManager, data->spells, data->spells_count),
-            data->spells_count);
+            data->spells_count,
+            false);
     for (int i = 0; i < data->startSpells_count; i++) {
         mob->spells[mob->spellCount + i] = findSpell(
                 mm->spellManager->spells,

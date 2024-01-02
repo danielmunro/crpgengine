@@ -152,7 +152,11 @@ void initializePlayer(Game *g, const char *saveFilePath) {
         g->player = createNewPlayer(g->mobiles, g->items);
     } else {
         g->saveToLoad = loadSaveData(saveFilePath);
-        g->player = mapSaveDataToPlayer(g->spells, g->animations, g->saveToLoad);
+        g->player = mapSaveDataToPlayer(
+                g->spells,
+                g->animations,
+                g->saveToLoad,
+                g->context->game->immortal);
     }
     addMobilesToMobileManager(g->mobiles, g->player->party);
 }

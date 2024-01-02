@@ -34,6 +34,7 @@ typedef struct {
     ActionStep step;
     float hitAnimationTimer;
     bool isFleeing;
+    bool immortal;
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {
@@ -51,7 +52,8 @@ Mobile *createMobile(
         int mana,
         Attributes *attributes,
         Spell **spells,
-        int spellCount) {
+        int spellCount,
+        bool immortal) {
     Mobile *mobile = malloc(sizeof(Mobile));
     mobile->id = &id[0];
     mobile->name = &name[0];
@@ -81,6 +83,7 @@ Mobile *createMobile(
     mobile->step = STEP_NONE;
     mobile->hitAnimationTimer = 0;
     mobile->isFleeing = false;
+    mobile->immortal = immortal;
     return mobile;
 }
 
@@ -197,7 +200,7 @@ void normalizeVitalsForMobile(Mobile *mob) {
         mob->hp = calculated.hp;
     }
      if (mob->hp <= 0) {
-        mob->hp = config->immortal ? 1 : 0;
+        mob->hp = mob->immortal ? 1 : 0;
     }
     if (mob->mana > calculated.mana) {
         mob->mana = calculated.mana;

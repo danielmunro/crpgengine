@@ -4,7 +4,7 @@
 #include "headers/player.h"
 #include "headers/mobile_manager.h"
 
-Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *save) {
+Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *save, bool immortal) {
     Mobile *mobs[MAX_PARTY_SIZE];
     addDebug("save file party count :: %d", save->player->party_count);
     for (int i = 0; i < save->player->party_count; i++) {
@@ -25,7 +25,8 @@ Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *sa
                 mob.mana,
                 createAttributesFromData(mob.attributes),
                 mapDataToSpells(sm, mob.spells, mob.spells_count),
-                mob.spells_count);
+                mob.spells_count,
+                immortal);
     }
     for (int i = save->player->party_count; i < MAX_PARTY_SIZE; i++) {
         mobs[i] = NULL;

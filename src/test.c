@@ -100,7 +100,8 @@ void canMoveMobTest(Context *c) {
             20,
             createTestAttributes(),
             mapDataToSpells(NULL, NULL, 0),
-            0);
+            0,
+            false);
 
     // when
     moveMob(
@@ -135,7 +136,8 @@ void canMobStopMovingTest(Context *c) {
             STARTING_MANA,
             createTestAttributes(),
             mapDataToSpells(NULL, NULL, 0),
-            0);
+            0,
+            false);
 
     // when
     moveMob(mob, start, (float) c->ui->screen->targetFrameRate);
