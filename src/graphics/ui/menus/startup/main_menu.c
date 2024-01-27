@@ -21,7 +21,7 @@ bool autosaveExists(const char *indexDir) {
 
 void drawMainMenuScreen(MenuContext *mc) {
     const FontStyle *fs = NULL;
-    if (autosaveExists(mc->indexDir)) {
+    if (autosaveExists(mc->context->indexDir)) {
         fs = mc->fonts->default_;
     } else {
         fs = mc->fonts->disable;
@@ -47,14 +47,14 @@ void drawMainMenuScreen(MenuContext *mc) {
 }
 
 int getNextMainMenuCursorPosition(const MenuContext *mc, int maxMenuLength) {
-    if (mc->cursorLine == MAIN_MENU_NEW_GAME && !autosaveExists(mc->indexDir)) {
+    if (mc->cursorLine == MAIN_MENU_NEW_GAME && !autosaveExists(mc->context->indexDir)) {
         return mc->cursorLine + 2;
     }
     return getDefaultNextOption(mc, maxMenuLength);
 }
 
 int getPreviousMainMenuCursorPosition(const MenuContext *mc, int maxMenuLength) {
-    if (mc->cursorLine == MAIN_MENU_LOAD_GAME && !autosaveExists(mc->indexDir)) {
+    if (mc->cursorLine == MAIN_MENU_LOAD_GAME && !autosaveExists(mc->context->indexDir)) {
         return mc->cursorLine - 2;
     }
 

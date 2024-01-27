@@ -52,7 +52,6 @@ typedef struct {
     MenuType menuType;
     const char *scene;
     Player *player;
-    const char *indexDir;
     int cursorLine;
     Fonts *fonts;
     Fight *fight;
