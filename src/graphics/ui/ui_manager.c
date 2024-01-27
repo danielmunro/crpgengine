@@ -183,6 +183,14 @@ int getMenuList(UIManager *uiMan) {
                     &menuKeyPressed,
                     &confirmPurchaseMenuItemSelected),
             createMenu(
+                    SHOP_SELL_MENU,
+                    &getShopSellCursorLength,
+                    &drawShopSellMenuScreen,
+                    &getDefaultPreviousOption,
+                    &getDefaultNextOption,
+                    &shopSellMenuKeyPressed,
+                    &shopBuyMenuItemSelected),
+            createMenu(
                     MAIN_MENU,
                     &getMainMenuCursorLength,
                     &drawMainMenuScreen,

@@ -26,5 +26,6 @@
 #include "graphics/ui/menus/shop/cannot_afford_menu.c"
 #include "graphics/ui/menus/shop/quantity_select_menu.c"
 #include "graphics/ui/menus/shop/confirm_purchase_menu.c"
+#include "graphics/ui/menus/shop/sell_menu.c"
 
 #endif //CJRPGENGINE_ALL_MENUS_H
