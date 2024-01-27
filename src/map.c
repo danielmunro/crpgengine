@@ -207,7 +207,7 @@ void drawTile(const Map *m, Image layer, int index, int x, int y) {
             (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
             WHITE
     );
-    if (config->showCollisions->objects) {
+    if (m->context->game->showCollisions->objects) {
         drawObjectCollision(m, layer, index, x, y);
     }
 }
@@ -265,10 +265,10 @@ void renderMapLayer(Map *m, LayerType layer) {
             );
         }
     }
-    if (config->showCollisions->warps) {
+    if (m->context->game->showCollisions->warps) {
         drawWarpCollisions(m, &renderedLayer);
     }
-    if (config->showCollisions->objects) {
+    if (m->context->game->showCollisions->objects) {
         drawShopCollisions(m, &renderedLayer);
     }
     m->renderedLayers[layer] = LoadTextureFromImage(renderedLayer);
@@ -351,7 +351,7 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
         }
     }
 
-    if (config->showCollisions->player) {
+    if (m->context->game->showCollisions->player) {
         const UIConfig *ui = m->context->ui;
         Rectangle rect = getMobileRectangle(getPartyLeader(p));
         DrawRectangle(
@@ -561,7 +561,7 @@ void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64]
     DrawTextureEx(m->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);
     drawExplorationControls(p, c, font, m->context->ui);
-    if (config->showFPS) {
+    if (m->context->game->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }
     EndDrawing();
