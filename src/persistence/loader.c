@@ -275,7 +275,7 @@ void loadScenesFromFiles(
         MobileManager *mm,
         ItemManager *im,
         Beastiary *beastiary) {
-    SceneLoader *sl = createSceneLoader();
+    SceneLoader *sl = createSceneLoader(sm->context->game->indexDir);
     loadScenes(
             sm,
             mm,

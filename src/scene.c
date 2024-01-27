@@ -101,11 +101,11 @@ void buildSceneFilesList(SceneLoader *sl) {
     }
 }
 
-SceneLoader *createSceneLoader() {
+SceneLoader *createSceneLoader(const char *indexDir) {
     const char *dir = "/scenes";
     SceneLoader *sceneLoader = malloc(sizeof(SceneLoader));
-    sceneLoader->sceneDirectory = (char *) malloc(strlen(config->indexDir) + strlen(dir));
-    sprintf(sceneLoader->sceneDirectory, "%s%s", config->indexDir, dir);
+    sceneLoader->sceneDirectory = (char *) malloc(strlen(indexDir) + strlen(dir));
+    sprintf(sceneLoader->sceneDirectory, "%s%s", indexDir, dir);
     sceneLoader->scenes = calloc(MAX_SCENES, sizeof(char *));
     sceneLoader->sceneFiles = calloc(MAX_SCENES, sizeof(char *));
     addDebug("get scene directories :: %s", sceneLoader->sceneDirectory);
