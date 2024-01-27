@@ -62,7 +62,7 @@ void loadMobiles(MobileManager *mm, Scene *scene, const char *sceneDirectory) {
 
 void loadPlayerMobiles(MobileManager *mm) {
     char directory[MAX_FS_PATH_LENGTH];
-    sprintf(directory, "%s/player/mobiles", config->indexDir);
+    sprintf(directory, "%s/player/mobiles", mm->context->game->indexDir);
     addDebug("load player mobiles from %s", directory);
     if (!FileExists(directory)) {
         addError("player mobiles directory does not exist :: %s", directory);
@@ -223,7 +223,7 @@ Scene *loadScene(
     loadMobiles(mm, scene, sceneDirectory);
 
     if (sceneData->encounters != NULL) {
-        loadEncounters(beastiary, scene, sceneData->encounters, config->indexDir);
+        loadEncounters(beastiary, scene, sceneData->encounters, mm->context->game->indexDir);
     }
 
     mapStorylinesToControlBlocks(cm, scene);
@@ -265,7 +265,7 @@ void loadScenes(
         addDebug("scene loaded :: %s (%d)", sm->scenes[i]->name, i);
     }
     sm->count = sl->count;
-    if (config->validate) {
+    if (sm->context->game->validate) {
         validateNoDuplicateSceneIds(sm);
     }
 }
@@ -286,7 +286,7 @@ void loadScenesFromFiles(
 }
 
 AudioManager *loadAudioManager(Context *c) {
-    addDebug("load audio manager from dir '%s'", config->indexDir);
+    addDebug("load audio manager from dir '%s'", c->game->indexDir);
     AudioManager *am = createAudioManager(c);
     assignAudioManagerValues(am);
     addDebug("audio manager loaded %d songs", am->musicCount);
@@ -294,10 +294,10 @@ AudioManager *loadAudioManager(Context *c) {
 }
 
 SpritesheetManager *loadSpritesheetManager(Context *c) {
-    addDebug("load spritesheet manager :: %s", config->indexDir);
+    addDebug("load spritesheet manager :: %s", c->game->indexDir);
     Spritesheet *spritesheets[MAX_SPRITESHEETS];
     char directory[MAX_FS_PATH_LENGTH];
-    sprintf(directory, "%s/spritesheets", config->indexDir);
+    sprintf(directory, "%s/spritesheets", c->game->indexDir);
     char **files = calloc(MAX_FILES, sizeof(char *));
     int filesInDirectory = getFilesInDirectory(directory, files);
     int count = 0;
@@ -344,7 +344,7 @@ void loadAllItems(ItemManager *itemManager) {
 
 void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm) {
     char animationsDir[MAX_FS_PATH_LENGTH / 2];
-    sprintf(animationsDir, "%s/animations", config->indexDir);
+    sprintf(animationsDir, "%s/animations", am->context->game->indexDir);
     char **files = calloc(MAX_FILES, sizeof(char *));
     int count = getFilesInDirectory(animationsDir, files);
     for (int i = 0; i < count; i++) {
