@@ -24,10 +24,8 @@ typedef struct {
     ShowCollisions *showCollisions;
 } GameConfig;
 
-GameConfig *config;
-
 GameConfig *createGameConfigFromData(const ConfigData *data) {
-    config = malloc(sizeof(GameConfig));
+    GameConfig *config = malloc(sizeof(GameConfig));
     config->showCollisions = malloc(sizeof(ShowCollisions));
     config->logLevel = getLogLevelFromString(data->logLevel);
     config->indexDir = data->indexDir;
