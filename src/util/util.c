@@ -153,6 +153,7 @@ float getScrollOffset(float lineHeight, int cursorLine, float areaHeight) {
 
 void getComponentPath(
         char dest[MAX_FS_PATH_LENGTH],
+        const char *indexDir,
         const char *moduleIndexDir,
         const char *componentName,
         const char *filename) {
@@ -161,7 +162,7 @@ void getComponentPath(
     sprintf(dest, "%s/%s", moduleIndexDir, baseFile);
     addDebug("check for module component :: %s, %s", componentName, dest);
     if (access(dest, F_OK) != 0) {
-        sprintf(dest, "%s/%s/%s", config->indexDir, componentName, baseFile);
+        sprintf(dest, "%s/%s/%s", indexDir, componentName, baseFile);
         addDebug("check for global component :: %s, %s", componentName, dest);
         if (access(dest, F_OK) != 0) {
             addError("no component exists with filename :: %s", baseFile);

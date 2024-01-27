@@ -109,10 +109,10 @@ Tile *parseTileNode(xmlNodePtr node) {
     return t;
 }
 
-void parseTilesetRootNode(xmlNodePtr node, Tileset *t) {
+void parseTilesetRootNode(xmlNodePtr node, Tileset *t, const char *indexDir) {
     const char *source = xmlString(node, PROP_SOURCE);
     char filePath[MAX_FS_PATH_LENGTH];
-    getComponentPath(filePath, config->indexDir, "tilesets", source);
+    getComponentPath(filePath, indexDir, indexDir, "tilesets", source);
     xmlDocPtr doc = xmlParseFile(filePath);
     xmlNodePtr cur = xmlDocGetRootElement(doc);
     if (cur == NULL) {
@@ -127,7 +127,7 @@ void parseTilesetRootNode(xmlNodePtr node, Tileset *t) {
             cur = cur->children;
         } else if (type == TILESET_NODE_TYPE_IMAGE) {
             char *imagePath = malloc(MAX_FS_PATH_LENGTH);
-            getComponentPath(imagePath, "", "tilesets", xmlString(cur, "source"));
+            getComponentPath(imagePath, indexDir, "", "tilesets", xmlString(cur, "source"));
             t->reader = xmlReaderForFile(filePath, NULL, 0);
             t->sourcePath = imagePath;
         } else if (type == TILESET_NODE_TYPE_TILE) {
@@ -307,7 +307,7 @@ void parseTilemapRootNode(Map *map, xmlNodePtr node, ItemManager *im) {
     while (node->children != NULL) {
         TilemapNodeType type = getTileMapNodeTypeFromString((const char *) node->children->name);
         if (type == TILEMAP_NODE_TYPE_TILESET) {
-            parseTilesetRootNode(node->children, map->tileset);
+            parseTilesetRootNode(node->children, map->tileset, map->context->game->indexDir);
         } else if (type == TILEMAP_NODE_TYPE_LAYER) {
             parseLayerNode(node->children, map);
         } else if (type == TILEMAP_NODE_TYPE_OBJECTGROUP) {
