@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.6)
-project (cjrpgengine)
+project (crpgengine)
 include(ExternalProject)
 set(CMAKE_BUILD_TYPE Debug)
 set(EXECUTABLE_OUTPUT_PATH ./build CACHE PATH "Build directory" FORCE)
@@ -64,7 +64,7 @@ target_link_libraries(tests ${LIBXML2_LIBRARIES})
 target_link_libraries(tests cyaml)
 
 # define main executable
-add_executable(cjrpgengine src/main.c)
-target_link_libraries(cjrpgengine raylib)
-target_link_libraries(cjrpgengine ${LIBXML2_LIBRARIES})
-target_link_libraries(cjrpgengine cyaml)
+add_executable(crpgengine src/main.c)
+target_link_libraries(crpgengine raylib)
+target_link_libraries(crpgengine ${LIBXML2_LIBRARIES})
+target_link_libraries(crpgengine cyaml)
