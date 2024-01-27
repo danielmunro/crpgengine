@@ -42,6 +42,7 @@ typedef struct {
     Rectangle alertRight;
     Rectangle small;
     Rectangle medium;
+    Rectangle topMedium;
     Rectangle full;
     Rectangle bottom;
     Rectangle right;
@@ -118,6 +119,7 @@ void setTextAreasFromData(TextAreasConfig *t, Resolution resolution) {
     t->small = getScreenRectangle(t->textAreaData->small, resolution);
     t->medium = getScreenRectangle(t->textAreaData->medium, resolution);
     t->mediumRight = getScreenRectangle(t->textAreaData->mediumRight, resolution);
+    t->topMedium = getScreenRectangle(t->textAreaData->topMedium, resolution);
     t->full = getScreenRectangle(t->textAreaData->full, resolution);
     t->bottom = getScreenRectangle(t->textAreaData->bottom, resolution);
     t->left = getScreenRectangle(t->textAreaData->left, resolution);
@@ -304,7 +306,7 @@ void drawScrollableInMenuWithStyle(
               + line(textBoxCursor != -1 ? textBoxCursor : tb->cursor, fs->lineHeight)
               + tb->padding
               - offset;
-    if (y >= tb->area.y) {
+    if (y >= tb->area.y && y + fs->lineHeight < tb->area.height + tb->area.y) {
         drawText(text, (Vector2) {
                 tb->area.x + tb->padding,
                 y,
