@@ -18,7 +18,7 @@ Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *sa
                 getDirectionFromString(mob.direction),
                 animations,
                 createAvatar(
-                        am->context->game->indexDir,
+                        am->context->indexDir,
                         mob.avatar,
                         am->context->ui->screen->scale),
                 mob.hp,
@@ -57,7 +57,7 @@ Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *sa
 
 Player *createNewPlayer(MobileManager *mm, ItemManager *im) {
     addInfo("creating new player");
-    StartPartyData *data = loadStartPartyData(mm->context->game->indexDir);
+    StartPartyData *data = loadStartPartyData(mm->context->indexDir);
     Mobile *mobiles[MAX_PARTY_SIZE];
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         mobiles[i] = NULL;

@@ -307,7 +307,7 @@ void parseTilemapRootNode(Map *map, xmlNodePtr node, ItemManager *im) {
     while (node->children != NULL) {
         TilemapNodeType type = getTileMapNodeTypeFromString((const char *) node->children->name);
         if (type == TILEMAP_NODE_TYPE_TILESET) {
-            parseTilesetRootNode(node->children, map->tileset, map->context->game->indexDir);
+            parseTilesetRootNode(node->children, map->tileset, map->context->indexDir);
         } else if (type == TILEMAP_NODE_TYPE_LAYER) {
             parseLayerNode(node->children, map);
         } else if (type == TILEMAP_NODE_TYPE_OBJECTGROUP) {

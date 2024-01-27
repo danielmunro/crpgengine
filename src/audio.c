@@ -68,7 +68,7 @@ void playSound(AudioManager *s, const char *name) {
 }
 
 void assignMusicValues(AudioManager *am) {
-    const char *indexDir = am->context->game->indexDir;
+    const char *indexDir = am->context->indexDir;
     MusicData *music = loadMusicYaml(indexDir);
     char filePath[MAX_FS_PATH_LENGTH] = "";
     sprintf(filePath, "%s/audio/%s", indexDir, music->town);
@@ -83,7 +83,7 @@ void assignMusicValues(AudioManager *am) {
 }
 
 void assignSoundValues(const AudioManager *am) {
-    SoundData *sound = loadSoundYaml(am->context->game->indexDir);
+    SoundData *sound = loadSoundYaml(am->context->indexDir);
 
 //    Sound_ *s = malloc(sizeof(Sound_));
 //    s->name = "bump";

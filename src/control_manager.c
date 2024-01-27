@@ -101,7 +101,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         progress++;
     } else if (needsToSave(then)) {
         addDebug("save player game :: scene: %s", cm->scene->name);
-        const SaveFile *s = save(cm->player, cm->scene->name, cm->context->game->indexDir);
+        const SaveFile *s = save(cm->player, cm->scene->name, cm->context->indexDir);
         addSaveFile(cm->saveFiles, s);
         addNotification(
                 cm->notificationManager,

@@ -54,7 +54,7 @@ Mobile *createMobileFromData(MobileManager *mm, MobileData *data, Animation *ani
             getDirectionFromString(data->direction),
             animations,
             createAvatar(
-                    mm->context->game->indexDir,
+                    mm->context->indexDir,
                     data->avatar,
                     mm->context->ui->screen->scale),
             data->hp,

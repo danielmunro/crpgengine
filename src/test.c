@@ -43,11 +43,11 @@ FightInScene *createFightInScene(Context *c) {
     fightInScene->e->beastEncountersCount = 1;
     fightInScene->e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
     UIManager *uiMan = createUIManager(
-            loadUIData(c->game->indexDir),
+            loadUIData(c->indexDir),
             NULL,
             NULL,
             NULL);
-    SpellManager *sm = loadSpellManager(c->game->indexDir);
+    SpellManager *sm = loadSpellManager(c->indexDir);
     fightInScene->fm = createFightManager(c, uiMan, sm, NULL);
     fightInScene->im = createItemManager(c);
     loadAllItems(fightInScene->im);
@@ -93,7 +93,7 @@ void canMoveMobTest(Context *c) {
             DIRECTION_DOWN,
             animations,
             createAvatar(
-                    c->game->indexDir,
+                    c->indexDir,
                     "fireas.png",
                     c->ui->screen->scale),
             20,
@@ -129,7 +129,7 @@ void canMobStopMovingTest(Context *c) {
             DIRECTION_DOWN,
             animations,
             createAvatar(
-                    c->game->indexDir,
+                    c->indexDir,
                     "fireas.png",
                     c->ui->screen->scale),
             STARTING_HP,

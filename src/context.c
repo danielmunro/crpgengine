@@ -6,6 +6,7 @@ typedef struct {
     const GameConfig *game;
     const UIConfig *ui;
     UserConfig *user;
+    const char *indexDir;
 } Context;
 
 Context *createContext(
@@ -18,5 +19,6 @@ Context *createContext(
     c->game = gameConfig;
     c->ui = uiConfig;
     c->user = userConfig;
+    c->indexDir = gameConfig->indexDir;
     return c;
 }

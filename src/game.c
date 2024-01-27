@@ -142,7 +142,7 @@ void checkMapInput(Game *g) {
         addInfo("player play time :: %ds", g->player->secondsPlayed);
     }
     if (IsKeyPressed(KEY_S)) {
-        const SaveFile *s = save(g->player, g->scenes->current->name, g->context->game->indexDir);
+        const SaveFile *s = save(g->player, g->scenes->current->name, g->context->indexDir);
         addSaveFile(g->saveFiles, s);
     }
 }
@@ -179,7 +179,7 @@ void checkMenuInput(Game *g) {
                 g->ui->menus,
                 mc);
         if (response->type == RESPONSE_TYPE_SAVE_GAME) {
-            const SaveFile *s = save(g->player, g->scenes->current->name, g->context->game->indexDir);
+            const SaveFile *s = save(g->player, g->scenes->current->name, g->context->indexDir);
             addSaveFile(g->saveFiles, s);
             addMenu(g->menus, findMenu(g->ui->menus, ACKNOWLEDGE_SAVE_MENU));
         } else if (response->type == RESPONSE_TYPE_LOAD_GAME) {
@@ -305,8 +305,8 @@ void loadAllMobiles(Game *g) {
 }
 
 UIManager *initializeUIManager(Game *g) {
-    UIData *uiData = loadUIData(g->context->game->indexDir);
-    Fonts *fonts = createFonts(g->context->game->indexDir, uiData);
+    UIData *uiData = loadUIData(g->context->indexDir);
+    Fonts *fonts = createFonts(g->context->indexDir, uiData);
     UISprite *uiSprite = createUISprite(
             findSpritesheetByName(g->sprites, uiData->sprite->name),
             uiData);
@@ -357,14 +357,14 @@ Game *createGame(Context *c) {
     g->animations = createAnimationManager(c);
     loadAllAnimations(g->animations, g->sprites);
     g->audio = loadAudioManager(c);
-    g->beastiary = loadBeastiary(c->game->indexDir);
+    g->beastiary = loadBeastiary(c->indexDir);
     g->items = createItemManager(c);
     loadAllItems(g->items);
-    g->spells = loadSpellManager(c->game->indexDir);
+    g->spells = loadSpellManager(c->indexDir);
     loadAllMobiles(g);
     g->notifications = createNotificationManager(c);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
-    g->saveFiles = getSaveFiles(c->game->indexDir);
+    g->saveFiles = getSaveFiles(c->indexDir);
     g->saveToLoad = NULL;
     g->timing = createTiming(g->notifications);
     g->ui = initializeUIManager(g);

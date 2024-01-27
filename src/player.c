@@ -254,7 +254,7 @@ bool isChestOpened(const Player *p, int sceneId, int chestId) {
 }
 
 void loadAllPlayerItems(ItemManager *im, Player *p) {
-    ItemsReferenceData *itemsData = loadItemsReferenceData(im->context->game->indexDir);
+    ItemsReferenceData *itemsData = loadItemsReferenceData(im->context->indexDir);
     for (int i = 0; i < itemsData->items_count; i++) {
         Item **items = createItemsFromReferenceData(im, &itemsData->items[i]);
         for (int j = 0; j < itemsData->items[i].quantity; j++) {
