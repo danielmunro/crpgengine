@@ -49,9 +49,9 @@ void sortSaveFiles(const SaveFiles *sf) {
     }
 }
 
-SaveFiles *getSaveFiles() {
+SaveFiles *getSaveFiles(const char *indexDir) {
     const char *savesDirectory = malloc(MAX_FS_PATH_LENGTH);
-    sprintf((char *) savesDirectory, "%s/_saves", config->indexDir);
+    sprintf((char *) savesDirectory, "%s/_saves", indexDir);
     char **files = calloc(MAX_SAVE_FILES, sizeof(char *));
     int count = getFilesInDirectory(savesDirectory, files);
     SaveFiles *sf = createSaveFiles();
@@ -97,7 +97,7 @@ SaveData *createSaveData(const Player *player, const char *scene, const char *sa
     return save;
 }
 
-SaveFile *save(const Player *player, const char *sceneName) {
+SaveFile *save(const Player *player, const char *sceneName, const char *indexDir) {
     addInfo("save player progress");
     time_t t = time(NULL);
     struct tm result;
@@ -113,12 +113,12 @@ SaveFile *save(const Player *player, const char *sceneName) {
             name);
 
     // auto save
-    saveFile(save, config->indexDir, "autosave.yaml");
+    saveFile(save, indexDir, "autosave.yaml");
     char filename[MAX_FS_PATH_LENGTH];
 
     // point-in-time save
     sprintf(filename, "save-%lu.yaml", (unsigned long) time(NULL));
-    saveFile(save, config->indexDir, filename);
+    saveFile(save, indexDir, filename);
 
     SaveFile *s = createSaveFile(filename, save->name, save->time);
     free(date);

@@ -142,7 +142,7 @@ void checkMapInput(Game *g) {
         addInfo("player play time :: %ds", g->player->secondsPlayed);
     }
     if (IsKeyPressed(KEY_S)) {
-        const SaveFile *s = save(g->player, g->scenes->current->name);
+        const SaveFile *s = save(g->player, g->scenes->current->name, g->context->game->indexDir);
         addSaveFile(g->saveFiles, s);
     }
 }
@@ -179,7 +179,7 @@ void checkMenuInput(Game *g) {
                 g->ui->menus,
                 mc);
         if (response->type == RESPONSE_TYPE_SAVE_GAME) {
-            const SaveFile *s = save(g->player, g->scenes->current->name);
+            const SaveFile *s = save(g->player, g->scenes->current->name, g->context->game->indexDir);
             addSaveFile(g->saveFiles, s);
             addMenu(g->menus, findMenu(g->ui->menus, ACKNOWLEDGE_SAVE_MENU));
         } else if (response->type == RESPONSE_TYPE_LOAD_GAME) {
@@ -328,6 +328,7 @@ UIManager *initializeUIManager(Game *g) {
 
 void initializeGameForPlayer(Game *g) {
     g->controls = createControlManager(
+            g->context,
             g->player,
             g->items,
             g->notifications,
@@ -363,7 +364,7 @@ Game *createGame(Context *c) {
     loadAllMobiles(g);
     g->notifications = createNotificationManager(c);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
-    g->saveFiles = getSaveFiles();
+    g->saveFiles = getSaveFiles(c->game->indexDir);
     g->saveToLoad = NULL;
     g->timing = createTiming(g->notifications);
     g->ui = initializeUIManager(g);

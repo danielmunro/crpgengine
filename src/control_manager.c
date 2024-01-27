@@ -9,6 +9,7 @@
 #include "headers/save.h"
 
 typedef struct {
+    Context *context;
     Scene *scene;
     Player *player;
     ItemManager *itemManager;
@@ -18,12 +19,14 @@ typedef struct {
 } ControlManager;
 
 ControlManager *createControlManager(
+        Context *c,
         Player *player,
         ItemManager *itemManager,
         NotificationManager *notificationManager,
         MobileManager *mobileManager,
         SaveFiles *saveFiles) {
     ControlManager *cm = malloc(sizeof(ControlManager));
+    cm->context = c;
     cm->player = player;
     cm->itemManager = itemManager;
     cm->notificationManager = notificationManager;
@@ -98,7 +101,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         progress++;
     } else if (needsToSave(then)) {
         addDebug("save player game :: scene: %s", cm->scene->name);
-        const SaveFile *s = save(cm->player, cm->scene->name);
+        const SaveFile *s = save(cm->player, cm->scene->name, cm->context->game->indexDir);
         addSaveFile(cm->saveFiles, s);
         addNotification(
                 cm->notificationManager,
