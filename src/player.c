@@ -1,6 +1,5 @@
 #include <math.h>
 
-#include "headers/util/util.h"
 #include "headers/util/log.h"
 #include "headers/direction.h"
 #include "headers/persistence/cyaml.h"
