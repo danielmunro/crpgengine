@@ -57,17 +57,17 @@ MobileData *loadMobYaml(const char *filePath) {
     return mob;
 }
 
-ItemsData *loadItemYaml() {
+ItemsData *loadItemYaml(const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/items.yaml", config->indexDir);
+    sprintf(filePath, "%s/items.yaml", indexDir);
     ItemsData *items = malloc(sizeof(ItemsData));
     loadYamlFile(filePath, itemsSchema, (cyaml_data_t **) &items);
     return items;
 }
 
-BeastiaryData *loadBeastiaryYaml() {
+BeastiaryData *loadBeastiaryYaml(const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/beastiary.yaml", config->indexDir);
+    sprintf(filePath, "%s/beastiary.yaml", indexDir);
     BeastiaryData *beastiary = malloc(sizeof(BeastiaryData));
     loadYamlFile(filePath, beastiaryTopSchema, (cyaml_data_t **) &beastiary);
     return beastiary;
@@ -99,33 +99,33 @@ void saveSaveData(const SaveData *saveData, const char *filePath) {
     }
 }
 
-SpellsData *loadSpellData() {
+SpellsData *loadSpellData(const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/spells.yaml", config->indexDir);
+    sprintf(filePath, "%s/spells.yaml", indexDir);
     SpellsData *spells = malloc(sizeof(SpellsData));
     loadYamlFile(filePath, spellsTopSchema, (cyaml_data_t **) &spells);
     return spells;
 }
 
-UIData *loadUIData() {
+UIData *loadUIData(const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/ui.yaml", config->indexDir);
+    sprintf(filePath, "%s/ui.yaml", indexDir);
     UIData *ui = malloc(sizeof(UIData));
     loadYamlFile(filePath, uiSchema, (cyaml_data_t **) &ui);
     return ui;
 }
 
-StartPartyData *loadStartPartyData() {
+StartPartyData *loadStartPartyData(const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/player/start_party.yaml", config->indexDir);
+    sprintf(filePath, "%s/player/start_party.yaml", indexDir);
     StartPartyData *startParty = malloc(sizeof(StartPartyData));
     loadYamlFile(filePath, startPartyTopSchema, (cyaml_data_t **) &startParty);
     return startParty;
 }
 
-ItemsReferenceData *loadItemsReferenceData() {
+ItemsReferenceData *loadItemsReferenceData(const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/player/items.yaml", config->indexDir);
+    sprintf(filePath, "%s/player/items.yaml", indexDir);
     ItemsReferenceData *items = malloc(sizeof(ItemsReferenceData));
     loadYamlFile(filePath, itemsReferenceSchema, (cyaml_data_t **) &items);
     return items;
@@ -137,9 +137,9 @@ ShopData *loadShopYaml(const char *filePath) {
     return shop;
 }
 
-void saveUserConfigData(const UserConfigData *userConfig) {
+void saveUserConfigData(const UserConfigData *userConfig, const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/user_config.yaml", config->indexDir);
+    sprintf(filePath, "%s/user_config.yaml", indexDir);
     cyaml_err_t err = cyaml_save_file(filePath, &cyamlConfig,
                                       &userConfigTopSchema, userConfig, 0);
     if (err != CYAML_OK) {
@@ -149,15 +149,15 @@ void saveUserConfigData(const UserConfigData *userConfig) {
     }
 }
 
-UserConfigData *loadUserConfigYaml() {
+UserConfigData *loadUserConfigYaml(const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/user_config.yaml", config->indexDir);
+    sprintf(filePath, "%s/user_config.yaml", indexDir);
     if (!FileExists(filePath)) {
         char templateFilePath[MAX_FS_PATH_LENGTH];
-        sprintf(templateFilePath, "%s/user_config.yaml.template", config->indexDir);
+        sprintf(templateFilePath, "%s/user_config.yaml.template", indexDir);
         UserConfigData *cfg = malloc(sizeof(UserConfigData));
         loadYamlFile(templateFilePath, userConfigTopSchema, (cyaml_data_t **) &cfg);
-        saveUserConfigData(cfg);
+        saveUserConfigData(cfg, indexDir);
         return cfg;
     }
     UserConfigData *cfg = malloc(sizeof(UserConfigData));

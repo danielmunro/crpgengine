@@ -43,13 +43,13 @@ FightInScene *createFightInScene(Context *c) {
     fightInScene->e->beastEncountersCount = 1;
     fightInScene->e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
     UIManager *uiMan = createUIManager(
-            loadUIData(),
+            loadUIData(c->game->indexDir),
             NULL,
             NULL,
             NULL);
-    SpellManager *sm = loadSpellManager();
+    SpellManager *sm = loadSpellManager(c->game->indexDir);
     fightInScene->fm = createFightManager(c, uiMan, sm, NULL);
-    fightInScene->im = createItemManager();
+    fightInScene->im = createItemManager(c);
     loadAllItems(fightInScene->im);
     fightInScene->mm = createMobileManager(
             sm,

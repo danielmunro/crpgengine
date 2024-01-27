@@ -305,7 +305,7 @@ void loadAllMobiles(Game *g) {
 }
 
 UIManager *initializeUIManager(Game *g) {
-    UIData *uiData = loadUIData();
+    UIData *uiData = loadUIData(g->context->game->indexDir);
     Fonts *fonts = createFonts(g->context->game->indexDir, uiData);
     UISprite *uiSprite = createUISprite(
             findSpritesheetByName(g->sprites, uiData->sprite->name),
@@ -358,9 +358,9 @@ Game *createGame(Context *c) {
     loadAllAnimations(g->animations, g->sprites);
     g->audio = loadAudioManager(c);
     g->beastiary = loadBeastiary(c->game->indexDir);
-    g->items = createItemManager();
+    g->items = createItemManager(c);
     loadAllItems(g->items);
-    g->spells = loadSpellManager();
+    g->spells = loadSpellManager(c->game->indexDir);
     loadAllMobiles(g);
     g->notifications = createNotificationManager(c);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));

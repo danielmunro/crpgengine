@@ -31,6 +31,6 @@ MenuSelectResponse *settingsDifficultyMenuItemSelected(const MenuContext *mc) {
     } else if (mc->cursorLine == 2) {
         userConfig->difficulty = DIFFICULTY_CHALLENGE;
     }
-    saveUserConfig(userConfig);
+    saveUserConfig(userConfig, mc->context->game->indexDir);
     return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, SETTINGS_DIFFICULTY_MENU);
 }

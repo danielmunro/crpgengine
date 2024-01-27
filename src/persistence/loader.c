@@ -334,7 +334,7 @@ SpritesheetManager *loadSpritesheetManager(Context *c) {
 }
 
 void loadAllItems(ItemManager *itemManager) {
-    const ItemsData *itemsData = loadItemYaml();
+    const ItemsData *itemsData = loadItemYaml(itemManager->context->game->indexDir);
     itemManager->items = calloc(itemsData->items_count, sizeof(ItemData));
     for (int i = 0; i < itemsData->items_count; i++) {
         itemManager->items[i] = createItemFromData(&itemsData->items[i]);
@@ -358,7 +358,7 @@ void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm) {
 }
 
 Beastiary *loadBeastiary(const char *indexDir) {
-    BeastiaryData *data = loadBeastiaryYaml();
+    BeastiaryData *data = loadBeastiaryYaml(indexDir);
     Beastiary *beastiary = malloc(sizeof(Beastiary));
     beastiary->count = data->beasts_count;
     for (int i = 0; i < data->beasts_count; i++) {
@@ -369,8 +369,8 @@ Beastiary *loadBeastiary(const char *indexDir) {
     return beastiary;
 }
 
-SpellManager *loadSpellManager() {
-    SpellsData *data = loadSpellData();
+SpellManager *loadSpellManager(const char *indexDir) {
+    SpellsData *data = loadSpellData(indexDir);
     Spell **spells = calloc(MAX_SPELLS, sizeof(Spell));
     for (int i = 0; i < data->spells_count; i++) {
         spells[i] = createSpellFromData(data->spells[i]);

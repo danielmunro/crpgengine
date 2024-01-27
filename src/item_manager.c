@@ -1,12 +1,14 @@
 #include <string.h>
 
 typedef struct {
+    Context *context;
     Item **items;
     int count;
 } ItemManager;
 
-ItemManager *createItemManager() {
+ItemManager *createItemManager(Context *c) {
     ItemManager *im = malloc(sizeof(ItemManager));
+    im->context = c;
     im->items = calloc(MAX_ITEMS, sizeof(Item));
     im->count = 0;
     return im;

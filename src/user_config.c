@@ -51,14 +51,14 @@ UserConfigData *createUserConfigData(const UserConfig *cfg) {
     return data;
 }
 
-void saveUserConfig(const UserConfig *cfg) {
+void saveUserConfig(const UserConfig *cfg, const char *indexDir) {
     UserConfigData *data = createUserConfigData(cfg);
-    saveUserConfigData(data);
+    saveUserConfigData(data, indexDir);
     free(data);
 }
 
-UserConfig *createUserConfig() {
-    UserConfigData *data = loadUserConfigYaml();
+UserConfig *createUserConfig(const char *indexDir) {
+    UserConfigData *data = loadUserConfigYaml(indexDir);
     UserConfig *userConfig = createUserConfigFromData(data);
     free(data);
     return userConfig;

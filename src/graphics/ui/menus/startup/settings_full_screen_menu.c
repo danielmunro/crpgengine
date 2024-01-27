@@ -27,11 +27,11 @@ MenuSelectResponse *settingsFullScreenMenuItemSelected(const MenuContext *mc) {
     if (mc->cursorLine == 0 && !userConfig->fullScreen) {
         ToggleFullscreen();
         userConfig->fullScreen = true;
-        saveUserConfig(userConfig);
+        saveUserConfig(userConfig, mc->context->game->indexDir);
     } else if (mc->cursorLine == 1 && userConfig->fullScreen) {
         ToggleFullscreen();
         userConfig->fullScreen = false;
-        saveUserConfig(userConfig);
+        saveUserConfig(userConfig, mc->context->game->indexDir);
     }
     return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, SETTINGS_FULL_SCREEN_MENU);
 }

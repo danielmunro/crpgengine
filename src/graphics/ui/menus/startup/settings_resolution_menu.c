@@ -32,6 +32,6 @@ MenuSelectResponse *settingsResolutionMenuItemSelected(const MenuContext *mc) {
     SetWindowSize(userConfig->resolution.width, userConfig->resolution.height);
     setTextAreasFromData(mc->context->ui->textAreas, userConfig->resolution);
     clearTextBoxes(mc->textBoxes);
-    saveUserConfig(userConfig);
+    saveUserConfig(userConfig, mc->context->game->indexDir);
     return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, SETTINGS_RESOLUTION_MENU);
 }

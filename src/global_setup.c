@@ -10,8 +10,8 @@ Log *setupLogging(LogLevel logLevel) {
     return createLog(logLevel);
 }
 
-UIConfig *setupUIConfig(Resolution resolution) {
-    UIData *uiConfigData = loadUIData();
+UIConfig *setupUIConfig(Resolution resolution, const char *indexDir) {
+    UIData *uiConfigData = loadUIData(indexDir);
     UIConfig *uiConfig = createUIConfig(uiConfigData, resolution);
     free(uiConfigData);
     return uiConfig;
@@ -42,8 +42,8 @@ void runGame(Game *g) {
 Context *globalSetup() {
     const GameConfig *gameConfig = createGameConfigFromData(loadGameConfigYaml());
     const Log *log = setupLogging(gameConfig->logLevel);
-    UserConfig *userConfig = createUserConfig();
-    const UIConfig *uiConfig = setupUIConfig(userConfig->resolution);
+    UserConfig *userConfig = createUserConfig(gameConfig->indexDir);
+    const UIConfig *uiConfig = setupUIConfig(userConfig->resolution, gameConfig->indexDir);
     initWindow(
             userConfig->resolution,
             userConfig->fullScreen,

@@ -57,7 +57,7 @@ Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *sa
 
 Player *createNewPlayer(MobileManager *mm, ItemManager *im) {
     addInfo("creating new player");
-    StartPartyData *data = loadStartPartyData();
+    StartPartyData *data = loadStartPartyData(mm->context->game->indexDir);
     Mobile *mobiles[MAX_PARTY_SIZE];
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         mobiles[i] = NULL;
