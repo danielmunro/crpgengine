@@ -1,13 +1,13 @@
 #include "headers/graphics/ui/menu.h"
 
-int getQuantitySelectCursorLength() {
+int getQuantityBuyCursorLength() {
     return 2;
 }
 
-void drawQuantitySelectMenuScreen(MenuContext *mc) {
+void drawQuantityBuyMenuScreen(MenuContext *mc) {
     TextBox *b = findOrCreateTextBox(
             mc,
-            QUANTITY_SELECT_BOX,
+            QUANTITY_BUY_BOX,
             mc->context->ui->textAreas->alert);
     drawMenuRect(mc->context->ui->menu, b->area);
     drawInMenu(b, "How many would you like to buy?");
@@ -16,7 +16,7 @@ void drawQuantitySelectMenuScreen(MenuContext *mc) {
     drawInMenu(b, amount);
     TextBox *b2 = findOrCreateTextBox(
             mc,
-            SHOP_QUANTITY_COSTS_BOX,
+            SHOP_QUANTITY_BUY_BOX,
             mc->context->ui->textAreas->alertRight);
     char costText[24];
     sprintf(costText, "= %d", (mc->quantity) * mc->itemToBuy->worth);
@@ -42,17 +42,19 @@ void drawQuantitySelectMenuScreen(MenuContext *mc) {
             });
 }
 
-MenuSelectResponse *quantitySelectMenuItemSelected(const MenuContext *mc) {
-    return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, SHOP_CONFIRM_PURCHASE_MENU);
+MenuSelectResponse *quantityBuyMenuItemSelected(const MenuContext *mc) {
+    return createMenuSelectResponse(
+            RESPONSE_TYPE_OPEN_MENU,
+            SHOP_CONFIRM_PURCHASE_MENU);
 }
 
-int getMaxQuantity(const MenuContext *mc) {
+int getMaxBuyQuantity(const MenuContext *mc) {
     return mc->player->coins / mc->itemToBuy->worth;
 }
 
-MenuKeyPressedType quantitySelectKeyPressed(const MenuContext *mc) {
+MenuKeyPressedType quantityBuyKeyPressed(const MenuContext *mc) {
     if (IsKeyPressed(KEY_UP)) {
-        if (getMaxQuantity(mc) > mc->quantity) {
+        if (getMaxBuyQuantity(mc) > mc->quantity) {
             return KEY_PRESSED_INCREMENT_QUANTITY;
         }
         return KEY_PRESSED_NOTHING_TO_DO;

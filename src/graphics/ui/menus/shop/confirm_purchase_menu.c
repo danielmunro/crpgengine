@@ -7,7 +7,7 @@ int getConfirmPurchaseCursorLength() {
 void drawConfirmPurchaseMenuScreen(MenuContext *mc) {
     TextBox *b = findOrCreateTextBox(
             mc,
-            QUANTITY_SELECT_BOX,
+            QUANTITY_BUY_BOX,
             mc->context->ui->textAreas->alert);
     drawMenuRect(mc->context->ui->menu, b->area);
     char purchaseText[64];
@@ -28,5 +28,7 @@ MenuSelectResponse *confirmPurchaseMenuItemSelected(MenuContext *mc) {
     }
     mc->player->coins -= mc->itemToBuy->worth * mc->quantity;
     mc->quantity = 1;
-    return createMenuSelectResponse(RESPONSE_TYPE_CLOSE_MENU, SHOP_QUANTITY_SELECT_MENU);
+    return createMenuSelectResponse(
+            RESPONSE_TYPE_CLOSE_MENU,
+            SHOP_QUANTITY_BUY_MENU);
 }
