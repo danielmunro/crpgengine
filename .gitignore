@@ -10,9 +10,11 @@ _deps/
 _saves/
 CMakeCache.txt
 .DS_Store
-Project.cbp
+crpgengine.cbp
 Makefile
 CPackConfig.cmake
 CPackSourceConfig.cmake
 cmake_install.cmake
 user_config.yaml
+libtap.so
+libcyaml.1.dylib

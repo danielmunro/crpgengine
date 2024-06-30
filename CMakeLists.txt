@@ -39,8 +39,9 @@ ExternalProject_Add(LibTap
         CONFIGURE_COMMAND ""
         BUILD_COMMAND make
         BUILD_IN_SOURCE 1)
-link_directories(_deps/src/LibTap)
-include_directories(_deps/src/LibTap)
+link_directories(${CMAKE_SOURCE_DIR}/_deps/src/LibTap)
+include_directories(${CMAKE_SOURCE_DIR}/_deps/src/LibTap)
+file(CREATE_LINK ${CMAKE_SOURCE_DIR}/_deps/src/LibTap/libtap.so ${CMAKE_SOURCE_DIR}//libtap.so SYMBOLIC)
 
 # add libyaml
 ExternalProject_Add(LibYaml
@@ -50,8 +51,9 @@ ExternalProject_Add(LibYaml
         CONFIGURE_COMMAND ""
         BUILD_COMMAND make
         BUILD_IN_SOURCE 1)
-link_directories(_deps/src/LibYaml/release/usr/local/lib)
-include_directories(_deps/src/LibYaml/release/usr/local/include)
+link_directories(${CMAKE_SOURCE_DIR}/_deps/src/LibYaml/release/usr/local/lib)
+include_directories(${CMAKE_SOURCE_DIR}/_deps/src/LibYaml/release/usr/local/include)
+file(CREATE_LINK ${CMAKE_SOURCE_DIR}/_deps/src/LibYaml/release/usr/local/lib/libcyaml.1.dylib ${CMAKE_SOURCE_DIR}/libcyaml.1.dylib SYMBOLIC)
 
 # add project source
 include_directories(.)
