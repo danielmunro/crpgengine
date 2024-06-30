@@ -1,4 +1,3 @@
-#include <raylib.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "headers/user_config.h"

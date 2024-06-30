@@ -1,6 +1,5 @@
 #include <mm_malloc.h>
 #include <string.h>
-#include <raylib.h>
 #include <libxml/xmlreader.h>
 #include "headers/persistence/db.h"
 #include "headers/tile.h"

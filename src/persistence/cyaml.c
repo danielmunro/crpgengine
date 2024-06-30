@@ -1,4 +1,3 @@
-#include <raylib.h>
 #include "headers/persistence/cyaml_config.h"
 #include "headers/config.h"
 #include "headers/errors.h"

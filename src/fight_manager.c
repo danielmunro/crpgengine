@@ -1,4 +1,3 @@
-#include <raylib.h>
 #include "headers/util/log.h"
 #include "headers/player.h"
 #include "headers/graphics/ui/menu.h"

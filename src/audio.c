@@ -1,5 +1,4 @@
 #include <mm_malloc.h>
-#include <raylib.h>
 #include "headers/util/log.h"
 #include "headers/persistence/cyaml.h"
 #include "headers/context.h"

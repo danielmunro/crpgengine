@@ -12,7 +12,7 @@ overrideStartScene: ""
 #   * info -- default
 #   * warn -- misconfigurations or edge cases that should not stop game execution
 #   * error -- almost always a fatal error
-logLevel: info
+logLevel: debug
 
 # Exit the game immediately after loading. Useful for debugging startup
 # problems.

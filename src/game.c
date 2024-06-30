@@ -1,5 +1,5 @@
-#include <raylib.h>
 #include <string.h>
+#include "../_deps/raylib-build/raylib/include/raylib.h"
 #include "headers/util/log.h"
 #include "headers/scene_manager.h"
 #include "headers/map.h"

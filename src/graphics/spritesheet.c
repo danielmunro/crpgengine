@@ -1,5 +1,4 @@
 #include <string.h>
-#include <raylib.h>
 #include <mm_malloc.h>
 #include <math.h>
 #include "headers/context.h"

@@ -1,4 +1,3 @@
-#include <raylib.h>
 #include <mm_malloc.h>
 #include <string.h>
 #include "headers/util/log.h"

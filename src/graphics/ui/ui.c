@@ -1,5 +1,5 @@
 #include <string.h>
-#include "src/headers/graphics/ui/menu_type.h"
+#include "headers/graphics/ui/menu_type.h"
 #include "headers/util/util.h"
 
 typedef struct {

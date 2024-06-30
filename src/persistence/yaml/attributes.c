@@ -54,7 +54,7 @@ static const cyaml_schema_field_t attributesFieldSchema[] = {
         CYAML_FIELD_INT(
                 "mana", CYAML_FLAG_OPTIONAL, AttributesData, mana),
         CYAML_FIELD_MAPPING_PTR(
-                "ac", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
+                "armor", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
                 AttributesData, ac, acFieldSchema),
         CYAML_FIELD_END
 };

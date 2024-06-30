@@ -6,11 +6,9 @@
 #include <sys/time.h>
 #include <math.h>
 #include <sys/resource.h>
-#include <raylib.h>
 #include <unistd.h>
 #include <libgen.h>
 #include "headers/util/log.h"
-#include "headers/direction.h"
 #include "headers/errors.h"
 
 typedef struct {

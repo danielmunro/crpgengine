@@ -1,4 +1,3 @@
-#include <raylib.h>
 #include <libxml/xmlreader.h>
 #include "headers/util/util.h"
 

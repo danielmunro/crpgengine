@@ -5,7 +5,7 @@ beasts:
     str: 1
     dex: 1
     con: 1
-    ac:
+    armor:
       fire: -5
       frost: 5
   level: 3
@@ -18,7 +18,7 @@ beasts:
     str: 2
     dex: 2
     con: 4
-    ac:
+    armor:
       fire: -5
       frost: 10
   level: 6
