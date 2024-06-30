@@ -1,0 +1,5 @@
+if ! test -f Makefile; then
+    cmake .
+fi
+make
+DYLD_FALLBACK_LIBRARY_PATH=_deps/src/LibYaml/release/usr/local/lib ./build/crpgengine
