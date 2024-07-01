@@ -39,8 +39,14 @@ ExternalProject_Add(LibTap
         CONFIGURE_COMMAND ""
         BUILD_COMMAND make
         BUILD_IN_SOURCE 1)
+<<<<<<< Updated upstream
 link_directories(_deps/src/LibTap)
 include_directories(_deps/src/LibTap)
+=======
+link_directories(${CMAKE_SOURCE_DIR}/_deps/src/LibTap)
+include_directories(${CMAKE_SOURCE_DIR}/_deps/src/LibTap)
+add_library(tap STATIC ${CMAKE_SOURCE_DIR}/_deps/src/LibTap/tap.c)
+>>>>>>> Stashed changes
 
 # add libyaml
 ExternalProject_Add(LibYaml
@@ -50,8 +56,14 @@ ExternalProject_Add(LibYaml
         CONFIGURE_COMMAND ""
         BUILD_COMMAND make
         BUILD_IN_SOURCE 1)
+<<<<<<< Updated upstream
 link_directories(_deps/src/LibYaml/release/usr/local/lib)
 include_directories(_deps/src/LibYaml/release/usr/local/include)
+=======
+link_directories(${CMAKE_SOURCE_DIR}/_deps/src/LibYaml/release/usr/local/lib)
+include_directories(${CMAKE_SOURCE_DIR}/_deps/src/LibYaml/release/usr/local/include)
+add_library(cyaml STATIC ${CMAKE_SOURCE_DIR}/_deps/src/LibYaml/build/release/static/src/free.o ${CMAKE_SOURCE_DIR}/_deps/src/LibYaml/src/load.c ${CMAKE_SOURCE_DIR}/_deps/src/LibYaml/src/mem.c ${CMAKE_SOURCE_DIR}/_deps/src/LibYaml/src/utf8.c ${CMAKE_SOURCE_DIR}/_deps/src/LibYaml/src/util.c ${CMAKE_SOURCE_DIR}/_deps/src/LibYaml/src/free.c)
+>>>>>>> Stashed changes
 
 # add project source
 include_directories(.)
