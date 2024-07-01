@@ -5,6 +5,7 @@
 #include "headers/map.h"
 #include "headers/fight.h"
 #include "headers/shop.h"
+#include "headers/scene.h"
 
 typedef enum {
     SCENE_TYPE_TOWN,

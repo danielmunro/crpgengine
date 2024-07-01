@@ -1,7 +1,6 @@
 #include <raylib.h>
 #include <stdio.h>
 #include "headers/config.h"
-#include "headers/graphics/ui/ui.h"
 
 typedef struct {
     Texture image;

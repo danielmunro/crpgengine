@@ -122,6 +122,7 @@ SaveFile *save(const Player *player, const char *sceneName, const char *indexDir
 
     SaveFile *s = createSaveFile(filename, save->name, save->time);
     free(date);
+    free(save->player);
     free(save);
     return s;
 }

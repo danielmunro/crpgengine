@@ -60,7 +60,7 @@ void processAnimations(AnimationManager *am) {
         if (am->animations[i]->isPlaying) {
             incrementAnimationFrame(
                     am->animations[i],
-                    am->context->ui->screen->targetFrameRate);
+                    (float) am->context->ui->screen->targetFrameRate);
         }
     }
 }

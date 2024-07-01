@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include "headers/notification.h"
 
 void drawFightBackground(Encounters *encounters, Resolution r) {
     float scale = (float) r.width / (float) encounters->background.width;
@@ -47,7 +48,7 @@ void drawFightPlayer(Player *player, Resolution r, int targetFPS) {
         Direction animationType = mob->isFleeing ? DIRECTION_RIGHT : DIRECTION_LEFT;
         Animation *animation = findAnimation(mob->animations, animationType);
         if (mob->isFleeing) {
-            incrementAnimationFrame(animation, targetFPS);
+            incrementAnimationFrame(animation, (float) targetFPS);
         }
         drawAnimation(animation, position);
     }
