@@ -87,9 +87,8 @@ void drawNotifications(NotificationManager *nm, FontStyle *font) {
             (float) nm->context->user->resolution.width
                 - NOTIFICATION_WIDTH
                 - ui->menu->padding,
-            (float) ((float) nm->context->user->resolution.height
-                - (ui->menu->padding * (float) (i + 1))
-                - (float) (NOTIFICATION_HEIGHT * (i + 1))),
+            (float) ((ui->menu->padding * (float) (i + 1))
+                + (float) (NOTIFICATION_HEIGHT * (i))),
             NOTIFICATION_WIDTH,
             NOTIFICATION_HEIGHT,
         };
@@ -97,7 +96,7 @@ void drawNotifications(NotificationManager *nm, FontStyle *font) {
             rect.x += (float) (nm->timeSinceUpdateInMs / 2);
         }
         if (nm->notifications[0] == NULL && nm->notifications[1] != NULL && nm->slideDown > 0) {
-            rect.y += NOTIFICATION_HEIGHT + ui->menu->padding - nm->slideDown;
+            rect.y -= NOTIFICATION_HEIGHT + ui->menu->padding - nm->slideDown;
         }
         if (nm->notifications[i] != NULL) {
             drawMenuRect(ui->menu, rect);
