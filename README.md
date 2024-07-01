@@ -9,31 +9,37 @@ new syntax to learn.
 
 ## Running RPGEngine
 
-TODO: document host system dependencies.
+1. Clone this repository and `cd` to it:
 
-Clone this repository:
+    ```
+    git clone git@github.com:danielmunro/cjrpgengine.git
+    cd crpgengine
+    ```
 
-```
-git clone git@github.com:danielmunro/cjrpgengine.git
-```
+2. Make the project:
 
-Run cmake:
+    ```
+    cmake .
+    make
+    ```
 
-```
-cmake .
-```
+3. Export the following dynamic lib fallback paths:
 
-Make the project:
+    ```
+    export DYLD_FALLBACK_LIBRARY_PATH=$PWD/_deps/src/LibTap:$PWD/_deps/src/LibYaml/release/usr/local/lib
+    ```
 
-```
-make
-```
+4. Run the provided example game:
+    
+    ```
+    ./build/crpgengine
+    ```
+   
+    Tests can also be run:
 
-Run the provided example game:
-
-```
-./build/cjrpgengine
-```
+    ```
+    ./build/tests
+    ```
 
 ## Runtime Configuration
 
