@@ -1,83 +1,12 @@
 #include "tap.h"
 #include "headers/test.h"
 #include "headers/global_setup.h"
-
-Beast *createTestBeast() {
-    Beast *beast = malloc(sizeof(Beast));
-    beast->id = 0;
-    beast->name = "foo";
-    beast->gp = 1;
-    beast->hp = 20;
-    beast->mana = 100;
-    beast->level = 100;
-    beast->attributes = createEmptyAttributes();
-    return beast;
-}
-
-AnimationManager *createTestAnimationManager(Context *c) {
-    AnimationManager *am = createAnimationManager(c);
-    SpritesheetManager *sm = loadSpritesheetManager(c);
-    loadAllAnimations(am, sm);
-    free(sm);
-    return am;
-}
-
-Attributes *createTestAttributes() {
-    Attributes *a = createEmptyAttributes();
-    a->hp = STARTING_HP;
-    a->mana = STARTING_MANA;
-    a->strength = 5;
-    return a;
-}
-
-typedef struct {
-    Encounters *e;
-    FightManager *fm;
-    MobileManager *mm;
-    ItemManager *im;
-} FightInScene;
-
-FightInScene *createFightInScene(Context *c) {
-    FightInScene *fightInScene = malloc(sizeof(FightInScene));
-    fightInScene->e = createEncounters();
-    fightInScene->e->beastEncountersCount = 1;
-    fightInScene->e->beastEncounters[0] = createBeastEncounter(createTestBeast(), 5);
-    UIManager *uiMan = createUIManager(
-            loadUIData(c->indexDir),
-            NULL,
-            NULL,
-            NULL);
-    SpellManager *sm = loadSpellManager(c->indexDir);
-    fightInScene->fm = createFightManager(c, uiMan, sm, NULL);
-    fightInScene->im = createItemManager(c);
-    loadAllItems(fightInScene->im);
-    fightInScene->mm = createMobileManager(
-            sm,
-            createTestAnimationManager(c),
-            c);
-    loadPlayerMobiles(fightInScene->mm);
-    return fightInScene;
-}
-
-Fight *createFightFromFightInScene(FightInScene *fightInScene) {
-    return createFightFromEncounters(
-            fightInScene->fm,
-            fightInScene->e,
-            createNewPlayer(fightInScene->mm, fightInScene->im));
-}
-
-void createFightInSceneTest(Context *c) {
-    FightInScene *fightInScene = createFightInScene(c);
-    for (int i = 0; i < 100; i++) {
-        createFightFromFightInScene(fightInScene);
-        const Fight *f = fightInScene->fm->fight;
-        char message[MAX_LOG_LINE_LENGTH];
-        sprintf(message, "beast count is within expected range: %d", f->beastCount);
-        ok(0 < f->beastCount && f->beastCount <= 9, message);
-    }
-}
+#include "headers/fight_test.h"
+#include "headers/util/test_util.h"
 
 void canMoveMobTest(Context *c) {
+    plan(2);
+
     // given
     float startX = 100;
     float startY = 100;
@@ -115,6 +44,8 @@ void canMoveMobTest(Context *c) {
 }
 
 void canMobStopMovingTest(Context *c) {
+    plan(2);
+
     // given
     float startX = 100;
     float startY = 100;
@@ -148,6 +79,8 @@ void canMobStopMovingTest(Context *c) {
 }
 
 void experienceToLevel1Test() {
+    plan(1);
+
     // when
     int experience = getExperienceToLevel(1);
 
@@ -156,6 +89,8 @@ void experienceToLevel1Test() {
 }
 
 void experienceToLevel51Test() {
+    plan(1);
+
     // when
     int experience = getExperienceToLevel(51);
 
@@ -165,7 +100,6 @@ void experienceToLevel51Test() {
 
 int main() {
     Context *c = globalSetup();
-    plan(106);
     createFightInSceneTest(c);
     canMoveMobTest(c);
     canMobStopMovingTest(c);
