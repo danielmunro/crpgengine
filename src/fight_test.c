@@ -1,6 +1,9 @@
+#include <tap.h>
 #include "headers/fight.h"
 #include "headers/util/test_util.h"
 #include "headers/persistence/loader.h"
+#include "headers/player_manager.h"
+#include "headers/fight_manager.h"
 
 typedef struct {
     Encounters *e;
@@ -51,7 +54,6 @@ Fight *createFightFromFightInScene(FightInScene *fightInScene) {
 }
 
 void createFightInSceneTest(Context *c) {
-    plan(100);
     FightInScene *fightInScene = createFightInScene(c);
     for (int i = 0; i < 100; i++) {
         createFightFromFightInScene(fightInScene);
@@ -60,4 +62,5 @@ void createFightInSceneTest(Context *c) {
         sprintf(message, "beast count is within expected range: %d", f->beastCount);
         ok(0 < f->beastCount && f->beastCount <= 9, message);
     }
+    free(fightInScene);
 }

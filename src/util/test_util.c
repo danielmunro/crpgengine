@@ -1,3 +1,5 @@
+#include "headers/test.h"
+
 AnimationManager *createTestAnimationManager(Context *c) {
     AnimationManager *am = createAnimationManager(c);
     SpritesheetManager *sm = loadSpritesheetManager(c);
