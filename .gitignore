@@ -10,7 +10,7 @@ _deps/
 _saves/
 CMakeCache.txt
 .DS_Store
-Project.cbp
+crpgengine.cbp
 Makefile
 CPackConfig.cmake
 CPackSourceConfig.cmake
