@@ -1,7 +1,7 @@
 #include <tap.h>
 #include "headers/player.h"
 
-void experienceToLevel1Test() {
+void testGainExperienceToLevel1() {
     // when
     int experience = getExperienceToLevel(1);
 
@@ -9,7 +9,7 @@ void experienceToLevel1Test() {
     ok(experience == 1000, "experience value was expected :: %d", experience);
 }
 
-void experienceToLevel51Test() {
+void testGainExperienceToLevel51() {
     // when
     int experience = getExperienceToLevel(51);
 

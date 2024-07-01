@@ -53,7 +53,7 @@ Fight *createFightFromFightInScene(FightInScene *fightInScene) {
             createNewPlayer(fightInScene->mm, fightInScene->im));
 }
 
-void createFightInSceneTest(Context *c) {
+void testBeastCountWithinExpectedRange(Context *c) {
     FightInScene *fightInScene = createFightInScene(c);
     for (int i = 0; i < 100; i++) {
         createFightFromFightInScene(fightInScene);

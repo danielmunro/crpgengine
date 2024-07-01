@@ -1,4 +1,4 @@
-void canMoveMobTest(Context *c) {
+void testCanMoveMob(Context *c) {
     // given
     float startX = 100;
     float startY = 100;
@@ -35,7 +35,7 @@ void canMoveMobTest(Context *c) {
     ok(mob->direction == DIRECTION_RIGHT, "mob is facing right");
 }
 
-void canMobStopMovingTest(Context *c) {
+void testMobCanStopMoving(Context *c) {
     // given
     float startX = 100;
     float startY = 100;

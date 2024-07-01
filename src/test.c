@@ -6,10 +6,10 @@
 
 int main() {
     Context *c = globalSetup();
-    createFightInSceneTest(c);
-    canMoveMobTest(c);
-    canMobStopMovingTest(c);
-    experienceToLevel1Test();
-    experienceToLevel51Test();
+    testBeastCountWithinExpectedRange(c);
+    testCanMoveMob(c);
+    testMobCanStopMoving(c);
+    testGainExperienceToLevel1();
+    testGainExperienceToLevel51();
     done_testing();
 }
