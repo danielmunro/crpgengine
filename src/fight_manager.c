@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <assert.h>
 #include "headers/util/log.h"
 #include "headers/player.h"
 #include "headers/graphics/ui/menu.h"
@@ -139,13 +140,14 @@ Mobile *getFinalMobileTarget(const Fight *fight, Mobile *mob) {
 }
 
 Beast *getFinalBeastTarget(const Fight *fight, ActionParticipant *ap) {
+    assert(fight->beasts != NULL);
     for (int i = 0; i < fight->beastCount; i++) {
         if (fight->beasts[i] == ap->beast) {
             return ap->beast;
         }
     }
     for (int i = ap->beastIndex; i < fight->beastCount; i++) {
-        if (fight->beasts != NULL) {
+        if (fight->beasts[i] != NULL) {
             return fight->beasts[i];
         }
     }
@@ -159,6 +161,7 @@ Beast *getFinalBeastTarget(const Fight *fight, ActionParticipant *ap) {
 
 void attackBeast(FightManager *fm, Action *act) {
     Beast *beast = getFinalBeastTarget(fm->fight, act->target);
+    assert(beast != NULL);
     beast->hp -= act->initiator->mob != NULL
                  ? calculateMobileAttributes(act->initiator->mob).strength
                  : calculateBeastAttributes(act->initiator->beast).strength;

@@ -3,6 +3,7 @@
 #include "headers/attributes.h"
 #include "headers/spell_manager.h"
 #include "headers/graphics/avatar.h"
+#include "headers/direction.h"
 
 typedef struct {
     Context *context;

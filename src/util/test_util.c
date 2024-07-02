@@ -1,4 +1,6 @@
 #include "headers/test.h"
+#include "headers/persistence/loader.h"
+#include "headers/attributes.h"
 
 AnimationManager *createTestAnimationManager(Context *c) {
     AnimationManager *am = createAnimationManager(c);

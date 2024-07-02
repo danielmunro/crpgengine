@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "mm_malloc.h"
 #include "time.h"
 #include "headers/util/log.h"
@@ -38,6 +39,8 @@ void saveFile(const SaveData *save, const char *indexDir, const char *filename) 
 }
 
 void sortSaveFiles(const SaveFiles *sf) {
+    assert(sf != NULL);
+    assert(sf->saves != NULL);
     for (int i = 0; i < sf->count; i++) {
         for (int j = 0; j < sf->count; j++) {
             if (sf->saves[i]->created > sf->saves[j]->created) {

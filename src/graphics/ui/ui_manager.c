@@ -10,7 +10,7 @@ typedef struct {
     UIData *config;
 } UIManager;
 
-Fonts *createFonts(const char *indexDir, UIData *uiConfig) {
+Fonts *createFonts(const char *indexDir, const UIData *uiConfig) {
     Fonts *fonts = malloc(sizeof(Fonts));
     fonts->default_ = createFontFromData(indexDir, uiConfig->fonts->default_);
     fonts->disable = createFontFromData(indexDir, uiConfig->fonts->disable);
