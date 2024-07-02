@@ -117,9 +117,9 @@ SaveFile *save(const Player *player, const char *sceneName, const char *indexDir
 
     // auto save
     saveFile(save, indexDir, "autosave.yaml");
-    char filename[MAX_FS_PATH_LENGTH];
 
     // point-in-time save
+    char *filename = malloc(MAX_FS_PATH_LENGTH);
     sprintf(filename, "save-%lu.yaml", (unsigned long) time(NULL));
     saveFile(save, indexDir, filename);
 

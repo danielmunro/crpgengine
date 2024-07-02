@@ -299,11 +299,6 @@ void run(Game *g) {
     }
 }
 
-void loadAllMobiles(Game *g) {
-    g->mobiles = createMobileManager(g->spells, g->animations, g->context);
-    loadPlayerMobiles(g->mobiles);
-}
-
 UIManager *initializeUIManager(Game *g) {
     UIData *uiData = loadUIData(g->context->indexDir);
     Fonts *fonts = createFonts(g->context->indexDir, uiData);
@@ -361,7 +356,8 @@ Game *createGame(Context *c) {
     g->items = createItemManager(c);
     loadAllItems(g->items);
     g->spells = loadSpellManager(c->indexDir);
-    loadAllMobiles(g);
+    g->mobiles = createMobileManager(g->spells, g->animations, g->context);
+    loadPlayerMobiles(g->mobiles);
     g->notifications = createNotificationManager(c);
     g->menus = calloc(MAX_MENUS, sizeof(Menu));
     g->saveFiles = getSaveFiles(c->indexDir);
