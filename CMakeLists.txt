@@ -58,13 +58,8 @@ include_directories(.)
 
 # define tests executable
 add_executable(tests src/test.c)
-target_link_libraries(tests raylib)
-target_link_libraries(tests tap)
-target_link_libraries(tests ${LIBXML2_LIBRARIES})
-target_link_libraries(tests cyaml)
+target_link_libraries(tests raylib tap cyaml ${LIBXML2_LIBRARIES})
 
 # define main executable
 add_executable(crpgengine src/main.c)
-target_link_libraries(crpgengine raylib)
-target_link_libraries(crpgengine ${LIBXML2_LIBRARIES})
-target_link_libraries(crpgengine cyaml)
+target_link_libraries(crpgengine raylib cyaml ${LIBXML2_LIBRARIES})
