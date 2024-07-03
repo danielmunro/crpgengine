@@ -30,3 +30,19 @@ void testCanSavePlayer(Context *c) {
     // and
     ok(sizeof(sf->saveName) > 0);
 }
+
+void testCanLoadPlayer(Context *c) {
+    // setup
+    Game *g = createGame(c);
+
+    // given
+    initializePlayer(g, g->saveFiles->saves[0]->filename);
+
+    // when
+    initializeGameForPlayer(g);
+
+    // then
+    ok(g->scenes != NULL);
+    ok(g->controls != NULL);
+    ok(strcmp(g->scenes->current->name, g->saveToLoad->scene) == 0);
+}

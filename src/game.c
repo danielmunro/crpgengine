@@ -340,7 +340,6 @@ void initializeGameForPlayer(Game *g) {
             g->items,
             g->beastiary);
     setSceneBasedOnSave(g->scenes, g->player, g->saveToLoad);
-    free(g->saveToLoad);
     g->ui->menuContext->player = g->player;
     addDebug("game initialized for player");
 }

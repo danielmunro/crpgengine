@@ -14,5 +14,6 @@ int main(int argc, char *argv[]) {
     testGainExperienceToLevel1();
     testGainExperienceToLevel51();
     testCanSavePlayer(c);
+    testCanLoadPlayer(c);
     done_testing();
 }
