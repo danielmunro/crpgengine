@@ -3,7 +3,7 @@ project (crpgengine)
 include(ExternalProject)
 set(CMAKE_BUILD_TYPE Debug)
 set(EXECUTABLE_OUTPUT_PATH ./build CACHE PATH "Build directory" FORCE)
-set(CMAKE_C_FLAGS "-Isrc")
+set(CMAKE_C_FLAGS "-Isrc -fprofile-instr-generate -fcoverage-mapping")
 
 # versions
 set(RAYLIB_VERSION 4.2.0)
