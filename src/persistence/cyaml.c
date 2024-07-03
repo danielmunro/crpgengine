@@ -165,10 +165,10 @@ UserConfigData *loadUserConfigYaml(const char *indexDir) {
     return cfg;
 }
 
-ConfigData *loadGameConfigYaml() {
+ConfigData *loadGameConfigYaml(const char *configFile) {
     ConfigData *cfg = malloc(sizeof(ConfigData));
     char filePath[MAX_FS_PATH_LENGTH];
-    cyaml_err_t err = cyaml_load_file("config.yaml", &cyamlConfig,
+    cyaml_err_t err = cyaml_load_file(configFile, &cyamlConfig,
                                       &configTopSchema, (cyaml_data_t **) &cfg, NULL);
     if (err != CYAML_OK) {
         addError("error parsing config yaml :: %s, %s",

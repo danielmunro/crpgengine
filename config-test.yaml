@@ -1,0 +1,45 @@
+# The directory to load the game files from.
+indexDir: examples/simple_demo
+
+# The default scene when starting a new game.
+startScene: tinytown
+
+# The start scene to override for testing purposes.
+overrideStartScene: ""
+
+# The level of logging to use. Options are:
+#   * debug -- very noisy. Enables logging from raylib
+#   * info -- default
+#   * warn -- misconfigurations or edge cases that should not stop game execution
+#   * error -- almost always a fatal error
+logLevel: debug
+
+# Exit the game immediately after loading. Useful for debugging startup
+# problems.
+exit: false
+
+# Player mobs can still take damage, but they cannot die
+immortal: false
+
+# Enable or disable random encounters in dungeons
+randomEncounters: true
+
+# Whether to validate game data after loading
+validate: true
+
+# Log memory usage in regular intervals. Useful for tracking memory leaks.
+logMemoryUsage: false
+
+# Delete all save files. The number of save files can grow quite long during
+# development. This is just a convenience option to clear them out.
+purgeSaves: false
+
+# Show FPS in the game.
+showFPS: false
+
+# Options to enable various object collision overlays. Useful for debugging
+# unexpected collision behavior.
+showCollisions:
+  objects: false
+  player: false
+  warps: false

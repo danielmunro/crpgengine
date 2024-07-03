@@ -3,9 +3,8 @@
 #include "headers/player_manager.h"
 #include "headers/global_setup.h"
 
-void testCanSavePlayer() {
+void testCanSavePlayer(Context *c) {
     // setup
-    Context *c = globalSetup();
     Game *g = createGame(c);
     initializePlayer(g, NULL);
     initializeGameForPlayer(g);

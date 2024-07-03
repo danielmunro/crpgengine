@@ -176,3 +176,12 @@ Texture loadImageTexture(const char *filePath) {
     UnloadImage(im);
     return tex;
 }
+
+char *getConfigFileName(int argc, char *argv[]) {
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "-c") == 0 && i + 1 < argc) {
+            return argv[i + 1];
+        }
+    }
+    return "config.yaml";
+}
