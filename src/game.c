@@ -3,6 +3,7 @@
 #include "headers/util/log.h"
 #include "headers/scene_manager.h"
 #include "headers/map.h"
+#include "headers/map_input_handler.h"
 #include "headers/graphics/ui/menu.h"
 #include "headers/fight_manager.h"
 #include "headers/timing.h"
