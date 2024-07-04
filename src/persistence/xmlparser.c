@@ -330,7 +330,7 @@ Map *parseTilemapDocToMap(
         addError("unable to find map resources for scene :: %s", indexDir);
         exit(ConfigurationErrorMapResourcesMissing);
     }
-    Map *map = createMap(id, doc->name, c);
+    Map *map = createMap(id, c);
     parseTilemapRootNode(map, cur, im);
     xmlFreeNode(cur);
     return map;

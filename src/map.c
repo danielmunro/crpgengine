@@ -34,7 +34,6 @@ typedef struct {
 typedef struct {
     Context *context;
     int sceneId;
-    const char *sceneName;
     MapConfig *config;
     Tileset *tileset;
     Layer **layers;
@@ -57,10 +56,9 @@ typedef struct {
     int shopTileCount;
 } Map;
 
-Map *createMap(int sceneId, const char *sceneName, Context *c) {
+Map *createMap(int sceneId, Context *c) {
     Map *map = malloc(sizeof(Map));
     map->sceneId = sceneId;
-    map->sceneName = sceneName;
     map->context = c;
     map->config = malloc(sizeof(MapConfig));
     map->config->tileSize = (Vector2D) {0, 0};
