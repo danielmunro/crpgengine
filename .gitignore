@@ -16,3 +16,4 @@ CPackConfig.cmake
 CPackSourceConfig.cmake
 cmake_install.cmake
 user_config.yaml
+*.profraw

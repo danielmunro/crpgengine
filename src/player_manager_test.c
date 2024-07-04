@@ -43,6 +43,13 @@ void testCanLoadPlayer(Context *c) {
 
     // then
     ok(g->scenes != NULL);
+
+    // and
     ok(g->controls != NULL);
+
+    // and
     ok(strcmp(g->scenes->current->name, g->saveToLoad->scene) == 0);
+
+    // and
+    ok(g->player != NULL);
 }
