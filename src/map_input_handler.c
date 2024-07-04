@@ -192,3 +192,7 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
     }
     return createResponse(ACTION_TAKEN_NONE);
 }
+
+void mapDebugKeyPressed(Vector2 position) {
+    addInfo("player coordinates: %f, %f", position.x, position.y);
+}

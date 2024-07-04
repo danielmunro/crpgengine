@@ -130,10 +130,6 @@ Vector2D getTileCount(const Map *m) {
     return (Vector2D) {x, y};
 }
 
-void mapDebugKeyPressed(Vector2 position) {
-    addInfo("player coordinates: %f, %f", position.x, position.y);
-}
-
 void drawObjectCollision(const Map *m, Image layer, int tileNumber, int x, int y) {
     const Tile *t = getTile(m, tileNumber);
     if (t == NULL) {
