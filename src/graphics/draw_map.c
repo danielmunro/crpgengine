@@ -3,23 +3,23 @@
 #include "headers/graphics/ui/ui.h"
 #include "headers/notification.h"
 
-void drawWarpCollisions(const Map *m, Image *image) {
-    for (int i = 0; i < m->exitCount; i++) {
+void drawWarpCollisions(const MapWarps *mw, Image *image) {
+    for (int i = 0; i < mw->exitCount; i++) {
         ImageDrawRectangle(
                 image,
-                (int) (m->exits[i]->area.x),
-                (int) (m->exits[i]->area.y),
-                (int) (m->exits[i]->area.width),
-                (int) (m->exits[i]->area.height),
+                (int) (mw->exits[i]->area.x),
+                (int) (mw->exits[i]->area.y),
+                (int) (mw->exits[i]->area.width),
+                (int) (mw->exits[i]->area.height),
                 WHITE);
     }
-    for (int i = 0; i < m->entranceCount; i++) {
+    for (int i = 0; i < mw->entranceCount; i++) {
         ImageDrawRectangle(
                 image,
-                (int) (m->entrances[i]->area.x),
-                (int) (m->entrances[i]->area.y),
-                (int) (m->entrances[i]->area.width),
-                (int) (m->entrances[i]->area.height),
+                (int) (mw->entrances[i]->area.x),
+                (int) (mw->entrances[i]->area.y),
+                (int) (mw->entrances[i]->area.width),
+                (int) (mw->entrances[i]->area.height),
                 BLACK);
     }
 }
@@ -105,7 +105,7 @@ void renderMapLayer(Map *m, LayerType layer) {
         }
     }
     if (m->context->game->showCollisions->warps) {
-        drawWarpCollisions(m, &renderedLayer);
+        drawWarpCollisions(m->warps, &renderedLayer);
     }
     if (m->context->game->showCollisions->objects) {
         drawShopCollisions(m, &renderedLayer);

@@ -183,12 +183,12 @@ void parseExit(xmlNodePtr node, Map *m) {
         addWarning("malformed exit, skipping :: id: %d, name: %s", id, xmlString(node, PROP_NAME));
         return;
     }
-    m->exits[m->exitCount] = createExit(
+    m->warps->exits[m->warps->exitCount] = createExit(
             id,
             to->value,
             scene->value,
             parseRectangle(node));
-    m->exitCount++;
+    m->warps->exitCount++;
     free((Property *) to);
     free((Property *) scene);
 }
@@ -197,12 +197,12 @@ void parseEntrance(xmlNodePtr node, Map *m) {
     int id = xmlInt(node, PROP_ID);
     const char *objectName = xmlString(node, PROP_NAME);
     const Property *direction = parseProperty(node, PROP_DIRECTION);
-    m->entrances[m->entranceCount] = createEntrance(
+    m->warps->entrances[m->warps->entranceCount] = createEntrance(
             id,
             objectName,
             getDirectionFromString(direction != NULL ? direction->value : DOWN),
             parseRectangle(node));
-    m->entranceCount++;
+    m->warps->entranceCount++;
     free((Property *) direction);
 }
 
@@ -228,11 +228,11 @@ void parseTilemapObjectGroupArriveAtNode(xmlNodePtr node, Map *m) {
         if (name == NODE_NAME_OBJECT) {
             int id = xmlInt(cur, PROP_ID);
             const char *objectName = xmlString(cur, PROP_NAME);
-            m->arriveAt[m->arriveAtCount] = createArriveAt(
+            m->warps->arriveAt[m->warps->arriveAtCount] = createArriveAt(
                     id,
                     objectName,
                     parseRectangle(cur));
-            m->arriveAtCount++;
+            m->warps->arriveAtCount++;
         }
         cur = cur->next;
     }

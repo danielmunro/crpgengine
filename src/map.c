@@ -32,19 +32,23 @@ typedef struct {
 } MapConfig;
 
 typedef struct {
-    Context *context;
-    int sceneId;
-    MapConfig *config;
-    Tileset *tileset;
-    Layer **layers;
-    int layersCount;
-    Texture2D renderedLayers[LAYER_COUNT];
     ArriveAt **arriveAt;
     int arriveAtCount;
     Exit **exits;
     int exitCount;
     Entrance **entrances;
     int entranceCount;
+} MapWarps;
+
+typedef struct {
+    Context *context;
+    int sceneId;
+    MapConfig *config;
+    Tileset *tileset;
+    Layer **layers;
+    int layersCount;
+    MapWarps *warps;
+    Texture2D renderedLayers[LAYER_COUNT];
     bool showCollisions;
     Mobile **mobiles;
     int mobileCount;
@@ -55,6 +59,17 @@ typedef struct {
     ShopTile **shopTiles;
     int shopTileCount;
 } Map;
+
+MapWarps *createMapWarps() {
+    MapWarps *warps = malloc(sizeof(MapWarps));
+    warps->entrances = calloc(MAX_ENTRANCES, sizeof(Entrance));
+    warps->entranceCount = 0;
+    warps->exits = calloc(MAX_EXITS, sizeof(Exit));
+    warps->exitCount = 0;
+    warps->arriveAt = calloc(MAX_ARRIVE_AT, sizeof(ArriveAt));
+    warps->arriveAtCount = 0;
+    return warps;
+}
 
 Map *createMap(int sceneId, Context *c) {
     Map *map = malloc(sizeof(Map));
@@ -73,12 +88,7 @@ Map *createMap(int sceneId, Context *c) {
     map->mobiles = calloc(MAX_MOBILES, sizeof(Mobile));
     map->mobileCount = 0;
     map->mobMovements = calloc(MAX_MOBILE_MOVEMENTS, sizeof(MobileMovement));
-    map->entrances = calloc(MAX_ENTRANCES, sizeof(Entrance));
-    map->entranceCount = 0;
-    map->exits = calloc(MAX_EXITS, sizeof(Exit));
-    map->exitCount = 0;
-    map->arriveAt = calloc(MAX_ARRIVE_AT, sizeof(ArriveAt));
-    map->arriveAtCount = 0;
+    map->warps = createMapWarps();
     return map;
 }
 
@@ -90,9 +100,9 @@ MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
 }
 
 Entrance *findEntrance(const Map *m, const char *name) {
-    for (int i = 0; i < m->entranceCount; i++) {
-        if (strcmp(m->entrances[i]->name, name) == 0) {
-            return m->entrances[i];
+    for (int i = 0; i < m->warps->entranceCount; i++) {
+        if (strcmp(m->warps->entrances[i]->name, name) == 0) {
+            return m->warps->entrances[i];
         }
     }
     addError("entrance not found :: %s", name);
@@ -159,8 +169,8 @@ Rectangle getObjectSize(const Map *m, const Object *o, int x, int y) {
 int atExit(const Map *m, const Player *p) {
     Mobile *mob = getPartyLeader(p);
     Rectangle rect = getMobileRectangle(mob);
-    for (int i = 0; i < m->exitCount; i++) {
-        Rectangle c = GetCollisionRec(m->exits[i]->area, rect);
+    for (int i = 0; i < m->warps->exitCount; i++) {
+        Rectangle c = GetCollisionRec(m->warps->exits[i]->area, rect);
         if (c.height > 0 || c.width > 0) {
             return i;
         }

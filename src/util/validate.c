@@ -2,8 +2,8 @@
 
 bool doesExitHaveEntrance(const Game *g, const Exit *e) {
     for (int i = 0; i < g->scenes->count; i++) {
-        for (int j = 0; j < g->scenes->scenes[i]->map->entranceCount; j++) {
-            if (strcmp(e->to, g->scenes->scenes[i]->map->entrances[j]->name) == 0) {
+        for (int j = 0; j < g->scenes->scenes[i]->map->warps->entranceCount; j++) {
+            if (strcmp(e->to, g->scenes->scenes[i]->map->warps->entrances[j]->name) == 0) {
                 return true;
             }
         }
@@ -15,9 +15,9 @@ void validateExits(Game *g) {
     for (int i = 0; i < g->scenes->count; i++) {
         addDebug("scene exit count :: %s - %d",
                  g->scenes->scenes[i]->name,
-                 g->scenes->scenes[i]->map->exitCount);
-        for (int j = 0; j < g->scenes->scenes[i]->map->exitCount; j++) {
-            Exit *ex = g->scenes->scenes[i]->map->exits[j];
+                 g->scenes->scenes[i]->map->warps->exitCount);
+        for (int j = 0; j < g->scenes->scenes[i]->map->warps->exitCount; j++) {
+            Exit *ex = g->scenes->scenes[i]->map->warps->exits[j];
             if (strcmp(ex->to, "") == 0) {
                 addWarning(
                         "exit defined without destination in scene :: %s",

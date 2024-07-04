@@ -68,8 +68,8 @@ void evaluateExits(Game *g) {
     if (ex < 0) {
         return;
     }
-    const char *sceneName = m->exits[ex]->scene;
-    const char *entranceName = m->exits[ex]->to;
+    const char *sceneName = m->warps->exits[ex]->scene;
+    const char *entranceName = m->warps->exits[ex]->to;
     for (int i = 0; i < g->scenes->count; i++) {
         if (strcmp(sceneName, g->scenes->scenes[i]->name) == 0) {
             attemptToUseExit(
@@ -81,7 +81,7 @@ void evaluateExits(Game *g) {
         }
     }
     addWarning("exit not found :: id: %d, scene: %s, entrance: %s",
-               m->exits[ex]->id, sceneName, entranceName);
+               m->warps->exits[ex]->id, sceneName, entranceName);
 }
 
 void mapMenuKeyPressed(Game *g) {

@@ -175,10 +175,10 @@ When *mapWhen(ControlManager *cm, const Scene *s, WhenData wd) {
         addDebug("mobile trigger is '%s'", trigger->name);
     }
     if (wd.arriveAt != NULL) {
-        const Map *e = s->map;
-        for (int i = 0; i < e->arriveAtCount; i++) {
-            if (strcmp(e->arriveAt[i]->name, wd.arriveAt) == 0) {
-                arriveAt = e->arriveAt[i];
+        const MapWarps *mw = s->map->warps;
+        for (int i = 0; i < mw->arriveAtCount; i++) {
+            if (strcmp(mw->arriveAt[i]->name, wd.arriveAt) == 0) {
+                arriveAt = mw->arriveAt[i];
                 break;
             }
         }
