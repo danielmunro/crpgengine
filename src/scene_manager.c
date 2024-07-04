@@ -1,5 +1,6 @@
 #include "headers/audio.h"
 #include "headers/map.h"
+#include "headers/graphics/draw_map.h"
 #include "headers/control_manager.h"
 
 typedef struct {
@@ -28,14 +29,14 @@ SceneManager *createSceneManager(
 }
 
 void unloadScene(const Scene *s) {
-    unloadMap(s->map);
+    unloadMapLayers(s->map);
     if (isDungeon(s)) {
         UnloadTexture(s->encounters->background);
     }
 }
 
 void initScene(const Scene *s) {
-    loadMap(s->map);
+    prepareMapLayers(s->map);
     if (isDungeon(s)) {
         Image im = LoadImage(s->encounters->backgroundFilePath);
         s->encounters->background = LoadTextureFromImage(im);
