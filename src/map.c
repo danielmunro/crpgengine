@@ -39,20 +39,20 @@ typedef struct {
     Layer **layers;
     int layersCount;
     Texture2D renderedLayers[LAYER_COUNT];
-    ArriveAt *arriveAt[MAX_ARRIVE_AT];
+    ArriveAt **arriveAt;
     int arriveAtCount;
-    Exit *exits[MAX_EXITS];
+    Exit **exits;
     int exitCount;
-    Entrance *entrances[MAX_ENTRANCES];
+    Entrance **entrances;
     int entranceCount;
     bool showCollisions;
-    Mobile *mobiles[MAX_MOBILES];
+    Mobile **mobiles;
     int mobileCount;
-    MobileMovement *mobMovements[MAX_MOBILE_MOVEMENTS];
+    MobileMovement **mobMovements;
     Chest **chests;
     int chestCount;
     Tile *openedChest;
-    ShopTile *shopTiles[MAX_SHOP_TILES];
+    ShopTile **shopTiles;
     int shopTileCount;
 } Map;
 
@@ -72,13 +72,18 @@ Map *createMap(int sceneId, Context *c) {
     map->tileset = createTileset();
     map->chests = calloc(MAX_CHESTS, sizeof(Chest));
     map->chestCount = 0;
-    for (int i = 0; i < MAX_SHOP_TILES; i++) {
-        map->shopTiles[i] = NULL;
-    }
-    for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
-        map->mobMovements[i] = NULL;
-    }
+    map->shopTiles = calloc(MAX_SHOP_TILES, sizeof(ShopTile));
+    map->shopTileCount = 0;
+    map->mobiles = calloc(MAX_MOBILES, sizeof(Mobile));
+    map->mobileCount = 0;
+    map->mobMovements = calloc(MAX_MOBILE_MOVEMENTS, sizeof(MobileMovement));
     map->openedChest = NULL;
+    map->entrances = calloc(MAX_ENTRANCES, sizeof(Entrance));
+    map->entranceCount = 0;
+    map->exits = calloc(MAX_EXITS, sizeof(Exit));
+    map->exitCount = 0;
+    map->arriveAt = calloc(MAX_ARRIVE_AT, sizeof(ArriveAt));
+    map->arriveAtCount = 0;
     return map;
 }
 
@@ -89,7 +94,7 @@ MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
     return mobMovement;
 }
 
-Entrance *findEntrance(Map *m, const char *name) {
+Entrance *findEntrance(const Map *m, const char *name) {
     for (int i = 0; i < m->entranceCount; i++) {
         if (strcmp(m->entrances[i]->name, name) == 0) {
             return m->entrances[i];
@@ -156,7 +161,7 @@ Rectangle getObjectSize(const Map *m, const Object *o, int x, int y) {
     };
 }
 
-int atExit(const Map *m, Player *p) {
+int atExit(const Map *m, const Player *p) {
     Mobile *mob = getPartyLeader(p);
     Rectangle rect = getMobileRectangle(mob);
     for (int i = 0; i < m->exitCount; i++) {
