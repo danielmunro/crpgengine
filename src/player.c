@@ -105,24 +105,6 @@ void removeItem(Player *player, const Item *item) {
     player->itemCount--;
 }
 
-void setBlockedByTile(Player *p, const Tile *t) {
-    p->blocking->mob = NULL;
-    p->blocking->chest = NULL;
-    p->blocking->tile = t;
-}
-
-void setBlockedByMob(Player *p, Mobile *mob) {
-    p->blocking->mob = mob;
-    p->blocking->chest = NULL;
-    p->blocking->tile = NULL;
-}
-
-void setBlockedByChest(Player *p, const Chest *chest) {
-    p->blocking->mob = NULL;
-    p->blocking->chest = chest;
-    p->blocking->tile = NULL;
-}
-
 Mobile *getPartyLeader(const Player *p) {
     return p->party[0];
 }
@@ -313,4 +295,10 @@ bool losesItemQuantity(Player *player, const ItemReferenceData *ird) {
     }
     addWarning("player didn't have enough items to give :: %d remaining", ird->quantity);
     return false;
+}
+
+void resetBlocking(Player *p) {
+    p->blocking->chest = NULL;
+    p->blocking->mob = NULL;
+    p->blocking->tile = NULL;
 }

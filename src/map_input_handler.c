@@ -77,19 +77,20 @@ void tryToMove(const Map *m, Player *p, Direction direction, Vector2 pos) {
             collision->height,
     };
     if (mob->moving[direction]) {
+        resetBlocking(p);
         const Chest *c = getBlockingChest(m, rect);
         if (c != NULL) {
-            setBlockedByChest(p, c);
+            p->blocking->chest = c;
             return;
         }
         const Tile *t = getBlockingMapTile(m, rect);
         if (t != NULL) {
-            setBlockedByTile(p, t);
+            p->blocking->tile = t;
             return;
         }
         Mobile *blockingMob = getBlockingMob(m, rect);
         if (blockingMob != NULL) {
-            setBlockedByMob(p, blockingMob);
+            p->blocking->mob = blockingMob;
             return;
         }
         mob->position = pos;
