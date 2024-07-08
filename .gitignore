@@ -17,3 +17,6 @@ CPackSourceConfig.cmake
 cmake_install.cmake
 user_config.yaml
 *.profraw
+*.profdata
+coverage.html
+coverage-tests.json
