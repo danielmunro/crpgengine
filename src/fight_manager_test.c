@@ -7,8 +7,7 @@ void testCanFleeSuccessfully(Context *c) {
     // given
     Beast **beasts = calloc(1, sizeof(Beast));
     beasts[0] = createTestBeast();
-    Fight *f = createFight(c, beasts, g->player, 1);
-    g->fights->fight = f;
+    Fight *f = createFight(g->fights, beasts, g->player, 1);
     ActionParticipant *playerParticipant = createMobParticipant(f->player->party[0]);
     ActionParticipant *beastParticipant = createBeastParticipant(beasts[0], 0);
     ok(g->notifications->count == 0);
@@ -40,8 +39,7 @@ void testCanFailAttemptingToFlee(Context *c) {
     while (attempt > 0 && fighting) {
         Beast **beasts = calloc(1, sizeof(Beast));
         beasts[0] = createTestBeast();
-        Fight *f = createFight(c, beasts, g->player, 1);
-        g->fights->fight = f;
+        Fight *f = createFight(g->fights, beasts, g->player, 1);
         ActionParticipant *playerParticipant = createMobParticipant(f->player->party[0]);
         ActionParticipant *beastParticipant = createBeastParticipant(beasts[0], 0);
         fighting = tryFlee(
