@@ -19,6 +19,7 @@ typedef enum {
     GameEngineErrorTextBoxNotFound = 301,
     GameEngineErrorMusicNotStreaming = 302,
     GameEngineErrorCannotAddMoreActiveControls = 303,
+    GameEngineErrorZeroBeastsToCreateForFight = 304,
 
     // Configuration errors
     ConfigurationErrorSceneIdCollision = 400,

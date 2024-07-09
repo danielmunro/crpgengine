@@ -48,6 +48,10 @@ Fight *createFight(
         int beastCount) {
     Fight *fight = malloc(sizeof(Fight));
     fight->context = fm->context;
+    if (beastCount < 1) {
+        addError("beast count was less than 1: %d", beastCount);
+        exit(GameEngineErrorZeroBeastsToCreateForFight);
+    }
     fight->beastCount = beastCount;
     fight->beasts = calloc(beastCount, sizeof(Beast));
     for (int i = 0; i < beastCount; i++) {
@@ -76,15 +80,11 @@ Fight *createFightFromEncounters(
         const Encounters *encounters,
         Player *player) {
     Beast *beasts[MAX_BEASTS_IN_FIGHT];
-    int beastsToCreate = GetRandomValue(1, MAX_BEASTS_IN_FIGHT);
+    int beastsToCreate = GetRandomValue(1, player->partyCount * 2);
     addDebug("creating %d beasts for fight", beastsToCreate);
     int created = 0;
     float x = BEAST_AREA.x;
     float y = BEAST_AREA.y;
-    int partyMax = player->partyCount * 2;
-    if (beastsToCreate > partyMax) {
-        beastsToCreate = partyMax;
-    }
     while (created < beastsToCreate) {
         int e = GetRandomValue(0, encounters->beastEncountersCount - 1);
         int max = encounters->beastEncounters[e]->max;
