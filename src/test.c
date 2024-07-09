@@ -4,6 +4,7 @@
 #include "headers/mobile_test.h"
 #include "headers/player_test.h"
 #include "headers/player_manager_test.h"
+#include "headers/fight_manager_test.h"
 
 int main(int argc, char *argv[]) {
     const char *configFile = getConfigFileName(argc, argv);
@@ -15,5 +16,7 @@ int main(int argc, char *argv[]) {
     testGainExperienceToLevel51();
     testCanSavePlayer(c);
     testCanLoadPlayer(c);
+    testCanFleeSuccessfully(c);
+    testCanFailAttemptingToFlee(c);
     done_testing();
 }

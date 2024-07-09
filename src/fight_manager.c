@@ -342,9 +342,9 @@ void clearAction(FightManager *fm, Action *a) {
     free(a);
 }
 
-void tryRunAway(FightManager *fm, Action *act) {
-    int option = GetRandomValue(0, 1);
-    if (option == 1) {
+bool tryFlee(FightManager *fm, Action *act) {
+    bool option = (bool) GetRandomValue(0, 1);
+    if (option) {
         addNotification(
                 fm->notifications,
                 createNotification(FIGHT_ACTION, "You successfully ran away."));
@@ -357,6 +357,7 @@ void tryRunAway(FightManager *fm, Action *act) {
                 fm->notifications,
                 createNotification(FIGHT_ACTION, "You failed to run away!"));
     }
+    return option;
 }
 
 void actionUpdate(FightManager *fm, double interval) {
@@ -373,7 +374,7 @@ void actionUpdate(FightManager *fm, double interval) {
     } else if (step == ATTACK_RETURN && act->elapsedTime > RETURN_TIMEOUT_MS) {
         step = STEP_NONE;
     } else if (step == ACTION_STEP_RUN && act->elapsedTime > RUN_TIMEOUT_MS) {
-        tryRunAway(fm, act);
+        tryFlee(fm, act);
         step = STEP_NONE;
     } else {
         return;
