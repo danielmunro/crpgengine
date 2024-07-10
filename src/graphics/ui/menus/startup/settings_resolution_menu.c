@@ -1,24 +1,35 @@
 #include "headers/graphics/ui/menu.h"
-#include "headers/graphics/ui/menus/startup/settings_common.h"
 
 int getSettingsResolutionMenuCursorLength() {
     return 2;
 }
 
 void drawSettingsResolutionMenuScreen(MenuContext *mc) {
-    const FontStyle *defaultFont = mc->fonts->default_;
+    TextBox *headersBox = findOrCreateTextBox(
+            mc,
+            SETTINGS_NAMES_BOX,
+            mc->context->ui->textAreas->medium);
+    drawMenuRect(mc->context->ui->menu, headersBox->area);
+    drawInMenu(headersBox, "Resolution");
     TextBox *valuesBox = findOrCreateTextBox(
             mc,
             SETTINGS_VALUES_BOX,
             mc->context->ui->textAreas->mediumRight);
-    drawFullScreenOptions(valuesBox, mc);
-    drawDifficultyOptions(valuesBox, mc);
-    drawResolutionOptions(valuesBox, mc);
+    if (mc->context->user->resolution.width == 800) {
+        drawInMenuWithStyle(valuesBox, mc->fonts->highlight, "*800x600");
+    } else {
+        drawInMenuWithStyle(valuesBox, mc->fonts->disable, "800x600");
+    }
+    if (mc->context->user->resolution.width == 1280) {
+        drawInMenuWithStyle(valuesBox, mc->fonts->highlight, "*1280x1024");
+    } else {
+        drawInMenuWithStyle(valuesBox, mc->fonts->disable, "1280x1024");
+    }
     drawRightCursor(
             mc->uiSprite,
             (Vector2) {
                     valuesBox->area.x,
-                    valuesBox->area.y + line(mc->cursorLine + 5, defaultFont->lineHeight)
+                    valuesBox->area.y + line(mc->cursorLine, mc->fonts->default_->lineHeight)
             });
 }
 

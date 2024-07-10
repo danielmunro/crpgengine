@@ -1,5 +1,4 @@
 #include "headers/graphics/ui/menu.h"
-#include "headers/graphics/ui/menus/startup/settings_common.h"
 
 int getSettingsFullScreenMenuCursorLength() {
     return 2;
@@ -7,13 +6,23 @@ int getSettingsFullScreenMenuCursorLength() {
 
 void drawSettingsFullScreenMenuScreen(MenuContext *mc) {
     const FontStyle *defaultFont = mc->fonts->default_;
+    TextBox *headersBox = findOrCreateTextBox(
+            mc,
+            SETTINGS_NAMES_BOX,
+            mc->context->ui->textAreas->medium);
+    drawMenuRect(mc->context->ui->menu, headersBox->area);
+    drawInMenu(headersBox, "Full screen");
     TextBox *valuesBox = findOrCreateTextBox(
             mc,
             SETTINGS_VALUES_BOX,
             mc->context->ui->textAreas->mediumRight);
-    drawFullScreenOptions(valuesBox, mc);
-    drawDifficultyOptions(valuesBox, mc);
-    drawResolutionOptions(valuesBox, mc);
+    if (mc->context->user->fullScreen) {
+        drawInMenuWithStyle(valuesBox, mc->fonts->highlight, "*Yes");
+        drawInMenuWithStyle(valuesBox, mc->fonts->disable, "No");
+    } else {
+        drawInMenuWithStyle(valuesBox, mc->fonts->disable, "Yes");
+        drawInMenuWithStyle(valuesBox, mc->fonts->highlight, "*No");
+    }
     drawRightCursor(
             mc->uiSprite,
             (Vector2) {
