@@ -79,8 +79,12 @@ Fight *createFightFromEncounters(
         FightManager *f,
         const Encounters *encounters,
         Player *player) {
-    Beast *beasts[MAX_BEASTS_IN_FIGHT];
-    int beastsToCreate = GetRandomValue(1, player->partyCount * 2);
+    int maxBeasts = player->partyCount * 2;
+    if (maxBeasts > MAX_BEASTS_IN_FIGHT) {
+        maxBeasts = MAX_BEASTS_IN_FIGHT;
+    }
+    Beast *beasts[maxBeasts];
+    int beastsToCreate = GetRandomValue(1, maxBeasts);
     addDebug("creating %d beasts for fight", beastsToCreate);
     int created = 0;
     float x = BEAST_AREA.x;
