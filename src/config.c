@@ -26,7 +26,6 @@ typedef struct {
 
 GameConfig *createGameConfigFromData(const ConfigData *data) {
     GameConfig *config = malloc(sizeof(GameConfig));
-    config->showCollisions = malloc(sizeof(ShowCollisions));
     config->logLevel = getLogLevelFromString(data->logLevel);
     config->indexDir = data->indexDir;
     config->startScene = data->startScene;
@@ -38,6 +37,7 @@ GameConfig *createGameConfigFromData(const ConfigData *data) {
     config->logMemoryUsage = data->logMemoryUsage;
     config->purgeSaves = data->purgeSaves;
     config->showFPS = data->showFPS;
+    config->showCollisions = malloc(sizeof(ShowCollisions));
     config->showCollisions->objects = data->showCollisions->objects;
     config->showCollisions->player = data->showCollisions->player;
     config->showCollisions->warps = data->showCollisions->warps;

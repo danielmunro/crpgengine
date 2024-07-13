@@ -20,3 +20,4 @@ user_config.yaml
 *.profdata
 coverage.html
 coverage-tests.json
+sample.png
