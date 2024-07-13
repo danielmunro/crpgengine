@@ -62,7 +62,7 @@ void playMusic(AudioManager *am, const char *name) {
 void playSound(AudioManager *s, const char *name) {
     for (int i = 0; i < s->soundCount; i++) {
         if (strcmp(s->sounds[i]->name, name) == 0) {
-            PlaySoundMulti(s->sounds[i]->sound);
+//            PlaySoundMulti(s->sounds[i]->sound);
         }
     }
 }
