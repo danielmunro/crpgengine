@@ -6,7 +6,7 @@ set(EXECUTABLE_OUTPUT_PATH ./build CACHE PATH "Build directory" FORCE)
 set(CMAKE_C_FLAGS "-Isrc -fprofile-instr-generate -fcoverage-mapping")
 
 # versions
-set(RAYLIB_VERSION 4.2.0)
+set(RAYLIB_VERSION 5.0)
 set(LIBTAP_VERSION 0.1.0)
 set(LIBYAML_VERSION 1.4.1)
 
