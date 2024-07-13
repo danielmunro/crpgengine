@@ -19,32 +19,33 @@ Attributes *createTestAttributes() {
     return a;
 }
 
-bool doesBufferMatchSnapshot(bool updateSnapshots, char *filename) {
+bool doesBufferMatchSnapshot(bool updateSnapshots, char filename[MAX_FS_PATH_LENGTH]) {
+    char filePath[MAX_FS_PATH_LENGTH];
+    sprintf(filePath, "snapshots/%s", filename);
+
     SwapScreenBuffer();
     TakeScreenshot("sample.png");
     Image buf = LoadImage("sample.png");
 
-    if (!FileExists(filename)) {
-        ExportImage(buf, filename);
+    if (!FileExists(filePath)) {
+        addInfo("snapshot does not exist, creating :: %s", filePath);
+        ExportImage(buf, filePath);
         UnloadImage(buf);
-        free(filename);
         return true;
     }
 
     if (updateSnapshots) {
-        addInfo("updating snapshot :: %s", filename);
-        ExportImage(buf, filename);
+        addInfo("updating snapshot :: %s", filePath);
+        ExportImage(buf, filePath);
         UnloadImage(buf);
-        free(filename);
         return true;
     }
 
-    Image ref = LoadImage(filename);
+    Image ref = LoadImage(filePath);
 
     if (buf.width != ref.width || buf.height != ref.height) {
         UnloadImage(buf);
         UnloadImage(ref);
-        free(filename);
         return false;
     }
 
@@ -55,7 +56,6 @@ bool doesBufferMatchSnapshot(bool updateSnapshots, char *filename) {
             if (r.a != b.a || r.b != b.b || r.g != b.g || r.r != b.r) {
                 UnloadImage(buf);
                 UnloadImage(ref);
-                free(filename);
                 return false;
             }
         }
@@ -63,12 +63,5 @@ bool doesBufferMatchSnapshot(bool updateSnapshots, char *filename) {
 
     UnloadImage(buf);
     UnloadImage(ref);
-    free(filename);
     return true;
-}
-
-char *snapshotPath(const char *filename) {
-    char *snapshotPath = malloc(MAX_FS_PATH_LENGTH);
-    sprintf(snapshotPath, "snapshots/%s", filename);
-    return snapshotPath;
 }

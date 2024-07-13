@@ -19,5 +19,5 @@ void testMainMenuRenders(Context *c, bool updateSnapshots) {
     // then
     ok(doesBufferMatchSnapshot(
             updateSnapshots,
-            snapshotPath("main_menu.png")));
+            "main_menu.png"));
 }
