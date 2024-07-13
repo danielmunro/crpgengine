@@ -297,6 +297,12 @@ void run(Game *g) {
         if (seconds > 0) {
             g->player->secondsPlayed += seconds;
         }
+        if (IsKeyPressed(KEY_F10)) {
+            char file[MAX_FS_PATH_LENGTH];
+            sprintf(file, "screenshot-%f.png", getTimeInMS());
+            addInfo("saving screen shot :: %s", file);
+            TakeScreenshot(file);
+        }
     }
 }
 
