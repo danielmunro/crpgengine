@@ -279,7 +279,7 @@ void drawMenuRect(const MenuConfig *c, Rectangle rect) {
                 c->verticalGradient->top,
                 c->verticalGradient->bottom);
     }
-    DrawRectangleRoundedLines(
+    DrawRectangleRoundedLinesEx(
             (Rectangle) {
                     rect.x + t,
                     rect.y + t,

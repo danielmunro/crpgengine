@@ -19,29 +19,28 @@ Attributes *createTestAttributes() {
     return a;
 }
 
-bool doesBufferMatchSnapshot(bool updateSnapshots, char filename[MAX_FS_PATH_LENGTH]) {
-    char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "snapshots/%s", filename);
+bool doesBufferMatchSnapshot(bool updateSnapshots, char refFilename[MAX_FS_PATH_LENGTH]) {
+    char refFilePath[MAX_FS_PATH_LENGTH];
+    sprintf(refFilePath, "snapshots/%s", refFilename);
 
     SwapScreenBuffer();
-    TakeScreenshot("sample.png");
-    Image buf = LoadImage("sample.png");
+    Image buf = LoadImageFromScreen();
 
-    if (!FileExists(filePath)) {
-        addInfo("snapshot does not exist, creating :: %s", filePath);
-        ExportImage(buf, filePath);
+    if (!FileExists(refFilePath)) {
+        addInfo("snapshot does not exist, creating :: %s", refFilePath);
+        ExportImage(buf, refFilePath);
         UnloadImage(buf);
         return true;
     }
 
     if (updateSnapshots) {
-        addInfo("updating snapshot :: %s", filePath);
-        ExportImage(buf, filePath);
+        addInfo("updating snapshot :: %s", refFilePath);
+        ExportImage(buf, refFilePath);
         UnloadImage(buf);
         return true;
     }
 
-    Image ref = LoadImage(filePath);
+    Image ref = LoadImage(refFilePath);
 
     if (buf.width != ref.width || buf.height != ref.height) {
         UnloadImage(buf);
