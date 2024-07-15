@@ -37,7 +37,7 @@ int getFilesInDirectory(const char *dir, char **files) {
     struct dirent *de;
     DIR *dr = opendir(dir);
     if (dr == NULL) {
-        fprintf(stderr, "Could not open scene index directory");
+        addError("getFilesInDirectory: could not open directory :: %s", dir);
     }
     int i = 0;
     while (true) {
