@@ -120,15 +120,13 @@ Animation *cloneAnimation(Animation *a) {
 }
 
 int loadAnimationsByName(AnimationManager *am, const char *name, Animation *animations[MAX_ANIMATIONS]) {
+    memset(animations, 0, sizeof(Animation));
     int count = 0;
     for (int i = 0; i < am->libraryCount; i++) {
         if (strcmp(am->library[i]->name, name) == 0) {
             animations[count] = cloneAnimation(am->library[i]);
             count++;
         }
-    }
-    for (int i = count; i < MAX_ANIMATIONS; i++) {
-        animations[i] = NULL;
     }
     return count;
 }
