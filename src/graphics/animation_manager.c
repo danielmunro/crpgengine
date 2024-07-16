@@ -16,7 +16,7 @@ AnimationManager *createAnimationManager(Context *c) {
     return animationManager;
 }
 
-void processAnimations(AnimationManager *am) {
+void processAnimations(const AnimationManager *am) {
     for (int i = 0; i < am->animationCount; i++) {
         if (am->animations[i]->isPlaying) {
             incrementAnimationFrame(
