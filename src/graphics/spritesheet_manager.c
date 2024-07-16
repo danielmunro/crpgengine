@@ -19,7 +19,7 @@ SpritesheetManager *createSpriteSheetManager(
     return sm;
 }
 
-Spritesheet *findSpritesheetByName(SpritesheetManager *sm, const char *name) {
+Spritesheet *findSpritesheetByName(const SpritesheetManager *sm, const char *name) {
     for (int i = 0; i < sm->spritesCount; i++) {
         if (strcmp(sm->spritesheets[i]->name, name) == 0) {
             return sm->spritesheets[i];
