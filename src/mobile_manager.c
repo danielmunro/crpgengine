@@ -4,6 +4,7 @@
 #include "headers/spell_manager.h"
 #include "headers/graphics/avatar.h"
 #include "headers/direction.h"
+#include "headers/graphics/animation_manager.h"
 
 typedef struct {
     Context *context;
