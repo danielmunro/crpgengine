@@ -8,8 +8,10 @@
 #include "headers/shop.h"
 #include "headers/persistence/db.h"
 #include "headers/persistence/xmlparser.h"
+#include "headers/graphics/spritesheet_manager.h"
+#include "headers/persistence/cyaml.h"
 
-void loadAnimations(AnimationManager *am, SpritesheetManager *sm, const char *file) {
+void loadAnimations(AnimationManager *am, const SpritesheetManager *sm, const char *file) {
     addDebug("load animations file: %s", file);
     AnimationData *animation = loadAnimationYaml(file);
     Spritesheet *sp = findSpritesheetByName(sm, animation->sprite->name);
@@ -306,10 +308,14 @@ SpritesheetManager *loadSpritesheetManager(Context *c) {
         if (strcmp(getFilenameExt(&files[i][0]), "yaml") == 0) {
             char dataFilePath[MAX_FS_PATH_LENGTH];
             sprintf(dataFilePath, "%s/%s", directory, files[i]);
+            addInfo("spritesheet data :: %s", dataFilePath);
             SpritesheetData *data = loadSpritesheetYaml(dataFilePath);
             char imageFilePath[MAX_FS_PATH_LENGTH];
-            sprintf(imageFilePath, "%s/%s", directory, data->filename);
-            addDebug("spritesheet :: %s, %s", data->name, imageFilePath);
+            sprintf(imageFilePath, "%s/images/sprites/%s", c->indexDir, data->filename);
+            if (!FileExists(imageFilePath)) {
+                addError("sprite does not exist at path :: %s, %s", data->name, imageFilePath);
+            }
+            addInfo("spritesheet image :: %s, %s", data->name, imageFilePath);
             Rectangle *collision = malloc(sizeof(Rectangle));
             if (data->collide != NULL) {
                 collision->width = (float) data->collide->width;
@@ -343,7 +349,7 @@ void loadAllItems(ItemManager *itemManager) {
     itemManager->count = itemsData->items_count;
 }
 
-void loadAllAnimations(AnimationManager *am, SpritesheetManager *sm) {
+void loadAllAnimations(AnimationManager *am, const SpritesheetManager *sm) {
     char animationsDir[MAX_FS_PATH_LENGTH / 2];
     sprintf(animationsDir, "%s/animations", am->context->indexDir);
     char **files = calloc(MAX_FILES, sizeof(char *));

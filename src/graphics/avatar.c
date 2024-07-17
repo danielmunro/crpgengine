@@ -10,10 +10,13 @@ typedef struct {
 
 Avatar *createAvatar(const char *indexDir, const char *filename, float scale) {
     char path[MAX_FS_PATH_LENGTH];
-    sprintf(path, "%s/images/%s", indexDir, filename);
+    sprintf(path, "%s/images/avatars/%s", indexDir, filename);
     Avatar *a = malloc(sizeof(Avatar));
     a->filename = filename;
     a->scale = scale;
+    if (!FileExists(path)) {
+        addError("avatar filepath not found :: %s", path);
+    }
     Image im = LoadImage(path);
     a->image = LoadTextureFromImage(im);
     UnloadImage(im);
