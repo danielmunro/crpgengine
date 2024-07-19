@@ -306,6 +306,7 @@ void parseTilemapRootNode(Map *map, xmlNodePtr node, ItemManager *im) {
     map->config->tileSize.y = xmlInt(node, PROP_TILE_HEIGHT);
     while (node->children != NULL) {
         TilemapNodeType type = getTileMapNodeTypeFromString((const char *) node->children->name);
+        addDebug("parse tile map node type :: %s", node->children->name);
         if (type == TILEMAP_NODE_TYPE_TILESET) {
             parseTilesetRootNode(node->children, map->tileset, map->context->indexDir);
         } else if (type == TILEMAP_NODE_TYPE_LAYER) {
