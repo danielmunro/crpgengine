@@ -67,7 +67,7 @@ Chest *getBlockingChest(const Map *m, Rectangle playerRect) {
     return NULL;
 }
 
-bool setCollision(const Map *m, Player *p, Direction direction, Vector2 pos) {
+void setCollision(const Map *m, Player *p, Direction direction, Vector2 pos) {
     Mobile *mob = getPartyLeader(p);
     const Rectangle *collision = getMobAnimation(mob)->spriteSheet->collision;
     Rectangle rect = {
