@@ -1,6 +1,4 @@
 #include <mm_malloc.h>
-#include <string.h>
-#include "headers/util/log.h"
 #include "headers/graphics/ui/ui.h"
 #include "headers/graphics/spritesheet.h"
 #include "headers/context.h"
@@ -50,7 +48,7 @@ Animation *createAnimation(
     a->frameRate = frameRate;
     a->repeat = repeat;
     a->frameRateCount = 0;
-    a->isPlaying = 0;
+    a->isPlaying = false;
     return a;
 }
 
