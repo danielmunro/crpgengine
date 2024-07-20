@@ -202,24 +202,28 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
     }
 }
 
-void drawOpenedChests(const Map *m, const Player *p, Vector2 offset) {
+void drawChests(const Map *m, const Player *p, Vector2 offset) {
     const UIConfig *ui = m->context->ui;
     for (int i = 0; i < m->chestCount; i++) {
+        Rectangle dest = {
+                (m->chests[i]->area.x * ui->screen->scale) + offset.x,
+                (m->chests[i]->area.y * ui->screen->scale) + offset.y,
+                (float) m->tileset->size.x * ui->screen->scale,
+                (float) m->tileset->size.y * ui->screen->scale };
+        Vector2 origin = { 0.0f, 0.0f };
+        Rectangle src;
         if (isChestOpened(p, m->sceneId, m->chests[i]->id)) {
-            Rectangle dest = {
-                    (m->chests[i]->area.x * ui->screen->scale) + offset.x,
-                    (m->chests[i]->area.y * ui->screen->scale) + offset.y,
-                    (float) m->tileset->size.x * ui->screen->scale,
-                    (float) m->tileset->size.y * ui->screen->scale };
-            Vector2 origin = { 0.0f, 0.0f };
-            DrawTexturePro(
-                    m->tileset->sourceTexture,
-                    getRectForTile(m, m->openedChest->id + 1),
-                    dest,
-                    origin,
-                    0.0f,
-                    WHITE);
+            src = getRectForTile(m, m->openedChest->id + 1);
+        } else {
+            src = getRectForTile(m, m->closedChest->id + 1);
         }
+        DrawTexturePro(
+                m->tileset->sourceTexture,
+                src,
+                dest,
+                origin,
+                0.0f,
+                WHITE);
     }
 }
 
@@ -265,7 +269,7 @@ void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64]
     };
     DrawTextureEx(m->renderedLayers[BACKGROUND], offset, 0, ui->screen->scale, WHITE);
     DrawTextureEx(m->renderedLayers[MIDGROUND], offset, 0, ui->screen->scale, WHITE);
-    drawOpenedChests(m, p, offset);
+    drawChests(m, p, offset);
     drawExplorationMobiles(m, p, offset);
     DrawTextureEx(m->renderedLayers[FOREGROUND], offset, 0, ui->screen->scale, WHITE);
     drawNotifications(nm, font);

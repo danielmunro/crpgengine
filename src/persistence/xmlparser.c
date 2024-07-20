@@ -92,9 +92,6 @@ void parseTileProperties(xmlNodePtr node, Tile *t) {
 Tile *parseTileNode(xmlNodePtr node) {
     int id = xmlInt(node, PROP_ID);
     TileType type = getTileTypeFromString(xmlString(node, PROP_TYPE));
-    if (type == TILE_TYPE_CHEST_EMPTY) {
-        addInfo("tile id :: %d", id);
-    }
     Tile *t = createTile(id, type);
     xmlNodePtr cur = node->children;
     while (cur != NULL) {
@@ -293,11 +290,12 @@ void parseTilemapObjectGroupNode(xmlNodePtr node, ItemManager *im, Map *m) {
     }
 }
 
-void assignOpenedChestTile(Map *m) {
+void assignChestTiles(Map *m) {
     for (int i = 0; i < m->tileset->tilesCount; i++) {
         if (m->tileset->tiles[i]->type == TILE_TYPE_CHEST_EMPTY) {
             m->openedChest = m->tileset->tiles[i];
-            break;
+        } else if (m->tileset->tiles[i]->type == TILE_TYPE_CHEST_FULL) {
+            m->closedChest = m->tileset->tiles[i];
         }
     }
 }
@@ -317,7 +315,7 @@ void parseTilemapRootNode(Map *map, xmlNodePtr node, ItemManager *im) {
         }
         node->children = node->children->next;
     }
-    assignOpenedChestTile(map);
+    assignChestTiles(map);
 }
 
 Map *parseTilemapDocToMap(

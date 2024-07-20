@@ -55,6 +55,7 @@ typedef struct {
     MobileMovement **mobMovements;
     Chest **chests;
     int chestCount;
+    Tile *closedChest;
     Tile *openedChest;
     ShopTile **shopTiles;
     int shopTileCount;
@@ -82,6 +83,7 @@ Map *createMap(int sceneId, Context *c) {
     map->layersCount = 0;
     map->chests = calloc(MAX_CHESTS, sizeof(Chest));
     map->chestCount = 0;
+    map->closedChest = NULL;
     map->openedChest = NULL;
     map->shopTiles = calloc(MAX_SHOP_TILES, sizeof(ShopTile));
     map->shopTileCount = 0;

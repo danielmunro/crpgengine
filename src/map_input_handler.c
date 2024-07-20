@@ -112,12 +112,12 @@ void evaluateMovement(const Map *m, Player *p) {
     }
 }
 
-void openChest(Player *p, int sceneId) {
+bool openChest(Player *p, int sceneId) {
     const Chest *c = p->blocking->chest;
     for (int i = 0; i < p->openedChestsCount; i++) {
         if (p->openedChests[i]->chestId == c->id
             && p->openedChests[i]->sceneId == sceneId) {
-            return;
+            return false;
         }
     }
     addInfo("chest opened :: %s", c->iq->item->name);
@@ -129,6 +129,7 @@ void openChest(Player *p, int sceneId) {
             sceneId,
             c->id);
     p->openedChestsCount++;
+    return true;
 }
 
 void dialogEngaged(const Player *player, ControlBlock *controlBlock) {
@@ -169,8 +170,7 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
         Response *r = createResponse(ACTION_TAKEN_ENGAGE_DIALOG);
         return r;
     }
-    if (player->blocking->chest != NULL) {
-        openChest(player, m->sceneId);
+    if (player->blocking->chest != NULL && openChest(player, m->sceneId)) {
         Response *r = createResponse(ACTION_TAKEN_OPENED_CHEST);
         r->chest = player->blocking->chest;
         return r;
