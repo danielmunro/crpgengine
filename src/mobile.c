@@ -106,7 +106,7 @@ Rectangle getMobileRectangle(Mobile *mob) {
     const Rectangle *c = getMobAnimation(mob)->spriteSheet->collision;
     return (Rectangle) {
             mob->position.x + c->x,
-            mob->position.y + c->height,
+            mob->position.y + c->y,
             c->width,
             c->height,
     };
