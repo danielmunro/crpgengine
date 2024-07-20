@@ -171,8 +171,8 @@ char *getPositionAsString(Vector2 position) {
 
 void useEntrance(Mobile *mob, const Entrance *e) {
     const Rectangle *c = getMobAnimation(mob)->spriteSheet->collision;
-    mob->position.x = e->area.x + (e->area.width / 2) - roundf(c->width / 2);
-    mob->position.y = e->area.y + (e->area.height / 2) - roundf(c->height / 2);
+    mob->position.x = e->area.x;
+    mob->position.y = e->area.y - c->y;
     mob->direction = e->direction;
 }
 
