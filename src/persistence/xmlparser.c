@@ -127,7 +127,8 @@ void parseTilesetRootNode(xmlNodePtr node, Tileset *t, const char *indexDir) {
             cur = cur->children;
         } else if (type == TILESET_NODE_TYPE_IMAGE) {
             char *imagePath = malloc(MAX_FS_PATH_LENGTH);
-            getComponentPath(imagePath, indexDir, "", "tilesets", xmlString(cur, "source"));
+            sprintf(filePath, "%s/%s/%s", indexDir, "images/tilesets", GetFileName(xmlString(cur, "source")));
+            sprintf(imagePath, "%s", filePath);
             t->reader = xmlReaderForFile(filePath, NULL, 0);
             t->sourcePath = imagePath;
         } else if (type == TILESET_NODE_TYPE_TILE) {

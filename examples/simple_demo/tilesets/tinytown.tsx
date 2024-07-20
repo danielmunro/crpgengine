@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.1" name="tinytown" tilewidth="16" tileheight="16" tilecount="132" columns="12">
- <image source="tinytown.png" width="192" height="176"/>
+<tileset version="1.11" tiledversion="1.11.0" name="tinytown" tilewidth="16" tileheight="16" tilecount="144" columns="12">
+ <image source="../images/tilesets/tinytown.png" width="192" height="192"/>
  <tile id="3">
   <objectgroup draworder="index" id="8">
    <object id="14" x="2" y="1" width="13" height="15"/>
@@ -341,14 +341,16 @@
    <object id="1" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
- <tile id="130" type="chest_empty">
+ <tile id="130">
   <objectgroup draworder="index" id="2">
    <object id="2" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
- <tile id="131" type="chest_full">
+ <tile id="131">
   <objectgroup draworder="index" id="2">
    <object id="5" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
+ <tile id="136" type="chest_full"/>
+ <tile id="137" type="chest_empty"/>
 </tileset>

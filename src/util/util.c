@@ -156,7 +156,6 @@ void getComponentPath(
         const char *moduleIndexDir,
         const char *componentName,
         const char *filename) {
-    sprintf(dest, "%s/%s", moduleIndexDir, filename);
     const char *baseFile = basename((char *) filename);
     sprintf(dest, "%s/%s", moduleIndexDir, baseFile);
     addDebug("check for module component :: %s, %s", componentName, dest);
