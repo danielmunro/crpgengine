@@ -5,7 +5,7 @@ frame:
   height: 24
   padding: 0
 collide:
-  width: 12
-  height: 12
-  left: 2
-  top: 12
+  width: 16
+  height: 16
+  left: 0
+  top: 8
