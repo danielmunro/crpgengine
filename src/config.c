@@ -24,10 +24,11 @@ typedef struct {
     ShowCollisions *showCollisions;
 } GameConfig;
 
-GameConfig *createGameConfigFromData(const ConfigData *data) {
+GameConfig *createGameConfigFromData(const ConfigData *data, const char *basePath) {
     GameConfig *config = malloc(sizeof(GameConfig));
     config->logLevel = getLogLevelFromString(data->logLevel);
-    config->indexDir = data->indexDir;
+    config->indexDir = malloc(MAX_FS_PATH_LENGTH);
+    sprintf((char *) config->indexDir, "%s/%s", basePath, data->indexDir);
     config->startScene = data->startScene;
     config->overrideStartScene = data->overrideStartScene;
     config->exit = data->exit;

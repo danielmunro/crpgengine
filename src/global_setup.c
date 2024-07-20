@@ -40,7 +40,7 @@ void runGame(Game *g) {
 }
 
 Context *globalSetup(const char *configFile) {
-    const GameConfig *gameConfig = createGameConfigFromData(loadGameConfigYaml(configFile));
+    const GameConfig *gameConfig = createGameConfigFromData(loadGameConfigYaml(configFile), GetDirectoryPath(configFile));
     const Log *log = setupLogging(gameConfig->logLevel);
     UserConfig *userConfig = createUserConfig(gameConfig->indexDir);
     const UIConfig *uiConfig = setupUIConfig(userConfig->resolution, gameConfig->indexDir);
