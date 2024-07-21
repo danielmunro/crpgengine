@@ -48,7 +48,7 @@ void attemptToUseExit(Game *game, Scene *scene, const Entrance *entrance) {
         addWarning("no entrance found for '%s' scene", scene->name);
         return;
     }
-    addDebug("entrance %s found at %f, %f, %f, %f",
+    addInfo("entrance %s found at %d, %d, %d, %d",
              entrance->name,
              entrance->area.x,
              entrance->area.y,

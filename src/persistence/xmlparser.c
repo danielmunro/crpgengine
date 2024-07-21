@@ -43,13 +43,7 @@ const char *xmlString(const xmlNode *node, const char *propName) {
     return (const char *) xmlGetProp(node, (const xmlChar *) propName);
 }
 
-RectangleD parseRectangle(const xmlNode *node, int tileSize) {
-//    return (RectangleD) {
-//            xmlInt(node, PROP_X) / tileSize,
-//            xmlInt(node, PROP_Y) / tileSize,
-//            xmlInt(node, PROP_WIDTH),
-//            xmlInt(node, PROP_HEIGHT),
-//    };
+RectangleD parseRectangle(const xmlNode *node) {
     return (RectangleD) {
             xmlInt(node, PROP_X),
             xmlInt(node, PROP_Y),
@@ -64,7 +58,7 @@ void parseTileObjectGroupNode(xmlNodePtr node, Tile *t, int tileSize) {
         if (name == NODE_NAME_OBJECT) {
             t->objects[t->objectCount] = createObject(
                     xmlInt(node, PROP_ID),
-                    parseRectangle(node, tileSize));
+                    parseRectangle(node));
             t->objectCount++;
         }
         node = node->next;
@@ -178,7 +172,7 @@ void parseExit(xmlNodePtr node, Map *m) {
             id,
             to->value,
             scene->value,
-            parseRectangle(node, m->context->game->tileSize));
+            parseRectangle(node));
     m->warps->exitCount++;
     free((Property *) to);
     free((Property *) scene);
@@ -192,7 +186,7 @@ void parseEntrance(xmlNodePtr node, Map *m) {
             id,
             objectName,
             getDirectionFromString(direction != NULL ? direction->value : DOWN),
-            parseRectangle(node, tileSize(m->context)));
+            parseRectangle(node));
     m->warps->entranceCount++;
     free((Property *) direction);
 }
@@ -222,7 +216,7 @@ void parseTilemapObjectGroupArriveAtNode(xmlNodePtr node, Map *m) {
             m->warps->arriveAt[m->warps->arriveAtCount] = createArriveAt(
                     id,
                     objectName,
-                    parseRectangle(cur, tileSize(m->context)));
+                    parseRectangle(cur));
             m->warps->arriveAtCount++;
         }
         cur = cur->next;
@@ -242,7 +236,7 @@ void parseTilemapObjectGroupChestNode(xmlNodePtr node, ItemManager *im, Map *m) 
                             findItemFromName(im, item->value),
                             TextToInteger(quantity->value)),
                     coins != NULL ? TextToInteger(coins->value) : 0,
-                    parseRectangle(node, tileSize(m->context)));
+                    parseRectangle(node));
             m->chestCount++;
             free((Property *) item);
             free((Property *) quantity);
@@ -260,7 +254,7 @@ void parseTilemapObjectGroupShopNode(xmlNodePtr node, Map *m) {
             const Property *propId = parseProperty(node, PROP_ID);
             Object *o = createObject(
                     xmlInt(node, "id"),
-                    parseRectangle(node, tileSize(m->context)));
+                    parseRectangle(node));
             m->shopTiles[m->shopTileCount] = createShopTile(
                     TextToInteger(propId->value),
                     propName->value,
