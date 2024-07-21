@@ -97,7 +97,7 @@ typedef enum {
 
 typedef struct {
     int id;
-    Rectangle area;
+    RectangleD area;
 } Object;
 
 typedef struct {
@@ -135,7 +135,7 @@ typedef struct {
     int id;
     ItemWithQuantity *iq;
     int coins;
-    Rectangle area;
+    RectangleD area;
 } Chest;
 
 typedef struct {
@@ -239,7 +239,7 @@ Tile *createTile(int id, TileType type) {
     return t;
 }
 
-Object *createObject(int id, Rectangle area) {
+Object *createObject(int id, RectangleD area) {
     Object *o = malloc(sizeof(Object));
     o->id = id;
     o->area = area;
@@ -254,7 +254,7 @@ Tileset *createTileset() {
     return t;
 }
 
-Chest *createChest(int id, ItemWithQuantity *iq, int coins, Rectangle area) {
+Chest *createChest(int id, ItemWithQuantity *iq, int coins, RectangleD area) {
     Chest *chest = malloc(sizeof(Chest));
     chest->id = id;
     chest->iq = iq;

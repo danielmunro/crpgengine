@@ -7,26 +7,26 @@ void drawWarpCollisions(const MapWarps *mw, Image *image) {
     for (int i = 0; i < mw->exitCount; i++) {
         ImageDrawRectangle(
                 image,
-                (int) (mw->exits[i]->area.x),
-                (int) (mw->exits[i]->area.y),
-                (int) (mw->exits[i]->area.width),
-                (int) (mw->exits[i]->area.height),
+                mw->exits[i]->area.x,
+                mw->exits[i]->area.y,
+                mw->exits[i]->area.width,
+                mw->exits[i]->area.height,
                 WHITE);
     }
     for (int i = 0; i < mw->entranceCount; i++) {
         ImageDrawRectangle(
                 image,
-                (int) (mw->entrances[i]->area.x),
-                (int) (mw->entrances[i]->area.y),
-                (int) (mw->entrances[i]->area.width),
-                (int) (mw->entrances[i]->area.height),
+                mw->entrances[i]->area.x,
+                mw->entrances[i]->area.y,
+                mw->entrances[i]->area.width,
+                mw->entrances[i]->area.height,
                 BLACK);
     }
 }
 
 void drawShopCollisions(const Map *m, Image *image) {
     for (int i = 0; i < m->shopTileCount; i++) {
-        Rectangle area = m->shopTiles[i]->object->area;
+        Rectangle area = rectangleDtoRectangle(m->shopTiles[i]->object->area);
         ImageDrawRectangle(
                 image,
                 (int) area.x,
@@ -46,11 +46,12 @@ void drawObjectCollision(const Map *m, Image layer, int tileNumber, int x, int y
         if (t->objects[i] == NULL) {
             return;
         }
+        Rectangle a = rectangleDtoRectangle(t->objects[i]->area);
         Rectangle r = {
-                (float) (m->context->game->tileSize * x) + t->objects[i]->area.x,
-                (float) (m->context->game->tileSize * y) + t->objects[i]->area.y,
-                t->objects[i]->area.width,
-                t->objects[i]->area.height,
+                (float) (m->context->game->tileSize * x) + a.x,
+                (float) (m->context->game->tileSize * y) + a.y,
+                a.width,
+                a.height,
         };
         ImageDrawRectangle(
                 &layer,
@@ -67,17 +68,17 @@ void drawTile(const Map *m, Image layer, int index, int x, int y) {
     if (index <= 0) {
         return;
     }
-    Vector2D sz = m->config->tileSize;
+    int sz = tileSize(m->context);
     Vector2 pos = {
-            (float) (sz.x * x),
-            (float) (sz.y * y),
+            (float) (sz * x),
+            (float) (sz * y),
     };
     Rectangle rect = getRectForTile(m, index);
     ImageDraw(
             &layer,
             m->tileset->source,
             rect,
-            (Rectangle) {pos.x, pos.y, (float) sz.x, (float) sz.y},
+            (Rectangle) {pos.x, pos.y, (float) sz, (float) sz},
             WHITE
     );
     if (m->context->game->showCollisions->objects) {
@@ -150,7 +151,7 @@ void createMobileLayer(
         mobsByYPosition[i] = 0;
     }
     for (int i = 0; i < mobileCount; i++) {
-        int y = (int) roundf(mobiles[i]->position.y);
+        int y = mobiles[i]->position.y;
         mobLayer[y][mobsByYPosition[y]] = mobiles[i];
         mobsByYPosition[y]++;
     }
@@ -169,7 +170,7 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
      * The player goes on the layer too.
      */
     Mobile *mob = getPartyLeader(p);
-    int playerY = (int) roundf(mob->position.y);
+    int playerY = mob->position.y;
     mobLayer[playerY][mobsByYPosition[playerY]] = mob;
 
     /**
@@ -184,8 +185,8 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
             drawAnimation(
                     getMobAnimation(mobLayer[y][n]),
                     (Vector2) {
-                            ((mobLayer[y][n]->position.x * m->context->ui->screen->scale) + offset.x),
-                            (floorf((mobLayer[y][n]->position.y * m->context->ui->screen->scale) + offset.y)),
+                            (((float) mobLayer[y][n]->position.x * m->context->ui->screen->scale) + offset.x),
+                            (floorf(((float) mobLayer[y][n]->position.y * m->context->ui->screen->scale) + offset.y)),
                     }
             );
             if (m->context->game->showCollisions->objects) {
@@ -218,8 +219,8 @@ void drawChests(const Map *m, const Player *p, Vector2 offset) {
     int tileSize = m->context->game->tileSize;
     for (int i = 0; i < m->chestCount; i++) {
         Rectangle dest = {
-                (m->chests[i]->area.x * ui->screen->scale) + offset.x,
-                (m->chests[i]->area.y * ui->screen->scale) + offset.y,
+                ((float) m->chests[i]->area.x * ui->screen->scale) + offset.x,
+                ((float) m->chests[i]->area.y * ui->screen->scale) + offset.y,
                 (float) tileSize * ui->screen->scale,
                 (float) tileSize * ui->screen->scale };
         Vector2 origin = { 0.0f, 0.0f };
@@ -276,8 +277,8 @@ void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64]
     ClearBackground(BLACK);
     const UIConfig *ui = m->context->ui;
     Vector2 offset = {
-            ((float) m->context->user->resolution.width / 2) - (mob->position.x * ui->screen->scale),
-            ((float) m->context->user->resolution.height / 2) - (mob->position.y * ui->screen->scale),
+            ((float) m->context->user->resolution.width / 2) - ((float) mob->position.x * ui->screen->scale),
+            ((float) m->context->user->resolution.height / 2) - ((float) mob->position.y * ui->screen->scale),
     };
     DrawTextureEx(m->renderedLayers[BACKGROUND], offset, 0, ui->screen->scale, WHITE);
     DrawTextureEx(m->renderedLayers[MIDGROUND], offset, 0, ui->screen->scale, WHITE);

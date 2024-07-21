@@ -22,3 +22,7 @@ Context *createContext(
     c->indexDir = gameConfig->indexDir;
     return c;
 }
+
+int tileSize(Context *c) {
+    return c->game->tileSize;
+}

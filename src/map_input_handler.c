@@ -3,8 +3,7 @@
 #include "headers/control.h"
 
 bool isObjectBlocking(const Map *m, const Object *o, Rectangle player, int x, int y) {
-    Rectangle objRect = getObjectSize(m, o, x, y);
-    Rectangle c = GetCollisionRec(player, objRect);
+    Rectangle c = GetCollisionRec(player, getObjectSize(m, o, x, y));
     return c.height > 0 || c.width > 0;
 }
 
@@ -59,7 +58,7 @@ Mobile *getBlockingMob(const Map *m, Rectangle playerRect) {
 
 Chest *getBlockingChest(const Map *m, Rectangle playerRect) {
     for (int i = 0; i < m->chestCount; i++) {
-        Rectangle c = GetCollisionRec(playerRect, m->chests[i]->area);
+        Rectangle c = GetCollisionRec(playerRect, rectangleDtoRectangle(m->chests[i]->area));
         if (c.height > 0 || c.width > 0) {
             return m->chests[i];
         }
@@ -196,7 +195,7 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
                         (float) m->context->game->tileSize,
                         (float) m->context->game->tileSize,
                 },
-                m->shopTiles[i]->object->area);
+                rectangleDtoRectangle(m->shopTiles[i]->object->area));
         if (c.height > 0 || c.width > 0) {
             Response *r = createResponse(ACTION_TAKEN_SHOPPING);
             r->shop = m->shopTiles[i];

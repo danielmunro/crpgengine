@@ -161,10 +161,10 @@ Rectangle getRectForTile(const Map *m, int index) {
 
 Rectangle getObjectSize(const Map *m, const Object *o, int x, int y) {
     return (Rectangle) {
-            (float) (m->context->game->tileSize * x) + o->area.x,
-            (float) (m->context->game->tileSize * y) + o->area.y,
-            o->area.width,
-            o->area.height,
+            (float) ((m->context->game->tileSize * x) + o->area.x),
+            (float) ((m->context->game->tileSize * y) + o->area.y),
+            (float) o->area.width,
+            (float) o->area.height,
     };
 }
 
@@ -172,7 +172,7 @@ int atExit(const Map *m, const Player *p) {
     Mobile *mob = getPartyLeader(p);
     Rectangle rect = getMobileRectangle(mob);
     for (int i = 0; i < m->warps->exitCount; i++) {
-        Rectangle c = GetCollisionRec(m->warps->exits[i]->area, rect);
+        Rectangle c = GetCollisionRec(rectangleDtoRectangle(m->warps->exits[i]->area), rect);
         if (c.height > 0 || c.width > 0) {
             return i;
         }

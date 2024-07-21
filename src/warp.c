@@ -4,7 +4,7 @@
 
 typedef struct {
     int id;
-    Rectangle area;
+    RectangleD area;
     const char *to;
     const char *scene;
 } Exit;
@@ -12,11 +12,11 @@ typedef struct {
 typedef struct {
     int id;
     const char *name;
-    Rectangle area;
+    RectangleD area;
     Direction direction;
 } Entrance;
 
-Exit *createExit(int id, const char *to, const char *scene, Rectangle area) {
+Exit *createExit(int id, const char *to, const char *scene, RectangleD area) {
     Exit *e = malloc(sizeof(Exit));
     e->id = id;
     e->to = to;
@@ -25,7 +25,7 @@ Exit *createExit(int id, const char *to, const char *scene, Rectangle area) {
     return e;
 }
 
-Entrance *createEntrance(int id, const char *name, Direction direction, Rectangle area) {
+Entrance *createEntrance(int id, const char *name, Direction direction, RectangleD area) {
     Entrance *e = malloc(sizeof(Entrance));
     e->id = id;
     e->name = name;
