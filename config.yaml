@@ -7,9 +7,6 @@ startScene: tinytown
 # The start scene to override for testing purposes.
 overrideStartScene: ""
 
-# Size of tiles
-tileSize: 16
-
 # The level of logging to use. Options are:
 #   * debug -- very noisy. Enables logging from raylib
 #   * info -- default
@@ -46,3 +43,11 @@ showCollisions:
   objects: false
   player: false
   warps: false
+
+# Size of tiles
+tileSize: 16
+
+# Size of mobiles
+mobileSize:
+  width: 16
+  height: 24

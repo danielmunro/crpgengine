@@ -103,7 +103,7 @@ typedef struct {
     ItemReferenceData *item;
     Outcome outcome;
     int amount;
-    Vector2 position;
+    Vector2D position;
     bool parallel;
 } Then;
 
@@ -153,7 +153,7 @@ Then *createThen(
         const char *direction,
         ItemReferenceData *item,
         const Outcome outcome,
-        Vector2 position,
+        Vector2D position,
         bool parallel,
         int amount) {
     Then *then = malloc(sizeof(Then));
@@ -242,8 +242,8 @@ bool needsToRemoveActiveControlBlock(const ControlBlock *control) {
 bool isMovingAndAtDestination(const ControlBlock *cb) {
     return cb->then[cb->progress]->outcome == MOVE_TO &&
            vector2DEquals(
-                   vector2DFromVect(cb->then[cb->progress]->target->position),
-                   vector2DFromVect(cb->then[cb->progress]->position)
+                   cb->then[cb->progress]->target->position,
+                   cb->then[cb->progress]->position
            );
 }
 

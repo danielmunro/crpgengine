@@ -55,7 +55,7 @@ void attemptToUseExit(Game *game, Scene *scene, const Entrance *entrance) {
              entrance->area.width,
              entrance->area.height
     );
-    getPartyLeader(game->player)->position = (Vector2) {
+    getPartyLeader(game->player)->position = (Vector2D) {
             entrance->area.x,
             entrance->area.y
     };
@@ -123,8 +123,8 @@ void checkMapInput(Game *g) {
     }
     Direction d = mapCheckMoveKeys(g->player);
     if (d != -1) {
-        Vector2 newPos = mob->position;
-        float amountToMove = (float) g->context->game->tileSize;
+        Vector2D newPos = mob->position;
+        int amountToMove = g->context->game->tileSize;
         if (d == DIRECTION_UP) {
             newPos.y -= amountToMove;
         } else if (d == DIRECTION_DOWN) {

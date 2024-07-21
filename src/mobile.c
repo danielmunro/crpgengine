@@ -16,7 +16,7 @@ typedef struct {
     Direction previousDirection;
     Animation *animations[MAX_ANIMATIONS];
     Avatar *avatar;
-    Vector2 position;
+    Vector2D position;
     bool moving[DIRECTION_COUNT];
     struct timeval lastMovement;
     bool isBeingMoved;
@@ -35,7 +35,7 @@ typedef struct {
     float hitAnimationTimer;
     bool isFleeing;
     bool immortal;
-    float amountToMove;
+    int amountToMove;
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {
@@ -45,7 +45,7 @@ Animation *getMobAnimation(Mobile *mob) {
 Mobile *createMobile(
         const char *id,
         const char *name,
-        Vector2 position,
+        Vector2D position,
         Direction direction,
         Animation *animations[MAX_ANIMATIONS],
         Avatar *avatar,
@@ -107,8 +107,8 @@ bool isMoving(const Mobile *mob) {
 Rectangle getMobileRectangle(Mobile *mob) {
     const Rectangle *c = getMobAnimation(mob)->spriteSheet->collision;
     return (Rectangle) {
-            mob->position.x + c->x,
-            mob->position.y + c->y,
+            (float) mob->position.x + c->x,
+            (float) mob->position.y + c->y,
             c->width,
             c->height,
     };
@@ -116,21 +116,6 @@ Rectangle getMobileRectangle(Mobile *mob) {
 
 float getMoveAmount(float fps) {
     return 60 / fps;
-}
-
-Vector2 getMoveFor(const Mobile *mob, Direction direction, float fps) {
-    if (direction == DIRECTION_UP) {
-        return (Vector2) {mob->position.x, mob->position.y - getMoveAmount(fps)};
-    } else if (direction == DIRECTION_DOWN) {
-        return (Vector2) {mob->position.x, mob->position.y + getMoveAmount(fps)};
-    }
-    if (direction == DIRECTION_LEFT) {
-        return (Vector2) {mob->position.x - getMoveAmount(fps), mob->position.y};
-    }
-    if (direction == DIRECTION_RIGHT) {
-        return (Vector2) {mob->position.x + getMoveAmount(fps), mob->position.y};
-    }
-    return mob->position;
 }
 
 void updateDirection(Mobile *mob, Direction direction) {
@@ -145,10 +130,20 @@ float normalizeMoveAmount(float a, float b, float fps) {
     return 0;
 }
 
-bool moveMob(Mobile *mob, Vector2 destination, float targetFPS) {
+bool moveMob(Mobile *mob, Vector2D destination, float targetFPS) {
     resetMoving(mob);
-    float x = normalizeMoveAmount(mob->position.x, destination.x, targetFPS);
-    float y = normalizeMoveAmount(mob->position.y, destination.y, targetFPS);
+    int x = 0;
+    int y = 0;
+    if (mob->position.x > destination.x) {
+        x = -1;
+    } else if (mob->position.x < destination.x) {
+        x = 1;
+    }
+    if (mob->position.y > destination.y) {
+        y = -1;
+    } else if (mob->position.y < destination.y) {
+        y = 1;
+    }
     mob->position.x += x;
     mob->position.y += y;
     bool moved = x != 0 || y != 0;
@@ -165,16 +160,16 @@ bool moveMob(Mobile *mob, Vector2 destination, float targetFPS) {
     return moved;
 }
 
-char *getPositionAsString(Vector2 position) {
+char *getPositionAsString(Vector2D position) {
     char *value = malloc(255);
-    sprintf(value, "%.1f, %.1f", position.x, position.y);
+    sprintf(value, "%d, %d", position.x, position.y);
     return value;
 }
 
 void useEntrance(Mobile *mob, const Entrance *e) {
     const Rectangle *c = getMobAnimation(mob)->spriteSheet->collision;
-    mob->position.x = e->area.x;
-    mob->position.y = e->area.y - c->y;
+    mob->position.x = (int) e->area.x;
+    mob->position.y = (int) (e->area.y - c->y);
     mob->direction = e->direction;
 }
 

@@ -67,12 +67,12 @@ Chest *getBlockingChest(const Map *m, Rectangle playerRect) {
     return NULL;
 }
 
-bool setCollision(const Map *m, Player *p, Direction direction, Vector2 pos) {
+bool setCollision(const Map *m, Player *p, Direction direction, Vector2D pos) {
     Mobile *mob = getPartyLeader(p);
     const Rectangle *collision = getMobAnimation(mob)->spriteSheet->collision;
     Rectangle rect = {
-            pos.x + collision->x,
-            pos.y + collision->y,
+            (float) pos.x + collision->x,
+            (float) pos.y + collision->y,
             collision->width,
             collision->height,
     };
@@ -104,10 +104,11 @@ void evaluateMovement(const Map *m, Player *p) {
         return;
     }
     if (mob->amountToMove > 0) {
-        float amount = getMoveAmount((float) m->context->ui->screen->targetFrameRate);
-        if (amount > mob->amountToMove) {
-            amount = mob->amountToMove;
-        }
+//        float amount = getMoveAmount((float) m->context->ui->screen->targetFrameRate);
+        int amount = 1;
+//        if (amount > mob->amountToMove) {
+//            amount = mob->amountToMove;
+//        }
         if (mob->direction == DIRECTION_UP) {
             mob->position.y -= amount;
         } else if (mob->direction == DIRECTION_DOWN) {
@@ -205,6 +206,6 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
     return createResponse(ACTION_TAKEN_NONE);
 }
 
-void mapDebugKeyPressed(Vector2 position, int tileSize) {
-    addInfo("player coordinates: %f, %f", position.x / (float) tileSize, position.y / (float) tileSize);
+void mapDebugKeyPressed(Vector2D position, int tileSize) {
+    addInfo("player coordinates: %f, %f", position.x / tileSize, position.y / tileSize);
 }

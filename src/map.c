@@ -24,7 +24,7 @@ typedef struct {
 
 typedef struct {
     Mobile *mob;
-    Vector2 destination;
+    Vector2D destination;
 } MobileMovement;
 
 typedef struct {
@@ -94,7 +94,7 @@ Map *createMap(int sceneId, Context *c) {
     return map;
 }
 
-MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
+MobileMovement *createMobileMovement(Mobile *mob, Vector2D destination) {
     MobileMovement *mobMovement = malloc(sizeof(MobileMovement));
     mobMovement->mob = mob;
     mobMovement->destination = destination;

@@ -210,11 +210,11 @@ Then *mapThen(ControlManager *cm, ThenData td) {
     } else {
         target = findMobById(cm->mobileManager, td.mob);
     }
-    Vector2 pos;
+    Vector2D pos;
     if (td.position != NULL) {
         pos = getPositionFromString(td.position);
     } else {
-        pos = (Vector2) {0, 0};
+        pos = (Vector2D) {0, 0};
     }
     if (td.dialog != NULL) {
         td.action = OUTCOME_DIALOG;

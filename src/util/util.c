@@ -73,13 +73,13 @@ int max(int a, int b) {
     return b;
 }
 
-Vector2 getPositionFromString(const char *position) {
+Vector2D getPositionFromString(const char *position) {
     char *p = (char *) position;
-    char *x = trim(strtok_r(p, ",", &p));
-    char *y = trim(strtok_r(p, ",", &p));
-    return (Vector2) {
-            strtof(x, &x),
-            strtof(y, &y),
+    const char *x = trim(strtok_r(p, ",", &p));
+    const char *y = trim(strtok_r(p, ",", &p));
+    return (Vector2D) {
+            atoi(x),
+            atoi(y),
     };
 }
 

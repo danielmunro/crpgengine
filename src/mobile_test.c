@@ -1,8 +1,8 @@
 void testCanMoveMob(Context *c) {
     // given
-    float startX = 100;
-    float startY = 100;
-    Vector2 start = (Vector2) {startX, startY};
+    int startX = 100;
+    int startY = 100;
+    Vector2D start = (Vector2D) {startX, startY};
     AnimationManager *am = createTestAnimationManager(c);
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
@@ -27,7 +27,7 @@ void testCanMoveMob(Context *c) {
     // when
     moveMob(
             mob,
-            (Vector2) {startX + 5, startY + 5},
+            (Vector2D) {startX + 5, startY + 5},
             (float) c->ui->screen->targetFrameRate);
 
     // then
@@ -37,9 +37,9 @@ void testCanMoveMob(Context *c) {
 
 void testMobCanStopMoving(Context *c) {
     // given
-    float startX = 100;
-    float startY = 100;
-    Vector2 start = (Vector2) {startX, startY};
+    int startX = 100;
+    int startY = 100;
+    Vector2D start = (Vector2D) {startX, startY};
     AnimationManager *am = createTestAnimationManager(c);
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
