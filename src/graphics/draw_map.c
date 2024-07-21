@@ -47,8 +47,8 @@ void drawObjectCollision(const Map *m, Image layer, int tileNumber, int x, int y
             return;
         }
         Rectangle r = {
-                (float) (m->tileset->size.x * x) + t->objects[i]->area.x,
-                (float) (m->tileset->size.y * y) + t->objects[i]->area.y,
+                (float) (m->context->game->tileSize * x) + t->objects[i]->area.x,
+                (float) (m->context->game->tileSize * y) + t->objects[i]->area.y,
                 t->objects[i]->area.width,
                 t->objects[i]->area.height,
         };
@@ -86,10 +86,10 @@ void drawTile(const Map *m, Image layer, int index, int x, int y) {
 }
 
 void renderMapLayer(Map *m, LayerType layer) {
-    Vector2D sz = m->tileset->size;
-    int width = m->context->user->resolution.width / sz.x;
-    int height = m->context->user->resolution.height / sz.y;
-    Image renderedLayer = GenImageColor(width * sz.x, height * sz.y, BLANK);
+    int tileSize = m->context->game->tileSize;
+    int width = m->context->user->resolution.width / tileSize;
+    int height = m->context->user->resolution.height / tileSize;
+    Image renderedLayer = GenImageColor(width * tileSize, height * tileSize, BLANK);
     for (int y = -1; y < height; y++) {
         for (int x = 0; x < width; x++) {
             if (x >= m->layers[layer]->width || y >= m->layers[layer]->height) {
@@ -215,12 +215,13 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
 
 void drawChests(const Map *m, const Player *p, Vector2 offset) {
     const UIConfig *ui = m->context->ui;
+    int tileSize = m->context->game->tileSize;
     for (int i = 0; i < m->chestCount; i++) {
         Rectangle dest = {
                 (m->chests[i]->area.x * ui->screen->scale) + offset.x,
                 (m->chests[i]->area.y * ui->screen->scale) + offset.y,
-                (float) m->tileset->size.x * ui->screen->scale,
-                (float) m->tileset->size.y * ui->screen->scale };
+                (float) tileSize * ui->screen->scale,
+                (float) tileSize * ui->screen->scale };
         Vector2 origin = { 0.0f, 0.0f };
         Rectangle src;
         if (isChestOpened(p, m->sceneId, m->chests[i]->id)) {

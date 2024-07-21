@@ -50,11 +50,11 @@ Mobile *findMobById(MobileManager *mm, const char *id) {
 
 Mobile *createMobileFromData(MobileManager *mm, MobileData *data, Animation *animations[MAX_ANIMATIONS]) {
     Vector2 pos = getPositionFromString(data->position);
+    float tileSize = (float) mm->context->game->tileSize;
     Mobile *mob = createMobile(
             data->id,
             data->name,
-//            (Vector2) {pos.x * (float) tileSize.x, pos.y * (float) tileSize.y},
-            pos,
+            (Vector2) {pos.x * tileSize, pos.y * tileSize},
             getDirectionFromString(data->direction),
             animations,
             createAvatar(

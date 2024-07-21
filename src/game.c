@@ -123,20 +123,15 @@ void checkMapInput(Game *g) {
     }
     Direction d = mapCheckMoveKeys(g->player);
     if (d != -1) {
-        float amountToMove;
         Vector2 newPos = mob->position;
-        Vector2D t = g->scenes->current->map->tileset->size;
+        float amountToMove = (float) g->context->game->tileSize;
         if (d == DIRECTION_UP) {
-            amountToMove = (float) t.y;
             newPos.y -= amountToMove;
         } else if (d == DIRECTION_DOWN) {
-            amountToMove = (float) t.y;
             newPos.y += amountToMove;
         } else if (d == DIRECTION_LEFT) {
-            amountToMove = (float) t.x;
             newPos.x -= amountToMove;
         } else if (d == DIRECTION_RIGHT) {
-            amountToMove = (float) t.x;
             newPos.x += amountToMove;
         }
         if (!setCollision(g->scenes->current->map, g->player, d, newPos)) {
@@ -145,7 +140,7 @@ void checkMapInput(Game *g) {
         }
     }
     if (IsKeyPressed(KEY_C)) {
-        mapDebugKeyPressed(mob->position, g->scenes->current->map->tileset->size);
+        mapDebugKeyPressed(mob->position, g->context->game->tileSize);
     }
     if (IsKeyPressed(KEY_SPACE)) {
         const Response *r = mapSpaceKeyPressed(

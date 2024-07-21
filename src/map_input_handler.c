@@ -192,8 +192,8 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
                 (Rectangle) {
                         mob->position.x,
                         mob->position.y,
-                        (float) m->tileset->size.x,
-                        (float) m->tileset->size.y,
+                        (float) m->context->game->tileSize,
+                        (float) m->context->game->tileSize,
                 },
                 m->shopTiles[i]->object->area);
         if (c.height > 0 || c.width > 0) {
@@ -205,6 +205,6 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
     return createResponse(ACTION_TAKEN_NONE);
 }
 
-void mapDebugKeyPressed(Vector2 position, Vector2D size) {
-    addInfo("player coordinates: %f, %f", position.x / (float) size.x, position.y / (float) size.y);
+void mapDebugKeyPressed(Vector2 position, int tileSize) {
+    addInfo("player coordinates: %f, %f", position.x / (float) tileSize, position.y / (float) tileSize);
 }

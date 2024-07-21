@@ -119,8 +119,6 @@ void parseTilesetRootNode(xmlNodePtr node, Tileset *t, const char *indexDir) {
     while (cur != NULL) {
         TilesetNodeType type = getTilesetNodeTypeFromString((const char *) cur->name);
         if (type == TILESET_NODE_TYPE_TILESET) {
-            t->size.x = xmlInt(cur, PROP_TILE_WIDTH);
-            t->size.y = xmlInt(cur, PROP_TILE_HEIGHT);
             cur = cur->children;
         } else if (type == TILESET_NODE_TYPE_IMAGE) {
             char *imagePath = malloc(MAX_FS_PATH_LENGTH);
