@@ -48,11 +48,12 @@ Mobile *findMobById(MobileManager *mm, const char *id) {
     exit(RuntimeErrorMobileNotFound);
 }
 
-Mobile *createMobileFromData(MobileManager *mm, MobileData *data, Animation *animations[MAX_ANIMATIONS]) {
+Mobile *createMobileFromData(MobileManager *mm, MobileData *data, Animation *animations[MAX_ANIMATIONS], Vector2D tileSize) {
+    Vector2 pos = getPositionFromString(data->position);
     Mobile *mob = createMobile(
             data->id,
             data->name,
-            getPositionFromString(data->position),
+            (Vector2) {pos.x * (float) tileSize.x, pos.y * (float) tileSize.y},
             getDirectionFromString(data->direction),
             animations,
             createAvatar(

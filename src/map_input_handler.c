@@ -67,7 +67,7 @@ Chest *getBlockingChest(const Map *m, Rectangle playerRect) {
     return NULL;
 }
 
-void setCollision(const Map *m, Player *p, Direction direction, Vector2 pos) {
+bool setCollision(const Map *m, Player *p, Direction direction, Vector2 pos) {
     Mobile *mob = getPartyLeader(p);
     const Rectangle *collision = getMobAnimation(mob)->spriteSheet->collision;
     Rectangle rect = {
@@ -81,34 +81,45 @@ void setCollision(const Map *m, Player *p, Direction direction, Vector2 pos) {
         const Chest *c = getBlockingChest(m, rect);
         if (c != NULL) {
             p->blocking->chest = c;
-            return;
+            return true;
         }
         const Tile *t = getBlockingMapTile(m, rect);
         if (t != NULL) {
             p->blocking->tile = t;
-            return;
+            return true;
         }
         Mobile *blockingMob = getBlockingMob(m, rect);
         if (blockingMob != NULL) {
             p->blocking->mob = blockingMob;
-            return;
+            return true;
         }
-        mob->position = pos;
         p->engageable = NULL;
     }
+    return false;
 }
 
 void evaluateMovement(const Map *m, Player *p) {
-    const Mobile *mob = getPartyLeader(p);
+    Mobile *mob = getPartyLeader(p);
     if (mob->isBeingMoved) {
         return;
     }
-    for (int i = 0; i < DIRECTION_COUNT; i++) {
-        setCollision(
-                m,
-                p,
-                DirectionEnums[i],
-                getMoveFor(mob, DirectionEnums[i], (float) m->context->ui->screen->targetFrameRate));
+    if (mob->amountToMove > 0) {
+        float amount = getMoveAmount((float) m->context->ui->screen->targetFrameRate);
+        if (amount > mob->amountToMove) {
+            amount = mob->amountToMove;
+        }
+        if (mob->direction == DIRECTION_UP) {
+            mob->position.y -= amount;
+        } else if (mob->direction == DIRECTION_DOWN) {
+            mob->position.y += amount;
+        } else if (mob->direction == DIRECTION_LEFT) {
+            mob->position.x -= amount;
+        } else if (mob->direction == DIRECTION_RIGHT) {
+            mob->position.x += amount;
+        }
+        mob->amountToMove -= amount;
+    } else {
+        resetMoving(mob);
     }
 }
 
@@ -194,6 +205,6 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
     return createResponse(ACTION_TAKEN_NONE);
 }
 
-void mapDebugKeyPressed(Vector2 position) {
-    addInfo("player coordinates: %f, %f", position.x, position.y);
+void mapDebugKeyPressed(Vector2 position, Vector2D size) {
+    addInfo("player coordinates: %f, %f", position.x / (float) size.x, position.y / (float) size.y);
 }

@@ -171,13 +171,15 @@ int getExperienceToLevel(int level) {
     return (int) pow((double) level, 3.0) + 999;
 }
 
-void checkMoveKey(const Player *p, int key, Direction direction) {
+bool checkMoveKey(const Player *p, int key, Direction direction) {
     Mobile *mob = getPartyLeader(p);
-    if (IsKeyDown(key) && !p->engaged) {
+    if (IsKeyDown(key) && !p->engaged && mob->amountToMove == 0) {
         mob->moving[direction] = true;
         mob->direction = direction;
         getMobAnimation(mob)->isPlaying = true;
+        return true;
     }
+    return false;
 }
 
 void clearDialog(Player *p) {
@@ -185,10 +187,13 @@ void clearDialog(Player *p) {
     p->dialog = NULL;
 }
 
-void mapCheckMoveKeys(const Player *player) {
+Direction mapCheckMoveKeys(const Player *player) {
     for (int i = 0; i < DIRECTION_COUNT; i++) {
-        checkMoveKey(player, MOVE_KEYS[i], DirectionEnums[i]);
+        if (checkMoveKey(player, MOVE_KEYS[i], DirectionEnums[i])) {
+            return DirectionEnums[i];
+        }
     }
+    return -1;
 }
 
 bool isSpeakingTo(const Player *p, const Mobile *target) {

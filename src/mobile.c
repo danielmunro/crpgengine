@@ -35,6 +35,7 @@ typedef struct {
     float hitAnimationTimer;
     bool isFleeing;
     bool immortal;
+    float amountToMove;
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {
@@ -84,6 +85,7 @@ Mobile *createMobile(
     mobile->hitAnimationTimer = 0;
     mobile->isFleeing = false;
     mobile->immortal = immortal;
+    mobile->amountToMove = 0;
     return mobile;
 }
 
@@ -92,7 +94,7 @@ void resetMoving(Mobile *mob) {
     mob->moving[DIRECTION_DOWN] = false;
     mob->moving[DIRECTION_LEFT] = false;
     mob->moving[DIRECTION_RIGHT] = false;
-    getMobAnimation(mob)->isPlaying = 0;
+    getMobAnimation(mob)->isPlaying = false;
 }
 
 bool isMoving(const Mobile *mob) {
@@ -177,7 +179,7 @@ void useEntrance(Mobile *mob, const Entrance *e) {
 }
 
 bool canPlayerMove(const Mobile *mob) {
-    return !mob->isBeingMoved && !mob->locked && mob->waitTimer < 0;
+    return !mob->isBeingMoved && !mob->locked && mob->waitTimer < 0 && mob->amountToMove == 0;
 }
 
 bool isReadyForAction(Mobile *mob) {
