@@ -175,6 +175,7 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
     /**
      * Now go through the layer and draw mobs in order.
      */
+    const UIConfig *ui = m->context->ui;
     for (int y = 0; y < MAX_LAYERS; y++) {
         for (int n = 0; n < MAX_MOBILES; n++) {
             if (mobLayer[y][n] == NULL) {
@@ -187,18 +188,28 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
                             (floorf((mobLayer[y][n]->position.y * m->context->ui->screen->scale) + offset.y)),
                     }
             );
+            if (m->context->game->showCollisions->objects) {
+                Rectangle rect = getMobileRectangle(mobLayer[y][n]);
+                DrawRectangle(
+                        (int) ((rect.x * ui->screen->scale) + offset.x),
+                        (int) ((rect.y * ui->screen->scale) + offset.y),
+                        (int) (rect.width * ui->screen->scale),
+                        (int) (rect.height * ui->screen->scale),
+                        GREEN
+                );
+            }
         }
     }
 
     if (m->context->game->showCollisions->player) {
-        const UIConfig *ui = m->context->ui;
         Rectangle rect = getMobileRectangle(getPartyLeader(p));
         DrawRectangle(
                 (int) ((rect.x * ui->screen->scale) + offset.x),
                 (int) ((rect.y * ui->screen->scale) + offset.y),
                 (int) (rect.width * ui->screen->scale),
                 (int) (rect.height * ui->screen->scale),
-                GREEN);
+                GREEN
+        );
     }
 }
 
