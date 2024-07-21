@@ -19,6 +19,7 @@ typedef struct {
     bool purgeSaves;
     bool showFPS;
     ShowCollisionsData *showCollisions;
+    int tileSize;
 } ConfigData;
 
 static const cyaml_schema_field_t showCollisionsFieldSchema[] = {
@@ -56,6 +57,8 @@ static const cyaml_schema_field_t configTopMappingField[] = {
                 "showFPS", CYAML_BOOL, ConfigData, showFPS),
         CYAML_FIELD_MAPPING_PTR(
                 "showCollisions", CYAML_FLAG_POINTER, ConfigData, showCollisions, showCollisionsFieldSchema),
+        CYAML_FIELD_INT(
+                "tileSize", CYAML_FLAG_DEFAULT, ConfigData, tileSize),
         CYAML_FIELD_END
 };
 
