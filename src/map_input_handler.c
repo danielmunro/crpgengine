@@ -198,5 +198,5 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
 }
 
 void mapDebugKeyPressed(Vector2D position, int tileSize) {
-    addInfo("player coordinates: %f, %f", position.x / tileSize, position.y / tileSize);
+    addInfo("player coordinates: %d, %d", position.x / tileSize, position.y / tileSize);
 }

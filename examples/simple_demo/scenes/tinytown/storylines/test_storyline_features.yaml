@@ -37,7 +37,7 @@ storylines:
     then:
       - player: true
         action: move_to
-        position: 287, 292
+        position: 22, 20
       - player: true
         action: add_story
         story: from_the_past:moved_1

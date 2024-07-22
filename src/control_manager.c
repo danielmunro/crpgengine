@@ -233,7 +233,10 @@ Then *mapThen(ControlManager *cm, ThenData td) {
             &td.direction[0],
             &td.item[0],
             o,
-            pos,
+            (Vector2D) {
+                pos.x * tileSize(cm->context),
+                pos.y * tileSize(cm->context),
+            },
             td.parallel,
             amount
     );
