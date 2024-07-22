@@ -55,10 +55,6 @@ void attemptToUseExit(Game *game, Scene *scene, const Entrance *entrance) {
              entrance->area.width,
              entrance->area.height
     );
-    getPartyLeader(game->player)->position = (Vector2D) {
-            entrance->area.x,
-            entrance->area.y
-    };
     setScene(game->scenes, scene, game->player, entrance->name);
 }
 
