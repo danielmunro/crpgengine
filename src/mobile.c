@@ -122,13 +122,6 @@ void updateDirection(Mobile *mob, Direction direction) {
     mob->previousDirection = mob->direction;
     mob->direction = direction;
 }
-float normalizeMoveAmount(float a, float b, float fps) {
-    int a1 = (int) a;
-    int b1 = (int) b;
-    if (a1 > b1) return -getMoveAmount(fps);
-    if (a1 < b1) return getMoveAmount(fps);
-    return 0;
-}
 
 bool moveMob(Mobile *mob, Vector2D destination, float targetFPS) {
     resetMoving(mob);
