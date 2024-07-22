@@ -183,8 +183,8 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
         Mobile *mob = getPartyLeader(player);
         if (CheckCollisionRecs(
                 (Rectangle) {
-                        mob->position.x,
-                        mob->position.y,
+                        (float) mob->position.x,
+                        (float) mob->position.y,
                         (float) m->context->game->tileSize,
                         (float) m->context->game->tileSize,
                 },
