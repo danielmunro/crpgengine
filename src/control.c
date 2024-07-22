@@ -195,10 +195,8 @@ bool isSceneLoaded(Condition condition, EventType eventType) {
 
 bool hasArrivedAt(const Player *p, Condition condition, const ArriveAt *arriveAt) {
     if (arriveAt != NULL) {
-        Rectangle c = GetCollisionRec(
-                getMobileRectangle(getPartyLeader(p)),
-                rectangleDtoRectangle(arriveAt->rect));
-        return condition == ARRIVE_AT && (c.height > 0 || c.width > 0);
+        return condition == ARRIVE_AT && CheckCollisionRecs(getMobileRectangle(getPartyLeader(p)),
+                                                            rectangleDtoRectangle(arriveAt->rect));
     }
     return false;
 }

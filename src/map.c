@@ -172,8 +172,8 @@ int atExit(const Map *m, const Player *p) {
     Mobile *mob = getPartyLeader(p);
     Rectangle rect = getMobileRectangle(mob);
     for (int i = 0; i < m->warps->exitCount; i++) {
-        Rectangle c = GetCollisionRec(rectangleDtoRectangle(m->warps->exits[i]->area), rect);
-        if (c.height > 0 || c.width > 0) {
+        if (CheckCollisionRecs(rectangleDtoRectangle(m->warps->exits[i]->area),
+                               rect)) {
             return i;
         }
     }

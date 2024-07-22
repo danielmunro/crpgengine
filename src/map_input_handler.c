@@ -3,8 +3,7 @@
 #include "headers/control.h"
 
 bool isObjectBlocking(const Map *m, const Object *o, Rectangle player, int x, int y) {
-    Rectangle c = GetCollisionRec(player, getObjectSize(m, o, x, y));
-    return c.height > 0 || c.width > 0;
+        return CheckCollisionRecs(player, getObjectSize(m, o, x, y));
 }
 
 const Tile *getBlockingTile(const Map *m, Rectangle player, int layer, int x, int y) {
@@ -48,8 +47,7 @@ const Tile *getBlockingMapTile(const Map *m, Rectangle player) {
 
 Mobile *getBlockingMob(const Map *m, Rectangle playerRect) {
     for (int i = 0; i < m->mobileCount; i++) {
-        Rectangle c = GetCollisionRec(playerRect, getMobileRectangle(m->mobiles[i]));
-        if (c.height > 0 || c.width > 0) {
+        if (CheckCollisionRecs(playerRect, getMobileRectangle(m->mobiles[i]))) {
             return m->mobiles[i];
         }
     }
@@ -58,8 +56,7 @@ Mobile *getBlockingMob(const Map *m, Rectangle playerRect) {
 
 Chest *getBlockingChest(const Map *m, Rectangle playerRect) {
     for (int i = 0; i < m->chestCount; i++) {
-        Rectangle c = GetCollisionRec(playerRect, rectangleDtoRectangle(m->chests[i]->area));
-        if (c.height > 0 || c.width > 0) {
+        if (CheckCollisionRecs(playerRect, rectangleDtoRectangle(m->chests[i]->area))) {
             return m->chests[i];
         }
     }
@@ -184,15 +181,14 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
     }
     for (int i = 0; i < m->shopTileCount; i++) {
         Mobile *mob = getPartyLeader(player);
-        Rectangle c = GetCollisionRec(
+        if (CheckCollisionRecs(
                 (Rectangle) {
                         mob->position.x,
                         mob->position.y,
                         (float) m->context->game->tileSize,
                         (float) m->context->game->tileSize,
                 },
-                rectangleDtoRectangle(m->shopTiles[i]->object->area));
-        if (c.height > 0 || c.width > 0) {
+                rectangleDtoRectangle(m->shopTiles[i]->object->area))) {
             Response *r = createResponse(ACTION_TAKEN_SHOPPING);
             r->shop = m->shopTiles[i];
             return r;
