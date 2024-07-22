@@ -97,17 +97,13 @@ bool setCollision(const Map *m, Player *p, Direction direction, Vector2D pos) {
     return false;
 }
 
-void evaluateMovement(const Map *m, Player *p) {
+void evaluateMovement(const Player *p) {
     Mobile *mob = getPartyLeader(p);
     if (mob->isBeingMoved) {
         return;
     }
     if (mob->amountToMove > 0) {
-//        float amount = getMoveAmount((float) m->context->ui->screen->targetFrameRate);
         int amount = 1;
-//        if (amount > mob->amountToMove) {
-//            amount = mob->amountToMove;
-//        }
         if (mob->direction == DIRECTION_UP) {
             mob->position.y -= amount;
         } else if (mob->direction == DIRECTION_DOWN) {
