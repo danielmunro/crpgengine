@@ -168,8 +168,9 @@ char *getPositionAsString(Vector2D position) {
 
 void useEntrance(Mobile *mob, const Entrance *e) {
     const Rectangle *c = getMobAnimation(mob)->spriteSheet->collision;
-    mob->position.x = (int) e->area.x;
-    mob->position.y = (int) (e->area.y - c->y);
+    addInfo("use entrance :: %s, %d, %d", e->name, e->area.x, e->area.y);
+    mob->position.x = e->area.x;
+    mob->position.y = (e->area.y - (int) c->y);
     mob->direction = e->direction;
 }
 
