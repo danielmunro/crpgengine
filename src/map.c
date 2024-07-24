@@ -194,7 +194,7 @@ void doMobileMovementUpdates(Map *m) {
         bool moved = moveMob(
                 mob,
                 m->mobMovements[i]->destination,
-                (float) m->context->ui->screen->targetFrameRate);
+                tileSize(m->context));
         if (!moved) {
             addInfo("mob done moving -- %s",
                     m->mobMovements[i]->mob->name);

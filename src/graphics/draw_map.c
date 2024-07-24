@@ -186,7 +186,7 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
                     getMobAnimation(mobLayer[y][n]),
                     (Vector2) {
                             (((float) mobLayer[y][n]->position.x * m->context->ui->screen->scale) + offset.x),
-                            (floorf(((float) mobLayer[y][n]->position.y * m->context->ui->screen->scale) + offset.y)),
+                            (floorf(((float) mobLayer[y][n]->position.y * m->context->ui->screen->scale) + offset.y)  - (float) (m->context->game->mobileSize.y - m->context->game->tileSize)),
                     }
             );
             if (m->context->game->showCollisions->objects) {

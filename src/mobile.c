@@ -114,43 +114,38 @@ Rectangle getMobileRectangle(Mobile *mob) {
     };
 }
 
-float getMoveAmount(float fps) {
-    return 60 / fps;
-}
-
 void updateDirection(Mobile *mob, Direction direction) {
     mob->previousDirection = mob->direction;
     mob->direction = direction;
 }
 
-bool moveMob(Mobile *mob, Vector2D destination, float targetFPS) {
+bool moveMob(Mobile *mob, Vector2D destination, int tileSize) {
     resetMoving(mob);
-    int x = 0;
-    int y = 0;
-    if (mob->position.x > destination.x) {
-        x = -1;
-    } else if (mob->position.x < destination.x) {
-        x = 1;
+    if (mob->amountToMove > 0) {
+        return true;
     }
-    if (mob->position.y > destination.y) {
-        y = -1;
-    } else if (mob->position.y < destination.y) {
-        y = 1;
-    }
-    mob->position.x += x;
-    mob->position.y += y;
-    bool moved = x != 0 || y != 0;
     Animation *animation = getMobAnimation(mob);
-    animation->isPlaying = moved;
-    if (moved) {
-        if (x > 0) mob->direction = DIRECTION_RIGHT;
-        else if (x < 0) mob->direction = DIRECTION_LEFT;
-        else if (y > 0) mob->direction = DIRECTION_DOWN;
-        else mob->direction = DIRECTION_UP;
-        mob->moving[mob->direction] = true;
+    addInfo("mob moving :: %s -- %d, %d -- %d, %d", mob->name, mob->position.x, mob->position.y, destination.x, destination.y);
+    if (mob->position.x > destination.x) {
+        mob->direction = DIRECTION_LEFT;
+        mob->amountToMove = tileSize;
+    } else if (mob->position.x < destination.x) {
+        mob->direction = DIRECTION_RIGHT;
+        mob->amountToMove = tileSize;
+    } else if (mob->position.y > destination.y) {
+        mob->direction = DIRECTION_UP;
+        mob->amountToMove = tileSize;
+    } else if (mob->position.y < destination.y) {
+        mob->direction = DIRECTION_DOWN;
+        mob->amountToMove = tileSize;
+    } else {
+        animation->isPlaying = false;
+        mob->isBeingMoved = false;
+        return false;
     }
-    incrementAnimationFrame(animation, targetFPS);
-    return moved;
+    mob->moving[mob->direction] = true;
+    animation->isPlaying = true;
+    return true;
 }
 
 char *getPositionAsString(Vector2D position) {
@@ -160,10 +155,9 @@ char *getPositionAsString(Vector2D position) {
 }
 
 void useEntrance(Mobile *mob, const Entrance *e) {
-    const Rectangle *c = getMobAnimation(mob)->spriteSheet->collision;
     addInfo("use entrance :: %s, %d, %d", e->name, e->area.x, e->area.y);
     mob->position.x = e->area.x;
-    mob->position.y = (e->area.y - (int) c->y);
+    mob->position.y = e->area.y;
     mob->direction = e->direction;
 }
 

@@ -94,25 +94,24 @@ bool setCollision(const Map *m, Player *p, Direction direction, Vector2D pos) {
     return false;
 }
 
-void evaluateMovement(const Player *p) {
-    Mobile *mob = getPartyLeader(p);
-    if (mob->isBeingMoved) {
-        return;
-    }
-    if (mob->amountToMove > 0) {
-        int amount = 1;
-        if (mob->direction == DIRECTION_UP) {
-            mob->position.y -= amount;
-        } else if (mob->direction == DIRECTION_DOWN) {
-            mob->position.y += amount;
-        } else if (mob->direction == DIRECTION_LEFT) {
-            mob->position.x -= amount;
-        } else if (mob->direction == DIRECTION_RIGHT) {
-            mob->position.x += amount;
+void evaluateMovement(const MobileManager *mm) {
+    for (int i = 0; i < mm->mobileCount; i++) {
+        Mobile *mob = mm->mobiles[i];
+        if (mob->amountToMove > 0) {
+            int amount = 1;
+            if (mob->direction == DIRECTION_UP) {
+                mob->position.y -= amount;
+            } else if (mob->direction == DIRECTION_DOWN) {
+                mob->position.y += amount;
+            } else if (mob->direction == DIRECTION_LEFT) {
+                mob->position.x -= amount;
+            } else if (mob->direction == DIRECTION_RIGHT) {
+                mob->position.x += amount;
+            }
+            mob->amountToMove -= amount;
+        } else {
+            resetMoving(mob);
         }
-        mob->amountToMove -= amount;
-    } else {
-        resetMoving(mob);
     }
 }
 
