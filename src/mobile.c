@@ -17,7 +17,6 @@ typedef struct {
     Animation *animations[MAX_ANIMATIONS];
     Avatar *avatar;
     Vector2D position;
-    bool moving[DIRECTION_COUNT];
     struct timeval lastMovement;
     bool isBeingMoved;
     Attributes *attributes;
@@ -61,10 +60,6 @@ Mobile *createMobile(
     mobile->name = &name[0];
     mobile->direction = direction;
     mobile->position = position;
-    mobile->moving[DIRECTION_UP] = false;
-    mobile->moving[DIRECTION_DOWN] = false;
-    mobile->moving[DIRECTION_LEFT] = false;
-    mobile->moving[DIRECTION_RIGHT] = false;
     mobile->attributes = attributes;
     mobile->turnCounter = 0;
     mobile->waitTimer = -1;
@@ -92,10 +87,6 @@ Mobile *createMobile(
 }
 
 void resetMoving(Mobile *mob) {
-    mob->moving[DIRECTION_UP] = false;
-    mob->moving[DIRECTION_DOWN] = false;
-    mob->moving[DIRECTION_LEFT] = false;
-    mob->moving[DIRECTION_RIGHT] = false;
     mob->destination = mob->position;
     mob->amountToMove = 0;
     mob->isBeingMoved = false;

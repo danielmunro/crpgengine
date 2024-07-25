@@ -113,7 +113,6 @@ void evaluateResponse(const Game *g, const Response *r) {
 }
 
 void evaluateMoveDirection(const Game *g, Mobile *mob, Direction d) {
-    mob->moving[d] = true;
     mob->direction = d;
     Vector2D newPos = mob->position;
     int amountToMove = g->context->game->tileSize;
@@ -126,7 +125,7 @@ void evaluateMoveDirection(const Game *g, Mobile *mob, Direction d) {
     } else if (d == DIRECTION_RIGHT) {
         newPos.x += amountToMove;
     }
-    if (!isCollisionDetected(g->scenes->current->map, g->player, d, newPos)) {
+    if (!isCollisionDetected(g->scenes->current->map, g->player, newPos)) {
         mob->amountToMove = amountToMove;
         mob->destination = newPos;
         getMobAnimation(mob)->isPlaying = true;

@@ -63,7 +63,7 @@ Chest *getBlockingChest(const Map *m, Rectangle playerRect) {
     return NULL;
 }
 
-bool isCollisionDetected(const Map *m, Player *p, Direction direction, Vector2D pos) {
+bool isCollisionDetected(const Map *m, Player *p, Vector2D pos) {
     Mobile *mob = getPartyLeader(p);
     const Rectangle *collision = getMobAnimation(mob)->spriteSheet->collision;
     Rectangle rect = {
@@ -72,19 +72,17 @@ bool isCollisionDetected(const Map *m, Player *p, Direction direction, Vector2D 
             collision->width,
             collision->height,
     };
-    if (mob->moving[direction]) {
-        const Chest *c = getBlockingChest(m, rect);
-        if (c != NULL) {
-            return true;
-        }
-        const Tile *t = getBlockingMapTile(m, rect);
-        if (t != NULL) {
-            return true;
-        }
-        Mobile *blockingMob = getBlockingMob(m, rect);
-        if (blockingMob != NULL) {
-            return true;
-        }
+    const Chest *c = getBlockingChest(m, rect);
+    if (c != NULL) {
+        return true;
+    }
+    const Tile *t = getBlockingMapTile(m, rect);
+    if (t != NULL) {
+        return true;
+    }
+    Mobile *blockingMob = getBlockingMob(m, rect);
+    if (blockingMob != NULL) {
+        return true;
     }
     return false;
 }
@@ -106,22 +104,18 @@ void evaluateMovement(const MobileManager *mm) {
             mob->amountToMove -= 1;
         } else if (mob->position.x > mob->destination.x) {
             mob->direction = DIRECTION_LEFT;
-            mob->moving[DIRECTION_LEFT] = true;
             mob->amountToMove = t;
             getMobAnimation(mob)->isPlaying = true;
         } else if (mob->position.x < mob->destination.x) {
             mob->direction = DIRECTION_RIGHT;
-            mob->moving[DIRECTION_RIGHT] = true;
             mob->amountToMove = t;
             getMobAnimation(mob)->isPlaying = true;
         } else if (mob->position.y < mob->destination.y) {
             mob->direction = DIRECTION_DOWN;
-            mob->moving[DIRECTION_DOWN] = true;
             mob->amountToMove = t;
             getMobAnimation(mob)->isPlaying = true;
         } else if (mob->position.y > mob->destination.y) {
             mob->direction = DIRECTION_UP;
-            mob->moving[DIRECTION_UP] = true;
             mob->amountToMove = t;
             getMobAnimation(mob)->isPlaying = true;
         } else {
