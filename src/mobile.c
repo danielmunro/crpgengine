@@ -98,6 +98,7 @@ void resetMoving(Mobile *mob) {
     mob->moving[DIRECTION_RIGHT] = false;
     mob->destination = mob->position;
     mob->amountToMove = 0;
+    mob->isBeingMoved = false;
     getMobAnimation(mob)->isPlaying = false;
 }
 

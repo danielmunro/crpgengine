@@ -59,7 +59,6 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
                 then->position.x,
                 then->position.y);
         then->target->destination = then->position;
-        getMobAnimation(then->target)->isPlaying = true;
         if (then->target == getPartyLeader(cm->player)) {
             disengageWithMobile(cm->player);
             getPartyLeader(cm->player)->isBeingMoved = true;
