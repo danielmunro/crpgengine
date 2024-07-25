@@ -52,16 +52,18 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         addStory(cm->player, then->story);
         progress++;
     } else if (needsToStartMoving(then)) {
-        addDebug("mob needs to start moving");
-        addMobileMovement(
-                cm->scene->map,
-                createMobileMovement(
-                        then->target,
-                        then->position
-                )
-        );
-        disengageWithMobile(cm->player);
-        getPartyLeader(cm->player)->isBeingMoved = true;
+        addInfo("mob to move :: %s :: %d, %d to %d %d",
+                then->target->name,
+                then->target->position.x,
+                then->target->position.y,
+                then->position.x,
+                then->position.y);
+        then->target->destination = then->position;
+        getMobAnimation(then->target)->isPlaying = true;
+        if (then->target == getPartyLeader(cm->player)) {
+            disengageWithMobile(cm->player);
+            getPartyLeader(cm->player)->isBeingMoved = true;
+        }
     } else if (isFaceDirectionOutcome(then)) {
         addDebug("set direction for mob :: %s, %s", then->target->name, then->direction);
         then->target->direction =

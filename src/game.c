@@ -119,6 +119,8 @@ void checkMapInput(Game *g) {
     }
     Direction d = mapCheckMoveKeys(g->player);
     if (d != -1) {
+        mob->moving[d] = true;
+        mob->direction = d;
         Vector2D newPos = mob->position;
         int amountToMove = g->context->game->tileSize;
         if (d == DIRECTION_UP) {
@@ -131,8 +133,9 @@ void checkMapInput(Game *g) {
             newPos.x += amountToMove;
         }
         if (!setCollision(g->scenes->current->map, g->player, d, newPos)) {
-            getMobAnimation(mob)->isPlaying = true;
             mob->amountToMove = amountToMove;
+            mob->destination = newPos;
+            getMobAnimation(mob)->isPlaying = true;
         }
     }
     if (IsKeyPressed(KEY_C)) {
@@ -257,7 +260,6 @@ void doExplorationLoop(Game *g) {
             s->activeControlBlocks,
             g->ui->fonts->default_);
     processAnimations(g->animations);
-    doMobileMovementUpdates(s->map);
     evaluateMovement(g->mobiles);
     evaluateExits(g);
     checkControls(g->controls);

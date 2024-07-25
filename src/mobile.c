@@ -36,6 +36,7 @@ typedef struct {
     bool isFleeing;
     bool immortal;
     int amountToMove;
+    Vector2D destination;
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {
@@ -86,6 +87,7 @@ Mobile *createMobile(
     mobile->isFleeing = false;
     mobile->immortal = immortal;
     mobile->amountToMove = 0;
+    mobile->destination = position;
     return mobile;
 }
 
@@ -94,14 +96,13 @@ void resetMoving(Mobile *mob) {
     mob->moving[DIRECTION_DOWN] = false;
     mob->moving[DIRECTION_LEFT] = false;
     mob->moving[DIRECTION_RIGHT] = false;
+    mob->destination = mob->position;
+    mob->amountToMove = 0;
     getMobAnimation(mob)->isPlaying = false;
 }
 
 bool isMoving(const Mobile *mob) {
-    return mob->moving[DIRECTION_DOWN]
-           || mob->moving[DIRECTION_UP]
-           || mob->moving[DIRECTION_LEFT]
-           || mob->moving[DIRECTION_RIGHT];
+    return mob->position.x != mob->destination.x || mob->position.y != mob->destination.y;
 }
 
 Rectangle getMobileRectangle(Mobile *mob) {
@@ -119,35 +120,6 @@ void updateDirection(Mobile *mob, Direction direction) {
     mob->direction = direction;
 }
 
-bool moveMob(Mobile *mob, Vector2D destination, int tileSize) {
-    resetMoving(mob);
-    if (mob->amountToMove > 0) {
-        return true;
-    }
-    Animation *animation = getMobAnimation(mob);
-    addInfo("mob moving :: %s -- %d, %d -- %d, %d", mob->name, mob->position.x, mob->position.y, destination.x, destination.y);
-    if (mob->position.x > destination.x) {
-        mob->direction = DIRECTION_LEFT;
-        mob->amountToMove = tileSize;
-    } else if (mob->position.x < destination.x) {
-        mob->direction = DIRECTION_RIGHT;
-        mob->amountToMove = tileSize;
-    } else if (mob->position.y > destination.y) {
-        mob->direction = DIRECTION_UP;
-        mob->amountToMove = tileSize;
-    } else if (mob->position.y < destination.y) {
-        mob->direction = DIRECTION_DOWN;
-        mob->amountToMove = tileSize;
-    } else {
-        animation->isPlaying = false;
-        mob->isBeingMoved = false;
-        return false;
-    }
-    mob->moving[mob->direction] = true;
-    animation->isPlaying = true;
-    return true;
-}
-
 char *getPositionAsString(Vector2D position) {
     char *value = malloc(255);
     sprintf(value, "%d, %d", position.x, position.y);
@@ -158,7 +130,9 @@ void useEntrance(Mobile *mob, const Entrance *e) {
     addInfo("use entrance :: %s, %d, %d", e->name, e->area.x, e->area.y);
     mob->position.x = e->area.x;
     mob->position.y = e->area.y;
+    mob->destination = mob->position;
     mob->direction = e->direction;
+    resetMoving(mob);
 }
 
 bool canPlayerMove(const Mobile *mob) {

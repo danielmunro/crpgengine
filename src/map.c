@@ -94,13 +94,6 @@ Map *createMap(int sceneId, Context *c) {
     return map;
 }
 
-MobileMovement *createMobileMovement(Mobile *mob, Vector2D destination) {
-    MobileMovement *mobMovement = malloc(sizeof(MobileMovement));
-    mobMovement->mob = mob;
-    mobMovement->destination = destination;
-    return mobMovement;
-}
-
 Entrance *findEntrance(const Map *m, const char *name) {
     for (int i = 0; i < m->warps->entranceCount; i++) {
         if (strcmp(m->warps->entrances[i]->name, name) == 0) {
@@ -109,17 +102,6 @@ Entrance *findEntrance(const Map *m, const char *name) {
     }
     addError("entrance not found :: %s", name);
     exit(RuntimeErrorUnknownEntrance);
-}
-
-void addMobileMovement(Map *m, MobileMovement *mobMovement) {
-    addInfo("add mob movement, %s target to %f, %f",
-            mobMovement->mob->name, mobMovement->destination.x, mobMovement->destination.y);
-    for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
-        if (m->mobMovements[i] == NULL) {
-            m->mobMovements[i] = mobMovement;
-            return;
-        }
-    }
 }
 
 Tile *getTile(const Map *m, int tileNumber) {
@@ -183,23 +165,4 @@ int atExit(const Map *m, const Player *p) {
 void addMobileToExploration(Map *m, Mobile *mob) {
     m->mobiles[m->mobileCount] = mob;
     m->mobileCount++;
-}
-
-void doMobileMovementUpdates(Map *m) {
-    for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
-        if (m->mobMovements[i] == NULL) {
-            continue;
-        }
-        Mobile *mob = m->mobMovements[i]->mob;
-        bool moved = moveMob(
-                mob,
-                m->mobMovements[i]->destination,
-                tileSize(m->context));
-        if (!moved) {
-            addInfo("mob done moving -- %s",
-                    m->mobMovements[i]->mob->name);
-            m->mobMovements[i] = NULL;
-            mob->isBeingMoved = false;
-        }
-    }
 }

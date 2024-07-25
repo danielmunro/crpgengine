@@ -171,15 +171,12 @@ int getExperienceToLevel(int level) {
     return (int) pow((double) level, 3.0) + 999;
 }
 
-bool checkMoveKey(const Player *p, int key, Direction direction) {
+Direction checkMoveKey(const Player *p, int key, Direction direction) {
     Mobile *mob = getPartyLeader(p);
     if (IsKeyDown(key) && !p->engaged && mob->amountToMove == 0) {
-        mob->moving[direction] = true;
-        mob->direction = direction;
-        getMobAnimation(mob)->isPlaying = true;
-        return true;
+        return direction;
     }
-    return false;
+    return -1;
 }
 
 void clearDialog(Player *p) {
@@ -189,7 +186,7 @@ void clearDialog(Player *p) {
 
 Direction mapCheckMoveKeys(const Player *player) {
     for (int i = 0; i < DIRECTION_COUNT; i++) {
-        if (checkMoveKey(player, MOVE_KEYS[i], DirectionEnums[i])) {
+        if (checkMoveKey(player, MOVE_KEYS[i], DirectionEnums[i]) != -1) {
             return DirectionEnums[i];
         }
     }

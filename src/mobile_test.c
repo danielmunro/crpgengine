@@ -32,11 +32,11 @@ void testCanMoveMob(Context *c) {
     addMobileToManager(mm, mob);
 
     // when
+    mob->destination = (Vector2D) {
+            mob->position.x + c->game->tileSize,
+            mob->position.y + c->game->tileSize,
+    };
     for (int i = 0; i < c->game->tileSize * 2; i++) {
-        moveMob(
-                mob,
-                (Vector2D) {startX + c->game->tileSize, startY + c->game->tileSize},
-                tileSize(c));
         evaluateMovement(mm);
     }
 
@@ -50,9 +50,11 @@ void testMobCanStopMoving(Context *c) {
     int startX = 100;
     int startY = 100;
     Vector2D start = (Vector2D) {startX, startY};
-    const AnimationManager *am = createTestAnimationManager(c);
+    AnimationManager *am = createTestAnimationManager(c);
     Animation *animations[MAX_ANIMATIONS];
     loadAnimationsByName(am, "fireas", animations);
+    Spell **spells = calloc(0, sizeof(Spell));
+    MobileManager *mm = createMobileManager(createSpellManager(spells, 0), am, c);
     Avatar *avatar = createAvatar(
             c->indexDir,
             "fireas.png",
@@ -70,9 +72,10 @@ void testMobCanStopMoving(Context *c) {
             mapDataToSpells(NULL, NULL, 0),
             0,
             false);
+    addMobileToManager(mm, mob);
 
     // when
-    moveMob(mob, start, tileSize(c));
+    evaluateMovement(mm);
 
     // then
     ok(mob->position.x == startX && mob->position.y == startY, "mob moved as expected");

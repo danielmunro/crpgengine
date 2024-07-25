@@ -95,20 +95,40 @@ bool setCollision(const Map *m, Player *p, Direction direction, Vector2D pos) {
 }
 
 void evaluateMovement(const MobileManager *mm) {
+    const int t = tileSize(mm->context);
     for (int i = 0; i < mm->mobileCount; i++) {
         Mobile *mob = mm->mobiles[i];
         if (mob->amountToMove > 0) {
-            int amount = 1;
             if (mob->direction == DIRECTION_UP) {
-                mob->position.y -= amount;
+                mob->position.y -= 1;
             } else if (mob->direction == DIRECTION_DOWN) {
-                mob->position.y += amount;
+                mob->position.y += 1;
             } else if (mob->direction == DIRECTION_LEFT) {
-                mob->position.x -= amount;
+                mob->position.x -= 1;
             } else if (mob->direction == DIRECTION_RIGHT) {
-                mob->position.x += amount;
+                mob->position.x += 1;
             }
-            mob->amountToMove -= amount;
+            mob->amountToMove -= 1;
+        } else if (mob->position.x > mob->destination.x) {
+            mob->direction = DIRECTION_LEFT;
+            mob->moving[DIRECTION_LEFT] = true;
+            mob->amountToMove = t;
+            getMobAnimation(mob)->isPlaying = true;
+        } else if (mob->position.x < mob->destination.x) {
+            mob->direction = DIRECTION_RIGHT;
+            mob->moving[DIRECTION_RIGHT] = true;
+            mob->amountToMove = t;
+            getMobAnimation(mob)->isPlaying = true;
+        } else if (mob->position.y < mob->destination.y) {
+            mob->direction = DIRECTION_DOWN;
+            mob->moving[DIRECTION_DOWN] = true;
+            mob->amountToMove = t;
+            getMobAnimation(mob)->isPlaying = true;
+        } else if (mob->position.y > mob->destination.y) {
+            mob->direction = DIRECTION_UP;
+            mob->moving[DIRECTION_UP] = true;
+            mob->amountToMove = t;
+            getMobAnimation(mob)->isPlaying = true;
         } else {
             resetMoving(mob);
         }
