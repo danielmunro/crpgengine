@@ -63,7 +63,7 @@ Chest *getBlockingChest(const Map *m, Rectangle playerRect) {
     return NULL;
 }
 
-bool setCollision(const Map *m, Player *p, Direction direction, Vector2D pos) {
+bool isCollisionDetected(const Map *m, Player *p, Direction direction, Vector2D pos) {
     Mobile *mob = getPartyLeader(p);
     const Rectangle *collision = getMobAnimation(mob)->spriteSheet->collision;
     Rectangle rect = {
@@ -73,23 +73,18 @@ bool setCollision(const Map *m, Player *p, Direction direction, Vector2D pos) {
             collision->height,
     };
     if (mob->moving[direction]) {
-        resetBlocking(p);
         const Chest *c = getBlockingChest(m, rect);
         if (c != NULL) {
-            p->blocking->chest = c;
             return true;
         }
         const Tile *t = getBlockingMapTile(m, rect);
         if (t != NULL) {
-            p->blocking->tile = t;
             return true;
         }
         Mobile *blockingMob = getBlockingMob(m, rect);
         if (blockingMob != NULL) {
-            p->blocking->mob = blockingMob;
             return true;
         }
-        p->engageable = NULL;
     }
     return false;
 }
@@ -135,8 +130,7 @@ void evaluateMovement(const MobileManager *mm) {
     }
 }
 
-bool openChest(Player *p, int sceneId) {
-    const Chest *c = p->blocking->chest;
+bool openChest(Player *p, Chest *c, int sceneId) {
     for (int i = 0; i < p->openedChestsCount; i++) {
         if (p->openedChests[i]->chestId == c->id
             && p->openedChests[i]->sceneId == sceneId) {
@@ -188,18 +182,38 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
         player->engaged = false;
         return createResponse(ACTION_TAKEN_NONE);
     }
-    if (player->blocking->mob != NULL) {
-        engageWithMobile(player);
-        Response *r = createResponse(ACTION_TAKEN_ENGAGE_DIALOG);
-        return r;
+    const Mobile *mob = getPartyLeader(player);
+    Vector2D focusPos = mob->position;
+    if (mob->direction == DIRECTION_UP) {
+        focusPos.y -= tileSize(m->context);
+    } else if (mob->direction == DIRECTION_DOWN) {
+        focusPos.y += tileSize(m->context);
+    } else if (mob->direction == DIRECTION_LEFT) {
+        focusPos.x -= tileSize(m->context);
+    } else if (mob->direction == DIRECTION_RIGHT) {
+        focusPos.x += tileSize(m->context);
     }
-    if (player->blocking->chest != NULL && openChest(player, m->sceneId)) {
-        Response *r = createResponse(ACTION_TAKEN_OPENED_CHEST);
-        r->chest = player->blocking->chest;
-        return r;
+    for (int i = 0; i < m->mobileCount; i++) {
+        if (m->mobiles[i]->position.x == focusPos.x && m->mobiles[i]->position.y == focusPos.y) {
+            engageWithMobile(player, m->mobiles[i]);
+            Response *r = createResponse(ACTION_TAKEN_ENGAGE_DIALOG);
+            return r;
+        }
+    }
+    for (int i = 0; i < m->chestCount; i++) {
+        if (CheckCollisionRecs(
+                (Rectangle) {
+                        (float) focusPos.x,
+                        (float) focusPos.y,
+                        (float) tileSize(m->context),
+                        (float) tileSize(m->context),
+                }, rectangleDtoRectangle(m->chests[i]->area)) && openChest(player, m->chests[i], m->sceneId)) {
+            Response *r = createResponse(ACTION_TAKEN_OPENED_CHEST);
+            r->chest = m->chests[i];
+            return r;
+        }
     }
     for (int i = 0; i < m->shopTileCount; i++) {
-        Mobile *mob = getPartyLeader(player);
         if (CheckCollisionRecs(
                 (Rectangle) {
                         (float) mob->position.x,

@@ -46,7 +46,6 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         progress++;
     } else if (isMovingAndAtDestination(cb)) {
         addDebug("mob at destination, control block proceeding :: %s", then->target->name);
-        resetBlocking(cm->player);
         progress++;
     } else if (isAddStoryOutcome(then)) {
         addStory(cm->player, then->story);
