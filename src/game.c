@@ -112,6 +112,27 @@ void evaluateResponse(const Game *g, const Response *r) {
     }
 }
 
+void evaluateMoveDirection(const Game *g, Mobile *mob, Direction d) {
+    mob->moving[d] = true;
+    mob->direction = d;
+    Vector2D newPos = mob->position;
+    int amountToMove = g->context->game->tileSize;
+    if (d == DIRECTION_UP) {
+        newPos.y -= amountToMove;
+    } else if (d == DIRECTION_DOWN) {
+        newPos.y += amountToMove;
+    } else if (d == DIRECTION_LEFT) {
+        newPos.x -= amountToMove;
+    } else if (d == DIRECTION_RIGHT) {
+        newPos.x += amountToMove;
+    }
+    if (!setCollision(g->scenes->current->map, g->player, d, newPos)) {
+        mob->amountToMove = amountToMove;
+        mob->destination = newPos;
+        getMobAnimation(mob)->isPlaying = true;
+    }
+}
+
 void checkMapInput(Game *g) {
     Mobile *mob = getPartyLeader(g->player);
     if (!canPlayerMove(mob)) {
@@ -119,24 +140,7 @@ void checkMapInput(Game *g) {
     }
     Direction d = mapCheckMoveKeys(g->player);
     if (d != -1) {
-        mob->moving[d] = true;
-        mob->direction = d;
-        Vector2D newPos = mob->position;
-        int amountToMove = g->context->game->tileSize;
-        if (d == DIRECTION_UP) {
-            newPos.y -= amountToMove;
-        } else if (d == DIRECTION_DOWN) {
-            newPos.y += amountToMove;
-        } else if (d == DIRECTION_LEFT) {
-            newPos.x -= amountToMove;
-        } else if (d == DIRECTION_RIGHT) {
-            newPos.x += amountToMove;
-        }
-        if (!setCollision(g->scenes->current->map, g->player, d, newPos)) {
-            mob->amountToMove = amountToMove;
-            mob->destination = newPos;
-            getMobAnimation(mob)->isPlaying = true;
-        }
+        evaluateMoveDirection(g, mob, d);
     }
     if (IsKeyPressed(KEY_C)) {
         mapDebugKeyPressed(mob->position, g->context->game->tileSize);
