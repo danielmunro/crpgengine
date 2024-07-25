@@ -23,11 +23,6 @@ typedef struct {
 } Response;
 
 typedef struct {
-    Mobile *mob;
-    Vector2D destination;
-} MobileMovement;
-
-typedef struct {
     Vector2D tileSize;
 } MapConfig;
 
@@ -52,7 +47,6 @@ typedef struct {
     bool showCollisions;
     Mobile **mobiles;
     int mobileCount;
-    MobileMovement **mobMovements;
     Chest **chests;
     int chestCount;
     Tile *closedChest;
@@ -89,7 +83,6 @@ Map *createMap(int sceneId, Context *c) {
     map->shopTileCount = 0;
     map->mobiles = calloc(MAX_MOBILES, sizeof(Mobile));
     map->mobileCount = 0;
-    map->mobMovements = calloc(MAX_MOBILE_MOVEMENTS, sizeof(MobileMovement));
     map->warps = createMapWarps();
     return map;
 }
