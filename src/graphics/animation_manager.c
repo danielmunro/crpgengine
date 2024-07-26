@@ -29,7 +29,7 @@ void processAnimations(const AnimationManager *am) {
 }
 
 void addAnimation(AnimationManager *am, Animation *a) {
-    addDebug("add animation to manager :: %s, %s, %d",
+    addInfo("add animation to manager :: %s, %s, %d",
              a->name, a->spriteSheet->name, am->animationCount);
     am->animations[am->animationCount] = a;
     am->animationCount++;

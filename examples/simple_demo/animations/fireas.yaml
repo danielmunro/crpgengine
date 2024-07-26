@@ -22,3 +22,8 @@ slices:
     frameEnd: 15
     rate: 6
     repeat: -1
+  - name: sleep
+    frameStart: 16
+    frameEnd: 16
+    rate: 0
+    repeat: -1

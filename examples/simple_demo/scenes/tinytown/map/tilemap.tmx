@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.11" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="17">
+<map version="1.11" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="20">
  <editorsettings>
   <export format="csv"/>
  </editorsettings>
@@ -108,6 +108,7 @@
  </objectgroup>
  <objectgroup id="7" name="arrive_at">
   <object id="15" name="demo_wait" type="arrive_at" x="543.83" y="112.048" width="15.9953" height="15.9646"/>
+  <object id="17" name="sleep" type="arrive_at" x="608" y="192" width="16" height="16"/>
  </objectgroup>
  <layer id="6" name="foreground" width="50" height="30">
   <data encoding="csv">

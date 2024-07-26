@@ -1,0 +1,7 @@
+storylines:
+  - when:
+      - player: arrive_at
+        arrive_at: sleep
+    then:
+      - player: true
+        action: sleep
