@@ -3,8 +3,6 @@
 #include "headers/graphics/spritesheet.h"
 #include "headers/context.h"
 
-const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT};
-
 typedef struct {
     Context *context;
     const char *name;

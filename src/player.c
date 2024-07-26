@@ -3,7 +3,6 @@
 #include "headers/util/log.h"
 #include "headers/direction.h"
 #include "headers/persistence/cyaml.h"
-#include "headers/graphics/animation.h"
 #include "headers/mobile.h"
 #include "headers/spell.h"
 #include "headers/graphics/ui/ui.h"
