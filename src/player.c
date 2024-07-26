@@ -55,10 +55,6 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
                      Item **items, int itemCount,
                      OpenedChest **openedChests, int openedChestsCount) {
     Player *player = malloc(sizeof(Player));
-    player->blocking = malloc(sizeof(Blocking));
-    player->blocking->mob = NULL;
-    player->blocking->chest = NULL;
-    player->blocking->tile = NULL;
     player->engageable = NULL;
     player->engaged = false;
     player->storylineCount = storylineCount;
@@ -171,13 +167,12 @@ int getExperienceToLevel(int level) {
     return (int) pow((double) level, 3.0) + 999;
 }
 
-void checkMoveKey(const Player *p, int key, Direction direction) {
-    Mobile *mob = getPartyLeader(p);
-    if (IsKeyDown(key) && !p->engaged) {
-        mob->moving[direction] = true;
-        mob->direction = direction;
-        getMobAnimation(mob)->isPlaying = true;
+Direction checkMoveKey(const Player *p, int key, Direction direction) {
+    const Mobile *mob = getPartyLeader(p);
+    if (IsKeyDown(key) && !p->engaged && mob->amountToMove == 0) {
+        return direction;
     }
+    return -1;
 }
 
 void clearDialog(Player *p) {
@@ -185,20 +180,23 @@ void clearDialog(Player *p) {
     p->dialog = NULL;
 }
 
-void mapCheckMoveKeys(const Player *player) {
+Direction mapCheckMoveKeys(const Player *player) {
     for (int i = 0; i < DIRECTION_COUNT; i++) {
-        checkMoveKey(player, MOVE_KEYS[i], DirectionEnums[i]);
+        if (checkMoveKey(player, MOVE_KEYS[i], DirectionEnums[i]) != -1) {
+            return DirectionEnums[i];
+        }
     }
+    return -1;
 }
 
 bool isSpeakingTo(const Player *p, const Mobile *target) {
     return p->engaged && target == p->engageable;
 }
 
-void engageWithMobile(Player *p) {
-    p->engageable = p->blocking->mob;
+void engageWithMobile(Player *p, Mobile *mob) {
+    p->engageable = mob;
     addInfo("updating mob direction to: %d", getOppositeDirection(getPartyLeader(p)->direction));
-    updateDirection(p->blocking->mob, getOppositeDirection(getPartyLeader(p)->direction));
+    updateDirection(mob, getOppositeDirection(getPartyLeader(p)->direction));
     addInfo("engaging with %s", p->engageable->name);
     p->engaged = true;
 }
@@ -206,8 +204,8 @@ void engageWithMobile(Player *p) {
 void disengageWithMobile(Player *p) {
     p->engaged = false;
     clearDialog(p);
-    if (p->blocking->mob != NULL) {
-        updateDirection(p->blocking->mob, p->blocking->mob->previousDirection);
+    if (p->engageable != NULL) {
+        updateDirection(p->engageable, p->engageable->previousDirection);
     }
 }
 
@@ -295,10 +293,4 @@ bool losesItemQuantity(Player *player, const ItemReferenceData *ird) {
     }
     addWarning("player didn't have enough items to give :: %d remaining", ird->quantity);
     return false;
-}
-
-void resetBlocking(Player *p) {
-    p->blocking->chest = NULL;
-    p->blocking->mob = NULL;
-    p->blocking->tile = NULL;
 }

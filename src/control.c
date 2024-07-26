@@ -83,7 +83,7 @@ Outcome mapOutcome(const char *then) {
 typedef struct {
     int id;
     const char *name;
-    Rectangle rect;
+    RectangleD rect;
 } ArriveAt;
 
 typedef struct {
@@ -103,7 +103,7 @@ typedef struct {
     ItemReferenceData *item;
     Outcome outcome;
     int amount;
-    Vector2 position;
+    Vector2D position;
     bool parallel;
 } Then;
 
@@ -153,7 +153,7 @@ Then *createThen(
         const char *direction,
         ItemReferenceData *item,
         const Outcome outcome,
-        Vector2 position,
+        Vector2D position,
         bool parallel,
         int amount) {
     Then *then = malloc(sizeof(Then));
@@ -169,7 +169,7 @@ Then *createThen(
     return then;
 }
 
-ArriveAt *createArriveAt(int id, const char *name, Rectangle rect) {
+ArriveAt *createArriveAt(int id, const char *name, RectangleD rect) {
     ArriveAt *a = malloc(sizeof(ArriveAt));
     a->id = id;
     a->name = name;
@@ -195,8 +195,8 @@ bool isSceneLoaded(Condition condition, EventType eventType) {
 
 bool hasArrivedAt(const Player *p, Condition condition, const ArriveAt *arriveAt) {
     if (arriveAt != NULL) {
-        Rectangle c = GetCollisionRec(getMobileRectangle(getPartyLeader(p)), arriveAt->rect);
-        return condition == ARRIVE_AT && (c.height > 0 || c.width > 0);
+        return condition == ARRIVE_AT && CheckCollisionRecs(getMobileRectangle(getPartyLeader(p)),
+                                                            rectangleDtoRectangle(arriveAt->rect));
     }
     return false;
 }
@@ -242,8 +242,8 @@ bool needsToRemoveActiveControlBlock(const ControlBlock *control) {
 bool isMovingAndAtDestination(const ControlBlock *cb) {
     return cb->then[cb->progress]->outcome == MOVE_TO &&
            vector2DEquals(
-                   vector2DFromVect(cb->then[cb->progress]->target->position),
-                   vector2DFromVect(cb->then[cb->progress]->position)
+                   cb->then[cb->progress]->target->position,
+                   cb->then[cb->progress]->position
            );
 }
 

@@ -17,6 +17,22 @@ typedef struct {
     int y;
 } Vector2D;
 
+typedef struct {
+    int x;
+    int y;
+    int width;
+    int height;
+} RectangleD;
+
+Rectangle rectangleDtoRectangle(RectangleD rect) {
+    return (Rectangle) {
+            (float) rect.x,
+            (float) rect.y,
+            (float) rect.width,
+            (float) rect.height,
+    };
+}
+
 char *trim(char *str) {
     char *end;
 
@@ -73,20 +89,13 @@ int max(int a, int b) {
     return b;
 }
 
-Vector2 getPositionFromString(const char *position) {
+Vector2D getPositionFromString(const char *position) {
     char *p = (char *) position;
-    char *x = trim(strtok_r(p, ",", &p));
-    char *y = trim(strtok_r(p, ",", &p));
-    return (Vector2) {
-            strtof(x, &x),
-            strtof(y, &y),
-    };
-}
-
-Vector2D vector2DFromVect(Vector2 vect) {
+    const char *x = trim(strtok_r(p, ",", &p));
+    const char *y = trim(strtok_r(p, ",", &p));
     return (Vector2D) {
-            (int) vect.x,
-            (int) vect.y
+            TextToInteger(x),
+            TextToInteger(y),
     };
 }
 

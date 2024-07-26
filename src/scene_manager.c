@@ -55,6 +55,9 @@ void setScene(SceneManager *sm, Scene *scene, const Player *player, const char *
     clearAnimations(sm->animationManager);
     Mobile *mob = getPartyLeader(player);
     addAllAnimations(sm->animationManager, mob->animations);
+    for (int i = 0; i < sm->current->map->mobileCount; i++) {
+        addAllAnimations(sm->animationManager, sm->current->map->mobiles[i]->animations);
+    }
     if (entranceName != NULL) {
         useEntrance(mob, findEntrance(scene->map, entranceName));
     }

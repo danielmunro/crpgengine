@@ -23,11 +23,6 @@ typedef struct {
 } Response;
 
 typedef struct {
-    Mobile *mob;
-    Vector2 destination;
-} MobileMovement;
-
-typedef struct {
     Vector2D tileSize;
 } MapConfig;
 
@@ -52,7 +47,6 @@ typedef struct {
     bool showCollisions;
     Mobile **mobiles;
     int mobileCount;
-    MobileMovement **mobMovements;
     Chest **chests;
     int chestCount;
     Tile *closedChest;
@@ -89,16 +83,8 @@ Map *createMap(int sceneId, Context *c) {
     map->shopTileCount = 0;
     map->mobiles = calloc(MAX_MOBILES, sizeof(Mobile));
     map->mobileCount = 0;
-    map->mobMovements = calloc(MAX_MOBILE_MOVEMENTS, sizeof(MobileMovement));
     map->warps = createMapWarps();
     return map;
-}
-
-MobileMovement *createMobileMovement(Mobile *mob, Vector2 destination) {
-    MobileMovement *mobMovement = malloc(sizeof(MobileMovement));
-    mobMovement->mob = mob;
-    mobMovement->destination = destination;
-    return mobMovement;
 }
 
 Entrance *findEntrance(const Map *m, const char *name) {
@@ -111,17 +97,6 @@ Entrance *findEntrance(const Map *m, const char *name) {
     exit(RuntimeErrorUnknownEntrance);
 }
 
-void addMobileMovement(Map *m, MobileMovement *mobMovement) {
-    addInfo("add mob movement, %s target to %f, %f",
-            mobMovement->mob->name, mobMovement->destination.x, mobMovement->destination.y);
-    for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
-        if (m->mobMovements[i] == NULL) {
-            m->mobMovements[i] = mobMovement;
-            return;
-        }
-    }
-}
-
 Tile *getTile(const Map *m, int tileNumber) {
     for (int i = 0; i < m->tileset->tilesCount; i++) {
         if (m->tileset->tiles[i]->id == tileNumber - 1) {
@@ -132,13 +107,13 @@ Tile *getTile(const Map *m, int tileNumber) {
 }
 
 Vector2D getTileCount(const Map *m) {
-    int x = m->context->user->resolution.width / m->tileset->size.x + 1;
-    int y = m->context->user->resolution.height / m->tileset->size.y + 2;
+    int x = m->context->user->resolution.width / m->context->game->tileSize + 1;
+    int y = m->context->user->resolution.height / m->context->game->tileSize + 2;
     return (Vector2D) {x, y};
 }
 
 Vector2D getTileFromIndex(const Map *m, int index) {
-    int width = m->tileset->sourceTexture.width / m->tileset->size.x;
+    int width = m->tileset->sourceTexture.width / m->context->game->tileSize;
     int y = index / width;
     int x = (index % width);
     if (x - 1 < 0) {
@@ -152,8 +127,8 @@ Vector2D getTileFromIndex(const Map *m, int index) {
 Rectangle getRectForTile(const Map *m, int index) {
     Vector2D tile = getTileFromIndex(m, index);
     return (Rectangle) {
-            (float) (tile.x * m->config->tileSize.x),
-            (float) (tile.y * m->config->tileSize.y),
+            (float) (tile.x * m->context->game->tileSize),
+            (float) (tile.y * m->context->game->tileSize),
             (float) m->config->tileSize.x,
             (float) m->config->tileSize.y,
     };
@@ -161,10 +136,10 @@ Rectangle getRectForTile(const Map *m, int index) {
 
 Rectangle getObjectSize(const Map *m, const Object *o, int x, int y) {
     return (Rectangle) {
-            (float) (m->tileset->size.x * x) + o->area.x,
-            (float) (m->tileset->size.y * y) + o->area.y,
-            o->area.width,
-            o->area.height,
+            (float) ((m->context->game->tileSize * x) + o->area.x),
+            (float) ((m->context->game->tileSize * y) + o->area.y),
+            (float) o->area.width,
+            (float) o->area.height,
     };
 }
 
@@ -172,8 +147,8 @@ int atExit(const Map *m, const Player *p) {
     Mobile *mob = getPartyLeader(p);
     Rectangle rect = getMobileRectangle(mob);
     for (int i = 0; i < m->warps->exitCount; i++) {
-        Rectangle c = GetCollisionRec(m->warps->exits[i]->area, rect);
-        if (c.height > 0 || c.width > 0) {
+        if (CheckCollisionRecs(rectangleDtoRectangle(m->warps->exits[i]->area),
+                               rect)) {
             return i;
         }
     }
@@ -183,23 +158,4 @@ int atExit(const Map *m, const Player *p) {
 void addMobileToExploration(Map *m, Mobile *mob) {
     m->mobiles[m->mobileCount] = mob;
     m->mobileCount++;
-}
-
-void doMobileMovementUpdates(Map *m) {
-    for (int i = 0; i < MAX_MOBILE_MOVEMENTS; i++) {
-        if (m->mobMovements[i] == NULL) {
-            continue;
-        }
-        Mobile *mob = m->mobMovements[i]->mob;
-        bool moved = moveMob(
-                mob,
-                m->mobMovements[i]->destination,
-                (float) m->context->ui->screen->targetFrameRate);
-        if (!moved) {
-            addInfo("mob done moving -- %s",
-                    m->mobMovements[i]->mob->name);
-            m->mobMovements[i] = NULL;
-            mob->isBeingMoved = false;
-        }
-    }
 }

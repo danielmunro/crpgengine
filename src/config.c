@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include "headers/util/log.h"
 #include "headers/persistence/cyaml.h"
+#include "headers/util/util.h"
 
 typedef struct {
     bool objects;
@@ -22,6 +23,8 @@ typedef struct {
     bool purgeSaves;
     bool showFPS;
     ShowCollisions *showCollisions;
+    int tileSize;
+    Vector2D mobileSize;
 } GameConfig;
 
 GameConfig *createGameConfigFromData(const ConfigData *data, const char *basePath) {
@@ -42,5 +45,10 @@ GameConfig *createGameConfigFromData(const ConfigData *data, const char *basePat
     config->showCollisions->objects = data->showCollisions->objects;
     config->showCollisions->player = data->showCollisions->player;
     config->showCollisions->warps = data->showCollisions->warps;
+    config->tileSize = data->tileSize;
+    config->mobileSize = (Vector2D) {
+        data->mobileSize->width,
+        data->mobileSize->height,
+    };
     return config;
 }

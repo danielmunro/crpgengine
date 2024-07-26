@@ -7,6 +7,11 @@ typedef struct {
 } ShowCollisionsData;
 
 typedef struct {
+    int width;
+    int height;
+} MobileSizeData;
+
+typedef struct {
     const char *indexDir;
     const char *startScene;
     const char *overrideStartScene;
@@ -19,6 +24,8 @@ typedef struct {
     bool purgeSaves;
     bool showFPS;
     ShowCollisionsData *showCollisions;
+    int tileSize;
+    MobileSizeData *mobileSize;
 } ConfigData;
 
 static const cyaml_schema_field_t showCollisionsFieldSchema[] = {
@@ -28,6 +35,14 @@ static const cyaml_schema_field_t showCollisionsFieldSchema[] = {
                 "player", CYAML_BOOL, ShowCollisionsData, player),
         CYAML_FIELD_BOOL(
                 "warps", CYAML_BOOL, ShowCollisionsData, warps),
+        CYAML_FIELD_END
+};
+
+static const cyaml_schema_field_t mobileSizeFieldSchema[] = {
+        CYAML_FIELD_INT(
+                "width", CYAML_FLAG_OPTIONAL, MobileSizeData, width),
+        CYAML_FIELD_INT(
+                "height", CYAML_FLAG_OPTIONAL, MobileSizeData, height),
         CYAML_FIELD_END
 };
 
@@ -56,6 +71,10 @@ static const cyaml_schema_field_t configTopMappingField[] = {
                 "showFPS", CYAML_BOOL, ConfigData, showFPS),
         CYAML_FIELD_MAPPING_PTR(
                 "showCollisions", CYAML_FLAG_POINTER, ConfigData, showCollisions, showCollisionsFieldSchema),
+        CYAML_FIELD_INT(
+                "tileSize", CYAML_FLAG_OPTIONAL, ConfigData, tileSize),
+        CYAML_FIELD_MAPPING_PTR(
+                "mobileSize", CYAML_FLAG_POINTER, ConfigData, mobileSize, mobileSizeFieldSchema),
         CYAML_FIELD_END
 };
 

@@ -3,9 +3,7 @@
 #include "headers/control.h"
 
 bool isObjectBlocking(const Map *m, const Object *o, Rectangle player, int x, int y) {
-    Rectangle objRect = getObjectSize(m, o, x, y);
-    Rectangle c = GetCollisionRec(player, objRect);
-    return c.height > 0 || c.width > 0;
+        return CheckCollisionRecs(player, getObjectSize(m, o, x, y));
 }
 
 const Tile *getBlockingTile(const Map *m, Rectangle player, int layer, int x, int y) {
@@ -49,8 +47,7 @@ const Tile *getBlockingMapTile(const Map *m, Rectangle player) {
 
 Mobile *getBlockingMob(const Map *m, Rectangle playerRect) {
     for (int i = 0; i < m->mobileCount; i++) {
-        Rectangle c = GetCollisionRec(playerRect, getMobileRectangle(m->mobiles[i]));
-        if (c.height > 0 || c.width > 0) {
+        if (CheckCollisionRecs(playerRect, getMobileRectangle(m->mobiles[i]))) {
             return m->mobiles[i];
         }
     }
@@ -59,61 +56,75 @@ Mobile *getBlockingMob(const Map *m, Rectangle playerRect) {
 
 Chest *getBlockingChest(const Map *m, Rectangle playerRect) {
     for (int i = 0; i < m->chestCount; i++) {
-        Rectangle c = GetCollisionRec(playerRect, m->chests[i]->area);
-        if (c.height > 0 || c.width > 0) {
+        if (CheckCollisionRecs(playerRect, rectangleDtoRectangle(m->chests[i]->area))) {
             return m->chests[i];
         }
     }
     return NULL;
 }
 
-void setCollision(const Map *m, Player *p, Direction direction, Vector2 pos) {
+bool isCollisionDetected(const Map *m, Player *p, Vector2D pos) {
     Mobile *mob = getPartyLeader(p);
     const Rectangle *collision = getMobAnimation(mob)->spriteSheet->collision;
     Rectangle rect = {
-            pos.x + collision->x,
-            pos.y + collision->y,
+            (float) pos.x + collision->x,
+            (float) pos.y + collision->y,
             collision->width,
             collision->height,
     };
-    if (mob->moving[direction]) {
-        resetBlocking(p);
-        const Chest *c = getBlockingChest(m, rect);
-        if (c != NULL) {
-            p->blocking->chest = c;
-            return;
+    const Chest *c = getBlockingChest(m, rect);
+    if (c != NULL) {
+        return true;
+    }
+    const Tile *t = getBlockingMapTile(m, rect);
+    if (t != NULL) {
+        return true;
+    }
+    Mobile *blockingMob = getBlockingMob(m, rect);
+    if (blockingMob != NULL) {
+        return true;
+    }
+    return false;
+}
+
+void evaluateMovement(const MobileManager *mm) {
+    const int t = tileSize(mm->context);
+    for (int i = 0; i < mm->mobileCount; i++) {
+        Mobile *mob = mm->mobiles[i];
+        if (mob->amountToMove > 0) {
+            if (mob->direction == DIRECTION_UP) {
+                mob->position.y -= 1;
+            } else if (mob->direction == DIRECTION_DOWN) {
+                mob->position.y += 1;
+            } else if (mob->direction == DIRECTION_LEFT) {
+                mob->position.x -= 1;
+            } else if (mob->direction == DIRECTION_RIGHT) {
+                mob->position.x += 1;
+            }
+            mob->amountToMove -= 1;
+        } else if (mob->position.x > mob->destination.x) {
+            mob->direction = DIRECTION_LEFT;
+            mob->amountToMove = t;
+            getMobAnimation(mob)->isPlaying = true;
+        } else if (mob->position.x < mob->destination.x) {
+            mob->direction = DIRECTION_RIGHT;
+            mob->amountToMove = t;
+            getMobAnimation(mob)->isPlaying = true;
+        } else if (mob->position.y < mob->destination.y) {
+            mob->direction = DIRECTION_DOWN;
+            mob->amountToMove = t;
+            getMobAnimation(mob)->isPlaying = true;
+        } else if (mob->position.y > mob->destination.y) {
+            mob->direction = DIRECTION_UP;
+            mob->amountToMove = t;
+            getMobAnimation(mob)->isPlaying = true;
+        } else {
+            resetMoving(mob);
         }
-        const Tile *t = getBlockingMapTile(m, rect);
-        if (t != NULL) {
-            p->blocking->tile = t;
-            return;
-        }
-        Mobile *blockingMob = getBlockingMob(m, rect);
-        if (blockingMob != NULL) {
-            p->blocking->mob = blockingMob;
-            return;
-        }
-        mob->position = pos;
-        p->engageable = NULL;
     }
 }
 
-void evaluateMovement(const Map *m, Player *p) {
-    const Mobile *mob = getPartyLeader(p);
-    if (mob->isBeingMoved) {
-        return;
-    }
-    for (int i = 0; i < DIRECTION_COUNT; i++) {
-        setCollision(
-                m,
-                p,
-                DirectionEnums[i],
-                getMoveFor(mob, DirectionEnums[i], (float) m->context->ui->screen->targetFrameRate));
-    }
-}
-
-bool openChest(Player *p, int sceneId) {
-    const Chest *c = p->blocking->chest;
+bool openChest(Player *p, Chest *c, int sceneId) {
     for (int i = 0; i < p->openedChestsCount; i++) {
         if (p->openedChests[i]->chestId == c->id
             && p->openedChests[i]->sceneId == sceneId) {
@@ -165,27 +176,46 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
         player->engaged = false;
         return createResponse(ACTION_TAKEN_NONE);
     }
-    if (player->blocking->mob != NULL) {
-        engageWithMobile(player);
-        Response *r = createResponse(ACTION_TAKEN_ENGAGE_DIALOG);
-        return r;
+    const Mobile *mob = getPartyLeader(player);
+    Vector2D focusPos = mob->position;
+    if (mob->direction == DIRECTION_UP) {
+        focusPos.y -= tileSize(m->context);
+    } else if (mob->direction == DIRECTION_DOWN) {
+        focusPos.y += tileSize(m->context);
+    } else if (mob->direction == DIRECTION_LEFT) {
+        focusPos.x -= tileSize(m->context);
+    } else if (mob->direction == DIRECTION_RIGHT) {
+        focusPos.x += tileSize(m->context);
     }
-    if (player->blocking->chest != NULL && openChest(player, m->sceneId)) {
-        Response *r = createResponse(ACTION_TAKEN_OPENED_CHEST);
-        r->chest = player->blocking->chest;
-        return r;
+    for (int i = 0; i < m->mobileCount; i++) {
+        if (m->mobiles[i]->position.x == focusPos.x && m->mobiles[i]->position.y == focusPos.y) {
+            engageWithMobile(player, m->mobiles[i]);
+            Response *r = createResponse(ACTION_TAKEN_ENGAGE_DIALOG);
+            return r;
+        }
+    }
+    for (int i = 0; i < m->chestCount; i++) {
+        if (CheckCollisionRecs(
+                (Rectangle) {
+                        (float) focusPos.x,
+                        (float) focusPos.y,
+                        (float) tileSize(m->context),
+                        (float) tileSize(m->context),
+                }, rectangleDtoRectangle(m->chests[i]->area)) && openChest(player, m->chests[i], m->sceneId)) {
+            Response *r = createResponse(ACTION_TAKEN_OPENED_CHEST);
+            r->chest = m->chests[i];
+            return r;
+        }
     }
     for (int i = 0; i < m->shopTileCount; i++) {
-        Mobile *mob = getPartyLeader(player);
-        Rectangle c = GetCollisionRec(
+        if (CheckCollisionRecs(
                 (Rectangle) {
-                        mob->position.x,
-                        mob->position.y,
-                        (float) m->tileset->size.x,
-                        (float) m->tileset->size.y,
+                        (float) mob->position.x,
+                        (float) mob->position.y,
+                        (float) m->context->game->tileSize,
+                        (float) m->context->game->tileSize,
                 },
-                m->shopTiles[i]->object->area);
-        if (c.height > 0 || c.width > 0) {
+                rectangleDtoRectangle(m->shopTiles[i]->object->area))) {
             Response *r = createResponse(ACTION_TAKEN_SHOPPING);
             r->shop = m->shopTiles[i];
             return r;
@@ -194,6 +224,6 @@ Response *mapSpaceKeyPressed(const Map *m, Player *player, ControlBlock *control
     return createResponse(ACTION_TAKEN_NONE);
 }
 
-void mapDebugKeyPressed(Vector2 position) {
-    addInfo("player coordinates: %f, %f", position.x, position.y);
+void mapDebugKeyPressed(Vector2D position, int tileSize) {
+    addInfo("player coordinates: %d, %d", position.x / tileSize, position.y / tileSize);
 }

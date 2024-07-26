@@ -2,9 +2,9 @@
 
 typedef struct {
     Context *context;
-    Animation *library[MAX_ANIMATIONS_IN_GAME];
+    Animation **library;
     int libraryCount;
-    Animation *animations[MAX_ANIMATIONS];
+    Animation **animations;
     int animationCount;
 } AnimationManager;
 
@@ -13,6 +13,8 @@ AnimationManager *createAnimationManager(Context *c) {
     animationManager->context = c;
     animationManager->animationCount = 0;
     animationManager->libraryCount = 0;
+    animationManager->library = calloc(MAX_ANIMATIONS_IN_GAME, sizeof(Animation));
+    animationManager->animations = calloc(MAX_ANIMATIONS, sizeof(Animation));
     return animationManager;
 }
 
@@ -43,7 +45,9 @@ void addAllAnimations(AnimationManager *am, Animation *animations[MAX_ANIMATIONS
 }
 
 void clearAnimations(AnimationManager *am) {
-    memset(am->animations, 0, sizeof(am->animations));
+    for (int i = 0; i < am->animationCount; i++) {
+        am->animations[i] = NULL;
+    }
     am->animationCount = 0;
 }
 

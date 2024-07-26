@@ -16,8 +16,7 @@ typedef struct {
     Direction previousDirection;
     Animation *animations[MAX_ANIMATIONS];
     Avatar *avatar;
-    Vector2 position;
-    bool moving[DIRECTION_COUNT];
+    Vector2D position;
     struct timeval lastMovement;
     bool isBeingMoved;
     Attributes *attributes;
@@ -35,6 +34,8 @@ typedef struct {
     float hitAnimationTimer;
     bool isFleeing;
     bool immortal;
+    int amountToMove;
+    Vector2D destination;
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {
@@ -44,7 +45,7 @@ Animation *getMobAnimation(Mobile *mob) {
 Mobile *createMobile(
         const char *id,
         const char *name,
-        Vector2 position,
+        Vector2D position,
         Direction direction,
         Animation *animations[MAX_ANIMATIONS],
         Avatar *avatar,
@@ -59,10 +60,6 @@ Mobile *createMobile(
     mobile->name = &name[0];
     mobile->direction = direction;
     mobile->position = position;
-    mobile->moving[DIRECTION_UP] = false;
-    mobile->moving[DIRECTION_DOWN] = false;
-    mobile->moving[DIRECTION_LEFT] = false;
-    mobile->moving[DIRECTION_RIGHT] = false;
     mobile->attributes = attributes;
     mobile->turnCounter = 0;
     mobile->waitTimer = -1;
@@ -84,100 +81,54 @@ Mobile *createMobile(
     mobile->hitAnimationTimer = 0;
     mobile->isFleeing = false;
     mobile->immortal = immortal;
+    mobile->amountToMove = 0;
+    mobile->destination = position;
     return mobile;
 }
 
 void resetMoving(Mobile *mob) {
-    mob->moving[DIRECTION_UP] = false;
-    mob->moving[DIRECTION_DOWN] = false;
-    mob->moving[DIRECTION_LEFT] = false;
-    mob->moving[DIRECTION_RIGHT] = false;
-    getMobAnimation(mob)->isPlaying = 0;
+    mob->destination = mob->position;
+    mob->amountToMove = 0;
+    mob->isBeingMoved = false;
+    getMobAnimation(mob)->isPlaying = false;
 }
 
 bool isMoving(const Mobile *mob) {
-    return mob->moving[DIRECTION_DOWN]
-           || mob->moving[DIRECTION_UP]
-           || mob->moving[DIRECTION_LEFT]
-           || mob->moving[DIRECTION_RIGHT];
+    return mob->position.x != mob->destination.x || mob->position.y != mob->destination.y;
 }
 
 Rectangle getMobileRectangle(Mobile *mob) {
     const Rectangle *c = getMobAnimation(mob)->spriteSheet->collision;
     return (Rectangle) {
-            mob->position.x + c->x,
-            mob->position.y + c->y,
+            (float) mob->position.x + c->x,
+            (float) mob->position.y + c->y,
             c->width,
             c->height,
     };
-}
-
-float getMoveAmount(float fps) {
-    return 60 / fps;
-}
-
-Vector2 getMoveFor(const Mobile *mob, Direction direction, float fps) {
-    if (direction == DIRECTION_UP) {
-        return (Vector2) {mob->position.x, mob->position.y - getMoveAmount(fps)};
-    } else if (direction == DIRECTION_DOWN) {
-        return (Vector2) {mob->position.x, mob->position.y + getMoveAmount(fps)};
-    }
-    if (direction == DIRECTION_LEFT) {
-        return (Vector2) {mob->position.x - getMoveAmount(fps), mob->position.y};
-    }
-    if (direction == DIRECTION_RIGHT) {
-        return (Vector2) {mob->position.x + getMoveAmount(fps), mob->position.y};
-    }
-    return mob->position;
 }
 
 void updateDirection(Mobile *mob, Direction direction) {
     mob->previousDirection = mob->direction;
     mob->direction = direction;
 }
-float normalizeMoveAmount(float a, float b, float fps) {
-    int a1 = (int) a;
-    int b1 = (int) b;
-    if (a1 > b1) return -getMoveAmount(fps);
-    if (a1 < b1) return getMoveAmount(fps);
-    return 0;
-}
 
-bool moveMob(Mobile *mob, Vector2 destination, float targetFPS) {
-    resetMoving(mob);
-    float x = normalizeMoveAmount(mob->position.x, destination.x, targetFPS);
-    float y = normalizeMoveAmount(mob->position.y, destination.y, targetFPS);
-    mob->position.x += x;
-    mob->position.y += y;
-    bool moved = x != 0 || y != 0;
-    Animation *animation = getMobAnimation(mob);
-    animation->isPlaying = moved;
-    if (moved) {
-        if (x > 0) mob->direction = DIRECTION_RIGHT;
-        else if (x < 0) mob->direction = DIRECTION_LEFT;
-        else if (y > 0) mob->direction = DIRECTION_DOWN;
-        else mob->direction = DIRECTION_UP;
-        mob->moving[mob->direction] = true;
-    }
-    incrementAnimationFrame(animation, targetFPS);
-    return moved;
-}
-
-char *getPositionAsString(Vector2 position) {
+char *getPositionAsString(Vector2D position) {
     char *value = malloc(255);
-    sprintf(value, "%.1f, %.1f", position.x, position.y);
+    sprintf(value, "%d, %d", position.x, position.y);
     return value;
 }
 
 void useEntrance(Mobile *mob, const Entrance *e) {
-    const Rectangle *c = getMobAnimation(mob)->spriteSheet->collision;
+    addInfo("use entrance :: %s, %d, %d", e->name, e->area.x, e->area.y);
     mob->position.x = e->area.x;
-    mob->position.y = e->area.y - c->y;
+    mob->position.y = e->area.y;
+    mob->destination = mob->position;
     mob->direction = e->direction;
+    resetMoving(mob);
 }
 
 bool canPlayerMove(const Mobile *mob) {
-    return !mob->isBeingMoved && !mob->locked && mob->waitTimer < 0;
+    return !mob->isBeingMoved && !mob->locked && mob->waitTimer < 0 && mob->amountToMove == 0;
 }
 
 bool isReadyForAction(Mobile *mob) {

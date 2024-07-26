@@ -48,17 +48,13 @@ void attemptToUseExit(Game *game, Scene *scene, const Entrance *entrance) {
         addWarning("no entrance found for '%s' scene", scene->name);
         return;
     }
-    addDebug("entrance %s found at %f, %f, %f, %f",
+    addInfo("entrance %s found at %d, %d, %d, %d",
              entrance->name,
              entrance->area.x,
              entrance->area.y,
              entrance->area.width,
              entrance->area.height
     );
-    getPartyLeader(game->player)->position = (Vector2) {
-            entrance->area.x,
-            entrance->area.y
-    };
     setScene(game->scenes, scene, game->player, entrance->name);
 }
 
@@ -116,15 +112,37 @@ void evaluateResponse(const Game *g, const Response *r) {
     }
 }
 
+void evaluateMoveDirection(const Game *g, Mobile *mob, Direction d) {
+    mob->direction = d;
+    Vector2D newPos = mob->position;
+    int amountToMove = g->context->game->tileSize;
+    if (d == DIRECTION_UP) {
+        newPos.y -= amountToMove;
+    } else if (d == DIRECTION_DOWN) {
+        newPos.y += amountToMove;
+    } else if (d == DIRECTION_LEFT) {
+        newPos.x -= amountToMove;
+    } else if (d == DIRECTION_RIGHT) {
+        newPos.x += amountToMove;
+    }
+    if (!isCollisionDetected(g->scenes->current->map, g->player, newPos)) {
+        mob->amountToMove = amountToMove;
+        mob->destination = newPos;
+        getMobAnimation(mob)->isPlaying = true;
+    }
+}
+
 void checkMapInput(Game *g) {
     Mobile *mob = getPartyLeader(g->player);
-    resetMoving(mob);
     if (!canPlayerMove(mob)) {
         return;
     }
-    mapCheckMoveKeys(g->player);
+    Direction d = mapCheckMoveKeys(g->player);
+    if (d != -1) {
+        evaluateMoveDirection(g, mob, d);
+    }
     if (IsKeyPressed(KEY_C)) {
-        mapDebugKeyPressed(mob->position);
+        mapDebugKeyPressed(mob->position, g->context->game->tileSize);
     }
     if (IsKeyPressed(KEY_SPACE)) {
         const Response *r = mapSpaceKeyPressed(
@@ -245,10 +263,9 @@ void doExplorationLoop(Game *g) {
             s->activeControlBlocks,
             g->ui->fonts->default_);
     processAnimations(g->animations);
-    doMobileMovementUpdates(s->map);
-    evaluateMovement(s->map, g->player);
     evaluateExits(g);
     checkControls(g->controls);
+    evaluateMovement(g->mobiles);
     checkFights(g, s);
 }
 

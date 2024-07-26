@@ -46,22 +46,22 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         progress++;
     } else if (isMovingAndAtDestination(cb)) {
         addDebug("mob at destination, control block proceeding :: %s", then->target->name);
-        resetBlocking(cm->player);
         progress++;
     } else if (isAddStoryOutcome(then)) {
         addStory(cm->player, then->story);
         progress++;
     } else if (needsToStartMoving(then)) {
-        addDebug("mob needs to start moving");
-        addMobileMovement(
-                cm->scene->map,
-                createMobileMovement(
-                        then->target,
-                        then->position
-                )
-        );
-        disengageWithMobile(cm->player);
-        getPartyLeader(cm->player)->isBeingMoved = true;
+        addInfo("mob to move :: %s :: %d, %d to %d %d",
+                then->target->name,
+                then->target->position.x,
+                then->target->position.y,
+                then->position.x,
+                then->position.y);
+        then->target->destination = then->position;
+        if (then->target == getPartyLeader(cm->player)) {
+            disengageWithMobile(cm->player);
+            getPartyLeader(cm->player)->isBeingMoved = true;
+        }
     } else if (isFaceDirectionOutcome(then)) {
         addDebug("set direction for mob :: %s, %s", then->target->name, then->direction);
         then->target->direction =
@@ -210,11 +210,11 @@ Then *mapThen(ControlManager *cm, ThenData td) {
     } else {
         target = findMobById(cm->mobileManager, td.mob);
     }
-    Vector2 pos;
+    Vector2D pos;
     if (td.position != NULL) {
         pos = getPositionFromString(td.position);
     } else {
-        pos = (Vector2) {0, 0};
+        pos = (Vector2D) {0, 0};
     }
     if (td.dialog != NULL) {
         td.action = OUTCOME_DIALOG;
@@ -233,7 +233,10 @@ Then *mapThen(ControlManager *cm, ThenData td) {
             &td.direction[0],
             &td.item[0],
             o,
-            pos,
+            (Vector2D) {
+                pos.x * tileSize(cm->context),
+                pos.y * tileSize(cm->context),
+            },
             td.parallel,
             amount
     );

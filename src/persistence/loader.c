@@ -38,7 +38,7 @@ void loadAnimations(AnimationManager *am, const SpritesheetManager *sm, const ch
 }
 
 void loadMobiles(MobileManager *mm, Scene *scene, const char *sceneDirectory) {
-    char directory[MAX_FS_PATH_LENGTH];
+    char directory[MAX_FS_PATH_LENGTH] = "";
     sprintf(directory, "%s/mobiles", sceneDirectory);
     addDebug("load mobiles from %s", directory);
     if (!FileExists(directory)) {
@@ -49,7 +49,7 @@ void loadMobiles(MobileManager *mm, Scene *scene, const char *sceneDirectory) {
     int files = getFilesInDirectory(directory, mobFiles);
     for (int i = 0; i < files; i++) {
         char *filePath = malloc(1 + strlen(directory) + strlen(&mobFiles[i][0]));
-        sprintf(filePath, "%s/%s", directory, &mobFiles[i][0]);
+        sprintf(filePath, "%s/%s", directory, mobFiles[i]);
         MobileData *mobData = loadMobYaml(filePath);
         Animation *animations[MAX_ANIMATIONS];
         loadAnimationsByName(mm->animationManager, mobData->animations, animations);

@@ -39,31 +39,20 @@ int xmlInt(const xmlNode *node, const char *propName) {
     return TextToInteger((const char *) xmlGetProp(node, (const xmlChar *) propName));
 }
 
-float xmlFloat(const xmlNode *node, const char *propName) {
-    char *ptr;
-    const char *value = (const char *) xmlGetProp(node, (const xmlChar *) propName);
-    float f = strtof(value, &ptr);
-    if (strcmp(ptr, "") != 0) {
-        addError("error parsing xml value :: %s, %s, %s", (const char *) node->name, propName, value);
-    }
-    free((char *) value);
-    return f;
-}
-
 const char *xmlString(const xmlNode *node, const char *propName) {
     return (const char *) xmlGetProp(node, (const xmlChar *) propName);
 }
 
-Rectangle parseRectangle(const xmlNode *node) {
-    return (Rectangle) {
-            xmlFloat(node, PROP_X),
-            xmlFloat(node, PROP_Y),
-            xmlFloat(node, PROP_WIDTH),
-            xmlFloat(node, PROP_HEIGHT),
+RectangleD parseRectangle(const xmlNode *node) {
+    return (RectangleD) {
+            xmlInt(node, PROP_X),
+            xmlInt(node, PROP_Y),
+            xmlInt(node, PROP_WIDTH),
+            xmlInt(node, PROP_HEIGHT),
     };
 }
 
-void parseTileObjectGroupNode(xmlNodePtr node, Tile *t) {
+void parseTileObjectGroupNode(xmlNodePtr node, Tile *t, int tileSize) {
     while (node != NULL) {
         const NodeName name = getNodeNameFromString((const char *) node->name);
         if (name == NODE_NAME_OBJECT) {
@@ -89,7 +78,7 @@ void parseTileProperties(xmlNodePtr node, Tile *t) {
     }
 }
 
-Tile *parseTileNode(xmlNodePtr node) {
+Tile *parseTileNode(xmlNodePtr node, int tileSize) {
     int id = xmlInt(node, PROP_ID);
     TileType type = getTileTypeFromString(xmlString(node, PROP_TYPE));
     Tile *t = createTile(id, type);
@@ -97,7 +86,7 @@ Tile *parseTileNode(xmlNodePtr node) {
     while (cur != NULL) {
         const NodeName name = getNodeNameFromString((const char *) cur->name);
         if (name == NODE_NAME_OBJECT_GROUP) {
-            parseTileObjectGroupNode(cur->children, t);
+            parseTileObjectGroupNode(cur->children, t, tileSize);
         } else if (name == NODE_NAME_PROPERTIES) {
             parseTileProperties(cur->children, t);
         }
@@ -106,10 +95,10 @@ Tile *parseTileNode(xmlNodePtr node) {
     return t;
 }
 
-void parseTilesetRootNode(xmlNodePtr node, Tileset *t, const char *indexDir) {
+void parseTilesetRootNode(Context *c, xmlNodePtr node, Tileset *t) {
     const char *source = xmlString(node, PROP_SOURCE);
     char filePath[MAX_FS_PATH_LENGTH];
-    getComponentPath(filePath, indexDir, indexDir, "tilesets", source);
+    getComponentPath(filePath, c->indexDir, c->indexDir, "tilesets", source);
     xmlDocPtr doc = xmlParseFile(filePath);
     xmlNodePtr cur = xmlDocGetRootElement(doc);
     if (cur == NULL) {
@@ -119,17 +108,15 @@ void parseTilesetRootNode(xmlNodePtr node, Tileset *t, const char *indexDir) {
     while (cur != NULL) {
         TilesetNodeType type = getTilesetNodeTypeFromString((const char *) cur->name);
         if (type == TILESET_NODE_TYPE_TILESET) {
-            t->size.x = xmlInt(cur, PROP_TILE_WIDTH);
-            t->size.y = xmlInt(cur, PROP_TILE_HEIGHT);
             cur = cur->children;
         } else if (type == TILESET_NODE_TYPE_IMAGE) {
             char *imagePath = malloc(MAX_FS_PATH_LENGTH);
-            sprintf(filePath, "%s/%s/%s", indexDir, "images/tilesets", GetFileName(xmlString(cur, "source")));
+            sprintf(filePath, "%s/%s/%s", c->indexDir, "images/tilesets", GetFileName(xmlString(cur, "source")));
             sprintf(imagePath, "%s", filePath);
             t->reader = xmlReaderForFile(filePath, NULL, 0);
             t->sourcePath = imagePath;
         } else if (type == TILESET_NODE_TYPE_TILE) {
-            t->tiles[t->tilesCount] = parseTileNode(cur);
+            t->tiles[t->tilesCount] = parseTileNode(cur, c->game->tileSize);
             t->tilesCount++;
         }
         cur = cur->next;
@@ -265,7 +252,9 @@ void parseTilemapObjectGroupShopNode(xmlNodePtr node, Map *m) {
         if (name == NODE_NAME_OBJECT) {
             const Property *propName = parseProperty(node, PROP_NAME);
             const Property *propId = parseProperty(node, PROP_ID);
-            Object *o = createObject(xmlInt(node, "id"), parseRectangle(node));
+            Object *o = createObject(
+                    xmlInt(node, "id"),
+                    parseRectangle(node));
             m->shopTiles[m->shopTileCount] = createShopTile(
                     TextToInteger(propId->value),
                     propName->value,
@@ -307,7 +296,7 @@ void parseTilemapRootNode(Map *map, xmlNodePtr node, ItemManager *im) {
         TilemapNodeType type = getTileMapNodeTypeFromString((const char *) node->children->name);
         addDebug("parse tile map node type :: %s", node->children->name);
         if (type == TILEMAP_NODE_TYPE_TILESET) {
-            parseTilesetRootNode(node->children, map->tileset, map->context->indexDir);
+            parseTilesetRootNode(map->context, node->children, map->tileset);
         } else if (type == TILEMAP_NODE_TYPE_LAYER) {
             parseLayerNode(node->children, map);
         } else if (type == TILEMAP_NODE_TYPE_OBJECTGROUP) {
