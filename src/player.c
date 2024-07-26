@@ -69,7 +69,7 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
             break;
         }
         player->party[i] = mobs[i];
-        player->partyCount = i + 1;
+        player->partyCount += 1;
     }
     player->itemCount = itemCount;
     player->items = items;
