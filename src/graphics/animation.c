@@ -76,3 +76,13 @@ Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], Direction type) {
     }
     return NULL;
 }
+
+AnimationType getAnimationTypeFromString(const char *animationType) {
+    for (int i = 0; i < sizeof(AnimationTypes) / sizeof(char *); i++) {
+        if (strcmp(AnimationTypes[i], animationType) == 0) {
+            return AnimationTypeEnums[i];
+        }
+    }
+    addError("unknown animation type :: %s", animationType);
+    exit(1);
+}
