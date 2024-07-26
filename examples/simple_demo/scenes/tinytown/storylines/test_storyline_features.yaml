@@ -63,8 +63,8 @@ storylines:
         scene: tinytown
     then:
       - mob: vill1
-        action: set_position
-        position: 320, 242
+        action: move_to
+        position: 20, 15
       - mob: vill1
         action: set_direction
         direction: down
