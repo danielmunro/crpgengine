@@ -25,7 +25,6 @@ typedef struct {
     Mobile **onDeck;
     const char **storylines;
     Item **items;
-    Blocking *blocking;
     Mobile *engageable;
     Dialog *dialog;
     OpenedChest **openedChests;
