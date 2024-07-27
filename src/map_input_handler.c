@@ -105,18 +105,22 @@ void evaluateMovement(const MobileManager *mm) {
         } else if (mob->position.x > mob->destination.x) {
             mob->direction = DIRECTION_LEFT;
             mob->amountToMove = t;
+            resetMobAnimations(mob);
             getMobAnimation(mob)->isPlaying = true;
         } else if (mob->position.x < mob->destination.x) {
             mob->direction = DIRECTION_RIGHT;
             mob->amountToMove = t;
+            resetMobAnimations(mob);
             getMobAnimation(mob)->isPlaying = true;
         } else if (mob->position.y < mob->destination.y) {
             mob->direction = DIRECTION_DOWN;
             mob->amountToMove = t;
+            resetMobAnimations(mob);
             getMobAnimation(mob)->isPlaying = true;
         } else if (mob->position.y > mob->destination.y) {
             mob->direction = DIRECTION_UP;
             mob->amountToMove = t;
+            resetMobAnimations(mob);
             getMobAnimation(mob)->isPlaying = true;
         } else {
             resetMoving(mob);

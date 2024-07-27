@@ -126,9 +126,7 @@ void evaluateMoveDirection(const Game *g, Mobile *mob, Direction d) {
         newPos.x += amountToMove;
     }
     if (!isCollisionDetected(g->scenes->current->map, g->player, newPos)) {
-        mob->amountToMove = amountToMove;
         mob->destination = newPos;
-        getMobAnimation(mob)->isPlaying = true;
     }
 }
 

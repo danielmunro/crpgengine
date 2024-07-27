@@ -183,10 +183,11 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
                 break;
             }
             drawAnimation(
-                    getMobAnimation(mobLayer[y][n]),
+                    getActiveMobAnimation(mobLayer[y][n]),
                     (Vector2) {
                             (((float) mobLayer[y][n]->position.x * m->context->ui->screen->scale) + offset.x),
-                            (floorf(((float) mobLayer[y][n]->position.y * m->context->ui->screen->scale) + offset.y)  - (float) (m->context->game->mobileSize.y - m->context->game->tileSize)),
+                            (floorf(((float) mobLayer[y][n]->position.y * m->context->ui->screen->scale) + offset.y) -
+                                    (float) tileSize(m->context)),
                     }
             );
             if (m->context->game->showCollisions->objects) {
@@ -206,7 +207,7 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
         Rectangle rect = getMobileRectangle(getPartyLeader(p));
         DrawRectangle(
                 (int) ((rect.x * ui->screen->scale) + offset.x),
-                (int) ((rect.y * ui->screen->scale) + offset.y),
+                (int) ((rect.y * ui->screen->scale) + offset.y - (float) tileSize(m->context)),
                 (int) (rect.width * ui->screen->scale),
                 (int) (rect.height * ui->screen->scale),
                 GREEN
