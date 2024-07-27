@@ -207,19 +207,18 @@ void parseTilemapObjectGroupWarpsNode(xmlNodePtr node, Map *m) {
 }
 
 void parseTilemapObjectGroupArriveAtNode(xmlNodePtr node, Map *m) {
-    xmlNodePtr cur = node->children;
-    while (cur != NULL) {
+    while (node != NULL) {
         const NodeName name = getNodeNameFromString((const char *) node->name);
         if (name == NODE_NAME_OBJECT) {
-            int id = xmlInt(cur, PROP_ID);
-            const char *objectName = xmlString(cur, PROP_NAME);
+            int id = xmlInt(node, PROP_ID);
+            const char *objectName = xmlString(node, PROP_NAME);
             m->warps->arriveAt[m->warps->arriveAtCount] = createArriveAt(
                     id,
                     objectName,
-                    parseRectangle(cur));
+                    parseRectangle(node));
             m->warps->arriveAtCount++;
         }
-        cur = cur->next;
+        node = node->next;
     }
 }
 
