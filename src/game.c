@@ -247,7 +247,7 @@ void checkFights(Game *g, const Scene *s) {
                 g->fights,
                 s->encounters,
                 g->player);
-        Animation *animation = findAnimation(getPartyLeader(g->player)->animations, DIRECTION_LEFT);
+        Animation *animation = findAnimation(getPartyLeader(g->player)->animations, ANIMATION_LEFT);
         animation->currentFrame = animation->firstFrame;
         g->ui->menuContext->fight = g->fights->fight;
     }

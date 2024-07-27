@@ -24,7 +24,7 @@ const char *AnimationTypes[] = {
         "up",
         "down",
         "left",
-        "right"
+        "right",
         "sleep",
 };
 

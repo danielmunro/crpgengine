@@ -39,7 +39,7 @@ typedef struct {
 } Mobile;
 
 Animation *getMobAnimation(Mobile *mob) {
-    return findAnimation(mob->animations, mob->direction);
+    return findAnimation(mob->animations, getAnimationTypeFromDirection(mob->direction));
 }
 
 Mobile *createMobile(

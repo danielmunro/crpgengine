@@ -6,7 +6,7 @@
 typedef struct {
     Context *context;
     const char *name;
-    Direction type;
+    AnimationType type;
     Spritesheet *spriteSheet;
     int firstFrame;
     int lastFrame;
@@ -30,7 +30,7 @@ void incrementAnimationFrame(Animation *a, float targetFPS) {
 
 Animation *createAnimation(
         const char *name,
-        Direction type,
+        AnimationType type,
         Spritesheet *spriteSheet,
         int firstFrame,
         int lastFrame,
@@ -65,7 +65,7 @@ void drawAnimation(const Animation *a, Vector2 position) {
     drawImageFromSprite(a->spriteSheet, position, a->currentFrame);
 }
 
-Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], Direction type) {
+Animation *findAnimation(Animation *animation[MAX_ANIMATIONS], AnimationType type) {
     for (int i = 0; i < MAX_ANIMATIONS; i++) {
         if (animation[i] == NULL) {
             break;
@@ -84,5 +84,19 @@ AnimationType getAnimationTypeFromString(const char *animationType) {
         }
     }
     addError("unknown animation type :: %s", animationType);
+    exit(1);
+}
+
+AnimationType getAnimationTypeFromDirection(Direction direction) {
+    if (direction == DIRECTION_UP) {
+        return ANIMATION_UP;
+    } else if (direction == DIRECTION_DOWN) {
+        return ANIMATION_DOWN;
+    } else if (direction == DIRECTION_LEFT) {
+        return ANIMATION_LEFT;
+    } else if (direction == DIRECTION_RIGHT) {
+        return ANIMATION_RIGHT;
+    }
+    addError("unknown direction for animation type :: %d", direction);
     exit(1);
 }
