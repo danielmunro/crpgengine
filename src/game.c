@@ -262,8 +262,8 @@ void doExplorationLoop(Game *g) {
             g->ui->fonts->default_);
     processAnimations(g->animations);
     evaluateExits(g);
-    checkControls(g->controls);
     evaluateMovement(g->mobiles);
+    checkControls(g->controls);
     checkFights(g, s);
 }
 

@@ -127,6 +127,11 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
                 cm->notificationManager,
                 createNotification(LOSE_QUEST_ITEM, message));
         progress++;
+    } else if (needsToSleep(then, mob)) {
+        addInfo("player going to sleep");
+        resetMobAnimations(mob);
+        findAnimation(mob->animations, ANIMATION_SLEEP)->isPlaying = true;
+        progress++;
     }
     cb->progress += progress;
     return progress;

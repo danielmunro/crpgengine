@@ -120,8 +120,8 @@ bool isMoving(const Mobile *mob) {
 Rectangle getMobileRectangle(Mobile *mob) {
     const Rectangle *c = getMobAnimation(mob)->spriteSheet->collision;
     return (Rectangle) {
-            (float) mob->position.x + c->x,
-            (float) mob->position.y + c->y,
+            (float) mob->position.x,
+            (float) mob->position.y,
             c->width,
             c->height,
     };

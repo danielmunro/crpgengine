@@ -197,9 +197,20 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
                         (int) ((rect.y * ui->screen->scale) + offset.y),
                         (int) (rect.width * ui->screen->scale),
                         (int) (rect.height * ui->screen->scale),
-                        GREEN
-                );
+                        BLUE);
             }
+        }
+    }
+
+    if (m->context->game->showCollisions->warps) {
+        for (int i = 0; i < m->warps->arriveAtCount; i++) {
+            Rectangle r = rectangleDtoRectangle(m->warps->arriveAt[i]->rect);
+            DrawRectangle(
+                    (int) ((r.x * ui->screen->scale) + offset.x),
+                    (int) ((r.y * ui->screen->scale) + offset.y),
+                    (int) (r.width * ui->screen->scale),
+                    (int) (r.height * ui->screen->scale),
+                    YELLOW);
         }
     }
 
@@ -207,11 +218,10 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
         Rectangle rect = getMobileRectangle(getPartyLeader(p));
         DrawRectangle(
                 (int) ((rect.x * ui->screen->scale) + offset.x),
-                (int) ((rect.y * ui->screen->scale) + offset.y - (float) tileSize(m->context)),
+                (int) ((rect.y * ui->screen->scale) + offset.y),
                 (int) (rect.width * ui->screen->scale),
                 (int) (rect.height * ui->screen->scale),
-                GREEN
-        );
+                GREEN);
     }
 }
 
