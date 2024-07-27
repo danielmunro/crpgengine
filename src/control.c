@@ -38,6 +38,7 @@ const char *outcomes[] = {
         "lock",
         "unlock",
         "save",
+        "sleep",
 };
 
 typedef enum {
@@ -53,6 +54,7 @@ typedef enum {
     LOCK,
     UNLOCK,
     SAVE,
+    SLEEP,
 } Outcome;
 
 typedef enum {
@@ -293,4 +295,8 @@ bool needsToReceiveItem(const Then *then, const Mobile *playerMob) {
 
 bool needsToLoseItem(const Then *then, const Mobile *playerMob) {
     return then->outcome == LOSE_ITEM && then->target == playerMob;
+}
+
+bool needsToSleep(const Then *then, const Mobile *playerMob) {
+    return then->outcome == SLEEP && then->target == playerMob;
 }
