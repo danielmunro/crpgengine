@@ -10,6 +10,7 @@ typedef enum {
     ANIMATION_LEFT,
     ANIMATION_RIGHT,
     ANIMATION_SLEEP,
+    ANIMATION_SLEEP_BUBBLE,
 } AnimationType;
 
 const AnimationType AnimationTypeEnums[] = {
@@ -18,6 +19,7 @@ const AnimationType AnimationTypeEnums[] = {
         ANIMATION_LEFT,
         ANIMATION_RIGHT,
         ANIMATION_SLEEP,
+        ANIMATION_SLEEP_BUBBLE,
 };
 
 const char *AnimationTypes[] = {
@@ -26,7 +28,25 @@ const char *AnimationTypes[] = {
         "left",
         "right",
         "sleep",
+        "sleep-bubble",
 };
+
+typedef enum {
+    DISPLAY_RELATIVE,
+    DISPLAY_ABSOLUTE,
+} Display;
+
+
+const Display Displays[] = {
+        DISPLAY_RELATIVE,
+        DISPLAY_ABSOLUTE,
+};
+
+const char *DisplayTypes[] = {
+        "relative",
+        "absolute",
+};
+
 
 #include "graphics/animation.c"
 

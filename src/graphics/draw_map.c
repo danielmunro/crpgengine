@@ -73,7 +73,10 @@ void drawTile(const Map *m, Image layer, int index, int x, int y) {
             (float) (sz * x),
             (float) (sz * y),
     };
-    Rectangle rect = getRectForTile(m, index);
+    Rectangle rect = getRectForSpriteByIndex(
+            m->tileset->sourceTexture.width,
+            tileSize(m->context),
+            index);
     ImageDraw(
             &layer,
             m->tileset->source,
@@ -235,12 +238,16 @@ void drawChests(const Map *m, const Player *p, Vector2 offset) {
                 (float) tileSize * ui->screen->scale,
                 (float) tileSize * ui->screen->scale };
         Vector2 origin = { 0.0f, 0.0f };
-        Rectangle src;
+        int index;
         if (isChestOpened(p, m->sceneId, m->chests[i]->id)) {
-            src = getRectForTile(m, m->openedChest->id + 1);
+            index = m->openedChest->id + 1;
         } else {
-            src = getRectForTile(m, m->closedChest->id + 1);
+            index = m->closedChest->id + 1;
         }
+        Rectangle src = getRectForSpriteByIndex(
+                m->tileset->sourceTexture.width,
+                tileSize,
+                index);
         DrawTexturePro(
                 m->tileset->sourceTexture,
                 src,

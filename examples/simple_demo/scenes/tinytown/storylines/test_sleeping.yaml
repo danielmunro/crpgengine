@@ -2,6 +2,11 @@ storylines:
   - when:
       - player: arrive_at
         arrive_at: sleep
+      - player: not_has_story
+        story: test_sleep
     then:
       - player: true
         action: sleep
+      - player: true
+        action: add_story
+        story: test_sleep

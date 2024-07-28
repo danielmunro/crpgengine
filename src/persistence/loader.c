@@ -30,7 +30,9 @@ void loadAnimations(AnimationManager *am, const SpritesheetManager *sm, const ch
                 s->frameStart,
                 s->frameEnd,
                 s->rate,
-                s->repeat
+                s->repeat,
+                getDisplayFromString(s->display),
+                getPositionFromString(s->position)
         );
     }
     am->libraryCount += animation->slices_count;

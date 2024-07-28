@@ -2,8 +2,10 @@ name: sleep-bubble
 sprite:
   name: sleep-bubble
 slices:
-  - name: down
+  - name: sleep-bubble
     frameStart: 0
     frameEnd: 1
     rate: 6
     repeat: -1
+    display: relative
+    position: 1,-1

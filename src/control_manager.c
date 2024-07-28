@@ -12,6 +12,7 @@ typedef struct {
     Context *context;
     Scene *scene;
     Player *player;
+    AnimationManager *animations;
     ItemManager *itemManager;
     NotificationManager *notificationManager;
     MobileManager *mobileManager;
@@ -21,6 +22,7 @@ typedef struct {
 ControlManager *createControlManager(
         Context *c,
         Player *player,
+        AnimationManager *animations,
         ItemManager *itemManager,
         NotificationManager *notificationManager,
         MobileManager *mobileManager,
@@ -28,6 +30,7 @@ ControlManager *createControlManager(
     ControlManager *cm = malloc(sizeof(ControlManager));
     cm->context = c;
     cm->player = player;
+    cm->animations = animations;
     cm->itemManager = itemManager;
     cm->notificationManager = notificationManager;
     cm->mobileManager = mobileManager;

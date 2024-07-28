@@ -347,6 +347,7 @@ void initializeGameForPlayer(Game *g) {
     g->controls = createControlManager(
             g->context,
             g->player,
+            g->animations,
             g->items,
             g->notifications,
             g->mobiles,

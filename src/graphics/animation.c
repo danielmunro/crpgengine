@@ -15,7 +15,19 @@ typedef struct {
     int frameRate;
     int frameRateCount;
     bool isPlaying;
+    Display display;
+    Vector2D position;
 } Animation;
+
+Display getDisplayFromString(const char *display) {
+    for (int i = 0; i < sizeof(DisplayTypes) / sizeof (char *); i++) {
+        if (strcmp(display, DisplayTypes[i]) == 0) {
+            return Displays[i];
+        }
+    }
+    addError("unknown display type :: %s", display);
+    exit(1);
+}
 
 void incrementAnimationFrame(Animation *a, float targetFPS) {
     a->frameRateCount++;
@@ -35,7 +47,9 @@ Animation *createAnimation(
         int firstFrame,
         int lastFrame,
         int frameRate,
-        int repeat) {
+        int repeat,
+        Display display,
+        Vector2D position) {
     Animation *a = malloc(sizeof(Animation));
     a->name = name;
     a->type = type;
@@ -47,6 +61,8 @@ Animation *createAnimation(
     a->repeat = repeat;
     a->frameRateCount = 0;
     a->isPlaying = false;
+    a->display = display;
+    a->position = position;
     return a;
 }
 
@@ -58,7 +74,9 @@ Animation *cloneAnimation(Animation *a) {
             a->firstFrame,
             a->lastFrame,
             a->frameRate,
-            a->repeat);
+            a->repeat,
+            a->display,
+            a->position);
 }
 
 void drawAnimation(const Animation *a, Vector2 position) {
