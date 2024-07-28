@@ -123,7 +123,10 @@ void evaluateMovement(const MobileManager *mm) {
             resetMobAnimations(mob);
             getMobAnimation(mob)->isPlaying = true;
         } else {
-            resetMoving(mob);
+            findAnimation(mob->animations, ANIMATION_DOWN)->isPlaying = false;
+            findAnimation(mob->animations, ANIMATION_UP)->isPlaying = false;
+            findAnimation(mob->animations, ANIMATION_LEFT)->isPlaying = false;
+            findAnimation(mob->animations, ANIMATION_RIGHT)->isPlaying = false;
         }
     }
 }
