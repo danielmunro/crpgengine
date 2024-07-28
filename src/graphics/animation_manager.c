@@ -21,9 +21,34 @@ AnimationManager *createAnimationManager(Context *c) {
 void processAnimations(const AnimationManager *am) {
     for (int i = 0; i < am->animationCount; i++) {
         if (am->animations[i]->isPlaying) {
+            Animation *a = am->animations[i];
             incrementAnimationFrame(
-                    am->animations[i],
+                    a,
                     (float) am->context->ui->screen->targetFrameRate);
+            if (a->display == DISPLAY_RELATIVE) {
+                int ts = tileSize(am->context);
+                int w = a->spriteSheet->frameWidth;
+                int h = a->spriteSheet->frameHeight;
+                Rectangle src = getRectForSpriteByIndex(
+                        a->spriteSheet->source.width,
+                        w,
+                        h,
+                        a->currentFrame);
+                Rectangle dest = {
+                        (((float) am->context->user->resolution.width / 2) + ((float) (a->position.x * ts) * am->context->ui->screen->scale)),
+                        (((float) am->context->user->resolution.height / 2) + ((float) (a->position.y * ts) * am->context->ui->screen->scale)) - (float) am->context->game->tileSize,
+                        (float) w * am->context->ui->screen->scale,
+                        (float) h * am->context->ui->screen->scale,
+                };
+                Vector2 origin = { 0.0f, 0.0f };
+                DrawTexturePro(
+                        a->spriteSheet->source,
+                        src,
+                        dest,
+                        origin,
+                        0,
+                        WHITE);
+            }
         }
     }
 }

@@ -134,6 +134,9 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         addInfo("player going to sleep");
         resetMobAnimations(mob);
         findAnimation(mob->animations, ANIMATION_SLEEP)->isPlaying = true;
+        Animation *animation = findAnimation(cm->animations->library, ANIMATION_SLEEP_BUBBLE);
+        animation->isPlaying = true;
+        addAnimation(cm->animations, animation);
         progress++;
     }
     cb->progress += progress;

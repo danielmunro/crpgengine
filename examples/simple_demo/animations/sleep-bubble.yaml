@@ -5,7 +5,8 @@ slices:
   - name: sleep-bubble
     frameStart: 0
     frameEnd: 1
-    rate: 6
+    rate: 2
     repeat: -1
     display: relative
     position: 1,-1
+    playUntil: move

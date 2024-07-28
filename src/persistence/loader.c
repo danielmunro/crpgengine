@@ -32,7 +32,8 @@ void loadAnimations(AnimationManager *am, const SpritesheetManager *sm, const ch
                 s->rate,
                 s->repeat,
                 getDisplayFromString(s->display),
-                getPositionFromString(s->position)
+                getPositionFromString(s->position),
+                getPlayUntilFromString(s->playUntil)
         );
     }
     am->libraryCount += animation->slices_count;

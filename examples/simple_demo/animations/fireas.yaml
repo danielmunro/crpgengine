@@ -9,6 +9,7 @@ slices:
     repeat: -1
     display: relative
     position: 0,0
+    playUntil: stopMove
   - name: left
     frameStart: 4
     frameEnd: 7
@@ -16,6 +17,7 @@ slices:
     repeat: -1
     display: relative
     position: 0,0
+    playUntil: stopMove
   - name: right
     frameStart: 8
     frameEnd: 11
@@ -23,6 +25,7 @@ slices:
     repeat: -1
     display: relative
     position: 0,0
+    playUntil: stopMove
   - name: up
     frameStart: 12
     frameEnd: 15
@@ -30,6 +33,7 @@ slices:
     repeat: -1
     display: relative
     position: 0,0
+    playUntil: stopMove
   - name: sleep
     frameStart: 16
     frameEnd: 16
@@ -37,3 +41,4 @@ slices:
     repeat: -1
     display: relative
     position: 0,0
+    playUntil: stopMove

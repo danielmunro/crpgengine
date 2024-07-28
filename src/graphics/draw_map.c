@@ -73,7 +73,7 @@ void drawTile(const Map *m, Image layer, int index, int x, int y) {
             (float) (sz * x),
             (float) (sz * y),
     };
-    Rectangle rect = getRectForSpriteByIndex(
+    Rectangle rect = getRectForSpriteByTile(
             m->tileset->sourceTexture.width,
             tileSize(m->context),
             index);
@@ -240,12 +240,13 @@ void drawChests(const Map *m, const Player *p, Vector2 offset) {
         Vector2 origin = { 0.0f, 0.0f };
         int index;
         if (isChestOpened(p, m->sceneId, m->chests[i]->id)) {
-            index = m->openedChest->id + 1;
+            index = m->openedChest->id;
         } else {
-            index = m->closedChest->id + 1;
+            index = m->closedChest->id;
         }
         Rectangle src = getRectForSpriteByIndex(
                 m->tileset->sourceTexture.width,
+                tileSize,
                 tileSize,
                 index);
         DrawTexturePro(
@@ -291,7 +292,6 @@ void drawExplorationControls(
 
 void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64], FontStyle *font) {
     const Mobile *mob = getPartyLeader(p);
-    BeginDrawing();
     ClearBackground(BLACK);
     const UIConfig *ui = m->context->ui;
     Vector2 offset = {
@@ -308,5 +308,4 @@ void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64]
     if (m->context->game->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }
-    EndDrawing();
 }

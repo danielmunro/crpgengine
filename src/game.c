@@ -138,6 +138,11 @@ void checkMapInput(Game *g) {
     Direction d = mapCheckMoveKeys(g->player);
     if (d != -1) {
         evaluateMoveDirection(g, mob, d);
+        for (int i = 0; i < g->animations->animationCount; i++) {
+            if (g->animations->animations[i]->playUntil == PLAY_UNTIL_MOVE) {
+                g->animations->animations[i]->isPlaying = false;
+            }
+        }
     }
     if (IsKeyPressed(KEY_C)) {
         mapDebugKeyPressed(mob->position, g->context->game->tileSize);
@@ -254,6 +259,7 @@ void checkFights(Game *g, const Scene *s) {
 void doExplorationLoop(Game *g) {
     Scene *s = g->scenes->current;
     checkMapInput(g);
+    BeginDrawing();
     drawMapView(
             s->map,
             g->player,
@@ -261,6 +267,7 @@ void doExplorationLoop(Game *g) {
             s->activeControlBlocks,
             g->ui->fonts->default_);
     processAnimations(g->animations);
+    EndDrawing();
     evaluateExits(g);
     evaluateMovement(g->mobiles);
     checkControls(g->controls);

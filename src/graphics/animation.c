@@ -17,15 +17,26 @@ typedef struct {
     bool isPlaying;
     Display display;
     Vector2D position;
+    PlayUntil playUntil;
 } Animation;
 
 Display getDisplayFromString(const char *display) {
-    for (int i = 0; i < sizeof(DisplayTypes) / sizeof (char *); i++) {
+    for (int i = 0; i < sizeof(DisplayTypes) / sizeof(char *); i++) {
         if (strcmp(display, DisplayTypes[i]) == 0) {
             return Displays[i];
         }
     }
     addError("unknown display type :: %s", display);
+    exit(1);
+}
+
+PlayUntil getPlayUntilFromString(const char *playUntil) {
+    for (int i = 0; i < sizeof(PlayUntilTypes) / sizeof(char *); i++) {
+        if (strcmp(playUntil, PlayUntilTypes[i]) == 0) {
+            return PlayUntils[i];
+        }
+    }
+    addError("unknown play until type :: %s", playUntil);
     exit(1);
 }
 
@@ -49,7 +60,8 @@ Animation *createAnimation(
         int frameRate,
         int repeat,
         Display display,
-        Vector2D position) {
+        Vector2D position,
+        PlayUntil playUntil) {
     Animation *a = malloc(sizeof(Animation));
     a->name = name;
     a->type = type;
@@ -63,6 +75,7 @@ Animation *createAnimation(
     a->isPlaying = false;
     a->display = display;
     a->position = position;
+    a->playUntil = playUntil;
     return a;
 }
 
@@ -76,7 +89,8 @@ Animation *cloneAnimation(Animation *a) {
             a->frameRate,
             a->repeat,
             a->display,
-            a->position);
+            a->position,
+            a->playUntil);
 }
 
 void drawAnimation(const Animation *a, Vector2 position) {

@@ -13,6 +13,7 @@ typedef struct {
     bool repeat;
     const char *display;
     const char *position;
+    const char *playUntil;
 } SliceData;
 
 typedef struct {
@@ -43,6 +44,8 @@ static const cyaml_schema_field_t slicesFieldSchema[] = {
                 "display", CYAML_FLAG_POINTER, SliceData, display, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "position", CYAML_FLAG_POINTER, SliceData, position, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_STRING_PTR(
+                "playUntil", CYAML_FLAG_POINTER, SliceData, playUntil, 0, CYAML_UNLIMITED),
         CYAML_FIELD_END
 };
 

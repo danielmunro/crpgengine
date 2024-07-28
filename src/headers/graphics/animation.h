@@ -47,6 +47,23 @@ const char *DisplayTypes[] = {
         "absolute",
 };
 
+typedef enum {
+    PLAY_UNTIL_INDEFINITE,
+    PLAY_UNTIL_MOVE,
+    PLAY_UNTIL_STOP_MOVE,
+} PlayUntil;
+
+const PlayUntil PlayUntils[] = {
+        PLAY_UNTIL_INDEFINITE,
+        PLAY_UNTIL_MOVE,
+        PLAY_UNTIL_STOP_MOVE,
+};
+
+const char *PlayUntilTypes[] = {
+        "indefinite",
+        "move",
+        "stopMove",
+};
 
 #include "graphics/animation.c"
 
