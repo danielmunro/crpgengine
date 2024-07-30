@@ -10,7 +10,7 @@ void drawShopSellMenuScreen(MenuContext *mc) {
             SHOP_SELL_BOX,
             mc->context->ui->textAreas->medium);
     drawMenuRect(mc->context->ui->menu, contentBox->area);
-    if (mc->itemListCount == 0) {
+    if (mc->itemList == NULL) {
         ItemListResult result = createItemList(mc->player);
         mc->itemList = result.itemList;
         mc->itemListCount = result.count;

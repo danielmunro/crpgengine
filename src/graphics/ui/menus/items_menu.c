@@ -7,7 +7,7 @@ void drawItemsMenuScreen(MenuContext *mc) {
             ITEMS_BOX,
             mc->context->ui->textAreas->full);
     drawMenuRect(mc->context->ui->menu, textBox->area);
-    if (mc->itemListCount == 0) {
+    if (mc->itemList == NULL) {
         ItemListResult result = createItemList(mc->player);
         mc->itemList = result.itemList;
         mc->itemListCount = result.count;

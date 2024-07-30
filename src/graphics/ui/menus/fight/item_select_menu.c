@@ -12,13 +12,15 @@ void drawItemSelectMenuScreen(MenuContext *mc) {
     drawMenuRect(mc->context->ui->menu, t->area);
     const FontStyle *defaultFont = mc->fonts->default_;
     const FontStyle *disabledFont = mc->fonts->disable;
-    ItemListResult result = createItemList(mc->player);
-    mc->itemList = result.itemList;
-    mc->itemListCount = result.count;
-    for (int i = 0; i < result.count; i++) {
-        const Item *item = result.itemList[i].item;
+    if (mc->itemList == NULL) {
+        ItemListResult result = createItemList(mc->player);
+        mc->itemList = result.itemList;
+        mc->itemListCount = result.count;
+    }
+    for (int i = 0; i < mc->itemListCount; i++) {
+        const Item *item = mc->itemList[i].item;
         char buffer[MAX_LINE_BUFFER];
-        sprintf(buffer, "(%d) %s", result.itemList[i].amount, item->name);
+        sprintf(buffer, "(%d) %s", mc->itemList[i].amount, item->name);
         const FontStyle *fs = item->type == ITEM_TYPE_CONSUMABLE ? defaultFont : disabledFont;
         drawInMenuWithStyle(t, fs, buffer);
     }
