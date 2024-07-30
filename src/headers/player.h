@@ -6,6 +6,8 @@
 #define MAX_SAVE_NAME 256
 #define MAX_STORIES 1024
 
+const int MOVE_KEYS[] = {KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT};
+
 #include "player.c"
 
 #endif //CJRPGENGINE_PLAYER_H

@@ -45,7 +45,7 @@ void drawFightPlayer(Player *player, Resolution r, int targetFPS) {
         if (mob->hitAnimationTimer > 0) {
             position.x += getHitAnimationX(mob->hitAnimationTimer);
         }
-        Direction animationType = mob->isFleeing ? DIRECTION_RIGHT : DIRECTION_LEFT;
+        AnimationType animationType = mob->isFleeing ? ANIMATION_RIGHT : ANIMATION_LEFT;
         Animation *animation = findAnimation(mob->animations, animationType);
         if (mob->isFleeing) {
             incrementAnimationFrame(animation, (float) targetFPS);

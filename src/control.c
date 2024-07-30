@@ -38,6 +38,7 @@ const char *outcomes[] = {
         "lock",
         "unlock",
         "save",
+        "sleep",
 };
 
 typedef enum {
@@ -53,6 +54,7 @@ typedef enum {
     LOCK,
     UNLOCK,
     SAVE,
+    SLEEP,
 } Outcome;
 
 typedef enum {
@@ -195,8 +197,11 @@ bool isSceneLoaded(Condition condition, EventType eventType) {
 
 bool hasArrivedAt(const Player *p, Condition condition, const ArriveAt *arriveAt) {
     if (arriveAt != NULL) {
-        return condition == ARRIVE_AT && CheckCollisionRecs(getMobileRectangle(getPartyLeader(p)),
-                                                            rectangleDtoRectangle(arriveAt->rect));
+        return condition == ARRIVE_AT
+                && !isMoving(getPartyLeader(p))
+                && CheckCollisionRecs(
+                        getMobileRectangle(getPartyLeader(p)),
+                        rectangleDtoRectangle(arriveAt->rect));
     }
     return false;
 }
@@ -293,4 +298,8 @@ bool needsToReceiveItem(const Then *then, const Mobile *playerMob) {
 
 bool needsToLoseItem(const Then *then, const Mobile *playerMob) {
     return then->outcome == LOSE_ITEM && then->target == playerMob;
+}
+
+bool needsToSleep(const Then *then, const Mobile *playerMob) {
+    return then->outcome == SLEEP && then->target == playerMob;
 }

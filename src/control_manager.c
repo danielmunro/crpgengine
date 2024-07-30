@@ -12,6 +12,7 @@ typedef struct {
     Context *context;
     Scene *scene;
     Player *player;
+    AnimationManager *animations;
     ItemManager *itemManager;
     NotificationManager *notificationManager;
     MobileManager *mobileManager;
@@ -21,6 +22,7 @@ typedef struct {
 ControlManager *createControlManager(
         Context *c,
         Player *player,
+        AnimationManager *animations,
         ItemManager *itemManager,
         NotificationManager *notificationManager,
         MobileManager *mobileManager,
@@ -28,6 +30,7 @@ ControlManager *createControlManager(
     ControlManager *cm = malloc(sizeof(ControlManager));
     cm->context = c;
     cm->player = player;
+    cm->animations = animations;
     cm->itemManager = itemManager;
     cm->notificationManager = notificationManager;
     cm->mobileManager = mobileManager;
@@ -39,6 +42,7 @@ ControlManager *createControlManager(
 int thenCheck(ControlManager *cm, ControlBlock *cb) {
     Then *then = cb->then[cb->progress];
     int progress = 0;
+    Mobile *mob = getPartyLeader(cm->player);
     if (then == NULL) {
         return 0;
     } else if (isSpeakOutcome(then) && !cm->player->engaged) {
@@ -58,9 +62,9 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
                 then->position.x,
                 then->position.y);
         then->target->destination = then->position;
-        if (then->target == getPartyLeader(cm->player)) {
+        if (then->target == mob) {
             disengageWithMobile(cm->player);
-            getPartyLeader(cm->player)->isBeingMoved = true;
+            mob->isBeingMoved = true;
         }
     } else if (isFaceDirectionOutcome(then)) {
         addDebug("set direction for mob :: %s, %s", then->target->name, then->direction);
@@ -91,12 +95,10 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
             }
         }
     } else if (needsToLock(then)) {
-        Mobile *mob = getPartyLeader(cm->player);
         mob->locked = true;
         resetMoving(mob);
         progress++;
     } else if (needsToUnlock(then)) {
-        Mobile *mob = getPartyLeader(cm->player);
         mob->locked = false;
         resetMoving(mob);
         progress++;
@@ -108,7 +110,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
                 cm->notificationManager,
                 createNotification(SAVED, "Your game has been saved."));
         progress++;
-    } else if (needsToReceiveItem(then, getPartyLeader(cm->player))) {
+    } else if (needsToReceiveItem(then, mob)) {
         addDebug("player received item :: %s", then->item->name);
         for (int i = 0; i < then->item->quantity; i++) {
             addItem(cm->player, findItemFromName(cm->itemManager, then->item->name));
@@ -119,7 +121,7 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
                 cm->notificationManager,
                 createNotification(RECEIVE_QUEST_ITEM, message));
         progress++;
-    } else if (needsToLoseItem(then, getPartyLeader(cm->player))
+    } else if (needsToLoseItem(then, mob)
             && losesItemQuantity(cm->player, then->item)) {
         addDebug("player lost item :: %s", then->item->name);
         const char *message = malloc(MAX_NOTIFICATION_LENGTH);
@@ -127,6 +129,14 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
         addNotification(
                 cm->notificationManager,
                 createNotification(LOSE_QUEST_ITEM, message));
+        progress++;
+    } else if (needsToSleep(then, mob)) {
+        addInfo("player going to sleep");
+        resetMobAnimations(mob);
+        findAnimation(mob->animations, ANIMATION_SLEEP)->isPlaying = true;
+        Animation *animation = findAnimation(cm->animations->library, ANIMATION_SLEEP_BUBBLE);
+        animation->isPlaying = true;
+        addAnimation(cm->animations, animation);
         progress++;
     }
     cb->progress += progress;

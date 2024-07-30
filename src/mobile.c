@@ -38,8 +38,28 @@ typedef struct {
     Vector2D destination;
 } Mobile;
 
+void resetMobAnimations(const Mobile *mob) {
+    for (int i = 0; i < MAX_ANIMATIONS; i++) {
+        if (mob->animations[i] == NULL) {
+            return;
+        }
+        mob->animations[i]->isPlaying = false;
+    }
+}
+
 Animation *getMobAnimation(Mobile *mob) {
-    return findAnimation(mob->animations, mob->direction);
+    return findAnimation(mob->animations, getAnimationTypeFromDirection(mob->direction));
+}
+
+Animation *getActiveMobAnimation(Mobile *mob) {
+    for (int i = 0; i < MAX_ANIMATIONS; i++) {
+        if (mob->animations[i] == NULL) {
+            break;
+        } else if (mob->animations[i]->isPlaying) {
+            return mob->animations[i];
+        }
+    }
+    return getMobAnimation(mob);
 }
 
 Mobile *createMobile(
@@ -90,7 +110,7 @@ void resetMoving(Mobile *mob) {
     mob->destination = mob->position;
     mob->amountToMove = 0;
     mob->isBeingMoved = false;
-    getMobAnimation(mob)->isPlaying = false;
+    resetMobAnimations(mob);
 }
 
 bool isMoving(const Mobile *mob) {
@@ -100,8 +120,8 @@ bool isMoving(const Mobile *mob) {
 Rectangle getMobileRectangle(Mobile *mob) {
     const Rectangle *c = getMobAnimation(mob)->spriteSheet->collision;
     return (Rectangle) {
-            (float) mob->position.x + c->x,
-            (float) mob->position.y + c->y,
+            (float) mob->position.x,
+            (float) mob->position.y,
             c->width,
             c->height,
     };

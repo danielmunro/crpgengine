@@ -193,3 +193,20 @@ char *getConfigFileName(int argc, char *argv[]) {
     }
     return "config.yaml";
 }
+
+Rectangle getRectForSpriteByIndex(int spriteWidth, int width, int height, int index) {
+    int spritesPerRow = spriteWidth / width;
+    int y = index / spritesPerRow;
+    int x = (index % spritesPerRow);
+    Rectangle pos = {
+            (float) (x * width),
+            (float) (y * height),
+            (float) width,
+            (float) height,
+    };
+    return pos;
+}
+
+Rectangle getRectForSpriteByTile(int spriteWidth, int tileSize, int index) {
+    return getRectForSpriteByIndex(spriteWidth, tileSize, tileSize, index - 1);
+}

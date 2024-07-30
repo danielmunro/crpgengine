@@ -73,7 +73,10 @@ void drawTile(const Map *m, Image layer, int index, int x, int y) {
             (float) (sz * x),
             (float) (sz * y),
     };
-    Rectangle rect = getRectForTile(m, index);
+    Rectangle rect = getRectForSpriteByTile(
+            m->tileset->sourceTexture.width,
+            tileSize(m->context),
+            index);
     ImageDraw(
             &layer,
             m->tileset->source,
@@ -183,10 +186,11 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
                 break;
             }
             drawAnimation(
-                    getMobAnimation(mobLayer[y][n]),
+                    getActiveMobAnimation(mobLayer[y][n]),
                     (Vector2) {
                             (((float) mobLayer[y][n]->position.x * m->context->ui->screen->scale) + offset.x),
-                            (floorf(((float) mobLayer[y][n]->position.y * m->context->ui->screen->scale) + offset.y)  - (float) (m->context->game->mobileSize.y - m->context->game->tileSize)),
+                            (floorf(((float) mobLayer[y][n]->position.y * m->context->ui->screen->scale) + offset.y) -
+                                    (float) tileSize(m->context)),
                     }
             );
             if (m->context->game->showCollisions->objects) {
@@ -196,9 +200,20 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
                         (int) ((rect.y * ui->screen->scale) + offset.y),
                         (int) (rect.width * ui->screen->scale),
                         (int) (rect.height * ui->screen->scale),
-                        GREEN
-                );
+                        BLUE);
             }
+        }
+    }
+
+    if (m->context->game->showCollisions->warps) {
+        for (int i = 0; i < m->warps->arriveAtCount; i++) {
+            Rectangle r = rectangleDtoRectangle(m->warps->arriveAt[i]->rect);
+            DrawRectangle(
+                    (int) ((r.x * ui->screen->scale) + offset.x),
+                    (int) ((r.y * ui->screen->scale) + offset.y),
+                    (int) (r.width * ui->screen->scale),
+                    (int) (r.height * ui->screen->scale),
+                    YELLOW);
         }
     }
 
@@ -209,8 +224,7 @@ void drawExplorationMobiles(Map *m, const Player *p, Vector2 offset) {
                 (int) ((rect.y * ui->screen->scale) + offset.y),
                 (int) (rect.width * ui->screen->scale),
                 (int) (rect.height * ui->screen->scale),
-                GREEN
-        );
+                GREEN);
     }
 }
 
@@ -224,12 +238,17 @@ void drawChests(const Map *m, const Player *p, Vector2 offset) {
                 (float) tileSize * ui->screen->scale,
                 (float) tileSize * ui->screen->scale };
         Vector2 origin = { 0.0f, 0.0f };
-        Rectangle src;
+        int index;
         if (isChestOpened(p, m->sceneId, m->chests[i]->id)) {
-            src = getRectForTile(m, m->openedChest->id + 1);
+            index = m->openedChest->id;
         } else {
-            src = getRectForTile(m, m->closedChest->id + 1);
+            index = m->closedChest->id;
         }
+        Rectangle src = getRectForSpriteByIndex(
+                m->tileset->sourceTexture.width,
+                tileSize,
+                tileSize,
+                index);
         DrawTexturePro(
                 m->tileset->sourceTexture,
                 src,
@@ -273,7 +292,6 @@ void drawExplorationControls(
 
 void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64], FontStyle *font) {
     const Mobile *mob = getPartyLeader(p);
-    BeginDrawing();
     ClearBackground(BLACK);
     const UIConfig *ui = m->context->ui;
     Vector2 offset = {
@@ -290,5 +308,4 @@ void drawMapView(Map *m, Player *p, NotificationManager *nm, ControlBlock *c[64]
     if (m->context->game->showFPS) {
         DrawFPS(FPS_X, FPS_Y);
     }
-    EndDrawing();
 }

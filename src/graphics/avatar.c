@@ -9,7 +9,7 @@ typedef struct {
 } Avatar;
 
 Avatar *createAvatar(const char *indexDir, const char *filename, float scale) {
-    char path[MAX_FS_PATH_LENGTH];
+    char path[MAX_FS_PATH_LENGTH] = "";
     sprintf(path, "%s/images/avatars/%s", indexDir, filename);
     Avatar *a = malloc(sizeof(Avatar));
     a->filename = filename;

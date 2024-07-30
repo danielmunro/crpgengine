@@ -22,17 +22,21 @@ void loadAnimations(AnimationManager *am, const SpritesheetManager *sm, const ch
     }
     for (int i = 0; i < animation->slices_count; i++) {
         const SliceData *s = &animation->slices[i];
-        am->library[i] = createAnimation(
+        int k = i + am->libraryCount;
+        am->library[k] = createAnimation(
                 animation->name,
-                getDirectionFromString(s->name),
+                getAnimationTypeFromString(s->name),
                 sp,
                 s->frameStart,
                 s->frameEnd,
                 s->rate,
-                s->repeat
+                s->repeat,
+                getDisplayFromString(s->display),
+                getPositionFromString(s->position),
+                getPlayUntilFromString(s->playUntil)
         );
     }
-    am->libraryCount = animation->slices_count;
+    am->libraryCount += animation->slices_count;
     addDebug("%d animations loaded", animation->slices_count);
     free(animation);
 }

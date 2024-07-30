@@ -3,7 +3,6 @@
 #include "headers/util/log.h"
 #include "headers/direction.h"
 #include "headers/persistence/cyaml.h"
-#include "headers/graphics/animation.h"
 #include "headers/mobile.h"
 #include "headers/spell.h"
 #include "headers/graphics/ui/ui.h"
@@ -26,7 +25,6 @@ typedef struct {
     Mobile **onDeck;
     const char **storylines;
     Item **items;
-    Blocking *blocking;
     Mobile *engageable;
     Dialog *dialog;
     OpenedChest **openedChests;
@@ -71,7 +69,7 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
             break;
         }
         player->party[i] = mobs[i];
-        player->partyCount = i + 1;
+        player->partyCount += 1;
     }
     player->itemCount = itemCount;
     player->items = items;
