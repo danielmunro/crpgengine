@@ -36,7 +36,7 @@ void drawShopSellMenuScreen(MenuContext *mc) {
 }
 
 MenuSelectResponse *shopSellMenuItemSelected(MenuContext *mc) {
-    mc->itemToSell = mc->itemList[mc->cursorLine];
+    mc->itemToSell = *mc->itemList;
     if (mc->itemList[mc->cursorLine].amount == 1) {
         for (int i = 0; i < mc->player->itemCount; i++) {
             if (mc->player->items[i] == mc->itemToSell.item) {
@@ -49,4 +49,10 @@ MenuSelectResponse *shopSellMenuItemSelected(MenuContext *mc) {
     return createMenuSelectResponse(
             RESPONSE_TYPE_OPEN_MENU,
             SHOP_QUANTITY_SELL_MENU);
+}
+
+void unloadItemSellMenu(MenuContext *mc) {
+    free(mc->itemList);
+    mc->itemList = NULL;
+    mc->itemListCount = 0;
 }

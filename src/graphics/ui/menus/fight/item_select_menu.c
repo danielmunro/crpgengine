@@ -45,3 +45,9 @@ MenuSelectResponse *itemSelectMenuItemSelected(MenuContext *menuContext) {
             RESPONSE_TYPE_OPEN_MENU,
             MOBILE_TARGET_FIGHT_MENU);
 }
+
+void unloadItemSelectMenu(MenuContext *mc) {
+    free(mc->itemList);
+    mc->itemList = NULL;
+    mc->itemListCount = 0;
+}

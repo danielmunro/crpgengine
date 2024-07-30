@@ -21,6 +21,8 @@ Fonts *createFonts(const char *indexDir, const UIData *uiConfig) {
     return fonts;
 }
 
+void unloadMenuNoop(MenuContext *mc) {}
+
 int getMenuList(UIManager *uiMan) {
     Menu *list[] = {
             createMenu(
@@ -30,7 +32,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &partyMenuItemSelected),
+                    &partyMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     PARTY_SELECT_MENU,
                     &getPartySelectMenuCursorLength,
@@ -38,7 +41,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &partySelectMenuItemSelected),
+                    &partySelectMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     MAGIC_MENU,
                     &getMagicMenuCursorLength,
@@ -46,7 +50,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &magicMenuItemSelected),
+                    &magicMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     ITEMS_MENU,
                     &getItemsCursorLength,
@@ -54,7 +59,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &itemMenuItemSelected),
+                    &itemMenuItemSelected,
+                    &unloadItemsMenu),
             createMenu(
                     LOAD_SAVE_MENU,
                     &getLoadCursorLength,
@@ -62,7 +68,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &loadMenuItemSelected),
+                    &loadMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     QUIT_GAME_MENU,
                     &getQuitCursorLength,
@@ -70,7 +77,8 @@ int getMenuList(UIManager *uiMan) {
                     getDefaultPreviousOption,
                     getDefaultNextOption,
                     &menuKeyPressed,
-                    &quitMenuItemSelected),
+                    &quitMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     ACKNOWLEDGE_SAVE_MENU,
                     &getAcknowledgeCursorLength,
@@ -78,7 +86,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &acknowledgeMenuItemSelected),
+                    &acknowledgeMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     MOBILE_SELECT_FIGHT_MENU,
                     &getMobileSelectMenuCursorLength,
@@ -86,7 +95,8 @@ int getMenuList(UIManager *uiMan) {
                     &getPreviousMobileSelectCursorPosition,
                     &getNextMobileSelectCursorPosition,
                     &menuKeyPressed,
-                    &mobileSelectMenuItemSelected),
+                    &mobileSelectMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     BEAST_LIST_FIGHT_MENU,
                     &getBeastSelectCursorLength,
@@ -94,7 +104,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &beastSelectMenuItemSelected),
+                    &beastSelectMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     ACTION_SELECT_FIGHT_MENU,
                     &getActionSelectCursorLength,
@@ -102,7 +113,8 @@ int getMenuList(UIManager *uiMan) {
                     &getPreviousActionSelectCursorPosition,
                     &getNextActionSelectCursorPosition,
                     &menuKeyPressed,
-                    &actionSelectMenuItemSelected),
+                    &actionSelectMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     BEAST_TARGET_FIGHT_MENU,
                     &geBeastTargetMenuCursorLength,
@@ -110,7 +122,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &beastTargetMenuItemSelected),
+                    &beastTargetMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     MAGIC_FIGHT_MENU,
                     &getMagicSelectCursorLength,
@@ -118,7 +131,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &magicSelectMenuItemSelected),
+                    &magicSelectMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     MOBILE_TARGET_FIGHT_MENU,
                     &getMobileTargetMenuCursorLength,
@@ -126,7 +140,8 @@ int getMenuList(UIManager *uiMan) {
                     &getPreviousMobileTargetCursorPosition,
                     &getNextMobileTargetCursorPosition,
                     &menuKeyPressed,
-                    &mobileTargetMenuItemSelected),
+                    &mobileTargetMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     PARTY_APPLY_MENU,
                     &getPartyApplyMenuCursorLength,
@@ -134,7 +149,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &partyApplyMenuItemSelected),
+                    &partyApplyMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     ITEMS_FIGHT_MENU,
                     &getItemSelectCursorLength,
@@ -142,7 +158,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &itemSelectMenuItemSelected),
+                    &itemSelectMenuItemSelected,
+                    &unloadItemSelectMenu),
             createMenu(
                     SHOP_WELCOME_MENU,
                     &getShopWelcomeCursorLength,
@@ -150,7 +167,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &shopWelcomeMenuItemSelected),
+                    &shopWelcomeMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     SHOP_BUY_MENU,
                     &getShopBuyCursorLength,
@@ -158,7 +176,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &shopBuyMenuItemSelected),
+                    &shopBuyMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     SHOP_CANNOT_AFFORD_MENU,
                     &getCannotAffordCursorLength,
@@ -166,7 +185,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &cannotAffordMenuItemSelected),
+                    &cannotAffordMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     SHOP_QUANTITY_BUY_MENU,
                     &getQuantityBuyCursorLength,
@@ -174,7 +194,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &quantityBuyKeyPressed,
-                    &quantityBuyMenuItemSelected),
+                    &quantityBuyMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     SHOP_CONFIRM_PURCHASE_MENU,
                     &getConfirmPurchaseCursorLength,
@@ -182,7 +203,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &confirmPurchaseMenuItemSelected),
+                    &confirmPurchaseMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     SHOP_SELL_MENU,
                     &getShopSellCursorLength,
@@ -190,7 +212,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &shopSellMenuItemSelected),
+                    &shopSellMenuItemSelected,
+                    &unloadItemSellMenu),
             createMenu(
                     SHOP_QUANTITY_SELL_MENU,
                     &getQuantitySellCursorLength,
@@ -198,7 +221,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &quantitySellKeyPressed,
-                    &quantitySellMenuItemSelected),
+                    &quantitySellMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     SHOP_CONFIRM_SALE_MENU,
                     &getConfirmSaleCursorLength,
@@ -206,7 +230,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &confirmSaleMenuItemSelected),
+                    &confirmSaleMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     MAIN_MENU,
                     &getMainMenuCursorLength,
@@ -214,7 +239,8 @@ int getMenuList(UIManager *uiMan) {
                     &getPreviousMainMenuCursorPosition,
                     &getNextMainMenuCursorPosition,
                     &menuKeyPressed,
-                    &mainMenuItemSelected),
+                    &mainMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     SETTINGS_MENU,
                     &getSettingsMenuCursorLength,
@@ -222,7 +248,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &settingsMenuItemSelected),
+                    &settingsMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     SETTINGS_FULL_SCREEN_MENU,
                     &getSettingsFullScreenMenuCursorLength,
@@ -230,7 +257,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &settingsFullScreenMenuItemSelected),
+                    &settingsFullScreenMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     SETTINGS_DIFFICULTY_MENU,
                     &getSettingsDifficultyMenuCursorLength,
@@ -238,7 +266,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &settingsDifficultyMenuItemSelected),
+                    &settingsDifficultyMenuItemSelected,
+                    &unloadMenuNoop),
             createMenu(
                     SETTINGS_RESOLUTION_MENU,
                     &getSettingsResolutionMenuCursorLength,
@@ -246,7 +275,8 @@ int getMenuList(UIManager *uiMan) {
                     &getDefaultPreviousOption,
                     &getDefaultNextOption,
                     &menuKeyPressed,
-                    &settingsResolutionMenuItemSelected),
+                    &settingsResolutionMenuItemSelected,
+                    &unloadMenuNoop),
     };
     int count = sizeof(list) / sizeof(list[0]);
     for (int i = 0; i < count; i++) {

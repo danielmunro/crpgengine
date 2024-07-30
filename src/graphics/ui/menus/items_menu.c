@@ -42,3 +42,9 @@ MenuSelectResponse *itemMenuItemSelected(MenuContext *menuContext) {
     }
     return NULL;
 }
+
+void unloadItemsMenu(MenuContext *mc) {
+    free(mc->itemList);
+    mc->itemList = NULL;
+    mc->itemListCount = 0;
+}

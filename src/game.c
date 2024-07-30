@@ -206,13 +206,13 @@ void checkMenuInput(Game *g) {
             addMenu(g->menus, findMenu(g->ui->menus, ACKNOWLEDGE_SAVE_MENU));
         } else if (response->type == RESPONSE_TYPE_LOAD_GAME) {
             initializePlayer(g, g->saveFiles->saves[mc->cursorLine]->filename);
-            removeMenu(g->menus, MAIN_MENU);
+            removeMenu(g->menus, mc, MAIN_MENU);
         } else if (response->type == RESPONSE_TYPE_CONTINUE_GAME) {
             initializePlayer(g, g->saveFiles->saves[0]->filename);
-            removeMenu(g->menus, MAIN_MENU);
+            removeMenu(g->menus, mc, MAIN_MENU);
         } else if (response->type == RESPONSE_TYPE_NEW_GAME) {
             initializePlayer(g, NULL);
-            removeMenu(g->menus, MAIN_MENU);
+            removeMenu(g->menus, mc, MAIN_MENU);
         }
         free(response);
     } else if (keyPressed == KEY_PRESSED_INCREMENT_QUANTITY) {

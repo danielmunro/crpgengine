@@ -87,13 +87,15 @@ typedef struct {
 
     void (*draw)(MenuContext *);
 
-    int (*getNextOption)(const MenuContext *, const int maxCursorLine);
+    int (*getNextOption)(const MenuContext *, const int);
 
-    int (*getPreviousOption)(const MenuContext *, const int maxCursorLine);
+    int (*getPreviousOption)(const MenuContext *, const int);
 
     MenuKeyPressedType (*keyPressed)(const MenuContext *);
 
-    MenuSelectResponse *(*selected)(MenuContext *menuContext);
+    MenuSelectResponse *(*selected)(MenuContext *);
+
+    void (*unloadMenu)(MenuContext *);
 } Menu;
 
 MenuSelectResponse *createMenuSelectResponse(MenuSelectResponseType type, MenuType menuType) {
@@ -110,7 +112,8 @@ Menu *createMenu(
         int (*getPreviousOption)(const MenuContext *, const int maxCursorLine),
         int (*getNextOption)(const MenuContext *, const int maxCursorLine),
         MenuKeyPressedType (*keyPressed)(const MenuContext *),
-        MenuSelectResponse *(*selected)()) {
+        MenuSelectResponse *(*selected)(),
+        void (*unloadMenu)(MenuContext *)) {
     Menu *menu = malloc(sizeof(Menu));
     menu->cursor = 0;
     menu->type = type;
@@ -120,6 +123,7 @@ Menu *createMenu(
     menu->getNextOption = getNextOption;
     menu->keyPressed = keyPressed;
     menu->selected = selected;
+    menu->unloadMenu = unloadMenu;
     return menu;
 }
 
@@ -205,7 +209,7 @@ Menu *getCurrentMenu(Menu **menus) {
     return menus[MAX_MENUS - 1];
 }
 
-int removeMenu(Menu **menus, MenuType menuType) {
+int removeMenu(Menu **menus, MenuContext *menuContext, MenuType menuType) {
     bool startRemoving = false;
     for (int i = 0; i < MAX_MENUS; i++) {
         if (menus[i] == NULL) {
@@ -213,6 +217,7 @@ int removeMenu(Menu **menus, MenuType menuType) {
         }
         if (menus[i]->type == menuType) {
             startRemoving = true;
+            menus[i]->unloadMenu(menuContext);
         }
         if (startRemoving) {
             menus[i] = NULL;
@@ -306,7 +311,7 @@ MenuSelectResponse *menuItemSelected(Menu **menus, Menu **allMenus, MenuContext 
     if (response->type == RESPONSE_TYPE_OPEN_MENU) {
         addMenu(menus, findMenu(allMenus, response->menuType));
     } else if (response->type == RESPONSE_TYPE_CLOSE_MENU) {
-        removeMenu(menus, response->menuType);
+        removeMenu(menus, menuContext, response->menuType);
     } else if (response->type == RESPONSE_TYPE_PARTY_MEMBER_SELECTED) {
         Menu *partyMenu = findMenu(menus, PARTY_MENU);
         if (strcmp(PartyMenuItems[partyMenu->cursor], PARTY_MENU_MAGIC) == 0) {
