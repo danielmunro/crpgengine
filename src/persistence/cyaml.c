@@ -117,7 +117,7 @@ UIData *loadUIData(const char *indexDir) {
 
 StartPartyData *loadStartPartyData(const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/player/start_party.yaml", indexDir);
+    sprintf(filePath, "%s/player/start-party.yaml", indexDir);
     StartPartyData *startParty = malloc(sizeof(StartPartyData));
     loadYamlFile(filePath, startPartyTopSchema, (cyaml_data_t **) &startParty);
     return startParty;
