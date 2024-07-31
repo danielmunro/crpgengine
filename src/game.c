@@ -189,7 +189,7 @@ void checkMenuInput(Game *g) {
     mc->menuType = menu->type;
     const MenuKeyPressedType keyPressed = menu->keyPressed(mc);
     if (keyPressed == KEY_PRESSED_CLOSE_MENU) {
-        removeLastMenu(g->menus);
+        removeLastMenu(g->menus, mc);
         resetMenuContext(mc);
     } else if (keyPressed == KEY_PRESSED_INCREMENT_CURSOR) {
         menu->cursor = menu->getNextOption(mc, menu->getCursorLength(mc));

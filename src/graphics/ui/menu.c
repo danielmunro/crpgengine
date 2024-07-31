@@ -147,7 +147,7 @@ MenuContext *createMenuContext(
     mc->spells = spells;
     mc->textBoxes = calloc(MAX_TEXT_BOXES, sizeof(TextBox));
     mc->selectedMob = NULL;
-    mc->itemList = calloc(MAX_ITEMS, sizeof(ItemList));
+    mc->itemList = NULL;
     mc->itemListCount = 0;
     mc->targetBeast = NULL;
     mc->targetMob = NULL;
@@ -226,10 +226,11 @@ int removeMenu(Menu **menus, MenuContext *menuContext, MenuType menuType) {
     return -1;
 }
 
-int removeLastMenu(Menu **menus) {
+int removeLastMenu(Menu **menus, MenuContext *mc) {
     for (int i = 0; i < MAX_MENUS; i++) {
         if (menus[i] == NULL) {
             if (i > 0) {
+                menus[i - 1]->unloadMenu(mc);
                 menus[i - 1] = NULL;
             }
             return i - 1;
