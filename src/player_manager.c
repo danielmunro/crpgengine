@@ -57,14 +57,14 @@ Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *sa
 
 Player *createNewPlayer(MobileManager *mm, ItemManager *im) {
     addInfo("creating new player");
-    StartPartyData *data = loadStartPartyData(mm->context->indexDir);
+    NewPlayerData *data = loadNewPlayerData(mm->context->indexDir);
     Mobile *mobiles[MAX_PARTY_SIZE];
     for (int i = 0; i < MAX_PARTY_SIZE; i++) {
         mobiles[i] = NULL;
     }
-    for (int i = 0; i < data->mobiles_count; i++) {
+    for (int i = 0; i < data->partyCount; i++) {
         for (int j = 0; j < mm->playableMobileCount; j++) {
-            if (strcmp(mm->playableMobiles[j]->id, data->mobiles[i]) == 0) {
+            if (strcmp(mm->playableMobiles[j]->id, data->party[i]) == 0) {
                 mobiles[i] = mm->playableMobiles[j];
                 break;
             }
@@ -72,20 +72,28 @@ Player *createNewPlayer(MobileManager *mm, ItemManager *im) {
     }
     const char **storylines = malloc(sizeof(char **));
     Item **items = calloc(MAX_ITEMS, sizeof(Item));
+    int itemCount = 0;
+    for (int i = 0; i < data->itemsCount; i++) {
+        for (int j = 0; j < im->count; j++) {
+            if (strcmp(data->items[i], im->items[j]->name) == 0) {
+                items[itemCount] = im->items[j];
+                itemCount++;
+            }
+        }
+    }
     OpenedChest **openedChests = calloc(MAX_CHESTS, sizeof(OpenedChest));
     Player *p = createPlayer(
             mobiles,
-            0,
+            data->coins,
             getExperienceToLevel(1),
             1,
             0,
             storylines,
             0,
             items,
-            0,
+            itemCount,
             openedChests,
             0);
-    loadAllPlayerItems(im, p);
     return p;
 }
 

@@ -115,20 +115,12 @@ UIData *loadUIData(const char *indexDir) {
     return ui;
 }
 
-StartPartyData *loadStartPartyData(const char *indexDir) {
+NewPlayerData *loadNewPlayerData(const char *indexDir) {
     char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/player/start-party.yaml", indexDir);
-    StartPartyData *startParty = malloc(sizeof(StartPartyData));
-    loadYamlFile(filePath, startPartyTopSchema, (cyaml_data_t **) &startParty);
-    return startParty;
-}
-
-ItemsReferenceData *loadItemsReferenceData(const char *indexDir) {
-    char filePath[MAX_FS_PATH_LENGTH];
-    sprintf(filePath, "%s/player/items.yaml", indexDir);
-    ItemsReferenceData *items = malloc(sizeof(ItemsReferenceData));
-    loadYamlFile(filePath, itemsReferenceSchema, (cyaml_data_t **) &items);
-    return items;
+    sprintf(filePath, "%s/player/new-player.yaml", indexDir);
+    NewPlayerData *newPlayer = malloc(sizeof(NewPlayerData));
+    loadYamlFile(filePath, newPlayerTopSchema, (cyaml_data_t **) &newPlayer);
+    return newPlayer;
 }
 
 ShopData *loadShopYaml(const char *filePath) {

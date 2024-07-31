@@ -18,10 +18,10 @@
 #include "persistence/yaml/mobile.c"
 #include "persistence/yaml/player.c"
 #include "persistence/yaml/save.c"
-#include "persistence/yaml/start_party.c"
 #include "persistence/yaml/ui.c"
 #include "persistence/yaml/shop.c"
 #include "persistence/yaml/user_config.c"
+#include "persistence/yaml/new_player.c"
 #include "persistence/cyaml.c"
 
 #endif //CJRPGENGINE_CYAML_H

@@ -77,6 +77,7 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
     player->dialog = NULL;
     player->openedChests = openedChests;
     player->openedChestsCount = openedChestsCount;
+    player->coins = 1000;
     return player;
 }
 
@@ -229,17 +230,6 @@ bool isChestOpened(const Player *p, int sceneId, int chestId) {
         }
     }
     return false;
-}
-
-void loadAllPlayerItems(ItemManager *im, Player *p) {
-    ItemsReferenceData *itemsData = loadItemsReferenceData(im->context->indexDir);
-    for (int i = 0; i < itemsData->items_count; i++) {
-        Item **items = createItemsFromReferenceData(im, &itemsData->items[i]);
-        for (int j = 0; j < itemsData->items[i].quantity; j++) {
-            addItem(p, items[j]);
-        }
-        free(items);
-    }
 }
 
 ItemListResult createItemList(const Player *p) {
