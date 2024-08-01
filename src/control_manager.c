@@ -111,21 +111,31 @@ int thenCheck(ControlManager *cm, ControlBlock *cb) {
                 createNotification(SAVED, "Your game has been saved."));
         progress++;
     } else if (needsToReceiveItem(then, mob)) {
-        addDebug("player received item :: %s", then->item->name);
-        for (int i = 0; i < then->item->quantity; i++) {
-            addItem(cm->player, findItemFromName(cm->itemManager, then->item->name));
+        char *message = malloc(MAX_NOTIFICATION_LENGTH);
+        sprintf(message, "you received:\n");
+        for (int i = 0; i < then->itemCount; i++) {
+            if (i > 0) {
+                sprintf(message, "%s,", message);
+            }
+            addDebug("player received item :: %s", then->items[i]);
+            addItem(cm->player, findItemFromName(cm->itemManager, then->items[i]));
+            sprintf(message, "%s%s", message, then->items[i]);
         }
-        const char *message = malloc(MAX_NOTIFICATION_LENGTH);
-        sprintf((char *) message, "you received:\n%s", then->item->name);
         addNotification(
                 cm->notificationManager,
                 createNotification(RECEIVE_QUEST_ITEM, message));
         progress++;
     } else if (needsToLoseItem(then, mob)
-            && losesItemQuantity(cm->player, then->item)) {
-        addDebug("player lost item :: %s", then->item->name);
-        const char *message = malloc(MAX_NOTIFICATION_LENGTH);
-        sprintf((char *) message, "you lost:\n%s", then->item->name);
+               && loseItems(cm->player, then->items, then->itemCount)) {
+        char *message = malloc(MAX_NOTIFICATION_LENGTH);
+        sprintf(message, "you lost:\n");
+        for (int i = 0; i < then->itemCount; i++) {
+            if (i > 0) {
+                sprintf(message, "%s,", message);
+            }
+            addDebug("player lost item :: %s", then->items[i]);
+            sprintf(message, "%s%s", message, then->items[i]);
+        }
         addNotification(
                 cm->notificationManager,
                 createNotification(LOSE_QUEST_ITEM, message));
@@ -204,11 +214,8 @@ When *mapWhen(ControlManager *cm, const Scene *s, WhenData wd) {
             trigger,
             c,
             wd.story,
-            wd.item != NULL
-                ? createItemWithQuantity(
-                        findItemFromName(cm->itemManager, wd.item->name),
-                        wd.item->quantity)
-                : NULL,
+            wd.items,
+            wd.itemsCount,
             arriveAt);
 }
 
@@ -241,7 +248,8 @@ Then *mapThen(ControlManager *cm, ThenData td) {
             &td.dialog[0],
             &td.story[0],
             &td.direction[0],
-            &td.item[0],
+            td.items,
+            td.itemsCount,
             o,
             (Vector2D) {
                 pos.x * tileSize(cm->context),

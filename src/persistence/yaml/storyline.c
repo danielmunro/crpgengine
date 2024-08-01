@@ -7,7 +7,8 @@ typedef struct {
     const char *condition;
     const char *story;
     const char *scene;
-    ItemReferenceData *item;
+    const char **items;
+    int itemsCount;
     const char *arriveAt;
 } WhenData;
 
@@ -20,7 +21,8 @@ typedef struct {
     const char *story;
     const char *position;
     const char *direction;
-    ItemReferenceData *item;
+    const char **items;
+    int itemsCount;
     int amount;
 } ThenData;
 
@@ -36,6 +38,14 @@ typedef struct {
     int storylines_count;
 } StorylinesData;
 
+static const cyaml_schema_value_t whenItemsSchema = {
+        CYAML_VALUE_STRING(CYAML_FLAG_POINTER, char, 0, CYAML_UNLIMITED),
+};
+
+static const cyaml_schema_value_t thenItemsSchema = {
+        CYAML_VALUE_STRING(CYAML_FLAG_POINTER, char, 0, CYAML_UNLIMITED),
+};
+
 static const cyaml_schema_field_t whenFieldSchema[] = {
         CYAML_FIELD_STRING_PTR(
                 "player", CYAML_FLAG_OPTIONAL, WhenData, player, 0, CYAML_UNLIMITED),
@@ -45,8 +55,10 @@ static const cyaml_schema_field_t whenFieldSchema[] = {
                 "mob", CYAML_FLAG_OPTIONAL, WhenData, mob, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "story", CYAML_FLAG_OPTIONAL, WhenData, story, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_MAPPING_PTR(
-                "item", CYAML_FLAG_OPTIONAL, WhenData, item, itemReferenceFieldSchema),
+        CYAML_FIELD_SEQUENCE_COUNT(
+                "items", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
+                WhenData, items, itemsCount,
+                &whenItemsSchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "scene", CYAML_FLAG_OPTIONAL, WhenData, scene, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
@@ -75,9 +87,10 @@ static const cyaml_schema_field_t thenFieldSchema[] = {
                 "position", CYAML_FLAG_OPTIONAL, ThenData, position, 0, CYAML_UNLIMITED),
         CYAML_FIELD_STRING_PTR(
                 "direction", CYAML_FLAG_OPTIONAL, ThenData, direction, 0, CYAML_UNLIMITED),
-        CYAML_FIELD_MAPPING_PTR(
-                "item", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
-                ThenData, item, itemReferenceFieldSchema),
+        CYAML_FIELD_SEQUENCE_COUNT(
+                "items", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL,
+                ThenData, items, itemsCount,
+                &thenItemsSchema, 0, CYAML_UNLIMITED),
         CYAML_FIELD_INT(
                 "amount", CYAML_FLAG_OPTIONAL, ThenData, amount),
         CYAML_FIELD_END

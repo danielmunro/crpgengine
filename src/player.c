@@ -260,25 +260,27 @@ ItemListResult createItemList(const Player *p) {
     };
 }
 
-bool losesItemQuantity(Player *player, const ItemReferenceData *ird) {
-    addInfo("player losing item :: %s", ird->name);
-    int found = 0;
-    int itemIndexes[ird->quantity];
-    for (int i = 0; i < player->itemCount; i++) {
-        if (strcmp(ird->name, player->items[i]->name) == 0) {
-            itemIndexes[found] = i;
-            found++;
-            if (found == ird->quantity) {
-                break;
+int loseItemsCountAndRemove(Player *player, const char **itemNames, int count, bool shouldRemove) {
+    int removableItems = 0;
+    for (int i = 0; i < count; i++) {
+        for (int j = 0; j < player->itemCount; j++) {
+            if (strcmp(player->items[j]->name, itemNames[i]) == 0) {
+                removableItems += 1;
+                if (shouldRemove) {
+                    addInfo("player losing item :: %s", itemNames[i]);
+                    removeItem(player, player->items[j]);
+                }
             }
         }
     }
-    if (found == ird->quantity) {
-        for (int i = 0; i < ird->quantity; i++) {
-            removeItem(player, player->items[itemIndexes[i]]);
-        }
+    return removableItems;
+}
+
+bool loseItems(Player *player, const char **itemNames, int count) {
+    if (loseItemsCountAndRemove(player, itemNames, count, false) == count) {
+        loseItemsCountAndRemove(player, itemNames, count, true);
         return true;
     }
-    addWarning("player didn't have enough items to give :: %d remaining", ird->quantity);
+    addWarning("player didn't have an item");
     return false;
 }

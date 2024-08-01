@@ -29,9 +29,8 @@ storylines:
           Hmm. If you'll let me borrow it, I should be able to fix it right up.
       - player: true
         action: lose_item
-        item:
-          name: a blemished amulet
-          quantity: 1
+        items:
+          - a blemished amulet
       - player: true
         action: wait
         amount: 2
@@ -46,9 +45,8 @@ storylines:
           There! Good as new. Now, don't go scuffing it up again.
       - player: true
         action: give_item
-        item:
-          name: a brilliant amulet
-          quantity: 1
+        items:
+          - a brilliant amulet
       - player: true
         action: add_story
         story: from_the_past:obtained_brilliant_amulet

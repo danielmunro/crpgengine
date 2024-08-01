@@ -10,7 +10,6 @@
 #include "persistence/yaml/attributes.c"
 #include "persistence/yaml/spell.c"
 #include "persistence/yaml/item.c"
-#include "persistence/yaml/item_reference.c"
 #include "persistence/yaml/storyline.c"
 #include "persistence/yaml/scene.c"
 #include "persistence/yaml/sound.c"

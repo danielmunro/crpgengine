@@ -93,7 +93,8 @@ typedef struct {
     Condition condition;
     Mobile *trigger;
     const char *story;
-    ItemWithQuantity *item;
+    const char **items;
+    int itemCount;
     ArriveAt *arriveAt;
 } When;
 
@@ -102,7 +103,8 @@ typedef struct {
     const char *message;
     const char *story;
     const char *direction;
-    ItemReferenceData *item;
+    const char **items;
+    int itemCount;
     Outcome outcome;
     int amount;
     Vector2D position;
@@ -136,14 +138,16 @@ When *createWhen(
         Mobile *trigger,
         int condition,
         const char *story,
-        ItemWithQuantity *item,
+        const char **items,
+        int itemCount,
         ArriveAt *arriveAt) {
     When *when = malloc(sizeof(When));
     when->source = source;
     when->trigger = trigger;
     when->condition = condition;
     when->story = story;
-    when->item = item;
+    when->items = items;
+    when->itemCount = itemCount;
     when->arriveAt = arriveAt;
     return when;
 }
@@ -153,7 +157,8 @@ Then *createThen(
         const char *message,
         const char *story,
         const char *direction,
-        ItemReferenceData *item,
+        const char **items,
+        int itemCount,
         const Outcome outcome,
         Vector2D position,
         bool parallel,
@@ -162,7 +167,8 @@ Then *createThen(
     then->target = target;
     then->message = message;
     then->direction = direction;
-    then->item = item;
+    then->items = items;
+    then->itemCount = itemCount;
     then->story = story;
     then->outcome = outcome;
     then->position = position;
@@ -206,18 +212,20 @@ bool hasArrivedAt(const Player *p, Condition condition, const ArriveAt *arriveAt
     return false;
 }
 
-bool hasItem(const Player *p, Condition condition, const ItemWithQuantity *iq) {
-    if (iq == NULL) {
+bool hasItem(const Player *p, Condition condition, const char **itemNames, int count) {
+    if (itemNames == NULL) {
         return false;
     }
-    int count = iq->quantity;
-    for (int i = 0; i < p->itemCount; i++) {
-        if (p->items[i] == iq->item) {
-            count--;
-            if (count == 0) {
-                return condition == HAS_ITEM;
+    int hasItems = 0;
+    for (int i = 0; i < count; i++) {
+        for (int j = 0; j < p->itemCount; j++) {
+            if (strcmp(p->items[j]->name, itemNames[i]) == 0) {
+                hasItems++;
             }
         }
+    }
+    if (hasItems == count) {
+        return condition == HAS_ITEM;
     }
     return condition == NOT_HAS_ITEM;
 }
@@ -228,7 +236,7 @@ bool isWhenActivated(const Player *p, const When *when, EventType eventType) {
            || hasConditionNoStory(p, when->condition, when->story)
            || isSceneLoaded(when->condition, eventType)
            || hasArrivedAt(p, when->condition, when->arriveAt)
-           || hasItem(p, when->condition, when->item);
+           || hasItem(p, when->condition, when->items, when->itemCount);
 }
 
 bool areConditionsMet(const ControlBlock *cb, const Player *p, EventType eventType) {
