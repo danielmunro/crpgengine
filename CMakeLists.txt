@@ -10,6 +10,8 @@ set(RAYLIB_VERSION 5ede47618bd9f9a440af648da1b4817e51644994)
 set(LIBTAP_VERSION 0.1.0)
 set(LIBYAML_VERSION 1.4.1)
 
+find_package(Threads REQUIRED)
+
 # add raylib
 include(FetchContent)
 FetchContent_Declare(
