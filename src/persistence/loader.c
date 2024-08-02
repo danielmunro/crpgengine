@@ -314,7 +314,7 @@ SpritesheetManager *loadSpritesheetManager(Context *c) {
             sprintf(dataFilePath, "%s/%s", directory, files[i]);
             addInfo("spritesheet data :: %s", dataFilePath);
             SpritesheetData *data = loadSpritesheetYaml(dataFilePath);
-            char imageFilePath[MAX_FS_PATH_LENGTH];
+            char *imageFilePath = malloc(MAX_FS_PATH_LENGTH);
             sprintf(imageFilePath, "%s/images/sprites/%s", c->indexDir, data->filename);
             if (!FileExists(imageFilePath)) {
                 addError("sprite does not exist at path :: %s, %s", data->name, imageFilePath);
