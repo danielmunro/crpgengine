@@ -127,6 +127,7 @@ void evaluateMovement(const MobileManager *mm) {
             findAnimation(mob->animations, ANIMATION_UP)->isPlaying = false;
             findAnimation(mob->animations, ANIMATION_LEFT)->isPlaying = false;
             findAnimation(mob->animations, ANIMATION_RIGHT)->isPlaying = false;
+            mob->isBeingMoved = false;
         }
     }
 }
