@@ -1,6 +1,6 @@
 id: vill1
 name: Kessamina
-animations: fireas
+animations: generic-villager
 avatar: fireas.png
 position: 17,16
 direction: up

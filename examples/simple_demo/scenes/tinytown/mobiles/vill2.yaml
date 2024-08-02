@@ -1,6 +1,6 @@
 id: vill2
 name: Bobarian
-animations: fireas
+animations: generic-villager
 avatar: fireas.png
 position: 21,18
 direction: down
