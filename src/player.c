@@ -6,14 +6,7 @@
 #include "headers/mobile.h"
 #include "headers/spell.h"
 #include "headers/graphics/ui/ui.h"
-#include "headers/tile.h"
 #include "headers/shop.h"
-
-typedef struct {
-    Mobile *mob;
-    const Chest *chest;
-    const Tile *tile;
-} Blocking;
 
 typedef struct {
     int chestId;
