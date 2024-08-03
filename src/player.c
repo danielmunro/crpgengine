@@ -40,9 +40,17 @@ OpenedChest *createOpenedChest(int sceneId, int chestId) {
     return o;
 }
 
-Player *
-createPlayer(Mobile *mobs[4], int coins, int level, int secondsPlayed, const char **storylines, int storylineCount,
-             Item **items, int itemCount, OpenedChest **openedChests, int openedChestsCount) {
+Player *createPlayer(
+        Mobile *mobs[4],
+        int coins,
+        int level,
+        int secondsPlayed,
+        const char **storylines,
+        int storylineCount,
+        Item **items,
+        int itemCount,
+        OpenedChest **openedChests,
+        int openedChestsCount) {
     Player *player = malloc(sizeof(Player));
     player->engageable = NULL;
     player->engaged = false;
