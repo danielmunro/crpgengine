@@ -10,14 +10,9 @@ void drawShopSellMenuScreen(MenuContext *mc) {
             SHOP_SELL_BOX,
             mc->context->ui->textAreas->medium);
     drawMenuRect(mc->context->ui->menu, contentBox->area);
-    if (mc->itemList == NULL) {
-        ItemListResult result = createItemList(mc->player);
-        mc->itemList = result.itemList;
-        mc->itemListCount = result.count;
-    }
-    for (int i = 0; i < mc->itemListCount; i++) {
+    for (int i = 0; i < mc->player->itemCount; i++) {
         char buffer[MAX_LINE_BUFFER];
-        sprintf(buffer, "(%d) %s", mc->itemList[i].amount, mc->itemList[i].item->name);
+        sprintf(buffer, "(%d) %s", mc->player->items[i]->quantity, mc->player->items[i]->name);
         drawScrollableInMenuWithStyle(
                 contentBox,
                 mc->fonts->default_,
@@ -36,10 +31,9 @@ void drawShopSellMenuScreen(MenuContext *mc) {
 }
 
 MenuSelectResponse *shopSellMenuItemSelected(MenuContext *mc) {
-    mc->itemToSell = *mc->itemList;
-    if (mc->itemList[mc->cursorLine].amount == 1) {
+    if (mc->player->items[mc->cursorLine]->quantity == 1) {
         for (int i = 0; i < mc->player->itemCount; i++) {
-            if (mc->player->items[i] == mc->itemToSell.item) {
+            if (strcmp(mc->player->items[i]->name, mc->player->items[mc->cursorLine]->name) == 0) {
                 return createMenuSelectResponse(
                         RESPONSE_TYPE_OPEN_MENU,
                         SHOP_CONFIRM_SALE_MENU);
@@ -52,7 +46,4 @@ MenuSelectResponse *shopSellMenuItemSelected(MenuContext *mc) {
 }
 
 void unloadItemSellMenu(MenuContext *mc) {
-    free(mc->itemList);
-    mc->itemList = NULL;
-    mc->itemListCount = 0;
 }

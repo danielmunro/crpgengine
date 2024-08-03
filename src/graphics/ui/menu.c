@@ -61,7 +61,7 @@ typedef struct {
     Spell *selectedSpell;
     UISprite *uiSprite;
     Spell **spells;
-    ItemList *itemList;
+    Item **items;
     int itemListCount;
     Beast *targetBeast;
     Mobile *targetMob;
@@ -147,7 +147,7 @@ MenuContext *createMenuContext(
     mc->spells = spells;
     mc->textBoxes = calloc(MAX_TEXT_BOXES, sizeof(TextBox));
     mc->selectedMob = NULL;
-    mc->itemList = NULL;
+    mc->items = NULL;
     mc->itemListCount = 0;
     mc->targetBeast = NULL;
     mc->targetMob = NULL;
@@ -165,8 +165,8 @@ void resetMenuContext(MenuContext *mc) {
 }
 
 void resetItemList(MenuContext *mc) {
-    free(mc->itemList);
-    mc->itemList = NULL;
+    free(mc->items);
+    mc->items = NULL;
     mc->itemListCount = 0;
 }
 
