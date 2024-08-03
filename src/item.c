@@ -145,11 +145,15 @@ Item *createItem(
 }
 
 Item *cloneItem(const Item *item) {
+    Attributes *a = NULL;
+    if (item->attributes != NULL) {
+        a = cloneAttributes(item->attributes);
+    }
     return createItem(
             item->type,
             item->name,
             item->worth,
-            cloneAttributes(item->attributes),
+            a,
             item->position,
             item->affects,
             item->affectsCount,
