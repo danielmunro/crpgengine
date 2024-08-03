@@ -31,6 +31,7 @@ void drawShopSellMenuScreen(MenuContext *mc) {
 }
 
 MenuSelectResponse *shopSellMenuItemSelected(MenuContext *mc) {
+    mc->itemToSell = mc->player->items[mc->cursorLine];
     if (mc->player->items[mc->cursorLine]->quantity == 1) {
         for (int i = 0; i < mc->player->itemCount; i++) {
             if (strcmp(mc->player->items[i]->name, mc->player->items[mc->cursorLine]->name) == 0) {

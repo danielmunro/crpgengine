@@ -67,11 +67,6 @@ typedef struct {
 } ItemList;
 
 typedef struct {
-    ItemList *itemList;
-    int count;
-} ItemListResult;
-
-typedef struct {
     Item *item;
     int quantity;
 } ItemWithQuantity;
@@ -147,6 +142,18 @@ Item *createItem(
     item->affectsCount = affectsCount;
     item->quantity = quantity;
     return item;
+}
+
+Item *cloneItem(const Item *item) {
+    return createItem(
+            item->type,
+            item->name,
+            item->worth,
+            cloneAttributes(item->attributes),
+            item->position,
+            item->affects,
+            item->affectsCount,
+            item->quantity);
 }
 
 ItemWithQuantity *createItemWithQuantity(Item *item, int quantity) {

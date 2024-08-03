@@ -68,7 +68,7 @@ typedef struct {
     ActionType actionType;
     Shop *shop;
     ItemWithMarkup *itemToBuy;
-    ItemList itemToSell;
+    Item *itemToSell;
     SaveFiles *saveFiles;
     int quantity;
     int scrollOffset;

@@ -3,6 +3,7 @@
 #include "headers/spell_manager.h"
 #include "headers/player.h"
 #include "headers/mobile_manager.h"
+#include "headers/item.h"
 
 Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *save, bool immortal) {
     Mobile *mobs[MAX_PARTY_SIZE];
@@ -75,8 +76,9 @@ Player *createNewPlayer(MobileManager *mm, ItemManager *im) {
     int itemCount = 0;
     for (int i = 0; i < data->itemsCount; i++) {
         for (int j = 0; j < im->count; j++) {
-            if (strcmp(data->items[i], im->items[j]->name) == 0) {
-                items[itemCount] = im->items[j];
+            if (strcmp(data->items[i].name, im->items[j]->name) == 0) {
+                items[itemCount] = cloneItem(im->items[j]);
+                items[itemCount]->quantity = data->items[i].quantity;
                 itemCount++;
             }
         }

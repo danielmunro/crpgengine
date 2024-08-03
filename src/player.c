@@ -79,8 +79,15 @@ Player *createPlayer(
     return player;
 }
 
-void addItem(Player *player, Item *item) {
-    player->items[player->itemCount] = item;
+void addItem(Player *player, const Item *item) {
+    for (int i = 0; i < player->itemCount; i++) {
+        if (strcmp(player->items[i]->name, item->name) == 0) {
+            player->items[i]->quantity += 1;
+            return;
+        }
+    }
+    player->items[player->itemCount] = cloneItem(item);
+    player->items[player->itemCount]->quantity = 1;
     player->itemCount++;
 }
 
@@ -89,7 +96,12 @@ void removeItem(Player *player, const Item *item) {
     bool foundItem = false;
     for (int i = 0; i < player->itemCount; i++) {
         if (player->items[i] == item) {
+            if (player->items[i]->quantity > 1) {
+                player->items[i]->quantity -= 1;
+                return;
+            }
             foundItem = true;
+            free(player->items[i]);
         }
         if (foundItem) {
             player->items[i] = player->items[i + 1];
