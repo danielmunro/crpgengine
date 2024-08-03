@@ -9,6 +9,6 @@ jobs:
       - run: sudo apt-get install pkg-config libegl1-mesa-dev libwayland-dev libxkbcommon-dev wayland-protocols libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libglfw3 libglfw3-dev
       - uses: actions/checkout@v3
       - uses: jwlawson/actions-setup-cmake@v1.13
-      - run: cmake .
+      - run: cmake . -D CMAKE_C_COMPILER=/usr/bin/cc -D CMAKE_CXX_COMPILER=/usr/bin/gcc
       - run: make
       - run: ./build/tests
