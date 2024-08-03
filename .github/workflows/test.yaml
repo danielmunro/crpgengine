@@ -6,9 +6,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt-get install pkg-config libegl1-mesa-dev libwayland-dev libxkbcommon-dev wayland-protocols libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libglfw3 libglfw3-dev
+      - run: |
+          sudo apt-get update -qq
+          sudo apt-get install gcc-multilib
+          sudo apt-get install -y --no-install-recommends libglfw3 libglfw3-dev libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libxext-dev libxfixes-dev libwayland-dev libwayland-bin libxkbcommon-dev
       - uses: actions/checkout@v3
       - uses: jwlawson/actions-setup-cmake@v1.13
-      - run: cmake . -D CMAKE_C_COMPILER=/usr/bin/cc -D CMAKE_CXX_COMPILER=/usr/bin/gcc
+      - run: cmake .
       - run: make
       - run: ./build/tests
