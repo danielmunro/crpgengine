@@ -68,7 +68,6 @@ MenuSelectResponse *partyApplyMenuItemSelected(MenuContext *mc) {
                 applyConsumable(mc->player->party[mc->cursorLine], mc->selectedItem);
                 removeItem(mc->player, mc->selectedItem);
                 mc->selectedItem = NULL;
-                resetItemList(mc);
                 break;
             }
         }

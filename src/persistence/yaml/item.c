@@ -8,6 +8,7 @@ typedef struct {
     AttributesData *attributes;
     const char **affects;
     int affects_count;
+    int quantity;
 } ItemData;
 
 typedef struct {
@@ -34,6 +35,8 @@ static const cyaml_schema_field_t itemFieldSchema[] = {
         CYAML_FIELD_SEQUENCE(
                 "affects", CYAML_FLAG_POINTER | CYAML_FLAG_OPTIONAL, ItemData, affects,
                 &affectsSchema, 0, CYAML_UNLIMITED),
+        CYAML_FIELD_INT(
+                "quantity", CYAML_FLAG_OPTIONAL, ItemData, quantity),
         CYAML_FIELD_END
 };
 

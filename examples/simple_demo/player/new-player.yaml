@@ -1,7 +1,6 @@
 coins: 1000
 items:
-  - potion
-  - potion
-  - potion
+  - name: potion
+    quantity: 3
 party:
   - fireas

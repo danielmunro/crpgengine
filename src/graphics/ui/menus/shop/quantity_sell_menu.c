@@ -12,14 +12,14 @@ void drawQuantitySellMenuScreen(MenuContext *mc) {
     drawMenuRect(mc->context->ui->menu, b->area);
     drawInMenu(b, "How many would you like to sell?");
     char amount[24];
-    sprintf(amount, "%s x %d", mc->itemToSell.item->name, mc->quantity);
+    sprintf(amount, "%s x %d", mc->itemToSell->name, mc->quantity);
     drawInMenu(b, amount);
     TextBox *b2 = findOrCreateTextBox(
             mc,
             SHOP_QUANTITY_SELL_BOX,
             mc->context->ui->textAreas->alertRight);
     char costText[24];
-    sprintf(costText, "= %d", (mc->quantity) * mc->itemToSell.item->worth);
+    sprintf(costText, "= %d", (mc->quantity) * mc->itemToSell->worth);
     drawInMenu(b2, "");
     drawInMenu(b2, costText);
     drawScrollableInMenuWithStyle(
@@ -49,7 +49,7 @@ MenuSelectResponse *quantitySellMenuItemSelected(const MenuContext *mc) {
 }
 
 int getMaxSellQuantity(const MenuContext *mc) {
-    return mc->itemToSell.amount;
+    return mc->itemToSell->quantity;
 }
 
 MenuKeyPressedType quantitySellKeyPressed(const MenuContext *mc) {

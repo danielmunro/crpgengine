@@ -58,17 +58,13 @@ typedef struct {
     EquipmentPosition position;
     ItemAffect *affects;
     int affectsCount;
+    int quantity;
 } Item;
 
 typedef struct {
     Item *item;
     int amount;
 } ItemList;
-
-typedef struct {
-    ItemList *itemList;
-    int count;
-} ItemListResult;
 
 typedef struct {
     Item *item;
@@ -131,7 +127,8 @@ Item *createItem(
         Attributes *attributes,
         EquipmentPosition position,
         const ItemAffect *affects,
-        int affectsCount) {
+        int affectsCount,
+        int quantity) {
     Item *item = malloc(sizeof(Item));
     item->type = type;
     item->name = name;
@@ -143,7 +140,20 @@ Item *createItem(
         item->affects[i] = affects[i];
     }
     item->affectsCount = affectsCount;
+    item->quantity = quantity;
     return item;
+}
+
+Item *cloneItem(const Item *item) {
+    return createItem(
+            item->type,
+            item->name,
+            item->worth,
+            cloneAttributes(item->attributes),
+            item->position,
+            item->affects,
+            item->affectsCount,
+            item->quantity);
 }
 
 ItemWithQuantity *createItemWithQuantity(Item *item, int quantity) {
@@ -169,7 +179,8 @@ Item *createItemFromData(const ItemData *data) {
             createAttributesFromData(data->attributes),
             getEquipmentPositionFromString(data->position),
             affects,
-            data->affects_count);
+            data->affects_count,
+            data->quantity);
     free(affects);
     return item;
 }

@@ -3,7 +3,7 @@
 typedef struct {
     const char **party;
     int partyCount;
-    const char **items;
+    const ItemReferenceData *items;
     int itemsCount;
     int coins;
 } NewPlayerData;
@@ -13,8 +13,9 @@ static const cyaml_schema_value_t newPlayerMobilesSchema = {
 };
 
 static const cyaml_schema_value_t newPlayerItemsSchema = {
-        CYAML_VALUE_STRING(CYAML_FLAG_POINTER, char, 0, CYAML_UNLIMITED),
+        CYAML_VALUE_MAPPING(CYAML_FLAG_DEFAULT, ItemReferenceData, itemReferenceFieldSchema),
 };
+
 
 static const cyaml_schema_field_t newPlayerTopMappingField[] = {
         CYAML_FIELD_SEQUENCE_COUNT(

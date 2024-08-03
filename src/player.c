@@ -6,14 +6,7 @@
 #include "headers/mobile.h"
 #include "headers/spell.h"
 #include "headers/graphics/ui/ui.h"
-#include "headers/tile.h"
 #include "headers/shop.h"
-
-typedef struct {
-    Mobile *mob;
-    const Chest *chest;
-    const Tile *tile;
-} Blocking;
 
 typedef struct {
     int chestId;
@@ -47,9 +40,17 @@ OpenedChest *createOpenedChest(int sceneId, int chestId) {
     return o;
 }
 
-Player *
-createPlayer(Mobile *mobs[4], int coins, int level, int secondsPlayed, const char **storylines, int storylineCount,
-             Item **items, int itemCount, OpenedChest **openedChests, int openedChestsCount) {
+Player *createPlayer(
+        Mobile *mobs[4],
+        int coins,
+        int level,
+        int secondsPlayed,
+        const char **storylines,
+        int storylineCount,
+        Item **items,
+        int itemCount,
+        OpenedChest **openedChests,
+        int openedChestsCount) {
     Player *player = malloc(sizeof(Player));
     player->engageable = NULL;
     player->engaged = false;
@@ -78,8 +79,15 @@ createPlayer(Mobile *mobs[4], int coins, int level, int secondsPlayed, const cha
     return player;
 }
 
-void addItem(Player *player, Item *item) {
-    player->items[player->itemCount] = item;
+void addItem(Player *player, const Item *item) {
+    for (int i = 0; i < player->itemCount; i++) {
+        if (strcmp(player->items[i]->name, item->name) == 0) {
+            player->items[i]->quantity += 1;
+            return;
+        }
+    }
+    player->items[player->itemCount] = cloneItem(item);
+    player->items[player->itemCount]->quantity = 1;
     player->itemCount++;
 }
 
@@ -88,7 +96,12 @@ void removeItem(Player *player, const Item *item) {
     bool foundItem = false;
     for (int i = 0; i < player->itemCount; i++) {
         if (player->items[i] == item) {
+            if (player->items[i]->quantity > 1) {
+                player->items[i]->quantity -= 1;
+                return;
+            }
             foundItem = true;
+            free(player->items[i]);
         }
         if (foundItem) {
             player->items[i] = player->items[i + 1];
@@ -228,34 +241,6 @@ bool isChestOpened(const Player *p, int sceneId, int chestId) {
         }
     }
     return false;
-}
-
-ItemListResult createItemList(const Player *p) {
-    ItemList *itemList = calloc(p->itemCount, sizeof(ItemList));
-    int count = 0;
-    for (int i = 0; i < p->itemCount; i++) {
-        const char *name = p->items[i]->name;
-        bool found = false;
-        for (int j = 0; j < count; j++) {
-            if (strcmp(name, itemList[j].item->name) == 0) {
-                itemList[j].amount += 1;
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            itemList[count] = (ItemList) {
-                    p->items[i],
-                    1,
-            };
-            count++;
-        }
-    }
-
-    return (ItemListResult) {
-            itemList,
-            count,
-    };
 }
 
 bool losesItemQuantity(Player *player, const ItemReferenceData *ird) {

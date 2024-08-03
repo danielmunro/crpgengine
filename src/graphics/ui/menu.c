@@ -61,14 +61,13 @@ typedef struct {
     Spell *selectedSpell;
     UISprite *uiSprite;
     Spell **spells;
-    ItemList *itemList;
     int itemListCount;
     Beast *targetBeast;
     Mobile *targetMob;
     ActionType actionType;
     Shop *shop;
     ItemWithMarkup *itemToBuy;
-    ItemList itemToSell;
+    Item *itemToSell;
     SaveFiles *saveFiles;
     int quantity;
     int scrollOffset;
@@ -147,8 +146,6 @@ MenuContext *createMenuContext(
     mc->spells = spells;
     mc->textBoxes = calloc(MAX_TEXT_BOXES, sizeof(TextBox));
     mc->selectedMob = NULL;
-    mc->itemList = NULL;
-    mc->itemListCount = 0;
     mc->targetBeast = NULL;
     mc->targetMob = NULL;
     mc->actionType = NONE;
@@ -162,12 +159,6 @@ MenuContext *createMenuContext(
 
 void resetMenuContext(MenuContext *mc) {
     mc->quantity = 1;
-}
-
-void resetItemList(MenuContext *mc) {
-    free(mc->itemList);
-    mc->itemList = NULL;
-    mc->itemListCount = 0;
 }
 
 UISprite *createUISprite(Spritesheet *sprite, UIData *uiData) {
