@@ -36,6 +36,7 @@ typedef struct {
     bool immortal;
     int amountToMove;
     Vector2D destination;
+    int experience;
 } Mobile;
 
 void resetMobAnimations(const Mobile *mob) {
@@ -71,6 +72,7 @@ Mobile *createMobile(
         Avatar *avatar,
         int hp,
         int mana,
+        int experience,
         Attributes *attributes,
         Spell **spells,
         int spellCount,
@@ -103,6 +105,7 @@ Mobile *createMobile(
     mobile->immortal = immortal;
     mobile->amountToMove = 0;
     mobile->destination = position;
+    mobile->experience = experience;
     return mobile;
 }
 

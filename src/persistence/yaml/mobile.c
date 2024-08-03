@@ -9,6 +9,7 @@ typedef struct {
     const char *direction;
     int hp;
     int mana;
+    int experience;
     AttributesData *attributes;
     SpellData *spells;
     int spells_count;
@@ -46,6 +47,8 @@ static const cyaml_schema_field_t mobileTopMappingField[] = {
                 "hp", CYAML_FLAG_OPTIONAL, MobileData, hp),
         CYAML_FIELD_INT(
                 "mana", CYAML_FLAG_OPTIONAL, MobileData, mana),
+        CYAML_FIELD_INT(
+                "experience", CYAML_FLAG_OPTIONAL, MobileData, experience),
         CYAML_FIELD_END
 };
 

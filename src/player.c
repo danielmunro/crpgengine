@@ -47,11 +47,9 @@ OpenedChest *createOpenedChest(int sceneId, int chestId) {
     return o;
 }
 
-Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
-                     int coins, int experience, int level, int secondsPlayed,
-                     const char **storylines, int storylineCount,
-                     Item **items, int itemCount,
-                     OpenedChest **openedChests, int openedChestsCount) {
+Player *
+createPlayer(Mobile *mobs[4], int coins, int level, int secondsPlayed, const char **storylines, int storylineCount,
+             Item **items, int itemCount, OpenedChest **openedChests, int openedChestsCount) {
     Player *player = malloc(sizeof(Player));
     player->engageable = NULL;
     player->engaged = false;
@@ -59,7 +57,6 @@ Player *createPlayer(Mobile *mobs[MAX_PARTY_SIZE],
     player->onDeckCount = 0;
     player->partyCount = 0;
     player->coins = coins;
-    player->experience = experience;
     player->level = level;
     player->secondsPlayed = secondsPlayed;
     player->storylines = storylines;
@@ -114,6 +111,7 @@ MobileData createMobDataFromMob(Mobile *mob) {
             Directions[mob->direction],
             mob->hp,
             mob->mana,
+            mob->experience,
             createDataFromAttributes(mob->attributes),
             mapSpellsToData(mob->spells, mob->spellCount),
             mob->spellCount,

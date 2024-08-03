@@ -23,6 +23,7 @@ Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *sa
                         am->context->ui->screen->scale),
                 mob.hp,
                 mob.mana,
+                mob.experience,
                 createAttributesFromData(mob.attributes),
                 mapDataToSpells(sm, mob.spells, mob.spells_count),
                 mob.spells_count,
@@ -44,7 +45,6 @@ Player *mapSaveDataToPlayer(SpellManager *sm, AnimationManager *am, SaveData *sa
     return createPlayer(
             mobs,
             save->player->coins,
-            save->player->experience,
             save->player->level,
             save->player->secondsPlayed,
             save->player->storylines,
@@ -85,7 +85,6 @@ Player *createNewPlayer(MobileManager *mm, ItemManager *im) {
     Player *p = createPlayer(
             mobiles,
             data->coins,
-            getExperienceToLevel(1),
             1,
             0,
             storylines,

@@ -63,6 +63,7 @@ Mobile *createMobileFromData(MobileManager *mm, MobileData *data, Animation *ani
                     mm->context->ui->screen->scale),
             data->hp,
             data->mana,
+            data->experience,
             createAttributesFromData(data->attributes),
             mapDataToSpells(mm->spellManager, data->spells, data->spells_count),
             data->spells_count,
