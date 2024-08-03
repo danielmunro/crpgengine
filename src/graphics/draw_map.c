@@ -94,7 +94,7 @@ void renderMapLayer(Map *m, LayerType layer) {
     int width = m->context->user->resolution.width / tileSize;
     int height = m->context->user->resolution.height / tileSize;
     Image renderedLayer = GenImageColor(width * tileSize, height * tileSize, BLANK);
-    for (int y = -1; y < height; y++) {
+    for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             if (x >= m->layers[layer]->width || y >= m->layers[layer]->height) {
                 continue;
