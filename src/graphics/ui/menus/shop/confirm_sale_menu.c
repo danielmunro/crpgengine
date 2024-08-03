@@ -29,7 +29,6 @@ MenuSelectResponse *confirmSaleMenuItemSelected(MenuContext *mc) {
     mc->player->coins += mc->itemToSell->worth * mc->quantity;
     int quantitySold = mc->quantity;
     mc->quantity = 1;
-    mc->itemListCount = 0;
     if (quantitySold == 1) {
         return createMenuSelectResponse(
                 RESPONSE_TYPE_CLOSE_MENU,

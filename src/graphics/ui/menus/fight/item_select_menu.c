@@ -12,14 +12,10 @@ void drawItemSelectMenuScreen(MenuContext *mc) {
     drawMenuRect(mc->context->ui->menu, t->area);
     const FontStyle *defaultFont = mc->fonts->default_;
     const FontStyle *disabledFont = mc->fonts->disable;
-    if (mc->items == NULL) {
-        mc->items = mc->player->items;
-        mc->itemListCount = mc->player->itemCount;
-    }
-    for (int i = 0; i < mc->itemListCount; i++) {
-        const Item *item = mc->items[i];
+    for (int i = 0; i < mc->player->itemCount; i++) {
+        const Item *item = mc->player->items[i];
         char buffer[MAX_LINE_BUFFER];
-        sprintf(buffer, "(%d) %s", mc->items[i]->quantity, item->name);
+        sprintf(buffer, "(%d) %s", mc->player->items[i]->quantity, item->name);
         const FontStyle *fs = item->type == ITEM_TYPE_CONSUMABLE ? defaultFont : disabledFont;
         drawInMenuWithStyle(t, fs, buffer);
     }
@@ -34,7 +30,7 @@ void drawItemSelectMenuScreen(MenuContext *mc) {
 }
 
 MenuSelectResponse *itemSelectMenuItemSelected(MenuContext *menuContext) {
-    Item *item = menuContext->items[menuContext->cursorLine];
+    Item *item = menuContext->player->items[menuContext->cursorLine];
     if (item->type != ITEM_TYPE_CONSUMABLE) {
         return createMenuSelectResponse(RESPONSE_TYPE_NONE, ITEMS_MENU);
     }
@@ -46,6 +42,4 @@ MenuSelectResponse *itemSelectMenuItemSelected(MenuContext *menuContext) {
 }
 
 void unloadItemSelectMenu(MenuContext *mc) {
-    mc->items = NULL;
-    mc->itemListCount = 0;
 }

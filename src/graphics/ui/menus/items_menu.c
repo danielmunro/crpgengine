@@ -7,16 +7,12 @@ void drawItemsMenuScreen(MenuContext *mc) {
             ITEMS_BOX,
             mc->context->ui->textAreas->full);
     drawMenuRect(mc->context->ui->menu, textBox->area);
-    if (mc->items == NULL) {
-        mc->items = mc->player->items;
-        mc->itemListCount = mc->player->itemCount;
-    }
-    for (int i = 0; i < mc->itemListCount; i++) {
+    for (int i = 0; i < mc->player->itemCount; i++) {
         char buffer[MAX_LINE_BUFFER];
-        sprintf(buffer, "(%d) %s", mc->items[i]->quantity, mc->items[i]->name);
+        sprintf(buffer, "(%d) %s", mc->player->items[i]->quantity, mc->player->items[i]->name);
         drawInMenuWithStyle(
                 textBox,
-                mc->items[i]->type == ITEM_TYPE_CONSUMABLE
+                mc->player->items[i]->type == ITEM_TYPE_CONSUMABLE
                 ? mc->fonts->default_
                 : mc->fonts->disable,
                 buffer);
@@ -30,11 +26,11 @@ void drawItemsMenuScreen(MenuContext *mc) {
 }
 
 int getItemsCursorLength(const MenuContext *menuContext) {
-    return menuContext->itemListCount;
+    return menuContext->player->itemCount;
 }
 
 MenuSelectResponse *itemMenuItemSelected(MenuContext *menuContext) {
-    Item *item = menuContext->items[menuContext->cursorLine];
+    Item *item = menuContext->player->items[menuContext->cursorLine];
     if (item->type == ITEM_TYPE_CONSUMABLE) {
         menuContext->selectedItem = item;
         return createMenuSelectResponse(RESPONSE_TYPE_OPEN_MENU, PARTY_APPLY_MENU);
@@ -43,6 +39,4 @@ MenuSelectResponse *itemMenuItemSelected(MenuContext *menuContext) {
 }
 
 void unloadItemsMenu(MenuContext *mc) {
-    mc->items = NULL;
-    mc->itemListCount = 0;
 }
